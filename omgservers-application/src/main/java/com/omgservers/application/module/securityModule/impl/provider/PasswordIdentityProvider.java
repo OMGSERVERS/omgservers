@@ -1,0 +1,80 @@
+package com.omgservers.application.module.securityModule.impl.provider;
+
+import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.ValidateCredentialsHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.response.ValidateCredentialsHelpResponse;
+import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
+import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.security.AuthenticationFailedException;
+import io.quarkus.security.identity.AuthenticationRequestContext;
+import io.quarkus.security.identity.IdentityProvider;
+import io.quarkus.security.identity.SecurityIdentity;
+import io.quarkus.security.identity.request.UsernamePasswordAuthenticationRequest;
+import io.quarkus.security.runtime.QuarkusPrincipal;
+import io.quarkus.security.runtime.QuarkusSecurityIdentity;
+import io.smallrye.mutiny.Uni;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.control.ActivateRequestContext;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthenticationRequest> {
+
+    final InternalModule internalModule;
+    final GetConfigOperation getConfigOperation;
+
+    @Override
+    public Class<UsernamePasswordAuthenticationRequest> getRequestType() {
+        return UsernamePasswordAuthenticationRequest.class;
+    }
+
+    @Override
+    @ActivateRequestContext
+    public Uni<SecurityIdentity> authenticate(UsernamePasswordAuthenticationRequest request,
+                                              AuthenticationRequestContext context) {
+        final var username = request.getUsername();
+        final var password = new String(request.getPassword().getPassword());
+
+        if (username.equals(getConfigOperation.getConfig().adminUsername())) {
+            if (BcryptUtil.matches(password, getConfigOperation.getConfig().adminPasswordHash())) {
+                final var principal = "admin/" + username;
+                log.info("Admin account was authenticated, principal={}", principal);
+                return Uni.createFrom().item(QuarkusSecurityIdentity.builder()
+                        .setPrincipal(new QuarkusPrincipal(principal))
+                        .addRole(InternalRoleEnum.Names.ADMIN)
+                        .setAnonymous(false)
+                        .build());
+            } else {
+                log.info("Authentication failed, username={}", username);
+                throw new AuthenticationFailedException();
+            }
+        } else {
+            final var validateCredentialsInternalRequest = new ValidateCredentialsHelpRequest(username, password);
+            return internalModule.getServiceAccountHelpService().validateCredentials(validateCredentialsInternalRequest)
+                    .map(ValidateCredentialsHelpResponse::getValid)
+                    .map(valid -> {
+                        if (valid) {
+                            final var principal = "sa/" + username;
+                            log.info("Service account was authenticated, principal={}", principal);
+                            return (SecurityIdentity) QuarkusSecurityIdentity.builder()
+                                    .setPrincipal(new QuarkusPrincipal(principal))
+                                    .addRole(InternalRoleEnum.Names.SERVICE)
+                                    .setAnonymous(false)
+                                    .build();
+                        } else {
+                            log.info("Authentication failed, username={}", username);
+                            throw new AuthenticationFailedException();
+                        }
+                    })
+                    .onFailure().transform(t -> {
+                        log.info("Authentication failed, {}", t.getMessage());
+                        return new AuthenticationFailedException();
+                    });
+        }
+    }
+}

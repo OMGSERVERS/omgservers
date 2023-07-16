@@ -1,0 +1,65 @@
+package com.omgservers.application.module.userModule.impl.operation.upsertUserOperation;
+
+import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlConnection;
+import io.vertx.mutiny.sqlclient.Tuple;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class UpsertUserOperationImpl implements UpsertUserOperation {
+
+    static private final String sql = """
+            insert into $schema.tab_user(created, modified, uuid, role, password_hash)
+            values($1, $2, $3, $4, $5)
+            on conflict (uuid) do
+            update set modified = $2, role = $4, password_hash = $5
+            returning xmax::text::int = 0 as inserted
+            """;
+
+    final PrepareShardSqlOperation prepareShardSqlOperation;
+
+    @Override
+    public Uni<Boolean> upsertUser(final SqlConnection sqlConnection,
+                                   final int shard,
+                                   final UserModel user) {
+        if (sqlConnection == null) {
+            throw new ServerSideBadRequestException("sqlConnection is null");
+        }
+        if (user == null) {
+            throw new ServerSideBadRequestException("user is null");
+        }
+
+        return upsertQuery(sqlConnection, shard, user)
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("User was inserted, user={}", user);
+                    } else {
+                        log.info("User was updated, user={}", user);
+                    }
+                });
+    }
+
+    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, UserModel userModel) {
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+
+        return sqlConnection.preparedQuery(preparedSql)
+                .execute(Tuple.from(Arrays.asList(
+                        userModel.getCreated().atOffset(ZoneOffset.UTC),
+                        userModel.getModified().atOffset(ZoneOffset.UTC),
+                        userModel.getUuid(),
+                        userModel.getRole(),
+                        userModel.getPasswordHash())))
+                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+    }
+}

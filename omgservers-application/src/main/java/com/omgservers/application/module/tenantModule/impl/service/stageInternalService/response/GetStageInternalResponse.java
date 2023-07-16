@@ -1,0 +1,14 @@
+package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response;
+
+import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetStageInternalResponse {
+
+    StageModel stage;
+}

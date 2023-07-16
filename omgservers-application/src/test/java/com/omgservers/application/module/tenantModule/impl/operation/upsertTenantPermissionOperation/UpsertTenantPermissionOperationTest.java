@@ -1,0 +1,70 @@
+package com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation;
+
+import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModel;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
+import com.omgservers.application.exception.ServerSideNotFoundException;
+import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+@Slf4j
+@QuarkusTest
+class UpsertTenantPermissionOperationTest extends Assertions {
+    static private final long TIMEOUT = 1L;
+
+    @Inject
+    UpsertTenantPermissionOperation upsertTenantPermissionOperation;
+
+    @Inject
+    UpsertTenantOperation upsertTenantOperation;
+
+    @Inject
+    PgPool pgPool;
+
+    @Test
+    void givenTenant_whenUpsertTenantPermission_thenInserted() {
+        final var shard = 0;
+        final var tenant = TenantModel.create(TenantConfigModel.create());
+        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+
+        final var permission = TenantPermissionModel.create(tenant.getUuid(), userUuid(), TenantPermissionEnum.CREATE_PROJECT);
+        assertTrue(upsertTenantPermissionOperation.upsertTenantPermission(TIMEOUT, pgPool, shard, permission));
+    }
+
+    @Test
+    void givenPermission_whenUpsertTenantPermission_thenUpdated() {
+        final var shard = 0;
+        final var tenant = TenantModel.create(TenantConfigModel.create());
+        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var permission = TenantPermissionModel.create(tenant.getUuid(), userUuid(), TenantPermissionEnum.CREATE_PROJECT);
+        upsertTenantPermissionOperation.upsertTenantPermission(TIMEOUT, pgPool, shard, permission);
+
+        assertFalse(upsertTenantPermissionOperation.upsertTenantPermission(TIMEOUT, pgPool, shard, permission));
+    }
+
+    @Test
+    void givenUnknownTenantUuid_whenUpsertTenantPermission_thenServerSideNotFoundException() {
+        final var shard = 0;
+
+        final var permission = TenantPermissionModel.create(tenantUuid(), userUuid(), TenantPermissionEnum.CREATE_PROJECT);
+        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertTenantPermissionOperation
+                .upsertTenantPermission(TIMEOUT, pgPool, shard, permission));
+        log.info("Exception: {}", exception.getMessage());
+    }
+
+    UUID userUuid() {
+        return UUID.randomUUID();
+    }
+
+    UUID tenantUuid() {
+        return UUID.randomUUID();
+    }
+}

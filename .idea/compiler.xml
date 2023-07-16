@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for omgservers-application" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <option name="mapstruct.defaultComponentModel" value="jakarta" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+        </processorPath>
+        <module name="omgservers-integrationtest" />
+        <module name="omgservers-application" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="omgservers-adminapi" target="17" />
+      <module name="omgservers-application" target="17" />
+      <module name="omgservers-client-mutiny" target="17" />
+      <module name="omgservers-developerapi" target="17" />
+      <module name="omgservers-entity" target="17" />
+      <module name="omgservers-event" target="17" />
+      <module name="omgservers-exception" target="17" />
+      <module name="omgservers-integrationtest" target="17" />
+      <module name="omgservers-luaj" target="17" />
+      <module name="omgservers-message" target="17" />
+      <module name="omgservers-parent" target="17" />
+      <module name="omgservers-platform-entity (1)" target="17" />
+      <module name="omgservers-serviceapi" target="17" />
+      <module name="omgservers-supportapi" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="omgservers-adminapi" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-application" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-client-mutiny" options="-parameters -Amapstruct.defaultComponentModel=cdi" />
+      <module name="omgservers-developerapi" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-entity" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-event" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-exception" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-integrationtest" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-luaj" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-message" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-parent" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-platform-entity (1)" options="-parameters -Amapstruct.defaultComponentModel=cdi" />
+      <module name="omgservers-serviceapi" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+      <module name="omgservers-supportapi" options="-parameters -Amapstruct.defaultComponentModel=jakarta" />
+    </option>
+  </component>
+</project>
