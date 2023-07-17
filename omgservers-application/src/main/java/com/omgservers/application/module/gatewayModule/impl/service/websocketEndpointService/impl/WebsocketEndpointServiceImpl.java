@@ -24,10 +24,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 @AllArgsConstructor
 class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
 
-    final ConnectionHelpService connectionInternalService;
+    final ConnectionHelpService connectionHelpService;
     final ClientInternalService clientInternalService;
 
-    final RespondMessageMethod respondClientMethod;
+    final RespondMessageMethod respondMessageMethod;
     final AssignPlayerMethod assignPlayerMethod;
 
     final GetGatewayServiceApiClientOperation getGatewayServiceApiClientOperation;
@@ -41,7 +41,7 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
         final var session = request.getSession();
         final var createConnectionHelpRequest = new com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.CreateConnectionHelpRequest(session);
         try {
-            connectionInternalService.createConnection(createConnectionHelpRequest);
+            connectionHelpService.createConnection(createConnectionHelpRequest);
         } catch (ServerSideConflictException e) {
             // TODO: close session ??
             log.error("Request failed, skip operation, {}", e.getMessage());
@@ -54,7 +54,7 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
 
         final var session = request.getSession();
         final var deleteConnectionHelpRequest = new com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.DeleteConnectionHelpRequest(session);
-        connectionInternalService.deleteConnection(deleteConnectionHelpRequest);
+        connectionHelpService.deleteConnection(deleteConnectionHelpRequest);
     }
 
     @Override
@@ -64,7 +64,7 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
         final var session = request.getSession();
         final var getConnectionHelpRequest = new GetConnectionHelpRequest(session);
         try {
-            final var connection = connectionInternalService.getConnection(getConnectionHelpRequest).getConnection();
+            final var connection = connectionHelpService.getConnection(getConnectionHelpRequest).getConnection();
             final var messageString = request.getMessage();
             processMessageOperation.processMessage(connection, messageString);
         } catch (ServerSideNotFoundException e) {
