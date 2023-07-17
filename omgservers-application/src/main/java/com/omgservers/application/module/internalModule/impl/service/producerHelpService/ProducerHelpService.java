@@ -5,5 +5,7 @@ import io.smallrye.mutiny.Uni;
 
 public interface ProducerHelpService {
 
-    Uni<Void> produceEvent(ProducerEventHelpRequest request);
+    Uni<Void> produceEventAsync(ProducerEventHelpRequest request);
+
+    void produceEventSync(ProducerEventHelpRequest request);
 }

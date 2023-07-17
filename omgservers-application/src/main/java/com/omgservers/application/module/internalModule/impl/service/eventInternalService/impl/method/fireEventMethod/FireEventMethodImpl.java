@@ -29,7 +29,7 @@ class FireEventMethodImpl implements FireEventMethod {
                 .flatMap(shard -> {
                     final var event = request.getEvent();
                     final var producerEventHelpRequest = new ProducerEventHelpRequest(event);
-                    return producerHelpService.produceEvent(producerEventHelpRequest);
+                    return producerHelpService.produceEventAsync(producerEventHelpRequest);
                 });
     }
 }

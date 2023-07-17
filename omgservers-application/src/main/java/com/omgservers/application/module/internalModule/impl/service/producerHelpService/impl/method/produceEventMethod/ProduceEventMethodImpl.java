@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.request.ProducerEventHelpRequest;
+import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @ApplicationScoped
-class ProduceEventMethodImpl implements ProducerEventMethod {
+class ProduceEventMethodImpl implements ProduceEventMethod {
 
     final ThreadLocal<JmsProducer> producers;
     final ObjectMapper objectMapper;
@@ -39,30 +40,40 @@ class ProduceEventMethodImpl implements ProducerEventMethod {
     }
 
     @Override
-    public Uni<Void> produceEvent(ProducerEventHelpRequest request) {
+    public Uni<Void> produceEventAsync(ProducerEventHelpRequest request) {
         ProducerEventHelpRequest.validate(request);
 
         final var event = request.getEvent();
         return Uni.createFrom().voidItem()
                 .emitOn(executor)
-                .invoke(voidItem -> {
-                    final String text;
-                    try {
-                        text = objectMapper.writeValueAsString(event);
-                    } catch (IOException e) {
-                        log.error("event is wrong, event={}, {}", event, e.getMessage());
-                        throw new ServerSideBadRequestException("event is wrong, " + e.getMessage());
-                    }
-
-                    try {
-                        final var producer = producers.get();
-                        producer.send(text, event.getGroup());
-                        log.info("Event was produced, event={}", event);
-                    } catch (Exception e) {
-                        log.error("producer failed, {}", e.getMessage());
-                        throw new ServerSideInternalException("producer failed, " + e.getMessage());
-                    }
-                })
+                .invoke(voidItem -> produceEvent(event))
                 .replaceWithVoid();
+    }
+
+    @Override
+    public void produceEventSync(ProducerEventHelpRequest request) {
+        ProducerEventHelpRequest.validate(request);
+
+        final var event = request.getEvent();
+        produceEvent(event);
+    }
+
+    void produceEvent(EventModel event) {
+        final String text;
+        try {
+            text = objectMapper.writeValueAsString(event);
+        } catch (IOException e) {
+            log.error("event is wrong, event={}, {}", event, e.getMessage());
+            throw new ServerSideBadRequestException("event is wrong, " + e.getMessage());
+        }
+
+        try {
+            final var producer = producers.get();
+            producer.send(text, event.getGroup());
+            log.info("Event was produced, event={}", event);
+        } catch (Exception e) {
+            log.error("producer failed, {}", e.getMessage());
+            throw new ServerSideInternalException("producer failed, " + e.getMessage());
+        }
     }
 }

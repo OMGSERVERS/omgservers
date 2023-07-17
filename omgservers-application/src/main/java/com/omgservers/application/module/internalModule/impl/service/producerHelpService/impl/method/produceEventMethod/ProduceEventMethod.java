@@ -3,6 +3,8 @@ package com.omgservers.application.module.internalModule.impl.service.producerHe
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.request.ProducerEventHelpRequest;
 import io.smallrye.mutiny.Uni;
 
-public interface ProducerEventMethod {
-    Uni<Void> produceEvent(ProducerEventHelpRequest request);
+public interface ProduceEventMethod {
+    Uni<Void> produceEventAsync(ProducerEventHelpRequest request);
+
+    void produceEventSync(ProducerEventHelpRequest request);
 }

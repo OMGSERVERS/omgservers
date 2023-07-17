@@ -69,6 +69,7 @@ class JmsConsumer implements Runnable {
                                         context.rollback();
                                     }
                                 })
+                                // TODO: handle timeout properly
                                 .await().atMost(Duration.ofSeconds(10));
                     }
                 }
