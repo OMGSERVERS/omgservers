@@ -15,6 +15,7 @@ public enum EventQualifierEnum {
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
     PLAYER_CREATED(PlayerCreatedEventBodyModel.class),
     CLIENT_CREATED(ClientCreatedEventBodyModel.class),
+    CLIENT_DISCONNECTED(ClientDisconnectedEventBodyModel.class),
     MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class),
     MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class),
     MATCH_CREATED(MatchCreatedEventBodyModel.class),

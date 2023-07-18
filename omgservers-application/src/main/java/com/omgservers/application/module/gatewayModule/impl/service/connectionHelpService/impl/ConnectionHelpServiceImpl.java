@@ -3,6 +3,7 @@ package com.omgservers.application.module.gatewayModule.impl.service.connectionH
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.*;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.DeleteConnectionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetSessionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
@@ -32,7 +33,7 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
     }
 
     @Override
-    public void createConnection(CreateConnectionHelpRequest request) {
+    public synchronized void createConnection(CreateConnectionHelpRequest request) {
         CreateConnectionHelpRequest.validate(request);
 
         final var session = request.getSession();
@@ -47,7 +48,7 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
     }
 
     @Override
-    public void deleteConnection(DeleteConnectionHelpRequest request) {
+    public synchronized DeleteConnectionHelpResponse deleteConnection(DeleteConnectionHelpRequest request) {
         DeleteConnectionHelpRequest.validate(request);
 
         final var session = request.getSession();
@@ -56,14 +57,16 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
 
         if (connection != null) {
             sessionByConnection.remove(connection);
-            assignedPlayerByConnection.remove(connection);
+            final var assignedPlayer = assignedPlayerByConnection.remove(connection);
+            return new DeleteConnectionHelpResponse(connection, assignedPlayer);
         } else {
             log.warn("Connection was not found, sessionId={}", sessionId);
+            return new DeleteConnectionHelpResponse();
         }
     }
 
     @Override
-    public void assignPlayer(AssignPlayerHelpRequest request) {
+    public synchronized void assignPlayer(AssignPlayerHelpRequest request) {
         AssignPlayerHelpRequest.validate(request);
 
         final var connection = request.getConnection();
@@ -76,7 +79,7 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
     }
 
     @Override
-    public GetConnectionHelpResponse getConnection(GetConnectionHelpRequest request) {
+    public synchronized GetConnectionHelpResponse getConnection(GetConnectionHelpRequest request) {
         GetConnectionHelpRequest.validate(request);
 
         final var session = request.getSession();
@@ -90,7 +93,7 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
     }
 
     @Override
-    public GetSessionHelpResponse getSession(GetSessionHelpRequest request) {
+    public synchronized GetSessionHelpResponse getSession(GetSessionHelpRequest request) {
         GetSessionHelpRequest.validate(request);
 
         final var connection = request.getConnection();
@@ -103,7 +106,7 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
     }
 
     @Override
-    public GetAssignedPlayerHelpResponse getAssignedPlayer(GetAssignedPlayerHelpRequest request) {
+    public synchronized GetAssignedPlayerHelpResponse getAssignedPlayer(GetAssignedPlayerHelpRequest request) {
         GetAssignedPlayerHelpRequest.validate(request);
 
         final var connection = request.getConnection();

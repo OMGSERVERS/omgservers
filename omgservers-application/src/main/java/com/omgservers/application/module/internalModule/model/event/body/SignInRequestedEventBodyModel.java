@@ -25,7 +25,7 @@ public class SignInRequestedEventBodyModel extends EventBodyModel {
                                          final UUID user,
                                          final String password) {
         final var body = new SignInRequestedEventBodyModel(server, connection, tenant, stage, secret, user, password);
-        final var group = user;
+        final var group = connection;
         final var event = EventModel.create(group, EventQualifierEnum.SIGN_IN_REQUESTED, body);
         return event;
     }

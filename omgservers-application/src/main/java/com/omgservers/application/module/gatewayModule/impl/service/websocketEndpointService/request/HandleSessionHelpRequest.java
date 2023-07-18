@@ -10,9 +10,9 @@ import jakarta.websocket.Session;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteConnectionHelpRequest {
+public class HandleSessionHelpRequest {
 
-    static public void validate(DeleteConnectionHelpRequest request) {
+    static public void validate(HandleSessionHelpRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

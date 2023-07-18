@@ -23,7 +23,7 @@ public class SignUpRequestedEventBodyModel extends EventBodyModel {
                                          final UUID stage,
                                          final String secret) {
         final var body = new SignUpRequestedEventBodyModel(server, connection, tenant, stage, secret);
-        final var group = UUID.randomUUID();
+        final var group = connection;
         final var event = EventModel.create(group, EventQualifierEnum.SIGN_UP_REQUESTED, body);
         return event;
     }
