@@ -11,5 +11,4 @@ import lombok.*;
 public class MatchmakerMessageBodyModel extends MessageBodyModel {
 
     String mode;
-    String pool;
 }

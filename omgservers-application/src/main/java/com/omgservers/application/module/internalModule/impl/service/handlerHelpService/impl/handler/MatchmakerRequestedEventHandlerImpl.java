@@ -49,13 +49,12 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
         final var player = body.getPlayer();
         final var client = body.getClient();
         final var mode = body.getMode();
-        final var pool = body.getPool();
         return getStage(tenant, stageUuid)
                 .flatMap(stage -> {
                     final var matchmaker = stage.getMatchmaker();
                     return getPlayerAttributes(user, player)
                             .flatMap(attributes -> {
-                                final var requestConfig = new RequestConfigModel(user, client, tenant, stageUuid, mode, pool, attributes);
+                                final var requestConfig = new RequestConfigModel(user, client, tenant, stageUuid, mode, attributes);
                                 final var requestModel = RequestModel.create(matchmaker, requestConfig);
                                 final var request = new CreateRequestInternalRequest(requestModel);
                                 return matchmakerModule.getMatchmakerInternalService().createRequest(request)

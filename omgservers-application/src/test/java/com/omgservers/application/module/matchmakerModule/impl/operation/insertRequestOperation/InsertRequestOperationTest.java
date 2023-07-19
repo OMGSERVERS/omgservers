@@ -33,7 +33,7 @@ class InsertRequestOperationTest extends Assertions {
         final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName(), poolName());
+        final var matchmakerRequestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName());
         final var matchmakerRequest = RequestModel.create(matchmaker.getUuid(), matchmakerRequestConfig);
         insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
     }
@@ -56,9 +56,5 @@ class InsertRequestOperationTest extends Assertions {
 
     String modeName() {
         return "mode-" + UUID.randomUUID();
-    }
-
-    String poolName() {
-        return "pool-" + UUID.randomUUID();
     }
 }

@@ -18,9 +18,8 @@ public class MatchmakerRequestedEventBodyModel extends EventBodyModel {
                                          final UUID user,
                                          final UUID player,
                                          final UUID client,
-                                         final String mode,
-                                         final String pool) {
-        final var body = new MatchmakerRequestedEventBodyModel(tenant, stage, user, player, client, mode, pool);
+                                         final String mode) {
+        final var body = new MatchmakerRequestedEventBodyModel(tenant, stage, user, player, client, mode);
         final var group = user;
         final var event = EventModel.create(group, EventQualifierEnum.MATCHMAKER_REQUESTED, body);
         return event;
@@ -32,5 +31,4 @@ public class MatchmakerRequestedEventBodyModel extends EventBodyModel {
     UUID player;
     UUID client;
     String mode;
-    String pool;
 }

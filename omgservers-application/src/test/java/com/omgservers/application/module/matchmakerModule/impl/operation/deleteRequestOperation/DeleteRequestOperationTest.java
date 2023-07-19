@@ -37,7 +37,7 @@ class DeleteRequestOperationTest extends Assertions {
         final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var requestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName(), poolName());
+        final var requestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName());
         final var request = RequestModel.create(matchmaker.getUuid(), requestConfig);
         insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, request);
 
@@ -70,9 +70,5 @@ class DeleteRequestOperationTest extends Assertions {
 
     String modeName() {
         return "mode-" + UUID.randomUUID();
-    }
-
-    String poolName() {
-        return "pool-" + UUID.randomUUID();
     }
 }

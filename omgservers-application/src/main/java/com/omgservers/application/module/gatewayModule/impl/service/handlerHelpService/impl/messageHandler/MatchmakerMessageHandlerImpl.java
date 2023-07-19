@@ -47,9 +47,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
         final var client = assignedPlayer.getClient();
         final var messageBody = (MatchmakerMessageBodyModel) message.getBody();
         final var mode = messageBody.getMode();
-        final var pool = messageBody.getPool();
 
-        final var event = MatchmakerRequestedEventBodyModel.createEvent(tenant, stageUuid, user, player, client, mode, pool);
+        final var event = MatchmakerRequestedEventBodyModel.createEvent(tenant, stageUuid, user, player, client, mode);
         final var request = new FireEventInternalRequest(event);
         return internalModule.getEventInternalService().fireEvent(request)
                 .replaceWithVoid();

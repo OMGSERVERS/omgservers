@@ -18,8 +18,7 @@ public class RequestConfigModel {
                                             final UUID client,
                                             final UUID tenant,
                                             final UUID stage,
-                                            final String mode,
-                                            final String pool) {
+                                            final String mode) {
         if (user == null) {
             throw new ServerSideBadRequestException("user is null");
         }
@@ -35,9 +34,6 @@ public class RequestConfigModel {
         if (mode == null) {
             throw new ServerSideBadRequestException("mode is null");
         }
-        if (pool == null) {
-            throw new ServerSideBadRequestException("pool is null");
-        }
 
         final var config = new RequestConfigModel();
         config.setUser(user);
@@ -45,12 +41,11 @@ public class RequestConfigModel {
         config.setTenant(tenant);
         config.setStage(stage);
         config.setMode(mode);
-        config.setPool(pool);
         config.setAttributes(new HashMap<>());
         return config;
     }
 
-    static public void validateMatchmakerRequestConfigModel(RequestConfigModel config) {
+    static public void validate(RequestConfigModel config) {
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
         }
@@ -61,6 +56,5 @@ public class RequestConfigModel {
     UUID tenant;
     UUID stage;
     String mode;
-    String pool;
     Map<String, String> attributes;
 }
