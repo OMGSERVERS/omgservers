@@ -69,6 +69,12 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             }
         }
 
+        final var statusNode = root.get("status");
+        if (statusNode != null) {
+            final var status = EventStatusEnum.valueOf(statusNode.asText());
+            eventModel.setStatus(status);
+        }
+
         return eventModel;
     }
 }

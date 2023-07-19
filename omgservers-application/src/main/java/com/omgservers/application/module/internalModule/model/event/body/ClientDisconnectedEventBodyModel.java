@@ -16,12 +16,15 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class ClientDisconnectedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID connection, final UUID client) {
-        final var body = new ClientDisconnectedEventBodyModel(client);
+    static public EventModel createEvent(final UUID connection,
+                                         final UUID user,
+                                         final UUID client) {
+        final var body = new ClientDisconnectedEventBodyModel(user, client);
         final var group = connection;
         final var eventModel = EventModel.create(group, EventQualifierEnum.CLIENT_DISCONNECTED, body);
         return eventModel;
     }
 
+    UUID user;
     UUID client;
 }

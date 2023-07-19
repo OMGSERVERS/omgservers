@@ -63,7 +63,7 @@ class ProduceEventMethodImpl implements ProduceEventMethod {
         try {
             text = objectMapper.writeValueAsString(event);
         } catch (IOException e) {
-            log.error("event is wrong, event={}, {}", event, e.getMessage());
+            log.error("Event is wrong, event={}, {}", event, e.getMessage());
             throw new ServerSideBadRequestException("event is wrong, " + e.getMessage());
         }
 

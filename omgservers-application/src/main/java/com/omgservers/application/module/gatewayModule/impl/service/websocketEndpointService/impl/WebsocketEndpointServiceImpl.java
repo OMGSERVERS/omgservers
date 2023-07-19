@@ -70,7 +70,9 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
                 final var assignedPlayer = response.getAssignedPlayer().get();
                 log.info("Connection was deleted, connection={}, assignedPlayer={}", connection, assignedPlayer);
 
-                final var event = ClientDisconnectedEventBodyModel.createEvent(connection, assignedPlayer.getClient());
+                final var user = assignedPlayer.getUser();
+                final var client = assignedPlayer.getClient();
+                final var event = ClientDisconnectedEventBodyModel.createEvent(connection, user, client);
                 final var fireEventInternalRequest = new FireEventInternalRequest(event);
                 internalModule.getEventInternalService().fireEvent(fireEventInternalRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
