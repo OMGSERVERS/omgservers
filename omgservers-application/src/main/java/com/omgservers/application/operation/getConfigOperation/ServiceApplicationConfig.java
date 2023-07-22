@@ -6,6 +6,8 @@ import java.net.URI;
 
 @ConfigMapping(prefix = "omgservers.application")
 public interface ServiceApplicationConfig {
+    Integer nodeId();
+
     URI serverUri();
 
     String serviceUsername();
