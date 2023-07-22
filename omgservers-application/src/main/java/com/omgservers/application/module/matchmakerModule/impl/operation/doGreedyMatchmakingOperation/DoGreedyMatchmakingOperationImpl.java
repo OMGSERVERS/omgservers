@@ -27,7 +27,9 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                                                        final VersionModeModel modeConfig,
                                                        final List<RequestModel> activeRequests,
                                                        final List<MatchModel> launchedMatches) {
-        List<MatchModel> temporaryMatches = new ArrayList<>(launchedMatches);
+        // Temporary do not update already launched matches
+        // List<MatchModel> temporaryMatches = new ArrayList<>(launchedMatches);
+        List<MatchModel> temporaryMatches = new ArrayList<>();
         List<RequestModel> failedRequests = new ArrayList<>();
         List<RequestModel> matchedRequests = new ArrayList<>();
 
