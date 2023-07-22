@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,10 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
         activeRequests.forEach(request -> {
             boolean matched = false;
-            for (var match : temporaryMatches) {
+
+            final var sortedMatches = temporaryMatches.stream()
+                    .sorted(Comparator.comparingInt(this::countMatchRequests)).toList();
+            for (var match : sortedMatches) {
                 matched = matchRequestWithMatch(request, match);
                 if (matched) {
                     matchedRequests.add(request);
@@ -70,7 +74,9 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
             return false;
         }
 
-        for (var group : matchGroups) {
+        final var sortedGroups = matchGroups.stream()
+                .sorted(Comparator.comparingInt(g -> g.getRequests().size())).toList();
+        for (var group : sortedGroups) {
             if (matchRequestWithGroup(request, group)) {
                 return true;
             }

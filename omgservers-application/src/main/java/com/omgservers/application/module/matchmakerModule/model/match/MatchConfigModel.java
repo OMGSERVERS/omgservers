@@ -43,7 +43,7 @@ public class MatchConfigModel {
         return matchConfig;
     }
 
-    static public void validateMatchmakerRequestConfigModel(MatchConfigModel config) {
+    static public void validate(MatchConfigModel config) {
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
         }
