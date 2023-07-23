@@ -1,6 +1,7 @@
 package com.omgservers.application.operation.generateIdOperation;
 
 import com.omgservers.application.exception.ServerSideInternalException;
+import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ class GenerateIdOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;
+
+    @Inject
+    GetConfigOperation getConfigOperation;
 
     @Test
     void sequenceTest() {
@@ -29,5 +33,28 @@ class GenerateIdOperationTest extends Assertions {
                 generateIdOperation.generateId();
             }
         });
+    }
+
+    @Test
+    void structureTest() {
+        // Skip sequence 0 for test purpose
+        generateIdOperation.generateId();
+        long id = generateIdOperation.generateId();
+
+        long sequence = id & GenerateIdOperation.SEQUENCE_MASK;
+        long nodeId = (id >> GenerateIdOperation.NODE_ID_OFFSET) & GenerateIdOperation.NODE_ID_MASK;
+        long datacenterId = (id >> GenerateIdOperation.DATACENTER_ID_OFFSET) & GenerateIdOperation.DATACENTER_ID_MASK;
+        long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
+
+        log.info("id={}", id);
+        log.info("sequence={}", sequence);
+        log.info("nodeId={}", nodeId);
+        log.info("datacenterId={}", datacenterId);
+        log.info("timestamp={}", timestamp);
+
+        assertEquals(1, sequence);
+        assertEquals(getConfigOperation.getConfig().nodeId(), nodeId);
+        assertEquals(getConfigOperation.getConfig().datacenterId(), datacenterId);
+        assertTrue(timestamp > 0);
     }
 }

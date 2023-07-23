@@ -1,5 +1,6 @@
 package com.omgservers.application.operation.generateIdOperation;
 
+import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,13 +10,24 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 class GenerateIdOperationImpl implements GenerateIdOperation {
 
+    final long datacenterId;
     final long nodeId;
 
     long lastTimestamp;
     long sequence;
 
     public GenerateIdOperationImpl(GetConfigOperation getConfigOperation) {
+        datacenterId = getConfigOperation.getConfig().datacenterId();
+        if (datacenterId < 0 || datacenterId >= 1 << DATACENTER_ID_BITS) {
+            throw new ServerSideConflictException("wrong datacenterId, value=" + datacenterId);
+        }
+
         nodeId = getConfigOperation.getConfig().nodeId();
+        if (nodeId < 0 || nodeId >= 1 << NODE_ID_BITS) {
+            throw new ServerSideConflictException("wrong nodeId, value=" + nodeId);
+        }
+
+        log.info("Generator was initialized, datacenterId={}, nodeId={}", datacenterId, nodeId);
 
         lastTimestamp = 0;
         sequence = 0;
@@ -28,7 +40,7 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
         if (timestamp == lastTimestamp) {
             sequence += 1;
 
-            if (sequence >= 1024) {
+            if (sequence >= (1 << SEQUENCE_BITS)) {
                 throw new ServerSideInternalException("sequence was overflowed, timestamp=" + timestamp);
             }
         } else if (timestamp > lastTimestamp) {
@@ -42,11 +54,14 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
             lastTimestamp = timestamp;
         }
 
-        var id = timestamp << 23 | nodeId << 13 | sequence;
+        var id = timestamp << TIMESTAMP_OFFSET |
+                datacenterId << DATACENTER_ID_OFFSET |
+                nodeId << NODE_ID_OFFSET |
+                sequence;
         return id;
     }
 
     long timestamp() {
-        return System.currentTimeMillis() - 1690056599000L;
+        return System.currentTimeMillis() - TIMESTAMP_EPOCH;
     }
 }

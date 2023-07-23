@@ -6,7 +6,9 @@ import java.net.URI;
 
 @ConfigMapping(prefix = "omgservers.application")
 public interface ServiceApplicationConfig {
-    Integer nodeId();
+    long datacenterId();
+
+    long nodeId();
 
     URI serverUri();
 
@@ -20,27 +22,27 @@ public interface ServiceApplicationConfig {
 
     String indexName();
 
-    Integer shardCount();
+    int shardCount();
 
     Integer migrationConcurrency();
 
-    Boolean disableMigration();
+    boolean disableMigration();
 
-    Long tokenLifetime();
+    long tokenLifetime();
 
-    Boolean disableConsumers();
+    boolean disableConsumers();
 
-    Integer consumerCount();
+    int consumerCount();
 
     String consumerQueue();
 
-    Integer producerCount();
+    int producerCount();
 
     String producerQueue();
 
-    Boolean disableDispatcher();
+    boolean disableDispatcher();
 
-    Integer dispatcherLimit();
+    int dispatcherLimit();
 
-    Boolean standalone();
+    boolean standalone();
 }
