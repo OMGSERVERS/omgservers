@@ -21,8 +21,8 @@ public class BuildVersionHelpRequest {
         // TODO: validate fields
     }
 
-    UUID tenant;
-    UUID stage;
+    Long tenantId;
+    Long stageId;
     VersionStageConfigModel stageConfig;
     VersionSourceCodeModel sourceCode;
 }

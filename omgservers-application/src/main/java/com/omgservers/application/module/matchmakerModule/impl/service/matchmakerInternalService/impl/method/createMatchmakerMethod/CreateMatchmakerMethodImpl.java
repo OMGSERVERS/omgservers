@@ -40,12 +40,11 @@ class CreateMatchmakerMethodImpl implements CreateMatchmakerMethod {
     Uni<Void> createMatchmaker(final int shard, final MatchmakerModel matchmaker) {
         return pgPool.withTransaction(sqlConnection -> insertMatchmakerOperation.insertMatchmaker(sqlConnection, shard, matchmaker)
                 .call(voidItem -> {
-                    final var uuid = matchmaker.getUuid();
-                    final var tenant = matchmaker.getTenant();
-                    final var stage = matchmaker.getStage();
-                    final var origin = MatchmakerCreatedEventBodyModel.createEvent(uuid, tenant, stage);
-                    final var event = EventCreatedEventBodyModel.createEvent(origin);
-                    final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                    final var id = matchmaker.getId();
+                    final var tenantId = matchmaker.getTenantId();
+                    final var stageId = matchmaker.getStageId();
+                    final var eventBody = new MatchmakerCreatedEventBodyModel(id, tenantId, stageId);
+                    final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                     return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
                             .replaceWithVoid();
                 }));

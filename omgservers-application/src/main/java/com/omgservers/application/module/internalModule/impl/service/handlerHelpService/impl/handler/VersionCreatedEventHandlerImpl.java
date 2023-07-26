@@ -40,31 +40,31 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (VersionCreatedEventBodyModel) event.getBody();
-        final var tenant = body.getTenant();
-        final var uuid = body.getUuid();
+        final var tenantId = body.getTenantId();
+        final var id = body.getId();
 
-        return getVersion(uuid)
-                .flatMap(version -> getStage(tenant, body.getStage())
+        return getVersion(id)
+                .flatMap(version -> getStage(tenantId, body.getStageId())
                         .flatMap(stage -> deployVersion(version, stage)))
                 .replaceWith(true);
     }
 
-    Uni<VersionModel> getVersion(UUID uuid) {
-        final var getVersionServiceRequest = new GetVersionInternalRequest(uuid);
+    Uni<VersionModel> getVersion(Long id) {
+        final var getVersionServiceRequest = new GetVersionInternalRequest(id);
         return versionModule.getVersionInternalService().getVersion(getVersionServiceRequest)
                 .map(GetVersionInternalResponse::getVersion);
     }
 
-    Uni<StageModel> getStage(UUID tenant, UUID uuid) {
-        final var request = new GetStageInternalRequest(tenant, uuid);
+    Uni<StageModel> getStage(Long tenantId, Long id) {
+        final var request = new GetStageInternalRequest(tenantId, id);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage);
     }
 
     Uni<Void> deployVersion(VersionModel version, StageModel stage) {
-        stage.setVersion(version.getUuid());
+        stage.setVersionId(version.getId());
         version.setStatus(VersionStatusEnum.DEPLOYED);
-        return syncStage(version.getTenant(), stage)
+        return syncStage(version.getTenantId(), stage)
                 .onFailure(ServerSideClientErrorException.class)
                 .invoke(t -> {
                     version.setStatus(VersionStatusEnum.FAILED);
@@ -73,8 +73,8 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(voidItem -> syncVersion(version));
     }
 
-    Uni<Void> syncStage(UUID tenant, StageModel stage) {
-        final var request = new SyncStageInternalRequest(tenant, stage);
+    Uni<Void> syncStage(Long tenantId, StageModel stage) {
+        final var request = new SyncStageInternalRequest(tenantId, stage);
         return tenantModule.getStageInternalService().syncStage(request);
     }
 

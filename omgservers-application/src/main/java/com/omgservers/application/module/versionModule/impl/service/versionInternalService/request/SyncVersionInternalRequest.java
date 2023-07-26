@@ -21,6 +21,6 @@ public class SyncVersionInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return version.getUuid().toString();
+        return version.getId().toString();
     }
 }

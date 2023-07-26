@@ -19,12 +19,12 @@ class CreatePlayerContextMethodImpl implements CreatePlayerContextMethod {
     public Uni<CreatePlayerContextHelpResponse> createPlayerContext(final CreatePlayerContextHelpRequest request) {
         CreatePlayerContextHelpRequest.validate(request);
 
-        final var user = request.getUser();
-        final var player = request.getPlayer();
-        final var client = request.getClient();
+        final var userId = request.getUserId();
+        final var playerId = request.getPlayerId();
+        final var clientId = request.getClientId();
 
         return Uni.createFrom().voidItem()
-                .map(voidItem -> luaPlayerContextFactory.build(user, player, client))
+                .map(voidItem -> luaPlayerContextFactory.build(userId, playerId, clientId))
                 .map(CreatePlayerContextHelpResponse::new);
     }
 }

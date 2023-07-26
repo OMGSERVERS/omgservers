@@ -29,31 +29,31 @@ class HandlePlayerSignedUpEventMethodImpl implements HandlePlayerSignedUpEventMe
     public Uni<Void> handleLuaPlayerSignedUpEvent(final HandlePlayerSignedUpEventHelpRequest request) {
         HandlePlayerSignedUpEventHelpRequest.validate(request);
 
-        final var tenant = request.getTenant();
-        final var stage = request.getStage();
-        final var user = request.getUser();
-        final var player = request.getPlayer();
-        final var client = request.getClient();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
+        final var userId = request.getUserId();
+        final var playerId = request.getPlayerId();
+        final var clientId = request.getClientId();
 
-        return createLuaRuntime(tenant, stage)
-                .flatMap(luaRuntime -> createPlayerContext(user, player, client)
+        return createLuaRuntime(tenantId, stageId)
+                .flatMap(luaRuntime -> createPlayerContext(userId, playerId, clientId)
                         .flatMap(luaPlayerContext -> {
-                            final var luaEvent = new LuaPlayerSignedUpEvent(user, player, client);
+                            final var luaEvent = new LuaPlayerSignedUpEvent(userId, playerId, clientId);
                             return handleEvent(luaRuntime, luaEvent, luaPlayerContext);
                         }))
                 .replaceWithVoid();
     }
 
-    Uni<LuaRuntime> createLuaRuntime(final UUID tenant, final UUID stage) {
-        final var request = new CreateLuaRuntimeHelpRequest(tenant, stage);
+    Uni<LuaRuntime> createLuaRuntime(final Long tenantId, final Long stageId) {
+        final var request = new CreateLuaRuntimeHelpRequest(tenantId, stageId);
         return runtimeHelpService.createLuaRuntime(request)
                 .map(CreateLuaRuntimeHelpResponse::getLuaRuntime);
     }
 
-    Uni<LuaPlayerContext> createPlayerContext(final UUID user,
-                                              final UUID player,
-                                              final UUID client) {
-        final var request = new CreatePlayerContextHelpRequest(user, player, client);
+    Uni<LuaPlayerContext> createPlayerContext(final Long userId,
+                                              final Long playerId,
+                                              final Long clientId) {
+        final var request = new CreatePlayerContextHelpRequest(userId, playerId, clientId);
         return runtimeHelpService.createPlayerContext(request)
                 .map(CreatePlayerContextHelpResponse::getLuaPlayerContext);
     }

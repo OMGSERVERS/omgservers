@@ -21,7 +21,8 @@ import java.util.List;
 class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
 
     static private final String sql = """
-            select created, shard_key, entity, type from internal.tab_job
+            select id, created, shard_key, entity, type 
+            from internal.tab_job
             """;
 
     final ObjectMapper objectMapper;
@@ -52,9 +53,10 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
 
     JobModel createJob(Row row) {
         JobModel job = new JobModel();
+        job.setId(row.getLong("id"));
         job.setCreated(row.getOffsetDateTime("created").toInstant());
-        job.setShardKey(row.getUUID("shard_key"));
-        job.setEntity(row.getUUID("entity"));
+        job.setShardKey(row.getLong("shard_key"));
+        job.setEntity(row.getLong("entity"));
         job.setType(JobType.valueOf(row.getString("type")));
         return job;
     }

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 class InsertRequestOperationImpl implements InsertRequestOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_request(matchmaker_uuid, created, uuid, config)
+            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, config)
             values($1, $2, $3, $4)
             """;
 
@@ -56,9 +56,9 @@ class InsertRequestOperationImpl implements InsertRequestOperation {
             var configString = objectMapper.writeValueAsString(request.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(request.getMatchmaker());
+                        add(request.getId());
+                        add(request.getMatchmakerId());
                         add(request.getCreated().atOffset(ZoneOffset.UTC));
-                        add(request.getUuid());
                         add(configString);
                     }}))
                     .replaceWithVoid();

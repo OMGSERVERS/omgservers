@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectTenantOperation {
-    Uni<TenantModel> selectTenant(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<TenantModel> selectTenant(SqlConnection sqlConnection, int shard, Long id);
 
-    default TenantModel selectTenant(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectTenant(sqlConnection, shard, uuid))
+    default TenantModel selectTenant(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectTenant(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

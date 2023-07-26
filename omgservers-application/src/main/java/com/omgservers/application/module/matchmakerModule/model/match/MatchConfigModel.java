@@ -13,17 +13,17 @@ import java.util.*;
 @AllArgsConstructor
 public class MatchConfigModel {
 
-    static public MatchConfigModel create(final UUID tenant,
-                                          final UUID stage,
-                                          final UUID version,
+    static public MatchConfigModel create(final Long tenantId,
+                                          final Long stageId,
+                                          final Long versionId,
                                           final VersionModeModel config) {
-        if (tenant == null) {
-            throw new ServerSideBadRequestException("tenant is null");
+        if (tenantId == null) {
+            throw new ServerSideBadRequestException("tenantId is null");
         }
-        if (stage == null) {
-            throw new ServerSideBadRequestException("stage is null");
+        if (stageId == null) {
+            throw new ServerSideBadRequestException("stageId is null");
         }
-        if (version == null) {
+        if (versionId == null) {
             throw new ServerSideBadRequestException("version is null");
         }
         if (config == null) {
@@ -31,9 +31,9 @@ public class MatchConfigModel {
         }
 
         final var matchConfig = new MatchConfigModel();
-        matchConfig.setTenant(tenant);
-        matchConfig.setStage(stage);
-        matchConfig.setVersion(version);
+        matchConfig.setTenantId(tenantId);
+        matchConfig.setStageId(stageId);
+        matchConfig.setVersionId(versionId);
         matchConfig.setModeConfig(config);
         matchConfig.setGroups(new ArrayList<>());
         config.getGroups().forEach(groupConfig -> {
@@ -49,9 +49,9 @@ public class MatchConfigModel {
         }
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID version;
+    Long tenantId;
+    Long stageId;
+    Long versionId;
     VersionModeModel modeConfig;
     List<MatchGroupModel> groups;
 }

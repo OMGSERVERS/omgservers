@@ -19,11 +19,11 @@ public class SyncProjectPermissionInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
+    Long tenantId;
     ProjectPermissionModel permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

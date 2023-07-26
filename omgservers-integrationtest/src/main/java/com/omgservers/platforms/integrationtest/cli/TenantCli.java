@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -42,26 +41,26 @@ public class TenantCli {
         return tenantClient;
     }
 
-    public TenantModel getTenant(UUID uuid) {
-        final var response = tenantClient.getTenant(TIMEOUT, new GetTenantInternalRequest(uuid));
+    public TenantModel getTenant(Long id) {
+        final var response = tenantClient.getTenant(TIMEOUT, new GetTenantInternalRequest(id));
         return response.getTenant();
     }
 
-    public Boolean hasTenantPermission(UUID tenant, UUID user, TenantPermissionEnum permission) {
+    public Boolean hasTenantPermission(Long tenantId, Long userId, TenantPermissionEnum permission) {
         final var response = tenantClient
-                .hasTenantPermission(TIMEOUT, new HasTenantPermissionInternalRequest(tenant, user, permission));
+                .hasTenantPermission(TIMEOUT, new HasTenantPermissionInternalRequest(tenantId, userId, permission));
         return response.getResult();
     }
 
-    public Boolean hasProjectPermission(UUID tenant, UUID project, UUID user, ProjectPermissionEnum permission) {
+    public Boolean hasProjectPermission(Long tenantId, Long projectId, Long userId, ProjectPermissionEnum permission) {
         final var response = tenantClient
-                .hasProjectPermission(TIMEOUT, new HasProjectPermissionInternalRequest(tenant, project, user, permission));
+                .hasProjectPermission(TIMEOUT, new HasProjectPermissionInternalRequest(tenantId, projectId, userId, permission));
         return response.getResult();
     }
 
-    public Boolean hasStagePermission(UUID tenant, UUID stage, UUID user, StagePermissionEnum permission) {
+    public Boolean hasStagePermission(Long tenantId, Long stageId, Long userId, StagePermissionEnum permission) {
         final var response = tenantClient
-                .hasStagePermission(TIMEOUT, new HasStagePermissionInternalRequest(tenant, stage, user, permission));
+                .hasStagePermission(TIMEOUT, new HasStagePermissionInternalRequest(tenantId, stageId, userId, permission));
         return response.getResult();
     }
 }

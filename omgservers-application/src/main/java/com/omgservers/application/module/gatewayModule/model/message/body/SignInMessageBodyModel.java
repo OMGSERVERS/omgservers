@@ -12,11 +12,11 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class SignInMessageBodyModel extends MessageBodyModel {
 
-    UUID tenant;
-    UUID stage;
+    Long tenantId;
+    Long stageId;
     @ToString.Exclude
     String secret;
-    UUID user;
+    Long userId;
     @ToString.Exclude
     String password;
 }

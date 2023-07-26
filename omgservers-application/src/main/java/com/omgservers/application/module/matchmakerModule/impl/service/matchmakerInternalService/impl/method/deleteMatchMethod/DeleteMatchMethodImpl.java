@@ -36,27 +36,26 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var matchmaker = request.getMatchmaker();
-                    final var uuid = request.getUuid();
-                    return deleteMatch(shard.shard(), matchmaker, uuid);
+                    final var matchmakerId = request.getMatchmakerId();
+                    final var id = request.getId();
+                    return deleteMatch(shard.shard(), matchmakerId, id);
                 })
                 .map(DeleteMatchInternalResponse::new);
     }
 
     Uni<Boolean> deleteMatch(final int shard,
-                             final UUID matchmaker,
-                             final UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteMatchOperation.deleteMatch(sqlConnection, shard, uuid)
+                             final Long matchmakerId,
+                             final Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteMatchOperation.deleteMatch(sqlConnection, shard, id)
                         .call(deleted -> {
                             if (deleted) {
-                                final var origin = MatchDeletedEventBodyModel.createEvent(matchmaker, uuid);
-                                final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                                final var eventBody = new MatchDeletedEventBodyModel(matchmakerId, id);
+                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                                 return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                             } else {
                                 return Uni.createFrom().voidItem();
                             }
                         }))
-                .invoke(deleted -> matchmakerInMemoryCache.removeMatch(uuid));
+                .invoke(deleted -> matchmakerInMemoryCache.removeMatch(id));
     }
 }

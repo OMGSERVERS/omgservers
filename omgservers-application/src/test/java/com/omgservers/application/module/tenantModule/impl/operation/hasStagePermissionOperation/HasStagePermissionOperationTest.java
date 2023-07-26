@@ -5,12 +5,15 @@ import com.omgservers.application.module.tenantModule.impl.operation.upsertStage
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStagePermissionOperation.UpsertStagePermissionOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEntity;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
+import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
+import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
+import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModel;
 import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
+import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModelFactory;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -41,36 +44,59 @@ class HasStagePermissionOperationTest extends Assertions {
     UpsertStageOperation upsertStageOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
+    ProjectModelFactory projectModelFactory;
+
+    @Inject
+    StageModelFactory stageModelFactory;
+
+    @Inject
+    StagePermissionModelFactory stagePermissionModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenStagePermission_whenHasStagePermission_thenYes() {
         final var shard = 0;
-        final var userUuid = userUuid();
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var userId = userId();
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = ProjectModel.create(tenant.getUuid(), userUuid, ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), userId, ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = StageModel.create(project.getUuid());
+        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
-        final var permission = StagePermissionEntity.create(stage.getUuid(), userUuid, StagePermissionEnum.CREATE_VERSION);
+        final var permission = stagePermissionModelFactory.create(stage.getId(), userId, StagePermissionEnum.CREATE_VERSION);
         upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
 
-        assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, stage.getUuid(), permission.getUser(), permission.getPermission()));
+        assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, stage.getId(), permission.getUserId(), permission.getPermission()));
     }
 
     @Test
     void givenUnknownUuids_whenHasStagePermission_thenNo() {
         final var shard = 0;
 
-        assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, projectUuid(), userUuid(), StagePermissionEnum.CREATE_VERSION));
+        assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, projectId(), userId(), StagePermissionEnum.CREATE_VERSION));
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID projectUuid() {
-        return UUID.randomUUID();
+    Long projectId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long matchmakerId() {
+        return generateIdOperation.generateId();
     }
 }

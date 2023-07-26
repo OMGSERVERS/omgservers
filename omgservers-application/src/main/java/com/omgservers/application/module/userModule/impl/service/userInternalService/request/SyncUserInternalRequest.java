@@ -21,6 +21,6 @@ public class SyncUserInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return user.getUuid().toString();
+        return user.getId().toString();
     }
 }

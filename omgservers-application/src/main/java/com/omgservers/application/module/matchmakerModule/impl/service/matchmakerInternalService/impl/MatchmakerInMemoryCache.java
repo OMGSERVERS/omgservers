@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -17,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerInMemoryCache {
 
-    final Map<UUID, RequestModel> requests;
-    final Map<UUID, MatchModel> matches;
+    final Map<Long, RequestModel> requests;
+    final Map<Long, MatchModel> matches;
 
     public MatchmakerInMemoryCache() {
         requests = new ConcurrentHashMap<>();
@@ -26,32 +25,32 @@ public class MatchmakerInMemoryCache {
     }
 
     public void addRequest(RequestModel request) {
-        final var uuid = request.getUuid();
-        requests.put(uuid, request);
+        final var id = request.getId();
+        requests.put(id, request);
     }
 
-    public boolean removeRequest(UUID uuid) {
-        return requests.remove(uuid) != null;
+    public boolean removeRequest(Long id) {
+        return requests.remove(id) != null;
     }
 
     public void addMatch(MatchModel match) {
-        final var uuid = match.getUuid();
-        matches.put(uuid, match);
+        final var id = match.getId();
+        matches.put(id, match);
     }
 
-    public boolean removeMatch(UUID uuid) {
-        return matches.remove(uuid) != null;
+    public boolean removeMatch(Long id) {
+        return matches.remove(id) != null;
     }
 
-    public List<RequestModel> getRequests(UUID matchmaker) {
+    public List<RequestModel> getRequests(Long matchmakerId) {
         return requests.values().stream()
-                .filter(request -> request.getMatchmaker().equals(matchmaker))
+                .filter(request -> request.getMatchmakerId().equals(matchmakerId))
                 .toList();
     }
 
-    public List<MatchModel> getMatches(UUID matchmaker) {
+    public List<MatchModel> getMatches(Long matchmakerId) {
         return matches.values().stream()
-                .filter(request -> request.getMatchmaker().equals(matchmaker))
+                .filter(request -> request.getMatchmakerId().equals(matchmakerId))
                 .toList();
     }
 }

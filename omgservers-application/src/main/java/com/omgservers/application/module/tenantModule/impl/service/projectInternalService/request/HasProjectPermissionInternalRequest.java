@@ -19,13 +19,13 @@ public class HasProjectPermissionInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    UUID project;
-    UUID user;
+    Long tenantId;
+    Long projectId;
+    Long userId;
     ProjectPermissionEnum permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 class InsertMatchOperationImpl implements InsertMatchOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_match(matchmaker_uuid, created, modified, uuid, runtime config)
+            insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime config)
             values($1, $2, $3, $4, $5, $6)
             """;
 
@@ -56,11 +56,11 @@ class InsertMatchOperationImpl implements InsertMatchOperation {
             var configString = objectMapper.writeValueAsString(match.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(match.getMatchmaker());
+                        add(match.getId());
+                        add(match.getMatchmakerId());
                         add(match.getCreated().atOffset(ZoneOffset.UTC));
                         add(match.getModified().atOffset(ZoneOffset.UTC));
-                        add(match.getUuid());
-                        add(match.getRuntime());
+                        add(match.getRuntimeId());
                         add(configString);
                     }}))
                     .replaceWithVoid();

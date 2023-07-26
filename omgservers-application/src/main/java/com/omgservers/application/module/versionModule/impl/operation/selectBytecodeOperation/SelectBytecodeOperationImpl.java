@@ -28,7 +28,7 @@ class SelectBytecodeOperationImpl implements SelectBytecodeOperation {
     static private final String sql = """
             select bytecode
             from $schema.tab_version
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -38,32 +38,33 @@ class SelectBytecodeOperationImpl implements SelectBytecodeOperation {
     @Override
     public Uni<VersionBytecodeModel> selectBytecode(final SqlConnection sqlConnection,
                                                     final int shard,
-                                                    final UUID version) {
+                                                    final Long versionId) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (version == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (versionId == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(version))
+                .execute(Tuple.of(versionId))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
                         try {
-                            log.info("Version was found, version={}", version);
+                            log.info("Version was found, versionId={}", versionId);
                             final var row = iterator.next();
                             final var bytecode = objectMapper.readValue(row.getString("bytecode"),
                                     VersionBytecodeModel.class);
                             return bytecode;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("bytecode can't be parsed, version=" + version);
+                            throw new ServerSideInternalException("bytecode can't be parsed, versionId=" + versionId);
                         }
                     } else {
-                        throw new ServerSideNotFoundException(String.format("version was not found, version=%s", version));
+                        throw new ServerSideNotFoundException(String.format("version was not found, " +
+                                "versionId=%s", versionId));
                     }
                 })
                 .onFailure(PgException.class)

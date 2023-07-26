@@ -1,6 +1,7 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
 import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
 import com.omgservers.application.module.internalModule.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
@@ -32,16 +33,16 @@ class SignUpMessageHandlerImpl implements MessageHandler {
     }
 
     @Override
-    public Uni<Void> handle(final UUID connection, final MessageModel message) {
+    public Uni<Void> handle(final Long connectionId, final MessageModel message) {
         final var messageBody = (SignUpMessageBodyModel) message.getBody();
-        final var tenant = messageBody.getTenant();
-        final var stage = messageBody.getStage();
+        final var tenantId = messageBody.getTenantId();
+        final var stageId = messageBody.getStageId();
         final var stageSecret = messageBody.getSecret();
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
-        final var event = SignUpRequestedEventBodyModel.createEvent(serverUri, connection, tenant, stage, stageSecret);
-        final var request = new FireEventInternalRequest(event);
-        return internalModule.getEventInternalService().fireEvent(request)
+        final var eventBody = new SignUpRequestedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
+        final var request = new FireEventHelpRequest(eventBody);
+        return internalModule.getEventHelpService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

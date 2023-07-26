@@ -3,12 +3,14 @@ package com.omgservers.application.module.tenantModule.impl.operation.upsertProj
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
 import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModel;
 import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
+import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModelFactory;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -33,28 +35,40 @@ class UpsertProjectPermissionOperationTest extends Assertions {
     UpsertTenantOperation upsertTenantOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
+    ProjectModelFactory projectModelFactory;
+
+    @Inject
+    ProjectPermissionModelFactory projectPermissionModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenProject_whenUpsertProjectPermission_thenInserted() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        final var permission = ProjectPermissionModel.create(project.getUuid(), userUuid(), ProjectPermissionEnum.CREATE_STAGE);
+        final var permission = projectPermissionModelFactory.create(project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
         assertTrue(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
     }
 
     @Test
     void givenPermission_whenUpsertProjectPermission_thenUpdated() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var permission = ProjectPermissionModel.create(project.getUuid(), userUuid(), ProjectPermissionEnum.CREATE_STAGE);
+        final var permission = projectPermissionModelFactory.create(project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
         upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
 
         assertFalse(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
@@ -64,21 +78,21 @@ class UpsertProjectPermissionOperationTest extends Assertions {
     void givenUnknownProjectUuid_whenUpsertProjectPermission_thenServerSideNotFoundException() {
         final var shard = 0;
 
-        final var permission = ProjectPermissionModel.create(projectUuid(), userUuid(), ProjectPermissionEnum.CREATE_STAGE);
+        final var permission = projectPermissionModelFactory.create(projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
         log.info("Exception: {}", exception.getMessage());
     }
 
-    UUID ownerUuid() {
-        return UUID.randomUUID();
+    Long ownerId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID projectUuid() {
-        return UUID.randomUUID();
+    Long projectId() {
+        return generateIdOperation.generateId();
     }
 }

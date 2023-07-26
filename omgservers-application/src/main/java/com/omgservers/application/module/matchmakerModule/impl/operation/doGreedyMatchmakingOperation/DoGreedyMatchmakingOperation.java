@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DoGreedyMatchmakingOperation {
-    GreedyMatchmakingResult doGreedyMatchmaking(UUID tenant,
-                                                UUID stage,
-                                                UUID version,
-                                                UUID matchmaker,
+    GreedyMatchmakingResult doGreedyMatchmaking(Long tenantId,
+                                                Long stageId,
+                                                Long versionId,
+                                                Long matchmakerId,
                                                 VersionModeModel modeConfig,
                                                 List<RequestModel> activeRequests,
                                                 List<MatchModel> launchedMatches);

@@ -26,7 +26,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var client = request.getClient();
+                    final var client = request.getClientId();
                     return pgPool.withTransaction(sqlConnection -> deleteClientOperation
                                     .deleteClient(sqlConnection, shard, client))
                             .replaceWithVoid();

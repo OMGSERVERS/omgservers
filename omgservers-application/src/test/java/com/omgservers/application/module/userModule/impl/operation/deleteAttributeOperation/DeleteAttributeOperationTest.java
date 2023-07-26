@@ -3,11 +3,12 @@ package com.omgservers.application.module.userModule.impl.operation.deleteAttrib
 import com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation.UpsertAttributeOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
+import com.omgservers.application.module.userModule.model.attribute.AttributeModelFactory;
 import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
-import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -35,21 +36,33 @@ class DeleteAttributeOperationTest extends Assertions {
     UpsertUserOperation upsertUserOperation;
 
     @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
+    PlayerModelFactory playerModelFactory;
+
+    @Inject
+    AttributeModelFactory attributeModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenAttributes_whenDeleteAttribute_thenDeleted() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, passwordHash());
-        final var userUuid = user.getUuid();
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
+        final var userUuid = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = PlayerModel.create(userUuid, stageUuid(), PlayerConfigModel.create());
-        final var playerUuid = player.getUuid();
+        final var player = playerModelFactory.create(userUuid, stageId(), PlayerConfigModel.create());
+        final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var attribute1 = AttributeModel
+        final var attribute1 = attributeModelFactory
                 .create(playerUuid, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute1);
-        final var attribute2 = AttributeModel
+        final var attribute2 = attributeModelFactory
                 .create(playerUuid, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute2);
 
@@ -59,19 +72,19 @@ class DeleteAttributeOperationTest extends Assertions {
     @Test
     void givenUnknownAttribute_whenDeleteAttribute_thenNotDeleted() {
         final var shard = 0;
-        assertFalse(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, playerUuid(), attributeName()));
+        assertFalse(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, playerId(), attributeName()));
     }
 
     String passwordHash() {
         return "passwordhash";
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID playerUuid() {
-        return UUID.randomUUID();
+    Long playerId() {
+        return generateIdOperation.generateId();
     }
 
     String attributeName() {

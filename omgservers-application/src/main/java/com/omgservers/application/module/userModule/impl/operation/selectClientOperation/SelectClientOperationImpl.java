@@ -24,9 +24,9 @@ import java.util.UUID;
 class SelectClientOperationImpl implements SelectClientOperation {
 
     static private final String sql = """
-            select player_uuid, created, uuid, server, connection_uuid
+            select id, player_id, created, server, connection_id
             from $schema.tab_player_client
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -36,18 +36,18 @@ class SelectClientOperationImpl implements SelectClientOperation {
     @Override
     public Uni<ClientModel> selectClient(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final UUID uuid) {
+                                         final Long id) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -55,19 +55,19 @@ class SelectClientOperationImpl implements SelectClientOperation {
                         log.info("Client was found, client={}", client);
                         return client;
                     } else {
-                        log.info("Client was not found, uuid={}", uuid);
-                        throw new ServerSideNotFoundException(String.format("client was not found, uuid=%s", uuid));
+                        log.info("Client was not found, id={}", id);
+                        throw new ServerSideNotFoundException(String.format("client was not found, id=%s", id));
                     }
                 });
     }
 
     ClientModel createClient(Row row) {
         ClientModel client = new ClientModel();
-        client.setPlayer(row.getUUID("player_uuid"));
+        client.setId(row.getLong("id"));
+        client.setPlayerId(row.getLong("player_id"));
         client.setCreated(row.getOffsetDateTime("created").toInstant());
-        client.setUuid(row.getUUID("uuid"));
         client.setServer(URI.create(row.getString("server")));
-        client.setConnection(row.getUUID("connection_uuid"));
+        client.setConnectionId(row.getLong("connection_id"));
         return client;
     }
 }

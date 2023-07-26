@@ -19,13 +19,13 @@ public class CreateClientInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
-    UUID player;
+    Long userId;
+    Long playerId;
     URI server;
-    UUID connection;
+    Long connectionId;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

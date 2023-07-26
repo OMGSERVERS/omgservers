@@ -2,8 +2,8 @@ package com.omgservers.application.module.tenantModule.impl.operation.insertTena
 
 import com.omgservers.application.module.tenantModule.impl.operation.selectTenantOperation.SelectTenantOperation;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.exception.ServerSideConflictException;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -23,22 +23,25 @@ class InsertTenantOperationTest extends Assertions {
     SelectTenantOperation selectTenantOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenTenant_whenInsertTenant_thenInserted() {
         final var shard = 0;
-        final var tenant1 = TenantModel.create(TenantConfigModel.create());
+        final var tenant1 = tenantModelFactory.create(TenantConfigModel.create());
         insertTenantOperation.insertTenant(TIMEOUT, pgPool, shard, tenant1);
 
-        final var tenant2 = selectTenantOperation.selectTenant(TIMEOUT, pgPool, shard, tenant1.getUuid());
+        final var tenant2 = selectTenantOperation.selectTenant(TIMEOUT, pgPool, shard, tenant1.getId());
         assertEquals(tenant1, tenant2);
     }
 
     @Test
     void givenTenant_whenInsertTenantAgain_thenServerSideConflictException() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         insertTenantOperation.insertTenant(TIMEOUT, pgPool, shard, tenant);
 
         final var exception = assertThrows(ServerSideConflictException.class, () -> insertTenantOperation

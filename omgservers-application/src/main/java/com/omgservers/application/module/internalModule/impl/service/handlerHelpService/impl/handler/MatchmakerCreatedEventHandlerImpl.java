@@ -7,7 +7,9 @@ import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.job.JobModel;
+import com.omgservers.application.module.internalModule.model.job.JobModelFactory;
 import com.omgservers.application.module.internalModule.model.job.JobType;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import com.omgservers.application.operation.getServersOperation.GetServersOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final InternalModule internalModule;
+
     final GetServersOperation getServersOperation;
+    final GenerateIdOperation generateIdOperation;
+
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -31,8 +37,8 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
-        final var uuid = body.getUuid();
-        final var job = JobModel.create(uuid, uuid, JobType.MATCHMAKER);
+        final var id = body.getId();
+        final var job = jobModelFactory.create(id, id, JobType.MATCHMAKER);
         final var request = new SyncJobInternalRequest(job);
         return internalModule.getJobInternalService().syncJob(request)
                 .replaceWith(true);

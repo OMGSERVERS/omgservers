@@ -14,21 +14,21 @@ import java.util.UUID;
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
     static private final String sql = """
-            delete from internal.tab_service_account where uuid = $1
+            delete from internal.tab_service_account where id = $1
             """;
 
     @Override
-    public Uni<Void> deleteServiceAccount(final SqlConnection sqlConnection, final UUID uuid) {
+    public Uni<Void> deleteServiceAccount(final SqlConnection sqlConnection, final Long id) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.of(uuid))
-                .invoke(rowSet -> log.info("Service account was deleted, uuid={}", uuid))
+                .execute(Tuple.of(id))
+                .invoke(rowSet -> log.info("Service account was deleted, uuid={}", id))
                 .replaceWithVoid();
     }
 }

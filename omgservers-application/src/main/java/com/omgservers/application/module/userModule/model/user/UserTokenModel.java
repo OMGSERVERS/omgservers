@@ -6,21 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTokenModel {
 
-    static public void validateUserTokenModel(UserTokenModel token) {
+    static public void validate(UserTokenModel token) {
         if (token == null) {
             throw new ServerSideBadRequestException("token is null");
         }
     }
 
-    UUID uuid;
-    UUID user;
+    Long id;
+    Long userId;
     UserRoleEnum role;
     @ToString.Exclude
     long secret;

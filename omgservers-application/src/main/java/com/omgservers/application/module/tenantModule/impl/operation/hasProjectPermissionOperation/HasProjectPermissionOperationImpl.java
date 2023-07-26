@@ -19,7 +19,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
     static private final String sql = """
             select id
             from $schema.tab_project_permission
-            where project_uuid = $1 and user_uuid = $2 and permission = $3
+            where project_id = $1 and user_id = $2 and permission = $3
             limit 1
             """;
 
@@ -28,17 +28,17 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
     @Override
     public Uni<Boolean> hasProjectPermission(final SqlConnection sqlConnection,
                                              final int shard,
-                                             final UUID project,
-                                             final UUID user,
+                                             final Long projectId,
+                                             final Long userId,
                                              final ProjectPermissionEnum permission) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (project == null) {
-            throw new IllegalArgumentException("project is null");
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId is null");
         }
-        if (user == null) {
-            throw new IllegalArgumentException("user is null");
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
         }
         if (permission == null) {
             throw new IllegalArgumentException("permission is null");
@@ -47,7 +47,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(project, user, permission))
+                .execute(Tuple.of(projectId, userId, permission))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

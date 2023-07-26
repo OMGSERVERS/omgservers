@@ -6,8 +6,9 @@ import com.omgservers.application.module.internalModule.impl.service.jobInternal
 import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
 import com.omgservers.application.module.internalModule.model.event.body.RuntimeCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.job.JobModel;
+import com.omgservers.application.module.internalModule.model.job.JobModelFactory;
 import com.omgservers.application.module.internalModule.model.job.JobType;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import com.omgservers.application.operation.getServersOperation.GetServersOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final InternalModule internalModule;
+
     final GetServersOperation getServersOperation;
+    final GenerateIdOperation generateIdOperation;
+
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -31,8 +36,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
-        final var uuid = body.getUuid();
-        final var job = JobModel.create(uuid, uuid, JobType.RUNTIME);
+        final var id = body.getId();
+        final var job = jobModelFactory.create(id, id, JobType.RUNTIME);
         final var request = new SyncJobInternalRequest(job);
         return internalModule.getJobInternalService().syncJob(request)
                 .replaceWith(true);

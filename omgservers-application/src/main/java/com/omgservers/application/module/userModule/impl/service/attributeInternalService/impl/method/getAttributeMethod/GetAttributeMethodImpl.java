@@ -25,7 +25,7 @@ class GetAttributeMethodImpl implements GetAttributeMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var player = request.getPlayer();
+                    final var player = request.getPlayerId();
                     final var name = request.getName();
                     return pgPool.withTransaction(sqlConnection -> selectAttributeOperation
                             .selectAttribute(sqlConnection, shard.shard(), player, name));

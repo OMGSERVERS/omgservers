@@ -4,9 +4,12 @@ import com.omgservers.application.module.matchmakerModule.impl.operation.insertM
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.versionModule.model.VersionGroupModel;
 import com.omgservers.application.module.versionModule.model.VersionModeModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -32,50 +35,59 @@ class DeleteMatchOperationTest extends Assertions {
     UpsertMatchOperation upsertMatchOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    MatchModelFactory matchModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenMatch_whenDeleteMatch_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 1, 4));
             add(VersionGroupModel.create("blue", 1, 4));
         }});
-        final var matchConfig = MatchConfigModel.create(tenantUuid(),
-                stageUuid(),
-                versionUuid(),
+        final var matchConfig = MatchConfigModel.create(tenantId(),
+                stageId(),
+                versionId(),
                 modeConfig);
-        final var match = MatchModel.create(matchmaker.getUuid(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
-        assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, match.getUuid()));
+        assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, match.getId()));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteMatch_thenSkip() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, uuid));
+        assertFalse(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID matchmakerUuid() {
-        return UUID.randomUUID();
+    Long runtimeId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID versionUuid() {
-        return UUID.randomUUID();
+    Long versionId() {
+        return generateIdOperation.generateId();
     }
 
     String modeName() {

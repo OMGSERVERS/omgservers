@@ -43,7 +43,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
         final var project = request.getProject();
         final var stage = request.getStage();
-        final var tenant = project.getTenant();
+        final var tenant = project.getTenantId();
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> validateProjectOperation.validateProject(project))
                 .invoke(voidItem -> validateStageOperation.validateStage(stage))
@@ -51,26 +51,24 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .flatMap(shardModel -> createProjectAndStage(shardModel.shard(), tenant, project, stage));
     }
 
-    Uni<Void> createProjectAndStage(Integer shard, UUID tenant, ProjectModel project, StageModel stage) {
+    Uni<Void> createProjectAndStage(Integer shard, Long tenantId, ProjectModel project, StageModel stage) {
         return pgPool.withTransaction(sqlConnection ->
                 insertProjectOperation.insertProject(sqlConnection, shard, project)
                         .call(voidItem -> insertStageOperation.insertStage(sqlConnection, shard, stage))
-                        .call(voidItem -> insertProjectCreatedEvent(sqlConnection, tenant, project.getUuid()))
-                        .call(voidItem -> insertStageCreatedEvent(sqlConnection, tenant, stage.getUuid())));
+                        .call(voidItem -> insertProjectCreatedEvent(sqlConnection, tenantId, project.getId()))
+                        .call(voidItem -> insertStageCreatedEvent(sqlConnection, tenantId, stage.getId())));
     }
 
-    Uni<Void> insertProjectCreatedEvent(SqlConnection sqlConnection, UUID tenant, UUID uuid) {
-        final var origin = ProjectCreatedEventBodyModel.createEvent(tenant, uuid);
-        final var event = EventCreatedEventBodyModel.createEvent(origin);
-        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+    Uni<Void> insertProjectCreatedEvent(SqlConnection sqlConnection, Long tenantId, Long id) {
+        final var eventBody = new ProjectCreatedEventBodyModel(tenantId, id);
+        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
         return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
                 .replaceWithVoid();
     }
 
-    Uni<Void> insertStageCreatedEvent(SqlConnection sqlConnection, UUID tenant, UUID uuid) {
-        final var origin = StageCreatedEventBodyModel.createEvent(tenant, uuid);
-        final var event = EventCreatedEventBodyModel.createEvent(origin);
-        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+    Uni<Void> insertStageCreatedEvent(SqlConnection sqlConnection, Long tenantId, Long id) {
+        final var eventBody = new StageCreatedEventBodyModel(tenantId, id);
+        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
         return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
                 .replaceWithVoid();
     }

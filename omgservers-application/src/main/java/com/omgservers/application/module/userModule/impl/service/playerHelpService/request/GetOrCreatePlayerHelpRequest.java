@@ -18,6 +18,6 @@ public class GetOrCreatePlayerHelpRequest {
         // TODO: validate fields
     }
 
-    UUID user;
-    UUID stage;
+    Long userId;
+    Long stageId;
 }

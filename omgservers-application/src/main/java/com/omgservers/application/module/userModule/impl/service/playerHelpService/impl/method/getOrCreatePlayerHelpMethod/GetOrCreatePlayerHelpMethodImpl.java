@@ -9,6 +9,8 @@ import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
+import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -23,27 +25,31 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
 
     final PlayerInternalService playerInternalService;
 
+    final PlayerModelFactory playerModelFactory;
+    final GenerateIdOperation generateIdOperation;
+
     @Override
     public Uni<GetOrCreatePlayerHelpResponse> getOrCreatePlayer(GetOrCreatePlayerHelpRequest request) {
         GetOrCreatePlayerHelpRequest.validate(request);
 
-        final var user = request.getUser();
-        final var stage = request.getStage();
-        return getPlayer(user, stage)
+        final var userId = request.getUserId();
+        final var stageId = request.getStageId();
+        return getPlayer(userId, stageId)
                 .map(player -> new GetOrCreatePlayerHelpResponse(false, player))
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithUni(t -> syncPlayer(user, stage)
+                .recoverWithUni(t -> syncPlayer(userId, stageId)
                         .map(player -> new GetOrCreatePlayerHelpResponse(true, player)));
     }
 
-    Uni<PlayerModel> getPlayer(UUID user, UUID stage) {
-        final var request = new GetPlayerInternalRequest(user, stage);
+    Uni<PlayerModel> getPlayer(Long userId, Long stageId) {
+        final var request = new GetPlayerInternalRequest(userId, stageId);
         return playerInternalService.getPlayer(request)
                 .map(GetPlayerInternalResponse::getPlayer);
     }
 
-    Uni<PlayerModel> syncPlayer(UUID user, UUID stage) {
-        final var player = PlayerModel.create(user, stage, PlayerConfigModel.create());
+    Uni<PlayerModel> syncPlayer(Long userId, Long stageId) {
+        final var player = playerModelFactory
+                .create(userId, stageId, PlayerConfigModel.create());
         final var request = new SyncPlayerInternalRequest(player);
         return playerInternalService.syncPlayer(request)
                 .replaceWith(player);

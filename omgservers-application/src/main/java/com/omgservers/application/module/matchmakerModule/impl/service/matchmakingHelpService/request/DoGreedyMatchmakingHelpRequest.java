@@ -21,10 +21,10 @@ public class DoGreedyMatchmakingHelpRequest {
         }
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID version;
-    UUID matchmaker;
+    Long tenantId;
+    Long stageId;
+    Long versionId;
+    Long matchmakerId;
     List<RequestModel> requests;
     List<MatchModel> matches;
     VersionStageConfigModel stageConfig;

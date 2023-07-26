@@ -18,11 +18,11 @@ public class DeleteMatchInternalRequest implements InternalRequest {
         }
     }
 
-    UUID matchmaker;
-    UUID uuid;
+    Long matchmakerId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return matchmaker.toString();
+        return matchmakerId.toString();
     }
 }

@@ -14,8 +14,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
@@ -34,18 +32,17 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
-                    return deleteRuntime(shard.shard(), uuid);
+                    final var id = request.getId();
+                    return deleteRuntime(shard.shard(), id);
                 })
                 .map(DeleteRuntimeInternalResponse::new);
     }
 
-    Uni<Boolean> deleteRuntime(final int shard, final UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteRuntimeOperation.deleteRuntime(sqlConnection, shard, uuid)
+    Uni<Boolean> deleteRuntime(final int shard, final Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteRuntimeOperation.deleteRuntime(sqlConnection, shard, id)
                 .call(deleted -> {
-                    final var origin = RuntimeDeletedEventBodyModel.createEvent(uuid);
-                    final var event = EventCreatedEventBodyModel.createEvent(origin);
-                    final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                    final var eventBody = new RuntimeDeletedEventBodyModel(id);
+                    final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                     return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                 }));
     }

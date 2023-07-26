@@ -22,16 +22,16 @@ class ValidateStageSecretHelpMethodImpl implements ValidateStageSecretHelpMethod
     public Uni<ValidateStageSecretHelpResponse> validateStageSecret(ValidateStageSecretHelpRequest request) {
         ValidateStageSecretHelpRequest.validateGetStageModuleRequest(request);
 
-        final var tenant = request.getTenant();
-        final var stageUuid = request.getStage();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageInternalRequest(tenant, stageUuid);
+        final var getStageServiceRequest = new GetStageInternalRequest(tenantId, stageId);
         return stageInternalService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();
                     if (!stage.getSecret().equals(secret)) {
                         throw new ServerSideBadRequestException(String.format("stage secret is wrong, " +
-                                "tenant=%s, stageUuid=%s", tenant, stageUuid));
+                                "tenantId=%s, stageId=%s", tenantId, stageId));
                     }
                     return stage;
                 })

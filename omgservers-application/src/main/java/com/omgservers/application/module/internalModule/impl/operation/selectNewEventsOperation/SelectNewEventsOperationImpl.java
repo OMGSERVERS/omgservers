@@ -24,7 +24,7 @@ import java.util.List;
 class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
 
     static private final String sql = """
-            select created, modified, uuid, group_uuid, qualifier, body, status
+            select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
             where status = $1
             order by id asc
@@ -58,17 +58,17 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
 
     EventModel createEvent(Row row) {
         EventModel event = new EventModel();
+        event.setId(row.getLong("id"));
         event.setCreated(row.getOffsetDateTime("created").toInstant());
         event.setModified(row.getOffsetDateTime("modified").toInstant());
-        event.setUuid(row.getUUID("uuid"));
-        event.setGroup(row.getUUID("group_uuid"));
+        event.setGroupId(row.getLong("group_id"));
         final var qualifier = EventQualifierEnum.valueOf(row.getString("qualifier"));
         event.setQualifier(qualifier);
         try {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             event.setBody(body);
         } catch (IOException e) {
-            log.error("event can't be parsed, uuid=" + event.getUuid(), e);
+            log.error("event can't be parsed, id=" + event.getId(), e);
         }
         event.setStatus(EventStatusEnum.valueOf(row.getString("status")));
         return event;

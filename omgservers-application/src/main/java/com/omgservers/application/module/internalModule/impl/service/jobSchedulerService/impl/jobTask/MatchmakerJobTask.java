@@ -25,7 +25,7 @@ public class MatchmakerJobTask implements JobTask {
     }
 
     @Override
-    public Uni<Boolean> executeTask(UUID shardKey, UUID entity) {
+    public Uni<Boolean> executeTask(Long shardKey, Long entity) {
         final var request = new DoMatchmakingInternalRequest(entity);
         //TODO: handle response (proceed or not)
         return matchmakerModule.getMatchmakerInternalService().doMatchmaking(request)

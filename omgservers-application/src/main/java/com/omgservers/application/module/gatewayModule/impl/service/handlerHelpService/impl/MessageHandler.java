@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface MessageHandler {
     MessageQualifierEnum getQualifier();
 
-    Uni<Void> handle(UUID connection, MessageModel message);
+    Uni<Void> handle(Long connectionId, MessageModel message);
 }

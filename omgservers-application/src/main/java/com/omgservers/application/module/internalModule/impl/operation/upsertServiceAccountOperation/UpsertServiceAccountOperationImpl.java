@@ -18,7 +18,7 @@ import java.time.ZoneOffset;
 class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation {
 
     static private final String sql = """
-            insert into internal.tab_service_account(uuid, created, modified, username, password_hash)
+            insert into internal.tab_service_account(id, created, modified, username, password_hash)
             values($1, $2, $3, $4, $5)
             on conflict (username) do
             update set modified = $3, password_hash = $5
@@ -41,7 +41,7 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
 
     Uni<Void> upsertQuery(SqlConnection sqlConnection, ServiceAccountModel serviceAccount) {
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.of(serviceAccount.getUuid(),
+                .execute(Tuple.of(serviceAccount.getId(),
                         serviceAccount.getCreated().atOffset(ZoneOffset.UTC),
                         serviceAccount.getModified().atOffset(ZoneOffset.UTC),
                         serviceAccount.getUsername(),

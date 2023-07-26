@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.UUID;
 
 public class EventDeserializer extends StdDeserializer<EventModel> {
 
@@ -37,9 +36,9 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
 
         final var eventModel = new EventModel();
 
-        final var uuidNode = root.get("uuid");
-        if (uuidNode != null) {
-            eventModel.setUuid(UUID.fromString(uuidNode.asText()));
+        final var idNode = root.get("id");
+        if (idNode != null) {
+            eventModel.setId(Long.valueOf(idNode.asText()));
         }
 
         final var createdNode = root.get("created");
@@ -52,9 +51,9 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             eventModel.setModified(Instant.parse(modifiedNode.asText()));
         }
 
-        final var groupNode = root.get("group");
-        if (groupNode != null) {
-            eventModel.setGroup(UUID.fromString(groupNode.asText()));
+        final var groupIdNode = root.get("groupId");
+        if (groupIdNode != null) {
+            eventModel.setGroupId(Long.valueOf(groupIdNode.asText()));
         }
 
         final var qualifierNode = root.get("qualifier");

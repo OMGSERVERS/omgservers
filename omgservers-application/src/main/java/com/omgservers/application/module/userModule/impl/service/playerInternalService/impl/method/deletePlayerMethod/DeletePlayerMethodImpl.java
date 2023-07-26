@@ -26,9 +26,9 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deletePlayerOperation
-                                    .deletePlayer(sqlConnection, shard, uuid))
+                                    .deletePlayer(sqlConnection, shard, id))
                             .replaceWithVoid();
                 });
     }

@@ -2,8 +2,11 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.insert
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
+import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -25,33 +28,42 @@ class InsertRequestOperationTest extends Assertions {
     InsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    RequestModelFactory requestModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void whenInsertMatchmakerRequest() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName());
-        final var matchmakerRequest = RequestModel.create(matchmaker.getUuid(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
         insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID clientUuid() {
-        return UUID.randomUUID();
+    Long clientId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     String modeName() {

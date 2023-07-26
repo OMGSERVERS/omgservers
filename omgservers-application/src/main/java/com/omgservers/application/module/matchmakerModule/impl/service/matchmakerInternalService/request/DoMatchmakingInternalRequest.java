@@ -18,10 +18,10 @@ public class DoMatchmakingInternalRequest implements InternalRequest {
         }
     }
 
-    UUID matchmaker;
+    Long matchmakerId;
 
     @Override
     public String getRequestShardKey() {
-        return matchmaker.toString();
+        return matchmakerId.toString();
     }
 }

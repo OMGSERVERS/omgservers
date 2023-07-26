@@ -18,6 +18,6 @@ public class HandleMatchCreatedEventHelpRequest {
         // TODO: validate fields
     }
 
-    UUID matchmaker;
-    UUID uuid;
+    Long matchmakerId;
+    Long id;
 }

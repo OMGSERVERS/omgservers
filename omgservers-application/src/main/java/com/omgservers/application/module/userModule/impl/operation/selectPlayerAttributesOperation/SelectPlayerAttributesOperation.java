@@ -7,15 +7,14 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.UUID;
 
 public interface SelectPlayerAttributesOperation {
     Uni<List<AttributeModel>> selectPlayerAttributes(SqlConnection sqlConnection,
                                                      int shard,
-                                                     UUID player);
+                                                     Long playerId);
 
-    default List<AttributeModel> selectPlayerAttributes(long timeout, PgPool pgPool, int shard, UUID player) {
-        return pgPool.withTransaction(sqlConnection -> selectPlayerAttributes(sqlConnection, shard, player))
+    default List<AttributeModel> selectPlayerAttributes(long timeout, PgPool pgPool, int shard, Long playerId) {
+        return pgPool.withTransaction(sqlConnection -> selectPlayerAttributes(sqlConnection, shard, playerId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

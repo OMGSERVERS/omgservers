@@ -21,9 +21,9 @@ import java.util.UUID;
 class SelectAttributeOperationImpl implements SelectAttributeOperation {
 
     static private final String sql = """
-            select player_uuid, created, modified, attribute_name, attribute_value
+            select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_player_attribute a
-            where player_uuid = $1 and attribute_name = $2
+            where player_id = $1 and attribute_name = $2
             limit 1
             """;
 
@@ -32,13 +32,13 @@ class SelectAttributeOperationImpl implements SelectAttributeOperation {
     @Override
     public Uni<AttributeModel> selectAttribute(final SqlConnection sqlConnection,
                                                final int shard,
-                                               final UUID player,
+                                               final Long playerId,
                                                final String name) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (player == null) {
-            throw new ServerSideBadRequestException("player is null");
+        if (playerId == null) {
+            throw new ServerSideBadRequestException("playerId is null");
         }
         if (name == null) {
             throw new ServerSideBadRequestException("name is null");
@@ -47,22 +47,23 @@ class SelectAttributeOperationImpl implements SelectAttributeOperation {
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(player, name))
+                .execute(Tuple.of(playerId, name))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        log.info("Attribute was found, player={}, name={}", player, name);
+                        log.info("Attribute was found, playerId={}, name={}", playerId, name);
                         return createAttribute(iterator.next());
                     } else {
                         throw new ServerSideNotFoundException(String.format("attribute or player was not found, " +
-                                "player=%s, name=%s", player, name));
+                                "playerId=%s, name=%s", playerId, name));
                     }
                 });
     }
 
     AttributeModel createAttribute(Row row) {
         AttributeModel attribute = new AttributeModel();
-        attribute.setPlayer(row.getUUID("player_uuid"));
+        attribute.setId(row.getLong("id"));
+        attribute.setPlayerId(row.getLong("player_id"));
         attribute.setCreated(row.getOffsetDateTime("created").toInstant());
         attribute.setModified(row.getOffsetDateTime("modified").toInstant());
         attribute.setName(row.getString("attribute_name"));

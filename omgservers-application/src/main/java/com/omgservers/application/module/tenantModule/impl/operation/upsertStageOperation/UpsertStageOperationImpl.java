@@ -25,10 +25,10 @@ import java.util.ArrayList;
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_project_stage(project_uuid, created, modified, uuid, secret, matchmaker, config, version)
+            insert into $schema.tab_project_stage(id, project_id, created, modified, secret, matchmaker_id, config, version_id)
             values($1, $2, $3, $4, $5, $6, $7, $8)
-            on conflict (uuid) do
-            update set modified = $3, secret = $5, matchmaker = $6, config = $7, version = $8
+            on conflict (id) do
+            update set modified = $4, secret = $5, matchmaker_id = $6, config = $7, version_id = $8
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -65,14 +65,14 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
             var configString = objectMapper.writeValueAsString(stage.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(stage.getProject());
+                        add(stage.getId());
+                        add(stage.getProjectId());
                         add(stage.getCreated().atOffset(ZoneOffset.UTC));
                         add(stage.getModified().atOffset(ZoneOffset.UTC));
-                        add(stage.getUuid());
                         add(stage.getSecret());
-                        add(stage.getMatchmaker());
+                        add(stage.getMatchmakerId());
                         add(configString);
-                        add(stage.getVersion());
+                        add(stage.getVersionId());
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

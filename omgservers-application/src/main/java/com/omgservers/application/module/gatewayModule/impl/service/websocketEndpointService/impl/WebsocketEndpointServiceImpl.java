@@ -6,7 +6,9 @@ import com.omgservers.application.module.gatewayModule.impl.service.connectionHe
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.DeleteConnectionHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.CleanUpHelpRequest;
 import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.ClientInternalService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetConnectionHelpRequest;
@@ -64,17 +66,17 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
         final var deleteConnectionHelpRequest = new DeleteConnectionHelpRequest(session);
         final var response = connectionHelpService.deleteConnection(deleteConnectionHelpRequest);
 
-        if (response.getConnection().isPresent()) {
-            final var connection = response.getConnection().get();
+        if (response.getConnectionId().isPresent()) {
+            final var connection = response.getConnectionId().get();
             if (response.getAssignedPlayer().isPresent()) {
                 final var assignedPlayer = response.getAssignedPlayer().get();
                 log.info("Connection was deleted, connection={}, assignedPlayer={}", connection, assignedPlayer);
 
-                final var user = assignedPlayer.getUser();
-                final var client = assignedPlayer.getClient();
-                final var event = ClientDisconnectedEventBodyModel.createEvent(connection, user, client);
-                final var fireEventInternalRequest = new FireEventInternalRequest(event);
-                internalModule.getEventInternalService().fireEvent(fireEventInternalRequest)
+                final var userId = assignedPlayer.getUserId();
+                final var clientId = assignedPlayer.getClientId();
+                final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
+                final var fireEventInternalRequest = new FireEventHelpRequest(eventBody);
+                internalModule.getEventHelpService().fireEvent(fireEventInternalRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
             } else {
                 log.info("There wasn't assigned player, connection was deleted without notification, " +
@@ -90,9 +92,9 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
         final var session = request.getSession();
         final var getConnectionHelpRequest = new GetConnectionHelpRequest(session);
         try {
-            final var connection = connectionHelpService.getConnection(getConnectionHelpRequest).getConnection();
+            final var connectionId = connectionHelpService.getConnection(getConnectionHelpRequest).getConnectionId();
             final var messageString = request.getMessage();
-            processMessageOperation.processMessage(connection, messageString)
+            processMessageOperation.processMessage(connectionId, messageString)
                     .await().atMost(Duration.ofSeconds(TIMEOUT));
         } catch (Exception e) {
             closeSession(session, e.getMessage());

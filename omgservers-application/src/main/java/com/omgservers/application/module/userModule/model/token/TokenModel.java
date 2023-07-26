@@ -7,27 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TokenModel {
 
-    static public void validateToken(TokenModel tokenModel) {
+    static public void validate(TokenModel tokenModel) {
         if (tokenModel == null) {
             throw new ServerSideBadRequestException("token is null");
         }
-        validateUser(tokenModel.getUser());
+        validateUserId(tokenModel.getUserId());
         validateCreated(tokenModel.getCreated());
-        validateUuid(tokenModel.getUuid());
+        validateId(tokenModel.getId());
         validateExpire(tokenModel.getExpire());
         validateHash(tokenModel.getHash());
     }
 
-    static public void validateUser(UUID user) {
-        if (user == null) {
-            throw new ServerSideBadRequestException("user field is null");
+    static public void validateUserId(Long userId) {
+        if (userId == null) {
+            throw new ServerSideBadRequestException("userId field is null");
         }
     }
 
@@ -37,9 +36,9 @@ public class TokenModel {
         }
     }
 
-    static public void validateUuid(UUID uuid) {
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid field is null");
+    static public void validateId(Long id) {
+        if (id == null) {
+            throw new ServerSideBadRequestException("id field is null");
         }
     }
 
@@ -61,10 +60,10 @@ public class TokenModel {
         }
     }
 
-    UUID user;
+    Long id;
+    Long userId;
     @ToString.Exclude
     Instant created;
-    UUID uuid;
     Instant expire;
     @ToString.Exclude
     String hash;

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 class InsertClientOperationImpl implements InsertClientOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_client(player_uuid, created, uuid, server, connection_uuid)
+            insert into $schema.tab_player_client(id, player_id, created, server, connection_id)
             values($1, $2, $3, $4, $5)
             """;
 
@@ -49,10 +49,10 @@ class InsertClientOperationImpl implements InsertClientOperation {
                     final var code = pgException.getSqlState();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("player was not found, uuid=" + client.getPlayer());
+                        return new ServerSideNotFoundException("player was not found, id=" + client.getPlayerId());
                     } else if (code.equals("23505")) {
                         // unique_violation
-                        return new ServerSideConflictException("client already exists, uuid=" + client.getUuid());
+                        return new ServerSideConflictException("client already exists, id=" + client.getId());
                     } else {
                         return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
                     }
@@ -63,11 +63,11 @@ class InsertClientOperationImpl implements InsertClientOperation {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
-                    add(client.getPlayer());
+                    add(client.getId());
+                    add(client.getPlayerId());
                     add(client.getCreated().atOffset(ZoneOffset.UTC));
-                    add(client.getUuid());
                     add(client.getServer().toString());
-                    add(client.getConnection());
+                    add(client.getConnectionId());
                 }}))
                 .replaceWithVoid();
     }

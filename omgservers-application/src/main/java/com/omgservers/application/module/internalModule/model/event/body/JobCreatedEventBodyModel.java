@@ -17,15 +17,17 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class JobCreatedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID shardKey,
-                                         final UUID entity,
-                                         final JobType type) {
-        final var body = new JobCreatedEventBodyModel(shardKey, entity, type);
-        final var event = EventModel.create(entity, EventQualifierEnum.JOB_CREATED, body);
-        return event;
+    Long shardKey;
+    Long entity;
+    JobType type;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.JOB_CREATED;
     }
 
-    UUID shardKey;
-    UUID entity;
-    JobType type;
+    @Override
+    public Long getGroupId() {
+        return entity;
+    }
 }

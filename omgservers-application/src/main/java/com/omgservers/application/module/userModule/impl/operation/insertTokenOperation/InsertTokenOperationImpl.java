@@ -4,6 +4,7 @@ import com.omgservers.application.module.userModule.model.token.TokenModel;
 import com.omgservers.application.module.userModule.model.user.*;
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.module.userModule.impl.operation.encodeTokenOperation.EncodeTokenOperation;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -18,28 +19,31 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
 class InsertTokenOperationImpl implements InsertTokenOperation {
 
     static private final String sql = """
-            insert into $schema.tab_user_token(user_uuid, created, uuid, expire, hash)
+            insert into $schema.tab_user_token(id, user_id, created, expire, hash)
             values($1, $2, $3, $4, $5)
             """;
 
-    final GetConfigOperation getConfigOperation;
-    final EncodeTokenOperation encodeTokenOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final EncodeTokenOperation encodeTokenOperation;
+    final GenerateIdOperation generateIdOperation;
+    final GetConfigOperation getConfigOperation;
+
     final SecureRandom secureRandom;
 
     public InsertTokenOperationImpl(GetConfigOperation getConfigOperation,
                                     EncodeTokenOperation encodeTokenOperation,
+                                    GenerateIdOperation generateIdOperation,
                                     PrepareShardSqlOperation prepareShardSqlOperation) {
         this.getConfigOperation = getConfigOperation;
         this.encodeTokenOperation = encodeTokenOperation;
         this.prepareShardSqlOperation = prepareShardSqlOperation;
+        this.generateIdOperation = generateIdOperation;
         this.secureRandom = new SecureRandom();
     }
 
@@ -57,16 +61,16 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
         final var lifetime = getConfigOperation.getConfig().tokenLifetime();
 
         final var now = Instant.now();
-        final var tokenUuid = UUID.randomUUID();
-        final var userUuid = user.getUuid();
-        final var tokenObject = createSecurityToken(tokenUuid, userUuid, user.getRole());
+        final var tokenId = generateIdOperation.generateId();
+        final var userId = user.getId();
+        final var tokenObject = createSecurityToken(tokenId, userId, user.getRole());
         final var rawToken = encodeTokenOperation.encodeToken(tokenObject);
         final var tokenHash = BcryptUtil.bcryptHash(rawToken);
         final var result = new UserTokenContainerModel(tokenObject, rawToken, lifetime);
 
         TokenModel tokenModel = new TokenModel();
-        tokenModel.setUuid(tokenUuid);
-        tokenModel.setUser(userUuid);
+        tokenModel.setId(tokenId);
+        tokenModel.setUserId(userId);
         tokenModel.setCreated(now);
         tokenModel.setExpire(now.plusSeconds(lifetime));
         tokenModel.setHash(tokenHash);
@@ -77,10 +81,10 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
 
     }
 
-    UserTokenModel createSecurityToken(UUID uuid, UUID user, UserRoleEnum role) {
+    UserTokenModel createSecurityToken(Long id, Long userId, UserRoleEnum role) {
         var token = new UserTokenModel();
-        token.setUuid(uuid);
-        token.setUser(user);
+        token.setId(id);
+        token.setUserId(userId);
         token.setRole(role);
         token.setSecret(Math.abs(secureRandom.nextLong()));
         return token;
@@ -91,9 +95,9 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
-                        tokenModel.getUser(),
+                        tokenModel.getId(),
+                        tokenModel.getUserId(),
                         tokenModel.getCreated().atOffset(ZoneOffset.UTC),
-                        tokenModel.getUuid(),
                         tokenModel.getExpire().atOffset(ZoneOffset.UTC),
                         tokenModel.getHash())))
                 .replaceWithVoid();

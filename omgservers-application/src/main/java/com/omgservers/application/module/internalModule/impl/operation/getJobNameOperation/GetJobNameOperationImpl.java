@@ -12,8 +12,8 @@ import java.util.UUID;
 class GetJobNameOperationImpl implements GetJobNameOperation {
 
     @Override
-    public String getJobName(final UUID shardKey,
-                             final UUID entity) {
+    public String getJobName(final Long shardKey,
+                             final Long entity) {
         return shardKey + "/" + entity;
     }
 }

@@ -18,9 +18,9 @@ public class HandlePlayerSignedUpEventHelpRequest {
         // TODO: validate fields
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID user;
-    UUID player;
-    UUID client;
+    Long tenantId;
+    Long stageId;
+    Long userId;
+    Long playerId;
+    Long clientId;
 }

@@ -18,6 +18,6 @@ public class CreateProjectHelpRequest {
         // TODO: validate fields
     }
 
-    UUID tenant;
+    Long tenantId;
     String title;
 }

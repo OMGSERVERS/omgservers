@@ -8,10 +8,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface DeleteProjectOperation {
-    Uni<Boolean> deleteProject(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<Boolean> deleteProject(SqlConnection sqlConnection, int shard, Long id);
 
-    default Boolean deleteProject(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteProject(sqlConnection, shard, uuid))
+    default Boolean deleteProject(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteProject(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

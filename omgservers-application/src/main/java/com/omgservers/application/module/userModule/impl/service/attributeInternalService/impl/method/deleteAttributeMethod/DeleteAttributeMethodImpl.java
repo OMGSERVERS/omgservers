@@ -26,7 +26,7 @@ class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var player = request.getPlayer();
+                    final var player = request.getPlayerId();
                     final var name = request.getName();
                     return pgPool.withTransaction(sqlConnection -> deleteAttributeOperation
                             .deleteAttribute(sqlConnection, shard, player, name));

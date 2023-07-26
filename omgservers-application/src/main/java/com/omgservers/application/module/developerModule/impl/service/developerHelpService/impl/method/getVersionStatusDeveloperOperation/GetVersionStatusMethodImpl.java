@@ -21,8 +21,8 @@ class GetVersionStatusMethodImpl implements GetVersionStatusMethod {
     public Uni<GetVersionStatusHelpResponse> getVersionStatus(final GetVersionStatusHelpRequest request) {
         GetVersionStatusHelpRequest.validate(request);
 
-        final var uuid = request.getUuid();
-        final var getVersionServiceRequest = new GetVersionInternalRequest(uuid);
+        final var id = request.getId();
+        final var getVersionServiceRequest = new GetVersionInternalRequest(id);
         return versionModule.getVersionInternalService().getVersion(getVersionServiceRequest)
                 .map(getVersionServiceResponse -> getVersionServiceResponse.getVersion().getStatus())
                 .map(GetVersionStatusHelpResponse::new);

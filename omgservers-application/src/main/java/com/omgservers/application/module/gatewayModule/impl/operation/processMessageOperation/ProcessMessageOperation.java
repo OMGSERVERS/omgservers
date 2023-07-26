@@ -5,5 +5,5 @@ import io.smallrye.mutiny.Uni;
 import java.util.UUID;
 
 public interface ProcessMessageOperation {
-    Uni<Void> processMessage(UUID connection, String messageString);
+    Uni<Void> processMessage(Long connectionId, String messageString);
 }

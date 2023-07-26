@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DeleteStageOperation {
-    Uni<Boolean> deleteStage(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<Boolean> deleteStage(SqlConnection sqlConnection, int shard, Long id);
 
-    default Boolean deleteStage(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteStage(sqlConnection, shard, uuid))
+    default Boolean deleteStage(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteStage(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

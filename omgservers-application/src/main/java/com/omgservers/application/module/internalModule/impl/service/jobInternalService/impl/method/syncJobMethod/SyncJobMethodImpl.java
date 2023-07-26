@@ -46,9 +46,8 @@ class SyncJobMethodImpl implements SyncJobMethod {
                         final var shardKey = job.getShardKey();
                         final var entity = job.getEntity();
                         final var type = job.getType();
-                        final var origin = JobCreatedEventBodyModel.createEvent(shardKey, entity, type);
-                        final var event = EventCreatedEventBodyModel.createEvent(origin);
-                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                        final var eventBody = new JobCreatedEventBodyModel(shardKey, entity, type);
+                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                         return eventInternalService.insertEvent(insertEventInternalRequest);
                     } else {
                         return Uni.createFrom().voidItem();

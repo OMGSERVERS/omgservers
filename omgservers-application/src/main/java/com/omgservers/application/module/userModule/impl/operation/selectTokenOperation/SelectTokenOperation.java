@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectTokenOperation {
-    Uni<TokenModel> selectToken(SqlConnection sqlConnection, int shard, UUID tokenUuid);
+    Uni<TokenModel> selectToken(SqlConnection sqlConnection, int shard, Long tokenId);
 
-    default TokenModel selectToken(long timeout, PgPool pgPool, int shard, UUID tokenUuid) {
-        return pgPool.withTransaction(sqlConnection -> selectToken(sqlConnection, shard, tokenUuid))
+    default TokenModel selectToken(long timeout, PgPool pgPool, int shard, Long tokenId) {
+        return pgPool.withTransaction(sqlConnection -> selectToken(sqlConnection, shard, tokenId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

@@ -49,7 +49,7 @@ class TokenInternalServiceImpl implements TokenInternalService {
         return Uni.createFrom().item(rawToken)
                 .map(decodeTokenOperation::decodeToken)
                 .flatMap(tokenObject -> {
-                    final var user = tokenObject.getUser();
+                    final var user = tokenObject.getUserId();
                     final var shardKey = user.toString();
                     return calculateShardOperation.calculateShard(shardKey)
                             .flatMap(shard -> {

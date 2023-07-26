@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertStagePermissionOperation;
 
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEntity;
+import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModel;
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
@@ -21,9 +21,9 @@ import java.time.ZoneOffset;
 class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperation {
 
     static private final String sql = """
-            insert into $schema.tab_stage_permission(stage_uuid, created, user_uuid, permission)
-            values($1, $2, $3, $4)
-            on conflict (stage_uuid, user_uuid, permission) do
+            insert into $schema.tab_stage_permission(id, stage_id, created, user_id, permission)
+            values($1, $2, $3, $4, $5)
+            on conflict (stage_id, user_id, permission) do
             nothing
             """;
 
@@ -32,7 +32,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
     @Override
     public Uni<Boolean> upsertStagePermission(final SqlConnection sqlConnection,
                                               final int shard,
-                                              final StagePermissionEntity permission) {
+                                              final StagePermissionModel permission) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -62,13 +62,14 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
                 });
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, StagePermissionEntity permission) {
+    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, StagePermissionModel permission) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
-                        permission.getStage(),
+                        permission.getId(),
+                        permission.getStageId(),
                         permission.getCreated().atOffset(ZoneOffset.UTC),
-                        permission.getUser(),
+                        permission.getUserId(),
                         permission.getPermission()))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }

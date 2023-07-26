@@ -19,13 +19,13 @@ public class HasStagePermissionInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID user;
+    Long tenantId;
+    Long stageId;
+    Long userId;
     StagePermissionEnum permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

@@ -1,6 +1,6 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request;
 
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEntity;
+import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModel;
 import com.omgservers.application.request.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,11 +19,11 @@ public class SyncStagePermissionInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    StagePermissionEntity permission;
+    Long tenantId;
+    StagePermissionModel permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

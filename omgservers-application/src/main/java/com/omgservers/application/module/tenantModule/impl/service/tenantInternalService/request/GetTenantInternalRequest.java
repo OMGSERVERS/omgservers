@@ -18,10 +18,10 @@ public class GetTenantInternalRequest implements InternalRequest {
         }
     }
 
-    UUID uuid;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return uuid.toString();
+        return id.toString();
     }
 }

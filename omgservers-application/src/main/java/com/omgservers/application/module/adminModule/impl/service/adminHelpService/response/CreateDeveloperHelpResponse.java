@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateDeveloperHelpResponse {
 
-    UUID user;
+    Long userId;
     @ToString.Exclude
     String password;
 }

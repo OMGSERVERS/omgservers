@@ -25,7 +25,7 @@ import java.util.ArrayList;
 class InsertProjectOperationImpl implements InsertProjectOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_project(tenant_uuid, created, modified, uuid, owner, config)
+            insert into $schema.tab_tenant_project(id, tenant_id, created, modified, owner_id, config)
             values($1, $2, $3, $4, $5, $6)
             """;
 
@@ -48,11 +48,10 @@ class InsertProjectOperationImpl implements InsertProjectOperation {
                 .onFailure(PgException.class)
                 .transform(t -> {
                     final var pgException = (PgException) t;
-                    final var code = pgException.getCode();
-                    final var column = pgException.getColumn();
+                    final var code = pgException.getSqlState();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("tenant was not found, uuid=" + project.getTenant());
+                        return new ServerSideNotFoundException("tenant was not found, uuid=" + project.getTenantId());
                     } else {
                         return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
                     }
@@ -65,11 +64,11 @@ class InsertProjectOperationImpl implements InsertProjectOperation {
             var configString = objectMapper.writeValueAsString(project.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(project.getTenant());
+                        add(project.getId());
+                        add(project.getTenantId());
                         add(project.getCreated().atOffset(ZoneOffset.UTC));
                         add(project.getModified().atOffset(ZoneOffset.UTC));
-                        add(project.getUuid());
-                        add(project.getOwner());
+                        add(project.getOwnerId());
                         add(configString);
                     }}))
                     .replaceWithVoid();

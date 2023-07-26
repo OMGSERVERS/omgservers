@@ -16,11 +16,15 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class TenantDeletedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID uuid) {
-        final var body = new TenantDeletedEventBodyModel(uuid);
-        final var event = EventModel.create(uuid, EventQualifierEnum.TENANT_DELETED, body);
-        return event;
+    Long id;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.TENANT_DELETED;
     }
 
-    UUID uuid;
+    @Override
+    public Long getGroupId() {
+        return id;
+    }
 }

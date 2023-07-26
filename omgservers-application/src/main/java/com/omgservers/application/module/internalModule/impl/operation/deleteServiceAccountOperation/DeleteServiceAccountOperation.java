@@ -6,5 +6,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.util.UUID;
 
 public interface DeleteServiceAccountOperation {
-    Uni<Void> deleteServiceAccount(SqlConnection sqlConnection, UUID uuid);
+    Uni<Void> deleteServiceAccount(SqlConnection sqlConnection, Long id);
 }

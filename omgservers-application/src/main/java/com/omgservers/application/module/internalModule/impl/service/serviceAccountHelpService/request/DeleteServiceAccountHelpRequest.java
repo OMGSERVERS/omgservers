@@ -17,5 +17,5 @@ public class DeleteServiceAccountHelpRequest {
         }
     }
 
-    UUID uuid;
+    Long id;
 }

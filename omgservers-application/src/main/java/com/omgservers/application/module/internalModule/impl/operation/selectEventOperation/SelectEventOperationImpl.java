@@ -25,9 +25,9 @@ import java.util.UUID;
 class SelectEventOperationImpl implements SelectEventOperation {
 
     static private final String sql = """
-            select created, modified, uuid, group_uuid, qualifier, body, status
+            select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -36,38 +36,38 @@ class SelectEventOperationImpl implements SelectEventOperation {
 
     @Override
     public Uni<EventModel> selectEvent(final SqlConnection sqlConnection,
-                                       final UUID uuid) {
+                                       final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new IllegalArgumentException("uuid is null");
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
         }
 
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
                         try {
                             final var event = createEvent(iterator.next());
-                            log.info("Event was found, event={}", uuid);
+                            log.info("Event was found, id={}", id);
                             return event;
                         } catch (IOException e) {
-                            throw new ServerSideConflictException("event can't be parsed, uuid=" + uuid, e);
+                            throw new ServerSideConflictException("event can't be parsed, id=" + id, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("event was not found, uuids=" + uuid);
+                        throw new ServerSideNotFoundException("event was not found, id=" + id);
                     }
                 });
     }
 
     EventModel createEvent(Row row) throws IOException {
         EventModel event = new EventModel();
+        event.setId(row.getLong("id"));
         event.setCreated(row.getOffsetDateTime("created").toInstant());
         event.setModified(row.getOffsetDateTime("modified").toInstant());
-        event.setUuid(row.getUUID("uuid"));
-        event.setGroup(row.getUUID("group_uuid"));
+        event.setGroupId(row.getLong("group_id"));
         final var qualifier = EventQualifierEnum.valueOf(row.getString("qualifier"));
         event.setQualifier(qualifier);
         final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());

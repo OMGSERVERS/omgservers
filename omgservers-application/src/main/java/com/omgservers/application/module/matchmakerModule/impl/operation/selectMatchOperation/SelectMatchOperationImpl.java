@@ -24,9 +24,9 @@ import java.util.UUID;
 class SelectMatchOperationImpl implements SelectMatchOperation {
 
     static private final String sql = """
-            select matchmaker_uuid, created, modified, uuid, runtime, config
+            select id, matchmaker_id, created, modified, runtime_id, config
             from $schema.tab_matchmaker_match
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -36,17 +36,17 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
     @Override
     public Uni<MatchModel> selectMatch(final SqlConnection sqlConnection,
                                        final int shard,
-                                       final UUID uuid) {
+                                       final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -55,21 +55,21 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
                             log.info("Match was found, match={}", match);
                             return match;
                         } catch (IOException e) {
-                            throw new ServerSideConflictException("match can't be parsed, uuid=" + uuid, e);
+                            throw new ServerSideConflictException("match can't be parsed, id=" + id, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("match was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("match was not found, id=" + id);
                     }
                 });
     }
 
     MatchModel createMatch(Row row) throws IOException {
         MatchModel match = new MatchModel();
-        match.setMatchmaker(row.getUUID("matchmaker_uuid"));
+        match.setId(row.getLong("id"));
+        match.setMatchmakerId(row.getLong("matchmaker_id"));
         match.setCreated(row.getOffsetDateTime("created").toInstant());
         match.setModified(row.getOffsetDateTime("modified").toInstant());
-        match.setUuid(row.getUUID("uuid"));
-        match.setRuntime(row.getUUID("runtime"));
+        match.setRuntimeId(row.getLong("runtime_id"));
         match.setConfig(objectMapper.readValue(row.getString("config"), MatchConfigModel.class));
         return match;
     }

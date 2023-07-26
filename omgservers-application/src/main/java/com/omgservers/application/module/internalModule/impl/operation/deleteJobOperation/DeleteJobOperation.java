@@ -8,9 +8,9 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface DeleteJobOperation {
-    Uni<Boolean> deleteJob(SqlConnection sqlConnection, UUID shardKey, UUID entity);
+    Uni<Boolean> deleteJob(SqlConnection sqlConnection, Long shardKey, Long entity);
 
-    default Boolean deleteJob(long timeout, PgPool pgPool, UUID shardKey, UUID entity) {
+    default Boolean deleteJob(long timeout, PgPool pgPool, Long shardKey, Long entity) {
         return pgPool.withTransaction(sqlConnection -> deleteJob(sqlConnection, shardKey, entity))
                 .await().atMost(Duration.ofSeconds(timeout));
     }

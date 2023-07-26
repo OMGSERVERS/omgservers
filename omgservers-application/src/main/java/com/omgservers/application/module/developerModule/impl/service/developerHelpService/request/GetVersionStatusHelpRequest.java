@@ -18,5 +18,5 @@ public class GetVersionStatusHelpRequest {
         // TODO: validate fields
     }
 
-    UUID uuid;
+    Long id;
 }

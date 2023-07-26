@@ -51,14 +51,14 @@ class TokenIdentityProvider implements IdentityProvider<TokenAuthenticationReque
         return userModule.getTokenInternalService().introspectToken(introspectTokenRequest)
                 .map(response -> {
                     final var tokenObject = response.getTokenObject();
-                    final var user = tokenObject.getUser();
+                    final var userId = tokenObject.getUserId();
                     final var role = tokenObject.getRole().getName();
-                    final var principal = role + "/" + user.toString();
+                    final var principal = role + "/" + userId.toString();
                     log.info("User was authenticated, principal={}, role={}", principal, role);
 
                     return (SecurityIdentity) QuarkusSecurityIdentity.builder()
                             .setPrincipal(new QuarkusPrincipal(principal))
-                            .addAttribute("uuid", user)
+                            .addAttribute("userId", userId)
                             .addRole(role)
                             .addPermissionCheckers(permissionCheckers.stream().toList())
                             .setAnonymous(false)

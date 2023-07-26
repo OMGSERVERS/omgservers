@@ -19,11 +19,11 @@ public class SyncStageInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
+    Long tenantId;
     StageModel stage;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

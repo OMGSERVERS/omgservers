@@ -7,46 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserModel {
 
-    static public UserModel create(final UserRoleEnum role,
-                                   final String passwordHash) {
-        return create(UUID.randomUUID(), role, passwordHash);
-    }
-
-    static public UserModel create(final UUID uuid,
-                                   final UserRoleEnum role,
-                                   final String passwordHash) {
-        Instant now = Instant.now();
-
-        UserModel user = new UserModel();
-        user.setCreated(now);
-        user.setModified(now);
-        user.setUuid(uuid);
-        user.setRole(role);
-        user.setPasswordHash(passwordHash);
-        return user;
-    }
-
-    static public void validateUser(UserModel user) {
+    static public void validate(UserModel user) {
         if (user == null) {
             throw new ServerSideBadRequestException("user is null");
         }
+        validateId(user.getId());
         validateCreated(user.getCreated());
         validateModified(user.getModified());
-        validateUuid(user.getUuid());
         validateRole(user.getRole());
         validatePasswordHash(user.getPasswordHash());
     }
 
-    static public void validateUuid(UUID uuid) {
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid field is null");
+    static public void validateId(Long id) {
+        if (id == null) {
+            throw new ServerSideBadRequestException("id field is null");
         }
     }
 
@@ -80,11 +60,11 @@ public class UserModel {
         }
     }
 
+    Long id;
     @ToString.Exclude
     Instant created;
     @ToString.Exclude
     Instant modified;
-    UUID uuid;
     UserRoleEnum role;
     @ToString.Exclude
     String passwordHash;

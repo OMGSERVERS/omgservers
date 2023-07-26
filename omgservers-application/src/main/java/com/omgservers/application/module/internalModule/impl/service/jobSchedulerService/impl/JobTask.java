@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface JobTask {
     JobType getJobType();
 
-    Uni<Boolean> executeTask(UUID shardKey, UUID entity);
+    Uni<Boolean> executeTask(Long shardKey, Long entity);
 }

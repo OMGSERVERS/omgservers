@@ -26,9 +26,9 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deleteVersionOperation
-                                    .deleteVersion(sqlConnection, shard, uuid))
+                                    .deleteVersion(sqlConnection, shard, id))
                             .replaceWithVoid();
                 });
     }

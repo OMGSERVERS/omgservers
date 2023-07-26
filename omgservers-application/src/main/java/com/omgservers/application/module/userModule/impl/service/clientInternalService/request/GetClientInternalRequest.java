@@ -18,11 +18,11 @@ public class GetClientInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
-    UUID client;
+    Long userId;
+    Long clientId;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

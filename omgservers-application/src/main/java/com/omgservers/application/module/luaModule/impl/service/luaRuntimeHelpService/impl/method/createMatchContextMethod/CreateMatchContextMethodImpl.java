@@ -21,9 +21,9 @@ class CreateMatchContextMethodImpl implements CreateMatchContextMethod {
 
         return Uni.createFrom().voidItem()
                 .map(voidItem -> {
-                    final var matchmaker = request.getMatchmaker();
-                    final var match = request.getMatch();
-                    return luaMatchContextFactory.build(matchmaker, match);
+                    final var matchmakerId = request.getMatchmakerId();
+                    final var matchId = request.getMatchId();
+                    return luaMatchContextFactory.build(matchmakerId, matchId);
                 })
                 .map(CreateMatchContextHelpResponse::new);
     }

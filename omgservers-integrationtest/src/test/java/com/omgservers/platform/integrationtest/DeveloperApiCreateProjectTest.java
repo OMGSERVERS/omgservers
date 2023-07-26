@@ -38,22 +38,22 @@ public class DeveloperApiCreateProjectTest extends Assertions {
         developerCli.createClient();
         tenantCli.createClient();
 
-        final var tenantUuid = adminCli.createTenant(tenantTitle());
-        final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantUuid);
-        final var user = createNewDeveloperAdminResponse.getUser();
+        final var tenantId = adminCli.createTenant(tenantTitle());
+        final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
+        final var userId = createNewDeveloperAdminResponse.getUserId();
         final var password = createNewDeveloperAdminResponse.getPassword();
-        developerCli.createToken(user, password);
+        developerCli.createToken(userId, password);
 
-        final var createProjectDeveloperResponse = developerCli.createProject(tenantUuid, projectTitle());
-        final var project = createProjectDeveloperResponse.getProject();
-        final var stage = createProjectDeveloperResponse.getStage();
-        assertNotNull(project);
-        assertNotNull(stage);
+        final var createProjectDeveloperResponse = developerCli.createProject(tenantId, projectTitle());
+        final var projectId = createProjectDeveloperResponse.getProjectId();
+        final var stageId = createProjectDeveloperResponse.getStageId();
+        assertNotNull(projectId);
+        assertNotNull(stageId);
 
         Thread.sleep(5000);
 
-        assertTrue(tenantCli.hasProjectPermission(tenantUuid, project, user, ProjectPermissionEnum.CREATE_STAGE));
-        assertTrue(tenantCli.hasStagePermission(tenantUuid, stage, user, StagePermissionEnum.CREATE_VERSION));
+        assertTrue(tenantCli.hasProjectPermission(tenantId, projectId, userId, ProjectPermissionEnum.CREATE_STAGE));
+        assertTrue(tenantCli.hasStagePermission(tenantId, stageId, userId, StagePermissionEnum.CREATE_VERSION));
     }
 
     String tenantTitle() {

@@ -9,17 +9,17 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class LuaPlayerSignedUpEvent extends LuaEvent {
 
-    final UUID user;
-    final UUID player;
-    final UUID client;
+    final Long userId;
+    final Long playerId;
+    final Long clientId;
 
-    public LuaPlayerSignedUpEvent(UUID user, UUID player, UUID client) {
+    public LuaPlayerSignedUpEvent(Long userId, Long playerId, Long clientId) {
         super("player_signed_up");
-        this.user = user;
-        this.player = player;
-        this.client = client;
-        set("user_uuid", user.toString());
-        set("player_uuid", player.toString());
-        set("client_uuid", client.toString());
+        this.userId = userId;
+        this.playerId = playerId;
+        this.clientId = clientId;
+        set("user_id", userId.toString());
+        set("player_id", playerId.toString());
+        set("client_id", clientId.toString());
     }
 }

@@ -19,9 +19,9 @@ import java.util.ArrayList;
 class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_attribute(player_uuid, created, modified, attribute_name, attribute_value)
-            values($1, $2, $3, $4, $5)
-            on conflict (player_uuid, attribute_name) do
+            insert into $schema.tab_player_attribute(id, player_id, created, modified, attribute_name, attribute_value)
+            values($1, $2, $3, $4, $5, $6)
+            on conflict (player_id, attribute_name) do
             update set modified = $3, attribute_value = $5
             returning xmax::text::int = 0 as inserted
             """;
@@ -53,7 +53,8 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
-                    add(attribute.getPlayer());
+                    add(attribute.getId());
+                    add(attribute.getPlayerId());
                     add(attribute.getCreated().atOffset(ZoneOffset.UTC));
                     add(attribute.getModified().atOffset(ZoneOffset.UTC));
                     add(attribute.getName());

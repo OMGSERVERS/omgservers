@@ -26,9 +26,9 @@ class GetStageConfigMethodImpl implements GetStageConfigMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var version = request.getVersion();
+                    final var versionId = request.getVersionId();
                     return pgPool.withTransaction(sqlConnection -> selectStageConfigOperation
-                            .selectStageConfig(sqlConnection, shard, version));
+                            .selectStageConfig(sqlConnection, shard, versionId));
                 })
                 .map(GetStageConfigInternalResponse::new);
     }

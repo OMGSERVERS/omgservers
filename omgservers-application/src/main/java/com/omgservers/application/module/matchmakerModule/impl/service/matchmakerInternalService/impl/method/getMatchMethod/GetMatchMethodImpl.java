@@ -26,9 +26,9 @@ class GetMatchMethodImpl implements GetMatchMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectMatchOperation
-                            .selectMatch(sqlConnection, shard.shard(), uuid));
+                            .selectMatch(sqlConnection, shard.shard(), id));
                 })
                 .map(GetMatchInternalResponse::new);
     }

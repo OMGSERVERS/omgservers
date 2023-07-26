@@ -25,9 +25,9 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
-                    final var connection = request.getConnection();
+                    final var connectionId = request.getConnectionId();
                     final var assignedPlayer = request.getAssignedPlayer();
-                    final var assignPlayerInternalRequest = new AssignPlayerHelpRequest(connection, assignedPlayer);
+                    final var assignPlayerInternalRequest = new AssignPlayerHelpRequest(connectionId, assignedPlayer);
                     connectionInternalService.assignPlayer(assignPlayerInternalRequest);
                 });
     }

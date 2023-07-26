@@ -21,6 +21,6 @@ public class CreateRuntimeInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return runtime.getUuid().toString();
+        return runtime.getId().toString();
     }
 }

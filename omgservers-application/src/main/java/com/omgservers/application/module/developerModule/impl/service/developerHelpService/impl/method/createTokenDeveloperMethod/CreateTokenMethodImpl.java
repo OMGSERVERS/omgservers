@@ -22,9 +22,9 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     public Uni<CreateTokenHelpResponse> createToken(final CreateTokenHelpRequest request) {
         CreateTokenHelpRequest.validate(request);
 
-        final var user = request.getUser();
+        final var userId = request.getUserId();
         final var password = request.getPassword();
-        final var createTokenRequest = new CreateTokenInternalRequest(user, password);
+        final var createTokenRequest = new CreateTokenInternalRequest(userId, password);
         return userModule.getTokenInternalService().createToken(createTokenRequest)
                 .map(response -> {
                     // TODO: does role have to be "Developer" only, block others?

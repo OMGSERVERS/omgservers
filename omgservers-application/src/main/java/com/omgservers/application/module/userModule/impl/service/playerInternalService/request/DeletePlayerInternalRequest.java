@@ -18,11 +18,11 @@ public class DeletePlayerInternalRequest implements InternalRequest {
         }
     }
 
-    String user;
-    UUID uuid;
+    Long userId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

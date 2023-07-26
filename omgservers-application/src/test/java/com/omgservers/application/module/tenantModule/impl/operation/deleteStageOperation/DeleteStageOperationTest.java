@@ -2,12 +2,16 @@ package com.omgservers.application.module.tenantModule.impl.operation.deleteStag
 
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
 import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
+import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
 import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -36,32 +40,52 @@ class DeleteStageOperationTest extends Assertions {
     UpsertStageOperation upsertStageOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
+    ProjectModelFactory projectModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
+    StageModelFactory stageModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenTenantProjectStage_whenDeleteStage_thenDeleted() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        final var project = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        final var stage = StageModel.create(project.getUuid());
+        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
 
-        assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, stage.getUuid()));
+        assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, stage.getId()));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteStage_thenSkip() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, uuid));
+        assertFalse(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID ownerUuid() {
-        return UUID.randomUUID();
+    Long ownerId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long matchmakerId() {
+        return generateIdOperation.generateId();
     }
 }

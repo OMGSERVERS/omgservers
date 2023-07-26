@@ -18,5 +18,5 @@ public class GetSessionHelpRequest {
         // TODO: validate fields
     }
 
-    UUID connection;
+    Long connectionId;
 }

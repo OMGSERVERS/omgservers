@@ -22,15 +22,15 @@ class ProcessMessageOperationImpl implements ProcessMessageOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> processMessage(final UUID connection, final String messageString) {
+    public Uni<Void> processMessage(final Long connectionId, final String messageString) {
         try {
             final var message = objectMapper.readValue(messageString, MessageModel.class);
-            log.info("Handle message, connection={}, message={}", connection, message);
-            final var handleMessageServiceRequest = new HandleMessageHelpRequest(connection, message);
+            log.info("Handle message, connectionId={}, message={}", connectionId, message);
+            final var handleMessageServiceRequest = new HandleMessageHelpRequest(connectionId, message);
             return handlerHelpService.handleMessage(handleMessageServiceRequest);
         } catch (Exception e) {
             throw new ServerSideBadRequestException(String
-                    .format("wrong message, connection=%s, %s", connection, e.getMessage()));
+                    .format("wrong message, connectionId=%s, %s", connectionId, e.getMessage()));
         }
     }
 }

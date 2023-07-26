@@ -29,9 +29,9 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
-                            .selectMatchmaker(sqlConnection, shard.shard(), uuid));
+                            .selectMatchmaker(sqlConnection, shard.shard(), id));
                 })
                 .map(GetMatchmakerInternalResponse::new);
     }

@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,11 +16,11 @@ public class DeleteObjectInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
-    UUID uuid;
+    Long userId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

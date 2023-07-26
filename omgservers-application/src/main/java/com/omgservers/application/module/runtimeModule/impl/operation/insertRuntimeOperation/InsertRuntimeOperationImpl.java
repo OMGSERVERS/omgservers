@@ -24,7 +24,7 @@ import java.util.ArrayList;
 class InsertRuntimeOperationImpl implements InsertRuntimeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime(created, uuid, matchmaker, match_uuid, config)
+            insert into $schema.tab_runtime(id, created, matchmaker_id, match_id, config)
             values($1, $2, $3, $4, $5)
             """;
 
@@ -57,10 +57,10 @@ class InsertRuntimeOperationImpl implements InsertRuntimeOperation {
             var configString = objectMapper.writeValueAsString(runtime.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
+                        add(runtime.getId());
                         add(runtime.getCreated().atOffset(ZoneOffset.UTC));
-                        add(runtime.getUuid());
-                        add(runtime.getMatchmaker());
-                        add(runtime.getMatch());
+                        add(runtime.getMatchmakerId());
+                        add(runtime.getMatchId());
                         add(configString);
                     }}))
                     .replaceWithVoid();

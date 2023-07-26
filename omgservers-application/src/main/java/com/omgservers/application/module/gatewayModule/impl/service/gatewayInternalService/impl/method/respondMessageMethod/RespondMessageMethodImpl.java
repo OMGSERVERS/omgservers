@@ -26,8 +26,8 @@ class RespondMessageMethodImpl implements RespondMessageMethod {
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> {
-                    final var connection = request.getConnection();
-                    final var getSessionHelpRequest = new GetSessionHelpRequest(connection);
+                    final var connectionId = request.getConnectionId();
+                    final var getSessionHelpRequest = new GetSessionHelpRequest(connectionId);
                     final var session = connectionInternalService.getSession(getSessionHelpRequest).getSession();
                     final var message = request.getMessage();
                     return sendMessageOperation.sendMessage(session, message);

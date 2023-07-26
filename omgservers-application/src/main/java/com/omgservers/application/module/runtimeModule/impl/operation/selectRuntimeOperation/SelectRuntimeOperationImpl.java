@@ -24,9 +24,9 @@ import java.util.UUID;
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     static private final String sql = """
-            select created, uuid, matchmaker, match_uuid, config
+            select id, created, matchmaker_id, match_id, config
             from $schema.tab_runtime
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -36,17 +36,17 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
     @Override
     public Uni<RuntimeModel> selectRuntime(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final UUID uuid) {
+                                           final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new IllegalArgumentException("uuid is null");
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -55,20 +55,20 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                             log.info("Runtime was found, runtime={}", match);
                             return match;
                         } catch (IOException e) {
-                            throw new ServerSideConflictException("runtime can't be parsed, uuid=" + uuid, e);
+                            throw new ServerSideConflictException("runtime can't be parsed, id=" + id, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("runtime was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("runtime was not found, id=" + id);
                     }
                 });
     }
 
     RuntimeModel createRuntime(Row row) throws IOException {
         RuntimeModel runtime = new RuntimeModel();
+        runtime.setId(row.getLong("id"));
         runtime.setCreated(row.getOffsetDateTime("created").toInstant());
-        runtime.setUuid(row.getUUID("uuid"));
-        runtime.setMatchmaker(row.getUUID("matchmaker"));
-        runtime.setMatch(row.getUUID("match_uuid"));
+        runtime.setMatchmakerId(row.getLong("matchmaker_id"));
+        runtime.setMatchId(row.getLong("match_id"));
         runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
         return runtime;
     }

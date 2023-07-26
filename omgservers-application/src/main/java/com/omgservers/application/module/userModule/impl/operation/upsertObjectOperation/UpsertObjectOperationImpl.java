@@ -20,9 +20,9 @@ import java.util.ArrayList;
 class UpsertObjectOperationImpl implements UpsertObjectOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_object(player_uuid, created, modified, uuid, name, body)
+            insert into $schema.tab_player_object(id, player_id, created, modified, name, body)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (player_uuid, name) do
+            on conflict (player_id, name) do
             update set modified = $3, name = $5, body = $6
             returning xmax::text::int = 0 as inserted
             """;
@@ -54,10 +54,10 @@ class UpsertObjectOperationImpl implements UpsertObjectOperation {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
-                    add(object.getPlayer());
+                    add(object.getId());
+                    add(object.getPlayerId());
                     add(object.getCreated().atOffset(ZoneOffset.UTC));
                     add(object.getModified().atOffset(ZoneOffset.UTC));
-                    add(object.getUuid());
                     add(object.getName());
                     add(object.getBody());
                 }}))

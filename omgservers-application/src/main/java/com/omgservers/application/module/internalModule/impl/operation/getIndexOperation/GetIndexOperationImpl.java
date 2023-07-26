@@ -22,7 +22,7 @@ import java.io.IOException;
 class GetIndexOperationImpl implements GetIndexOperation {
 
     static private final String sql = """
-            select uuid, created, modified, name, version, config
+            select id, created, modified, name, version, config
             from internal.tab_index where name = $1 limit 1
             """;
 
@@ -56,7 +56,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
 
     IndexModel createIndex(Row row) throws IOException {
         IndexModel index = new IndexModel();
-        index.setUuid(row.getUUID("uuid"));
+        index.setId(row.getLong("id"));
         index.setCreated(row.getOffsetDateTime("created").toInstant());
         index.setModified(row.getOffsetDateTime("modified").toInstant());
         index.setName(row.getString("name"));

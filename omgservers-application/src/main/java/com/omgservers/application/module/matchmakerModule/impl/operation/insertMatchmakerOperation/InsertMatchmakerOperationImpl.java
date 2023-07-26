@@ -22,7 +22,7 @@ import java.util.ArrayList;
 class InsertMatchmakerOperationImpl implements InsertMatchmakerOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker(created, uuid, tenant, stage)
+            insert into $schema.tab_matchmaker(id, created, tenant_id, stage_id)
             values($1, $2, $3, $4)
             """;
 
@@ -53,10 +53,10 @@ class InsertMatchmakerOperationImpl implements InsertMatchmakerOperation {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
+                    add(matchmaker.getId());
                     add(matchmaker.getCreated().atOffset(ZoneOffset.UTC));
-                    add(matchmaker.getUuid());
-                    add(matchmaker.getTenant());
-                    add(matchmaker.getStage());
+                    add(matchmaker.getTenantId());
+                    add(matchmaker.getStageId());
                 }}))
                 .replaceWithVoid();
     }

@@ -19,7 +19,7 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
     static private final String sql = """
             select id
             from $schema.tab_stage_permission
-            where stage_uuid = $1 and user_uuid = $2 and permission = $3
+            where stage_id = $1 and user_id = $2 and permission = $3
             limit 1
             """;
 
@@ -28,17 +28,17 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
     @Override
     public Uni<Boolean> hasStagePermission(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final UUID stage,
-                                           final UUID user,
+                                           final Long stageId,
+                                           final Long userId,
                                            final StagePermissionEnum permission) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (stage == null) {
-            throw new IllegalArgumentException("stage is null");
+        if (stageId == null) {
+            throw new IllegalArgumentException("stageId is null");
         }
-        if (user == null) {
-            throw new IllegalArgumentException("user is null");
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
         }
         if (permission == null) {
             throw new IllegalArgumentException("permission is null");
@@ -46,12 +46,12 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(stage, user, permission))
+                .execute(Tuple.of(stageId, userId, permission))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(selected -> {
                     if (selected) {
-                        log.info("Stage's permission was found, stage={}, user={}, permission={}",
-                                stage, user, permission);
+                        log.info("Stage's permission was found, stageId={}, userId={}, permission={}",
+                                stageId, userId, permission);
                     }
                 });
     }

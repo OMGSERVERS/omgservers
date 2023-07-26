@@ -23,7 +23,7 @@ import java.util.Arrays;
 class InsertVersionOperationImpl implements InsertVersionOperation {
 
     static private final String sql = """
-            insert into $schema.tab_version(created, modified, uuid, tenant, stage, stage_config, source_code, bytecode, status, errors)
+            insert into $schema.tab_version(id, created, modified, tenant_id, stage_id, stage_config, source_code, bytecode, status, errors)
             values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             """;
 
@@ -53,11 +53,11 @@ class InsertVersionOperationImpl implements InsertVersionOperation {
             final var bytecode = objectMapper.writeValueAsString(version.getBytecode());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(
+                            version.getId(),
                             version.getCreated().atOffset(ZoneOffset.UTC),
                             version.getModified().atOffset(ZoneOffset.UTC),
-                            version.getUuid(),
-                            version.getTenant(),
-                            version.getStage(),
+                            version.getTenantId(),
+                            version.getStageId(),
                             stageConfig,
                             sourceCode,
                             bytecode,

@@ -2,15 +2,14 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.select
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
@@ -24,33 +23,39 @@ class SelectMatchmakerOperationTest extends Assertions {
     InsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenMatchmaker_whenSelectMatchmaker_thenSelected() {
         final var shard = 0;
-        final var matchmaker1 = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker1);
 
-        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(TIMEOUT, pgPool, shard, matchmaker1.getUuid());
+        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(TIMEOUT, pgPool, shard, matchmaker1.getId());
         assertEquals(matchmaker1, matchmaker2);
     }
 
     @Test
     void givenUnknownUuid_whenSelectMatchmaker_then() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectMatchmakerOperation
-                .selectMatchmaker(TIMEOUT, pgPool, shard, uuid));
+                .selectMatchmaker(TIMEOUT, pgPool, shard, id));
         log.info("Exception: {}", exception.getMessage());
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

@@ -12,6 +12,7 @@ import com.omgservers.application.module.internalModule.model.index.IndexModel;
 import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
+import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModelFactory;
 import com.omgservers.platforms.integrationtest.operations.getAdminClientOperation.AdminClientForAdminAccount;
 import com.omgservers.platforms.integrationtest.operations.getAdminClientOperation.GetAdminClientOperation;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
@@ -21,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -31,6 +31,8 @@ public class AdminCli {
 
     final GetConfigOperation getConfigOperation;
     final GetAdminClientOperation getAdminClientOperation;
+
+    final ServiceAccountModelFactory serviceAccountModelFactory;
 
     AdminClientForAdminAccount adminClient;
 
@@ -60,8 +62,8 @@ public class AdminCli {
         adminClient.syncIndex(TIMEOUT, new SyncIndexHelpRequest(index));
     }
 
-    public void deleteIndex(UUID uuid) {
-        adminClient.deleteIndex(TIMEOUT, new DeleteIndexHelpRequest(uuid));
+    public void deleteIndex(Long id) {
+        adminClient.deleteIndex(TIMEOUT, new DeleteIndexHelpRequest(id));
     }
 
     public ServiceAccountModel getServiceAccount(String username) {
@@ -71,7 +73,7 @@ public class AdminCli {
     }
 
     public void createServiceAccount(String username, String password) {
-        final var serviceAccountModel = ServiceAccountModel.create(username, BcryptUtil.bcryptHash(password));
+        final var serviceAccountModel = serviceAccountModelFactory.create(username, BcryptUtil.bcryptHash(password));
         syncServiceAccount(serviceAccountModel);
     }
 
@@ -79,16 +81,16 @@ public class AdminCli {
         adminClient.syncServiceAccount(TIMEOUT, new SyncServiceAccountHelpRequest(serviceAccount));
     }
 
-    public void deleteServiceAccount(UUID uuid) {
-        adminClient.deleteServiceAccount(TIMEOUT, new DeleteServiceAccountHelpRequest(uuid));
+    public void deleteServiceAccount(Long id) {
+        adminClient.deleteServiceAccount(TIMEOUT, new DeleteServiceAccountHelpRequest(id));
     }
 
-    public UUID createTenant(String title) {
+    public Long createTenant(String title) {
         final var response = adminClient.createTenant(TIMEOUT, new CreateTenantHelpRequest(title));
-        return response.getUuid();
+        return response.getId();
     }
 
-    public CreateDeveloperHelpResponse createDeveloper(UUID tenant) {
-        return adminClient.createDeveloper(TIMEOUT, new CreateDeveloperHelpRequest(tenant));
+    public CreateDeveloperHelpResponse createDeveloper(Long tenantId) {
+        return adminClient.createDeveloper(TIMEOUT, new CreateDeveloperHelpRequest(tenantId));
     }
 }

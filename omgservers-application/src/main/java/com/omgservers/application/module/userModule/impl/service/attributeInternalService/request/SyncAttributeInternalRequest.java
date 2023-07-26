@@ -19,11 +19,11 @@ public class SyncAttributeInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
+    Long userId;
     AttributeModel attribute;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

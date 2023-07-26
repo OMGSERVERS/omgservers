@@ -26,9 +26,9 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectRuntimeOperation
-                            .selectRuntime(sqlConnection, shard.shard(), uuid));
+                            .selectRuntime(sqlConnection, shard.shard(), id));
                 })
                 .map(GetRuntimeInternalResponse::new);
     }

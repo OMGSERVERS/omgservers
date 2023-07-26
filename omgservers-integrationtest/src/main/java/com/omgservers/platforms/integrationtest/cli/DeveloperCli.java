@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -50,29 +49,29 @@ public class DeveloperCli {
         return clientForAuthenticatedAccess;
     }
 
-    public String createToken(UUID user, String password) {
-        final var createTokenDeveloperRequest = new CreateTokenHelpRequest(user, password);
+    public String createToken(Long userId, String password) {
+        final var createTokenDeveloperRequest = new CreateTokenHelpRequest(userId, password);
         final var createTokenDeveloperResponse = clientForAnonymousAccess.createToken(TIMEOUT, createTokenDeveloperRequest);
         rawToken = createTokenDeveloperResponse.getRawToken();
-        log.info("Token was created, user={}, {}", user, rawToken);
+        log.info("Token was created, userId={}, {}", userId, rawToken);
         return rawToken;
     }
 
-    public CreateProjectHelpResponse createProject(UUID tenant, String title) {
-        final var createProjectDeveloperRequest = new CreateProjectHelpRequest(tenant, title);
+    public CreateProjectHelpResponse createProject(Long tenantId, String title) {
+        final var createProjectDeveloperRequest = new CreateProjectHelpRequest(tenantId, title);
         final var response = clientForAuthenticatedAccess.createProject(TIMEOUT, rawToken, createProjectDeveloperRequest);
         return response;
     }
 
-    public UUID createVersion(UUID tenant, UUID stage, VersionStageConfigModel stageConfig, VersionSourceCodeModel sourceCode) {
-        final var createVersionDeveloperRequest = new CreateVersionHelpRequest(tenant, stage, stageConfig, sourceCode);
+    public Long createVersion(Long tenantId, Long stageId, VersionStageConfigModel stageConfig, VersionSourceCodeModel sourceCode) {
+        final var createVersionDeveloperRequest = new CreateVersionHelpRequest(tenantId, stageId, stageConfig, sourceCode);
         final var createVersionDeveloperResponse = clientForAuthenticatedAccess.createVersion(TIMEOUT, rawToken, createVersionDeveloperRequest);
-        return createVersionDeveloperResponse.getUuid();
+        return createVersionDeveloperResponse.getId();
     }
 
-    public VersionStatusEnum getVersionStatus(UUID version) {
+    public VersionStatusEnum getVersionStatus(Long versionId) {
         final var response = clientForAuthenticatedAccess
-                .getVersionStatus(TIMEOUT, rawToken, new GetVersionStatusHelpRequest(version));
+                .getVersionStatus(TIMEOUT, rawToken, new GetVersionStatusHelpRequest(versionId));
         return response.getStatus();
     }
 }

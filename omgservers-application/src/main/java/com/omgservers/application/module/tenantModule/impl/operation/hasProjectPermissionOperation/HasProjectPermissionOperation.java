@@ -11,17 +11,18 @@ import java.util.UUID;
 public interface HasProjectPermissionOperation {
     Uni<Boolean> hasProjectPermission(SqlConnection sqlConnection,
                                       int shard,
-                                      UUID project,
-                                      UUID user,
+                                      Long projectId,
+                                      Long userId,
                                       ProjectPermissionEnum permission);
 
     default Boolean hasProjectPermission(long timeout,
                                          PgPool pgPool,
                                          int shard,
-                                         UUID project,
-                                         UUID user,
+                                         Long projectId,
+                                         Long userId,
                                          ProjectPermissionEnum permission) {
-        return pgPool.withTransaction(sqlConnection -> hasProjectPermission(sqlConnection, shard, project, user, permission))
+        return pgPool.withTransaction(sqlConnection ->
+                        hasProjectPermission(sqlConnection, shard, projectId, userId, permission))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

@@ -21,6 +21,6 @@ public class SyncPlayerInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return player.getUser().toString();
+        return player.getUserId().toString();
     }
 }

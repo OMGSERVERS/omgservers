@@ -11,5 +11,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GetConnectionHelpResponse {
 
-    UUID connection;
+    Long connectionId;
 }

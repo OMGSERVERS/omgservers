@@ -19,12 +19,12 @@ public class CreateTokenInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
+    Long userId;
     @ToString.Exclude
     String password;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

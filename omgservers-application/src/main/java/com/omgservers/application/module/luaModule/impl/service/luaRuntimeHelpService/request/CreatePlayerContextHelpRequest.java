@@ -18,7 +18,7 @@ public class CreatePlayerContextHelpRequest {
         // TODO: validate fields
     }
 
-    UUID user;
-    UUID player;
-    UUID client;
+    Long userId;
+    Long playerId;
+    Long clientId;
 }

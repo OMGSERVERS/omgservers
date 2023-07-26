@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertUserOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -19,12 +19,15 @@ class InsertUserOperationTest extends Assertions {
     UpsertUserOperation upsertUserOperation;
 
     @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenNothing_whenUpsertUser_thenInserted() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
 
         assertTrue(upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user));
     }
@@ -32,7 +35,7 @@ class InsertUserOperationTest extends Assertions {
     @Test
     void givenClient_whenUpsertClient_thenUpdated() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
 
         assertFalse(upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user));

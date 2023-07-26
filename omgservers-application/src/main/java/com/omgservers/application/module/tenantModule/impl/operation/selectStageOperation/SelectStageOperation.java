@@ -11,10 +11,10 @@ import java.util.UUID;
 public interface SelectStageOperation {
     Uni<StageModel> selectStage(SqlConnection sqlConnection,
                                 int shard,
-                                UUID uuid);
+                                Long id);
 
-    default StageModel selectStage(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectStage(sqlConnection, shard, uuid))
+    default StageModel selectStage(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectStage(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

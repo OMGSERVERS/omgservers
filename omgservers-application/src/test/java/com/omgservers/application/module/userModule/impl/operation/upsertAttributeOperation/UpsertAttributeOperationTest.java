@@ -3,10 +3,14 @@ package com.omgservers.application.module.userModule.impl.operation.upsertAttrib
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
 import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
+import com.omgservers.application.module.userModule.model.attribute.AttributeModelFactory;
 import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
 import com.omgservers.application.module.userModule.model.player.PlayerModel;
+import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -31,30 +35,42 @@ class UpsertAttributeOperationTest extends Assertions {
     UpsertUserOperation upsertUserOperation;
 
     @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
+    PlayerModelFactory playerModelFactory;
+
+    @Inject
+    AttributeModelFactory attributeModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenPlayer_whenUpsertAttribute_thenInserted() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, passwordHash());
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = PlayerModel.create(user.getUuid(), UUID.randomUUID(), PlayerConfigModel.create());
-        final var playerUuid = player.getUuid();
+        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var attribute = AttributeModel.create(playerUuid, attributeName(), stringValue());
+        final var attribute = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
         assertTrue(upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute));
     }
 
     @Test
     void givenAttribute_whenUpsertAttribute_thenUpdated() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = PlayerModel.create(user.getUuid(), UUID.randomUUID(), PlayerConfigModel.create());
-        final var playerUuid = player.getUuid();
+        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var attribute = AttributeModel.create(playerUuid, attributeName(), stringValue());
+        final var attribute = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute);
 
         assertFalse(upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute));
@@ -70,5 +86,9 @@ class UpsertAttributeOperationTest extends Assertions {
 
     String stringValue() {
         return UUID.randomUUID().toString();
+    }
+
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

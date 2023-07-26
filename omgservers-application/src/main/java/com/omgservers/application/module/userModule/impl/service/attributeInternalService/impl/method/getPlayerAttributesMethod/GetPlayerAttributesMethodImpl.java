@@ -25,9 +25,9 @@ class GetPlayerAttributesMethodImpl implements GetPlayerAttributesMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var player = request.getPlayer();
+                    final var playerId = request.getPlayerId();
                     return pgPool.withTransaction(sqlConnection -> selectPlayerAttributesOperation
-                            .selectPlayerAttributes(sqlConnection, shardModel.shard(), player));
+                            .selectPlayerAttributes(sqlConnection, shardModel.shard(), playerId));
                 })
                 .map(GetPlayerAttributesInternalResponse::new);
     }

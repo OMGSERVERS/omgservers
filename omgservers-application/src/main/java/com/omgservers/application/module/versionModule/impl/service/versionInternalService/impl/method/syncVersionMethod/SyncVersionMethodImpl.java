@@ -40,12 +40,11 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
                                 .flatMap(result -> {
                                     final var inserted = result.getItem2();
                                     if (inserted) {
-                                        final var uuid = version.getUuid();
-                                        final var tenant = version.getTenant();
-                                        final var stage = version.getStage();
-                                        final var origin = VersionCreatedEventBodyModel.createEvent(tenant, stage, uuid);
-                                        final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                                        final var id = version.getId();
+                                        final var tenantId = version.getTenantId();
+                                        final var stageId = version.getStageId();
+                                        final var eventBody = new VersionCreatedEventBodyModel(tenantId, stageId, id);
+                                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                                         return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                                     } else {
                                         return Uni.createFrom().voidItem();

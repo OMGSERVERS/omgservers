@@ -50,34 +50,34 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
     public Uni<Void> doGreedyMatchmaking(DoGreedyMatchmakingHelpRequest request) {
         DoGreedyMatchmakingHelpRequest.validate(request);
 
-        final var tenant = request.getTenant();
-        final var stage = request.getStage();
-        final var version = request.getVersion();
-        final var matchmaker = request.getMatchmaker();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
+        final var versionId = request.getVersionId();
+        final var matchmakerId = request.getMatchmakerId();
         final var requests = request.getRequests();
         final var matches = request.getMatches();
         final var stageConfig = request.getStageConfig();
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
-                .map(voidItem -> doMatchmaking(tenant,
-                        stage,
-                        version,
-                        matchmaker,
+                .map(voidItem -> doMatchmaking(tenantId,
+                        stageId,
+                        versionId,
+                        matchmakerId,
                         requests,
                         matches,
                         stageConfig))
                 .flatMap(this::syncOverallResults);
     }
 
-    OverallMatchmakingResults doMatchmaking(final UUID tenant,
-                                            final UUID stage,
-                                            final UUID version,
-                                            final UUID matchmaker,
+    OverallMatchmakingResults doMatchmaking(final Long tenantId,
+                                            final Long stageId,
+                                            final Long versionId,
+                                            final Long matchmakerId,
                                             final List<RequestModel> matchmakerRequests,
                                             final List<MatchModel> matchmakerMatches,
                                             final VersionStageConfigModel stageConfig) {
-        // TODO: this code is not a thread-safe, do we need to use lock for matchmaker here to prevent concurrent execution
+        // TODO: this code is not a thread-safe, do we need to use lock for matchmakerId here to prevent concurrent execution
 
         final var groupedRequests = matchmakerRequests.stream()
                 .collect(Collectors.groupingBy(request -> request.getConfig().getMode()));
@@ -94,10 +94,10 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                     .filter(mode -> mode.getName().equals(modeName)).findFirst();
             if (modeConfigOptional.isPresent()) {
                 final var modeConfig = modeConfigOptional.get();
-                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(tenant,
-                        stage,
-                        version,
-                        matchmaker,
+                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(tenantId,
+                        stageId,
+                        versionId,
+                        matchmakerId,
                         modeConfig,
                         activeRequests,
                         launchedMatches);
@@ -146,9 +146,9 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
         // TODO: use batching???
         return Multi.createFrom().iterable(completedRequests)
                 .onItem().transformToUniAndMerge(request -> {
-                    final var matchmaker = request.getMatchmaker();
-                    final var uuid = request.getUuid();
-                    final var deleteRequestInternalRequest = new DeleteRequestInternalRequest(matchmaker, uuid);
+                    final var matchmaker = request.getMatchmakerId();
+                    final var id = request.getId();
+                    final var deleteRequestInternalRequest = new DeleteRequestInternalRequest(matchmaker, id);
                     return matchmakerInternalService.deleteRequest(deleteRequestInternalRequest);
                 })
                 .collect().asList()

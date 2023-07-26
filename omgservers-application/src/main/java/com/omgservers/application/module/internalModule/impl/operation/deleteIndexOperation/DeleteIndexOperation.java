@@ -6,5 +6,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.util.UUID;
 
 public interface DeleteIndexOperation {
-    Uni<Void> deleteIndex(SqlConnection sqlConnection, UUID uuid);
+    Uni<Void> deleteIndex(SqlConnection sqlConnection, Long id);
 }

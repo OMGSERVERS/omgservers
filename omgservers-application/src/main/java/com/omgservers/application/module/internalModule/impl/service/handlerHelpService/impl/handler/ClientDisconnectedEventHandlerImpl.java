@@ -27,9 +27,9 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (ClientDisconnectedEventBodyModel) event.getBody();
-        final var user = body.getUser();
-        final var client = body.getClient();
-        final var request = new DeleteClientInternalRequest(user, client);
+        final var userId = body.getUserId();
+        final var clientId = body.getClientId();
+        final var request = new DeleteClientInternalRequest(userId, clientId);
         return userModule.getClientInternalService().deleteClient(request)
                 .replaceWith(true);
     }

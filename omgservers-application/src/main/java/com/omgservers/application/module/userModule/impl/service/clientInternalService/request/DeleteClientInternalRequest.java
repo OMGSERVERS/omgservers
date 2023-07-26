@@ -19,11 +19,11 @@ public class DeleteClientInternalRequest implements InternalRequest {
         // TODO: validate fields
     }
 
-    UUID user;
-    UUID client;
+    Long userId;
+    Long clientId;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

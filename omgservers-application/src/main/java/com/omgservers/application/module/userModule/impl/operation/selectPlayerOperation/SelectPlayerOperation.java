@@ -11,11 +11,11 @@ import java.util.UUID;
 public interface SelectPlayerOperation {
     Uni<PlayerModel> selectPlayer(SqlConnection sqlConnection,
                                   int shard,
-                                  UUID userUuid,
-                                  UUID stageUuid);
+                                  Long userId,
+                                  Long stageId);
 
-    default PlayerModel selectPlayer(long timeout, PgPool pgPool, int shard, UUID userUuid, UUID stageUuid) {
-        return pgPool.withTransaction(sqlConnection -> selectPlayer(sqlConnection, shard, userUuid, stageUuid))
+    default PlayerModel selectPlayer(long timeout, PgPool pgPool, int shard, Long userId, Long stageId) {
+        return pgPool.withTransaction(sqlConnection -> selectPlayer(sqlConnection, shard, userId, stageId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

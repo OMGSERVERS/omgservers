@@ -39,34 +39,34 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (PlayerSignedInEventBodyModel) event.getBody();
-        final var tenant = body.getTenant();
-        final var stage = body.getStage();
-        final var user = body.getUser();
-        final var player = body.getPlayer();
-        final var clientUuid = body.getClient();
+        final var tenantId = body.getTenantId();
+        final var stageId = body.getStageId();
+        final var userId = body.getUserId();
+        final var playerId = body.getPlayerId();
+        final var clientId = body.getClientId();
 
-        return getClient(user, clientUuid)
-                .flatMap(client -> assignPlayer(tenant, stage, user, player, client))
-                .flatMap(voidItem -> handleEvent(tenant, stage, user, player, clientUuid))
+        return getClient(userId, clientId)
+                .flatMap(client -> assignPlayer(tenantId, stageId, userId, playerId, client))
+                .flatMap(voidItem -> handleEvent(tenantId, stageId, userId, playerId, clientId))
                 .replaceWith(true);
     }
 
-    Uni<ClientModel> getClient(UUID user, UUID client) {
-        final var getClientServiceRequest = new GetClientInternalRequest(user, client);
+    Uni<ClientModel> getClient(Long userId, Long clientId) {
+        final var getClientServiceRequest = new GetClientInternalRequest(userId, clientId);
         return userModule.getClientInternalService().getClient(getClientServiceRequest)
                 .map(GetClientInternalResponse::getClient);
     }
 
-    Uni<Void> assignPlayer(UUID tenant, UUID stage, UUID user, UUID player, ClientModel client) {
+    Uni<Void> assignPlayer(Long tenantId, Long stageId, Long userId, Long playerId, ClientModel client) {
         final var server = client.getServer();
-        final var connection = client.getConnection();
-        final var assignedPlayer = new AssignedPlayerModel(tenant, stage, user, player, client.getUuid());
+        final var connection = client.getConnectionId();
+        final var assignedPlayer = new AssignedPlayerModel(tenantId, stageId, userId, playerId, client.getId());
         final var request = new AssignPlayerInternalRequest(server, connection, assignedPlayer);
         return gatewayModule.getGatewayInternalService().assignPlayer(request);
     }
 
-    Uni<Void> handleEvent(UUID tenant, UUID stage, UUID user, UUID player, UUID client) {
-        final var request = new HandlePlayerSignedInEventHelpRequest(tenant, stage, user, player, client);
+    Uni<Void> handleEvent(Long tenantId, Long stageId, Long userId, Long playerId, Long clientId) {
+        final var request = new HandlePlayerSignedInEventHelpRequest(tenantId, stageId, userId, playerId, clientId);
         return luaModule.getHandlerHelpService().handlePlayerSignedInEvent(request);
     }
 }

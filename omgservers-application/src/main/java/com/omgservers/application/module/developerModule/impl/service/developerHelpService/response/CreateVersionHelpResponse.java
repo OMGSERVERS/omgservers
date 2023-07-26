@@ -11,5 +11,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateVersionHelpResponse {
 
-    UUID uuid;
+    Long id;
 }

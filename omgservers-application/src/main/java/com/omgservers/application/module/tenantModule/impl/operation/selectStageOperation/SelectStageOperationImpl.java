@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -25,9 +24,9 @@ import java.util.UUID;
 class SelectStageOperationImpl implements SelectStageOperation {
 
     static private final String sql = """
-            select project_uuid, created, modified, uuid, secret, matchmaker, config, version
+            select id, project_id, created, modified, secret, matchmaker_id, config, version_id
             from $schema.tab_project_stage
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -37,43 +36,43 @@ class SelectStageOperationImpl implements SelectStageOperation {
     @Override
     public Uni<StageModel> selectStage(final SqlConnection sqlConnection,
                                        final int shard,
-                                       final UUID uuid) {
+                                       final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
                         try {
-                            log.info("Stage was found, uuid={}", uuid);
+                            log.info("Stage was found, id={}", id);
                             return createStage(iterator.next());
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("stage config can't be parsed, uuid=" + uuid);
+                            throw new ServerSideInternalException("stage config can't be parsed, id=" + id);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("stage was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("stage was not found, id=" + id);
                     }
                 });
     }
 
     StageModel createStage(Row row) throws IOException {
         StageModel stage = new StageModel();
-        stage.setProject(row.getUUID("project_uuid"));
+        stage.setId(row.getLong("id"));
+        stage.setProjectId(row.getLong("project_id"));
         stage.setCreated(row.getOffsetDateTime("created").toInstant());
         stage.setModified(row.getOffsetDateTime("modified").toInstant());
-        stage.setUuid(row.getUUID("uuid"));
         stage.setSecret(row.getString("secret"));
-        stage.setMatchmaker(row.getUUID("matchmaker"));
+        stage.setMatchmakerId(row.getLong("matchmaker_id"));
         stage.setConfig(objectMapper.readValue(row.getString("config"), StageConfigModel.class));
-        stage.setVersion(row.getUUID("version"));
+        stage.setVersionId(row.getLong("version_id"));
         return stage;
     }
 }

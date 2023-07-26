@@ -35,10 +35,10 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
 
         final var rawToken = request.getRawToken();
         final var tokenObject = decodeTokenOperation.decodeToken(rawToken);
-        final var userUuid = tokenObject.getUser();
+        final var userUuid = tokenObject.getUserId();
         return checkShardOperation.checkShard(userUuid.toString())
                 .flatMap(shard -> {
-                    final var tokenUuid = tokenObject.getUuid();
+                    final var tokenUuid = tokenObject.getId();
                     return pgPool.withTransaction(sqlConnection -> selectTokenOperation
                             .selectToken(sqlConnection, shard.shard(), tokenUuid)
                             .map(token -> introspect(token, rawToken, tokenObject)));

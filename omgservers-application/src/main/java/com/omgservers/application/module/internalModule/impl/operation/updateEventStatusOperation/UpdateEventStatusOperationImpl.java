@@ -21,41 +21,41 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
 
     static private final String sql = """
             update internal.tab_event set status = $2
-            where uuid = $1
+            where id = $1
             """;
 
     final ObjectMapper objectMapper;
 
     @Override
     public Uni<Boolean> updateEventStatus(final SqlConnection sqlConnection,
-                                          final UUID event,
+                                          final Long id,
                                           final EventStatusEnum newStatus) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (event == null) {
-            throw new ServerSideBadRequestException("event is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
         if (newStatus == null) {
             throw new ServerSideBadRequestException("newStatus is null");
         }
 
-        return updateQuery(sqlConnection, event, newStatus)
+        return updateQuery(sqlConnection, id, newStatus)
                 .invoke(updated -> {
                     if (updated) {
-                        log.info("Event was updated, event={}, newStatus={}", event, newStatus);
+                        log.info("Event was updated, id={}, newStatus={}", id, newStatus);
                     } else {
-                        log.warn("Event wasn't found, event={}, newStatus={}", event, newStatus);
+                        log.warn("Event wasn't found, id={}, newStatus={}", id, newStatus);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s, event=%s, newStatus=%s", t.getMessage(), event, newStatus)));
+                        .format("unhandled PgException, %s, id=%s, newStatus=%s", t.getMessage(), id, newStatus)));
     }
 
-    Uni<Boolean> updateQuery(SqlConnection sqlConnection, UUID event, EventStatusEnum status) {
+    Uni<Boolean> updateQuery(SqlConnection sqlConnection, Long id, EventStatusEnum status) {
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.of(event, status.toString()))
+                .execute(Tuple.of(id, status.toString()))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

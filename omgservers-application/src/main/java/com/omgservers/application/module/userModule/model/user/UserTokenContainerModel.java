@@ -14,7 +14,7 @@ public class UserTokenContainerModel {
         if (userTokenContainerModel == null) {
             throw new ServerSideBadRequestException("tokenContainer is null");
         }
-        UserTokenModel.validateUserTokenModel(userTokenContainerModel.getTokenObject());
+        UserTokenModel.validate(userTokenContainerModel.getTokenObject());
         validateRawToken(userTokenContainerModel.getRawToken());
     }
 

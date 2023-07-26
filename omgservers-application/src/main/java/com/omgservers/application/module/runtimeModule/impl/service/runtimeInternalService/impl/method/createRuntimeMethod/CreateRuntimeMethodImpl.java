@@ -2,7 +2,6 @@ package com.omgservers.application.module.runtimeModule.impl.service.runtimeInte
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.application.module.runtimeModule.impl.operation.insertRuntimeOperation.InsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
@@ -38,14 +37,14 @@ class CreateRuntimeMethodImpl implements CreateRuntimeMethod {
     }
 
     Uni<Void> createRuntime(final int shard, final RuntimeModel runtime) {
-        return pgPool.withTransaction(sqlConnection -> insertRuntimeOperation.insertRuntime(sqlConnection, shard, runtime)
+        return pgPool.withTransaction(sqlConnection -> insertRuntimeOperation
+                        .insertRuntime(sqlConnection, shard, runtime)
                         .call(voidItem -> {
-                            final var uuid = runtime.getUuid();
-                            final var matchmaker = runtime.getMatchmaker();
-                            final var match = runtime.getMatch();
-                            final var origin = RuntimeCreatedEventBodyModel.createEvent(uuid, matchmaker, match);
-                            final var event = EventCreatedEventBodyModel.createEvent(origin);
-                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                            final var id = runtime.getId();
+                            final var matchmakerId = runtime.getMatchmakerId();
+                            final var matchId = runtime.getMatchId();
+                            final var eventBody = new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
+                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                             return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                         }))
                 .replaceWithVoid();

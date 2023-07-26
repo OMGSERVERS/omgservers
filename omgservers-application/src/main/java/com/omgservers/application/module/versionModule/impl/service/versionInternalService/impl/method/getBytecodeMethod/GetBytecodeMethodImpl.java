@@ -27,7 +27,7 @@ class GetBytecodeMethodImpl implements GetBytecodeMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var version = request.getVersion();
+                    final var version = request.getVersionId();
                     return pgPool.withTransaction(sqlConnection -> selectBytecodeOperation
                             .selectBytecode(sqlConnection, shard, version));
                 })

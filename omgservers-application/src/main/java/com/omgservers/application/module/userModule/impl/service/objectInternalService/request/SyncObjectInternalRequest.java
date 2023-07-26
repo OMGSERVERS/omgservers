@@ -19,11 +19,11 @@ public class SyncObjectInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
+    Long userId;
     ObjectModel object;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

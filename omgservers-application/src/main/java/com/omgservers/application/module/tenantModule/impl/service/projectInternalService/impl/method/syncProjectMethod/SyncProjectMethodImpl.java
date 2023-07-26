@@ -2,7 +2,6 @@ package com.omgservers.application.module.tenantModule.impl.service.projectInter
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
 import com.omgservers.application.module.internalModule.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
@@ -37,7 +36,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
         SyncProjectInternalRequest.validate(request);
 
         final var project = request.getProject();
-        final var tenant = project.getTenant();
+        final var tenant = project.getTenantId();
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> validateProjectOperation.validateProject(project))
                 .flatMap(validatedProject -> checkShardOperation.checkShard(request.getRequestShardKey()))
@@ -45,15 +44,15 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
                 .map(SyncProjectInternalResponse::new);
     }
 
-    Uni<Boolean> syncProject(Integer shard, UUID tenant, ProjectModel project) {
+    Uni<Boolean> syncProject(Integer shard, Long tenantId, ProjectModel project) {
         return pgPool.withTransaction(sqlConnection ->
                 upsertProjectOperation.upsertProject(sqlConnection, shard, project)
                         .call(inserted -> {
                             if (inserted) {
-                                final var uuid = project.getUuid();
-                                final var origin = ProjectCreatedEventBodyModel.createEvent(tenant, uuid);
-                                final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                                final var id = project.getId();
+                                final var eventBody = new ProjectCreatedEventBodyModel(tenantId, id);
+                                final var insertEventInternalRequest =
+                                        new InsertEventHelpRequest(sqlConnection, eventBody);
                                 return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                             } else {
                                 return Uni.createFrom().voidItem();

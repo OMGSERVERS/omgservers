@@ -21,6 +21,6 @@ public class SyncProjectInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return project.getTenant().toString();
+        return project.getTenantId().toString();
     }
 }

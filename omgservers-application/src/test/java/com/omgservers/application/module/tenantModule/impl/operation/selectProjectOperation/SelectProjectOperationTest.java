@@ -1,12 +1,13 @@
 package com.omgservers.application.module.tenantModule.impl.operation.selectProjectOperation;
 
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -32,31 +33,40 @@ class SelectProjectOperationTest extends Assertions {
     UpsertProjectOperation upsertProjectOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
+    ProjectModelFactory projectModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenProject_whenSelectProject_thenSelected() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        final var project1 = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project1 = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project1);
 
-        final var project2 = selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, project1.getUuid());
+        final var project2 = selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, project1.getId());
         assertEquals(project1, project2);
     }
 
     @Test
     void givenUnknownUuid_whenSelectProject_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
-                .selectProject(TIMEOUT, pgPool, shard, uuid));
+                .selectProject(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID ownerUuid() {
-        return UUID.randomUUID();
+    Long ownerId() {
+        return generateIdOperation.generateId();
     }
 }

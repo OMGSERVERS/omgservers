@@ -26,9 +26,9 @@ class DeleteObjectMethodImpl implements DeleteObjectMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deleteObjectOperation
-                                    .deleteObject(sqlConnection, shard, uuid))
+                                    .deleteObject(sqlConnection, shard, id))
                             .replaceWithVoid();
                 });
     }

@@ -19,7 +19,7 @@ public class CreateTokenHelpRequest {
         // TODO: validate fields
     }
 
-    UUID user;
+    Long userId;
     @ToString.Exclude
     String password;
 }

@@ -16,13 +16,16 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class ClientCreatedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID user,
-                                         final UUID uuid) {
-        final var body = new ClientCreatedEventBodyModel(user, uuid);
-        final var event = EventModel.create(user, EventQualifierEnum.CLIENT_CREATED, body);
-        return event;
+    Long userId;
+    Long id;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.CLIENT_CREATED;
     }
 
-    UUID user;
-    UUID uuid;
+    @Override
+    public Long getGroupId() {
+        return userId;
+    }
 }

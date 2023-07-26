@@ -25,9 +25,9 @@ import java.util.UUID;
 class SelectPlayerOperationImpl implements SelectPlayerOperation {
 
     static private final String sql = """
-            select created, modified, uuid, config
+            select id, user_id, created, modified, stage_id, config
             from $schema.tab_user_player
-            where user_uuid = $1 and stage = $2
+            where user_id = $1 and stage_id = $2
             limit 1
             """;
 
@@ -37,47 +37,47 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
     @Override
     public Uni<PlayerModel> selectPlayer(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final UUID user,
-                                         final UUID stage) {
+                                         final Long userId,
+                                         final Long stageId) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (user == null) {
-            throw new IllegalArgumentException("user is null");
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
         }
-        if (stage == null) {
-            throw new IllegalArgumentException("stage is null");
+        if (stageId == null) {
+            throw new IllegalArgumentException("stageId is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(user, stage))
+                .execute(Tuple.of(userId, stageId))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
                         try {
-                            final var player = createPlayer(user, stage, iterator.next());
+                            final var player = createPlayer(iterator.next());
                             log.info("Player was found, player={}", player);
                             return player;
                         } catch (IOException e) {
                             throw new ServerSideConflictException(String.format("player config can't be parsed, " +
-                                    "user=%s, stage=%s", user, stage));
+                                    "userId=%s, stageId=%s", userId, stageId));
                         }
                     } else {
                         throw new ServerSideNotFoundException(String.format("player was not found, " +
-                                "user=%s, stage=%s", user, stage));
+                                "userId=%s, stageId=%s", userId, stageId));
                     }
                 });
     }
 
-    PlayerModel createPlayer(UUID userUuid, UUID stageUuid, Row row) throws IOException {
+    PlayerModel createPlayer(Row row) throws IOException {
         PlayerModel player = new PlayerModel();
-        player.setUser(userUuid);
+        player.setId(row.getLong("id"));
+        player.setUserId(row.getLong("user_id"));
         player.setCreated(row.getOffsetDateTime("created").toInstant());
         player.setModified(row.getOffsetDateTime("modified").toInstant());
-        player.setUuid(row.getUUID("uuid"));
-        player.setStage(stageUuid);
+        player.setStageId(row.getLong("stage_id"));
         player.setConfig(objectMapper.readValue(row.getString("config"), PlayerConfigModel.class));
         return player;
     }

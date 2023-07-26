@@ -21,6 +21,6 @@ public class RespondMessageInternalRequest {
     }
 
     URI server;
-    UUID connection;
+    Long connectionId;
     MessageModel message;
 }

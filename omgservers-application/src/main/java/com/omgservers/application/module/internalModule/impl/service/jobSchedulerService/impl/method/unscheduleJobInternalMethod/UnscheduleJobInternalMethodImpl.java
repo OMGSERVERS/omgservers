@@ -33,7 +33,7 @@ class UnscheduleJobInternalMethodImpl implements UnscheduleJobInternalMethod {
                 });
     }
 
-    void unscheduleJob(UUID shardKey, UUID entity) {
+    void unscheduleJob(Long shardKey, Long entity) {
         final var jobName = getJobNameOperation.getJobName(shardKey, entity);
         final var trigger = scheduler.unscheduleJob(jobName);
         if (trigger == null) {

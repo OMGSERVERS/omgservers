@@ -36,7 +36,7 @@ class HandlerHelpServiceImpl implements HandlerHelpService {
     public Uni<Void> handleMessage(final HandleMessageHelpRequest request) {
         HandleMessageHelpRequest.validate(request);
 
-        final var connection = request.getConnection();
+        final var connectionId = request.getConnectionId();
         final var message = request.getMessage();
         final var qualifier = message.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
@@ -51,6 +51,6 @@ class HandlerHelpServiceImpl implements HandlerHelpService {
         }
 
         final var handler = messageHandlers.get(qualifier);
-        return handler.handle(connection, message);
+        return handler.handle(connectionId, message);
     }
 }

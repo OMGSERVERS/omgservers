@@ -2,7 +2,9 @@ package com.omgservers.application.module.internalModule.impl.operation.deleteJo
 
 import com.omgservers.application.module.internalModule.impl.operation.upsertJobOperation.UpsertJobOperation;
 import com.omgservers.application.module.internalModule.model.job.JobModel;
+import com.omgservers.application.module.internalModule.model.job.JobModelFactory;
 import com.omgservers.application.module.internalModule.model.job.JobType;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -24,11 +26,17 @@ class DeleteJobOperationTest extends Assertions {
     UpsertJobOperation upsertJobOperation;
 
     @Inject
+    JobModelFactory jobModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenJob_whenDeleteJob_thenDeleted() {
-        final var job = JobModel.create(shardKey(), entity(), JobType.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entity(), JobType.RUNTIME);
         upsertJobOperation.upsertJob(TIMEOUT, pgPool, job);
 
         assertTrue(deleteJobOperation.deleteJob(TIMEOUT, pgPool, job.getShardKey(), job.getEntity()));
@@ -36,17 +44,17 @@ class DeleteJobOperationTest extends Assertions {
 
     @Test
     void givenUnknownUuids_whenDeleteJob_thenSkip() {
-        final var shardKey = UUID.randomUUID();
-        final var entity = UUID.randomUUID();
+        final var shardKey = generateIdOperation.generateId();
+        final var entity = generateIdOperation.generateId();
 
         assertFalse(deleteJobOperation.deleteJob(TIMEOUT, pgPool, shardKey, entity));
     }
 
-    UUID shardKey() {
-        return UUID.randomUUID();
+    Long shardKey() {
+        return generateIdOperation.generateId();
     }
 
-    UUID entity() {
-        return UUID.randomUUID();
+    Long entity() {
+        return generateIdOperation.generateId();
     }
 }

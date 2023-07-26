@@ -38,12 +38,12 @@ public class AdminApiCreateDeveloperTest extends Assertions {
 
         final var tenantUuid = adminCli.createTenant(tenantTitle());
         final var response = adminCli.createDeveloper(tenantUuid);
-        final var user = response.getUser();
+        final var userId = response.getUserId();
         final var password = response.getPassword();
-        assertNotNull(user);
+        assertNotNull(userId);
         assertNotNull(password);
 
-        assertTrue(tenantCli.hasTenantPermission(tenantUuid, user, TenantPermissionEnum.CREATE_PROJECT));
+        assertTrue(tenantCli.hasTenantPermission(tenantUuid, userId, TenantPermissionEnum.CREATE_PROJECT));
     }
 
     String tenantTitle() {

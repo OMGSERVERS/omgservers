@@ -24,7 +24,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
         CreateUserInternalRequest.validate(request);
 
         final var user = request.getUser();
-        final var shardKey = user.getUuid().toString();
+        final var shardKey = user.getId().toString();
         return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> pgPool.withTransaction(sqlConnection ->
                         insertUserOperation.insertUser(sqlConnection, shardModel.shard(), user)));

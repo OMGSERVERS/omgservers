@@ -41,13 +41,12 @@ class DeleteJobMethodImpl implements DeleteJobMethod {
                 .map(DeleteJobInternalResponse::new);
     }
 
-    Uni<Boolean> deleteJob(final UUID shardKey, final UUID entity) {
+    Uni<Boolean> deleteJob(final Long shardKey, final Long entity) {
         return pgPool.withTransaction(sqlConnection -> deleteJobOperation.deleteJob(sqlConnection, shardKey, entity)
                 .call(deleted -> {
                     if (deleted) {
-                        final var origin = JobDeletedEventBodyModel.createEvent(shardKey, entity);
-                        final var event = EventCreatedEventBodyModel.createEvent(origin);
-                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                        final var eventBody = new JobDeletedEventBodyModel(shardKey, entity);
+                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                         return eventInternalService.insertEvent(insertEventInternalRequest);
                     } else {
                         return Uni.createFrom().voidItem();

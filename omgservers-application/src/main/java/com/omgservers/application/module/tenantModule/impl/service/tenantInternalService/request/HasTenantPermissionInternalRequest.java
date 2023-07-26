@@ -19,12 +19,12 @@ public class HasTenantPermissionInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    UUID user;
+    Long tenantId;
+    Long userId;
     TenantPermissionEnum permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

@@ -18,12 +18,12 @@ public class GetAttributeInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
-    UUID player;
+    Long userId;
+    Long playerId;
     String name;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

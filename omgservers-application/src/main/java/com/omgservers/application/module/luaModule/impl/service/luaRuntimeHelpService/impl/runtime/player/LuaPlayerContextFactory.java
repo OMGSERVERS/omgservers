@@ -4,8 +4,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -15,11 +13,11 @@ public class LuaPlayerContextFactory {
     final LuaPlayerSetAttributeFunctionFactory setAttributeFunctionFactory;
     final LuaPlayerGetAttributeFunctionFactory getAttributeFunctionFactory;
 
-    public LuaPlayerContext build(UUID user, UUID player, UUID client) {
+    public LuaPlayerContext build(Long userId, Long playerId, Long clientId) {
         final var context = LuaPlayerContext.builder()
-                .respondFunction(respondFunctionFactory.build(user, client))
-                .setAttributeFunction(setAttributeFunctionFactory.build(user, player))
-                .getAttributeFunction(getAttributeFunctionFactory.build(user, player))
+                .respondFunction(respondFunctionFactory.build(userId, clientId))
+                .setAttributeFunction(setAttributeFunctionFactory.build(userId, playerId))
+                .getAttributeFunction(getAttributeFunctionFactory.build(userId, playerId))
                 .build();
 
         return context;

@@ -2,6 +2,8 @@ package com.omgservers.application.module.internalModule.impl.service.eventHelpS
 
 import com.omgservers.application.module.internalModule.impl.operation.selectNewEventsOperation.SelectNewEventsOperation;
 import com.omgservers.application.module.internalModule.impl.operation.updateEventStatusOperation.UpdateEventStatusOperation;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl.method.fireEventMethod.FireEventMethod;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
@@ -27,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 class StartEventDispatcherMethodImpl implements StartEventDispatcherMethod {
     static final String EVENT_DISPATCHER_JOB = "event-dispatcher";
 
-    final EventInternalService eventInternalService;
+    final FireEventMethod fireEventMethod;
 
     final UpdateEventStatusOperation updateEventStatusOperation;
     final SelectNewEventsOperation selectNewEventsOperation;
@@ -76,11 +78,11 @@ class StartEventDispatcherMethodImpl implements StartEventDispatcherMethod {
 
     Uni<Void> dispatchEvent(final EventModel origin) {
         log.info("Dispatch event, {}", origin);
-        final var event = EventCreatedEventBodyModel.createEvent(origin);
-        final var request = new FireEventInternalRequest(event);
-        return eventInternalService.fireEvent(request)
+        final var eventBody = new EventCreatedEventBodyModel(origin);
+        final var request = new FireEventHelpRequest(eventBody);
+        return fireEventMethod.fireEvent(request)
                 .flatMap(voidItem -> pgPool.withConnection(sqlConnection -> updateEventStatusOperation
-                        .updateEventStatus(sqlConnection, origin.getUuid(), EventStatusEnum.FIRED)))
+                        .updateEventStatus(sqlConnection, origin.getId(), EventStatusEnum.FIRED)))
                 .replaceWithVoid();
     }
 }

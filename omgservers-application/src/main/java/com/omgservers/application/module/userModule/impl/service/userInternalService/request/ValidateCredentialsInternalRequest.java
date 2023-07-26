@@ -18,12 +18,12 @@ public class ValidateCredentialsInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    UUID user;
+    Long tenantId;
+    Long userId;
     String password;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

@@ -25,7 +25,7 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
     public Uni<Void> syncObject(SyncObjectInternalRequest request) {
         SyncObjectInternalRequest.validate(request);
 
-        final var user = request.getUser();
+        final var user = request.getUserId();
         final var object = request.getObject();
         return Uni.createFrom().voidItem()
                 .map(voidItem -> validateObjectOperation.validateObject(object))

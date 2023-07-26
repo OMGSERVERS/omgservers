@@ -10,8 +10,6 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
 
-import java.util.UUID;
-
 @Slf4j
 @ToString
 @AllArgsConstructor
@@ -21,13 +19,13 @@ public class LuaPlayerGetAttributeFunction extends VarArgFunction {
     @ToString.Exclude
     final UserModule userModule;
 
-    final UUID user;
-    final UUID player;
+    final Long userId;
+    final Long playerId;
 
     @Override
     public Varargs invoke(Varargs args) {
         final var name = args.checkjstring(1);
-        final var request = new GetAttributeInternalRequest(user, player, name);
+        final var request = new GetAttributeInternalRequest(userId, playerId, name);
 
         try {
             final var response = userModule.getAttributeInternalService().getAttribute(TIMEOUT, request);

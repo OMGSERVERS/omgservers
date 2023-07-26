@@ -23,7 +23,7 @@ import java.time.ZoneOffset;
 class InsertTenantOperationImpl implements InsertTenantOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant(created, modified, uuid, config)
+            insert into $schema.tab_tenant(id, created, modified, config)
             values($1, $2, $3, $4)
             """;
 
@@ -54,9 +54,9 @@ class InsertTenantOperationImpl implements InsertTenantOperation {
             var configString = objectMapper.writeValueAsString(tenant.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.of(
+                            tenant.getId(),
                             tenant.getCreated().atOffset(ZoneOffset.UTC),
                             tenant.getModified().atOffset(ZoneOffset.UTC),
-                            tenant.getUuid(),
                             configString))
                     .replaceWithVoid();
         } catch (IOException e) {

@@ -11,17 +11,18 @@ import java.util.UUID;
 public interface HasTenantPermissionOperation {
     Uni<Boolean> hasTenantPermission(SqlConnection sqlConnection,
                                      int shard,
-                                     UUID tenant,
-                                     UUID user,
+                                     Long tenantId,
+                                     Long userId,
                                      TenantPermissionEnum permission);
 
     default Boolean hasTenantPermission(long timeout,
                                         PgPool pgPool,
                                         int shard,
-                                        UUID tenant,
-                                        UUID user,
+                                        Long tenantId,
+                                        Long userId,
                                         TenantPermissionEnum permission) {
-        return pgPool.withTransaction(sqlConnection -> hasTenantPermission(sqlConnection, shard, tenant, user, permission))
+        return pgPool.withTransaction(sqlConnection ->
+                        hasTenantPermission(sqlConnection, shard, tenantId, userId, permission))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

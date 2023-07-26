@@ -20,8 +20,8 @@ class DeleteIndexMethodImpl implements DeleteIndexMethod {
     public Uni<Void> deleteIndex(final DeleteIndexHelpRequest request) {
         DeleteIndexHelpRequest.validate(request);
 
-        final var uuid = request.getUuid();
+        final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> deleteIndexOperation
-                .deleteIndex(sqlConnection, uuid));
+                .deleteIndex(sqlConnection, id));
     }
 }

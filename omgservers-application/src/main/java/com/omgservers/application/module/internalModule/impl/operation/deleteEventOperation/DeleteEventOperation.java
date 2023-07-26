@@ -8,10 +8,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface DeleteEventOperation {
-    Uni<Boolean> deleteEvent(SqlConnection sqlConnection, UUID uuid);
+    Uni<Boolean> deleteEvent(SqlConnection sqlConnection, Long id);
 
-    default Boolean deleteEvent(long timeout, PgPool pgPool, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteEvent(sqlConnection, uuid))
+    default Boolean deleteEvent(long timeout, PgPool pgPool, Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteEvent(sqlConnection, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

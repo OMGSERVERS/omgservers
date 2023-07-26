@@ -21,9 +21,9 @@ import java.util.UUID;
 class SelectObjectOperationImpl implements SelectObjectOperation {
 
     static private final String sql = """
-            select player_uuid, created, modified, uuid as object_uuid, name, body
+            select id, player_id, created, modified, name, body
             from $schema.tab_player_object
-            where player_uuid = $1 and name = $2
+            where player_id = $1 and name = $2
             limit 1
             """;
 
@@ -32,13 +32,13 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
     @Override
     public Uni<ObjectModel> selectObject(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final UUID player,
+                                         final Long playerId,
                                          final String name) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (player == null) {
-            throw new IllegalArgumentException("player is null");
+        if (playerId == null) {
+            throw new IllegalArgumentException("playerId is null");
         }
         if (name == null) {
             throw new IllegalArgumentException("fileName is null");
@@ -47,25 +47,25 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(player, name))
+                .execute(Tuple.of(playerId, name))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        log.info("Object was found, player={}, name={}", player, name);
+                        log.info("Object was found, playerId={}, name={}", playerId, name);
                         return createObject(iterator.next());
                     } else {
                         throw new ServerSideNotFoundException(String.format("object was not found, " +
-                                "player=%s, name=%s", player, name));
+                                "playerId=%s, name=%s", playerId, name));
                     }
                 });
     }
 
     ObjectModel createObject(Row row) {
         ObjectModel object = new ObjectModel();
-        object.setPlayer(row.getUUID("player_uuid"));
+        object.setId(row.getLong("id"));
+        object.setPlayerId(row.getLong("player_id"));
         object.setCreated(row.getOffsetDateTime("created").toInstant());
         object.setModified(row.getOffsetDateTime("modified").toInstant());
-        object.setUuid(row.getUUID("object_uuid"));
         object.setName(row.getString("name"));
         object.setBody(row.getBuffer("body").getBytes());
         return object;

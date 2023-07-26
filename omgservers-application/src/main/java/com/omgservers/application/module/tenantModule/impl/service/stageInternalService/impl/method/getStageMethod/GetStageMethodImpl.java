@@ -26,9 +26,9 @@ class GetStageMethodImpl implements GetStageMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectStageOperation
-                            .selectStage(sqlConnection, shardModel.shard(), uuid));
+                            .selectStage(sqlConnection, shardModel.shard(), id));
                 })
                 .map(GetStageInternalResponse::new);
     }

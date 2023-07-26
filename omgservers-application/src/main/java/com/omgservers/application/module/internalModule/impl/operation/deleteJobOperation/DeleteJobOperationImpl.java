@@ -18,7 +18,7 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
             """;
 
     @Override
-    public Uni<Boolean> deleteJob(SqlConnection sqlConnection, UUID shardKey, UUID entity) {
+    public Uni<Boolean> deleteJob(SqlConnection sqlConnection, Long shardKey, Long entity) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }

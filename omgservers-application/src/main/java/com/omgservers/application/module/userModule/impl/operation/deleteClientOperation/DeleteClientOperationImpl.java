@@ -17,7 +17,7 @@ import java.util.UUID;
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
     static private final String sql = """
-            delete from $schema.tab_player_client where uuid = $1
+            delete from $schema.tab_player_client where id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -25,23 +25,23 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
     @Override
     public Uni<Boolean> deleteClient(final SqlConnection sqlConnection,
                                      final int shard,
-                                     final UUID uuid) {
+                                     final Long id) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(deleted -> {
                     if (deleted) {
-                        log.info("Client was deleted, shard={}, uuid={}", shard, uuid);
+                        log.info("Client was deleted, shard={}, id={}", shard, id);
                     } else {
-                        log.warn("Client was not found, skip operation, shard={}, uuid={}", shard, uuid);
+                        log.warn("Client was not found, skip operation, shard={}, id={}", shard, id);
                     }
                 });
     }

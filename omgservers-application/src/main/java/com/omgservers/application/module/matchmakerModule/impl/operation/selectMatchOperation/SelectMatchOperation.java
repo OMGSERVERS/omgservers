@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectMatchOperation {
-    Uni<MatchModel> selectMatch(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<MatchModel> selectMatch(SqlConnection sqlConnection, int shard, Long id);
 
-    default MatchModel selectMatch(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectMatch(sqlConnection, shard, uuid))
+    default MatchModel selectMatch(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectMatch(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

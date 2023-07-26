@@ -35,7 +35,7 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
 
     @Override
     public synchronized long generateId() {
-        var timestamp = timestamp();
+        var timestamp = System.currentTimeMillis() - TIMESTAMP_EPOCH;
 
         if (timestamp == lastTimestamp) {
             sequence += 1;
@@ -59,9 +59,5 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
                 nodeId << NODE_ID_OFFSET |
                 sequence;
         return id;
-    }
-
-    long timestamp() {
-        return System.currentTimeMillis() - TIMESTAMP_EPOCH;
     }
 }

@@ -24,10 +24,10 @@ import java.time.ZoneOffset;
 class UpsertTenantOperationImpl implements UpsertTenantOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant(created, modified, uuid, config)
+            insert into $schema.tab_tenant(id, created, modified, config)
             values($1, $2, $3, $4)
-            on conflict (uuid) do
-            update set modified = $2, config = $4
+            on conflict (id) do
+            update set modified = $3, config = $4
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -64,9 +64,9 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
             var configString = objectMapper.writeValueAsString(tenant.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.of(
+                            tenant.getId(),
                             tenant.getCreated().atOffset(ZoneOffset.UTC),
                             tenant.getModified().atOffset(ZoneOffset.UTC),
-                            tenant.getUuid(),
                             configString))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

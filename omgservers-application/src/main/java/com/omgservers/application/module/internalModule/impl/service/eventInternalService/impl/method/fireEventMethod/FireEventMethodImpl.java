@@ -3,7 +3,9 @@ package com.omgservers.application.module.internalModule.impl.service.eventInter
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.request.ProducerEventHelpRequest;
+import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,6 +20,7 @@ class FireEventMethodImpl implements FireEventMethod {
     final ProducerHelpService producerHelpService;
 
     final CheckShardOperation checkShardOperation;
+    final GenerateIdOperation generateIdOperation;
 
     final PgPool pgPool;
 

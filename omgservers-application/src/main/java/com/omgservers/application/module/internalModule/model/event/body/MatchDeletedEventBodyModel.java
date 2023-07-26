@@ -16,13 +16,16 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class MatchDeletedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID matchmaker,
-                                         final UUID uuid) {
-        final var body = new MatchDeletedEventBodyModel(matchmaker, uuid);
-        final var event = EventModel.create(uuid, EventQualifierEnum.MATCH_DELETED, body);
-        return event;
+    Long matchmakerId;
+    Long id;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.MATCH_DELETED;
     }
 
-    UUID matchmaker;
-    UUID uuid;
+    @Override
+    public Long getGroupId() {
+        return id;
+    }
 }

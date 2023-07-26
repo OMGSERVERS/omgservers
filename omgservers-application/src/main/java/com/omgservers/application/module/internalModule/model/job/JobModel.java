@@ -13,25 +13,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class JobModel {
 
-    static public JobModel create(UUID shardKey, UUID entity, JobType type) {
-        Instant now = Instant.now();
-
-        JobModel job = new JobModel();
-        job.setCreated(now);
-        job.setShardKey(shardKey);
-        job.setEntity(entity);
-        job.setType(type);
-        return job;
-    }
-
-    static public void validateJobModel(JobModel job) {
+    static public void validate(JobModel job) {
         if (job == null) {
             throw new ServerSideBadRequestException("job is null");
         }
     }
 
+    Long id;
     Instant created;
-    UUID shardKey;
-    UUID entity;
+    Long shardKey;
+    Long entity;
     JobType type;
 }

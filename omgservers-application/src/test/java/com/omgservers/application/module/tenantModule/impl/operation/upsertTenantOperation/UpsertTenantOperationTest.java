@@ -2,6 +2,7 @@ package com.omgservers.application.module.tenantModule.impl.operation.upsertTena
 
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -19,19 +20,22 @@ class UpsertTenantOperationTest extends Assertions {
     UpsertTenantOperation upsertTenantOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void whenUpsertTenant_thenInserted() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         assertTrue(upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant));
     }
 
     @Test
     void givenTenant_whenUpsertTenant_thenUpdated() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
         assertFalse(upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant));

@@ -17,24 +17,21 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class SignInRequestedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final URI server,
-                                         final UUID connection,
-                                         final UUID tenant,
-                                         final UUID stage,
-                                         final String secret,
-                                         final UUID user,
-                                         final String password) {
-        final var body = new SignInRequestedEventBodyModel(server, connection, tenant, stage, secret, user, password);
-        final var group = connection;
-        final var event = EventModel.create(group, EventQualifierEnum.SIGN_IN_REQUESTED, body);
-        return event;
+    URI server;
+    Long connectionId;
+    Long tenantId;
+    Long stageId;
+    String secret;
+    Long userId;
+    String password;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.SIGN_IN_REQUESTED;
     }
 
-    URI server;
-    UUID connection;
-    UUID tenant;
-    UUID stage;
-    String secret;
-    UUID user;
-    String password;
+    @Override
+    public Long getGroupId() {
+        return connectionId;
+    }
 }

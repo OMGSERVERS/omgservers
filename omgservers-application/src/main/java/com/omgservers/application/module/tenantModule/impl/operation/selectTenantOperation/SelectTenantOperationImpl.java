@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -25,9 +24,9 @@ import java.util.UUID;
 class SelectTenantOperationImpl implements SelectTenantOperation {
 
     static private final String sql = """
-            select created, modified, uuid, config
+            select id, created, modified, config
             from $schema.tab_tenant
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -37,18 +36,18 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
     @Override
     public Uni<TenantModel> selectTenant(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final UUID uuid) {
+                                         final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new IllegalArgumentException("uuid is null");
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -57,19 +56,19 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
                             log.info("Tenant was found, tenant={}", tenant);
                             return tenant;
                         } catch (IOException e) {
-                            throw new ServerSideConflictException("tenant can't be parsed, uuid=" + uuid, e);
+                            throw new ServerSideConflictException("tenant can't be parsed, id=" + id, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("tenant was not found, uuids=" + uuid);
+                        throw new ServerSideNotFoundException("tenant was not found, id=" + id);
                     }
                 });
     }
 
     TenantModel createTenant(Row row) throws IOException {
         TenantModel tenant = new TenantModel();
+        tenant.setId(row.getLong("id"));
         tenant.setCreated(row.getOffsetDateTime("created").toInstant());
         tenant.setModified(row.getOffsetDateTime("modified").toInstant());
-        tenant.setUuid(row.getUUID("uuid"));
         tenant.setConfig(objectMapper.readValue(row.getString("config"), TenantConfigModel.class));
         return tenant;
     }

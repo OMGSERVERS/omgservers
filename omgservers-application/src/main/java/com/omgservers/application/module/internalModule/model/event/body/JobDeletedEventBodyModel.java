@@ -16,12 +16,16 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class JobDeletedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID shardKey, final UUID entity) {
-        final var body = new JobDeletedEventBodyModel(shardKey, entity);
-        final var event = EventModel.create(entity, EventQualifierEnum.JOB_DELETED, body);
-        return event;
+    Long shardKey;
+    Long entity;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.JOB_DELETED;
     }
 
-    UUID shardKey;
-    UUID entity;
+    @Override
+    public Long getGroupId() {
+        return entity;
+    }
 }

@@ -28,7 +28,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     public Uni<CreateTokenInternalResponse> createToken(final CreateTokenInternalRequest request) {
         CreateTokenInternalRequest.validate(request);
 
-        final var userUuid = request.getUser();
+        final var userUuid = request.getUserId();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

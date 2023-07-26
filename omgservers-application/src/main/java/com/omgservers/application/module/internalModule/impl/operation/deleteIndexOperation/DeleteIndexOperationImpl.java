@@ -13,21 +13,21 @@ import java.util.UUID;
 class DeleteIndexOperationImpl implements DeleteIndexOperation {
 
     static private final String sql = """
-            delete from internal.tab_index where uuid = $1
+            delete from internal.tab_index where id = $1
             """;
 
     @Override
-    public Uni<Void> deleteIndex(final SqlConnection sqlConnection, final UUID uuid) {
+    public Uni<Void> deleteIndex(final SqlConnection sqlConnection, final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.of(uuid))
-                .invoke(rowSet -> log.info("Index was deleted, uuid={}", uuid))
+                .execute(Tuple.of(id))
+                .invoke(rowSet -> log.info("Index was deleted, uuid={}", id))
                 .replaceWithVoid();
     }
 }

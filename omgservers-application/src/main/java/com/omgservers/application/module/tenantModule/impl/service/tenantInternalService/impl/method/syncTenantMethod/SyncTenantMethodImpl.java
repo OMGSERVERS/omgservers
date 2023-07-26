@@ -2,7 +2,6 @@ package com.omgservers.application.module.tenantModule.impl.service.tenantIntern
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation.ValidateTenantOperation;
@@ -35,7 +34,6 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
         SyncTenantInternalRequest.validate(request);
 
         final var tenant = request.getTenant();
-        final var uuid = tenant.getUuid();
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> validateTenantOperation.validateTenant(tenant))
                 .flatMap(validatedTenant -> checkShardOperation.checkShard(request.getRequestShardKey()))
@@ -48,10 +46,9 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
                 upsertTenantOperation.upsertTenant(sqlConnection, shard, tenant)
                         .call(inserted -> {
                             if (inserted) {
-                                final var uuid = tenant.getUuid();
-                                final var origin = TenantCreatedEventBodyModel.createEvent(uuid);
-                                final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                                final var id = tenant.getId();
+                                final var eventBody = new TenantCreatedEventBodyModel(id);
+                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                                 return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                             } else {
                                 return Uni.createFrom().voidItem();

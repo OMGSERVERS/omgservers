@@ -1,9 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation;
 
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
+import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.module.versionModule.model.VersionGroupModel;
 import com.omgservers.application.module.versionModule.model.VersionModeModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +14,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
@@ -20,12 +22,21 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
     @Inject
     DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
 
+    @Inject
+    RequestModelFactory requestModelFactory;
+
+    @Inject
+    MatchModelFactory matchModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
     @Test
     void testDoGreedyMatchmaking() {
         final var mode = "teams";
-        final var matchmaker = matchmakerUuid();
-        final var tenant = tenantUuid();
-        final var stage = stageUuid();
+        final var matchmaker = matchmakerId();
+        final var tenant = tenantId();
+        final var stage = stageId();
 
         final var modeConfig = VersionModeModel.create(mode, 3, 6, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 2, 4));
@@ -33,31 +44,31 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
         }});
 
         final var activeRequests = new ArrayList<RequestModel>() {{
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
 
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
 
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
-            add(RequestModel.create(matchmaker, RequestConfigModel.create(userUuid(), clientUuid(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
         }};
 
         final var result = doGreedyMatchmakingOperation.doGreedyMatchmaking(
                 tenant,
                 stage,
-                versionUuid(),
+                versionId(),
                 matchmaker,
                 modeConfig,
                 activeRequests,
@@ -77,27 +88,27 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
         assertEquals(2, result.preparedMatches().get(2).getConfig().getGroups().get(1).getRequests().size());
     }
 
-    UUID matchmakerUuid() {
-        return UUID.randomUUID();
+    Long matchmakerId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID versionUuid() {
-        return UUID.randomUUID();
+    Long versionId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID clientUuid() {
-        return UUID.randomUUID();
+    Long clientId() {
+        return generateIdOperation.generateId();
     }
 }

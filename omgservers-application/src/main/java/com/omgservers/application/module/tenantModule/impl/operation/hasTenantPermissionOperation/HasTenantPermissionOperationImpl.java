@@ -19,7 +19,7 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
     static private final String sql = """
             select id
             from $schema.tab_tenant_permission
-            where tenant_uuid = $1 and user_uuid = $2 and permission = $3
+            where tenant_id = $1 and user_id = $2 and permission = $3
             limit 1
             """;
 
@@ -28,17 +28,17 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
     @Override
     public Uni<Boolean> hasTenantPermission(final SqlConnection sqlConnection,
                                             final int shard,
-                                            final UUID tenant,
-                                            final UUID user,
+                                            final Long tenantId,
+                                            final Long userId,
                                             final TenantPermissionEnum permission) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (tenant == null) {
-            throw new IllegalArgumentException("tenant is null");
+        if (tenantId == null) {
+            throw new IllegalArgumentException("tenantId is null");
         }
-        if (user == null) {
-            throw new IllegalArgumentException("user is null");
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
         }
         if (permission == null) {
             throw new IllegalArgumentException("permission is null");
@@ -47,12 +47,12 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(tenant, user, permission))
+                .execute(Tuple.of(tenantId, userId, permission))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(selected -> {
                     if (selected) {
-                        log.info("Tenant's permission was found, tenant={}, user={}, permission={}",
-                                tenant, user, permission);
+                        log.info("Tenant's permission was found, tenant={}, userId={}, permission={}",
+                                tenantId, userId, permission);
                     }
                 });
     }

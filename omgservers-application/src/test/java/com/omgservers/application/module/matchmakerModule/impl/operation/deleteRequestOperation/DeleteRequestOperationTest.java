@@ -2,9 +2,13 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.delete
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation.InsertRequestOperation;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
+import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -29,43 +33,52 @@ class DeleteRequestOperationTest extends Assertions {
     InsertRequestOperation insertRequestOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    RequestModelFactory requestModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenRequest_whenDeleteRequest_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var requestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName());
-        final var request = RequestModel.create(matchmaker.getUuid(), requestConfig);
+        final var requestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
+        final var request = requestModelFactory.create(matchmaker.getId(), requestConfig);
         insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, request);
 
-        assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getUuid()));
+        assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getId()));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteTenant_thenSkip() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, uuid));
+        assertFalse(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID clientUuid() {
-        return UUID.randomUUID();
+    Long clientId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     String modeName() {

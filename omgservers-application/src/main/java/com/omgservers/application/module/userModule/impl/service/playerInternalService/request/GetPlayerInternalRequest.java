@@ -18,11 +18,11 @@ public class GetPlayerInternalRequest implements InternalRequest {
         }
     }
 
-    UUID user;
-    UUID stage;
+    Long userId;
+    Long stageId;
 
     @Override
     public String getRequestShardKey() {
-        return user.toString();
+        return userId.toString();
     }
 }

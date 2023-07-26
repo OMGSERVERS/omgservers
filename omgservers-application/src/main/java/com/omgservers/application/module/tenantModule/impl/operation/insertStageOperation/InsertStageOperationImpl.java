@@ -25,7 +25,7 @@ import java.util.ArrayList;
 class InsertStageOperationImpl implements InsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_project_stage(project_uuid, created, modified, uuid, secret, matchmaker, config, version)
+            insert into $schema.tab_project_stage(id, project_id, created, modified, secret, matchmaker_id, config, version_id)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             """;
 
@@ -52,7 +52,7 @@ class InsertStageOperationImpl implements InsertStageOperation {
                     final var column = pgException.getColumn();
                     if (code.equals("23503") ) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("project was not found, uuid=" + stage.getProject());
+                        return new ServerSideNotFoundException("project was not found, uuid=" + stage.getProjectId());
                     } else {
                         return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
                     }
@@ -65,14 +65,14 @@ class InsertStageOperationImpl implements InsertStageOperation {
             var configString = objectMapper.writeValueAsString(stage.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(stage.getProject());
+                        add(stage.getId());
+                        add(stage.getProjectId());
                         add(stage.getCreated().atOffset(ZoneOffset.UTC));
                         add(stage.getModified().atOffset(ZoneOffset.UTC));
-                        add(stage.getUuid());
                         add(stage.getSecret());
-                        add(stage.getMatchmaker());
+                        add(stage.getMatchmakerId());
                         add(configString);
-                        add(stage.getVersion());
+                        add(stage.getVersionId());
                     }}))
                     .replaceWithVoid();
         } catch (IOException e) {

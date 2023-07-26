@@ -23,9 +23,9 @@ import java.util.ArrayList;
 class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
 
     static private final String sql = """
-            insert into $schema.tab_user_player(user_uuid, created, modified, uuid, stage, config)
+            insert into $schema.tab_user_player(id, user_id, created, modified, stage_id, config)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (user_uuid, stage) do
+            on conflict (user_id, stage_id) do
             update set modified = $3, config = $6
             returning xmax::text::int = 0 as inserted
             """;
@@ -60,11 +60,11 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
             var configString = objectMapper.writeValueAsString(player.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(player.getUser());
+                        add(player.getId());
+                        add(player.getUserId());
                         add(player.getCreated().atOffset(ZoneOffset.UTC));
                         add(player.getModified().atOffset(ZoneOffset.UTC));
-                        add(player.getUuid());
-                        add(player.getStage());
+                        add(player.getStageId());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

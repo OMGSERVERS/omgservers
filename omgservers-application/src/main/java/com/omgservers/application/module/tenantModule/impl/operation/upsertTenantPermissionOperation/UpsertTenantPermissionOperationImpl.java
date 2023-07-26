@@ -21,9 +21,9 @@ import java.time.ZoneOffset;
 class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_permission(tenant_uuid, created, user_uuid, permission)
-            values($1, $2, $3, $4)
-            on conflict (tenant_uuid, user_uuid, permission) do
+            insert into $schema.tab_tenant_permission(id, tenant_id, created, user_id, permission)
+            values($1, $2, $3, $4, $5)
+            on conflict (tenant_id, user_id, permission) do
             nothing
             """;
 
@@ -65,9 +65,10 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
-                        permission.getTenant(),
+                        permission.getId(),
+                        permission.getTenantId(),
                         permission.getCreated().atOffset(ZoneOffset.UTC),
-                        permission.getUser(),
+                        permission.getUserId(),
                         permission.getPermission()))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }

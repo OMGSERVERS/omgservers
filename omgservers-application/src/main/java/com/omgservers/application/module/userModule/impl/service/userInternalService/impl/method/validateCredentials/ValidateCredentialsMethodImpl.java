@@ -29,10 +29,10 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var user = request.getUser();
+                    final var userId = request.getUserId();
                     final var password = request.getPassword();
                     return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                                    .selectUser(sqlConnection, shard.shard(), user)
+                                    .selectUser(sqlConnection, shard.shard(), userId)
                                     .flatMap(userModel -> validateCredentialsOperation
                                             .validateCredentials(userModel, password)))
                             .map(ValidateCredentialsInternalResponse::new);

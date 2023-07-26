@@ -3,9 +3,13 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.upsert
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
+import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.module.versionModule.model.VersionGroupModel;
 import com.omgservers.application.module.versionModule.model.VersionModeModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -28,56 +32,69 @@ class UpsertMatchOperationTest extends Assertions {
     InsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    MatchModelFactory matchModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenConfig_whenUpsertMatch_thenInserted() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 1, 4));
             add(VersionGroupModel.create("blue", 1, 4));
         }});
-        final var matchConfig = MatchConfigModel.create(tenantUuid(),
-                stageUuid(),
-                versionUuid(),
+        final var matchConfig = MatchConfigModel.create(tenantId(),
+                stageId(),
+                versionId(),
                 modeConfig);
-        final var match = MatchModel.create(matchmaker.getUuid(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
         assertTrue(upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match));
     }
 
     @Test
     void givenMatch_whenUpsertMatch_thenUpdated() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 1, 4));
             add(VersionGroupModel.create("blue", 1, 4));
         }});
-        final var matchConfig = MatchConfigModel.create(tenantUuid(),
-                stageUuid(),
-                versionUuid(),
+        final var matchConfig = MatchConfigModel.create(tenantId(),
+                stageId(),
+                versionId(),
                 modeConfig);
-        final var match = MatchModel.create(matchmaker.getUuid(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
         assertFalse(upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match));
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID versionUuid() {
-        return UUID.randomUUID();
+    Long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long runtimeId() {
+        return generateIdOperation.generateId();
     }
 
     String modeName() {

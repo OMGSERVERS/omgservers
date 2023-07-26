@@ -8,45 +8,22 @@ import lombok.ToString;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientModel {
 
-    static public ClientModel create(final UUID player,
-                                     final URI server,
-                                     final UUID connection) {
-        return create(player, UUID.randomUUID(), server, connection);
-    }
-
-    static public ClientModel create(final UUID player,
-                                     final UUID uuid,
-                                     final URI server,
-                                     final UUID connection) {
-        Instant now = Instant.now();
-
-        ClientModel client = new ClientModel();
-        client.setPlayer(player);
-        client.setCreated(now);
-        client.setUuid(uuid);
-        client.setServer(server);
-        client.setConnection(connection);
-
-        return client;
-    }
-
-    static public void validateClient(ClientModel client) {
+    static public void validate(ClientModel client) {
         if (client == null) {
             throw new ServerSideBadRequestException("client is null");
         }
     }
 
-    UUID player;
+    Long id;
+    Long playerId;
     @ToString.Exclude
     Instant created;
-    UUID uuid;
     URI server;
-    UUID connection;
+    Long connectionId;
 }

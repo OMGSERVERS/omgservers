@@ -20,10 +20,10 @@ import java.util.Arrays;
 class UpsertUserOperationImpl implements UpsertUserOperation {
 
     static private final String sql = """
-            insert into $schema.tab_user(created, modified, uuid, role, password_hash)
+            insert into $schema.tab_user(id, created, modified, role, password_hash)
             values($1, $2, $3, $4, $5)
-            on conflict (uuid) do
-            update set modified = $2, role = $4, password_hash = $5
+            on conflict (id) do
+            update set modified = $3, role = $4, password_hash = $5
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -55,9 +55,9 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
+                        userModel.getId(),
                         userModel.getCreated().atOffset(ZoneOffset.UTC),
                         userModel.getModified().atOffset(ZoneOffset.UTC),
-                        userModel.getUuid(),
                         userModel.getRole(),
                         userModel.getPasswordHash())))
                 .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

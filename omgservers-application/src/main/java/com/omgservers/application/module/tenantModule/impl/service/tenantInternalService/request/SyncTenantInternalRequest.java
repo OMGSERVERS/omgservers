@@ -21,6 +21,6 @@ public class SyncTenantInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return tenant.getUuid().toString();
+        return tenant.getId().toString();
     }
 }

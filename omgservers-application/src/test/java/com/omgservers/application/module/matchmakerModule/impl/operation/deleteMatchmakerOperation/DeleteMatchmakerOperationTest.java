@@ -2,6 +2,8 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.delete
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -23,30 +25,36 @@ class DeleteMatchmakerOperationTest extends Assertions {
     InsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenMatchmaker_whenDeleteMatchmaker_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        assertTrue(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, matchmaker.getUuid()));
+        assertTrue(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, matchmaker.getId()));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteMatchmaker_thenSkip() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, uuid));
+        assertFalse(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

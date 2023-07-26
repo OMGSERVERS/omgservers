@@ -25,9 +25,9 @@ import java.util.UUID;
 class SelectProjectOperationImpl implements SelectProjectOperation {
 
     static private final String sql = """
-            select tenant_uuid, created, modified, uuid as uuid, owner, config
+            select id, tenant_id, created, modified, owner_id, config
             from $schema.tab_tenant_project
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -37,18 +37,18 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
     @Override
     public Uni<ProjectModel> selectProject(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final UUID uuid) {
+                                           final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -57,21 +57,21 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
                             log.info("Project was found, project={}", project);
                             return project;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("project config can't be parsed, uuid=" + uuid);
+                            throw new ServerSideInternalException("project config can't be parsed, id=" + id);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("project was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("project was not found, id=" + id);
                     }
                 });
     }
 
     ProjectModel createProject(Row row) throws IOException {
         ProjectModel project = new ProjectModel();
-        project.setTenant(row.getUUID("tenant_uuid"));
+        project.setId(row.getLong("id"));
+        project.setTenantId(row.getLong("tenant_id"));
         project.setCreated(row.getOffsetDateTime("created").toInstant());
         project.setModified(row.getOffsetDateTime("modified").toInstant());
-        project.setUuid(row.getUUID("uuid"));
-        project.setOwner(row.getUUID("owner"));
+        project.setOwnerId(row.getLong("owner_id"));
         project.setConfig(objectMapper.readValue(row.getString("config"), ProjectConfigModel.class));
         return project;
     }

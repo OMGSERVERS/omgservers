@@ -11,11 +11,11 @@ import java.util.UUID;
 public interface SelectAttributeOperation {
     Uni<AttributeModel> selectAttribute(SqlConnection sqlConnection,
                                         int shard,
-                                        UUID player,
+                                        Long playerId,
                                         String name);
 
-    default AttributeModel selectAttribute(long timeout, PgPool pgPool, int shard, UUID player, String name) {
-        return pgPool.withTransaction(sqlConnection -> selectAttribute(sqlConnection, shard, player, name))
+    default AttributeModel selectAttribute(long timeout, PgPool pgPool, int shard, Long playerId, String name) {
+        return pgPool.withTransaction(sqlConnection -> selectAttribute(sqlConnection, shard, playerId, name))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

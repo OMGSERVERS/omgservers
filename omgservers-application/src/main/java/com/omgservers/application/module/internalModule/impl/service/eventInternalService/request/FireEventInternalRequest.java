@@ -21,6 +21,6 @@ public class FireEventInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return event.getGroup().toString();
+        return event.getGroupId().toString();
     }
 }

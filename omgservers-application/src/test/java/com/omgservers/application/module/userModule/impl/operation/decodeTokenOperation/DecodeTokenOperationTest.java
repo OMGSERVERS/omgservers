@@ -18,9 +18,9 @@ class DecodeTokenOperationTest extends Assertions {
 
     @Test
     void givenToken_whenDecodeToken_thenToken() {
-        String rawToken = "eyJ1dWlkIjoiMjQ3MDI0ZDctZjU1NS00ZjRkLTkxZjItOWFkMDkzOTQzMzk4IiwidGVuYW50IjoiMzc1ZDFlYmEtNGNkMS00MTUzLThhOTYtNGVkNzg0ZGEzYzJlIiwidXNlciI6ImE1OWZmYjM4LWIxZDctNGNhNy1iNzI2LTgxMzRkMThkYWQ0MiIsInJvbGUiOiJQTEFZRVIiLCJzZWNyZXQiOjEyMzQ1Njc4OTB9";
+        String rawToken = "eyJpZCI6Mjg5NzQyMzQ0Mzc1ODA4MCwidXNlciI6Mjg5NzQyMzQ0Mzc1ODA4MSwicm9sZSI6IlBMQVlFUiIsInNlY3JldCI6MTIzNDU2Nzg5MH0=";
         UserTokenModel token = decodeTokenOperation.decodeToken(rawToken);
-        UserTokenModel.validateUserTokenModel(token);
+        UserTokenModel.validate(token);
         log.info("Token, {}", token);
     }
 

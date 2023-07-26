@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateProjectHelpResponse {
 
-    UUID project;
-    UUID stage;
+    Long projectId;
+    Long stageId;
     String secret;
 }

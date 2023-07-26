@@ -1,6 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation;
 
+import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
 import com.omgservers.application.module.versionModule.model.VersionModel;
+import com.omgservers.application.module.versionModule.model.VersionModelFactory;
+import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
+import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -20,29 +25,35 @@ class UpsertVersionOperationTest extends Assertions {
     UpsertVersionOperation upsertVersionOperation;
 
     @Inject
+    VersionModelFactory versionModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void whenUpsertVersion_thenInserted() {
         final var shard = 0;
-        final var version = VersionModel.create(tenantUuid(), stageUuid());
+        final var version = versionModelFactory.create(tenantId(), stageId(), VersionStageConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
         assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version).getItem2());
     }
 
     @Test
     void givenVersion_whenUpsertVersion_thenUpdated() {
         final var shard = 0;
-        final var version = VersionModel.create(tenantUuid(), stageUuid());
+        final var version = versionModelFactory.create(tenantId(), stageId(), VersionStageConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
         upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version);
 
         assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version).getItem2());
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

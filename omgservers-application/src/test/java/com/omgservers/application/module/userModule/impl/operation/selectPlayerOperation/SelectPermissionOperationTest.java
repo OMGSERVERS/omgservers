@@ -2,11 +2,14 @@ package com.omgservers.application.module.userModule.impl.operation.selectPlayer
 
 import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
 import com.omgservers.application.module.userModule.model.player.PlayerModel;
+import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +35,25 @@ class SelectPermissionOperationTest extends Assertions {
     UpsertPlayerOperation upsertPlayerOperation;
 
     @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
+    PlayerModelFactory playerModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenPlayer_whenSelectPlayer_thenSelected() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
-        final var userUuid = user.getUuid();
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var userUuid = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player1 = PlayerModel.create(user.getUuid(), UUID.randomUUID(), PlayerConfigModel.create());
-        final var stageUuid = player1.getStage();
+        final var player1 = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var stageUuid = player1.getStageId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player1);
 
         final var player2 = selectPlayerOperation.selectPlayer(TIMEOUT, pgPool, shard, userUuid, stageUuid);
@@ -51,10 +63,14 @@ class SelectPermissionOperationTest extends Assertions {
     @Test
     void givenUnknownUuids_whenSelectPlayer_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var userUuid = UUID.randomUUID();
-        final var stageUuid = UUID.randomUUID();
+        final var userId = generateIdOperation.generateId();
+        final var stageId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectPlayerOperation
-                .selectPlayer(TIMEOUT, pgPool, shard, userUuid, stageUuid));
+                .selectPlayer(TIMEOUT, pgPool, shard, userId, stageId));
+    }
+
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

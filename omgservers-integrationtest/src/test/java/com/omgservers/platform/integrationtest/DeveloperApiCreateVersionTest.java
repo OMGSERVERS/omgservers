@@ -38,12 +38,12 @@ public class DeveloperApiCreateVersionTest extends Assertions {
 
         final var tenantUuid = adminCli.createTenant(tenantTitle());
         final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantUuid);
-        final var user = createNewDeveloperAdminResponse.getUser();
+        final var userId = createNewDeveloperAdminResponse.getUserId();
         final var password = createNewDeveloperAdminResponse.getPassword();
-        developerCli.createToken(user, password);
+        developerCli.createToken(userId, password);
 
         final var createProjectDeveloperResponse = developerCli.createProject(tenantUuid, projectTitle());
-        final var stage = createProjectDeveloperResponse.getStage();
+        final var stageId = createProjectDeveloperResponse.getStageId();
 
         Thread.sleep(5000);
 
@@ -52,7 +52,7 @@ public class DeveloperApiCreateVersionTest extends Assertions {
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder().encodeToString("""
                 print('hello, world')
                 """.getBytes(StandardCharsets.UTF_8))));
-        final var version = developerCli.createVersion(tenantUuid, stage, stageConfig, sourceCode);
+        final var version = developerCli.createVersion(tenantUuid, stageId, stageConfig, sourceCode);
         Thread.sleep(5000);
         assertEquals(VersionStatusEnum.DEPLOYED, developerCli.getVersionStatus(version));
     }

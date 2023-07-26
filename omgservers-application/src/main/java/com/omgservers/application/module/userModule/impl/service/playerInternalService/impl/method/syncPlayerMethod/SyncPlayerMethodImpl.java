@@ -35,7 +35,7 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
         SyncPlayerInternalRequest.validate(request);
 
         final var player = request.getPlayer();
-        final var user = player.getUser();
+        final var user = player.getUserId();
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> validatePlayerOperation.validatePlayer(player))
                 .flatMap(validatedProject -> checkShardOperation.checkShard(request.getRequestShardKey()))
@@ -43,16 +43,16 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                 .map(SyncPlayerInternalResponse::new);
     }
 
-    Uni<Boolean> syncPlayer(Integer shard, UUID user, PlayerModel player) {
+    Uni<Boolean> syncPlayer(Integer shard, Long user, PlayerModel player) {
         return pgPool.withTransaction(sqlConnection ->
                 upsertPlayerOperation.upsertPlayer(sqlConnection, shard, player)
                         .call(inserted -> {
                             if (inserted) {
-                                final var uuid = player.getUuid();
-                                final var stage = player.getStage();
-                                final var origin = PlayerCreatedEventBodyModel.createEvent(user, stage, uuid);
-                                final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                                final var id = player.getId();
+                                final var stageId = player.getStageId();
+                                final var eventBody = new PlayerCreatedEventBodyModel(user, stageId, id);
+                                final var insertEventInternalRequest =
+                                        new InsertEventHelpRequest(sqlConnection, eventBody);
                                 return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                             } else {
                                 return Uni.createFrom().voidItem();

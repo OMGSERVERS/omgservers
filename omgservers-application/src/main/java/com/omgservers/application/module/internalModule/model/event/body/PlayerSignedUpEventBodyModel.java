@@ -16,19 +16,19 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class PlayerSignedUpEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID tenant,
-                                         final UUID stage,
-                                         final UUID user,
-                                         final UUID player,
-                                         final UUID client) {
-        final var body = new PlayerSignedUpEventBodyModel(tenant, stage, user, player, client);
-        final var event = EventModel.create(user, EventQualifierEnum.PLAYER_SIGNED_UP, body);
-        return event;
+    Long tenantId;
+    Long stageId;
+    Long userId;
+    Long playerId;
+    Long clientId;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.PLAYER_SIGNED_UP;
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID user;
-    UUID player;
-    UUID client;
+    @Override
+    public Long getGroupId() {
+        return clientId;
+    }
 }

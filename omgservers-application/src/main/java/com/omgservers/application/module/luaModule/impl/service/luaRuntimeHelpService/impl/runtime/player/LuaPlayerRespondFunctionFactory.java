@@ -14,8 +14,8 @@ class LuaPlayerRespondFunctionFactory {
 
     final UserModule userModule;
 
-    public LuaPlayerRespondFunction build(UUID user, UUID client) {
-        final var function = new LuaPlayerRespondFunction(userModule, user, client);
+    public LuaPlayerRespondFunction build(Long userId, Long clientId) {
+        final var function = new LuaPlayerRespondFunction(userModule, userId, clientId);
         return function;
     }
 }

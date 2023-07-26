@@ -32,15 +32,15 @@ class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOpera
         adminCli.createClient();
         developerCli.createClient();
 
-        final var tenantUuid = adminCli.createTenant(tenantTitle());
-        final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantUuid);
-        final var developerUser = createNewDeveloperAdminResponse.getUser();
+        final var tenantId = adminCli.createTenant(tenantTitle());
+        final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
+        final var developerUser = createNewDeveloperAdminResponse.getUserId();
         final var developerPassword = createNewDeveloperAdminResponse.getPassword();
         developerCli.createToken(developerUser, developerPassword);
 
-        final var createProjectDeveloperResponse = developerCli.createProject(tenantUuid, projectTitle());
-        final var project = createProjectDeveloperResponse.getProject();
-        final var stage = createProjectDeveloperResponse.getStage();
+        final var createProjectDeveloperResponse = developerCli.createProject(tenantId, projectTitle());
+        final var projectId = createProjectDeveloperResponse.getProjectId();
+        final var stageId = createProjectDeveloperResponse.getStageId();
         final var secret = createProjectDeveloperResponse.getSecret();
 
         Thread.sleep(10000);
@@ -49,23 +49,23 @@ class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOpera
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
-        final var version = developerCli.createVersion(tenantUuid, stage, stageConfig, sourceCode);
+        final var version = developerCli.createVersion(tenantId, stageId, stageConfig, sourceCode);
 
         Thread.sleep(10000);
 
         testClient.connect();
-        testClient.signUp(tenantUuid, stage, secret);
+        testClient.signUp(tenantId, stageId, secret);
         final var credentialsMessage = testClient.consumeCredentialsMessage();
         final var credentials = (CredentialsMessageBodyModel) credentialsMessage.getBody();
-        final var playerUser = credentials.getUser();
+        final var playerUser = credentials.getUserId();
         final var playerPassword = credentials.getPassword();
 
         return VersionParameters.builder()
-                .tenant(tenantUuid)
+                .tenant(tenantId)
                 .developerUser(developerUser)
                 .developerPassword(developerPassword)
-                .project(project)
-                .stage(stage)
+                .project(projectId)
+                .stage(stageId)
                 .secret(secret)
                 .version(version)
                 .playerUser(playerUser)

@@ -26,9 +26,9 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deleteTenantOperation
-                                    .deleteTenant(sqlConnection, shard.shard(), uuid))
+                                    .deleteTenant(sqlConnection, shard.shard(), id))
                             .replaceWithVoid();
                 });
     }

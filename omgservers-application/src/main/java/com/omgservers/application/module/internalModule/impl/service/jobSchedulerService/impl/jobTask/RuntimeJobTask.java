@@ -21,7 +21,7 @@ public class RuntimeJobTask implements JobTask {
     }
 
     @Override
-    public Uni<Boolean> executeTask(UUID shardKey, UUID entity) {
+    public Uni<Boolean> executeTask(Long shardKey, Long entity) {
         return Uni.createFrom().item(true);
     }
 }

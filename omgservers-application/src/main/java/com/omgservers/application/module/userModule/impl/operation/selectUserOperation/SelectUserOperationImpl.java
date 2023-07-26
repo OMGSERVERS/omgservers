@@ -16,16 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectUserOperationImpl implements SelectUserOperation {
 
     static private final String sql = """
-            select created, modified, role, password_hash
-            from $schema.tab_user where uuid = $1
+            select id, created, modified, role, password_hash
+            from $schema.tab_user
+            where id = $1
             limit 1
             """;
 
@@ -35,33 +34,33 @@ class SelectUserOperationImpl implements SelectUserOperation {
     @Override
     public Uni<UserModel> selectUser(final SqlConnection sqlConnection,
                                      final int shard,
-                                     final UUID uuid) {
+                                     final Long id) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        return createUser(uuid, iterator.next());
+                        return createUser(iterator.next());
                     } else {
-                        throw new ServerSideNotFoundException(String.format("user was not found, uuid=%s", uuid));
+                        throw new ServerSideNotFoundException("user was not found, id=" + id);
                     }
                 });
     }
 
-    UserModel createUser(UUID uuid, Row row) {
+    UserModel createUser(Row row) {
         UserModel userModel = new UserModel();
+        userModel.setId(row.getLong("id"));
         userModel.setCreated(row.getOffsetDateTime("created").toInstant());
         userModel.setModified(row.getOffsetDateTime("modified").toInstant());
-        userModel.setUuid(uuid);
         userModel.setRole(UserRoleEnum.valueOf(row.getString("role")));
         userModel.setPasswordHash(row.getString("password_hash"));
         return userModel;

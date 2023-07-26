@@ -16,30 +16,30 @@ import java.util.UUID;
 class DeleteMatchOperationImpl implements DeleteMatchOperation {
 
     static private final String sql = """
-            delete from $schema.tab_matchmaker_match where uuid = $1
+            delete from $schema.tab_matchmaker_match where id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
-    public Uni<Boolean> deleteMatch(SqlConnection sqlConnection, int shard, UUID uuid) {
+    public Uni<Boolean> deleteMatch(SqlConnection sqlConnection, int shard, Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(deleted -> {
                     if (deleted) {
-                        log.info("Match was deleted, shard={}, uuid={}", shard, uuid);
+                        log.info("Match was deleted, shard={}, id={}", shard, id);
                     } else {
-                        log.warn("Match was not found, skip operation, shard={}, uuid={}", shard, uuid);
+                        log.warn("Match was not found, skip operation, shard={}, id={}", shard, id);
                     }
                 });
     }

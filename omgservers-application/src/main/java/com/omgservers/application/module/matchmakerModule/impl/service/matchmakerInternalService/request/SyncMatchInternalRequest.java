@@ -21,6 +21,6 @@ public class SyncMatchInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return match.getMatchmaker().toString();
+        return match.getMatchmakerId().toString();
     }
 }

@@ -15,17 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectTokenOperationImpl implements SelectTokenOperation {
 
     static private final String sql = """
-            select user_uuid, created, uuid, expire, hash
+            select id, user_id, created, expire, hash
             from $schema.tab_user_token
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -35,35 +33,35 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
     @Override
     public Uni<TokenModel> selectToken(final SqlConnection sqlConnection,
                                        final int shard,
-                                       final UUID tokenUuid) {
+                                       final Long tokenId) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (tokenUuid == null) {
-            throw new ServerSideBadRequestException("tokenUuid is null");
+        if (tokenId == null) {
+            throw new ServerSideBadRequestException("tokenId is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(tokenUuid))
+                .execute(Tuple.of(tokenId))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        log.info("Token was found, uuid={}, shard={}", tokenUuid, shard);
+                        log.info("Token was found, uuid={}, shard={}", tokenId, shard);
                         return createToken(iterator.next());
                     } else {
-                        throw new ServerSideNotFoundException(String.format("token was not found, tokenUuid=%s",
-                                tokenUuid));
+                        throw new ServerSideNotFoundException(String.format("token was not found, tokenId=%s",
+                                tokenId));
                     }
                 });
     }
 
     TokenModel createToken(Row row) {
         TokenModel tokenModel = new TokenModel();
-        tokenModel.setUser(row.getUUID("user_uuid"));
+        tokenModel.setId(row.getLong("id"));
+        tokenModel.setUserId(row.getLong("user_id"));
         tokenModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        tokenModel.setUuid(row.getUUID("uuid"));
         tokenModel.setExpire(row.getOffsetDateTime("expire").toInstant());
         tokenModel.setHash(row.getString("hash"));
         return tokenModel;

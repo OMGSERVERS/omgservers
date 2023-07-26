@@ -11,11 +11,11 @@ import java.util.UUID;
 public interface SelectObjectOperation {
     Uni<ObjectModel> selectObject(SqlConnection sqlConnection,
                                   int shard,
-                                  UUID playerUuid,
+                                  Long playerId,
                                   String name);
 
-    default ObjectModel selectObject(long timeout, PgPool pgPool, int shard, UUID playerUuid, String name) {
-        return pgPool.withTransaction(sqlConnection -> selectObject(sqlConnection, shard, playerUuid, name))
+    default ObjectModel selectObject(long timeout, PgPool pgPool, int shard, Long playerId, String name) {
+        return pgPool.withTransaction(sqlConnection -> selectObject(sqlConnection, shard, playerId, name))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

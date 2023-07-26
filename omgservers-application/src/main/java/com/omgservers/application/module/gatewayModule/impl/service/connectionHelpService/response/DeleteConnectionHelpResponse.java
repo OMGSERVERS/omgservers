@@ -5,17 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteConnectionHelpResponse {
 
-    UUID connection;
+    Long connectionId;
     AssignedPlayerModel assignedPlayer;
 
-    public Optional<UUID> getConnection() {
-        return Optional.ofNullable(connection);
+    public Optional<Long> getConnectionId() {
+        return Optional.ofNullable(connectionId);
     }
 
     public Optional<AssignedPlayerModel> getAssignedPlayer() {

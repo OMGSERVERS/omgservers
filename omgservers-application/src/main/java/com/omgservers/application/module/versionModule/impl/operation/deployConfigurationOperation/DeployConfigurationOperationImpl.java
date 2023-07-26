@@ -33,7 +33,7 @@ class DeployConfigurationOperationImpl implements DeployConfigurationOperation {
     }
 
 //    Uni<Void> syncProjectStages(final String tenant,
-//                                final UUID project,
+//                                final Long projectId,
 //                                final VersionConfigModel config) {
 //        final var syncStageRequests = config.getStages().stream()
 //                .map(stageConfig -> {
@@ -48,7 +48,7 @@ class DeployConfigurationOperationImpl implements DeployConfigurationOperation {
 //    }
 //
 //    Uni<Void> cleanProjectStages(final String tenant,
-//                                 final UUID project,
+//                                 final Long projectId,
 //                                 final VersionConfigModel config) {
 //        return tenantModule.getStageInternalService()
 //                .getProjectStages(new GetProjectStagesServiceRequest(tenant, project))

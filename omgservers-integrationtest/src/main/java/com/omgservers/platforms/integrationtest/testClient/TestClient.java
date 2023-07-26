@@ -15,7 +15,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -40,22 +39,22 @@ public class TestClient {
         websocketClient.close();
     }
 
-    public void signUp(final UUID tenant,
-                       final UUID stage,
+    public void signUp(final Long tenantId,
+                       final Long stageId,
                        final String secret) throws IOException {
         final var messageModel = MessageModel.create(MessageQualifierEnum.SIGN_UP_MESSAGE,
-                new SignUpMessageBodyModel(tenant, stage, secret));
+                new SignUpMessageBodyModel(tenantId, stageId, secret));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
 
-    public void signIn(final UUID tenant,
-                       final UUID stage,
+    public void signIn(final Long tenantId,
+                       final Long stageId,
                        final String secret,
-                       final UUID user,
+                       final Long userId,
                        final String password) throws IOException {
         final var messageModel = MessageModel.create(MessageQualifierEnum.SIGN_IN_MESSAGE,
-                new SignInMessageBodyModel(tenant, stage, secret, user, password));
+                new SignInMessageBodyModel(tenantId, stageId, secret, userId, password));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }

@@ -11,10 +11,10 @@ import java.util.UUID;
 public interface SelectVersionOperation {
     Uni<VersionModel> selectVersion(SqlConnection sqlConnection,
                                     int shard,
-                                    UUID uuid);
+                                    Long id);
 
-    default VersionModel selectVersion(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectVersion(sqlConnection, shard, uuid))
+    default VersionModel selectVersion(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectVersion(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

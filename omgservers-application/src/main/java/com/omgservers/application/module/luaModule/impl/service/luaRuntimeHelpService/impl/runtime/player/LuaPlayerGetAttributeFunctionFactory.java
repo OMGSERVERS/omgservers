@@ -14,8 +14,8 @@ public class LuaPlayerGetAttributeFunctionFactory {
 
     final UserModule userModule;
 
-    public LuaPlayerGetAttributeFunction build(UUID user, UUID player) {
-        final var function = new LuaPlayerGetAttributeFunction(userModule, user, player);
+    public LuaPlayerGetAttributeFunction build(Long userId, Long playerId) {
+        final var function = new LuaPlayerGetAttributeFunction(userModule, userId, playerId);
         return function;
     }
 }

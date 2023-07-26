@@ -1,16 +1,15 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.runtime.player;
 
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
+import com.omgservers.application.module.userModule.model.attribute.AttributeModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.TwoArgFunction;
-
-import java.util.UUID;
 
 @Slf4j
 @ToString
@@ -21,16 +20,22 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
     @ToString.Exclude
     final UserModule userModule;
 
-    final UUID user;
-    final UUID player;
+    @ToString.Exclude
+    final AttributeModelFactory attributeModelFactory;
+
+    @ToString.Exclude
+    final GenerateIdOperation generateIdOperation;
+
+    final Long userId;
+    final Long playerId;
 
     @Override
     public LuaValue call(LuaValue arg1, LuaValue arg2) {
         String name = arg1.checkjstring();
         String value = arg2.checkjstring();
 
-        final var attribute = AttributeModel.create(player, name, value);
-        final var syncAttributeServiceRequest = new SyncAttributeInternalRequest(user, attribute);
+        final var attribute = attributeModelFactory.create(generateIdOperation.generateId(), playerId, name, value);
+        final var syncAttributeServiceRequest = new SyncAttributeInternalRequest(userId, attribute);
 
         try {
             userModule.getAttributeInternalService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);

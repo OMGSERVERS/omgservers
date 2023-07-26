@@ -35,24 +35,25 @@ class SyncStageMethodImpl implements SyncStageMethod {
     public Uni<Void> syncStage(SyncStageInternalRequest request) {
         SyncStageInternalRequest.validate(request);
 
-        final var tenant = request.getTenant();
+        final var tenantId = request.getTenantId();
         final var stage = request.getStage();
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> validateStageOperation.validateStage(stage))
                 .flatMap(validatedStage -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> syncStage(shardModel.shard(), tenant, stage));
+                .flatMap(shardModel -> syncStage(shardModel.shard(), tenantId, stage));
     }
 
-    Uni<Void> syncStage(Integer shard, UUID tenant, StageModel stage) {
+    Uni<Void> syncStage(Integer shard, Long tenantId, StageModel stage) {
         return pgPool.withTransaction(sqlConnection ->
                         upsertStageOperation.upsertStage(sqlConnection, shard, stage)
                                 .flatMap(inserted -> {
                                     if (inserted) {
-                                        final var uuid = stage.getUuid();
-                                        final var origin = StageCreatedEventBodyModel.createEvent(tenant, uuid);
-                                        final var event = EventCreatedEventBodyModel.createEvent(origin);
-                                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
-                                        return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                                        final var id = stage.getId();
+                                        final var eventBody = new StageCreatedEventBodyModel(tenantId, id);
+                                        final var insertEventInternalRequest =
+                                                new InsertEventHelpRequest(sqlConnection, eventBody);
+                                        return internalModule.getEventHelpService()
+                                                .insertEvent(insertEventInternalRequest);
                                     } else {
                                         return Uni.createFrom().voidItem();
                                     }

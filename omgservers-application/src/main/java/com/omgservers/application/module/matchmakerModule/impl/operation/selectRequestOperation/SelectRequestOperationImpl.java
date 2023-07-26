@@ -24,9 +24,9 @@ import java.util.UUID;
 class SelectRequestOperationImpl implements SelectRequestOperation {
 
     static private final String sql = """
-            select matchmaker_uuid, created, uuid, config
+            select id, matchmaker_id, created, config
             from $schema.tab_matchmaker_request
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -36,17 +36,17 @@ class SelectRequestOperationImpl implements SelectRequestOperation {
     @Override
     public Uni<RequestModel> selectRequest(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final UUID uuid) {
+                                           final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -55,19 +55,19 @@ class SelectRequestOperationImpl implements SelectRequestOperation {
                             log.info("Matchmaker request was found, matchmakerRequest={}", matchmakerRequest);
                             return matchmakerRequest;
                         } catch (IOException e) {
-                            throw new ServerSideConflictException("matchmaker request can't be parsed, uuid=" + uuid, e);
+                            throw new ServerSideConflictException("matchmaker request can't be parsed, id=" + id, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("matchmaker request was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("matchmaker request was not found, id=" + id);
                     }
                 });
     }
 
     RequestModel createMatchmakerRequest(Row row) throws IOException {
         RequestModel request = new RequestModel();
-        request.setMatchmaker(row.getUUID("matchmaker_uuid"));
+        request.setId(row.getLong("id"));
+        request.setMatchmakerId(row.getLong("matchmaker_id"));
         request.setCreated(row.getOffsetDateTime("created").toInstant());
-        request.setUuid(row.getUUID("uuid"));
         request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         return request;
     }

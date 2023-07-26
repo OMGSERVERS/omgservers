@@ -16,13 +16,17 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class RuntimeCreatedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID uuid, final UUID matchmaker, final UUID match) {
-        final var body = new RuntimeCreatedEventBodyModel(uuid, matchmaker, match);
-        final var event = EventModel.create(uuid, EventQualifierEnum.RUNTIME_CREATED, body);
-        return event;
+    Long id;
+    Long matchmakerId;
+    Long matchId;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.RUNTIME_CREATED;
     }
 
-    UUID uuid;
-    UUID matchmaker;
-    UUID match;
+    @Override
+    public Long getGroupId() {
+        return id;
+    }
 }

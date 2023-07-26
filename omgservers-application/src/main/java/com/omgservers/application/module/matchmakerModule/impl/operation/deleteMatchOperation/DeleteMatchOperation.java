@@ -8,10 +8,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface DeleteMatchOperation {
-    Uni<Boolean> deleteMatch(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<Boolean> deleteMatch(SqlConnection sqlConnection, int shard, Long id);
 
-    default Boolean deleteMatch(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> deleteMatch(sqlConnection, shard, uuid))
+    default Boolean deleteMatch(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> deleteMatch(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

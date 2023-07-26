@@ -26,11 +26,11 @@ class HasStagePermissionMethodImpl implements HasStagePermissionMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var stage = request.getStage();
-                    final var user = request.getUser();
+                    final var stageId = request.getStageId();
+                    final var userId= request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasStagePermissionOperation
-                            .hasStagePermission(sqlConnection, shard, stage, user, permission));
+                            .hasStagePermission(sqlConnection, shard, stageId, userId, permission));
                 })
                 .map(HasStagePermissionInternalResponse::new);
     }

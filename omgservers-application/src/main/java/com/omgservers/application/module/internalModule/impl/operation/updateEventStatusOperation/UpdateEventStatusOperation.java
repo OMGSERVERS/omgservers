@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface UpdateEventStatusOperation {
-    Uni<Boolean> updateEventStatus(SqlConnection sqlConnection, UUID event, EventStatusEnum newStatus);
+    Uni<Boolean> updateEventStatus(SqlConnection sqlConnection, Long id, EventStatusEnum newStatus);
 
-    default Boolean updateEventStatus(long timeout, PgPool pgPool, UUID event, EventStatusEnum newStatus) {
-        return pgPool.withTransaction(sqlConnection -> updateEventStatus(sqlConnection, event, newStatus))
+    default Boolean updateEventStatus(long timeout, PgPool pgPool, Long id, EventStatusEnum newStatus) {
+        return pgPool.withTransaction(sqlConnection -> updateEventStatus(sqlConnection, id, newStatus))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

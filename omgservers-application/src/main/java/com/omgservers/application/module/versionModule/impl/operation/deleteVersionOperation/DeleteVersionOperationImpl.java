@@ -17,7 +17,7 @@ import java.util.UUID;
 class DeleteVersionOperationImpl implements DeleteVersionOperation {
 
     static private final String sql = """
-            delete from $schema.tab_version where uuid = $1
+            delete from $schema.tab_version where id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -25,24 +25,24 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
     @Override
     public Uni<Boolean> deleteVersion(final SqlConnection sqlConnection,
                                       final int shard,
-                                      final UUID uuid) {
+                                      final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(deleted -> {
                     if (deleted) {
-                        log.info("Version was deleted, shard={}, uuid={}", shard, uuid);
+                        log.info("Version was deleted, shard={}, id={}", shard, id);
                     } else {
-                        log.info("Version was not found, skip operation, shard={}, uuid={}", shard, uuid);
+                        log.info("Version was not found, skip operation, shard={}, id={}", shard, id);
                     }
                 });
     }

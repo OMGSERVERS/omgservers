@@ -1,14 +1,15 @@
 package com.omgservers.application.module.userModule.impl.operation.insertClientOperation;
 
-import com.omgservers.application.module.userModule.model.client.ClientModel;
+import com.omgservers.application.module.userModule.model.client.ClientModelFactory;
 import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
-import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -35,30 +36,42 @@ class InsertClientOperationTest extends Assertions {
     UpsertPlayerOperation upsertPlayerOperation;
 
     @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
+    PlayerModelFactory playerModelFactory;
+
+    @Inject
+    ClientModelFactory clientModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenUserPlayer_whenInsertClient_thenInserted() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = PlayerModel.create(user.getUuid(), UUID.randomUUID(), PlayerConfigModel.create());
-        final var playerUuid = player.getUuid();
+        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var client = ClientModel.create(playerUuid, URI.create("http://localhost:8080"), UUID.randomUUID());
+        final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
         insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client);
     }
 
     @Test
     void givenClient_whenInsertClientAgain_thenServerSideConflictException() {
         final var shard = 0;
-        final var user = UserModel.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = PlayerModel.create(user.getUuid(), UUID.randomUUID(), PlayerConfigModel.create());
-        final var playerUuid = player.getUuid();
+        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client = ClientModel.create(playerUuid, URI.create("http://localhost:8080"), UUID.randomUUID());
+        final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
         insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client);
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
@@ -69,9 +82,21 @@ class InsertClientOperationTest extends Assertions {
     @Test
     void whenInsertClientWithUnknownPlayerUuid_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var client = ClientModel.create(UUID.randomUUID(), URI.create("http://localhost:8080"), UUID.randomUUID());
+        final var client = clientModelFactory.create(playerId(), URI.create("http://localhost:8080"), connectionId());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client));
         log.info("Exception: {}", exception.getMessage());
+    }
+
+    long playerId() {
+        return generateIdOperation.generateId();
+    }
+
+    long connectionId() {
+        return generateIdOperation.generateId();
+    }
+
+    long stageId() {
+        return generateIdOperation.generateId();
     }
 }

@@ -18,5 +18,5 @@ public class GetAssignedPlayerHelpRequest {
         // TODO: validate fields
     }
 
-    UUID connection;
+    Long connectionId;
 }

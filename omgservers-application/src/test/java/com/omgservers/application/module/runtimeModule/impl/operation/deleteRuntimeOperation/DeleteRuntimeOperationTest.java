@@ -2,16 +2,15 @@ package com.omgservers.application.module.runtimeModule.impl.operation.deleteRun
 
 import com.omgservers.application.module.runtimeModule.impl.operation.insertRuntimeOperation.InsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModel;
+import com.omgservers.application.module.runtimeModule.model.RuntimeModelFactory;
 import com.omgservers.application.module.runtimeModule.model.RuntimeTypeEnum;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
@@ -25,30 +24,36 @@ class DeleteRuntimeOperationTest extends Assertions {
     InsertRuntimeOperation insertRuntimeOperation;
 
     @Inject
+    RuntimeModelFactory runtimeModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenRuntime_whenRuntimeTenant_thenDeleted() {
         final var shard = 0;
-        final var runtime1 = RuntimeModel.create(matchmakerUuid(), matchUuid(), RuntimeConfigModel.create(RuntimeTypeEnum.EMBEDDED_LUA));
+        final var runtime1 = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeConfigModel.create(RuntimeTypeEnum.EMBEDDED_LUA));
         insertRuntimeOperation.insertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
-        assertTrue(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, runtime1.getUuid()));
+        assertTrue(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, runtime1.getId()));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteTenant_thenSkip() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, uuid));
+        assertFalse(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID matchmakerUuid() {
-        return UUID.randomUUID();
+    Long matchmakerId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID matchUuid() {
-        return UUID.randomUUID();
+    Long matchId() {
+        return generateIdOperation.generateId();
     }
 }

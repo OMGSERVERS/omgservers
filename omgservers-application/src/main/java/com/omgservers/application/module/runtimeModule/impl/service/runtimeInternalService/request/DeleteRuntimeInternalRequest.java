@@ -18,10 +18,10 @@ public class DeleteRuntimeInternalRequest implements InternalRequest {
         }
     }
 
-    UUID uuid;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return uuid.toString();
+        return id.toString();
     }
 }

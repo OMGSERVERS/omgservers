@@ -6,12 +6,12 @@ import com.omgservers.application.module.versionModule.impl.service.versionHelpS
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
 import com.omgservers.application.module.versionModule.model.VersionModel;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.CreateVersionInternalRequest;
+import com.omgservers.application.module.versionModule.model.VersionModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -19,20 +19,22 @@ import java.util.UUID;
 public class BuildVersionMethodImpl implements BuildVersionMethod {
 
     final VersionInternalService versionInternalService;
+
     final CompileVersionSourceCodeOperation compileVersionCodeOperation;
+    final VersionModelFactory versionModelFactory;
+    final GenerateIdOperation generateIdOperation;
 
     @Override
     public Uni<BuildVersionHelpResponse> buildVersion(BuildVersionHelpRequest request) {
         BuildVersionHelpRequest.validate(request);
 
-        final var tenant = request.getTenant();
-        final var stage = request.getStage();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
         final var stageConfig = request.getStageConfig();
         final var sourceCode = request.getSourceCode();
         return compileVersionCodeOperation.compileVersionSourceCode(sourceCode)
                 .flatMap(bytecode -> {
-                    final var uuid = UUID.randomUUID();
-                    final var version = VersionModel.create(uuid, tenant, stage, stageConfig, sourceCode, bytecode);
+                    final var version = versionModelFactory.create(tenantId, stageId, stageConfig, sourceCode, bytecode);
                     return createVersion(version);
                 })
                 .map(BuildVersionHelpResponse::new);

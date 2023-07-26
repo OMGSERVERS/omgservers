@@ -18,10 +18,10 @@ public class GetStageConfigInternalRequest implements InternalRequest {
         }
     }
 
-    UUID version;
+    Long versionId;
 
     @Override
     public String getRequestShardKey() {
-        return version.toString();
+        return versionId.toString();
     }
 }

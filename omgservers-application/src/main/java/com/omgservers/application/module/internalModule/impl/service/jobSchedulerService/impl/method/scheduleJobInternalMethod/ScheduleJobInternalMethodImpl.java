@@ -60,7 +60,7 @@ class ScheduleJobInternalMethodImpl implements ScheduleJobInternalMethod {
                 });
     }
 
-    void scheduleJob(UUID shardKey, UUID entity, JobType type) {
+    void scheduleJob(Long shardKey, Long entity, JobType type) {
         final var jobName = getJobNameOperation.getJobName(shardKey, entity);
         if (scheduler.getScheduledJob(jobName) != null) {
             log.warn("Job task was already scheduled, job={}", jobName);
@@ -82,8 +82,8 @@ class ScheduleJobInternalMethodImpl implements ScheduleJobInternalMethod {
 
     @WithSpan
     Uni<Void> asyncTask(final ScheduledExecution scheduledExecution,
-                        final UUID shardKey,
-                        final UUID entity,
+                        final Long shardKey,
+                        final Long entity,
                         final JobType type) {
         // TODO: calculate and log delay between launch and planning timestamp
         log.info("Job was launched, shardKey={}, entity={}, type={}", shardKey, entity, type);

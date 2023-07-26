@@ -14,11 +14,15 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class EventCreatedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final EventModel event) {
-        final var body = new EventCreatedEventBodyModel(event);
-        final var eventModel = EventModel.create(event.getGroup(), EventQualifierEnum.EVENT_CREATED, body);
-        return eventModel;
+    EventModel event;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.EVENT_CREATED;
     }
 
-    EventModel event;
+    @Override
+    public Long getGroupId() {
+        return event.getGroupId();
+    }
 }

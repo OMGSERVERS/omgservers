@@ -25,11 +25,11 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var project = request.getProject();
-                    final var user = request.getUser();
+                    final var projectId = request.getProjectId();
+                    final var userId = request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasProjectPermissionOperation
-                            .hasProjectPermission(sqlConnection, shard.shard(), project, user, permission));
+                            .hasProjectPermission(sqlConnection, shard.shard(), projectId, userId, permission));
                 })
                 .map(HasProjectPermissionInternalResponse::new);
     }

@@ -6,15 +6,14 @@ import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
-import java.util.UUID;
 
 public interface SelectStageConfigOperation {
     Uni<VersionStageConfigModel> selectStageConfig(SqlConnection sqlConnection,
                                                    int shard,
-                                                   UUID version);
+                                                   Long versionId);
 
-    default VersionStageConfigModel selectStageConfig(long timeout, PgPool pgPool, int shard, UUID version) {
-        return pgPool.withTransaction(sqlConnection -> selectStageConfig(sqlConnection, shard, version))
+    default VersionStageConfigModel selectStageConfig(long timeout, PgPool pgPool, int shard, Long versionId) {
+        return pgPool.withTransaction(sqlConnection -> selectStageConfig(sqlConnection, shard, versionId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

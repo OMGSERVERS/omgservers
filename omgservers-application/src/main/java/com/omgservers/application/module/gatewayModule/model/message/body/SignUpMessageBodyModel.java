@@ -11,8 +11,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class SignUpMessageBodyModel extends MessageBodyModel {
 
-    UUID tenant;
-    UUID stage;
+    Long tenantId;
+    Long stageId;
     @ToString.Exclude
     String secret;
 }

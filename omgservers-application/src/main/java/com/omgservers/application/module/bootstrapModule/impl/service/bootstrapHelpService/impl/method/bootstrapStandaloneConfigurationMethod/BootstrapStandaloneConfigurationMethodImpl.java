@@ -4,8 +4,8 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
 import com.omgservers.application.module.internalModule.model.index.IndexConfigModel;
-import com.omgservers.application.module.internalModule.model.index.IndexModel;
-import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.application.module.internalModule.model.index.IndexModelFactory;
+import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModelFactory;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -26,6 +26,9 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
 
     final GetConfigOperation getConfigOperation;
 
+    final IndexModelFactory indexModelFactory;
+    final ServiceAccountModelFactory serviceAccountModelFactory;
+
     @Override
     public Uni<Void> bootstrapStandaloneConfiguration() {
         if (getConfigOperation.getConfig().standalone()) {
@@ -43,7 +46,7 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
         final var indexName = getConfigOperation.getConfig().indexName();
         final var serverUri = getConfigOperation.getConfig().serverUri();
         final var indexConfig = IndexConfigModel.create(Collections.singletonList(serverUri));
-        final var indexModel = IndexModel.create(indexName, indexConfig);
+        final var indexModel = indexModelFactory.create(indexName, indexConfig);
         final var request = new SyncIndexHelpRequest(indexModel);
         return internalModule.getIndexInternalService().syncIndex(request);
     }
@@ -52,7 +55,7 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
         final var serviceUsername = getConfigOperation.getConfig().serviceUsername();
         final var servicePassword = getConfigOperation.getConfig().servicePassword();
         final var passwordHash = BcryptUtil.bcryptHash(servicePassword);
-        final var serviceAccountModel = ServiceAccountModel.create(serviceUsername, passwordHash);
+        final var serviceAccountModel = serviceAccountModelFactory.create(serviceUsername, passwordHash);
         final var request = new SyncServiceAccountHelpRequest(serviceAccountModel);
         return internalModule.getServiceAccountHelpService().syncServiceAccount(request);
     }

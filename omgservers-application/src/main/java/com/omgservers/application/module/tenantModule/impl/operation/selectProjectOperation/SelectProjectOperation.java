@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectProjectOperation {
-    Uni<ProjectModel> selectProject(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<ProjectModel> selectProject(SqlConnection sqlConnection, int shard, Long id);
 
-    default ProjectModel selectProject(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectProject(sqlConnection, shard, uuid))
+    default ProjectModel selectProject(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectProject(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

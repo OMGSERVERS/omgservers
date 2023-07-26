@@ -24,7 +24,7 @@ import java.util.ArrayList;
 class InsertEventOperationImpl implements InsertEventOperation {
 
     static private final String sql = """
-            insert into internal.tab_event(created, modified, uuid, group_uuid, qualifier, body, status)
+            insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
             values($1, $2, $3, $4, $5, $6, $7)
             """;
 
@@ -51,10 +51,10 @@ class InsertEventOperationImpl implements InsertEventOperation {
             var bodyString = objectMapper.writeValueAsString(event.getBody());
             return sqlConnection.preparedQuery(sql)
                     .execute(Tuple.from(new ArrayList<>() {{
+                        add(event.getId());
                         add(event.getCreated().atOffset(ZoneOffset.UTC));
                         add(event.getModified().atOffset(ZoneOffset.UTC));
-                        add(event.getUuid());
-                        add(event.getGroup());
+                        add(event.getGroupId());
                         add(event.getQualifier());
                         add(bodyString);
                         add(event.getStatus());

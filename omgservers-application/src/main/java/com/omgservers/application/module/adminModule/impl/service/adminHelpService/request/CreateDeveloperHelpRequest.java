@@ -17,5 +17,5 @@ public class CreateDeveloperHelpRequest {
         }
     }
 
-    UUID tenant;
+    Long tenantId;
 }

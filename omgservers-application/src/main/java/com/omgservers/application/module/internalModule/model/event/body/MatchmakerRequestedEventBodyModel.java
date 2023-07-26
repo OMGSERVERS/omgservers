@@ -13,22 +13,20 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class MatchmakerRequestedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID tenant,
-                                         final UUID stage,
-                                         final UUID user,
-                                         final UUID player,
-                                         final UUID client,
-                                         final String mode) {
-        final var body = new MatchmakerRequestedEventBodyModel(tenant, stage, user, player, client, mode);
-        final var group = user;
-        final var event = EventModel.create(group, EventQualifierEnum.MATCHMAKER_REQUESTED, body);
-        return event;
+    Long tenantId;
+    Long stageId;
+    Long userId;
+    Long playerId;
+    Long clientId;
+    String mode;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.MATCHMAKER_REQUESTED;
     }
 
-    UUID tenant;
-    UUID stage;
-    UUID user;
-    UUID player;
-    UUID client;
-    String mode;
+    @Override
+    public Long getGroupId() {
+        return clientId;
+    }
 }

@@ -11,5 +11,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateTenantHelpResponse {
 
-    UUID uuid;
+    Long id;
 }

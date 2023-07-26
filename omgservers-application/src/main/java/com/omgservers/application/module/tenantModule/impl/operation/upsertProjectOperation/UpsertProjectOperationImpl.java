@@ -26,10 +26,10 @@ import java.util.ArrayList;
 class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_project(tenant_uuid, created, modified, uuid, owner, config)
+            insert into $schema.tab_tenant_project(id, tenant_id, created, modified, owner_id, config)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (uuid) do
-            update set modified = $3, config = $6
+            on conflict (id) do
+            update set modified = $4, owner_id = $5, config = $6
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -59,10 +59,9 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                 .transform(t -> {
                     final var pgException = (PgException) t;
                     final var code = pgException.getSqlState();
-                    final var column = pgException.getColumn();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("tenant was not found, name=" + project.getTenant());
+                        return new ServerSideNotFoundException("tenant was not found, name=" + project.getTenantId());
                     } else {
                         return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
                     }
@@ -75,11 +74,11 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
             var configString = objectMapper.writeValueAsString(project.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(project.getTenant());
+                        add(project.getId());
+                        add(project.getTenantId());
                         add(project.getCreated().atOffset(ZoneOffset.UTC));
                         add(project.getModified().atOffset(ZoneOffset.UTC));
-                        add(project.getUuid());
-                        add(project.getOwner());
+                        add(project.getOwnerId());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

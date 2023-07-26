@@ -27,9 +27,9 @@ GetProjectMethodImpl implements GetProjectMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectProjectOperation
-                            .selectProject(sqlConnection, shard.shard(), uuid));
+                            .selectProject(sqlConnection, shard.shard(), id));
                 })
                 .map(GetProjectInternalResponse::new);
     }

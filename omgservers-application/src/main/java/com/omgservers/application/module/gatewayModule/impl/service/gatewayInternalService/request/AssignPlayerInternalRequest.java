@@ -20,6 +20,6 @@ public class AssignPlayerInternalRequest {
     }
 
     URI server;
-    UUID connection;
+    Long connectionId;
     AssignedPlayerModel assignedPlayer;
 }

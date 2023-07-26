@@ -2,6 +2,7 @@ package com.omgservers.platform.integrationtest;
 
 import com.omgservers.application.exception.ClientSideNotFoundException;
 import com.omgservers.application.exception.ClientSideUnauthorizedException;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.DeveloperCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;
@@ -21,6 +22,9 @@ public class DeveloperApiCreateTokenTest extends Assertions {
     BootstrapEnvironmentOperation bootstrapEnvironmentOperation;
 
     @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     DeveloperCli developerCli;
 
     @Inject
@@ -34,10 +38,10 @@ public class DeveloperApiCreateTokenTest extends Assertions {
 
         final var tenantUuid = adminCli.createTenant(tenantTitle());
         final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantUuid);
-        final var user = createNewDeveloperAdminResponse.getUser();
+        final var userId = createNewDeveloperAdminResponse.getUserId();
         final var password = createNewDeveloperAdminResponse.getPassword();
 
-        final var token = developerCli.createToken(user, password);
+        final var token = developerCli.createToken(userId, password);
         assertNotNull(token);
     }
 
@@ -49,11 +53,11 @@ public class DeveloperApiCreateTokenTest extends Assertions {
         final var tenantUuid = adminCli.createTenant(tenantTitle());
 
         final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantUuid);
-        final var user = createNewDeveloperAdminResponse.getUser();
+        final var userId = createNewDeveloperAdminResponse.getUserId();
 
         developerCli.createClient();
         final var exception = assertThrows(ClientSideUnauthorizedException.class, () -> developerCli
-                .createToken(user, randomString()));
+                .createToken(userId, randomString()));
         log.info("Exception: {}", exception.getMessage());
     }
 
@@ -61,7 +65,7 @@ public class DeveloperApiCreateTokenTest extends Assertions {
     void givenUnknownUser_whenCreateToken_thenNotFoundException() {
         bootstrapEnvironmentOperation.bootstrap();
 
-        final var unknownUser = UUID.randomUUID();
+        final var unknownUser = generateIdOperation.generateId();
         developerCli.createClient();
         final var exception = assertThrows(ClientSideNotFoundException.class, () -> developerCli
                 .createToken(unknownUser, randomString()));

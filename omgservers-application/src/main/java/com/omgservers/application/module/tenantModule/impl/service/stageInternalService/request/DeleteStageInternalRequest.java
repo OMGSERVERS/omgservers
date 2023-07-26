@@ -19,11 +19,11 @@ public class DeleteStageInternalRequest implements InternalRequest {
         // TODO: validate fields
     }
 
-    UUID tenant;
-    UUID uuid;
+    Long tenantId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

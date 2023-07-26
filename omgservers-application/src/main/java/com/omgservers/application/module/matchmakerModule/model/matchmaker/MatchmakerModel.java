@@ -14,33 +14,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MatchmakerModel {
 
-    static public MatchmakerModel create(final UUID tenant,
-                                         final UUID stage) {
-        return create(UUID.randomUUID(), tenant, stage);
-    }
-
-    static public MatchmakerModel create(final UUID uuid,
-                                         final UUID tenant,
-                                         final UUID stage) {
-        Instant now = Instant.now();
-
-        final var matchmaker = new MatchmakerModel();
-        matchmaker.setCreated(now);
-        matchmaker.setUuid(uuid);
-        matchmaker.setTenant(tenant);
-        matchmaker.setStage(stage);
-        return matchmaker;
-    }
-
     static public void validate(MatchmakerModel matchmaker) {
         if (matchmaker == null) {
             throw new ServerSideBadRequestException("matchmaker is null");
         }
     }
 
+    Long id;
     @ToString.Exclude
     Instant created;
-    UUID uuid;
-    UUID tenant;
-    UUID stage;
+    Long tenantId;
+    Long stageId;
 }

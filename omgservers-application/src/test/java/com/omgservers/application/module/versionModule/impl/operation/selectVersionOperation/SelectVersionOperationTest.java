@@ -1,8 +1,13 @@
 package com.omgservers.application.module.versionModule.impl.operation.selectVersionOperation;
 
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
+import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
 import com.omgservers.application.module.versionModule.model.VersionModel;
 import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.application.module.versionModule.model.VersionModelFactory;
+import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
+import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +30,19 @@ class SelectVersionOperationTest extends Assertions {
     UpsertVersionOperation upsertVersionOperation;
 
     @Inject
+    VersionModelFactory versionModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenVersion_whenSelectVersion_thenSelected() {
         final var shard = 0;
-        final var version1 = VersionModel.create(tenantUuid(), stageUuid());
-        final var versionUuid = version1.getUuid();
+        final var version1 = versionModelFactory.create(tenantId(), stageId(), VersionStageConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
+        final var versionUuid = version1.getId();
         upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version1);
 
         final var version2 = selectVersionOperation.selectVersion(TIMEOUT, pgPool, shard, versionUuid);
@@ -41,17 +52,17 @@ class SelectVersionOperationTest extends Assertions {
     @Test
     void givenUnknownUuid_whenSelectVersion_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectVersionOperation
-                .selectVersion(TIMEOUT, pgPool, shard, uuid));
+                .selectVersion(TIMEOUT, pgPool, shard, id));
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 }

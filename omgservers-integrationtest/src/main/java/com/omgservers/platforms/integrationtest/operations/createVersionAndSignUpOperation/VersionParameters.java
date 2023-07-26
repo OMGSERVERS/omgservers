@@ -3,19 +3,17 @@ package com.omgservers.platforms.integrationtest.operations.createVersionAndSign
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @Builder
 public class VersionParameters {
 
-    final UUID tenant;
-    final UUID developerUser;
+    final Long tenant;
+    final Long developerUser;
     final String developerPassword;
-    final UUID project;
-    final UUID stage;
+    final Long project;
+    final Long stage;
     final String secret;
-    final UUID version;
-    final UUID playerUser;
+    final Long version;
+    final Long playerUser;
     final String playerPassword;
 }

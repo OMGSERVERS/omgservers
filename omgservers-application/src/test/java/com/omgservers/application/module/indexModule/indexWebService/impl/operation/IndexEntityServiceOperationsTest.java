@@ -6,6 +6,7 @@ import com.omgservers.application.module.internalModule.impl.operation.getIndexO
 import com.omgservers.application.module.internalModule.impl.operation.upsertIndexOperation.UpsertIndexOperation;
 import com.omgservers.application.module.internalModule.model.index.IndexConfigModel;
 import com.omgservers.application.module.internalModule.model.index.IndexModel;
+import com.omgservers.application.module.internalModule.model.index.IndexModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +32,15 @@ public class IndexEntityServiceOperationsTest extends Assertions {
     DeleteIndexOperation deleteIndexOperation;
 
     @Inject
+    IndexModelFactory indexModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void whenRegularUsage_thenOk() {
         final var name = UUID.randomUUID().toString();
-        final var index = IndexModel.create(name, IndexConfigModel.create(32));
+        final var index = indexModelFactory.create(name, IndexConfigModel.create(32));
 
         syncIndex(index);
         final var index1 = getIndex(name);
@@ -49,7 +53,7 @@ public class IndexEntityServiceOperationsTest extends Assertions {
         final var index2 = getIndex(name);
         assertEquals(newVersion, index2.getVersion());
 
-        deleteIndex(index.getUuid());
+        deleteIndex(index.getId());
 
         assertThrows(ServerSideNotFoundException.class, () -> getIndex(name));
     }
@@ -66,9 +70,9 @@ public class IndexEntityServiceOperationsTest extends Assertions {
                 .await().atMost(Duration.ofSeconds(1));
     }
 
-    void deleteIndex(UUID uuid) {
+    void deleteIndex(Long id) {
         pgPool.withTransaction(sqlConnection -> deleteIndexOperation
-                        .deleteIndex(sqlConnection, uuid))
+                        .deleteIndex(sqlConnection, id))
                 .await().atMost(Duration.ofSeconds(1));
     }
 }

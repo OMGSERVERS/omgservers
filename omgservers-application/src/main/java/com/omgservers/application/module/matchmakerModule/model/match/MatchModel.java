@@ -14,38 +14,18 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MatchModel {
 
-    static public MatchModel create(final UUID matchmaker,
-                                    final MatchConfigModel config) {
-        return create(matchmaker, UUID.randomUUID(), config);
-    }
-
-    static public MatchModel create(final UUID matchmaker,
-                                    final UUID uuid,
-                                    final MatchConfigModel config) {
-        Instant now = Instant.now();
-
-        final var match = new MatchModel();
-        match.setMatchmaker(matchmaker);
-        match.setCreated(now);
-        match.setModified(now);
-        match.setUuid(uuid);
-        match.setRuntime(UUID.randomUUID());
-        match.setConfig(config);
-        return match;
-    }
-
     static public void validate(MatchModel match) {
         if (match == null) {
             throw new ServerSideBadRequestException("match is null");
         }
     }
 
-    UUID matchmaker;
+    Long id;
+    Long matchmakerId;
     @ToString.Exclude
     Instant created;
     @ToString.Exclude
     Instant modified;
-    UUID uuid;
-    UUID runtime;
+    Long runtimeId;
     MatchConfigModel config;
 }

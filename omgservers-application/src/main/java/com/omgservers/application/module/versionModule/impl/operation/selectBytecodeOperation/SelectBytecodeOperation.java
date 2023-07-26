@@ -11,10 +11,10 @@ import java.util.UUID;
 public interface SelectBytecodeOperation {
     Uni<VersionBytecodeModel> selectBytecode(SqlConnection sqlConnection,
                                              int shard,
-                                             UUID version);
+                                             Long versionId);
 
-    default VersionBytecodeModel selectBytecode(long timeout, PgPool pgPool, int shard, UUID version) {
-        return pgPool.withTransaction(sqlConnection -> selectBytecode(sqlConnection, shard, version))
+    default VersionBytecodeModel selectBytecode(long timeout, PgPool pgPool, int shard, Long versionId) {
+        return pgPool.withTransaction(sqlConnection -> selectBytecode(sqlConnection, shard, versionId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

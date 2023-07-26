@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectEventOperation {
-    Uni<EventModel> selectEvent(SqlConnection sqlConnection, UUID uuid);
+    Uni<EventModel> selectEvent(SqlConnection sqlConnection, Long id);
 
-    default EventModel selectEvent(long timeout, PgPool pgPool, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectEvent(sqlConnection, uuid))
+    default EventModel selectEvent(long timeout, PgPool pgPool, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectEvent(sqlConnection, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

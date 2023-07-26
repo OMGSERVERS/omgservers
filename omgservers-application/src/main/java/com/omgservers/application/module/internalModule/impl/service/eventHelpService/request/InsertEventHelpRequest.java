@@ -1,5 +1,6 @@
 package com.omgservers.application.module.internalModule.impl.service.eventHelpService.request;
 
+import com.omgservers.application.module.internalModule.model.event.EventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.EventModel;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,8 @@ public class InsertEventHelpRequest {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
-        EventModel.validate(request.getEvent());
     }
 
     SqlConnection sqlConnection;
-    EventModel event;
+    EventBodyModel eventBody;
 }

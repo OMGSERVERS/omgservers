@@ -17,5 +17,5 @@ public class DeleteIndexHelpRequest {
         }
     }
 
-    UUID uuid;
+    Long id;
 }

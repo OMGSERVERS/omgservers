@@ -69,7 +69,7 @@ class ProduceEventMethodImpl implements ProduceEventMethod {
 
         try {
             final var producer = producers.get();
-            producer.send(text, event.getGroup());
+            producer.send(text, event.getGroupId());
             log.info("Event was produced, event={}", event);
         } catch (Exception e) {
             log.error("producer failed, {}", e.getMessage());

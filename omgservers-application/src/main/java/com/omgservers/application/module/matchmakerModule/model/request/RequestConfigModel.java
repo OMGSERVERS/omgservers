@@ -7,39 +7,38 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestConfigModel {
 
-    static public RequestConfigModel create(final UUID user,
-                                            final UUID client,
-                                            final UUID tenant,
-                                            final UUID stage,
+    static public RequestConfigModel create(final Long userId,
+                                            final Long clientId,
+                                            final Long tenantId,
+                                            final Long stageId,
                                             final String mode) {
-        if (user == null) {
-            throw new ServerSideBadRequestException("user is null");
+        if (userId == null) {
+            throw new ServerSideBadRequestException("userId is null");
         }
-        if (client == null) {
-            throw new ServerSideBadRequestException("client is null");
+        if (clientId == null) {
+            throw new ServerSideBadRequestException("clientId is null");
         }
-        if (tenant == null) {
-            throw new ServerSideBadRequestException("tenant is null");
+        if (tenantId == null) {
+            throw new ServerSideBadRequestException("tenantId is null");
         }
-        if (stage == null) {
-            throw new ServerSideBadRequestException("stage is null");
+        if (stageId == null) {
+            throw new ServerSideBadRequestException("stageId is null");
         }
         if (mode == null) {
             throw new ServerSideBadRequestException("mode is null");
         }
 
         final var config = new RequestConfigModel();
-        config.setUser(user);
-        config.setClient(client);
-        config.setTenant(tenant);
-        config.setStage(stage);
+        config.setUserId(userId);
+        config.setClientId(clientId);
+        config.setTenantId(tenantId);
+        config.setStageId(stageId);
         config.setMode(mode);
         config.setAttributes(new HashMap<>());
         return config;
@@ -51,10 +50,10 @@ public class RequestConfigModel {
         }
     }
 
-    UUID user;
-    UUID client;
-    UUID tenant;
-    UUID stage;
+    Long userId;
+    Long clientId;
+    Long tenantId;
+    Long stageId;
     String mode;
     Map<String, String> attributes;
 }

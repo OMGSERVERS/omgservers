@@ -26,11 +26,11 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var tenant = request.getTenant();
-                    final var user = request.getUser();
+                    final var tenantId = request.getTenantId();
+                    final var userId= request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasTenantPermissionOperation
-                            .hasTenantPermission(sqlConnection, shard.shard(), tenant, user, permission));
+                            .hasTenantPermission(sqlConnection, shard.shard(), tenantId, userId, permission));
                 })
                 .map(HasTenantPermissionResponse::new);
     }

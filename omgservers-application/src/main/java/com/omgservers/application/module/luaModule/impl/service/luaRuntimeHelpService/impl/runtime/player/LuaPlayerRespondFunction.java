@@ -12,8 +12,6 @@ import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
 
-import java.util.UUID;
-
 @Slf4j
 @ToString
 @AllArgsConstructor
@@ -22,15 +20,15 @@ public class LuaPlayerRespondFunction extends OneArgFunction {
 
     @ToString.Exclude
     final UserModule userModule;
-    final UUID user;
-    final UUID client;
+    final Long userId;
+    final Long clientId;
 
     @Override
     public LuaValue call(LuaValue arg) {
         final var event = arg.checkjstring();
         final var body = new EventMessageBodyModel(event);
         final var message = MessageModel.create(MessageQualifierEnum.EVENT_MESSAGE, body);
-        final var request = new RespondClientHelpRequest(user, client, message);
+        final var request = new RespondClientHelpRequest(userId, clientId, message);
 
         try {
             userModule.getUserHelpService().respondClient(TIMEOUT, request);

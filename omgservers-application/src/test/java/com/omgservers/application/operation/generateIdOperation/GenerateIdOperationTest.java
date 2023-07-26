@@ -36,7 +36,8 @@ class GenerateIdOperationTest extends Assertions {
     }
 
     @Test
-    void structureTest() {
+    void structureTest() throws InterruptedException {
+        Thread.sleep(1);
         // Skip sequence 0 for test purpose
         generateIdOperation.generateId();
         long id = generateIdOperation.generateId();

@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -29,8 +28,8 @@ import java.util.UUID;
 class SelectVersionOperationImpl implements SelectVersionOperation {
 
     static private final String sql = """
-            select created, modified, uuid, tenant, stage, stage_config, source_code, bytecode, status, errors
-            from $schema.tab_version where uuid = $1
+            select id, created, modified, tenant_id, stage_id, stage_config, source_code, bytecode, status, errors
+            from $schema.tab_version where id = $1
             limit 1
             """;
 
@@ -40,18 +39,18 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
     @Override
     public Uni<VersionModel> selectVersion(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final UUID uuid) {
+                                           final Long id) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (uuid == null) {
-            throw new ServerSideBadRequestException("uuid is null");
+        if (id == null) {
+            throw new ServerSideBadRequestException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -60,10 +59,10 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
                             log.info("Version was found, version={}", version);
                             return version;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("version can't be parsed, uuid=" + uuid);
+                            throw new ServerSideInternalException("version can't be parsed, id=" + id);
                         }
                     } else {
-                        throw new ServerSideNotFoundException(String.format("version was not found, uuid=%s", uuid));
+                        throw new ServerSideNotFoundException(String.format("version was not found, id=%s", id));
                     }
                 });
     }
@@ -72,9 +71,9 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
         VersionModel version = new VersionModel();
         version.setCreated(row.getOffsetDateTime("created").toInstant());
         version.setModified(row.getOffsetDateTime("modified").toInstant());
-        version.setUuid(row.getUUID("uuid"));
-        version.setTenant(row.getUUID("tenant"));
-        version.setStage(row.getUUID("stage"));
+        version.setId(row.getLong("id"));
+        version.setTenantId(row.getLong("tenant_id"));
+        version.setStageId(row.getLong("stage_id"));
         version.setStageConfig(objectMapper.readValue(row.getString("stage_config"), VersionStageConfigModel.class));
         version.setSourceCode(objectMapper.readValue(row.getString("source_code"), VersionSourceCodeModel.class));
         version.setBytecode(objectMapper.readValue(row.getString("bytecode"), VersionBytecodeModel.class));

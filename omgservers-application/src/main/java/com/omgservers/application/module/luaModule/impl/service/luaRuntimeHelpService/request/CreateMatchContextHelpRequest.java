@@ -18,6 +18,6 @@ public class CreateMatchContextHelpRequest {
         // TODO: validate fields
     }
 
-    UUID matchmaker;
-    UUID match;
+    Long matchmakerId;
+    Long matchId;
 }

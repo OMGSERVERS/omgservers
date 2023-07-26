@@ -16,15 +16,17 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class MatchmakerCreatedEventBodyModel extends EventBodyModel {
 
-    static public EventModel createEvent(final UUID uuid,
-                                         final UUID tenant,
-                                         final UUID stage) {
-        final var body = new MatchmakerCreatedEventBodyModel(uuid, tenant, stage);
-        final var event = EventModel.create(uuid, EventQualifierEnum.MATCHMAKER_CREATED, body);
-        return event;
+    Long id;
+    Long tenantId;
+    Long stageId;
+
+    @Override
+    public EventQualifierEnum getQualifier() {
+        return EventQualifierEnum.MATCHMAKER_CREATED;
     }
 
-    UUID uuid;
-    UUID tenant;
-    UUID stage;
+    @Override
+    public Long getGroupId() {
+        return id;
+    }
 }

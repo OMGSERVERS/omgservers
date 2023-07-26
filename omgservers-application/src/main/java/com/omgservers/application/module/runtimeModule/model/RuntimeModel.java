@@ -14,37 +14,16 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RuntimeModel {
 
-    static public RuntimeModel create(final UUID matchmaker,
-                                      final UUID match,
-                                      final RuntimeConfigModel config) {
-        return create(UUID.randomUUID(), matchmaker, match, config);
-    }
-
-    static public RuntimeModel create(final UUID uuid,
-                                      final UUID matchmaker,
-                                      final UUID match,
-                                      final RuntimeConfigModel config) {
-        Instant now = Instant.now();
-
-        final var runtime = new RuntimeModel();
-        runtime.setCreated(now);
-        runtime.setUuid(uuid);
-        runtime.setMatchmaker(matchmaker);
-        runtime.setMatch(match);
-        runtime.setConfig(config);
-        return runtime;
-    }
-
-    static public void validateRuntimeModel(RuntimeModel runtime) {
+    static public void validate(RuntimeModel runtime) {
         if (runtime == null) {
             throw new ServerSideBadRequestException("runtime is null");
         }
     }
 
+    Long id;
     @ToString.Exclude
     Instant created;
-    UUID uuid;
-    UUID matchmaker;
-    UUID match;
+    Long matchmakerId;
+    Long matchId;
     RuntimeConfigModel config;
 }

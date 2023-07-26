@@ -21,6 +21,6 @@ public class SyncTenantPermissionInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return permission.getTenant().toString();
+        return permission.getTenantId().toString();
     }
 }

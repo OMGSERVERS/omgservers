@@ -21,6 +21,6 @@ public class CreateRequestInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return request.getMatchmaker().toString();
+        return request.getMatchmakerId().toString();
     }
 }

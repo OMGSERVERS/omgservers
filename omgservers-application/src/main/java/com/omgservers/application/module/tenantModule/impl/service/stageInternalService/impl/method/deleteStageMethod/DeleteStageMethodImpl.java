@@ -25,9 +25,9 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deleteStageOperation
-                            .deleteStage(sqlConnection, shard.shard(), uuid));
+                            .deleteStage(sqlConnection, shard.shard(), id));
                 })
                 .replaceWithVoid();
     }

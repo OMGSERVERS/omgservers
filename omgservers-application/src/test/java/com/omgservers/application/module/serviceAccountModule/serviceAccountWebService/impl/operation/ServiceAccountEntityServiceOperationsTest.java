@@ -5,6 +5,7 @@ import com.omgservers.application.module.internalModule.impl.operation.selectSer
 import com.omgservers.application.module.internalModule.impl.operation.upsertServiceAccountOperation.UpsertServiceAccountOperation;
 import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +31,15 @@ public class ServiceAccountEntityServiceOperationsTest extends Assertions {
     DeleteServiceAccountOperation deleteServiceAccountOperation;
 
     @Inject
+    ServiceAccountModelFactory serviceAccountModelFactory;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void whenRegularUsage_thenOk() {
         final var username = UUID.randomUUID().toString();
-        final var serviceAccount = ServiceAccountModel.create(username, "passwordhash");
+        final var serviceAccount = serviceAccountModelFactory.create(username, "passwordhash");
 
         syncServiceAccount(serviceAccount);
         final var serviceAccount1 = getServiceAccount(username);
@@ -48,7 +52,7 @@ public class ServiceAccountEntityServiceOperationsTest extends Assertions {
         final var serviceAccount2 = getServiceAccount(username);
         assertEquals(newPasswordHash, serviceAccount2.getPasswordHash());
 
-        deleteServiceAccount(serviceAccount.getUuid());
+        deleteServiceAccount(serviceAccount.getId());
 
         assertThrows(ServerSideNotFoundException.class, () -> getServiceAccount(username));
     }
@@ -65,9 +69,9 @@ public class ServiceAccountEntityServiceOperationsTest extends Assertions {
                 .await().atMost(Duration.ofSeconds(1));
     }
 
-    void deleteServiceAccount(UUID uuid) {
+    void deleteServiceAccount(Long id) {
         pgPool.withTransaction(sqlConnection -> deleteServiceAccountOperation
-                        .deleteServiceAccount(sqlConnection, uuid))
+                        .deleteServiceAccount(sqlConnection, id))
                 .await().atMost(Duration.ofSeconds(1));
     }
 }

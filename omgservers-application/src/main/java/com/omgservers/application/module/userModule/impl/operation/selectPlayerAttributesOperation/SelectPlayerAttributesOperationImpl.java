@@ -21,9 +21,9 @@ import java.util.UUID;
 class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOperation {
 
     static private final String sql = """
-            select player_uuid, created, modified, attribute_name, attribute_value
+            select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_player_attribute
-            where player_uuid = $1
+            where player_id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -31,18 +31,18 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
     @Override
     public Uni<List<AttributeModel>> selectPlayerAttributes(final SqlConnection sqlConnection,
                                                             final int shard,
-                                                            final UUID player) {
+                                                            final Long playerId) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (player == null) {
-            throw new IllegalArgumentException("player is null");
+        if (playerId == null) {
+            throw new IllegalArgumentException("playerId is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(player))
+                .execute(Tuple.of(playerId))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     final var result = new ArrayList<AttributeModel>();
@@ -51,9 +51,9 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                         result.add(attribute);
                     }
                     if (result.size() > 0) {
-                        log.info("Player's attributes were found, player={}, size={}", player, result.size());
+                        log.info("Player's attributes were found, playerId={}, size={}", playerId, result.size());
                     } else {
-                        log.info("Player's attributes were not found, player={}", player);
+                        log.info("Player's attributes were not found, playerId={}", playerId);
                     }
 
                     return result;
@@ -62,7 +62,8 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
 
     AttributeModel createAttribute(Row row) {
         AttributeModel attribute = new AttributeModel();
-        attribute.setPlayer(row.getUUID("player_uuid"));
+        attribute.setId(row.getLong("id"));
+        attribute.setPlayerId(row.getLong("player_id"));
         attribute.setCreated(row.getOffsetDateTime("created").toInstant());
         attribute.setModified(row.getOffsetDateTime("modified").toInstant());
         attribute.setName(row.getString("attribute_name"));

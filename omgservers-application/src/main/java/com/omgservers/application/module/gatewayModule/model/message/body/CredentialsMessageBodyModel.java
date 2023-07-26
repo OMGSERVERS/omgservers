@@ -11,7 +11,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class CredentialsMessageBodyModel extends MessageBodyModel {
 
-    UUID user;
+    Long userId;
     @ToString.Exclude
     String password;
 }

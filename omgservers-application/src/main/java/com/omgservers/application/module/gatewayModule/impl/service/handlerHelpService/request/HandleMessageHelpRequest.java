@@ -19,6 +19,6 @@ public class HandleMessageHelpRequest {
         // TODO: validate fields
     }
 
-    UUID connection;
+    Long connectionId;
     MessageModel message;
 }

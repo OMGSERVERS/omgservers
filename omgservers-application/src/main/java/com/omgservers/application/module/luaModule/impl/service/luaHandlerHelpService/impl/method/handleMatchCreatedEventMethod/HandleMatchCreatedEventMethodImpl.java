@@ -34,15 +34,15 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
     public Uni<Void> handleMatchCreatedEvent(final HandleMatchCreatedEventHelpRequest request) {
         HandleMatchCreatedEventHelpRequest.validate(request);
 
-        final var matchmaker = request.getMatchmaker();
-        final var matchUuid = request.getUuid();
+        final var matchmakerId = request.getMatchmakerId();
+        final var matchId = request.getId();
 
-        return getMatch(matchmaker, matchUuid)
+        return getMatch(matchmakerId, matchId)
                 .flatMap(match -> {
-                    final var tenant = match.getConfig().getTenant();
-                    final var stage = match.getConfig().getStage();
-                    return createLuaRuntime(tenant, stage)
-                            .flatMap(luaRuntime -> createMatchContext(matchmaker, matchUuid)
+                    final var tenantId = match.getConfig().getTenantId();
+                    final var stageId = match.getConfig().getStageId();
+                    return createLuaRuntime(tenantId, stageId)
+                            .flatMap(luaRuntime -> createMatchContext(matchmakerId, matchId)
                                     .flatMap(luaMatchContext -> {
                                         final var mode = match.getConfig().getModeConfig().getName();
                                         final var luaEvent = new LuaMatchCreatedEvent(mode);
@@ -51,20 +51,20 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
                 });
     }
 
-    Uni<MatchModel> getMatch(final UUID matchmaker, final UUID uuid) {
-        final var requests = new GetMatchInternalRequest(matchmaker, uuid);
+    Uni<MatchModel> getMatch(final Long matchmakerId, final Long id) {
+        final var requests = new GetMatchInternalRequest(matchmakerId, id);
         return matchmakerModule.getMatchmakerInternalService().getMatch(requests)
                 .map(GetMatchInternalResponse::getMatch);
     }
 
-    Uni<LuaRuntime> createLuaRuntime(final UUID tenant, final UUID stage) {
-        final var request = new CreateLuaRuntimeHelpRequest(tenant, stage);
+    Uni<LuaRuntime> createLuaRuntime(final Long tenantId, final Long stageId) {
+        final var request = new CreateLuaRuntimeHelpRequest(tenantId, stageId);
         return runtimeHelpService.createLuaRuntime(request)
                 .map(CreateLuaRuntimeHelpResponse::getLuaRuntime);
     }
 
-    Uni<LuaMatchContext> createMatchContext(final UUID matchmaker, final UUID uuid) {
-        final var request = new CreateMatchContextHelpRequest(matchmaker, uuid);
+    Uni<LuaMatchContext> createMatchContext(final Long matchmakerId, final Long id) {
+        final var request = new CreateMatchContextHelpRequest(matchmakerId, id);
         return runtimeHelpService.createMatchContext(request)
                 .map(CreateMatchContextHelpResponse::getLuaMatchContext);
     }

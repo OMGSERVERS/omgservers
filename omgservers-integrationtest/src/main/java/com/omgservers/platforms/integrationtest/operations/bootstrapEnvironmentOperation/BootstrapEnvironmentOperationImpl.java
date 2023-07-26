@@ -2,6 +2,7 @@ package com.omgservers.platforms.integrationtest.operations.bootstrapEnvironment
 
 import com.omgservers.application.module.internalModule.model.index.IndexConfigModel;
 import com.omgservers.application.module.internalModule.model.index.IndexModel;
+import com.omgservers.application.module.internalModule.model.index.IndexModelFactory;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapServerOperation.BootstrapServerOperation;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
@@ -19,8 +20,11 @@ class BootstrapEnvironmentOperationImpl implements BootstrapEnvironmentOperation
 
     static final AtomicBoolean finished = new AtomicBoolean(false);
 
-    final GetConfigOperation getConfigOperation;
     final BootstrapServerOperation bootstrapServerOperation;
+    final GetConfigOperation getConfigOperation;
+
+    final IndexModelFactory indexModelFactory;
+
     final AdminCli adminCli;
 
     @Override
@@ -32,7 +36,7 @@ class BootstrapEnvironmentOperationImpl implements BootstrapEnvironmentOperation
 
         var indexName = getConfigOperation.getConfig().environment().indexName();
         var config = IndexConfigModel.create(getConfigOperation.getInternalAddresses());
-        var index = IndexModel.create(indexName, config);
+        var index = indexModelFactory.create(indexName, config);
 
         var testerUsername = getConfigOperation.getConfig().tester().serviceUsername();
         var testerPassword = getConfigOperation.getConfig().tester().servicePassword();

@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LuaMatchContextFactory {
 
-    public LuaMatchContext build(UUID matchmaker, UUID match) {
+    public LuaMatchContext build(Long matchmakerId, Long matchId) {
         final var context = LuaMatchContext.builder()
                 .build();
 

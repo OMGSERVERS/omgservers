@@ -23,7 +23,7 @@ public class JmsProducer {
         log.info("Producer was created, queueName={}", queueName);
     }
 
-    public void send(String text, UUID group) throws JMSException {
+    public void send(String text, Long group) throws JMSException {
         final var message = context.createTextMessage(text);
         message.setStringProperty("JMSXGroupID", group.toString());
         producer.send(queue, message);

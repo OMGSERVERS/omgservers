@@ -19,8 +19,8 @@ public class UnscheduleJobInternalRequest implements InternalRequest {
         }
     }
 
-    UUID shardKey;
-    UUID entity;
+    Long shardKey;
+    Long entity;
 
     @Override
     public String getRequestShardKey() {

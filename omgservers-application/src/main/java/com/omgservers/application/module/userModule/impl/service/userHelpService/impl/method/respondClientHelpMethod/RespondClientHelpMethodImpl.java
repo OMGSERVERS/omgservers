@@ -12,8 +12,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -26,21 +24,22 @@ class RespondClientHelpMethodImpl implements RespondClientHelpMethod {
     public Uni<Void> respondClient(RespondClientHelpRequest request) {
         RespondClientHelpRequest.validateRespondClientServiceRequest(request);
 
-        final var user = request.getUser();
-        final var clientUuid = request.getClient();
+        final var userId = request.getUserId();
+        final var clientId = request.getClientId();
 
-        return getClient(user, clientUuid)
+        return getClient(userId, clientId)
                 .flatMap(client -> {
                     final var server = client.getServer();
-                    final var connection = client.getConnection();
+                    final var connection = client.getConnectionId();
                     final var message = request.getMessage();
-                    final var respondMessageInternalRequest = new RespondMessageInternalRequest(server, connection, message);
+                    final var respondMessageInternalRequest =
+                            new RespondMessageInternalRequest(server, connection, message);
                     return gatewayModule.getGatewayInternalService().respondMessage(respondMessageInternalRequest);
                 });
     }
 
-    Uni<ClientModel> getClient(UUID user, UUID client) {
-        final var getClientServiceRequest = new GetClientInternalRequest(user, client);
+    Uni<ClientModel> getClient(Long userId, Long clientId) {
+        final var getClientServiceRequest = new GetClientInternalRequest(userId, clientId);
         return userModule.getClientInternalService().getClient(getClientServiceRequest)
                 .map(GetClientInternalResponse::getClient);
     }

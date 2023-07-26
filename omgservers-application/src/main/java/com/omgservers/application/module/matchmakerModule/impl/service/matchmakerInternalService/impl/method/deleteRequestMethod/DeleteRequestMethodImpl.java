@@ -34,19 +34,19 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
-                    return deleteRequest(shard.shard(), uuid);
+                    final var id = request.getId();
+                    return deleteRequest(shard.shard(), id);
                 })
                 .map(DeleteRequestInternalResponse::new);
     }
 
     Uni<Boolean> deleteRequest(final int shard,
-                               final UUID uuid) {
+                               final Long id) {
         return pgPool.withTransaction(sqlConnection -> deleteRequestOperation
-                        .deleteRequest(sqlConnection, shard, uuid))
+                        .deleteRequest(sqlConnection, shard, id))
                 .invoke(deleted -> {
                     if (deleted) {
-                        matchmakerInMemoryCache.removeRequest(uuid);
+                        matchmakerInMemoryCache.removeRequest(id);
                     }
                 });
     }

@@ -18,11 +18,11 @@ public class GetProjectInternalRequest implements InternalRequest {
         }
     }
 
-    UUID tenant;
-    UUID uuid;
+    Long tenantId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return tenant.toString();
+        return tenantId.toString();
     }
 }

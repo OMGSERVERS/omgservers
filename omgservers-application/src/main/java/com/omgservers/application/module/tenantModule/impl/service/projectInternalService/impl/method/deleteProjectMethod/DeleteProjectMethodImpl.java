@@ -25,9 +25,9 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> deleteProjectOperation
-                                    .deleteProject(sqlConnection, shard.shard(), uuid))
+                                    .deleteProject(sqlConnection, shard.shard(), id))
                             .replaceWithVoid();
                 });
     }

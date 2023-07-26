@@ -18,6 +18,6 @@ public class CreateLuaRuntimeHelpRequest {
         // TODO: validate fields
     }
 
-    UUID tenant;
-    UUID stage;
+    Long tenantId;
+    Long stageId;
 }

@@ -18,7 +18,7 @@ public class RespondClientHelpRequest {
         }
     }
 
-    UUID user;
-    UUID client;
+    Long userId;
+    Long clientId;
     MessageModel message;
 }

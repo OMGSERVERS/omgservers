@@ -39,10 +39,10 @@ class CreateLuaRuntimeMethodImpl implements CreateLuaRuntimeMethod {
     public Uni<CreateLuaRuntimeHelpResponse> createLuaRuntime(final CreateLuaRuntimeHelpRequest request) {
         CreateLuaRuntimeHelpRequest.validate(request);
 
-        final var tenant = request.getTenant();
-        final var stage = request.getStage();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
 
-        return getStageVersion(tenant, stage)
+        return getStageVersion(tenantId, stageId)
                 .flatMap(this::getBytecode)
                 .map(versionBytecode -> {
                     final var base64Files = versionBytecode.getFiles();
@@ -58,15 +58,15 @@ class CreateLuaRuntimeMethodImpl implements CreateLuaRuntimeMethod {
                 .map(CreateLuaRuntimeHelpResponse::new);
     }
 
-    Uni<UUID> getStageVersion(final UUID tenant, final UUID stage) {
-        final var request = new GetStageInternalRequest(tenant, stage);
+    Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
+        final var request = new GetStageInternalRequest(tenantId, stageId);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage)
-                .map(StageModel::getVersion);
+                .map(StageModel::getVersionId);
     }
 
-    Uni<VersionBytecodeModel> getBytecode(final UUID uuid) {
-        final var request = new GetBytecodeInternalRequest(uuid);
+    Uni<VersionBytecodeModel> getBytecode(final Long id) {
+        final var request = new GetBytecodeInternalRequest(id);
         return versionModule.getVersionInternalService().getBytecode(request)
                 .map(GetBytecodeInternalResponse::getBytecode);
     }

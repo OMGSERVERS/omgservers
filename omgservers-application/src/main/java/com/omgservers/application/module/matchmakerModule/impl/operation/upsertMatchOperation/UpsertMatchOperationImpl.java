@@ -23,10 +23,10 @@ import java.time.ZoneOffset;
 class UpsertMatchOperationImpl implements UpsertMatchOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_match(matchmaker_uuid, created, modified, uuid, runtime, config)
+            insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, config)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (uuid) do
-            update set modified = $2, config = $6
+            on conflict (id) do
+            update set modified = $4, config = $6
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -63,11 +63,11 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
             var configString = objectMapper.writeValueAsString(match.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.of(
-                            match.getMatchmaker(),
+                            match.getId(),
+                            match.getMatchmakerId(),
                             match.getCreated().atOffset(ZoneOffset.UTC),
                             match.getModified().atOffset(ZoneOffset.UTC),
-                            match.getUuid(),
-                            match.getRuntime(),
+                            match.getRuntimeId(),
                             configString))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

@@ -43,11 +43,10 @@ class CreateMatchMethodImpl implements CreateMatchMethod {
     Uni<Void> createMatch(final int shard, final MatchModel match) {
         return pgPool.withTransaction(sqlConnection -> insertMatchOperation.insertMatch(sqlConnection, shard, match)
                         .flatMap(voidItem -> {
-                            final var matchmaker = match.getMatchmaker();
-                            final var uuid = match.getUuid();
-                            final var origin = MatchCreatedEventBodyModel.createEvent(matchmaker, uuid);
-                            final var event = EventCreatedEventBodyModel.createEvent(origin);
-                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                            final var matchmakerId = match.getMatchmakerId();
+                            final var id = match.getId();
+                            final var eventBody = new MatchCreatedEventBodyModel(matchmakerId, id);
+                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                             return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
                                     .replaceWithVoid();
                         }))

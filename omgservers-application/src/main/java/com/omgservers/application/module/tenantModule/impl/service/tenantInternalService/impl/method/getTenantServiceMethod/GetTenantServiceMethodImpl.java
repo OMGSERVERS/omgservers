@@ -27,9 +27,9 @@ class GetTenantServiceMethodImpl implements GetTenantServiceMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantOperation
-                            .selectTenant(sqlConnection, shard.shard(), uuid));
+                            .selectTenant(sqlConnection, shard.shard(), id));
                 })
                 .map(GetTenantResponse::new);
     }

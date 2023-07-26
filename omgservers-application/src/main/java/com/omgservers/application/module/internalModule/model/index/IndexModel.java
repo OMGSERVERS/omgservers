@@ -7,31 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.*;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndexModel {
 
-    static public IndexModel create(final String name, final IndexConfigModel config) {
-        Instant now = Instant.now();
-
-        IndexModel model = new IndexModel();
-        model.setUuid(UUID.randomUUID());
-        model.setCreated(now);
-        model.setModified(now);
-        model.setName(name);
-        model.setVersion(1L);
-        model.setConfig(config);
-        return model;
-    }
-
-    static public void validateIndexModel(IndexModel indexModel) {
+    static public void validate(IndexModel indexModel) {
         if (indexModel == null) {
             throw new ServerSideBadRequestException("index is null");
         }
-        validateUuid(indexModel.getUuid());
+        validateId(indexModel.getId());
         validateCreated(indexModel.getCreated());
         validateModified(indexModel.getModified());
         validateName(indexModel.getName());
@@ -39,8 +25,8 @@ public class IndexModel {
         IndexConfigModel.validateConfig(indexModel.getConfig());
     }
 
-    static public void validateUuid(UUID uuid) {
-        if (uuid == null) {
+    static public void validateId(Long id) {
+        if (id == null) {
             throw new ServerSideBadRequestException("uuid field is null");
         }
     }
@@ -81,7 +67,7 @@ public class IndexModel {
         }
     }
 
-    UUID uuid;
+    Long id;
     @ToString.Exclude
     Instant created;
     @ToString.Exclude

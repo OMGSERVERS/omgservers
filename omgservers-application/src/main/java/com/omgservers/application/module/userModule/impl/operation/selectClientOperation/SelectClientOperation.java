@@ -11,10 +11,10 @@ import java.util.UUID;
 public interface SelectClientOperation {
     Uni<ClientModel> selectClient(SqlConnection sqlConnection,
                                   int shard,
-                                  UUID uuid);
+                                  Long id);
 
-    default ClientModel selectClient(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectClient(sqlConnection, shard, uuid))
+    default ClientModel selectClient(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectClient(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

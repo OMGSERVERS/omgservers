@@ -21,9 +21,9 @@ import java.util.UUID;
 class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
 
     static private final String sql = """
-            select created, uuid, tenant, stage
+            select id, created, tenant_id, stage_id
             from $schema.tab_matchmaker
-            where uuid = $1
+            where id = $1
             limit 1
             """;
 
@@ -33,17 +33,17 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
     @Override
     public Uni<MatchmakerModel> selectMatchmaker(final SqlConnection sqlConnection,
                                                  final int shard,
-                                                 final UUID uuid) {
+                                                 final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
-        if (uuid == null) {
+        if (id == null) {
             throw new IllegalArgumentException("uuid is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(uuid))
+                .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -51,17 +51,17 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
                         log.info("Matchmaker was found, matchmaker={}", matchmaker);
                         return matchmaker;
                     } else {
-                        throw new ServerSideNotFoundException("matchmaker was not found, uuid=" + uuid);
+                        throw new ServerSideNotFoundException("matchmaker was not found, id=" + id);
                     }
                 });
     }
 
     MatchmakerModel createMatchmaker(Row row) {
         MatchmakerModel matchmakerModel = new MatchmakerModel();
+        matchmakerModel.setId(row.getLong("id"));
         matchmakerModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        matchmakerModel.setUuid(row.getUUID("uuid"));
-        matchmakerModel.setTenant(row.getUUID("tenant"));
-        matchmakerModel.setStage(row.getUUID("stage"));
+        matchmakerModel.setTenantId(row.getLong("tenant_id"));
+        matchmakerModel.setStageId(row.getLong("stage_id"));
         return matchmakerModel;
     }
 }

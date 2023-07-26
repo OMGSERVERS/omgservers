@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation {
 
     static private final String sql = """
-            select uuid, created, modified, username, password_hash
+            select id, created, modified, username, password_hash
             from internal.tab_service_account where username = $1 limit 1
             """;
 
@@ -49,7 +49,7 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
 
     ServiceAccountModel createServiceAccount(Row row) {
         ServiceAccountModel serviceAccount = new ServiceAccountModel();
-        serviceAccount.setUuid(row.getUUID("uuid"));
+        serviceAccount.setId(row.getLong("id"));
         serviceAccount.setCreated(row.getOffsetDateTime("created").toInstant());
         serviceAccount.setModified(row.getOffsetDateTime("modified").toInstant());
         serviceAccount.setUsername(row.getString("username"));

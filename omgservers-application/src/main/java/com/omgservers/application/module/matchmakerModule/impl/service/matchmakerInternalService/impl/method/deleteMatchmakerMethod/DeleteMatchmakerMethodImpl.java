@@ -34,21 +34,20 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var uuid = request.getUuid();
-                    return deleteMatchmaker(shard.shard(), uuid);
+                    final var id = request.getId();
+                    return deleteMatchmaker(shard.shard(), id);
                 })
                 .map(DeleteMatchmakerInternalResponse::new);
     }
 
     Uni<Boolean> deleteMatchmaker(final int shard,
-                                  final UUID uuid) {
+                                  final Long id) {
         return pgPool.withTransaction(sqlConnection -> deleteMatchmakerOperation
-                .deleteMatchmaker(sqlConnection, shard, uuid)
+                .deleteMatchmaker(sqlConnection, shard, id)
                 .call(deleted -> {
                     if (deleted) {
-                        final var origin = MatchmakerDeletedEventBodyModel.createEvent(uuid);
-                        final var event = EventCreatedEventBodyModel.createEvent(origin);
-                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                        final var eventBody = new MatchmakerDeletedEventBodyModel(id);
+                        final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                         return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                     } else {
                         return Uni.createFrom().voidItem();

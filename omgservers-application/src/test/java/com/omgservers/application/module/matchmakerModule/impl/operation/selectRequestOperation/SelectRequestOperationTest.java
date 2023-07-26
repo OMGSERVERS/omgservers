@@ -3,9 +3,13 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.select
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation.InsertRequestOperation;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
+import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -30,46 +34,55 @@ class SelectRequestOperationTest extends Assertions {
     InsertRequestOperation insertRequestOperation;
 
     @Inject
+    MatchmakerModelFactory matchmakerModelFactory;
+    
+    @Inject
+    RequestModelFactory requestModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenMatchmakerRequest_whenSelectMatchmakerRequest_thenSelected() {
         final var shard = 0;
-        final var matchmaker = MatchmakerModel.create(tenantUuid(), stageUuid());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userUuid(), clientUuid(), tenantUuid(), stageUuid(), modeName());
-        final var matchmakerRequest1 = RequestModel.create(matchmaker.getUuid(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
+        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
         insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
-        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getUuid());
+        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getId());
         assertEquals(matchmakerRequest1, matchmakerRequest2);
     }
 
     @Test
     void givenUnknownUuid_whenSelectMatchmakerRequest_then() {
         final var shard = 0;
-        final var uuid = UUID.randomUUID();
+        final var id = generateIdOperation.generateId();
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
-                .selectRequest(TIMEOUT, pgPool, shard, uuid));
+                .selectRequest(TIMEOUT, pgPool, shard, id));
         log.info("Exception: {}", exception.getMessage());
     }
 
-    UUID userUuid() {
-        return UUID.randomUUID();
+    Long userId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID clientUuid() {
-        return UUID.randomUUID();
+    Long clientId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID tenantUuid() {
-        return UUID.randomUUID();
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID stageUuid() {
-        return UUID.randomUUID();
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     String modeName() {

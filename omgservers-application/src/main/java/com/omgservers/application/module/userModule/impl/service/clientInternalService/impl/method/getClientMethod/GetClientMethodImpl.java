@@ -31,7 +31,7 @@ class GetClientMethodImpl implements GetClientMethod {
                         throw new ServerSideGoneException("wrong shard server, shard=" + shardModel.shard());
                     }
 
-                    final var client = request.getClient();
+                    final var client = request.getClientId();
                     final var shard = shardModel.shard();
                     return pgPool.withTransaction(sqlConnection -> selectClientOperation
                             .selectClient(sqlConnection, shard, client));

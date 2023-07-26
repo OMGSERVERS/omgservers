@@ -20,8 +20,8 @@ public class ScheduleJobInternalRequest implements InternalRequest {
         }
     }
 
-    UUID shardKey;
-    UUID entity;
+    Long shardKey;
+    Long entity;
     JobType type;
 
     @Override

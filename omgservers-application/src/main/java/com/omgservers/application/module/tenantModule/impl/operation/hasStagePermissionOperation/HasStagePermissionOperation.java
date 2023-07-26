@@ -11,17 +11,18 @@ import java.util.UUID;
 public interface HasStagePermissionOperation {
     Uni<Boolean> hasStagePermission(SqlConnection sqlConnection,
                                     int shard,
-                                    UUID stage,
-                                    UUID user,
+                                    Long stageId,
+                                    Long userId,
                                     StagePermissionEnum permission);
 
     default Boolean hasStagePermission(long timeout,
                                        PgPool pgPool,
                                        int shard,
-                                       UUID stage,
-                                       UUID user,
+                                       Long stageId,
+                                       Long userId,
                                        StagePermissionEnum permission) {
-        return pgPool.withTransaction(sqlConnection -> hasStagePermission(sqlConnection, shard, stage, user, permission))
+        return pgPool.withTransaction(sqlConnection ->
+                        hasStagePermission(sqlConnection, shard, stageId, userId, permission))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

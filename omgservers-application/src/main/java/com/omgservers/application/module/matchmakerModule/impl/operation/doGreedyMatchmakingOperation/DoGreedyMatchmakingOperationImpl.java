@@ -3,8 +3,10 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.doGree
 import com.omgservers.application.module.matchmakerModule.model.match.MatchGroupModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.versionModule.model.VersionModeModel;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,18 +14,20 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
+    final MatchModelFactory matchModelFactory;
+    final GenerateIdOperation generateIdOperation;
+
     @Override
-    public GreedyMatchmakingResult doGreedyMatchmaking(final UUID tenant,
-                                                       final UUID stage,
-                                                       final UUID version,
-                                                       final UUID matchmaker,
+    public GreedyMatchmakingResult doGreedyMatchmaking(final Long tenantId,
+                                                       final Long stageId,
+                                                       final Long versionId,
+                                                       final Long matchmakerId,
                                                        final VersionModeModel modeConfig,
                                                        final List<RequestModel> activeRequests,
                                                        final List<MatchModel> launchedMatches) {
@@ -47,8 +51,8 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
             }
 
             if (!matched) {
-                final var matchConfig = MatchConfigModel.create(tenant, stage, version, modeConfig);
-                final var newMatch = MatchModel.create(matchmaker, matchConfig);
+                final var matchConfig = MatchConfigModel.create(tenantId, stageId, versionId, modeConfig);
+                final var newMatch = matchModelFactory.create(matchmakerId, generateIdOperation.generateId(), matchConfig);
                 temporaryMatches.add(newMatch);
 
                 if (matchRequestWithMatch(request, newMatch)) {

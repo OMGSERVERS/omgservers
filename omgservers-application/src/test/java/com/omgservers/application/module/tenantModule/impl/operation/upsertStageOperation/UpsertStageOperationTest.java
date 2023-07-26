@@ -1,13 +1,16 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation;
 
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
+import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
 import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -33,27 +36,39 @@ class UpsertStageOperationTest extends Assertions {
     UpsertStageOperation upsertStageOperation;
 
     @Inject
+    TenantModelFactory tenantModelFactory;
+
+    @Inject
+    ProjectModelFactory projectModelFactory;
+
+    @Inject
+    StageModelFactory stageModelFactory;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     PgPool pgPool;
 
     @Test
     void givenProject_whenUpsertStage_thenInserted() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = StageModel.create(project.getUuid());
+        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
         assertTrue(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
     }
 
     @Test
     void givenStage_whenUpsertStage_thenUpdated() {
         final var shard = 0;
-        final var tenant = TenantModel.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = ProjectModel.create(tenant.getUuid(), ownerUuid(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = StageModel.create(project.getUuid());
+        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
 
         assertFalse(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
@@ -62,17 +77,25 @@ class UpsertStageOperationTest extends Assertions {
     @Test
     void givenUnknownProjectUuid_whenUpsertStage_thenServerSideConflictException() {
         final var shard = 0;
-        final var stage = StageModel.create(projectUuid());
+        final var stage = stageModelFactory.create(projectId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
         log.info("Exception: {}", exception.getMessage());
     }
 
-    UUID projectUuid() {
-        return UUID.randomUUID();
+    Long projectId() {
+        return generateIdOperation.generateId();
     }
 
-    UUID ownerUuid() {
-        return UUID.randomUUID();
+    Long ownerId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long matchmakerId() {
+        return generateIdOperation.generateId();
     }
 }

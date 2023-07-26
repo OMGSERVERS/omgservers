@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 public interface SelectRuntimeOperation {
-    Uni<RuntimeModel> selectRuntime(SqlConnection sqlConnection, int shard, UUID uuid);
+    Uni<RuntimeModel> selectRuntime(SqlConnection sqlConnection, int shard, Long id);
 
-    default RuntimeModel selectRuntime(long timeout, PgPool pgPool, int shard, UUID uuid) {
-        return pgPool.withTransaction(sqlConnection -> selectRuntime(sqlConnection, shard, uuid))
+    default RuntimeModel selectRuntime(long timeout, PgPool pgPool, int shard, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectRuntime(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

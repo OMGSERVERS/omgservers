@@ -1,6 +1,7 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
 import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
 import com.omgservers.application.module.internalModule.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
@@ -32,18 +33,18 @@ class SignInMessageHandlerImpl implements MessageHandler {
     }
 
     @Override
-    public Uni<Void> handle(UUID connection, MessageModel message) {
+    public Uni<Void> handle(Long connectionId, MessageModel message) {
         final var messageBody = (SignInMessageBodyModel) message.getBody();
-        final var tenant = messageBody.getTenant();
-        final var stage = messageBody.getStage();
+        final var tenant = messageBody.getTenantId();
+        final var stage = messageBody.getStageId();
         final var stageSecret = messageBody.getSecret();
-        final var user = messageBody.getUser();
+        final var user = messageBody.getUserId();
         final var userPassword = messageBody.getPassword();
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
-        final var event = SignInRequestedEventBodyModel.createEvent(serverUri, connection, tenant, stage, stageSecret, user, userPassword);
-        final var request = new FireEventInternalRequest(event);
-        return internalModule.getEventInternalService().fireEvent(request)
+        final var event = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
+        final var request = new FireEventHelpRequest(event);
+        return internalModule.getEventHelpService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

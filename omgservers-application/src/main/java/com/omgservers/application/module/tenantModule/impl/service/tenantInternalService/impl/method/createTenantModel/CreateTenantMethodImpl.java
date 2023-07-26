@@ -43,10 +43,10 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
         return pgPool.withTransaction(sqlConnection ->
                 insertTenantOperation.insertTenant(sqlConnection, shard, tenant)
                         .call(voidItem -> {
-                            final var uuid = tenant.getUuid();
-                            final var origin = TenantCreatedEventBodyModel.createEvent(uuid);
-                            final var event = EventCreatedEventBodyModel.createEvent(origin);
-                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, event);
+                            final var id = tenant.getId();
+                            final var eventBody = new TenantCreatedEventBodyModel(id);
+                            final var insertEventInternalRequest =
+                                    new InsertEventHelpRequest(sqlConnection, eventBody);
                             return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                         }));
     }

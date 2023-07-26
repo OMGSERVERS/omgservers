@@ -21,6 +21,6 @@ public class CreateMatchmakerInternalRequest implements InternalRequest {
 
     @Override
     public String getRequestShardKey() {
-        return matchmaker.getUuid().toString();
+        return matchmaker.getId().toString();
     }
 }
