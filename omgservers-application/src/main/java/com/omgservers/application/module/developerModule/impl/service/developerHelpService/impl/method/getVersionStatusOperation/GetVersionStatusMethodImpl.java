@@ -1,4 +1,4 @@
-package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.getVersionStatusDeveloperOperation;
+package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.getVersionStatusOperation;
 
 import com.omgservers.application.module.versionModule.VersionModule;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.GetVersionStatusHelpRequest;

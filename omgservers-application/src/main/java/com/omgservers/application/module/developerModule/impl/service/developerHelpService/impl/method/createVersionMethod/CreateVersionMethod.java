@@ -1,4 +1,4 @@
-package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionDeveloperMethod;
+package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod;
 
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateVersionHelpResponse;

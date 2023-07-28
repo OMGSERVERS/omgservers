@@ -57,8 +57,8 @@ public class DeveloperCli {
         return rawToken;
     }
 
-    public CreateProjectHelpResponse createProject(Long tenantId, String title) {
-        final var createProjectDeveloperRequest = new CreateProjectHelpRequest(tenantId, title);
+    public CreateProjectHelpResponse createProject(Long tenantId) {
+        final var createProjectDeveloperRequest = new CreateProjectHelpRequest(tenantId);
         final var response = clientForAuthenticatedAccess.createProject(TIMEOUT, rawToken, createProjectDeveloperRequest);
         return response;
     }

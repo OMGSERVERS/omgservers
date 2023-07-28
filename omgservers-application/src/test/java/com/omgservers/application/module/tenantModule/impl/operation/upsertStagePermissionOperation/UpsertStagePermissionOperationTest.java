@@ -68,7 +68,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(project.getId(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
 
         final var permission = stagePermissionModelFactory.create(stage.getId(), userId(), StagePermissionEnum.CREATE_VERSION);
@@ -82,7 +82,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(project.getId(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
         final var permission = stagePermissionModelFactory.create(stage.getId(), userId(), StagePermissionEnum.CREATE_VERSION);
         upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);

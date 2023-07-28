@@ -1,4 +1,4 @@
-package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectDeveloperMethod;
+package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectMethod;
 
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateProjectHelpResponse;

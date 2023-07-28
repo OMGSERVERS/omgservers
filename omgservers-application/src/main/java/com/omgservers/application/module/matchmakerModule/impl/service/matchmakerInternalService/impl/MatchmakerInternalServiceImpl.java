@@ -1,6 +1,5 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl;
 
-import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchmakerOperation.DeleteMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.getMatchmakerServiceApiClientOperation.GetMatchmakerServiceApiClientOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.MatchmakerInternalService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createMatchmakerMethod.CreateMatchmakerMethod;

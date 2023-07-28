@@ -40,11 +40,6 @@ public class TenantWebServiceImpl implements TenantWebService {
     }
 
     @Override
-    public Uni<Void> createTenant(CreateTenantInternalRequest request) {
-        return tenantInternalService.createTenant(request);
-    }
-
-    @Override
     public Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request) {
         return tenantInternalService.syncTenant(request);
     }
@@ -67,11 +62,6 @@ public class TenantWebServiceImpl implements TenantWebService {
     @Override
     public Uni<GetProjectInternalResponse> getProject(GetProjectInternalRequest request) {
         return projectInternalService.getProject(request);
-    }
-
-    @Override
-    public Uni<Void> createProject(CreateProjectInternalRequest request) {
-        return projectInternalService.createProject(request);
     }
 
     @Override

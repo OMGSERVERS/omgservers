@@ -11,8 +11,6 @@ public interface TenantInternalService {
 
     Uni<GetTenantResponse> getTenant(GetTenantInternalRequest request);
 
-    Uni<Void> createTenant(CreateTenantInternalRequest request);
-
     Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request);
 
     Uni<Void> deleteTenant(DeleteTenantInternalRequest request);

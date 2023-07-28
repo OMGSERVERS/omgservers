@@ -1,10 +1,8 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl;
 
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.TenantServiceApiClient;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.createTenantModel.CreateTenantMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod.HasTenantPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod.SyncTenantPermissionMethod;
-import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.TenantInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.deleteTenantMethod.DeleteTenantMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.getTenantServiceMethod.GetTenantServiceMethod;
@@ -36,7 +34,6 @@ public class TenantInternalServiceImpl implements TenantInternalService {
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final HasTenantPermissionMethod hasTenantPermissionMethod;
     final GetTenantServiceMethod getTenantMethod;
-    final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
     final SyncTenantMethod syncTenantMethod;
 
@@ -47,15 +44,6 @@ public class TenantInternalServiceImpl implements TenantInternalService {
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getTenant,
                 getTenantMethod::getTenant);
-    }
-
-    @Override
-    public Uni<Void> createTenant(CreateTenantInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateTenantInternalRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::createTenant,
-                createTenantMethod::createTenant);
     }
 
     @Override

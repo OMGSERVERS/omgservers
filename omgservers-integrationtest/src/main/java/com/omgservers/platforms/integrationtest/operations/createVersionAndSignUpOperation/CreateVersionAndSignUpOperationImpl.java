@@ -38,7 +38,7 @@ class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOpera
         final var developerPassword = createNewDeveloperAdminResponse.getPassword();
         developerCli.createToken(developerUser, developerPassword);
 
-        final var createProjectDeveloperResponse = developerCli.createProject(tenantId, projectTitle());
+        final var createProjectDeveloperResponse = developerCli.createProject(tenantId);
         final var projectId = createProjectDeveloperResponse.getProjectId();
         final var stageId = createProjectDeveloperResponse.getStageId();
         final var secret = createProjectDeveloperResponse.getSecret();
@@ -75,9 +75,5 @@ class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOpera
 
     String tenantTitle() {
         return "title-" + UUID.randomUUID();
-    }
-
-    String projectTitle() {
-        return "project-" + UUID.randomUUID();
     }
 }

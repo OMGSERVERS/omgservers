@@ -62,7 +62,7 @@ class SelectProjectStagesOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        final var stage1 = stageModelFactory.create(project.getId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
+        final var stage1 = stageModelFactory.create(project.getId(), matchmakerId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage1);
 
         final var stage2 = selectStageOperation.selectStage(TIMEOUT, pgPool, shard, stage1.getId());

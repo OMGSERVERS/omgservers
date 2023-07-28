@@ -1,4 +1,4 @@
-package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenDeveloperMethod;
+package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenMethod;
 
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateTokenHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateTokenHelpResponse;

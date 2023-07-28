@@ -19,5 +19,4 @@ public class CreateProjectHelpRequest {
     }
 
     Long tenantId;
-    String title;
 }

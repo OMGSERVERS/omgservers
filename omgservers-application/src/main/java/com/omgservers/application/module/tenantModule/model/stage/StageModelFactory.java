@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 
 @Slf4j
@@ -16,17 +17,15 @@ public class StageModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public StageModel create(final Long projectId,
-                             final Long versionId,
-                             final String secret,
                              final Long matchmakerId,
                              final StageConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, projectId, versionId, secret, matchmakerId, config);
+        final var secret = String.valueOf(new SecureRandom().nextLong());
+        return create(id, projectId, secret, matchmakerId, config);
     }
 
     public StageModel create(final Long id,
                              final Long projectId,
-                             final Long versionId,
                              final String secret,
                              final Long matchmakerId,
                              final StageConfigModel config) {
@@ -53,7 +52,6 @@ public class StageModelFactory {
         stage.setProjectId(projectId);
         stage.setCreated(now);
         stage.setModified(now);
-        stage.setVersionId(versionId);
         stage.setSecret(secret);
         stage.setMatchmakerId(matchmakerId);
         stage.setConfig(config);

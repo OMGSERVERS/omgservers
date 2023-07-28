@@ -40,12 +40,6 @@ class TenantServiceApiImpl implements TenantServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> createTenant(CreateTenantInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::createTenant);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncTenant);
     }
@@ -72,12 +66,6 @@ class TenantServiceApiImpl implements TenantServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetProjectInternalResponse> getProject(GetProjectInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getProject);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> createProject(CreateProjectInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::createProject);
     }
 
     @Override

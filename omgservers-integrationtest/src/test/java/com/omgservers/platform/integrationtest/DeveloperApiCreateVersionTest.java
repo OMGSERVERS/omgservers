@@ -42,7 +42,7 @@ public class DeveloperApiCreateVersionTest extends Assertions {
         final var password = createNewDeveloperAdminResponse.getPassword();
         developerCli.createToken(userId, password);
 
-        final var createProjectDeveloperResponse = developerCli.createProject(tenantUuid, projectTitle());
+        final var createProjectDeveloperResponse = developerCli.createProject(tenantUuid);
         final var stageId = createProjectDeveloperResponse.getStageId();
 
         Thread.sleep(5000);
@@ -59,9 +59,5 @@ public class DeveloperApiCreateVersionTest extends Assertions {
 
     String tenantTitle() {
         return "tenant-" + UUID.randomUUID();
-    }
-
-    String projectTitle() {
-        return "project-" + UUID.randomUUID();
     }
 }

@@ -3,8 +3,8 @@ package com.omgservers.application.module.adminModule.impl.service.adminHelpServ
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantInternalRequest;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.CreateTenantInternalRequest;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -27,9 +27,9 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
     public Uni<CreateTenantHelpResponse> createTenant(final CreateTenantHelpRequest request) {
         CreateTenantHelpRequest.validate(request);
 
-        final var tenant = tenantModelFactory.create(generateIdOperation.generateId(), TenantConfigModel.create());
-        final var createTenantServiceRequest = new CreateTenantInternalRequest(tenant);
-        return tenantModule.getTenantInternalService().createTenant(createTenantServiceRequest)
+        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
+        final var syncTenantInternalRequest = new SyncTenantInternalRequest(tenant);
+        return tenantModule.getTenantInternalService().syncTenant(syncTenantInternalRequest)
                 .replaceWith(new CreateTenantHelpResponse(tenant.getId()));
     }
 }

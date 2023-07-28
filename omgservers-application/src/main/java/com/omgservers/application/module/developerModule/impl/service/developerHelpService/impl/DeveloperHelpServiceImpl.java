@@ -1,10 +1,10 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl;
 
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.DeveloperHelpService;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectDeveloperMethod.CreateProjectMethod;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenDeveloperMethod.CreateTokenMethod;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionDeveloperMethod.CreateVersionMethod;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.getVersionStatusDeveloperOperation.GetVersionStatusMethod;
+import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectMethod.CreateProjectMethod;
+import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenMethod.CreateTokenMethod;
+import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod.CreateVersionMethod;
+import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.getVersionStatusOperation.GetVersionStatusMethod;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateTokenHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;

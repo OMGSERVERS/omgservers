@@ -34,15 +34,6 @@ public interface TenantServiceApi {
     }
 
     @PUT
-    @Path("/create-tenant")
-    Uni<Void> createTenant(CreateTenantInternalRequest request);
-
-    default void createTenant(long timeout, CreateTenantInternalRequest request) {
-        createTenant(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
-    @PUT
     @Path("/sync-tenant")
     Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request);
 
@@ -84,15 +75,6 @@ public interface TenantServiceApi {
 
     default GetProjectInternalResponse getProject(long timeout, GetProjectInternalRequest request) {
         return getProject(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
-    @PUT
-    @Path("/create-project")
-    Uni<Void> createProject(CreateProjectInternalRequest request);
-
-    default void createProject(long timeout, CreateProjectInternalRequest request) {
-        createProject(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 

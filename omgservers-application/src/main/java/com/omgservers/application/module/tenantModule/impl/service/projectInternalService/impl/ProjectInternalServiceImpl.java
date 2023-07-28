@@ -2,10 +2,8 @@ package com.omgservers.application.module.tenantModule.impl.service.projectInter
 
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.TenantServiceApiClient;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.createProjectMethod.CreateProjectMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.hasProjectPermissionMethod.HasProjectPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod.SyncProjectPermissionMethod;
-import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.*;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.GetProjectInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.HasProjectPermissionInternalResponse;
@@ -31,7 +29,6 @@ class ProjectInternalServiceImpl implements ProjectInternalService {
 
     final SyncProjectPermissionMethod syncProjectPermissionMethod;
     final HasProjectPermissionMethod hasProjectPermissionMethod;
-    final CreateProjectMethod createProjectMethod;
     final DeleteProjectMethod deleteProjectMethod;
     final SyncProjectMethod syncProjectMethod;
     final GetProjectMethod getProjectMethod;
@@ -47,15 +44,6 @@ class ProjectInternalServiceImpl implements ProjectInternalService {
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getProject,
                 getProjectMethod::getProject);
-    }
-
-    @Override
-    public Uni<Void> createProject(CreateProjectInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateProjectInternalRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::createProject,
-                createProjectMethod::createProject);
     }
 
     @Override

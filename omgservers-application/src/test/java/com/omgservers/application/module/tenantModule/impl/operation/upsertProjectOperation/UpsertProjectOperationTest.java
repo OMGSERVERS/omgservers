@@ -17,7 +17,7 @@ import jakarta.inject.Inject;
 
 @Slf4j
 @QuarkusTest
-class InsertStageOperationTest extends Assertions {
+class UpsertProjectOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject

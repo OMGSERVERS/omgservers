@@ -11,8 +11,6 @@ public interface ProjectInternalService {
 
     Uni<GetProjectInternalResponse> getProject(GetProjectInternalRequest request);
 
-    Uni<Void> createProject(CreateProjectInternalRequest request);
-
     Uni<SyncProjectInternalResponse> syncProject(SyncProjectInternalRequest request);
 
     Uni<Void> deleteProject(DeleteProjectInternalRequest request);

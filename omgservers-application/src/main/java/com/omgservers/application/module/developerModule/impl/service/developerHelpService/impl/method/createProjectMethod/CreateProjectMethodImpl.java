@@ -1,6 +1,8 @@
-package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectDeveloperMethod;
+package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectMethod;
 
 import com.omgservers.application.module.tenantModule.TenantModule;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
 import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
 import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
 import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
@@ -8,11 +10,8 @@ import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateProjectHelpResponse;
 import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
 import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
 import com.omgservers.application.exception.ServerSideForbiddenException;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.CreateProjectInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
@@ -23,9 +22,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.security.SecureRandom;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -76,13 +72,15 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     Uni<CreateProjectHelpResponse> createProject(final Long tenantId, final Long userId) {
         final var project = projectModelFactory.create(tenantId, userId, ProjectConfigModel.create());
-        final var stage = stageModelFactory.create(project.getId(),
-                null,
-                String.valueOf(new SecureRandom().nextLong()),
-                generateIdOperation.generateId(),
-                new StageConfigModel());
-        final var request = new CreateProjectInternalRequest(project, stage);
-        return tenantModule.getProjectInternalService().createProject(request)
-                .replaceWith(new CreateProjectHelpResponse(project.getId(), stage.getId(), stage.getSecret()));
+        final var syncProjectInternalRequest = new SyncProjectInternalRequest(project);
+        return tenantModule.getProjectInternalService().syncProject(syncProjectInternalRequest)
+                .flatMap(response -> {
+                    final var stage = stageModelFactory.create(project.getId(),
+                            generateIdOperation.generateId(),
+                            new StageConfigModel());
+                    final var syncStageInternalRequest = new SyncStageInternalRequest(tenantId, stage);
+                    return tenantModule.getStageInternalService().syncStage(syncStageInternalRequest)
+                            .replaceWith(new CreateProjectHelpResponse(project.getId(), stage.getId(), stage.getSecret()));
+                });
     }
 }

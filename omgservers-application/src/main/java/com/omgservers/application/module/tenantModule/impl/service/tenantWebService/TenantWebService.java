@@ -20,8 +20,6 @@ public interface TenantWebService {
 
     Uni<GetTenantResponse> getTenant(GetTenantInternalRequest request);
 
-    Uni<Void> createTenant(CreateTenantInternalRequest request);
-
     Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionInternalRequest request);
 
     Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request);
@@ -31,8 +29,6 @@ public interface TenantWebService {
     Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionInternalRequest request);
 
     Uni<GetProjectInternalResponse> getProject(GetProjectInternalRequest request);
-
-    Uni<Void> createProject(CreateProjectInternalRequest request);
 
     Uni<SyncProjectInternalResponse> syncProject(SyncProjectInternalRequest request);
 
