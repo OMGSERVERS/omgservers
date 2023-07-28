@@ -31,10 +31,10 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
 
     @Override
     public LuaValue call(LuaValue arg1, LuaValue arg2) {
-        String name = arg1.checkjstring();
-        String value = arg2.checkjstring();
+        String name = arg1.tojstring();
+        String value = arg2.tojstring();
 
-        final var attribute = attributeModelFactory.create(generateIdOperation.generateId(), playerId, name, value);
+        final var attribute = attributeModelFactory.create(playerId, name, value);
         final var syncAttributeServiceRequest = new SyncAttributeInternalRequest(userId, attribute);
 
         try {
