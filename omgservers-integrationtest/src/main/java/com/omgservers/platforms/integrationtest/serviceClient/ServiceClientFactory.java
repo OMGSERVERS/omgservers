@@ -2,17 +2,12 @@ package com.omgservers.platforms.integrationtest.serviceClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
-import com.omgservers.platforms.integrationtest.testClient.TestClient;
-import com.omgservers.platforms.integrationtest.testClient.WebsocketClient;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.websocket.ClientEndpointConfig;
-import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.DeploymentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Random;
 
 @Slf4j
