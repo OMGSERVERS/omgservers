@@ -1,4 +1,4 @@
-package com.omgservers.application.module.runtimeModule.impl.operation.insertRuntimeOperation;
+package com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
@@ -21,20 +21,23 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class InsertRuntimeOperationImpl implements InsertRuntimeOperation {
+class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime(id, created, matchmaker_id, match_id, config)
-            values($1, $2, $3, $4, $5)
+            insert into $schema.tab_runtime(id, created, modified, matchmaker_id, match_id, config)
+            values($1, $2, $3, $4, $5, $6)
+            on conflict (id) do
+            update set modified = $3, matchmaker_id = $4, match_id = $5, config = $6
+            returning xmax::text::int = 0 as inserted
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> insertRuntime(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final RuntimeModel runtime) {
+    public Uni<Boolean> upsertRuntime(final SqlConnection sqlConnection,
+                                      final int shard,
+                                      final RuntimeModel runtime) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -42,16 +45,22 @@ class InsertRuntimeOperationImpl implements InsertRuntimeOperation {
             throw new ServerSideBadRequestException("runtime is null");
         }
 
-        return insertQuery(sqlConnection, shard, runtime)
-                .invoke(voidItem -> log.info("Runtime was inserted, {}", runtime))
+        return upsertQuery(sqlConnection, shard, runtime)
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("Runtime was inserted, shard={}, runtime={}", shard, runtime);
+                    } else {
+                        log.info("Runtime was updated, shard={}, runtime={}", shard, runtime);
+                    }
+                })
                 .onFailure(PgException.class)
                 .transform(t -> new ServerSideConflictException(String
                         .format("unhandled PgException, %s, runtime=%s", t.getMessage(), runtime)));
     }
 
-    Uni<Void> insertQuery(final SqlConnection sqlConnection,
-                          final int shard,
-                          final RuntimeModel runtime) {
+    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
+                             final int shard,
+                             final RuntimeModel runtime) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(runtime.getConfig());
@@ -59,11 +68,12 @@ class InsertRuntimeOperationImpl implements InsertRuntimeOperation {
                     .execute(Tuple.from(new ArrayList<>() {{
                         add(runtime.getId());
                         add(runtime.getCreated().atOffset(ZoneOffset.UTC));
+                        add(runtime.getModified().atOffset(ZoneOffset.UTC));
                         add(runtime.getMatchmakerId());
                         add(runtime.getMatchId());
                         add(configString);
                     }}))
-                    .replaceWithVoid();
+                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

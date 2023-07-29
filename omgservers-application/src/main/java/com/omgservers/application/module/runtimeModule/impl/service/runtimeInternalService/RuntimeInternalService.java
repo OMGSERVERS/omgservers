@@ -1,6 +1,6 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService;
 
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
@@ -9,9 +9,9 @@ import io.smallrye.mutiny.Uni;
 
 public interface RuntimeInternalService {
 
-    Uni<Void> createRuntime(CreateRuntimeInternalRequest request);
-
     Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request);
+
+    Uni<Void> syncRuntime(SyncRuntimeInternalRequest request);
 
     Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request);
 }

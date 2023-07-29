@@ -1,7 +1,7 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.selectRuntimeOperation;
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.runtimeModule.impl.operation.insertRuntimeOperation.InsertRuntimeOperation;
+import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
 import com.omgservers.application.module.runtimeModule.model.RuntimeModelFactory;
 import com.omgservers.application.module.runtimeModule.model.RuntimeTypeEnum;
@@ -22,7 +22,7 @@ class SelectRuntimeOperationTest extends Assertions {
     SelectRuntimeOperation selectRuntimeOperation;
 
     @Inject
-    InsertRuntimeOperation insertRuntimeOperation;
+    UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -37,7 +37,7 @@ class SelectRuntimeOperationTest extends Assertions {
     void givenRuntime_whenSelectRuntime_thenSelected() {
         final var shard = 0;
         final var runtime1 = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeConfigModel.create(RuntimeTypeEnum.EMBEDDED_LUA));
-        insertRuntimeOperation.insertRuntime(TIMEOUT, pgPool, shard, runtime1);
+        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         final var runtime2 = selectRuntimeOperation.selectRuntime(TIMEOUT, pgPool, shard, runtime1.getId());
         assertEquals(runtime1, runtime2);

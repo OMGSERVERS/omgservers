@@ -1,6 +1,6 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
@@ -25,8 +25,8 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> createRuntime(CreateRuntimeInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::createRuntime);
+    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncRuntime);
     }
 
     @Override

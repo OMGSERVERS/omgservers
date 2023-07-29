@@ -3,10 +3,10 @@ package com.omgservers.application.module.runtimeModule.impl.service.runtimeInte
 import com.omgservers.application.module.runtimeModule.impl.operation.getRuntimeServiceApiClientOperation.GetRuntimeServiceApiClientOperation;
 import com.omgservers.application.module.runtimeModule.impl.operation.getRuntimeServiceApiClientOperation.RuntimeServiceApiClient;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.RuntimeInternalService;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.createRuntimeMethod.CreateRuntimeMethod;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod.SyncRuntimeMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteRuntimeMethod.DeleteRuntimeMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.getRuntimeMethod.GetRuntimeMethod;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
@@ -26,17 +26,17 @@ public class RuntimeInternalServiceImpl implements RuntimeInternalService {
     final GetRuntimeServiceApiClientOperation getRuntimeServiceApiClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
-    final CreateRuntimeMethod createRuntimeMethod;
+    final SyncRuntimeMethod syncRuntimeMethod;
     final DeleteRuntimeMethod deleteRuntimeMethod;
     final GetRuntimeMethod getRuntimeMethod;
 
     @Override
-    public Uni<Void> createRuntime(CreateRuntimeInternalRequest request) {
+    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateRuntimeInternalRequest::validate,
+                SyncRuntimeInternalRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
-                RuntimeServiceApiClient::createRuntime,
-                createRuntimeMethod::createRuntime);
+                RuntimeServiceApiClient::syncRuntime,
+                syncRuntimeMethod::syncRuntime);
     }
 
     @Override

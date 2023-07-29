@@ -1,6 +1,6 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
@@ -13,12 +13,12 @@ import jakarta.ws.rs.Path;
 public interface RuntimeServiceApi {
 
     @PUT
-    @Path("/create-runtime")
-    Uni<Void> createRuntime(CreateRuntimeInternalRequest request);
-
-    @PUT
     @Path("/get-runtime")
     Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request);
+
+    @PUT
+    @Path("/sync-runtime")
+    Uni<Void> syncRuntime(SyncRuntimeInternalRequest request);
 
     @PUT
     @Path("/delete-runtime")

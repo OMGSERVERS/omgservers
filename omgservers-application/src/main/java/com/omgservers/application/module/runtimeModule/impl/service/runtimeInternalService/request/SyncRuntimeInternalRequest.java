@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRuntimeInternalRequest implements InternalRequest {
+public class SyncRuntimeInternalRequest implements InternalRequest {
 
-    static public void validate(CreateRuntimeInternalRequest request) {
+    static public void validate(SyncRuntimeInternalRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -1,6 +1,9 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
+import com.omgservers.application.module.internalModule.model.event.body.MatchCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchInternalRequest;
@@ -41,7 +44,15 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
 
     Uni<Boolean> syncMatch(final int shard, final MatchModel match) {
         return pgPool.withTransaction(sqlConnection -> upsertMatchOperation
-                        .upsertMatch(sqlConnection, shard, match))
+                        .upsertMatch(sqlConnection, shard, match)
+                        .call(inserted -> {
+                            final var matchmakerId = match.getMatchmakerId();
+                            final var id = match.getId();
+                            final var eventBody = new MatchCreatedEventBodyModel(matchmakerId, id);
+                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
+                            return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
+                                    .replaceWithVoid();
+                        }))
                 .invoke(voidItem -> matchmakerInMemoryCache.addMatch(match));
     }
 }

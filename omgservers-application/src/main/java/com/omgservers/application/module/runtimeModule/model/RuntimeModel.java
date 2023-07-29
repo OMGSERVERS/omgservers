@@ -23,6 +23,8 @@ public class RuntimeModel {
     Long id;
     @ToString.Exclude
     Instant created;
+    @ToString.Exclude
+    Instant modified;
     Long matchmakerId;
     Long matchId;
     RuntimeConfigModel config;

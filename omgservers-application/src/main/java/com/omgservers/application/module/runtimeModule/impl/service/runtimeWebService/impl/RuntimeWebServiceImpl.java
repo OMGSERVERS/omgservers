@@ -1,7 +1,7 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl;
 
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.RuntimeInternalService;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.CreateRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
@@ -21,8 +21,8 @@ class RuntimeWebServiceImpl implements RuntimeWebService {
     final RuntimeInternalService runtimeInternalService;
 
     @Override
-    public Uni<Void> createRuntime(CreateRuntimeInternalRequest request) {
-        return runtimeInternalService.createRuntime(request);
+    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
+        return runtimeInternalService.syncRuntime(request);
     }
 
     @Override

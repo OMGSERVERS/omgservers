@@ -30,6 +30,7 @@ public class RuntimeModelFactory {
         final var runtime = new RuntimeModel();
         runtime.setId(id);
         runtime.setCreated(now);
+        runtime.setModified(now);
         runtime.setMatchmakerId(matchmakerId);
         runtime.setMatchId(matchId);
         runtime.setConfig(config);

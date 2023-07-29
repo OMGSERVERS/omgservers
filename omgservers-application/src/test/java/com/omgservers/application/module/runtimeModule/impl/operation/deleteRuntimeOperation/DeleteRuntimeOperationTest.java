@@ -1,6 +1,6 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.deleteRuntimeOperation;
 
-import com.omgservers.application.module.runtimeModule.impl.operation.insertRuntimeOperation.InsertRuntimeOperation;
+import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
 import com.omgservers.application.module.runtimeModule.model.RuntimeModelFactory;
 import com.omgservers.application.module.runtimeModule.model.RuntimeTypeEnum;
@@ -21,7 +21,7 @@ class DeleteRuntimeOperationTest extends Assertions {
     DeleteRuntimeOperation deleteRuntimeOperation;
 
     @Inject
-    InsertRuntimeOperation insertRuntimeOperation;
+    UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -36,7 +36,7 @@ class DeleteRuntimeOperationTest extends Assertions {
     void givenRuntime_whenRuntimeTenant_thenDeleted() {
         final var shard = 0;
         final var runtime1 = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeConfigModel.create(RuntimeTypeEnum.EMBEDDED_LUA));
-        insertRuntimeOperation.insertRuntime(TIMEOUT, pgPool, shard, runtime1);
+        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         assertTrue(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, runtime1.getId()));
     }

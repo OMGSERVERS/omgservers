@@ -24,7 +24,7 @@ import java.util.UUID;
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     static private final String sql = """
-            select id, created, matchmaker_id, match_id, config
+            select id, created, modified, matchmaker_id, match_id, config
             from $schema.tab_runtime
             where id = $1
             limit 1
@@ -67,6 +67,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
         RuntimeModel runtime = new RuntimeModel();
         runtime.setId(row.getLong("id"));
         runtime.setCreated(row.getOffsetDateTime("created").toInstant());
+        runtime.setModified(row.getOffsetDateTime("modified").toInstant());
         runtime.setMatchmakerId(row.getLong("matchmaker_id"));
         runtime.setMatchId(row.getLong("match_id"));
         runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
