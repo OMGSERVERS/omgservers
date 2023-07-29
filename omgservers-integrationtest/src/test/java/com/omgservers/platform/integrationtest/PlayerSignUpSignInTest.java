@@ -1,7 +1,7 @@
 package com.omgservers.platform.integrationtest;
 
-import com.omgservers.platforms.integrationtest.operations.createVersionAndSignUpOperation.CreateVersionAndSignUpOperation;
-import com.omgservers.platforms.integrationtest.testClient.TestClient;
+import com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation.BootstrapVersionOperation;
+import com.omgservers.platforms.integrationtest.serviceClient.ServiceClientFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -14,38 +14,38 @@ import jakarta.inject.Inject;
 public class PlayerSignUpSignInTest extends Assertions {
 
     @Inject
-    CreateVersionAndSignUpOperation createIndependentVersionOperation;
+    BootstrapVersionOperation bootstrapVersionOperation;
 
     @Inject
-    TestClient testClient;
+    ServiceClientFactory serviceClientFactory;
 
     @Test
     void givenVersion_whenSignUpSignIn() throws Exception {
-        final var version = createIndependentVersionOperation.createVersionAndSignUp("""
+        final var version = bootstrapVersionOperation.bootstrap("""
                 function player_signed_up(event, player)
-                    player.respond("from player_signed_up")
+                    player.respond("player_signed_up")
                 end
                                 
                 function player_signed_in(event, player)
-                    player.respond("from player_signed_in")
+                    player.respond("player_signed_in")
                 end
                                 
-                print("initialized")
+                print("version was initialized")
                 """);
 
-        var event1 = testClient.consumeEventMessage();
-        assertEquals("from player_signed_up", event1.getEvent().toString());
-        Thread.sleep(5000);
+        final var client = serviceClientFactory.create();
+        client.signUp(version);
+        var event1 = client.consumeEventMessage();
+        assertEquals("player_signed_up", event1.getEvent().toString());
+        Thread.sleep(1000);
 
-        // Reconnect to sign-in test
-        testClient.close();
-        testClient.connect();
-        testClient.signIn(version.getTenant(), version.getStage(), version.getSecret(), version.getPlayerUser(), version.getPlayerPassword());
-        var event2 = testClient.consumeEventMessage();
-        assertEquals("from player_signed_in", event2.getEvent().toString());
-        testClient.close();
+        client.reconnect();
+        client.signIn(version);
+        var event2 = client.consumeEventMessage();
+        assertEquals("player_signed_in", event2.getEvent().toString());
+        client.close();
 
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         log.info("Finished");
     }

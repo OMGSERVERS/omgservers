@@ -1,14 +1,13 @@
-package com.omgservers.platforms.integrationtest.operations.createVersionAndSignUpOperation;
+package com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation;
 
-import com.omgservers.application.module.gatewayModule.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.application.module.versionModule.model.VersionFileModel;
 import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
 import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.DeveloperCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;
-import com.omgservers.platforms.integrationtest.testClient.TestClient;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,32 +17,31 @@ import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
-@AllArgsConstructor
-class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOperation {
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
 
     final BootstrapEnvironmentOperation bootstrapEnvironmentOperation;
     final DeveloperCli developerCli;
     final AdminCli adminCli;
-    final TestClient testClient;
 
     @Override
-    public VersionParameters createVersionAndSignUp(String script) throws Exception {
+    public VersionParameters bootstrap(String script) throws InterruptedException {
         bootstrapEnvironmentOperation.bootstrap();
         adminCli.createClient();
         developerCli.createClient();
 
         final var tenantId = adminCli.createTenant(tenantTitle());
-        final var createNewDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
-        final var developerUser = createNewDeveloperAdminResponse.getUserId();
-        final var developerPassword = createNewDeveloperAdminResponse.getPassword();
+        final var createDeveloperResponse = adminCli.createDeveloper(tenantId);
+        final var developerUser = createDeveloperResponse.getUserId();
+        final var developerPassword = createDeveloperResponse.getPassword();
         developerCli.createToken(developerUser, developerPassword);
 
-        final var createProjectDeveloperResponse = developerCli.createProject(tenantId);
-        final var projectId = createProjectDeveloperResponse.getProjectId();
-        final var stageId = createProjectDeveloperResponse.getStageId();
-        final var secret = createProjectDeveloperResponse.getSecret();
+        final var createProjectResponse = developerCli.createProject(tenantId);
+        final var projectId = createProjectResponse.getProjectId();
+        final var stageId = createProjectResponse.getStageId();
+        final var stageSecret = createProjectResponse.getSecret();
 
-        Thread.sleep(10000);
+        Thread.sleep(1000);
 
         final var stageConfig = VersionStageConfigModel.create();
         final var sourceCode = VersionSourceCodeModel.create();
@@ -51,25 +49,16 @@ class CreateVersionAndSignUpOperationImpl implements CreateVersionAndSignUpOpera
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
         final var version = developerCli.createVersion(tenantId, stageId, stageConfig, sourceCode);
 
-        Thread.sleep(10000);
-
-        testClient.connect();
-        testClient.signUp(tenantId, stageId, secret);
-        final var credentialsMessage = testClient.consumeCredentialsMessage();
-        final var credentials = (CredentialsMessageBodyModel) credentialsMessage.getBody();
-        final var playerUser = credentials.getUserId();
-        final var playerPassword = credentials.getPassword();
+        Thread.sleep(1000);
 
         return VersionParameters.builder()
-                .tenant(tenantId)
+                .tenantId(tenantId)
                 .developerUser(developerUser)
                 .developerPassword(developerPassword)
-                .project(projectId)
-                .stage(stageId)
-                .secret(secret)
-                .version(version)
-                .playerUser(playerUser)
-                .playerPassword(playerPassword)
+                .projectId(projectId)
+                .stageId(stageId)
+                .stageSecret(stageSecret)
+                .versionId(version)
                 .build();
     }
 
