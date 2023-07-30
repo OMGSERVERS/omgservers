@@ -34,7 +34,7 @@ public class LuaPlayerGetAttributeFunction extends VarArgFunction {
             final var value = LuaValue.valueOf(attribute.getValue());
             return value;
         } catch (TimeoutException e) {
-            log.warn("Lua call failed due to timeout, function={}", this);
+            log.error("Lua call failed due to timeout, function={}", this);
             return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf("timeout"));
         } catch (Exception e) {
             final var error = e.getMessage();
