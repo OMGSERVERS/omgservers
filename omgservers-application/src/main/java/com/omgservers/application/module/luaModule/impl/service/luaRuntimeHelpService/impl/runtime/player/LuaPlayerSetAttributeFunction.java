@@ -4,6 +4,7 @@ import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
 import com.omgservers.application.module.userModule.model.attribute.AttributeModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import org.luaj.vm2.lib.TwoArgFunction;
 @ToString
 @AllArgsConstructor
 public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
-    static private final long TIMEOUT = 1L;
+    static private final long TIMEOUT = 10L;
 
     @ToString.Exclude
     final UserModule userModule;
@@ -40,10 +41,13 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
         try {
             userModule.getAttributeInternalService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);
             return LuaValue.NIL;
+        } catch (TimeoutException e) {
+            log.warn("Lua call failed due to timeout, function={}", this);
+            return LuaString.valueOf("timeout");
         } catch (Exception e) {
             final var error = e.getMessage();
-            log.warn("Lua function failed, function={}, {}", this, error);
-            return LuaString.valueOf(error);
+            log.warn("Lua call failed due to exception, function={}, {}", this, error);
+            return LuaString.valueOf("failed");
         }
     }
 }

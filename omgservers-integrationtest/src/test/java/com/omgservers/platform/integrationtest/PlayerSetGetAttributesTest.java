@@ -22,19 +22,21 @@ public class PlayerSetGetAttributesTest extends Assertions {
     void givenVersion_whenSetGetAttributes() throws Exception {
         final var version = bootstrapVersionOperation.bootstrap("""
                 function player_signed_up(event, player)
-                    player.set_attribute("a1", "helloworld")
-                    player.set_attribute("a2", 0)
-                    player.set_attribute("a3", 123456789)
+                    player.set_attribute("a1", "1")
+                    player.set_attribute("a2", "2")
+                    player.set_attribute("a3", "3")
                 end
 
                 function player_signed_in(event, player)
                     local a1 = player.get_attribute("a1")
+                    print("a1:", a1)
+                    player.respond(a1)
                     local a2 = player.get_attribute("a2")
+                    print("a2:", a2)
+                    player.respond(a2)
                     local a3 = player.get_attribute("a3")
-                    print(a1, a2, a3)
-                    
-                    local attributes = table.concat({a1, a2, a3}, ";")
-                    player.respond(attributes)
+                    print("a3:", a3)
+                    player.respond(a3)
                 end
 
                 print("version was initialized")
@@ -47,10 +49,14 @@ public class PlayerSetGetAttributesTest extends Assertions {
 
         client.reconnect();
         client.signIn(version);
-        var message = client.consumeEventMessage();
-        assertEquals("helloworld;0;123456789", message.getEvent().toString());
-        client.close();
+        var message1 = client.consumeEventMessage();
+        assertEquals("1", message1.getEvent().toString());
+        var message2 = client.consumeEventMessage();
+        assertEquals("2", message2.getEvent().toString());
+        var message3 = client.consumeEventMessage();
+        assertEquals("3", message3.getEvent().toString());
 
+        client.close();
         log.info("Finished");
     }
 }

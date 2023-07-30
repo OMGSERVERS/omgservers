@@ -2,6 +2,7 @@ package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpS
 
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
+import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.luaj.vm2.lib.VarArgFunction;
 @ToString
 @AllArgsConstructor
 public class LuaPlayerGetAttributeFunction extends VarArgFunction {
-    static private final long TIMEOUT = 1L;
+    static private final long TIMEOUT = 10L;
 
     @ToString.Exclude
     final UserModule userModule;
@@ -32,10 +33,13 @@ public class LuaPlayerGetAttributeFunction extends VarArgFunction {
             final var attribute = response.getAttribute();
             final var value = LuaValue.valueOf(attribute.getValue());
             return value;
+        } catch (TimeoutException e) {
+            log.warn("Lua call failed due to timeout, function={}", this);
+            return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf("timeout"));
         } catch (Exception e) {
             final var error = e.getMessage();
-            log.warn("Lua call failed, function={}, {}", this, error);
-            return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf(error));
+            log.warn("Lua call failed due to exception, function={}, {}", this, error, e);
+            return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf("failed"));
         }
     }
 }

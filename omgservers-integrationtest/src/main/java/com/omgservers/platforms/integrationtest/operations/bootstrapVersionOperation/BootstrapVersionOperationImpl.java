@@ -63,6 +63,6 @@ class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
     }
 
     String tenantTitle() {
-        return "title-" + UUID.randomUUID();
+        return "tenant-" + UUID.randomUUID();
     }
 }
