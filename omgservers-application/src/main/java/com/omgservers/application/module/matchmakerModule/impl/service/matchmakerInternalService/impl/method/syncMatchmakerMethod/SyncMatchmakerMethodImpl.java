@@ -1,11 +1,11 @@
-package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createMatchmakerMethod;
+package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerCreatedEventBodyModel;
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.CreateMatchmakerInternalRequest;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchmakerInternalRequest;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncMatchmakerInternalResponse;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,28 +17,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class CreateMatchmakerMethodImpl implements CreateMatchmakerMethod {
+class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
 
     final InternalModule internalModule;
 
-    final InsertMatchmakerOperation insertMatchmakerOperation;
+    final UpsertMatchmakerOperation upsertMatchmakerOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request) {
-        CreateMatchmakerInternalRequest.validate(request);
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request) {
+        SyncMatchmakerInternalRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmaker = request.getMatchmaker();
-                    return createMatchmaker(shard.shard(), matchmaker);
-                });
+                    return syncMatchmaker(shard.shard(), matchmaker);
+                })
+                .map(SyncMatchmakerInternalResponse::new);
     }
 
-    Uni<Void> createMatchmaker(final int shard, final MatchmakerModel matchmaker) {
-        return pgPool.withTransaction(sqlConnection -> insertMatchmakerOperation.insertMatchmaker(sqlConnection, shard, matchmaker)
+    Uni<Boolean> syncMatchmaker(final int shard, final MatchmakerModel matchmaker) {
+        return pgPool.withTransaction(sqlConnection -> upsertMatchmakerOperation.upsertMatchmaker(sqlConnection, shard, matchmaker)
                 .call(voidItem -> {
                     final var id = matchmaker.getId();
                     final var tenantId = matchmaker.getTenantId();

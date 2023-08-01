@@ -11,8 +11,8 @@ import jakarta.ws.rs.Path;
 public interface MatchmakerServiceApi {
 
     @PUT
-    @Path("/create-matchmaker")
-    Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request);
+    @Path("/sync-matchmaker")
+    Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request);
 
     @PUT
     @Path("/get-matchmaker")
@@ -23,8 +23,8 @@ public interface MatchmakerServiceApi {
     Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerInternalRequest request);
 
     @PUT
-    @Path("/create-request")
-    Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request);
+    @Path("/sync-request")
+    Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request);
 
     @PUT
     @Path("/delete-request")
@@ -35,7 +35,7 @@ public interface MatchmakerServiceApi {
     Uni<GetMatchInternalResponse> getMatch(GetMatchInternalRequest request);
 
     @PUT
-    @Path("/create-match")
+    @Path("/sync-match")
     Uni<SyncMatchInternalResponse> syncMatch(SyncMatchInternalRequest request);
 
     @PUT

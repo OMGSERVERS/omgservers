@@ -29,6 +29,7 @@ public class RequestModelFactory {
         request.setId(id);
         request.setMatchmakerId(matchmakerId);
         request.setCreated(now);
+        request.setModified(now);
         request.setConfig(config);
         return request;
     }

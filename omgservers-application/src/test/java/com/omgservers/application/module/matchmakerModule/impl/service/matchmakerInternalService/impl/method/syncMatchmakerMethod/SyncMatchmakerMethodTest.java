@@ -1,14 +1,8 @@
-package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createMatchmakerMethod;
+package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod;
 
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.getMatchmakerMethod.GetMatchmakerMethod;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.CreateMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.GetMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchmakerInternalRequest;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -17,18 +11,14 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class CreateMatchmakerMethodTest extends Assertions {
+class SyncMatchmakerMethodTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    CreateMatchmakerMethod createMatchmakerMethod;
+    SyncMatchmakerMethod syncMatchmakerMethod;
 
     @Inject
     GetMatchmakerMethod getMatchmakerMethod;
@@ -43,10 +33,10 @@ class CreateMatchmakerMethodTest extends Assertions {
     EventHelpService eventHelpServiceMock;
 
     @Test
-    void givenMatchmaker_whenCreateMatchmaker_thenEventInsertedAndEntityCreated() {
+    void givenMatchmaker_whenSyncMatchmaker_thenEventInsertedAndEntityCreated() {
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId());
-        final var createMatchmakerInternalRequest = new CreateMatchmakerInternalRequest(matchmaker1);
-        createMatchmakerMethod.createMatchmaker(TIMEOUT, createMatchmakerInternalRequest);
+        final var syncMatchmakerInternalRequest = new SyncMatchmakerInternalRequest(matchmaker1);
+        syncMatchmakerMethod.syncMatchmaker(TIMEOUT, syncMatchmakerInternalRequest);
 
 //        ArgumentCaptor<InsertEventHelpRequest> insertEventRequest = ArgumentCaptor.forClass(InsertEventHelpRequest.class);
 //        Mockito.verify(eventHelpServiceMock).insertEvent(insertEventRequest.capture());

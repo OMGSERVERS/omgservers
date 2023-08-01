@@ -5,13 +5,13 @@ import com.omgservers.application.module.matchmakerModule.impl.service.matchmake
 import io.smallrye.mutiny.Uni;
 
 public interface MatchmakerInternalService {
-    Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request);
+    Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request);
 
     Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerInternalRequest request);
 
     Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerInternalRequest request);
 
-    Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request);
+    Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request);
 
     Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestInternalRequest request);
 

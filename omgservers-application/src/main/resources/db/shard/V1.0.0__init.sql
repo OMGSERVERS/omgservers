@@ -131,6 +131,7 @@ create table if not exists tab_version (
 create table if not exists tab_matchmaker (
     id bigint primary key,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     tenant_id bigint not null,
     stage_id bigint not null
 );
@@ -139,6 +140,7 @@ create table if not exists tab_matchmaker_request (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     config json not null
 );
 

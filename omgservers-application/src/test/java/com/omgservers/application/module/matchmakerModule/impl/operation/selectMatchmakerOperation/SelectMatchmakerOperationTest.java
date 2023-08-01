@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectMatchmakerOperation;
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,7 +20,7 @@ class SelectMatchmakerOperationTest extends Assertions {
     SelectMatchmakerOperation selectMatchmakerOperation;
 
     @Inject
-    InsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -35,7 +35,7 @@ class SelectMatchmakerOperationTest extends Assertions {
     void givenMatchmaker_whenSelectMatchmaker_thenSelected() {
         final var shard = 0;
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker1);
+        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker1);
 
         final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(TIMEOUT, pgPool, shard, matchmaker1.getId());
         assertEquals(matchmaker1, matchmaker2);

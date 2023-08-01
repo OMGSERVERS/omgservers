@@ -6,13 +6,11 @@ import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
 import com.omgservers.application.module.internalModule.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.CreateMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchmakerInternalRequest;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
 import com.omgservers.application.module.tenantModule.model.stage.StageModel;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModel;
 import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.GetProjectInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
@@ -28,8 +26,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -61,7 +57,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
         return getStage(tenantId, id)
                 .flatMap(stage -> Uni.join().all(
                                 syncPermissions(tenantId, stage),
-                                createMatchmaker(tenantId, stage.getId(), stage.getMatchmakerId()))
+                                syncMatchmaker(tenantId, stage.getId(), stage.getMatchmakerId()))
                         .andCollectFailures().replaceWithVoid())
                 .replaceWith(true);
     }
@@ -91,9 +87,11 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Void> createMatchmaker(final Long tenantId, final Long stageId, final Long id) {
+    Uni<Void> syncMatchmaker(final Long tenantId, final Long stageId, final Long id) {
         final var matchmaker = matchmakerModelFactory.create(id, tenantId, stageId);
-        final var request = new CreateMatchmakerInternalRequest(matchmaker);
-        return matchmakerModule.getMatchmakerInternalService().createMatchmaker(request);
+        final var request = new SyncMatchmakerInternalRequest(matchmaker);
+        return matchmakerModule.getMatchmakerInternalService()
+                .syncMatchmaker(request)
+                .replaceWithVoid();
     }
 }

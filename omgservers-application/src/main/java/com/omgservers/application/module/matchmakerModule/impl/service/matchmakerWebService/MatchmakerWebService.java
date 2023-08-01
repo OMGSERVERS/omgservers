@@ -3,18 +3,16 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.*;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.*;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
 
 public interface MatchmakerWebService {
 
-    Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request);
+    Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request);
 
     Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerInternalRequest request);
 
     Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerInternalRequest request);
 
-    Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request);
+    Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request);
 
     Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestInternalRequest request);
 

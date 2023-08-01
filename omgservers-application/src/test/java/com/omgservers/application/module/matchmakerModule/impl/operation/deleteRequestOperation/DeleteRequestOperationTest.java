@@ -1,12 +1,9 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.deleteRequestOperation;
 
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation.InsertRequestOperation;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -27,10 +24,10 @@ class DeleteRequestOperationTest extends Assertions {
     DeleteRequestOperation deleteRequestOperation;
 
     @Inject
-    InsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
-    InsertRequestOperation insertRequestOperation;
+    UpsertRequestOperation upsertRequestOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -48,11 +45,11 @@ class DeleteRequestOperationTest extends Assertions {
     void givenRequest_whenDeleteRequest_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var requestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
         final var request = requestModelFactory.create(matchmaker.getId(), requestConfig);
-        insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, request);
+        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
         assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getId()));
     }

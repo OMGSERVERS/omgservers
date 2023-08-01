@@ -1,14 +1,8 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod;
 
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createMatchmakerMethod.CreateMatchmakerMethod;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.CreateMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod.SyncMatchmakerMethod;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchmakerInternalRequest;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -17,10 +11,6 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
@@ -31,7 +21,7 @@ class DeleteMatchmakerMethodTest extends Assertions {
     DeleteMatchmakerMethod deleteMatchmakerMethod;
 
     @Inject
-    CreateMatchmakerMethod createMatchmakerMethod;
+    SyncMatchmakerMethod syncMatchmakerMethod;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -45,8 +35,8 @@ class DeleteMatchmakerMethodTest extends Assertions {
     @Test
     void givenMatchmaker_whenDeleteMatchmaker_thenEventInsertedAndEntityDeleted() {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        final var createMatchmakerInternalRequest = new CreateMatchmakerInternalRequest(matchmaker);
-        createMatchmakerMethod.createMatchmaker(TIMEOUT, createMatchmakerInternalRequest);
+        final var createMatchmakerInternalRequest = new SyncMatchmakerInternalRequest(matchmaker);
+        syncMatchmakerMethod.syncMatchmaker(TIMEOUT, createMatchmakerInternalRequest);
 
 //        final var deleteMatchmakerInternalRequest = new DeleteMatchmakerInternalRequest(matchmaker.getId());
 //        assertTrue(deleteMatchmakerMethod.deleteMatchmaker(TIMEOUT, deleteMatchmakerInternalRequest).getDeleted());

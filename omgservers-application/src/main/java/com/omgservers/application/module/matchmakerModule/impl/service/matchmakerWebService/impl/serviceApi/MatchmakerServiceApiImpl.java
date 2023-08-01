@@ -23,8 +23,8 @@ public class MatchmakerServiceApiImpl implements MatchmakerServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::createMatchmaker);
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncMatchmaker);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class MatchmakerServiceApiImpl implements MatchmakerServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::createRequest);
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncRequest);
     }
 
     @Override

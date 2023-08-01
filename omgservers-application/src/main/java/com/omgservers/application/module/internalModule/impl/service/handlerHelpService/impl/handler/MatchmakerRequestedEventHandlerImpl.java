@@ -5,10 +5,9 @@ import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.CreateRequestInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.CreateRequestInternalResponse;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncRequestInternalRequest;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncRequestInternalResponse;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.tenantModule.model.stage.StageModel;
@@ -62,9 +61,8 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
                                 final var requestConfig =
                                         new RequestConfigModel(userId, clientId, tenantId, stageId, mode, attributes);
                                 final var requestModel = requestModelFactory.create(matchmakerId, requestConfig);
-                                final var request = new CreateRequestInternalRequest(requestModel);
-                                return matchmakerModule.getMatchmakerInternalService().createRequest(request)
-                                        .map(CreateRequestInternalResponse::getRequest);
+                                final var request = new SyncRequestInternalRequest(requestModel);
+                                return matchmakerModule.getMatchmakerInternalService().syncRequest(request);
                             });
                 })
                 .replaceWith(true);

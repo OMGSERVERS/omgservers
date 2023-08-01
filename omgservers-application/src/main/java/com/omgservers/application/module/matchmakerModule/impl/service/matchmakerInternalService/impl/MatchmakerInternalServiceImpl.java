@@ -2,8 +2,8 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.getMatchmakerServiceApiClientOperation.GetMatchmakerServiceApiClientOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.MatchmakerInternalService;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createMatchmakerMethod.CreateMatchmakerMethod;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.createRequestMethod.CreateRequestMethod;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod.SyncMatchmakerMethod;
+import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncRequestMethod.SyncRequestMethod;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchMethod.DeleteMatchMethod;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod.DeleteMatchmakerMethod;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteRequestMethod.DeleteRequestMethod;
@@ -27,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MatchmakerInternalServiceImpl implements MatchmakerInternalService {
 
-    final CreateMatchmakerMethod createMatchmakerMethod;
     final DeleteMatchmakerMethod deleteMatchmakerMethod;
+    final SyncMatchmakerMethod syncMatchmakerMethod;
     final GetMatchmakerMethod getMatchmakerMethod;
-    final CreateRequestMethod createRequestMethod;
+    final SyncRequestMethod syncRequestMethod;
     final DeleteRequestMethod deleteRequestMethod;
     final DoMatchmakingMethod doMatchmakingMethod;
     final DeleteMatchMethod deleteMatchMethod;
@@ -42,12 +42,12 @@ class MatchmakerInternalServiceImpl implements MatchmakerInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request) {
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateMatchmakerInternalRequest::validate,
+                SyncMatchmakerInternalRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
-                MatchmakerServiceApi::createMatchmaker,
-                createMatchmakerMethod::createMatchmaker);
+                MatchmakerServiceApi::syncMatchmaker,
+                syncMatchmakerMethod::syncMatchmaker);
     }
 
     @Override
@@ -69,12 +69,12 @@ class MatchmakerInternalServiceImpl implements MatchmakerInternalService {
     }
 
     @Override
-    public Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request) {
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateRequestInternalRequest::validate,
+                SyncRequestInternalRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
-                MatchmakerServiceApi::createRequest,
-                createRequestMethod::createRequest);
+                MatchmakerServiceApi::syncRequest,
+                syncRequestMethod::syncRequest);
     }
 
     @Override

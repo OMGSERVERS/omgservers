@@ -19,8 +19,8 @@ class MatchmakerWebServiceImpl implements MatchmakerWebService {
     final MatchmakerInternalService matchmakerInternalService;
 
     @Override
-    public Uni<Void> createMatchmaker(CreateMatchmakerInternalRequest request) {
-        return matchmakerInternalService.createMatchmaker(request);
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request) {
+        return matchmakerInternalService.syncMatchmaker(request);
     }
 
     @Override
@@ -34,8 +34,8 @@ class MatchmakerWebServiceImpl implements MatchmakerWebService {
     }
 
     @Override
-    public Uni<CreateRequestInternalResponse> createRequest(CreateRequestInternalRequest request) {
-        return matchmakerInternalService.createRequest(request);
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
+        return matchmakerInternalService.syncRequest(request);
     }
 
     @Override

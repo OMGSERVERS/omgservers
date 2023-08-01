@@ -26,8 +26,9 @@ public class MatchmakerModelFactory {
         Instant now = Instant.now();
 
         final var matchmaker = new MatchmakerModel();
-        matchmaker.setCreated(now);
         matchmaker.setId(id);
+        matchmaker.setCreated(now);
+        matchmaker.setModified(now);
         matchmaker.setTenantId(tenantId);
         matchmaker.setStageId(stageId);
         return matchmaker;

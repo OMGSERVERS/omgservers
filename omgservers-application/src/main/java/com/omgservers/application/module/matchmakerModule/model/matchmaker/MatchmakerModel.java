@@ -21,8 +21,10 @@ public class MatchmakerModel {
     }
 
     Long id;
-    @ToString.Exclude
+//    @ToString.Exclude
     Instant created;
+//    @ToString.Exclude
+    Instant modified;
     Long tenantId;
     Long stageId;
 }

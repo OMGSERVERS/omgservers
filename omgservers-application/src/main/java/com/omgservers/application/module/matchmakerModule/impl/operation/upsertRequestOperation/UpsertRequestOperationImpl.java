@@ -1,4 +1,4 @@
-package com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation;
+package com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
@@ -21,20 +21,23 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class InsertRequestOperationImpl implements InsertRequestOperation {
+class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, config)
-            values($1, $2, $3, $4)
+            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, config)
+            values($1, $2, $3, $4, $5)
+            on conflict (id) do
+            update set matchmaker_id = $2, modified = $4, config = $5
+            returning xmax::text::int = 0 as inserted
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> insertRequest(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final RequestModel request) {
+    public Uni<Boolean> upsertRequest(final SqlConnection sqlConnection,
+                                      final int shard,
+                                      final RequestModel request) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -42,15 +45,22 @@ class InsertRequestOperationImpl implements InsertRequestOperation {
             throw new ServerSideBadRequestException("request is null");
         }
 
-        return insertQuery(sqlConnection, shard, request)
+        return upsertQuery(sqlConnection, shard, request)
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("Request was inserted, shard={}, request={}", shard, request);
+                    } else {
+                        log.info("Request was updated, shard={}, request={}", shard, request);
+                    }
+                })
                 .onFailure(PgException.class)
                 .transform(t -> new ServerSideConflictException(String
                         .format("unhandled PgException, %s, matchmakerRequest=%s", t.getMessage(), request)));
     }
 
-    Uni<Void> insertQuery(final SqlConnection sqlConnection,
-                          final int shard,
-                          final RequestModel request) {
+    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
+                             final int shard,
+                             final RequestModel request) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(request.getConfig());
@@ -59,9 +69,10 @@ class InsertRequestOperationImpl implements InsertRequestOperation {
                         add(request.getId());
                         add(request.getMatchmakerId());
                         add(request.getCreated().atOffset(ZoneOffset.UTC));
+                        add(request.getModified().atOffset(ZoneOffset.UTC));
                         add(configString);
                     }}))
-                    .replaceWithVoid();
+                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

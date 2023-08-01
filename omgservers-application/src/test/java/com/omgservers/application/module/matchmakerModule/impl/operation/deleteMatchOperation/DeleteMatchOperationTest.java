@@ -1,11 +1,9 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchOperation;
 
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.versionModule.model.VersionGroupModel;
 import com.omgservers.application.module.versionModule.model.VersionModeModel;
@@ -29,7 +27,7 @@ class DeleteMatchOperationTest extends Assertions {
     DeleteMatchOperation deleteMatchOperation;
 
     @Inject
-    InsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
     UpsertMatchOperation upsertMatchOperation;
@@ -50,7 +48,7 @@ class DeleteMatchOperationTest extends Assertions {
     void givenMatch_whenDeleteMatch_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 1, 4));

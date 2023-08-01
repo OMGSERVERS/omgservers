@@ -24,7 +24,7 @@ import java.util.UUID;
 class SelectRequestOperationImpl implements SelectRequestOperation {
 
     static private final String sql = """
-            select id, matchmaker_id, created, config
+            select id, matchmaker_id, created, modified, config
             from $schema.tab_matchmaker_request
             where id = $1
             limit 1
@@ -68,6 +68,7 @@ class SelectRequestOperationImpl implements SelectRequestOperation {
         request.setId(row.getLong("id"));
         request.setMatchmakerId(row.getLong("matchmaker_id"));
         request.setCreated(row.getOffsetDateTime("created").toInstant());
+        request.setModified(row.getOffsetDateTime("modified").toInstant());
         request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         return request;
     }

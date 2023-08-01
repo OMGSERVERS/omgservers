@@ -1,10 +1,8 @@
-package com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation;
+package com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation;
 
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,14 +16,14 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class InsertRequestOperationTest extends Assertions {
+class UpsertRequestOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    InsertRequestOperation insertRequestOperation;
+    UpsertRequestOperation upsertRequestOperation;
 
     @Inject
-    InsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperation upsertMatchmakerOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -40,14 +38,27 @@ class InsertRequestOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void whenInsertMatchmakerRequest() {
+    void givenRequest_whenUpsertRequest_thenInserted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
-        insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
+        assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
+    }
+
+    @Test
+    void givenRequest_whenUpsertRequestAgain_thenUpdated() {
+        final var shard = 0;
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
+        upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+
+        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
+        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
+
+        assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
 
     Long userId() {

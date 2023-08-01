@@ -21,7 +21,7 @@ import java.util.UUID;
 class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
 
     static private final String sql = """
-            select id, created, tenant_id, stage_id
+            select id, created, modified, tenant_id, stage_id
             from $schema.tab_matchmaker
             where id = $1
             limit 1
@@ -60,6 +60,7 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
         MatchmakerModel matchmakerModel = new MatchmakerModel();
         matchmakerModel.setId(row.getLong("id"));
         matchmakerModel.setCreated(row.getOffsetDateTime("created").toInstant());
+        matchmakerModel.setModified(row.getOffsetDateTime("modified").toInstant());
         matchmakerModel.setTenantId(row.getLong("tenant_id"));
         matchmakerModel.setStageId(row.getLong("stage_id"));
         return matchmakerModel;

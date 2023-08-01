@@ -1,13 +1,10 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectRequestOperation;
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation.InsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.impl.operation.insertRequestOperation.InsertRequestOperation;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
+import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -28,10 +25,10 @@ class SelectRequestOperationTest extends Assertions {
     SelectRequestOperation selectRequestOperation;
 
     @Inject
-    InsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
-    InsertRequestOperation insertRequestOperation;
+    UpsertRequestOperation upsertRequestOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -49,11 +46,11 @@ class SelectRequestOperationTest extends Assertions {
     void givenMatchmakerRequest_whenSelectMatchmakerRequest_thenSelected() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.insertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
         final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
-        insertRequestOperation.insertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
+        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
         final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getId());
         assertEquals(matchmakerRequest1, matchmakerRequest2);

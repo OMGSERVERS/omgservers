@@ -1,4 +1,4 @@
-package com.omgservers.application.module.matchmakerModule.impl.operation.insertMatchmakerOperation;
+package com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
@@ -19,20 +19,23 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class InsertMatchmakerOperationImpl implements InsertMatchmakerOperation {
+class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker(id, created, tenant_id, stage_id)
-            values($1, $2, $3, $4)
+            insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)
+            values($1, $2, $3, $4, $5)
+            on conflict (id) do
+            update set modified = $3, tenant_id = $4, stage_id = $5
+            returning xmax::text::int = 0 as inserted
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> insertMatchmaker(final SqlConnection sqlConnection,
-                                      final int shard,
-                                      final MatchmakerModel matchmaker) {
+    public Uni<Boolean> upsertMatchmaker(final SqlConnection sqlConnection,
+                                         final int shard,
+                                         final MatchmakerModel matchmaker) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -40,24 +43,31 @@ class InsertMatchmakerOperationImpl implements InsertMatchmakerOperation {
             throw new ServerSideBadRequestException("matchmaker is null");
         }
 
-        return insertQuery(sqlConnection, shard, matchmaker)
-                .invoke(voidItem -> log.info("Matchmaker was inserted, matchmaker={}", matchmaker))
+        return upsertQuery(sqlConnection, shard, matchmaker)
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("Matchmaker was inserted, shard={}, matchmaker={}", shard, matchmaker);
+                    } else {
+                        log.info("Matchmaker was updated, shard={}, matchmaker={}", shard, matchmaker);
+                    }
+                })
                 .onFailure(PgException.class)
                 .transform(t -> new ServerSideConflictException(String
                         .format("unhandled PgException, %s, matchmaker=%s", t.getMessage(), matchmaker)));
     }
 
-    Uni<Void> insertQuery(final SqlConnection sqlConnection,
-                          final int shard,
-                          final MatchmakerModel matchmaker) {
+    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
+                             final int shard,
+                             final MatchmakerModel matchmaker) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
                     add(matchmaker.getId());
                     add(matchmaker.getCreated().atOffset(ZoneOffset.UTC));
+                    add(matchmaker.getModified().atOffset(ZoneOffset.UTC));
                     add(matchmaker.getTenantId());
                     add(matchmaker.getStageId());
                 }}))
-                .replaceWithVoid();
+                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
     }
 }
