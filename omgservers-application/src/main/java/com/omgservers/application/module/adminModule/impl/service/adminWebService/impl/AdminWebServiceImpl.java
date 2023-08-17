@@ -36,17 +36,17 @@ class AdminWebServiceImpl implements AdminWebService {
 
     @Override
     public Uni<GetIndexHelpResponse> getIndex(GetIndexHelpRequest request) {
-        return internalModule.getIndexInternalService().getIndex(request);
+        return internalModule.getIndexHelpService().getIndex(request);
     }
 
     @Override
     public Uni<Void> syncIndex(SyncIndexHelpRequest request) {
-        return internalModule.getIndexInternalService().syncIndex(request);
+        return internalModule.getIndexHelpService().syncIndex(request);
     }
 
     @Override
     public Uni<Void> deleteIndex(DeleteIndexHelpRequest request) {
-        return internalModule.getIndexInternalService().deleteIndex(request);
+        return internalModule.getIndexHelpService().deleteIndex(request);
     }
 
     @Override

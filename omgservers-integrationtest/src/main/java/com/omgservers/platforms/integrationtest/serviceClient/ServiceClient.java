@@ -5,6 +5,7 @@ import com.omgservers.application.module.gatewayModule.model.message.MessageMode
 import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
 import com.omgservers.application.module.gatewayModule.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.application.module.gatewayModule.model.message.body.EventMessageBodyModel;
+import com.omgservers.application.module.gatewayModule.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.application.module.gatewayModule.model.message.body.SignInMessageBodyModel;
 import com.omgservers.application.module.gatewayModule.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation.VersionParameters;
@@ -14,7 +15,6 @@ import jakarta.websocket.DeploymentException;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 
@@ -71,6 +71,7 @@ public class ServiceClient {
         final var credentials = (CredentialsMessageBodyModel) credentialsMessage.getBody();
         userId = credentials.getUserId();
         password = credentials.getPassword();
+        log.info("User signed up, userId={}, password={}", userId, password);
     }
 
     public synchronized void signIn(VersionParameters versionParameters) throws IOException {
@@ -81,18 +82,15 @@ public class ServiceClient {
         send(messageString);
     }
 
-    public synchronized MessageModel consumeCredentialsMessage() throws InterruptedException, IOException {
-        String messageString = serviceEndpoint.receive(30);
-        if (messageString == null) {
-            throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
-        }
-        MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Credentials were consumed, {} ", messageModel);
-        return messageModel;
+    public synchronized void requestMatchmaking(String mode) throws IOException {
+        final var messageModel = MessageModel
+                .create(MessageQualifierEnum.MATCHMAKER_MESSAGE, new MatchmakerMessageBodyModel(mode));
+        final var messageString = objectMapper.writeValueAsString(messageModel);
+        send(messageString);
     }
 
     public synchronized EventMessageBodyModel consumeEventMessage() throws InterruptedException, IOException {
-        String messageString = serviceEndpoint.receive(30);
+        String messageString = serviceEndpoint.receive(45);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.EVENT_MESSAGE + " was not received");
         }
@@ -101,7 +99,17 @@ public class ServiceClient {
         return (EventMessageBodyModel) messageModel.getBody();
     }
 
-    void send(String messageString) throws IOException {
+    synchronized MessageModel consumeCredentialsMessage() throws InterruptedException, IOException {
+        String messageString = serviceEndpoint.receive(45);
+        if (messageString == null) {
+            throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
+        }
+        MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("Credentials were consumed, {} ", messageModel);
+        return messageModel;
+    }
+
+    synchronized void send(String messageString) throws IOException {
         session.getBasicRemote().sendText(messageString);
         log.info("Sent, {}", messageString);
     }

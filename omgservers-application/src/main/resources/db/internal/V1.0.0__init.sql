@@ -33,3 +33,9 @@ create table if not exists tab_job (
     type text not null,
     unique(shard_key, entity)
 );
+
+create table if not exists tab_log (
+    id bigserial primary key,
+    created timestamp with time zone not null,
+    message text not null
+);

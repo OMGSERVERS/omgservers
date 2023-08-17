@@ -1,22 +1,24 @@
 package com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.impl;
 
-import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.*;
-import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.DeleteConnectionHelpResponse;
-import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetSessionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
-import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
-import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetConnectionHelpResponse;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.AssignPlayerHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.CreateConnectionHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.DeleteConnectionHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetAssignedPlayerHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetConnectionHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetSessionHelpRequest;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.DeleteConnectionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetAssignedPlayerHelpResponse;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetConnectionHelpResponse;
+import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetSessionHelpResponse;
+import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.Session;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -43,12 +45,12 @@ class ConnectionHelpServiceImpl implements ConnectionHelpService {
 
         final var session = request.getSession();
         final var sessionId = session.getId();
-        final var connection = generateIdOperation.generateId();
-        if (sessionByConnection.containsKey(connection)) {
-            throw new ServerSideConflictException("Generated connection's UUID is already in use");
-        } else {
-            connectionBySession.put(sessionId, connection);
-            sessionByConnection.put(connection, session);
+
+        if (!connectionBySession.containsKey(sessionId)) {
+            final var connectionId = generateIdOperation.generateId();
+            connectionBySession.put(sessionId, connectionId);
+            sessionByConnection.put(connectionId, session);
+            log.info("Session was associated with connectionId, sessionId={}, connectionId={}", sessionId, connectionId);
         }
     }
 

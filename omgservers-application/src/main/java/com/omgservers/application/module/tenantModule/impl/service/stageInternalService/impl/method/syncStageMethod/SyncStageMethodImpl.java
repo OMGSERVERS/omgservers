@@ -2,21 +2,19 @@ package com.omgservers.application.module.tenantModule.impl.service.stageInterna
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.StageCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation.ValidateStageOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
+import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -29,6 +27,7 @@ class SyncStageMethodImpl implements SyncStageMethod {
     final UpsertStageOperation upsertStageOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -46,7 +45,7 @@ class SyncStageMethodImpl implements SyncStageMethod {
     Uni<Void> syncStage(Integer shard, Long tenantId, StageModel stage) {
         return pgPool.withTransaction(sqlConnection ->
                         upsertStageOperation.upsertStage(sqlConnection, shard, stage)
-                                .flatMap(inserted -> {
+                                .call(inserted -> {
                                     if (inserted) {
                                         final var id = stage.getId();
                                         final var eventBody = new StageCreatedEventBodyModel(tenantId, id);
@@ -57,6 +56,11 @@ class SyncStageMethodImpl implements SyncStageMethod {
                                     } else {
                                         return Uni.createFrom().voidItem();
                                     }
+                                })
+                                .call(inserted -> {
+                                    final var syncLog = logModelFactory.create("Stage was sync, stage=" + stage);
+                                    final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                    return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                                 }))
                 .replaceWithVoid();
     }

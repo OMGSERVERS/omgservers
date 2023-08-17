@@ -40,7 +40,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
     @Override
     public Uni<ShardModel> calculateShard(String indexName, List<String> keys) {
         final var getIndexInternalRequest = new GetIndexHelpRequest(indexName);
-        return internalModule.getIndexInternalService().getIndex(getIndexInternalRequest)
+        return internalModule.getIndexHelpService().getIndex(getIndexInternalRequest)
                 .map(GetIndexHelpResponse::getIndex)
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);

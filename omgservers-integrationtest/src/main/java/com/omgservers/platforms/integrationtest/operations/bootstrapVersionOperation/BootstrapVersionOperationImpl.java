@@ -26,6 +26,11 @@ class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
 
     @Override
     public VersionParameters bootstrap(String script) throws InterruptedException {
+        return bootstrap(script, VersionStageConfigModel.create());
+    }
+
+    @Override
+    public VersionParameters bootstrap(String script, VersionStageConfigModel stageConfig) throws InterruptedException {
         bootstrapEnvironmentOperation.bootstrap();
         adminCli.createClient();
         developerCli.createClient();
@@ -41,15 +46,14 @@ class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
         final var stageId = createProjectResponse.getStageId();
         final var stageSecret = createProjectResponse.getSecret();
 
-        Thread.sleep(1000);
+        Thread.sleep(5000);
 
-        final var stageConfig = VersionStageConfigModel.create();
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
         final var version = developerCli.createVersion(tenantId, stageId, stageConfig, sourceCode);
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         return VersionParameters.builder()
                 .tenantId(tenantId)

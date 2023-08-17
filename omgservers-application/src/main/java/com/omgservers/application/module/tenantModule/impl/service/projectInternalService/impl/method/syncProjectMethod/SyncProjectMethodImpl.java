@@ -2,6 +2,8 @@ package com.omgservers.application.module.tenantModule.impl.service.projectInter
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
 import com.omgservers.application.module.internalModule.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
@@ -29,6 +31,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
     final UpsertProjectOperation upsertProjectOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -57,6 +60,11 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
                             } else {
                                 return Uni.createFrom().voidItem();
                             }
+                        })
+                        .call(inserted -> {
+                            final var syncLog = logModelFactory.create("Project was sync, project=" + project);
+                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));
     }
 }

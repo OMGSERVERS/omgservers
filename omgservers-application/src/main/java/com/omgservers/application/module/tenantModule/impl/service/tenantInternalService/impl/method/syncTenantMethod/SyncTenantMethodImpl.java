@@ -2,19 +2,20 @@ package com.omgservers.application.module.tenantModule.impl.service.tenantIntern
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation.ValidateTenantOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantResponse;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
+import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -27,6 +28,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
     final UpsertTenantOperation upsertTenantOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -53,6 +55,11 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
                             } else {
                                 return Uni.createFrom().voidItem();
                             }
+                        })
+                        .call(inserted -> {
+                            final var syncLog = logModelFactory.create("Tenant was created, tenant=" + tenant);
+                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));
     }
 }

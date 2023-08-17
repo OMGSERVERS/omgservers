@@ -1,5 +1,8 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStagePermissionMethod;
 
+import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStagePermissionOperation.UpsertStagePermissionOperation;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStagePermissionInternalRequest;
@@ -15,9 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
 
+    final InternalModule internalModule;
+
     final UpsertStagePermissionOperation upsertStagePermissionOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -28,7 +34,12 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
                 .flatMap(shard -> {
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> upsertStagePermissionOperation
-                            .upsertStagePermission(sqlConnection, shard.shard(), permission));
+                            .upsertStagePermission(sqlConnection, shard.shard(), permission)
+                            .call(inserted -> {
+                                final var syncLog = logModelFactory.create("Stage permission was sync, permission=" + permission);
+                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                            }));
                 })
                 .map(SyncStagePermissionInternalResponse::new);
     }

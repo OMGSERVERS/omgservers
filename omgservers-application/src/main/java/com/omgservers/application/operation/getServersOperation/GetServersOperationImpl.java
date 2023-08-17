@@ -28,7 +28,7 @@ class GetServersOperationImpl implements GetServersOperation {
     public Uni<List<URI>> getServers() {
         final var indexName = getConfigOperation.getConfig().indexName();
         final var getIndexInternalRequest = new GetIndexHelpRequest(indexName);
-        return internalModule.getIndexInternalService().getIndex(getIndexInternalRequest)
+        return internalModule.getIndexHelpService().getIndex(getIndexInternalRequest)
                 .map(GetIndexHelpResponse::getIndex)
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerModel::getUri)

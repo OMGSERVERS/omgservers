@@ -6,6 +6,7 @@ import com.omgservers.application.module.internalModule.impl.service.eventIntern
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.IndexHelpService;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.JobInternalService;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.JobSchedulerService;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.ServiceAccountHelpService;
 import com.omgservers.application.module.internalModule.impl.service.syncInternalService.SyncInternalService;
@@ -20,7 +21,7 @@ public interface InternalModule {
 
     EventInternalService getEventInternalService();
 
-    IndexHelpService getIndexInternalService();
+    IndexHelpService getIndexHelpService();
 
     JobInternalService getJobInternalService();
 
@@ -29,4 +30,6 @@ public interface InternalModule {
     ServiceAccountHelpService getServiceAccountHelpService();
 
     SyncInternalService getSyncInternalService();
+
+    LogHelpService getLogHelpService();
 }

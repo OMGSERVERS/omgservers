@@ -1,5 +1,8 @@
 package com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod;
 
+import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectPermissionOperation.UpsertProjectPermissionOperation;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectPermissionInternalRequest;
@@ -15,8 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
 
+    final InternalModule internalModule;
+
     final UpsertProjectPermissionOperation upsertProjectPermissionOperation;
     final CheckShardOperation checkShardOperation;
+
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -28,7 +35,12 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
                     final var shard = shardModel.shard();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> upsertProjectPermissionOperation
-                            .upsertProjectPermission(sqlConnection, shard, permission));
+                            .upsertProjectPermission(sqlConnection, shard, permission)
+                            .call(inserted -> {
+                                final var syncLog = logModelFactory.create("Project permission was sync, permission=" + permission);
+                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                            }));
                 })
                 .map(SyncProjectPermissionInternalResponse::new);
     }

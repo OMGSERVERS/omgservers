@@ -37,9 +37,9 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(deleted -> {
                     if (deleted) {
-                        log.info("Matchmaker request was deleted, shard={}, id={}", shard, id);
+                        log.info("Request was deleted, shard={}, id={}", shard, id);
                     } else {
-                        log.warn("Matchmaker request was not found, skip operation, shard={}, id={}", shard, id);
+                        log.warn("Request was not found, skip operation, shard={}, id={}", shard, id);
                     }
                 });
     }

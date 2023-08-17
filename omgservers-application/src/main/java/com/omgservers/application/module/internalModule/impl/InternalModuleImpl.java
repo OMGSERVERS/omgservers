@@ -7,6 +7,7 @@ import com.omgservers.application.module.internalModule.impl.service.eventIntern
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.IndexHelpService;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.JobInternalService;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.JobSchedulerService;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
 import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.ServiceAccountHelpService;
 import com.omgservers.application.module.internalModule.impl.service.syncInternalService.SyncInternalService;
@@ -26,9 +27,10 @@ public class InternalModuleImpl implements InternalModule {
     final ProducerHelpService producerHelpService;
     final JobSchedulerService jobSchedulerService;
     final SyncInternalService syncInternalService;
-    final IndexHelpService indexInternalService;
     final JobInternalService jobInternalService;
+    final IndexHelpService indexHelpService;
     final EventHelpService eventHelpService;
+    final LogHelpService logHelpService;
 
     @Override
     public ConsumerHelpService getConsumerHelpService() {
@@ -50,9 +52,8 @@ public class InternalModuleImpl implements InternalModule {
         return eventInternalService;
     }
 
-    @Override
-    public IndexHelpService getIndexInternalService() {
-        return indexInternalService;
+    public IndexHelpService getIndexHelpService() {
+        return indexHelpService;
     }
 
     @Override
@@ -72,5 +73,10 @@ public class InternalModuleImpl implements InternalModule {
     @Override
     public SyncInternalService getSyncInternalService() {
         return syncInternalService;
+    }
+
+    @Override
+    public LogHelpService getLogHelpService() {
+        return logHelpService;
     }
 }

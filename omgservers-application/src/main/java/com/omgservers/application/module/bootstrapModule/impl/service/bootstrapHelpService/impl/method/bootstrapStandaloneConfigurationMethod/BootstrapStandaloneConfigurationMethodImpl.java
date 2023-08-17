@@ -48,7 +48,7 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
         final var indexConfig = IndexConfigModel.create(Collections.singletonList(serverUri));
         final var indexModel = indexModelFactory.create(indexName, indexConfig);
         final var request = new SyncIndexHelpRequest(indexModel);
-        return internalModule.getIndexInternalService().syncIndex(request);
+        return internalModule.getIndexHelpService().syncIndex(request);
     }
 
     Uni<Void> syncServiceAccount() {
