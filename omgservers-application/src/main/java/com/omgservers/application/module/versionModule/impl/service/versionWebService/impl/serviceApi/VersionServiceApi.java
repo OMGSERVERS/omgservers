@@ -24,15 +24,6 @@ public interface VersionServiceApi {
     }
 
     @PUT
-    @Path("/create-version")
-    Uni<Void> createVersion(CreateVersionInternalRequest request);
-
-    default void createVersion(long timeout, CreateVersionInternalRequest request) {
-        createVersion(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
-    @PUT
     @Path("/sync-version")
     Uni<Void> syncVersion(SyncVersionInternalRequest request);
 

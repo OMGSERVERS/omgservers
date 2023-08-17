@@ -2,22 +2,20 @@ package com.omgservers.application.module.userModule.impl.service.playerInternal
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.PlayerCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.validatePlayerOperation.ValidatePlayerOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
+import com.omgservers.application.module.userModule.model.player.PlayerModel;
+import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -25,9 +23,12 @@ import java.util.UUID;
 class SyncPlayerMethodImpl implements SyncPlayerMethod {
 
     final InternalModule internalModule;
+
     final ValidatePlayerOperation validatePlayerOperation;
-    final CheckShardOperation checkShardOperation;
     final UpsertPlayerOperation upsertPlayerOperation;
+    final CheckShardOperation checkShardOperation;
+
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -57,6 +58,11 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                             } else {
                                 return Uni.createFrom().voidItem();
                             }
+                        })
+                        .call(inserted -> {
+                            final var syncLog = logModelFactory.create("Player was sync, player=" + player);
+                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));
     }
 }

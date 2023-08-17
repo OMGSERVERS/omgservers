@@ -1,17 +1,20 @@
 package com.omgservers.application.module.userModule.impl.service.userWebService.impl;
 
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.AttributeInternalService;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.*;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.DeleteAttributeInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetPlayerAttributesInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.DeleteAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetPlayerAttributesInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.SyncAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.ClientInternalService;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.CreateClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.CreateClientInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.ObjectInternalService;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.DeleteObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.GetObjectInternalRequest;
@@ -29,18 +32,16 @@ import com.omgservers.application.module.userModule.impl.service.tokenInternalSe
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.CreateTokenInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.IntrospectTokenInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.UserInternalService;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.CreateUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.ValidateCredentialsInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.response.SyncUserInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.response.ValidateCredentialsInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.userWebService.UserWebService;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -53,11 +54,6 @@ class UserWebServiceImpl implements UserWebService {
     final TokenInternalService tokenInternalService;
     final UserInternalService userInternalService;
     final ClientInternalService internalService;
-
-    @Override
-    public Uni<Void> createUser(CreateUserInternalRequest request) {
-        return userInternalService.createUser(request);
-    }
 
     @Override
     public Uni<SyncUserInternalResponse> syncUser(SyncUserInternalRequest request) {
@@ -95,8 +91,8 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<CreateClientInternalResponse> createClient(CreateClientInternalRequest request) {
-        return internalService.createClient(request);
+    public Uni<SyncClientInternalResponse> syncClient(SyncClientInternalRequest request) {
+        return internalService.syncClient(request);
     }
 
     @Override

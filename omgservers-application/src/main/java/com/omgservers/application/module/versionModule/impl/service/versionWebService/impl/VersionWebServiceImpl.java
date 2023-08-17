@@ -26,11 +26,6 @@ class VersionWebServiceImpl implements VersionWebService {
     }
 
     @Override
-    public Uni<Void> createVersion(CreateVersionInternalRequest request) {
-        return versionInternalService.createVersion(request);
-    }
-
-    @Override
     public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
         return versionInternalService.syncVersion(request);
     }

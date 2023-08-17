@@ -1,6 +1,9 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.impl.method.assignPlayerMethod;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.sendMessageOperation.SendMessageOperation;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.AssignPlayerHelpRequest;
@@ -15,8 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class AssignPlayerMethodImpl implements AssignPlayerMethod {
 
+    final InternalModule internalModule;
+
     final ConnectionHelpService connectionInternalService;
+
     final SendMessageOperation sendMessageOperation;
+
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
@@ -29,6 +37,11 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
                     final var assignedPlayer = request.getAssignedPlayer();
                     final var assignPlayerInternalRequest = new AssignPlayerHelpRequest(connectionId, assignedPlayer);
                     connectionInternalService.assignPlayer(assignPlayerInternalRequest);
+                })
+                .call(voidItem -> {
+                    final var syncLog = logModelFactory.create("Player was assigned, request=" + request);
+                    final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                    return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                 });
     }
 }

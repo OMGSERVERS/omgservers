@@ -2,8 +2,9 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerDeletedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchmakerOperation.DeleteMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchmakerInternalRequest;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteMatchmakerInternalResponse;
@@ -13,8 +14,6 @@ import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -26,6 +25,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
     final DeleteMatchmakerOperation deleteMatchmakerOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -49,6 +49,15 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
                         final var eventBody = new MatchmakerDeletedEventBodyModel(id);
                         final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                         return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                    } else {
+                        return Uni.createFrom().voidItem();
+                    }
+                })
+                .call(deleted -> {
+                    if (deleted) {
+                        final var syncLog = logModelFactory.create("Matchmaker was deleted, matchmakerId=" + id);
+                        final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                        return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                     } else {
                         return Uni.createFrom().voidItem();
                     }

@@ -2,7 +2,9 @@ package com.omgservers.application.module.runtimeModule.impl.service.runtimeInte
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.RuntimeCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.model.RuntimeModel;
@@ -23,6 +25,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final UpsertRuntimeOperation upsertRuntimeOperation;
     final CheckShardOperation checkShardOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -39,13 +42,22 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     Uni<Void> syncRuntime(final int shard, final RuntimeModel runtime) {
         return pgPool.withTransaction(sqlConnection -> upsertRuntimeOperation
                         .upsertRuntime(sqlConnection, shard, runtime)
-                        .call(voidItem -> {
-                            final var id = runtime.getId();
-                            final var matchmakerId = runtime.getMatchmakerId();
-                            final var matchId = runtime.getMatchId();
-                            final var eventBody = new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
-                            final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
-                            return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                        .call(inserted -> {
+                            if (inserted) {
+                                final var id = runtime.getId();
+                                final var matchmakerId = runtime.getMatchmakerId();
+                                final var matchId = runtime.getMatchId();
+                                final var eventBody = new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
+                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
+                                return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                            } else {
+                                return Uni.createFrom().voidItem();
+                            }
+                        })
+                        .call(inserted -> {
+                            final var syncLog = logModelFactory.create("Runtime was sync, runtime=" + runtime);
+                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }))
                 .replaceWithVoid();
     }

@@ -1,42 +1,39 @@
 package com.omgservers.application.module.internalModule.impl.service.handlerHelpService.impl.handler;
 
+import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
+import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
+import com.omgservers.application.module.gatewayModule.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.application.module.internalModule.model.event.EventModel;
+import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
+import com.omgservers.application.module.internalModule.model.event.body.PlayerSignedUpEventBodyModel;
+import com.omgservers.application.module.internalModule.model.event.body.SignUpRequestedEventBodyModel;
+import com.omgservers.application.module.tenantModule.TenantModule;
+import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
+import com.omgservers.application.module.userModule.UserModule;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
 import com.omgservers.application.module.userModule.impl.service.userHelpService.request.RespondClientHelpRequest;
+import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
 import com.omgservers.application.module.userModule.model.client.ClientModel;
+import com.omgservers.application.module.userModule.model.client.ClientModelFactory;
 import com.omgservers.application.module.userModule.model.player.PlayerModel;
 import com.omgservers.application.module.userModule.model.user.UserModel;
 import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.module.internalModule.model.event.EventModel;
-import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
-import com.omgservers.application.module.internalModule.model.event.body.SignUpRequestedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.PlayerSignedUpEventBodyModel;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.CreateClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.CreateUserInternalRequest;
-import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
-import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
-import com.omgservers.application.module.gatewayModule.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.application.module.internalModule.impl.service.handlerHelpService.impl.EventHandler;
-import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.CreateClientInternalResponse;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.net.URI;
 import java.security.SecureRandom;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -47,8 +44,10 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final UserModelFactory userModelFactory;
     final GenerateIdOperation generateIdOperation;
+
+    final ClientModelFactory clientModelFactory;
+    final UserModelFactory userModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -94,8 +93,8 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
     Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
-        final var createUserServiceRequest = new CreateUserInternalRequest(user);
-        return userModule.getUserInternalService().createUser(createUserServiceRequest)
+        final var syncUserInternalRequest = new SyncUserInternalRequest(user);
+        return userModule.getUserInternalService().syncUser(syncUserInternalRequest)
                 .replaceWith(user);
     }
 
@@ -109,9 +108,10 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final Long playerId,
                                   final URI server,
                                   final Long connectionId) {
-        final var request = new CreateClientInternalRequest(userId, playerId, server, connectionId);
-        return userModule.getClientInternalService().createClient(request)
-                .map(CreateClientInternalResponse::getClient);
+        final var client = clientModelFactory.create(playerId, server, connectionId);
+        final var request = new SyncClientInternalRequest(userId, client);
+        return userModule.getClientInternalService().syncClient(request)
+                .replaceWith(client);
     }
 
     Uni<Void> respondCredentials(Long userId, Long clientId, String password) {

@@ -6,7 +6,6 @@ import com.omgservers.application.module.internalModule.model.event.EventQualifi
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncRequestInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncRequestInternalResponse;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
 import com.omgservers.application.module.tenantModule.TenantModule;

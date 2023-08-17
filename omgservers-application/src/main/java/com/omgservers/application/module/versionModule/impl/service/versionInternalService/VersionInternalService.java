@@ -10,8 +10,6 @@ public interface VersionInternalService {
 
     Uni<GetVersionInternalResponse> getVersion(GetVersionInternalRequest request);
 
-    Uni<Void> createVersion(CreateVersionInternalRequest request);
-
     Uni<Void> syncVersion(SyncVersionInternalRequest request);
 
     Uni<Void> deleteVersion(DeleteVersionInternalRequest request);

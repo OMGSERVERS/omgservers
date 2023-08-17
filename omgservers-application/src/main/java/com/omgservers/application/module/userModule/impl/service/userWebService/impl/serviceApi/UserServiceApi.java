@@ -5,10 +5,10 @@ import com.omgservers.application.module.userModule.impl.service.attributeIntern
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetPlayerAttributesInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.SyncAttributeInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.CreateClientInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.CreateClientInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.DeleteObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.GetObjectInternalRequest;
@@ -23,7 +23,6 @@ import com.omgservers.application.module.userModule.impl.service.tokenInternalSe
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.IntrospectTokenInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.CreateTokenInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.IntrospectTokenInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.CreateUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.ValidateCredentialsInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.response.SyncUserInternalResponse;
@@ -37,14 +36,6 @@ import java.time.Duration;
 
 @Path("/omgservers/service-api/user-api/v1/request")
 public interface UserServiceApi {
-
-    @PUT
-    @Path("/create-user")
-    Uni<Void> createUser(CreateUserInternalRequest request);
-
-    default void createUser(long timeout, CreateUserInternalRequest request) {
-        createUser(request).await().atMost(Duration.ofSeconds(timeout));
-    }
 
     @PUT
     @Path("/sync-user")
@@ -84,8 +75,8 @@ public interface UserServiceApi {
     }
 
     @PUT
-    @Path("/create-client")
-    Uni<CreateClientInternalResponse> createClient(CreateClientInternalRequest request);
+    @Path("/sync-client")
+    Uni<SyncClientInternalResponse> syncClient(SyncClientInternalRequest request);
 
     @PUT
     @Path("/get-client")

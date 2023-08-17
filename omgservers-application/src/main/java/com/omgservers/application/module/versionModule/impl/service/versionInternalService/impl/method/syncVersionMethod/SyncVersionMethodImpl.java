@@ -2,7 +2,9 @@ package com.omgservers.application.module.versionModule.impl.service.versionInte
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.versionModule.model.VersionModel;
@@ -21,8 +23,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 class SyncVersionMethodImpl implements SyncVersionMethod {
 
     final InternalModule internalModule;
-    final CheckShardOperation checkShardOperation;
+
     final UpsertVersionOperation upsertVersionOperation;
+    final CheckShardOperation checkShardOperation;
+
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -37,8 +42,7 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
     Uni<Void> syncVersion(Integer shard, VersionModel version) {
         return pgPool.withTransaction(sqlConnection ->
                         upsertVersionOperation.upsertVersion(sqlConnection, shard, version)
-                                .flatMap(result -> {
-                                    final var inserted = result.getItem2();
+                                .call(inserted -> {
                                     if (inserted) {
                                         final var id = version.getId();
                                         final var tenantId = version.getTenantId();
@@ -49,6 +53,11 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
                                     } else {
                                         return Uni.createFrom().voidItem();
                                     }
+                                })
+                                .call(inserted ->  {
+                                    final var syncLog = logModelFactory.create("Version was sync, version=" + version);
+                                    final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                    return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                                 }))
                 .replaceWithVoid();
     }

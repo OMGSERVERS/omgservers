@@ -1,4 +1,4 @@
-package com.omgservers.application.module.userModule.impl.operation.insertClientOperation;
+package com.omgservers.application.module.userModule.impl.operation.upsertClientOperation;
 
 import com.omgservers.application.module.userModule.model.client.ClientModelFactory;
 import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
@@ -19,15 +19,14 @@ import org.junit.jupiter.api.Test;
 import jakarta.inject.Inject;
 
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class InsertClientOperationTest extends Assertions {
+class UpsertClientOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    InsertClientOperation insertClientOperation;
+    UpsertClientOperation insertClientOperation;
 
     @Inject
     UpsertUserOperation upsertUserOperation;
@@ -51,7 +50,7 @@ class InsertClientOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenUserPlayer_whenInsertClient_thenInserted() {
+    void givenUserPlayer_whenUpsertClient_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
@@ -60,11 +59,11 @@ class InsertClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
         final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
     }
 
     @Test
-    void givenClient_whenInsertClientAgain_thenServerSideConflictException() {
+    void givenClient_whenUpsertClientAgain_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
@@ -72,11 +71,9 @@ class InsertClientOperationTest extends Assertions {
         final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
-        final var exception = assertThrows(ServerSideConflictException.class, () ->
-                insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client));
-        log.info("Exception: {}", exception.getMessage());
+        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
     }
 
     @Test
@@ -84,7 +81,7 @@ class InsertClientOperationTest extends Assertions {
         final var shard = 0;
         final var client = clientModelFactory.create(playerId(), URI.create("http://localhost:8080"), connectionId());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
-                insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client));
+                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
         log.info("Exception: {}", exception.getMessage());
     }
 

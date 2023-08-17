@@ -3,22 +3,19 @@ package com.omgservers.application.module.userModule.impl.service.userInternalSe
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.GetUserServiceApiClientOperation;
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.UserServiceApiClient;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.UserInternalService;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.createUserMethod.CreateUserMethod;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.syncUserMethod.SyncUserMethod;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.validateCredentials.ValidateCredentialsMethod;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.CreateUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.ValidateCredentialsInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.response.SyncUserInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.response.ValidateCredentialsInternalResponse;
+import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -30,17 +27,7 @@ class UserInternalServiceImpl implements UserInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     final ValidateCredentialsMethod validateCredentialsMethod;
-    final CreateUserMethod createUserMethod;
     final SyncUserMethod syncUserMethod;
-
-    @Override
-    public Uni<Void> createUser(CreateUserInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateUserInternalRequest::validate,
-                getUserServiceApiClientOperation::getClient,
-                UserServiceApiClient::createUser,
-                createUserMethod::createUser);
-    }
 
     @Override
     public Uni<SyncUserInternalResponse> syncUser(final SyncUserInternalRequest request) {

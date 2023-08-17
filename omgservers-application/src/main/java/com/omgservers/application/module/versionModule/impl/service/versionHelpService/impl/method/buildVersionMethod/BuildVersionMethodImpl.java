@@ -4,6 +4,7 @@ import com.omgservers.application.module.versionModule.impl.operation.compileVer
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
 import com.omgservers.application.module.versionModule.model.VersionModel;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.CreateVersionInternalRequest;
 import com.omgservers.application.module.versionModule.model.VersionModelFactory;
@@ -41,8 +42,8 @@ public class BuildVersionMethodImpl implements BuildVersionMethod {
     }
 
     Uni<VersionModel> createVersion(final VersionModel version) {
-        final var createVersionServiceRequest = new CreateVersionInternalRequest(version);
-        return versionInternalService.createVersion(createVersionServiceRequest)
+        final var syncVersionInternalRequest = new SyncVersionInternalRequest(version);
+        return versionInternalService.syncVersion(syncVersionInternalRequest)
                 .replaceWith(version);
     }
 }

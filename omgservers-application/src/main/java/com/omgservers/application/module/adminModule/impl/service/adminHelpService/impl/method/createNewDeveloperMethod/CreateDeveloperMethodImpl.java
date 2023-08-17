@@ -3,16 +3,14 @@ package com.omgservers.application.module.adminModule.impl.service.adminHelpServ
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModelFactory;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
-import com.omgservers.application.module.userModule.model.user.UserModel;
-import com.omgservers.application.module.userModule.model.user.UserModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.CreateUserInternalRequest;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
+import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModelFactory;
+import com.omgservers.application.module.userModule.UserModule;
+import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
+import com.omgservers.application.module.userModule.model.user.UserModelFactory;
+import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -58,8 +56,8 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     Uni<Void> createUser(Long id, String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.DEVELOPER, passwordHash);
-        final var createUserServiceRequest = new CreateUserInternalRequest(user);
-        return userModule.getUserInternalService().createUser(createUserServiceRequest)
+        final var syncUserInternalRequest = new SyncUserInternalRequest(user);
+        return userModule.getUserInternalService().syncUser(syncUserInternalRequest)
                 .replaceWithVoid();
     }
 

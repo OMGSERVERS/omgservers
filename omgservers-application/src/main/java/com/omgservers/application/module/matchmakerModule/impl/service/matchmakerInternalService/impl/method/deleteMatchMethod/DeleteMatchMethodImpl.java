@@ -2,8 +2,9 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.MatchDeletedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchOperation.DeleteMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchInternalRequest;
@@ -14,8 +15,6 @@ import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -28,6 +27,8 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     final CheckShardOperation checkShardOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
+
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -52,6 +53,16 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
                                 final var eventBody = new MatchDeletedEventBodyModel(matchmakerId, id);
                                 final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
                                 return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                            } else {
+                                return Uni.createFrom().voidItem();
+                            }
+                        })
+                        .call(deleted -> {
+                            if (deleted) {
+                                final var syncLog = logModelFactory.create(String.format("Match was deleted, " +
+                                        "matchmakerId=%d, id=%d", matchmakerId, id));
+                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                             } else {
                                 return Uni.createFrom().voidItem();
                             }

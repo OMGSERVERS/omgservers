@@ -6,7 +6,7 @@ import com.omgservers.application.module.userModule.model.player.PlayerModelFact
 import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.userModule.impl.operation.insertClientOperation.InsertClientOperation;
+import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
@@ -29,7 +29,7 @@ class SelectClientOperationTest extends Assertions {
     SelectClientOperation selectClientOperation;
 
     @Inject
-    InsertClientOperation insertClientOperation;
+    UpsertClientOperation insertClientOperation;
 
     @Inject
     UpsertUserOperation upsertUserOperation;
@@ -61,7 +61,7 @@ class SelectClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client1 = clientModelFactory.create(player.getId(), URI.create("http://localhost:8080"), connectionId());
         final var clientUuid = client1.getId();
-        insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client1);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client1);
 
         final var client2 = selectClientOperation.selectClient(TIMEOUT, pgPool, shard, clientUuid);
         assertEquals(client1, client2);

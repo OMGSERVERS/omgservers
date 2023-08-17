@@ -30,12 +30,6 @@ public class VersionServiceApiImpl implements VersionServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> createVersion(CreateVersionInternalRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::createVersion);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::syncVersion);
     }

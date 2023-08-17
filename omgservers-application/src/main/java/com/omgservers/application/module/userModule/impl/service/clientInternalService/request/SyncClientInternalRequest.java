@@ -1,28 +1,24 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.request;
 
+import com.omgservers.application.module.userModule.model.client.ClientModel;
 import com.omgservers.application.request.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateClientInternalRequest implements InternalRequest {
+public class SyncClientInternalRequest implements InternalRequest {
 
-    static public void validate(CreateClientInternalRequest request) {
+    static public void validate(SyncClientInternalRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
     }
 
     Long userId;
-    Long playerId;
-    URI server;
-    Long connectionId;
+    ClientModel client;
 
     @Override
     public String getRequestShardKey() {

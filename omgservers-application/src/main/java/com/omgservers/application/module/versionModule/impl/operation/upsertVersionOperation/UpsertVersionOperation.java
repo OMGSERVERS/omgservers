@@ -2,18 +2,17 @@ package com.omgservers.application.module.versionModule.impl.operation.upsertVer
 
 import com.omgservers.application.module.versionModule.model.VersionModel;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.tuples.Tuple2;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
 
 public interface UpsertVersionOperation {
-    Uni<Tuple2<Long, Boolean>> upsertVersion(SqlConnection sqlConnection,
-                                             int shard,
-                                             VersionModel version);
+    Uni<Boolean> upsertVersion(SqlConnection sqlConnection,
+                               int shard,
+                               VersionModel version);
 
-    default Tuple2<Long, Boolean> upsertVersion(long timeout, PgPool pgPool, int shard, VersionModel version) {
+    default Boolean upsertVersion(long timeout, PgPool pgPool, int shard, VersionModel version) {
         return pgPool.withTransaction(sqlConnection -> upsertVersion(sqlConnection, shard, version))
                 .await().atMost(Duration.ofSeconds(timeout));
     }

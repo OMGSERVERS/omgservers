@@ -3,7 +3,6 @@ package com.omgservers.application.module.versionModule.impl.service.versionInte
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
 import com.omgservers.application.module.versionModule.impl.operation.getVersionServiceApiClientOperation.GetVersionServiceApiClientOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.createVersionMethod.CreateVersionMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.deleteVersionMethod.DeleteVersionMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getBytecodeMethod.GetBytecodeMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getStageConfigMethod.GetStageConfigMethod;
@@ -28,7 +27,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class VersionInternalServiceImpl implements VersionInternalService {
 
     final GetStageConfigMethod getStageConfigMethod;
-    final CreateVersionMethod createVersionMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final SyncVersionMethod syncVersionMethod;
     final GetBytecodeMethod getBytecodeMethod;
@@ -45,15 +43,6 @@ public class VersionInternalServiceImpl implements VersionInternalService {
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::getVersion,
                 getVersionMethod::getVersion);
-    }
-
-    @Override
-    public Uni<Void> createVersion(CreateVersionInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateVersionInternalRequest::validate,
-                getVersionServiceApiClientOperation::getClient,
-                VersionServiceApi::createVersion,
-                createVersionMethod::createVersion);
     }
 
     @Override

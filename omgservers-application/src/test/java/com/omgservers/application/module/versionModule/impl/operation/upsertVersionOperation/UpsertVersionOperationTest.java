@@ -37,7 +37,7 @@ class UpsertVersionOperationTest extends Assertions {
     void whenUpsertVersion_thenInserted() {
         final var shard = 0;
         final var version = versionModelFactory.create(tenantId(), stageId(), VersionStageConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
-        assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version).getItem2());
+        assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version));
     }
 
     @Test
@@ -46,7 +46,7 @@ class UpsertVersionOperationTest extends Assertions {
         final var version = versionModelFactory.create(tenantId(), stageId(), VersionStageConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
         upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version);
 
-        assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version).getItem2());
+        assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version));
     }
 
     Long tenantId() {

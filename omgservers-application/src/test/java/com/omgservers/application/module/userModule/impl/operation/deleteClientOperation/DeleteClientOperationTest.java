@@ -5,7 +5,7 @@ import com.omgservers.application.module.userModule.model.player.PlayerConfigMod
 import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserModelFactory;
 import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.module.userModule.impl.operation.insertClientOperation.InsertClientOperation;
+import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
@@ -28,7 +28,7 @@ class DeleteClientOperationTest extends Assertions {
     DeleteClientOperation deleteClientOperation;
 
     @Inject
-    InsertClientOperation insertClientOperation;
+    UpsertClientOperation insertClientOperation;
 
     @Inject
     UpsertUserOperation upsertUserOperation;
@@ -60,7 +60,7 @@ class DeleteClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client = clientModelFactory.create(player.getId(), URI.create("http://localhost:8080"), connectionId());
         final var clientId = client.getId();
-        insertClientOperation.insertClient(TIMEOUT, pgPool, shard, client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
         assertTrue(deleteClientOperation.deleteClient(TIMEOUT, pgPool, shard, clientId));
     }

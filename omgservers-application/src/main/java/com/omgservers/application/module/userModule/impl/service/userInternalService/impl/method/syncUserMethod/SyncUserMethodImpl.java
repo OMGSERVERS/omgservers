@@ -1,5 +1,8 @@
 package com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.syncUserMethod;
 
+import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
@@ -16,9 +19,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 @AllArgsConstructor
 class SyncUserMethodImpl implements SyncUserMethod {
 
+    final InternalModule internalModule;
+
     final CheckShardOperation checkShardOperation;
     final UpsertUserOperation upsertUserOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -29,7 +35,12 @@ class SyncUserMethodImpl implements SyncUserMethod {
                 .flatMap(shardModel -> {
                     final var user = request.getUser();
                     return pgPool.withTransaction(sqlConnection ->
-                            upsertUserOperation.upsertUser(sqlConnection, shardModel.shard(), user));
+                            upsertUserOperation.upsertUser(sqlConnection, shardModel.shard(), user)
+                                    .call(inserted -> {
+                                        final var syncLog = logModelFactory.create("User was sync, user=" + user);
+                                        final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                        return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                                    }));
                 })
                 .map(SyncUserInternalResponse::new);
     }
