@@ -1,7 +1,9 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService;
 
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
@@ -9,6 +11,8 @@ import com.omgservers.application.module.internalModule.impl.service.indexHelpSe
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.GetIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.response.GetIndexHelpResponse;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.DeleteServiceAccountHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.GetServiceAccountHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
@@ -34,4 +38,6 @@ public interface AdminWebService {
     Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request);
 
     Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request);
+
+    Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request);
 }

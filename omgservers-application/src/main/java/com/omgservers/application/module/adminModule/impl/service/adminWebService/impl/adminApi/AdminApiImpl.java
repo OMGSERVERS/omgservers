@@ -1,7 +1,9 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService.impl.adminApi;
 
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
@@ -82,5 +84,11 @@ public class AdminApiImpl implements AdminApi {
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::createDeveloper);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
+    public Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::collectLogs);
     }
 }

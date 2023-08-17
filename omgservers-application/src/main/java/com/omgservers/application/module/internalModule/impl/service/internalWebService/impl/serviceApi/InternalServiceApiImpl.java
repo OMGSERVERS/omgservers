@@ -9,6 +9,8 @@ import com.omgservers.application.module.internalModule.impl.service.jobInternal
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.response.SyncJobInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.ScheduleJobInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.UnscheduleJobInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
 import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
 import com.omgservers.application.operation.handleApiRequestOperation.HandleApiRequestOperation;
@@ -66,5 +68,11 @@ class InternalServiceApiImpl implements InternalServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<Void> unscheduleJob(UnscheduleJobInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::unscheduleJob);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewLogsHelpResponse> viewLogs(ViewLogsHelpRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::viewLogs);
     }
 }

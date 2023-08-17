@@ -1,8 +1,10 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService.impl;
 
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.AdminHelpService;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
@@ -72,5 +74,10 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request) {
         return adminHelpService.createDeveloper(request);
+    }
+
+    @Override
+    public Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request) {
+        return adminHelpService.collectLogs(request);
     }
 }

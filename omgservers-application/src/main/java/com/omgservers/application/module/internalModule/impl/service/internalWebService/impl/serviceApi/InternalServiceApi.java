@@ -8,6 +8,8 @@ import com.omgservers.application.module.internalModule.impl.service.jobInternal
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.response.SyncJobInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.ScheduleJobInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.UnscheduleJobInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
@@ -72,5 +74,14 @@ public interface InternalServiceApi {
 
     default void unscheduleJob(long timeout, UnscheduleJobInternalRequest request) {
         unscheduleJob(request).await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/view-logs")
+    Uni<ViewLogsHelpResponse> viewLogs(ViewLogsHelpRequest request);
+
+    default ViewLogsHelpResponse viewLogs(long timeout, ViewLogsHelpRequest request) {
+        return viewLogs(request)
+                .await().atMost(Duration.ofSeconds(timeout));
     }
 }

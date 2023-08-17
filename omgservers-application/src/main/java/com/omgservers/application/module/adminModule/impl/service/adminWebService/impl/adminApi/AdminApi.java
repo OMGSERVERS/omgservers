@@ -1,7 +1,9 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService.impl.adminApi;
 
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
@@ -100,6 +102,15 @@ public interface AdminApi {
 
     default CreateDeveloperHelpResponse createDeveloper(long timeout, CreateDeveloperHelpRequest request) {
         return createDeveloper(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/collect-logs")
+    Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request);
+
+    default CollectLogsHelpResponse collectLogs(long timeout, CollectLogsHelpRequest request) {
+        return collectLogs(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

@@ -20,10 +20,11 @@ import java.time.ZoneOffset;
 class UpsertJobOperationImpl implements UpsertJobOperation {
 
     static private final String sql = """
-            insert into internal.tab_job(created, shard_key, entity, type)
-            values($1, $2, $3, $4)
+            insert into internal.tab_job(id, created, shard_key, entity, type)
+            values($1, $2, $3, $4, $5)
             on conflict (shard_key, entity) do
-            nothing            
+            update set type = $5
+            returning xmax::text::int = 0 as inserted
             """;
 
     final ObjectMapper objectMapper;
@@ -53,10 +54,11 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, JobModel job) {
         return sqlConnection.preparedQuery(sql)
                 .execute(Tuple.of(
+                        job.getId(),
                         job.getCreated().atOffset(ZoneOffset.UTC),
                         job.getShardKey(),
                         job.getEntity(),
                         job.getType()))
-                .map(rowSet -> rowSet.rowCount() > 0);
+                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
     }
 }

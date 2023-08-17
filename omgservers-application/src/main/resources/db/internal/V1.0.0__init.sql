@@ -16,7 +16,7 @@ create table if not exists tab_service_account (
 );
 
 create table if not exists tab_event (
-    id bigserial primary key,
+    id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     group_id bigint not null,
@@ -26,7 +26,7 @@ create table if not exists tab_event (
 );
 
 create table if not exists tab_job (
-    id bigserial primary key,
+    id bigint primary key,
     created timestamp with time zone not null,
     shard_key bigint not null,
     entity bigint not null,
@@ -35,7 +35,7 @@ create table if not exists tab_job (
 );
 
 create table if not exists tab_log (
-    id bigserial primary key,
+    id bigint primary key,
     created timestamp with time zone not null,
     message text not null
 );

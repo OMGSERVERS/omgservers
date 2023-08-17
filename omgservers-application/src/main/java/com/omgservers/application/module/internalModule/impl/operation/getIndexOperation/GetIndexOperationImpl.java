@@ -34,7 +34,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
             throw new IllegalArgumentException("sqlConnection is null");
         }
         if (name == null) {
-            throw new IllegalArgumentException("fileName is null");
+            throw new IllegalArgumentException("name is null");
         }
 
         return sqlConnection.preparedQuery(sql)
@@ -46,10 +46,10 @@ class GetIndexOperationImpl implements GetIndexOperation {
                             log.debug("Index was found, name={}", name);
                             return createIndex(iterator.next());
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("index can't be parsed, fileName=" + name, e);
+                            throw new ServerSideInternalException("index can't be parsed, name=" + name, e);
                         }
                     } else {
-                        throw new ServerSideNotFoundException("index was not found, fileName=" + name);
+                        throw new ServerSideNotFoundException("index was not found, name=" + name);
                     }
                 });
     }

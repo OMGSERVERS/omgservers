@@ -13,6 +13,9 @@ import com.omgservers.application.module.internalModule.impl.service.jobInternal
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.JobSchedulerService;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.ScheduleJobInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.UnscheduleJobInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.ServiceAccountHelpService;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
 import io.smallrye.mutiny.Uni;
@@ -31,6 +34,7 @@ public class InternalWebServiceImpl implements InternalWebService {
     final JobSchedulerService jobSchedulerService;
     final JobInternalService jobInternalService;
     final IndexHelpService indexHelpService;
+    final LogHelpService logHelpService;
 
     @Override
     public Uni<Void> syncIndex(SyncIndexHelpRequest request) {
@@ -65,5 +69,10 @@ public class InternalWebServiceImpl implements InternalWebService {
     @Override
     public Uni<Void> unscheduleJob(UnscheduleJobInternalRequest request) {
         return jobSchedulerService.unscheduleJob(request);
+    }
+
+    @Override
+    public Uni<ViewLogsHelpResponse> viewLogs(final ViewLogsHelpRequest request) {
+        return logHelpService.viewLogs(request);
     }
 }

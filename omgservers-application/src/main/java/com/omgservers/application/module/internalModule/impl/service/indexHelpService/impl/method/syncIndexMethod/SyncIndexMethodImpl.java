@@ -14,9 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncIndexMethodImpl implements SyncIndexMethod {
 
-    final PgPool pgPool;
     final ValidateIndexOperation validateIndexOperation;
     final UpsertIndexOperation syncIndexOperation;
+
+    final PgPool pgPool;
 
     @Override
     public Uni<Void> syncIndex(SyncIndexHelpRequest request) {

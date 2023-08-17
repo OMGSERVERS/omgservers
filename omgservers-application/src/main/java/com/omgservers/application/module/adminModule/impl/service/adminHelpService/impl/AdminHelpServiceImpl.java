@@ -1,13 +1,16 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.pingServerMethod.PingServerMethod;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.AdminHelpService;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.collectLogsMethod.CollectLogsMethod;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewDeveloperMethod.CreateDeveloperMethod;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewTenantMethod.CreateTenantMethod;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.pingServerMethod.PingServerMethod;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,6 +25,7 @@ class AdminHelpServiceImpl implements AdminHelpService {
 
     final CreateDeveloperMethod createDeveloperAdminMethod;
     final CreateTenantMethod createTenantAdminMethod;
+    final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
 
     @Override
@@ -37,5 +41,10 @@ class AdminHelpServiceImpl implements AdminHelpService {
     @Override
     public Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request) {
         return createDeveloperAdminMethod.createDeveloper(request);
+    }
+
+    @Override
+    public Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request) {
+        return collectLogsMethod.collectLogs(request);
     }
 }
