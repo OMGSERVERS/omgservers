@@ -2,6 +2,7 @@ package com.omgservers.application.module.tenantModule.impl.service.tenantIntern
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation.UpsertTenantPermissionOperation;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
@@ -36,7 +37,14 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                     return pgPool.withTransaction(sqlConnection -> upsertTenantPermissionOperation
                             .upsertTenantPermission(sqlConnection, shard.shard(), permission)
                             .call(inserted -> {
-                                final var syncLog = logModelFactory.create("Tenant permission was sync, permission=" + permission);
+                                final LogModel syncLog;
+                                if (inserted) {
+                                    syncLog = logModelFactory.create("Tenant permission was created, " +
+                                            "permission=" + permission);
+                                } else {
+                                    syncLog = logModelFactory.create("Tenant permission was updated, " +
+                                            "permission=" + permission);
+                                }
                                 final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                                 return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                             }));

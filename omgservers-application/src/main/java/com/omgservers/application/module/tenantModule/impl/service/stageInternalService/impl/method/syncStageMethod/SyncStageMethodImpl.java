@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.StageCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation.ValidateStageOperation;
@@ -58,7 +59,12 @@ class SyncStageMethodImpl implements SyncStageMethod {
                                     }
                                 })
                                 .call(inserted -> {
-                                    final var syncLog = logModelFactory.create("Stage was sync, stage=" + stage);
+                                    final LogModel syncLog;
+                                    if (inserted) {
+                                        syncLog = logModelFactory.create("Stage was created, stage=" + stage);
+                                    } else {
+                                        syncLog = logModelFactory.create("Stage was update, stage=" + stage);
+                                    }
                                     final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                                     return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                                 }))

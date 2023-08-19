@@ -36,10 +36,14 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
                     return pgPool.withTransaction(sqlConnection -> deleteClientOperation
                                     .deleteClient(sqlConnection, shard, client)
                                     .call(deleted -> {
-                                        final var syncLog = logModelFactory.create("Client was deleted, " +
-                                                "client=" + client);
-                                        final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                        return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                                        if (deleted) {
+                                            final var syncLog = logModelFactory.create("Client was deleted, " +
+                                                    "client=" + client);
+                                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                                        } else {
+                                            return Uni.createFrom().voidItem();
+                                        }
                                     }))
                             .replaceWithVoid();
                 });

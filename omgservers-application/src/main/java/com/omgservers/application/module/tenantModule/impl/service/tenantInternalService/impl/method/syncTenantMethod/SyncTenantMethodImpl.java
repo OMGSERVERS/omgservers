@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation.ValidateTenantOperation;
@@ -57,7 +58,12 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
                             }
                         })
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Tenant was created, tenant=" + tenant);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Tenant was created, tenant=" + tenant);
+                            } else {
+                                syncLog = logModelFactory.create("Tenant was updated, tenant=" + tenant);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));

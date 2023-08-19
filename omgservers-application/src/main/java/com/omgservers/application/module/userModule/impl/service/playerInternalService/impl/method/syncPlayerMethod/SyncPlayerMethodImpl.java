@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.PlayerCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.validatePlayerOperation.ValidatePlayerOperation;
@@ -60,7 +61,12 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                             }
                         })
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Player was sync, player=" + player);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Player was created, player=" + player);
+                            } else {
+                                syncLog = logModelFactory.create("Player was updated, player=" + player);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));

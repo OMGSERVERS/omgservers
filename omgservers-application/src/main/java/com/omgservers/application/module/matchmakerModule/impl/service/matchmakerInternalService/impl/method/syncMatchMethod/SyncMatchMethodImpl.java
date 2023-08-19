@@ -4,7 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.MatchCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.MatchmakerCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
@@ -62,7 +62,12 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
                             }
                         })
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Match was sync, match=" + match);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Match was created, match=" + match);
+                            } else {
+                                syncLog = logModelFactory.create("Match was updated, match=" + match);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }))

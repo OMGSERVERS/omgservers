@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.ClientCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
@@ -52,7 +53,12 @@ class SyncClientMethodImpl implements SyncClientMethod {
                             return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
                         })
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Client was sync, client=" + client);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Client was created, client=" + client);
+                            } else {
+                                syncLog = logModelFactory.create("Client was updated, client=" + client);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));

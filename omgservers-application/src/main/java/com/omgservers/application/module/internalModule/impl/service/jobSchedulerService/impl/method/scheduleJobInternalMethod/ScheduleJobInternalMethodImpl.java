@@ -4,7 +4,10 @@ import com.omgservers.application.module.internalModule.impl.operation.getJobInt
 import com.omgservers.application.module.internalModule.impl.operation.getJobNameOperation.GetJobNameOperation;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.impl.JobTask;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.ScheduleJobInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.job.JobType;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.scheduler.Scheduled;
@@ -16,27 +19,35 @@ import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @ApplicationScoped
 class ScheduleJobInternalMethodImpl implements ScheduleJobInternalMethod {
 
+    final LogHelpService logHelpService;
+
+    final GetJobIntervalOperation getJobIntervalOperation;
     final CheckShardOperation checkShardOperation;
     final GetJobNameOperation getJobNameOperation;
-    final GetJobIntervalOperation getJobIntervalOperation;
+
+    final LogModelFactory logModelFactory;
+
     final Map<JobType, JobTask> jobTasks;
     final Scheduler scheduler;
 
-    public ScheduleJobInternalMethodImpl(CheckShardOperation checkShardOperation,
+    public ScheduleJobInternalMethodImpl(LogHelpService logHelpService,
+                                         CheckShardOperation checkShardOperation,
                                          GetJobNameOperation getJobNameOperation,
                                          GetJobIntervalOperation getJobIntervalOperation,
+                                         LogModelFactory logModelFactory,
                                          Instance<JobTask> jobTaskBeans,
                                          Scheduler scheduler) {
+        this.logHelpService = logHelpService;
         this.checkShardOperation = checkShardOperation;
         this.getJobNameOperation = getJobNameOperation;
         this.getJobIntervalOperation = getJobIntervalOperation;
+        this.logModelFactory = logModelFactory;
         this.jobTasks = new ConcurrentHashMap<>();
         jobTaskBeans.stream().forEach(jobTask -> {
             JobType type = jobTask.getJobType();
@@ -56,7 +67,13 @@ class ScheduleJobInternalMethodImpl implements ScheduleJobInternalMethod {
                     final var entity = request.getEntity();
                     final var type = request.getType();
                     return Uni.createFrom().voidItem()
-                            .invoke(voidItem -> scheduleJob(shardKey, entity, type));
+                            .invoke(voidItem -> scheduleJob(shardKey, entity, type))
+                            .call(voidItem -> {
+                                final var syncLog = logModelFactory
+                                        .create(String.format("Job was scheduled, type=%s, entity=%d", type, entity));
+                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                return logHelpService.syncLog(syncLogHelpRequest);
+                            });
                 });
     }
 

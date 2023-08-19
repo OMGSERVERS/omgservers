@@ -2,6 +2,9 @@ package com.omgservers.application.module.internalModule.impl.service.jobSchedul
 
 import com.omgservers.application.module.internalModule.impl.operation.getJobNameOperation.GetJobNameOperation;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.request.UnscheduleJobInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
+import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
@@ -9,15 +12,17 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class UnscheduleJobInternalMethodImpl implements UnscheduleJobInternalMethod {
 
+    final LogHelpService logHelpService;
+
     final CheckShardOperation checkShardOperation;
     final GetJobNameOperation getJobNameOperation;
+
+    final LogModelFactory logModelFactory;
     final Scheduler scheduler;
 
     @Override
@@ -29,7 +34,13 @@ class UnscheduleJobInternalMethodImpl implements UnscheduleJobInternalMethod {
                     final var shardKey = request.getShardKey();
                     final var entity = request.getEntity();
                     return Uni.createFrom().voidItem()
-                            .invoke(voidItem -> unscheduleJob(shardKey, entity));
+                            .invoke(voidItem -> unscheduleJob(shardKey, entity))
+                            .call(voidItem -> {
+                                final var syncLog = logModelFactory
+                                        .create(String.format("Job was unscheduled, entity=%d", entity));
+                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
+                                return logHelpService.syncLog(syncLogHelpRequest);
+                            });
                 });
     }
 

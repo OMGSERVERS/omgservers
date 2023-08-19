@@ -2,6 +2,7 @@ package com.omgservers.application.module.userModule.impl.service.userInternalSe
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
@@ -37,7 +38,12 @@ class SyncUserMethodImpl implements SyncUserMethod {
                     return pgPool.withTransaction(sqlConnection ->
                             upsertUserOperation.upsertUser(sqlConnection, shardModel.shard(), user)
                                     .call(inserted -> {
-                                        final var syncLog = logModelFactory.create("User was sync, user=" + user);
+                                        final LogModel syncLog;
+                                        if (inserted) {
+                                            syncLog = logModelFactory.create("User was created, user=" + user);
+                                        } else {
+                                            syncLog = logModelFactory.create("User was updated, user=" + user);
+                                        }
                                         final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                                         return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                                     }));

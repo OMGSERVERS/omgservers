@@ -2,10 +2,9 @@ package com.omgservers.application.module.adminModule.impl.service.adminHelpServ
 
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
+import com.omgservers.application.module.adminModule.model.ServerLogModel;
 import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.operation.getServersOperation.GetServersOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -14,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,26 +31,32 @@ class CollectLogsMethodImpl implements CollectLogsMethod {
 
         return getServersOperation.getServers()
                 .flatMap(this::collectLogs)
-                .map(CollectLogsHelpResponse::new);
+                .map(collectedLogs -> new CollectLogsHelpResponse(collectedLogs.size(), collectedLogs));
     }
 
-    Uni<List<LogModel>> collectLogs(List<URI> servers) {
+    Uni<List<ServerLogModel>> collectLogs(List<URI> servers) {
         log.info("Collect logs from servers, servers={}", servers);
         return Multi.createFrom().iterable(servers)
-                .map(getInternalsServiceApiClientOperation::getClient)
-                .onItem().transformToUniAndMerge(client -> {
+                .onItem().transformToUniAndMerge(server -> {
+                    final var client = getInternalsServiceApiClientOperation.getClient(server);
                     final var request = new ViewLogsHelpRequest();
-                    return client.viewLogs(request);
+                    return client.viewLogs(request)
+                            .map(response -> response.getLogs().stream()
+                                    .map(log -> new ServerLogModel(log.getId(),
+                                            log.getCreated(),
+                                            server,
+                                            log.getMessage()))
+                                    .toList());
                 })
                 .collect().asList()
                 .map(this::flatLogs);
 
     }
 
-    List<LogModel> flatLogs(List<ViewLogsHelpResponse> responses) {
-        return responses.stream()
-                .flatMap(response -> response.getLogs().stream())
-                .sorted(Comparator.comparingLong(log -> log.getCreated().toEpochMilli()))
+    List<ServerLogModel> flatLogs(List<List<ServerLogModel>> serverLogs) {
+        return serverLogs.stream()
+                .flatMap(Collection::stream)
+                .sorted(Comparator.comparingLong(ServerLogModel::getId).reversed())
                 .toList();
     }
 }

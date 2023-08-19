@@ -3,22 +3,20 @@ package com.omgservers.application.module.tenantModule.impl.service.projectInter
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
 import com.omgservers.application.module.internalModule.model.event.body.ProjectCreatedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateProjectOperation.ValidateProjectOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectInternalResponse;
+import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -62,7 +60,12 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
                             }
                         })
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Project was sync, project=" + project);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Project was created, project=" + project);
+                            } else {
+                                syncLog = logModelFactory.create("Project was updated, project=" + project);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }));

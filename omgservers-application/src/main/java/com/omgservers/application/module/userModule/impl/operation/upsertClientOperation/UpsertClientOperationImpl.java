@@ -45,7 +45,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
         return upsertQuery(sqlConnection, shard, client)
                 .invoke(inserted -> {
                     if (inserted) {
-                        log.info("Client was inserted, client={}", client);
+                        log.info("Client was created, client={}", client);
                     } else {
                         log.info("Client was updated, client={}", client);
                     }

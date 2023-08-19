@@ -46,7 +46,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
         return upsertQuery(sqlConnection, shard, matchmaker)
                 .invoke(inserted -> {
                     if (inserted) {
-                        log.info("Matchmaker was inserted, shard={}, matchmaker={}", shard, matchmaker);
+                        log.info("Matchmaker was created, shard={}, matchmaker={}", shard, matchmaker);
                     } else {
                         log.info("Matchmaker was updated, shard={}, matchmaker={}", shard, matchmaker);
                     }

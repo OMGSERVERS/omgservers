@@ -2,6 +2,7 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
@@ -47,7 +48,12 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
         return pgPool.withTransaction(sqlConnection -> upsertRequestOperation
                         .upsertRequest(sqlConnection, shard, request)
                         .call(inserted -> {
-                            final var syncLog = logModelFactory.create("Request was sync, request=" + request);
+                            final LogModel syncLog;
+                            if (inserted) {
+                                syncLog = logModelFactory.create("Request was created, request=" + request);
+                            } else {
+                                syncLog = logModelFactory.create("Request was updated, request=" + request);
+                            }
                             final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
                             return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
                         }))

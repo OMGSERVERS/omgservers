@@ -21,9 +21,9 @@ public class RequestModel {
 
     Long id;
     Long matchmakerId;
-//    @ToString.Exclude
+    @ToString.Exclude
     Instant created;
-//    @ToString.Exclude
+    @ToString.Exclude
     Instant modified;
     RequestConfigModel config;
 }

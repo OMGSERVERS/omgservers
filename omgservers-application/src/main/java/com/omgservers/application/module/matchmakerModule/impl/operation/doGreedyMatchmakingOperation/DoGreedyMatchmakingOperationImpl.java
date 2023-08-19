@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation;
 
-import com.omgservers.application.module.matchmakerModule.model.match.MatchGroupModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
+import com.omgservers.application.module.matchmakerModule.model.match.MatchGroupModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
 import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
 import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
@@ -35,7 +35,6 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
         // List<MatchModel> temporaryMatches = new ArrayList<>(launchedMatches);
         List<MatchModel> temporaryMatches = new ArrayList<>();
         List<RequestModel> failedRequests = new ArrayList<>();
-        List<RequestModel> matchedRequests = new ArrayList<>();
 
         activeRequests.forEach(request -> {
             boolean matched = false;
@@ -45,7 +44,6 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
             for (var match : sortedMatches) {
                 matched = matchRequestWithMatch(request, match);
                 if (matched) {
-                    matchedRequests.add(request);
                     break;
                 }
             }
@@ -55,9 +53,8 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 final var newMatch = matchModelFactory.create(matchmakerId, generateIdOperation.generateId(), matchConfig);
                 temporaryMatches.add(newMatch);
 
-                if (matchRequestWithMatch(request, newMatch)) {
-                    matchedRequests.add(request);
-                } else {
+                if (!matchRequestWithMatch(request, newMatch)) {
+                    // Request can't be matched even with new match
                     failedRequests.add(request);
                 }
             }
@@ -65,6 +62,10 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
         final var preparedMatches = temporaryMatches.stream()
                 .filter(this::checkMatchReadiness)
+                .toList();
+
+        final var matchedRequests = preparedMatches.stream()
+                .flatMap(match -> getMatchRequests(match).stream())
                 .toList();
 
         return new GreedyMatchmakingResult(matchedRequests, failedRequests, preparedMatches);
@@ -109,6 +110,14 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
         return match.getConfig().getGroups().stream()
                 .map(group -> group.getRequests().size())
                 .reduce(0, Integer::sum);
+    }
+
+    List<RequestModel> getMatchRequests(MatchModel match) {
+        final var matchRequests = new ArrayList<RequestModel>();
+        match.getConfig().getGroups().stream()
+                .flatMap(group -> group.getRequests().stream())
+                .forEach(matchRequests::add);
+        return matchRequests;
     }
 
     boolean checkMatchReadiness(MatchModel match) {

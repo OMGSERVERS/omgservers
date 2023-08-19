@@ -47,7 +47,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
         return upsertQuery(sqlConnection, shard, match)
                 .invoke(inserted -> {
                     if (inserted) {
-                        log.info("Match was inserted, shard={}, match={}", shard, match);
+                        log.info("Match was created, shard={}, match={}", shard, match);
                     } else {
                         log.info("Match was updated, shard={}, match={}", shard, match);
                     }

@@ -1,5 +1,6 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.response;
 
+import com.omgservers.application.module.adminModule.model.ServerLogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CollectLogsHelpResponse {
 
-    List<LogModel> logs;
+    int totalRows;
+    List<ServerLogModel> logs;
 }
