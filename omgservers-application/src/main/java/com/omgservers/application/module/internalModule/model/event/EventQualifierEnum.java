@@ -3,7 +3,6 @@ package com.omgservers.application.module.internalModule.model.event;
 import com.omgservers.application.module.internalModule.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.ClientUpdatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.JobUpdatedEventBodyModel;
@@ -27,6 +26,7 @@ import com.omgservers.application.module.internalModule.model.event.body.SignInR
 import com.omgservers.application.module.internalModule.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.StageDeletedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.event.body.StageUpdatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.TenantDeletedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.VersionCreatedEventBodyModel;
@@ -34,7 +34,6 @@ import com.omgservers.application.module.internalModule.model.event.body.Version
 import com.omgservers.application.module.internalModule.model.event.body.VersionUpdatedEventBodyModel;
 
 public enum EventQualifierEnum {
-    EVENT_CREATED(EventCreatedEventBodyModel.class),
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_UPDATED(JobUpdatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),
@@ -45,6 +44,7 @@ public enum EventQualifierEnum {
     PROJECT_UPDATED(ProjectUpdatedEventBodyModel.class),
     PROJECT_DELETED(ProjectDeletedEventBodyModel.class),
     STAGE_CREATED(StageCreatedEventBodyModel.class),
+    STAGE_UPDATED(StageUpdatedEventBodyModel.class),
     STAGE_DELETED(StageDeletedEventBodyModel.class),
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
     VERSION_UPDATED(VersionUpdatedEventBodyModel.class),

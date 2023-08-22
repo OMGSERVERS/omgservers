@@ -1,7 +1,6 @@
 package com.omgservers.application.module.internalModule.model.event.body;
 
 import com.omgservers.application.module.internalModule.model.event.EventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventQualifierEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EventCreatedEventBodyModel extends EventBodyModel {
+public class StageUpdatedEventBodyModel extends EventBodyModel {
 
-    EventModel event;
+    Long tenantId;
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.EVENT_CREATED;
+        return EventQualifierEnum.STAGE_UPDATED;
     }
 
     @Override
     public Long getGroupId() {
-        return event.getGroupId();
+        return tenantId;
     }
 }
