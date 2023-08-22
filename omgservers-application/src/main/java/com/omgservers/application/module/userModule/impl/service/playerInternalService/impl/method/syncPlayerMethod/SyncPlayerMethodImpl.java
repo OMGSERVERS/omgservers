@@ -1,17 +1,14 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.syncPlayerMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.PlayerCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
+import com.omgservers.application.module.internalModule.model.event.body.PlayerUpdatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.validatePlayerOperation.ValidatePlayerOperation;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +24,7 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
 
     final ValidatePlayerOperation validatePlayerOperation;
     final UpsertPlayerOperation upsertPlayerOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -37,38 +34,27 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
         SyncPlayerInternalRequest.validate(request);
 
         final var player = request.getPlayer();
-        final var user = player.getUserId();
-        return Uni.createFrom().voidItem()
-                .invoke(voidItem -> validatePlayerOperation.validatePlayer(player))
-                .flatMap(validatedProject -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> syncPlayer(shardModel.shard(), user, player))
+        final var userId = player.getUserId();
+        return changeOperation.changeWithEvent(request,
+                        (sqlConnection, shardModel) -> upsertPlayerOperation
+                                .upsertPlayer(sqlConnection, shardModel.shard(), player),
+                        inserted -> {
+                            if (inserted) {
+                                return logModelFactory.create("Player was created, player=" + player);
+                            } else {
+                                return logModelFactory.create("Player was updated, player=" + player);
+                            }
+                        },
+                        inserted -> {
+                            final var stageId = player.getStageId();
+                            final var id = player.getId();
+                            if (inserted) {
+                                return new PlayerCreatedEventBodyModel(userId, stageId, id);
+                            } else {
+                                return new PlayerUpdatedEventBodyModel(userId, stageId, id);
+                            }
+                        }
+                )
                 .map(SyncPlayerInternalResponse::new);
-    }
-
-    Uni<Boolean> syncPlayer(Integer shard, Long user, PlayerModel player) {
-        return pgPool.withTransaction(sqlConnection ->
-                upsertPlayerOperation.upsertPlayer(sqlConnection, shard, player)
-                        .call(inserted -> {
-                            if (inserted) {
-                                final var id = player.getId();
-                                final var stageId = player.getStageId();
-                                final var eventBody = new PlayerCreatedEventBodyModel(user, stageId, id);
-                                final var insertEventInternalRequest =
-                                        new InsertEventHelpRequest(sqlConnection, eventBody);
-                                return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
-                            } else {
-                                return Uni.createFrom().voidItem();
-                            }
-                        })
-                        .call(inserted -> {
-                            final LogModel syncLog;
-                            if (inserted) {
-                                syncLog = logModelFactory.create("Player was created, player=" + player);
-                            } else {
-                                syncLog = logModelFactory.create("Player was updated, player=" + player);
-                            }
-                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                        }));
     }
 }

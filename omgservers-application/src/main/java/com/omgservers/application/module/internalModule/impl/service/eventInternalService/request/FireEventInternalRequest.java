@@ -1,7 +1,7 @@
 package com.omgservers.application.module.internalModule.impl.service.eventInternalService.request;
 
 import com.omgservers.application.module.internalModule.model.event.EventModel;
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

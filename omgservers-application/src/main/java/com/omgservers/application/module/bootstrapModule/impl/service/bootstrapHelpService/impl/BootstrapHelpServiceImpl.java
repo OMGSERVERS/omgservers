@@ -2,7 +2,6 @@ package com.omgservers.application.module.bootstrapModule.impl.service.bootstrap
 
 import com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.BootstrapHelpService;
 import com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapDatabaseSchemaMethod.BootstrapDatabaseSchemaMethod;
-import com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapConsumersMethod.BootstrapConsumersMethod;
 import com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapEventDispatcherMethod.BootstrapEventDispatcherMethod;
 import com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapStandaloneConfigurationMethod.BootstrapStandaloneConfigurationMethod;
 import io.smallrye.mutiny.Uni;
@@ -19,13 +18,11 @@ class BootstrapHelpServiceImpl implements BootstrapHelpService {
     final BootstrapStandaloneConfigurationMethod bootstrapStandaloneConfigurationMethod;
     final BootstrapEventDispatcherMethod bootstrapEventDispatcherMethod;
     final BootstrapDatabaseSchemaMethod bootstrapDatabaseSchemaMethod;
-    final BootstrapConsumersMethod bootstrapConsumersMethod;
 
     @Override
     public Uni<Void> bootstrap() {
         return bootstrapDatabaseSchemaMethod.bootstrapDatabaseSchema()
                 .flatMap(voidItem -> bootstrapStandaloneConfigurationMethod.bootstrapStandaloneConfiguration())
-                .flatMap(voidItem -> bootstrapConsumersMethod.bootstrapConsumersMethod())
                 .flatMap(voidItem -> bootstrapEventDispatcherMethod.bootstrapEventDispatcherMethod());
     }
 }

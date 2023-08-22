@@ -1,13 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectPermissionOperation.UpsertProjectPermissionOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectPermissionInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectPermissionInternalResponse;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +20,7 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
     final InternalModule internalModule;
 
     final UpsertProjectPermissionOperation upsertProjectPermissionOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -31,25 +29,19 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
     public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionInternalRequest request) {
         SyncProjectPermissionInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var permission = request.getPermission();
-                    return pgPool.withTransaction(sqlConnection -> upsertProjectPermissionOperation
-                            .upsertProjectPermission(sqlConnection, shard, permission)
-                            .call(inserted -> {
-                                final LogModel syncLog;
-                                if (inserted) {
-                                    syncLog = logModelFactory.create("Project permission was created, " +
-                                            "permission=" + permission);
-                                } else {
-                                    syncLog = logModelFactory.create("Project permission was updated, " +
-                                            "permission=" + permission);
-                                }
-                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                            }));
-                })
+        final var permission = request.getPermission();
+        return changeOperation.changeWithLog(request,
+                        ((sqlConnection, shardModel) -> upsertProjectPermissionOperation
+                                .upsertProjectPermission(sqlConnection, shardModel.shard(), permission)),
+                        inserted -> {
+                            if (inserted) {
+                                return logModelFactory.create("Project permission was created, " +
+                                        "permission=" + permission);
+                            } else {
+                                return logModelFactory.create("Project permission was updated, " +
+                                        "permission=" + permission);
+                            }
+                        })
                 .map(SyncProjectPermissionInternalResponse::new);
     }
 }

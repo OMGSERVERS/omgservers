@@ -1,13 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteRequestMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteRequestOperation.DeleteRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteRequestInternalRequest;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteRequestInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +21,7 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     final InternalModule internalModule;
 
     final DeleteRequestOperation deleteRequestOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
@@ -33,31 +32,20 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestInternalRequest request) {
         DeleteRequestInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var id = request.getId();
-                    return deleteRequest(shard.shard(), id);
-                })
-                .map(DeleteRequestInternalResponse::new);
-    }
-
-    Uni<Boolean> deleteRequest(final int shard,
-                               final Long id) {
-        return pgPool.withTransaction(sqlConnection -> deleteRequestOperation
-                        .deleteRequest(sqlConnection, shard, id)
-                        .call(deleted -> {
+        final var matchmakerId = request.getMatchmakerId();
+        final var id = request.getId();
+        return changeOperation.changeWithLog(request,
+                        (sqlConnection, shardModel) -> deleteRequestOperation
+                                .deleteRequest(sqlConnection, shardModel.shard(), id),
+                        deleted -> {
                             if (deleted) {
-                                final var syncLog = logModelFactory.create("Request was deleted, id=" + id);
-                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
+                                return logModelFactory.create(String.format("Request was deleted, " +
+                                        "matchmakerId=%d, id=%d", matchmakerId, id));
                             } else {
-                                return Uni.createFrom().voidItem();
+                                return null;
                             }
-                        }))
-                .invoke(deleted -> {
-                    if (deleted) {
-                        matchmakerInMemoryCache.removeRequest(id);
-                    }
-                });
+                        })
+                .invoke(deleted -> matchmakerInMemoryCache.removeRequest(id))
+                .map(DeleteRequestInternalResponse::new);
     }
 }

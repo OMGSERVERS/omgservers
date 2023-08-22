@@ -4,7 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.GetIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.response.GetIndexHelpResponse;
 import com.omgservers.application.operation.calculateCrc16Operation.CalculateCrc16Operation;
-import com.omgservers.application.model.ShardModel;
+import com.omgservers.application.ShardModel;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import lombok.AllArgsConstructor;

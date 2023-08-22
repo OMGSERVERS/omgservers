@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.service.objectInternalService.request;
 
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

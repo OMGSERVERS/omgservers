@@ -59,9 +59,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             if (qualifier.getBodyClass().isInstance(eventBody)) {
                 log.info("Handle event, {}", event);
                 return eventHandler.handle(event)
-                        .replaceWith(true)
-                        .onFailure(ServerSideInternalException.class)
-                        .recoverWithItem(false);
+                        .replaceWith(true);
             } else {
                 log.error("Event body has wrong type, event={}", event);
                 return Uni.createFrom().item(true);

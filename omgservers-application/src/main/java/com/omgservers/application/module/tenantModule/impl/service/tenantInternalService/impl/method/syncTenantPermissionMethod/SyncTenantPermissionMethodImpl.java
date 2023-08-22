@@ -1,13 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation.UpsertTenantPermissionOperation;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +20,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     final InternalModule internalModule;
 
     final UpsertTenantPermissionOperation upsertTenantPermissionOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -31,24 +29,20 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionInternalRequest request) {
         SyncTenantPermissionInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var permission = request.getPermission();
-                    return pgPool.withTransaction(sqlConnection -> upsertTenantPermissionOperation
-                            .upsertTenantPermission(sqlConnection, shard.shard(), permission)
-                            .call(inserted -> {
-                                final LogModel syncLog;
-                                if (inserted) {
-                                    syncLog = logModelFactory.create("Tenant permission was created, " +
-                                            "permission=" + permission);
-                                } else {
-                                    syncLog = logModelFactory.create("Tenant permission was updated, " +
-                                            "permission=" + permission);
-                                }
-                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                            }));
-                })
+        final var permission = request.getPermission();
+        return changeOperation.changeWithLog(request,
+                        (sqlConnection, shardModel) -> upsertTenantPermissionOperation
+                                .upsertTenantPermission(sqlConnection, shardModel.shard(), permission),
+                        inserted -> {
+                            if (inserted) {
+                                return logModelFactory.create("Tenant permission was created, " +
+                                        "permission=" + permission);
+                            } else {
+                                return logModelFactory.create("Tenant permission was updated, " +
+                                        "permission=" + permission);
+                            }
+                        }
+                )
                 .map(SyncTenantPermissionResponse::new);
     }
 }

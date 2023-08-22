@@ -1,15 +1,13 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.MatchDeletedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchOperation.DeleteMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchInternalRequest;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteMatchInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +22,7 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     final InternalModule internalModule;
 
     final DeleteMatchOperation deleteMatchOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
@@ -35,38 +33,27 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchInternalRequest request) {
         DeleteMatchInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var matchmakerId = request.getMatchmakerId();
-                    final var id = request.getId();
-                    return deleteMatch(shard.shard(), matchmakerId, id);
-                })
+        final var matchmakerId = request.getMatchmakerId();
+        final var id = request.getId();
+        return changeOperation.changeWithEvent(request,
+                        (sqlConnection, shardModel) -> deleteMatchOperation
+                                .deleteMatch(sqlConnection, shardModel.shard(), id),
+                        deleted -> {
+                            if (deleted) {
+                                return logModelFactory.create("Matchmaker was deleted, matchmakerId=" + id);
+                            } else {
+                                return null;
+                            }
+                        },
+                        deleted -> {
+                            if (deleted) {
+                                return new MatchDeletedEventBodyModel(matchmakerId, id);
+                            } else {
+                                return null;
+                            }
+                        }
+                )
+                .invoke(deleted -> matchmakerInMemoryCache.removeMatch(id))
                 .map(DeleteMatchInternalResponse::new);
-    }
-
-    Uni<Boolean> deleteMatch(final int shard,
-                             final Long matchmakerId,
-                             final Long id) {
-        return pgPool.withTransaction(sqlConnection -> deleteMatchOperation.deleteMatch(sqlConnection, shard, id)
-                        .call(deleted -> {
-                            if (deleted) {
-                                final var eventBody = new MatchDeletedEventBodyModel(matchmakerId, id);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
-                                return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
-                            } else {
-                                return Uni.createFrom().voidItem();
-                            }
-                        })
-                        .call(deleted -> {
-                            if (deleted) {
-                                final var syncLog = logModelFactory.create(String.format("Match was deleted, " +
-                                        "matchmakerId=%d, id=%d", matchmakerId, id));
-                                final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                            } else {
-                                return Uni.createFrom().voidItem();
-                            }
-                        }))
-                .invoke(deleted -> matchmakerInMemoryCache.removeMatch(id));
     }
 }

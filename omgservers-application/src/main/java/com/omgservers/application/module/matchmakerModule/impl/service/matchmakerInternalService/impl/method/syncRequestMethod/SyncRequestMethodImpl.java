@@ -1,15 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncRequestMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncRequestInternalRequest;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncRequestInternalResponse;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +21,7 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final InternalModule internalModule;
 
     final UpsertRequestOperation upsertRequestOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
@@ -35,28 +32,19 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
         SyncRequestInternalRequest.validate(request);
 
-        return Uni.createFrom().voidItem()
-                .flatMap(validatedProject -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shard -> {
-                    final var requestModel = request.getRequest();
-                    return syncRequest(shard.shard(), requestModel);
-                })
-                .map(SyncRequestInternalResponse::new);
-    }
-
-    Uni<Boolean> syncRequest(final int shard, final RequestModel request) {
-        return pgPool.withTransaction(sqlConnection -> upsertRequestOperation
-                        .upsertRequest(sqlConnection, shard, request)
-                        .call(inserted -> {
-                            final LogModel syncLog;
+        final var requestModel = request.getRequest();
+        return changeOperation.changeWithLog(request,
+                        (sqlConnection, shardModel) -> upsertRequestOperation
+                                .upsertRequest(sqlConnection, shardModel.shard(), requestModel),
+                        inserted -> {
                             if (inserted) {
-                                syncLog = logModelFactory.create("Request was created, request=" + request);
+                                return logModelFactory.create("Request was created, request=" + requestModel);
                             } else {
-                                syncLog = logModelFactory.create("Request was updated, request=" + request);
+                                return logModelFactory.create("Request was updated, request=" + requestModel);
                             }
-                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                        }))
-                .invoke(voidItem -> matchmakerInMemoryCache.addRequest(request));
+                        }
+                )
+                .invoke(inserted -> matchmakerInMemoryCache.addRequest(requestModel))
+                .map(SyncRequestInternalResponse::new);
     }
 }

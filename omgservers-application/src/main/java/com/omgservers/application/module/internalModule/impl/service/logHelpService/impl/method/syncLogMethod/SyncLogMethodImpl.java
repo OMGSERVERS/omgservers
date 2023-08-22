@@ -1,6 +1,6 @@
 package com.omgservers.application.module.internalModule.impl.service.logHelpService.impl.method.syncLogMethod;
 
-import com.omgservers.application.module.internalModule.impl.operation.upsertLogOperation.UpsertLogOperation;
+import com.omgservers.application.operation.upsertLogOperation.UpsertLogOperation;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.SyncLogHelpResponse;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;

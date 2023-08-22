@@ -1,6 +1,6 @@
 package com.omgservers.application.module.internalModule.impl.operation.deleteEventOperation;
 
-import com.omgservers.application.module.internalModule.impl.operation.insertEventOperation.InsertEventOperation;
+import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

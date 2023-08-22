@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.handleInternalRequestOperation;
 
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import io.smallrye.mutiny.Uni;
 import org.slf4j.Logger;
 

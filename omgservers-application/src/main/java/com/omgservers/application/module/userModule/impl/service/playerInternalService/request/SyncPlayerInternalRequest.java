@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.request;
 
 import com.omgservers.application.module.userModule.model.player.PlayerModel;
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

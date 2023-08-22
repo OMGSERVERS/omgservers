@@ -1,4 +1,4 @@
-package com.omgservers.application.model;
+package com.omgservers.application;
 
 import java.net.URI;
 

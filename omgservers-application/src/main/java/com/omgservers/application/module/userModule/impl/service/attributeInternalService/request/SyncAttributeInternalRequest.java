@@ -1,12 +1,10 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.request;
 
 import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

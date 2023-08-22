@@ -1,8 +1,7 @@
 package com.omgservers.application.module.internalModule.impl.operation.selectEventOperation;
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.internalModule.impl.operation.insertEventOperation.InsertEventOperation;
-import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -10,8 +9,6 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

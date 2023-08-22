@@ -1,4 +1,4 @@
-package com.omgservers.application.request;
+package com.omgservers.application;
 
 public interface InternalRequest {
 

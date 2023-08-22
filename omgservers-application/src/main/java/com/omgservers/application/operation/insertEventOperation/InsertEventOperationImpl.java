@@ -1,4 +1,4 @@
-package com.omgservers.application.module.internalModule.impl.operation.insertEventOperation;
+package com.omgservers.application.operation.insertEventOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;

@@ -1,15 +1,12 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.event.body.RuntimeCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
+import com.omgservers.application.module.internalModule.model.event.body.RuntimeUpdatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +21,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final InternalModule internalModule;
 
     final UpsertRuntimeOperation upsertRuntimeOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -33,38 +30,29 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
         SyncRuntimeInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var runtime = request.getRuntime();
-                    return syncRuntime(shard.shard(), runtime);
-                });
-    }
-
-    Uni<Void> syncRuntime(final int shard, final RuntimeModel runtime) {
-        return pgPool.withTransaction(sqlConnection -> upsertRuntimeOperation
-                        .upsertRuntime(sqlConnection, shard, runtime)
-                        .call(inserted -> {
+        final var runtime = request.getRuntime();
+        return changeOperation.changeWithEvent(request,
+                        (sqlConnection, shardModel) -> upsertRuntimeOperation
+                                .upsertRuntime(sqlConnection, shardModel.shard(), runtime),
+                        inserted -> {
                             if (inserted) {
-                                final var id = runtime.getId();
-                                final var matchmakerId = runtime.getMatchmakerId();
-                                final var matchId = runtime.getMatchId();
-                                final var eventBody = new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
-                                return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
+                                return logModelFactory.create("Runtime was created, runtime=" + runtime);
                             } else {
-                                return Uni.createFrom().voidItem();
+                                return logModelFactory.create("Runtime was update, runtime=" + runtime);
                             }
-                        })
-                        .call(inserted -> {
-                            final LogModel syncLog;
+                        },
+                        inserted -> {
+                            final var id = runtime.getId();
+                            final var matchmakerId = runtime.getMatchmakerId();
+                            final var matchId = runtime.getMatchId();
                             if (inserted) {
-                                syncLog = logModelFactory.create("Runtime was created, runtime=" + runtime);
+                                return new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
                             } else {
-                                syncLog = logModelFactory.create("Runtime was updated, runtime=" + runtime);
+                                return new RuntimeUpdatedEventBodyModel(id, matchmakerId, matchId);
                             }
-                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                        }))
+                        }
+                )
+                //TODO: add response with created field
                 .replaceWithVoid();
     }
 }

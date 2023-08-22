@@ -1,11 +1,10 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.deleteClientMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.deleteClientOperation.DeleteClientOperation;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +19,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final InternalModule internalModule;
 
     final DeleteClientOperation deleteClientOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -29,23 +28,19 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     public Uni<Void> deleteClient(final DeleteClientInternalRequest request) {
         DeleteClientInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var client = request.getClientId();
-                    return pgPool.withTransaction(sqlConnection -> deleteClientOperation
-                                    .deleteClient(sqlConnection, shard, client)
-                                    .call(deleted -> {
-                                        if (deleted) {
-                                            final var syncLog = logModelFactory.create("Client was deleted, " +
-                                                    "client=" + client);
-                                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                                        } else {
-                                            return Uni.createFrom().voidItem();
-                                        }
-                                    }))
-                            .replaceWithVoid();
-                });
+        final var clientId = request.getClientId();
+        return changeOperation.changeWithLog(request,
+                        ((sqlConnection, shardModel) -> deleteClientOperation
+                                .deleteClient(sqlConnection, shardModel.shard(), clientId)),
+                        deleted -> {
+                            if (deleted) {
+                                return logModelFactory.create("Client was deleted, " +
+                                        "clientId=" + clientId);
+                            } else {
+                                return null;
+                            }
+                        })
+                // TODO: implement response with deleted flag
+                .replaceWithVoid();
     }
 }

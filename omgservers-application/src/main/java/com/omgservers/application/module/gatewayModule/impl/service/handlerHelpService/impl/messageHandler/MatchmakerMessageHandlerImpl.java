@@ -3,13 +3,12 @@ package com.omgservers.application.module.gatewayModule.impl.service.handlerHelp
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetAssignedPlayerHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
+import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
 import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
 import com.omgservers.application.module.gatewayModule.model.message.body.MatchmakerMessageBodyModel;
-import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
 import com.omgservers.application.module.internalModule.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
@@ -18,8 +17,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

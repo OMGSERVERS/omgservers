@@ -30,19 +30,11 @@ public interface ServiceApplicationConfig {
 
     long tokenLifetime();
 
-    boolean disableConsumers();
-
-    int consumerCount();
-
-    String consumerQueue();
-
-    int producerCount();
-
-    String producerQueue();
-
     boolean disableDispatcher();
 
-    int dispatcherLimit();
+    int dispatcherCount();
+
+    int postponeInterval();
 
     boolean standalone();
 }

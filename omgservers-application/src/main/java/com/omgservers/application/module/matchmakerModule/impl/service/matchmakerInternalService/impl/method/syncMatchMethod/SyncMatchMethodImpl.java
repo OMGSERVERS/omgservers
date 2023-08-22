@@ -1,17 +1,15 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.internalModule.model.event.EventModelFactory;
 import com.omgservers.application.module.internalModule.model.event.body.MatchCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModel;
+import com.omgservers.application.module.internalModule.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchInternalRequest;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncMatchInternalResponse;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,10 +24,10 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     final InternalModule internalModule;
 
     final UpsertMatchOperation upsertMatchOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
-
+    final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
@@ -37,40 +35,26 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchInternalRequest request) {
         SyncMatchInternalRequest.validate(request);
 
-        return Uni.createFrom().voidItem()
-                .flatMap(validatedProject -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shard -> {
-                    final var match = request.getMatch();
-                    return syncMatch(shard.shard(), match);
-                })
+        final var match = request.getMatch();
+        return changeOperation.changeWithEvent(request,
+                        (sqlConnection, shardModel) -> upsertMatchOperation
+                                .upsertMatch(sqlConnection, shardModel.shard(), match),
+                        inserted -> {
+                            if (inserted) {
+                                return logModelFactory.create("Match was created, match=" + match);
+                            } else {
+                                return logModelFactory.create("Match was updated, match=" + match);
+                            }
+                        },
+                        inserted -> {
+                            if (inserted) {
+                                return new MatchCreatedEventBodyModel(match.getMatchmakerId(), match.getId());
+                            } else {
+                                return new MatchUpdatedEventBodyModel(match.getMatchmakerId(), match.getId());
+                            }
+                        }
+                )
+                .invoke(inserted -> matchmakerInMemoryCache.addMatch(match))
                 .map(SyncMatchInternalResponse::new);
-    }
-
-    Uni<Boolean> syncMatch(final int shard, final MatchModel match) {
-        return pgPool.withTransaction(sqlConnection -> upsertMatchOperation
-                        .upsertMatch(sqlConnection, shard, match)
-                        .call(inserted -> {
-                            if (inserted) {
-                                final var matchmakerId = match.getMatchmakerId();
-                                final var id = match.getId();
-                                final var eventBody = new MatchCreatedEventBodyModel(matchmakerId, id);
-                                final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
-                                return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest)
-                                        .replaceWithVoid();
-                            } else {
-                                return Uni.createFrom().voidItem();
-                            }
-                        })
-                        .call(inserted -> {
-                            final LogModel syncLog;
-                            if (inserted) {
-                                syncLog = logModelFactory.create("Match was created, match=" + match);
-                            } else {
-                                syncLog = logModelFactory.create("Match was updated, match=" + match);
-                            }
-                            final var syncLogHelpRequest = new SyncLogHelpRequest(syncLog);
-                            return internalModule.getLogHelpService().syncLog(syncLogHelpRequest);
-                        }))
-                .invoke(voidItem -> matchmakerInMemoryCache.addMatch(match));
     }
 }

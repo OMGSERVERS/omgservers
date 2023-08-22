@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.checkShardOperation;
 
-import com.omgservers.application.model.ShardModel;
+import com.omgservers.application.ShardModel;
 import io.smallrye.mutiny.Uni;
 
 public interface CheckShardOperation {

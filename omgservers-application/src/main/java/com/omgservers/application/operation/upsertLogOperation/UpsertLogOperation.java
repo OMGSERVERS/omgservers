@@ -1,4 +1,4 @@
-package com.omgservers.application.module.internalModule.impl.operation.upsertLogOperation;
+package com.omgservers.application.operation.upsertLogOperation;
 
 import com.omgservers.application.module.internalModule.model.log.LogModel;
 import io.smallrye.mutiny.Uni;

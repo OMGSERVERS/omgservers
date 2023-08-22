@@ -2,6 +2,8 @@ package com.omgservers.application.module.internalModule.impl.service.eventInter
 
 import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
 import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.InternalsServiceApiClient;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.impl.method.fireEventMethod.FireEventMethod;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class EventInternalServiceImpl implements EventInternalService {
 
+    final EventHelpService eventHelpService;
     final FireEventMethod fireEventMethod;
 
     final GetInternalsServiceApiClientOperation getInternalsServiceApiClientOperation;

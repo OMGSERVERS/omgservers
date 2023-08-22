@@ -5,7 +5,6 @@ services:
     container_name: "app-1"
     depends_on:
       - db-1
-      - qm-1
     ports:
       - "10001:8080"
     environment:
@@ -13,9 +12,6 @@ services:
       - QUARKUS_DATASOURCE_PASSWORD=root
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://db-1:5432/root
       - QUARKUS_DATASOURCE_REACTIVE_URL=postgresql://db-1:5432/root
-      - QUARKUS_QPID_JMS_URL=amqp://qm-1:5672
-      - QUARKUS_QPID_JMS_USERNAME=omgservers
-      - QUARKUS_QPID_JMS_PASSWORD=omgservers
       - OMGSERVERS_APPLICATION_DATACENTER_ID=1
       - OMGSERVERS_APPLICATION_NODE_ID=1
       - OMGSERVERS_APPLICATION_SERVER_URI=http://app-1:8080
@@ -28,13 +24,9 @@ services:
       - OMGSERVERS_APPLICATION_DISABLE_MIGRATION=false
       - OMGSERVERS_APPLICATION_MIGRATION_CONCURRENCY=4
       - OMGSERVERS_APPLICATION_TOKEN_LIFETIME=600
-      - OMGSERVERS_APPLICATION_DISABLE_CONSUMERS=false
-      - OMGSERVERS_APPLICATION_CONSUMER_COUNT=4
-      - OMGSERVERS_APPLICATION_CONSUMER_QUEUE=OMGSERVERS.EVENTS
-      - OMGSERVERS_APPLICATION_PRODUCER_COUNT=4
-      - OMGSERVERS_APPLICATION_PRODUCER_QUEUE=OMGSERVERS.EVENTS
       - OMGSERVERS_APPLICATION_DISABLE_DISPATCHER=false
       - OMGSERVERS_APPLICATION_DISPATCHER_LIMIT=32
+      - OMGSERVERS_APPLICATION_POSTPONE_INTERVAL=60
       - OMGSERVERS_APPLICATION_STANDALONE=false
   db-1:
     image: "postgres:15.1"
@@ -45,22 +37,11 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-  qm-1:
-    image: "quay.io/artemiscloud/activemq-artemis-broker:latest"
-    container_name: "qm-1"
-    expose:
-      - "5672"
-      - "8161"
-      - "61616"
-    environment:
-      - AMQ_USER=omgservers
-      - AMQ_PASSWORD=omgservers
   app-2:
     image: "omgservers/omgservers-application:1.0.0-SNAPSHOT"
     container_name: "app-2"
     depends_on:
       - db-2
-      - qm-2
     ports:
       - "10002:8080"
     environment:
@@ -68,9 +49,6 @@ services:
       - QUARKUS_DATASOURCE_PASSWORD=root
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://db-2:5432/root
       - QUARKUS_DATASOURCE_REACTIVE_URL=postgresql://db-2:5432/root
-      - QUARKUS_QPID_JMS_URL=amqp://qm-2:5672
-      - QUARKUS_QPID_JMS_USERNAME=omgservers
-      - QUARKUS_QPID_JMS_PASSWORD=omgservers
       - OMGSERVERS_APPLICATION_DATACENTER_ID=1
       - OMGSERVERS_APPLICATION_NODE_ID=2
       - OMGSERVERS_APPLICATION_SERVER_URI=http://app-2:8080
@@ -83,13 +61,9 @@ services:
       - OMGSERVERS_APPLICATION_DISABLE_MIGRATION=false
       - OMGSERVERS_APPLICATION_MIGRATION_CONCURRENCY=4
       - OMGSERVERS_APPLICATION_TOKEN_LIFETIME=600
-      - OMGSERVERS_APPLICATION_DISABLE_CONSUMERS=false
-      - OMGSERVERS_APPLICATION_CONSUMER_COUNT=4
-      - OMGSERVERS_APPLICATION_CONSUMER_QUEUE=OMGSERVERS.EVENTS
-      - OMGSERVERS_APPLICATION_PRODUCER_COUNT=4
-      - OMGSERVERS_APPLICATION_PRODUCER_QUEUE=OMGSERVERS.EVENTS
       - OMGSERVERS_APPLICATION_DISABLE_DISPATCHER=false
       - OMGSERVERS_APPLICATION_DISPATCHER_LIMIT=32
+      - OMGSERVERS_APPLICATION_POSTPONE_INTERVAL=60
       - OMGSERVERS_APPLICATION_STANDALONE=false
   db-2:
     image: "postgres:15.1"
@@ -100,22 +74,11 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-  qm-2:
-    image: "quay.io/artemiscloud/activemq-artemis-broker:latest"
-    container_name: "qm-2"
-    expose:
-      - "5672"
-      - "8161"
-      - "61616"
-    environment:
-      - AMQ_USER=omgservers
-      - AMQ_PASSWORD=omgservers
   app-3:
     image: "omgservers/omgservers-application:1.0.0-SNAPSHOT"
     container_name: "app-3"
     depends_on:
       - db-3
-      - qm-3
     ports:
       - "10003:8080"
     environment:
@@ -123,9 +86,6 @@ services:
       - QUARKUS_DATASOURCE_PASSWORD=root
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://db-3:5432/root
       - QUARKUS_DATASOURCE_REACTIVE_URL=postgresql://db-3:5432/root
-      - QUARKUS_QPID_JMS_URL=amqp://qm-3:5672
-      - QUARKUS_QPID_JMS_USERNAME=omgservers
-      - QUARKUS_QPID_JMS_PASSWORD=omgservers
       - OMGSERVERS_APPLICATION_DATACENTER_ID=1
       - OMGSERVERS_APPLICATION_NODE_ID=3
       - OMGSERVERS_APPLICATION_SERVER_URI=http://app-3:8080
@@ -138,13 +98,9 @@ services:
       - OMGSERVERS_APPLICATION_DISABLE_MIGRATION=false
       - OMGSERVERS_APPLICATION_MIGRATION_CONCURRENCY=4
       - OMGSERVERS_APPLICATION_TOKEN_LIFETIME=600
-      - OMGSERVERS_APPLICATION_DISABLE_CONSUMERS=false
-      - OMGSERVERS_APPLICATION_CONSUMER_COUNT=4
-      - OMGSERVERS_APPLICATION_CONSUMER_QUEUE=OMGSERVERS.EVENTS
-      - OMGSERVERS_APPLICATION_PRODUCER_COUNT=4
-      - OMGSERVERS_APPLICATION_PRODUCER_QUEUE=OMGSERVERS.EVENTS
       - OMGSERVERS_APPLICATION_DISABLE_DISPATCHER=false
       - OMGSERVERS_APPLICATION_DISPATCHER_LIMIT=32
+      - OMGSERVERS_APPLICATION_POSTPONE_INTERVAL=60
       - OMGSERVERS_APPLICATION_STANDALONE=false
   db-3:
     image: "postgres:15.1"
@@ -155,23 +111,3 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-  qm-3:
-    image: "quay.io/artemiscloud/activemq-artemis-broker:latest"
-    container_name: "qm-3"
-    expose:
-      - "5672"
-      - "8161"
-      - "61616"
-    environment:
-      - AMQ_USER=omgservers
-      - AMQ_PASSWORD=omgservers
-#  jaeger:
-#    image: jaegertracing/all-in-one:latest
-#    ports:
-#      - "16686:16686" # Jaeger UI
-#      - "14268:14268" # Receive legacy OpenTracing traces, optional
-#      - "4317:4317"   # OTLP gRPC receiver
-#      - "4318:4318"   # OTLP HTTP receiver, not yet used by Quarkus, optional
-#      - "14250:14250" # Receive from external otel-collector, optional
-#    environment:
-#      - COLLECTOR_OTLP_ENABLED=true

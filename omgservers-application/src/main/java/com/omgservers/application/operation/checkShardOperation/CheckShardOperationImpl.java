@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.checkShardOperation;
 
-import com.omgservers.application.model.ShardModel;
+import com.omgservers.application.ShardModel;
 import com.omgservers.application.exception.ServerSideGoneException;
 import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;

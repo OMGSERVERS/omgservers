@@ -1,11 +1,10 @@
 package com.omgservers.application.module.internalModule.impl.service.eventInternalService.impl.method.fireEventMethod;
 
+import com.omgservers.application.Dispatcher;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
-import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
-import com.omgservers.application.module.internalModule.impl.service.producerHelpService.request.ProducerEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,11 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class FireEventMethodImpl implements FireEventMethod {
 
-    final ProducerHelpService producerHelpService;
+    final EventHelpService eventHelpService;
 
+    final InsertEventOperation insertEventOperation;
     final CheckShardOperation checkShardOperation;
-    final GenerateIdOperation generateIdOperation;
 
+    final Dispatcher dispatcher;
     final PgPool pgPool;
 
     @Override
@@ -31,8 +31,13 @@ class FireEventMethodImpl implements FireEventMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var event = request.getEvent();
-                    final var producerEventHelpRequest = new ProducerEventHelpRequest(event);
-                    return producerHelpService.produceEventAsync(producerEventHelpRequest);
+                    return pgPool.withTransaction(sqlConnection -> insertEventOperation
+                                    .insertEvent(sqlConnection, event))
+                            .invoke(inserted -> {
+                                final var eventId = event.getId();
+                                final var groupId = event.getGroupId();
+                                dispatcher.addEvent(eventId, groupId);
+                            });
                 });
     }
 }

@@ -24,6 +24,6 @@ public class ClientDisconnectedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return connectionId;
+        return userId;
     }
 }

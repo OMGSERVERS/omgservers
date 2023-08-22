@@ -1,14 +1,12 @@
 package com.omgservers.application.module.internalModule.impl;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.consumerHelpService.ConsumerHelpService;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.IndexHelpService;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.JobInternalService;
 import com.omgservers.application.module.internalModule.impl.service.jobSchedulerService.JobSchedulerService;
 import com.omgservers.application.module.internalModule.impl.service.logHelpService.LogHelpService;
-import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
 import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.ServiceAccountHelpService;
 import com.omgservers.application.module.internalModule.impl.service.syncInternalService.SyncInternalService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,24 +21,12 @@ public class InternalModuleImpl implements InternalModule {
 
     final ServiceAccountHelpService serviceAccountHelpService;
     final EventInternalService eventInternalService;
-    final ConsumerHelpService consumerHelpService;
-    final ProducerHelpService producerHelpService;
     final JobSchedulerService jobSchedulerService;
     final SyncInternalService syncInternalService;
     final JobInternalService jobInternalService;
     final IndexHelpService indexHelpService;
     final EventHelpService eventHelpService;
     final LogHelpService logHelpService;
-
-    @Override
-    public ConsumerHelpService getConsumerHelpService() {
-        return consumerHelpService;
-    }
-
-    @Override
-    public ProducerHelpService getProducerHelpService() {
-        return producerHelpService;
-    }
 
     @Override
     public EventHelpService getEventHelpService() {

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.request;
 
 import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.request.InternalRequest;
+import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,16 +1,15 @@
 package com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl.method.startEventDispatcherMethod;
 
-import com.omgservers.application.module.internalModule.impl.operation.selectNewEventsOperation.SelectNewEventsOperation;
+import com.omgservers.application.Dispatcher;
+import com.omgservers.application.exception.ServerSideClientErrorException;
+import com.omgservers.application.exception.ServerSideInternalException;
+import com.omgservers.application.module.internalModule.impl.operation.selectEventOperation.SelectEventOperation;
 import com.omgservers.application.module.internalModule.impl.operation.updateEventStatusOperation.UpdateEventStatusOperation;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl.method.fireEventMethod.FireEventMethod;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
-import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
-import com.omgservers.application.module.internalModule.impl.service.producerHelpService.ProducerHelpService;
-import com.omgservers.application.module.internalModule.impl.service.producerHelpService.request.ProducerEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.handlerHelpService.HandlerHelpService;
+import com.omgservers.application.module.internalModule.impl.service.handlerHelpService.request.HandleEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.handlerHelpService.response.HandleEventHelpResponse;
 import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventStatusEnum;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.scheduler.Scheduled;
@@ -23,17 +22,21 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class StartEventDispatcherMethodImpl implements StartEventDispatcherMethod {
     static final String EVENT_DISPATCHER_JOB = "event-dispatcher";
 
-    final FireEventMethod fireEventMethod;
+    final HandlerHelpService handlerHelpService;
 
     final UpdateEventStatusOperation updateEventStatusOperation;
-    final SelectNewEventsOperation selectNewEventsOperation;
+    final SelectEventOperation selectEventOperation;
     final GetConfigOperation getConfigOperation;
+
+    final Dispatcher dispatcherInMemoryCache;
 
     final Scheduler scheduler;
     final PgPool pgPool;
@@ -43,46 +46,77 @@ class StartEventDispatcherMethodImpl implements StartEventDispatcherMethod {
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var disableDispatcher = getConfigOperation.getConfig().disableDispatcher();
-                    final var dispatcherLimit = getConfigOperation.getConfig().dispatcherLimit();
+                    final var dispatcherCount = getConfigOperation.getConfig().dispatcherCount();
                     if (disableDispatcher) {
                         log.warn("Event dispatcher was disabled, skip method");
                     } else {
-                        scheduleEventDispatcher(dispatcherLimit);
+                        scheduleEventDispatcher(dispatcherCount);
                     }
                 });
     }
 
-    synchronized void scheduleEventDispatcher(final int dispatcherLimit) {
+    synchronized void scheduleEventDispatcher(final int dispatcherCount) {
         if (scheduler.getScheduledJob(EVENT_DISPATCHER_JOB) == null) {
             final var trigger = scheduler.newJob(EVENT_DISPATCHER_JOB)
                     .setInterval("1s")
                     .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
-                    .setAsyncTask(scheduledExecution -> dispatchEventTask(scheduledExecution, dispatcherLimit))
+                    .setAsyncTask(scheduledExecution -> dispatchTask(scheduledExecution, dispatcherCount))
                     .schedule();
-            log.info("Event dispatcher was scheduled, limit={}, {}", dispatcherLimit, trigger);
+            log.info("Event dispatcher was scheduled, limit={}, {}", dispatcherCount, trigger);
         } else {
             log.error("Event dispatcher job was already scheduled, job={}", EVENT_DISPATCHER_JOB);
         }
     }
 
-    @WithSpan
-    Uni<Void> dispatchEventTask(final ScheduledExecution scheduledExecution,
-                                final int dispatcherLimit) {
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> pgPool.withConnection(sqlConnection -> selectNewEventsOperation
-                                .selectNewEvents(sqlConnection, dispatcherLimit))
-                        .flatMap(events -> Multi.createFrom().iterable(events)
-                                .onItem().transformToUniAndConcatenate(this::dispatchEvent)
-                                .collect().asList().replaceWithVoid()));
+    Uni<Void> dispatchTask(final ScheduledExecution scheduledExecution, final int dispatcherCount) {
+        return Multi.createFrom().range(0, dispatcherCount)
+                .onItem().transformToUniAndMerge(this::dispatch)
+                .collect().asList().replaceWithVoid();
     }
 
-    Uni<Void> dispatchEvent(final EventModel origin) {
-        log.info("Dispatch event, {}", origin);
-        final var eventBody = new EventCreatedEventBodyModel(origin);
-        final var request = new FireEventHelpRequest(eventBody);
-        return fireEventMethod.fireEvent(request)
-                .flatMap(voidItem -> pgPool.withConnection(sqlConnection -> updateEventStatusOperation
-                        .updateEventStatus(sqlConnection, origin.getId(), EventStatusEnum.FIRED)))
+    @WithSpan
+    Uni<Void> dispatch(int index) {
+        return Uni.createFrom().item(dispatcherInMemoryCache::pollGroup)
+                .flatMap(eventGroup -> {
+                    if (eventGroup != null) {
+                        final var eventId = eventGroup.getEventId();
+                        return selectEvent(eventId)
+                                .flatMap(event -> {
+                                    final var request = new HandleEventHelpRequest(event);
+                                    return handlerHelpService.handleEvent(request);
+                                })
+                                .map(HandleEventHelpResponse::getResult)
+                                .invoke(result -> {
+                                    if (result) {
+                                        dispatcherInMemoryCache.returnGroup(eventGroup);
+                                    } else {
+                                        dispatcherInMemoryCache.postponeGroup(eventGroup);
+                                    }
+                                })
+                                .flatMap(result -> updateStatus(eventId, result))
+                                .onFailure(ServerSideClientErrorException.class)
+                                .invoke(t -> dispatcherInMemoryCache.returnGroup(eventGroup))
+                                .onFailure(ServerSideInternalException.class)
+                                .invoke(t -> dispatcherInMemoryCache.postponeGroup(eventGroup));
+                        //TODO: handle failures
+                    } else {
+                        return Uni.createFrom().voidItem()
+                                .onItem().delayIt().by(Duration.ofSeconds(1));
+                    }
+                })
+                .repeat().indefinitely()
+                .collect().last().replaceWithVoid();
+    }
+
+    Uni<EventModel> selectEvent(final Long eventId) {
+        return pgPool.withConnection(sqlConnection -> selectEventOperation
+                .selectEvent(sqlConnection, eventId));
+    }
+
+    Uni<Void> updateStatus(final Long eventId, final Boolean processed) {
+        return pgPool.withConnection(sqlConnection -> updateEventStatusOperation
+                        .updateEventStatus(sqlConnection, eventId, processed ?
+                                EventStatusEnum.PROCESSED : EventStatusEnum.FAILED))
                 .replaceWithVoid();
     }
 }

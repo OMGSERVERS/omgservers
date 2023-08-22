@@ -1,13 +1,12 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteRuntimeMethod;
 
 import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.EventCreatedEventBodyModel;
 import com.omgservers.application.module.internalModule.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.runtimeModule.impl.operation.deleteRuntimeOperation.DeleteRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,28 +21,34 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
     final InternalModule internalModule;
 
     final DeleteRuntimeOperation deleteRuntimeOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeOperation changeOperation;
 
+    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
     public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request) {
         DeleteRuntimeInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var id = request.getId();
-                    return deleteRuntime(shard.shard(), id);
-                })
+        final var id = request.getId();
+        return changeOperation.changeWithEvent(request,
+                        (sqlConnection, shardModel) -> deleteRuntimeOperation
+                                .deleteRuntime(sqlConnection, shardModel.shard(), id),
+                        deleted -> {
+                            if (deleted) {
+                                return logModelFactory.create("Runtime was deleted, id=" + id);
+                            } else {
+                                return null;
+                            }
+                        },
+                        deleted -> {
+                            if (deleted) {
+                                return new RuntimeDeletedEventBodyModel(id);
+                            } else {
+                                return null;
+                            }
+                        }
+                )
                 .map(DeleteRuntimeInternalResponse::new);
-    }
-
-    Uni<Boolean> deleteRuntime(final int shard, final Long id) {
-        return pgPool.withTransaction(sqlConnection -> deleteRuntimeOperation.deleteRuntime(sqlConnection, shard, id)
-                .call(deleted -> {
-                    final var eventBody = new RuntimeDeletedEventBodyModel(id);
-                    final var insertEventInternalRequest = new InsertEventHelpRequest(sqlConnection, eventBody);
-                    return internalModule.getEventHelpService().insertEvent(insertEventInternalRequest);
-                }));
     }
 }

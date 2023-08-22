@@ -1,4 +1,4 @@
-package com.omgservers.application.module.internalModule.impl.operation.insertEventOperation;
+package com.omgservers.application.operation.insertEventOperation;
 
 import com.omgservers.application.module.internalModule.model.event.EventModel;
 import io.smallrye.mutiny.Uni;
