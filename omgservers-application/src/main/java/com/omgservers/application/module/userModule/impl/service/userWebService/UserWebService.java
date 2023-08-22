@@ -1,22 +1,29 @@
 package com.omgservers.application.module.userModule.impl.service.userWebService;
 
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.*;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.DeleteAttributeInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetPlayerAttributesInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.DeleteAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetPlayerAttributesInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.SyncAttributeInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.DeleteObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.GetObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.SyncObjectInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.DeleteObjectInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.GetObjectInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.SyncObjectInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.CreateTokenInternalRequest;
@@ -43,13 +50,13 @@ public interface UserWebService {
 
     Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerInternalRequest request);
 
-    Uni<Void> deletePlayer(DeletePlayerInternalRequest request);
+    Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerInternalRequest request);
 
     Uni<SyncClientInternalResponse> syncClient(SyncClientInternalRequest request);
 
     Uni<GetClientInternalResponse> getClient(GetClientInternalRequest request);
 
-    Uni<Void> deleteClient(DeleteClientInternalRequest request);
+    Uni<DeleteClientInternalResponse> deleteClient(DeleteClientInternalRequest request);
 
     Uni<GetAttributeInternalResponse> getAttribute(GetAttributeInternalRequest request);
 
@@ -61,7 +68,7 @@ public interface UserWebService {
 
     Uni<GetObjectInternalResponse> getObject(GetObjectInternalRequest request);
 
-    Uni<Void> syncObject(SyncObjectInternalRequest request);
+    Uni<SyncObjectInternalResponse> syncObject(SyncObjectInternalRequest request);
 
-    Uni<Void> deleteObject(DeleteObjectInternalRequest request);
+    Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectInternalRequest request);
 }

@@ -1,5 +1,7 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl;
 
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
 import com.omgservers.application.module.versionModule.impl.operation.getVersionServiceApiClientOperation.GetVersionServiceApiClientOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
@@ -46,7 +48,7 @@ public class VersionInternalServiceImpl implements VersionInternalService {
     }
 
     @Override
-    public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncVersionInternalRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
@@ -55,7 +57,7 @@ public class VersionInternalServiceImpl implements VersionInternalService {
     }
 
     @Override
-    public Uni<Void> deleteVersion(DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteVersionInternalRequest::validate,
                 getVersionServiceApiClientOperation::getClient,

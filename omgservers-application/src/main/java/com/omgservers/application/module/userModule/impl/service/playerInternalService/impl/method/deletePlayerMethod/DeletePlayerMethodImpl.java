@@ -3,6 +3,7 @@ package com.omgservers.application.module.userModule.impl.service.playerInternal
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.deletePlayerOperation.DeletePlayerOperation;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,7 +23,7 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deletePlayer(final DeletePlayerInternalRequest request) {
+    public Uni<DeletePlayerInternalResponse> deletePlayer(final DeletePlayerInternalRequest request) {
         DeletePlayerInternalRequest.validate(request);
 
         final var userId = request.getUserId();
@@ -38,7 +39,6 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
                                 return null;
                             }
                         })
-                //TODO: implement response with deleted flag
-                .replaceWithVoid();
+                .map(DeletePlayerInternalResponse::new);
     }
 }

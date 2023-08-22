@@ -13,17 +13,21 @@ import com.omgservers.application.module.userModule.impl.service.clientInternalS
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.ObjectInternalService;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.DeleteObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.GetObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.SyncObjectInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.DeleteObjectInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.GetObjectInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.SyncObjectInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.PlayerInternalService;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.TokenInternalService;
@@ -86,7 +90,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<Void> deletePlayer(DeletePlayerInternalRequest request) {
+    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerInternalRequest request) {
         return playerInternalService.deletePlayer(request);
     }
 
@@ -101,7 +105,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<Void> deleteClient(DeleteClientInternalRequest request) {
+    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientInternalRequest request) {
         return internalService.deleteClient(request);
     }
 
@@ -131,12 +135,12 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<Void> syncObject(SyncObjectInternalRequest request) {
+    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectInternalRequest request) {
         return objectInternalService.syncObject(request);
     }
 
     @Override
-    public Uni<Void> deleteObject(DeleteObjectInternalRequest request) {
+    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectInternalRequest request) {
         return objectInternalService.deleteObject(request);
     }
 }

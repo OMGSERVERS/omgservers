@@ -3,6 +3,7 @@ package com.omgservers.application.module.userModule.impl.service.playerInternal
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
@@ -13,5 +14,5 @@ public interface PlayerInternalService {
 
     Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerInternalRequest request);
 
-    Uni<Void> deletePlayer(DeletePlayerInternalRequest request);
+    Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerInternalRequest request);
 }

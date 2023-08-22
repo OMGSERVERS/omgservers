@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.model.event.body.Version
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.deleteVersionOperation.DeleteVersionOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.DeleteVersionInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,7 +24,7 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteVersion(final DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(final DeleteVersionInternalRequest request) {
         DeleteVersionInternalRequest.validate(request);
 
         final var id = request.getId();
@@ -45,7 +46,6 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
                             }
                         }
                 )
-                //TODO: add response with deleted field
-                .replaceWithVoid();
+                .map(DeleteVersionInternalResponse::new);
     }
 }

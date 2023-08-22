@@ -11,6 +11,7 @@ import com.omgservers.application.module.runtimeModule.impl.service.runtimeInter
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
 import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +32,7 @@ public class RuntimeInternalServiceImpl implements RuntimeInternalService {
     final GetRuntimeMethod getRuntimeMethod;
 
     @Override
-    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncRuntimeInternalRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,

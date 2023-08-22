@@ -2,6 +2,8 @@ package com.omgservers.application.module.versionModule.impl.service.versionWebS
 
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.*;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.VersionWebService;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
@@ -26,12 +28,12 @@ class VersionWebServiceImpl implements VersionWebService {
     }
 
     @Override
-    public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
         return versionInternalService.syncVersion(request);
     }
 
     @Override
-    public Uni<Void> deleteVersion(DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request) {
         return versionInternalService.deleteVersion(request);
     }
 

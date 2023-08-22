@@ -6,6 +6,7 @@ import com.omgservers.application.module.internalModule.model.event.body.Runtime
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,7 +28,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
         SyncRuntimeInternalRequest.validate(request);
 
         final var runtime = request.getRuntime();
@@ -52,7 +53,6 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                             }
                         }
                 )
-                //TODO: add response with created field
-                .replaceWithVoid();
+                .map(SyncRuntimeInternalResponse::new);
     }
 }

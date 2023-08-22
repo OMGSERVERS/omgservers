@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.model.event.body.StageDe
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.deleteStageOperation.DeleteStageOperation;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.DeleteStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,7 +24,7 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteStage(final DeleteStageInternalRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageInternalRequest request) {
         DeleteStageInternalRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -47,7 +48,6 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
                                 return null;
                             }
                         })
-                // TODO: add response with deleted flag
-                .replaceWithVoid();
+                .map(DeleteStageInternalResponse::new);
     }
 }

@@ -1,24 +1,24 @@
 package com.omgservers.application.module.userModule.impl.service.objectInternalService.impl;
 
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.GetUserServiceApiClientOperation;
-import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.UserServiceApiClient;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.ObjectInternalService;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.deleteObjectMethod.DeleteObjectMethod;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.getObjectMethod.GetObjectMethod;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.syncObjectMethod.SyncObjectMethod;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.DeleteObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.GetObjectInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.SyncObjectInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.DeleteObjectInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.GetObjectInternalResponse;
+import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.SyncObjectInternalResponse;
+import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -43,7 +43,7 @@ class ObjectInternalServiceImpl implements ObjectInternalService {
     }
 
     @Override
-    public Uni<Void> syncObject(SyncObjectInternalRequest request) {
+    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncObjectInternalRequest::validate,
                 getUserServiceApiClientOperation::getClient,
@@ -52,7 +52,7 @@ class ObjectInternalServiceImpl implements ObjectInternalService {
     }
 
     @Override
-    public Uni<Void> deleteObject(DeleteObjectInternalRequest request) {
+    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteObjectInternalRequest::validate,
                 getUserServiceApiClientOperation::getClient,

@@ -8,6 +8,8 @@ import com.omgservers.application.module.tenantModule.impl.service.stageInternal
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.getStageMethod.GetStageMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod.SyncStageMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.*;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
 import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
@@ -46,7 +48,7 @@ public class StageInternalServiceImpl implements StageInternalService {
     }
 
     @Override
-    public Uni<Void> syncStage(SyncStageInternalRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncStageInternalRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -55,7 +57,7 @@ public class StageInternalServiceImpl implements StageInternalService {
     }
 
     @Override
-    public Uni<Void> deleteStage(DeleteStageInternalRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteStageInternalRequest::validate,
                 getTenantServiceApiClientOperation::getClient,

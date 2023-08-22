@@ -6,6 +6,7 @@ import com.omgservers.application.module.internalModule.model.log.LogModelFactor
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation.ValidateStageOperation;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -28,7 +29,7 @@ class SyncStageMethodImpl implements SyncStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> syncStage(SyncStageInternalRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request) {
         SyncStageInternalRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -53,7 +54,6 @@ class SyncStageMethodImpl implements SyncStageMethod {
                             }
                         }
                 )
-                //TODO: add response with created field
-                .replaceWithVoid();
+                .map(SyncStageInternalResponse::new);
     }
 }

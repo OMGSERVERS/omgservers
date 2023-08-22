@@ -1,11 +1,16 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi;
 
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.*;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.DeleteVersionInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetBytecodeInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetStageConfigInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetVersionInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetVersionInternalResponse;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
-
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
@@ -25,15 +30,16 @@ public interface VersionServiceApi {
 
     @PUT
     @Path("/sync-version")
-    Uni<Void> syncVersion(SyncVersionInternalRequest request);
+    Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request);
 
-    default void syncVersion(long timeout, SyncVersionInternalRequest request) {
-        syncVersion(request).await().atMost(Duration.ofSeconds(timeout));
+    default SyncVersionInternalResponse syncVersion(long timeout, SyncVersionInternalRequest request) {
+        return syncVersion(request)
+                .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-version")
-    Uni<Void> deleteVersion(DeleteVersionInternalRequest request);
+    Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request);
 
     default void deleteVersion(long timeout, DeleteVersionInternalRequest request) {
         deleteVersion(request)

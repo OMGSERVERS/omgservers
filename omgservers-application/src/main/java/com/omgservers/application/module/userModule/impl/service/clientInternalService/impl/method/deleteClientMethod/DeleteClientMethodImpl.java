@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.InternalModule;
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.deleteClientOperation.DeleteClientOperation;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,7 +26,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteClient(final DeleteClientInternalRequest request) {
+    public Uni<DeleteClientInternalResponse> deleteClient(final DeleteClientInternalRequest request) {
         DeleteClientInternalRequest.validate(request);
 
         final var clientId = request.getClientId();
@@ -40,7 +41,6 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
                                 return null;
                             }
                         })
-                // TODO: implement response with deleted flag
-                .replaceWithVoid();
+                .map(DeleteClientInternalResponse::new);
     }
 }

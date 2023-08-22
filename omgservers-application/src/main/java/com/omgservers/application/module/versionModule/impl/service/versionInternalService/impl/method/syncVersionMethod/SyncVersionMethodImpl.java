@@ -5,6 +5,7 @@ import com.omgservers.application.module.internalModule.model.event.body.Version
 import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import com.omgservers.application.operation.changeOperation.ChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -24,7 +25,7 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
         SyncVersionInternalRequest.validate(request);
 
         final var version = request.getVersion();
@@ -49,7 +50,6 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
                             }
                         }
                 )
-                //TODO: prepare response with "Boolean created;" field
-                .replaceWithVoid();
+                .map(SyncVersionInternalResponse::new);
     }
 }

@@ -8,8 +8,10 @@ import com.omgservers.application.module.tenantModule.impl.service.projectIntern
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.*;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStagePermissionInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.TenantInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.*;
@@ -90,12 +92,12 @@ public class TenantWebServiceImpl implements TenantWebService {
     }
 
     @Override
-    public Uni<Void> syncStage(SyncStageInternalRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request) {
         return stageInternalService.syncStage(request);
     }
 
     @Override
-    public Uni<Void> deleteStage(DeleteStageInternalRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageInternalRequest request) {
         return stageInternalService.deleteStage(request);
     }
 

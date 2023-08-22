@@ -1,15 +1,29 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantWebService;
 
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.*;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.DeleteProjectInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.GetProjectInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.HasProjectPermissionInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectPermissionInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.GetProjectInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.HasProjectPermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectPermissionInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.*;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectPermissionInternalResponse;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.DeleteStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.HasStagePermissionInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStagePermissionInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStagePermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.*;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.DeleteTenantInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
@@ -40,9 +54,9 @@ public interface TenantWebService {
 
     Uni<GetStageInternalResponse> getStage(GetStageInternalRequest request);
 
-    Uni<Void> syncStage(SyncStageInternalRequest request);
+    Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request);
 
-    Uni<Void> deleteStage(DeleteStageInternalRequest request);
+    Uni<DeleteStageInternalResponse> deleteStage(DeleteStageInternalRequest request);
 
     Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionInternalRequest request);
 

@@ -6,6 +6,7 @@ import com.omgservers.application.module.runtimeModule.impl.service.runtimeInter
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.RuntimeWebService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +22,7 @@ class RuntimeWebServiceImpl implements RuntimeWebService {
     final RuntimeInternalService runtimeInternalService;
 
     @Override
-    public Uni<Void> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
         return runtimeInternalService.syncRuntime(request);
     }
 

@@ -9,6 +9,7 @@ import com.omgservers.application.module.userModule.impl.service.clientInternalS
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
 import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
@@ -51,7 +52,7 @@ class ClientInternalServiceImpl implements ClientInternalService {
     }
 
     @Override
-    public Uni<Void> deleteClient(DeleteClientInternalRequest request) {
+    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteClientInternalRequest::validate,
                 getUserServiceApiClientOperation::getClient,

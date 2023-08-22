@@ -1,6 +1,8 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi;
 
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.*;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.VersionWebService;
 import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
@@ -30,13 +32,13 @@ public class VersionServiceApiImpl implements VersionServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::syncVersion);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> deleteVersion(DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::deleteVersion);
     }
 

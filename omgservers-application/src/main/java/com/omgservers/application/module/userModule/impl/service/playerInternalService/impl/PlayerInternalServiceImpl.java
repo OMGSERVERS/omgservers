@@ -2,23 +2,23 @@ package com.omgservers.application.module.userModule.impl.service.playerInternal
 
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.GetUserServiceApiClientOperation;
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.UserServiceApiClient;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.deletePlayerMethod.DeletePlayerMethod;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.syncPlayerMethod.SyncPlayerMethod;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.PlayerInternalService;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.deletePlayerMethod.DeletePlayerMethod;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.getPlayerMethod.GetPlayerMethod;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.syncPlayerMethod.SyncPlayerMethod;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
+import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -52,7 +52,7 @@ public class PlayerInternalServiceImpl implements PlayerInternalService {
     }
 
     @Override
-    public Uni<Void> deletePlayer(DeletePlayerInternalRequest request) {
+    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeletePlayerInternalRequest::validate,
                 getUserServiceApiClientOperation::getClient,
