@@ -1,6 +1,7 @@
 package com.omgservers.application.module.internalModule.impl.service.internalWebService.impl.serviceApi;
 
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.request.DeleteJobInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.request.SyncJobInternalRequest;
@@ -38,10 +39,11 @@ public interface InternalServiceApi {
 
     @PUT
     @Path("/fire-event")
-    Uni<Void> fireEvent(FireEventInternalRequest request);
+    Uni<FireEventInternalResponse> fireEvent(FireEventInternalRequest request);
 
-    default void fireEvent(long timeout, FireEventInternalRequest request) {
-        fireEvent(request).await().atMost(Duration.ofSeconds(timeout));
+    default FireEventInternalResponse fireEvent(long timeout, FireEventInternalRequest request) {
+        return fireEvent(request)
+                .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT

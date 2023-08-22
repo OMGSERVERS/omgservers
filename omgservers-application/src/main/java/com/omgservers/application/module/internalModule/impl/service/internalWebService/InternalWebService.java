@@ -1,6 +1,7 @@
 package com.omgservers.application.module.internalModule.impl.service.internalWebService;
 
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.request.DeleteJobInternalRequest;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.request.SyncJobInternalRequest;
@@ -18,7 +19,7 @@ public interface InternalWebService {
 
     Uni<Void> syncServiceAccount(SyncServiceAccountHelpRequest request);
 
-    Uni<Void> fireEvent(FireEventInternalRequest request);
+    Uni<FireEventInternalResponse> fireEvent(FireEventInternalRequest request);
 
     Uni<SyncJobInternalResponse> syncJob(SyncJobInternalRequest request);
 

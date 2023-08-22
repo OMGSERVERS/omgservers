@@ -3,10 +3,10 @@ package com.omgservers.application.module.internalModule.impl.service.eventInter
 import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
 import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.InternalsServiceApiClient;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.InsertEventHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.impl.method.fireEventMethod.FireEventMethod;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
 import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ class EventInternalServiceImpl implements EventInternalService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     @Override
-    public Uni<Void> fireEvent(FireEventInternalRequest request) {
+    public Uni<FireEventInternalResponse> fireEvent(FireEventInternalRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 FireEventInternalRequest::validate,
                 getInternalsServiceApiClientOperation::getClient,

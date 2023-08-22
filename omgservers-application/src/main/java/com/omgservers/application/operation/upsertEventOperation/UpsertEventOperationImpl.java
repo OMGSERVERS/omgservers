@@ -1,18 +1,16 @@
-package com.omgservers.application.operation.insertEventOperation;
+package com.omgservers.application.operation.upsertEventOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.exception.ServerSideInternalException;
+import com.omgservers.application.module.internalModule.model.event.EventModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import io.vertx.pgclient.PgException;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
@@ -21,17 +19,20 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class InsertEventOperationImpl implements InsertEventOperation {
+class UpsertEventOperationImpl implements UpsertEventOperation {
 
     static private final String sql = """
             insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
             values($1, $2, $3, $4, $5, $6, $7)
+            on conflict (id) do
+            update set modified = $3, group_id = $4, qualifier = $5, body = $6, status = $7
+            returning xmax::text::int = 0 as inserted
             """;
 
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> insertEvent(final SqlConnection sqlConnection, final EventModel event) {
+    public Uni<Boolean> upsertEvent(final SqlConnection sqlConnection, final EventModel event) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -40,13 +41,19 @@ class InsertEventOperationImpl implements InsertEventOperation {
         }
 
         return upsertQuery(sqlConnection, event)
-                .invoke(voidItem -> log.info("Event was inserted, event={}", event))
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("Event was inserted, event={}", event);
+                    } else {
+                        log.info("Event was updated, event={}", event);
+                    }
+                })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
+                .transform(t -> new ServerSideInternalException(String
                         .format("unhandled PgException, %s, event=%s", t.getMessage(), event)));
     }
 
-    Uni<Void> upsertQuery(final SqlConnection sqlConnection, final EventModel event) {
+    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final EventModel event) {
         try {
             var bodyString = objectMapper.writeValueAsString(event.getBody());
             return sqlConnection.preparedQuery(sql)
@@ -59,7 +66,7 @@ class InsertEventOperationImpl implements InsertEventOperation {
                         add(bodyString);
                         add(event.getStatus());
                     }}))
-                    .replaceWithVoid();
+                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

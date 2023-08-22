@@ -3,8 +3,9 @@ package com.omgservers.application.module.internalModule.impl.service.eventInter
 import com.omgservers.application.Dispatcher;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
+import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.application.operation.upsertEventOperation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,26 +19,25 @@ class FireEventMethodImpl implements FireEventMethod {
 
     final EventHelpService eventHelpService;
 
-    final InsertEventOperation insertEventOperation;
-    final CheckShardOperation checkShardOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final ChangeOperation changeOperation;
 
     final Dispatcher dispatcher;
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> fireEvent(final FireEventInternalRequest request) {
+    public Uni<FireEventInternalResponse> fireEvent(final FireEventInternalRequest request) {
         FireEventInternalRequest.validate(request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var event = request.getEvent();
-                    return pgPool.withTransaction(sqlConnection -> insertEventOperation
-                                    .insertEvent(sqlConnection, event))
-                            .invoke(inserted -> {
-                                final var eventId = event.getId();
-                                final var groupId = event.getGroupId();
-                                dispatcher.addEvent(eventId, groupId);
-                            });
-                });
+        final var event = request.getEvent();
+        return changeOperation.change(request,
+                        ((sqlConnection, shardModel) -> upsertEventOperation
+                                .upsertEvent(sqlConnection, event)))
+                .invoke(inserted -> {
+                    final var eventId = event.getId();
+                    final var groupId = event.getGroupId();
+                    dispatcher.addEvent(eventId, groupId);
+                })
+                .map(FireEventInternalResponse::new);
     }
 }

@@ -4,6 +4,7 @@ import com.omgservers.application.module.internalModule.impl.service.eventHelpSe
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl.method.fireEventMethod.FireEventMethod;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl.method.startEventDispatcherMethod.StartEventDispatcherMethod;
 import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventHelpService.response.FireEventHelpResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,7 +25,7 @@ class EventHelpServiceImpl implements EventHelpService {
     }
 
     @Override
-    public Uni<Void> fireEvent(FireEventHelpRequest request) {
+    public Uni<FireEventHelpResponse> fireEvent(FireEventHelpRequest request) {
         return fireEventMethod.fireEvent(request);
     }
 }

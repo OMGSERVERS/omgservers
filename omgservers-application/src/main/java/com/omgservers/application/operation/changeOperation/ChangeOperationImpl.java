@@ -8,7 +8,7 @@ import com.omgservers.application.module.internalModule.model.event.EventModel;
 import com.omgservers.application.module.internalModule.model.event.EventModelFactory;
 import com.omgservers.application.module.internalModule.model.log.LogModel;
 import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
+import com.omgservers.application.operation.upsertEventOperation.UpsertEventOperation;
 import com.omgservers.application.operation.upsertLogOperation.UpsertLogOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 @AllArgsConstructor
 class ChangeOperationImpl implements ChangeOperation {
 
-    final InsertEventOperation insertEventOperation;
+    final UpsertEventOperation upsertEventOperation;
     final CheckShardOperation checkShardOperation;
     final UpsertLogOperation upsertLogOperation;
 
@@ -66,7 +66,7 @@ class ChangeOperationImpl implements ChangeOperation {
                 .flatMap(shardModel -> pgPool.withTransaction(sqlConnection ->
                         changeFunction.apply(sqlConnection, shardModel)
                                 .flatMap(result -> upsertLog(sqlConnection, result, logFunction)
-                                        .flatMap(changeLog -> insertEvent(sqlConnection, result, eventBodyFunction)
+                                        .flatMap(changeLog -> upsertEvent(sqlConnection, result, eventBodyFunction)
                                                 .map(insertedEvent -> new TransactionResult(result, changeLog, insertedEvent)))))
                 )
                 .invoke(transactionResult -> {
@@ -90,13 +90,13 @@ class ChangeOperationImpl implements ChangeOperation {
         }
     }
 
-    Uni<EventModel> insertEvent(final SqlConnection sqlConnection,
+    Uni<EventModel> upsertEvent(final SqlConnection sqlConnection,
                                 final boolean result,
                                 final Function<Boolean, EventBodyModel> eventBodyFunction) {
         final var body = eventBodyFunction.apply(result);
         if (body != null) {
             final var event = eventModelFactory.create(body);
-            return insertEventOperation.insertEvent(sqlConnection, event)
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
                     .replaceWith(event);
         } else {
             return Uni.createFrom().nullItem();

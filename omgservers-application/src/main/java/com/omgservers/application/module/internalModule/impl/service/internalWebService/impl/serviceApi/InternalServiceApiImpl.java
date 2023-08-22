@@ -1,6 +1,7 @@
 package com.omgservers.application.module.internalModule.impl.service.internalWebService.impl.serviceApi;
 
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.internalWebService.InternalWebService;
 import com.omgservers.application.module.internalModule.impl.service.jobInternalService.request.DeleteJobInternalRequest;
@@ -42,7 +43,7 @@ class InternalServiceApiImpl implements InternalServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> fireEvent(FireEventInternalRequest request) {
+    public Uni<FireEventInternalResponse> fireEvent(FireEventInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::fireEvent);
     }
 

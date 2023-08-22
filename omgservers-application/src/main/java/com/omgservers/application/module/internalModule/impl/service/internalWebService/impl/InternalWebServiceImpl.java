@@ -2,6 +2,7 @@ package com.omgservers.application.module.internalModule.impl.service.internalWe
 
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.EventInternalService;
 import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
+import com.omgservers.application.module.internalModule.impl.service.eventInternalService.response.FireEventInternalResponse;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.IndexHelpService;
 import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
 import com.omgservers.application.module.internalModule.impl.service.internalWebService.InternalWebService;
@@ -47,7 +48,7 @@ public class InternalWebServiceImpl implements InternalWebService {
     }
 
     @Override
-    public Uni<Void> fireEvent(FireEventInternalRequest request) {
+    public Uni<FireEventInternalResponse> fireEvent(FireEventInternalRequest request) {
         return eventInternalService.fireEvent(request);
     }
 

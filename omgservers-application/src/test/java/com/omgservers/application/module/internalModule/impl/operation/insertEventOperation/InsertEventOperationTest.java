@@ -2,7 +2,7 @@ package com.omgservers.application.module.internalModule.impl.operation.insertEv
 
 import com.omgservers.application.module.internalModule.impl.operation.selectEventOperation.SelectEventOperation;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.application.operation.insertEventOperation.InsertEventOperation;
+import com.omgservers.application.operation.upsertEventOperation.UpsertEventOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -16,7 +16,7 @@ class InsertEventOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    InsertEventOperation insertEventOperation;
+    UpsertEventOperation insertEventOperation;
 
     @Inject
     SelectEventOperation selectEventOperation;
