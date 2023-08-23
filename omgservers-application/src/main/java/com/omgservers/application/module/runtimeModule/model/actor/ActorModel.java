@@ -1,4 +1,4 @@
-package com.omgservers.application.module.runtimeModule.model;
+package com.omgservers.application.module.runtimeModule.model.actor;
 
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;
@@ -7,25 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RuntimeModel {
+public class ActorModel {
 
-    static public void validate(RuntimeModel runtime) {
-        if (runtime == null) {
-            throw new ServerSideBadRequestException("runtime is null");
+    static public void validate(ActorModel actor) {
+        if (actor == null) {
+            throw new ServerSideBadRequestException("actor is null");
         }
     }
 
     Long id;
+    Long runtimeId;
     @ToString.Exclude
     Instant created;
     @ToString.Exclude
     Instant modified;
-    Long matchmakerId;
-    Long matchId;
-    RuntimeConfigModel config;
+    Long userId;
+    Long clientId;
+    ActorConfigModel config;
+    ActorStatusEnum status;
 }

@@ -8,9 +8,9 @@ import com.omgservers.application.module.internalModule.model.event.body.MatchCr
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
 import com.omgservers.application.module.runtimeModule.RuntimeModule;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModelFactory;
-import com.omgservers.application.module.runtimeModule.model.RuntimeTypeEnum;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

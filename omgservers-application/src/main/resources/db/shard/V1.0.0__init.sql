@@ -164,3 +164,14 @@ create table if not exists tab_runtime (
     match_id bigint not null,
     config json not null
 );
+
+create table if not exists tab_runtime_actor (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    user_id bigint not null,
+    client_id bigint not null,
+    config json not null,
+    status text not null
+);

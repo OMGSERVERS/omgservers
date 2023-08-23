@@ -1,10 +1,14 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteActorInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncActorInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteActorInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncActorInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.RuntimeWebService;
 import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
@@ -40,5 +44,17 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteRuntime);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncActorInternalResponse> syncActor(SyncActorInternalRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncActor);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteActorInternalResponse> deleteActor(DeleteActorInternalRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteActor);
     }
 }

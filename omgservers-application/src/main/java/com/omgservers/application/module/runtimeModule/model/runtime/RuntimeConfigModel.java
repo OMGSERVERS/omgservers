@@ -1,4 +1,4 @@
-package com.omgservers.application.module.runtimeModule.model;
+package com.omgservers.application.module.runtimeModule.model.runtime;
 
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;

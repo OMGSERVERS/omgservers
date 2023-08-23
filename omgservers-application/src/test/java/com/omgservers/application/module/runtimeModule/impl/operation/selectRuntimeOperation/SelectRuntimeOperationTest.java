@@ -2,9 +2,9 @@ package com.omgservers.application.module.runtimeModule.impl.operation.selectRun
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModelFactory;
-import com.omgservers.application.module.runtimeModule.model.RuntimeTypeEnum;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
 import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

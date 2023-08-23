@@ -1,6 +1,5 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response;
 
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetRuntimeInternalResponse {
+public class SyncActorInternalResponse {
 
-    RuntimeModel runtime;
+    Boolean created;
 }

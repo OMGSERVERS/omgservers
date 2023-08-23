@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

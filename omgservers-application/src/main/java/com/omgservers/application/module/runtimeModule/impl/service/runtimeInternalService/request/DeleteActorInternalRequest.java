@@ -1,6 +1,5 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request;
 
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import com.omgservers.application.InternalRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,18 +8,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SyncRuntimeInternalRequest implements InternalRequest {
+public class DeleteActorInternalRequest implements InternalRequest {
 
-    static public void validate(SyncRuntimeInternalRequest request) {
+    static public void validate(DeleteActorInternalRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
     }
 
-    RuntimeModel runtime;
+    Long id;
 
     @Override
     public String getRequestShardKey() {
-        return runtime.getId().toString();
+        return id.toString();
     }
 }

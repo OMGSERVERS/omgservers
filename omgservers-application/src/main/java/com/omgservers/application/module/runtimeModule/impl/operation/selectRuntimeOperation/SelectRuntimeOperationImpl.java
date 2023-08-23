@@ -3,8 +3,8 @@ package com.omgservers.application.module.runtimeModule.impl.operation.selectRun
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.runtimeModule.model.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.RuntimeModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
