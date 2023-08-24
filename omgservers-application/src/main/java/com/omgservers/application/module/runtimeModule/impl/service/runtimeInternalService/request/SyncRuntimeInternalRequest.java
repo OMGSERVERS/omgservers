@@ -1,7 +1,7 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request;
 
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import com.omgservers.application.InternalRequest;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

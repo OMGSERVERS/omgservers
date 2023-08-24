@@ -5,6 +5,7 @@ import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
+import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -23,7 +24,7 @@ import java.io.IOException;
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     static private final String sql = """
-            select id, created, modified, matchmaker_id, match_id, config
+            select id, created, modified, matchmaker_id, match_id, type, config
             from $schema.tab_runtime
             where id = $1
             limit 1
@@ -69,6 +70,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
         runtime.setModified(row.getOffsetDateTime("modified").toInstant());
         runtime.setMatchmakerId(row.getLong("matchmaker_id"));
         runtime.setMatchId(row.getLong("match_id"));
+        runtime.setType(RuntimeTypeEnum.valueOf(row.getString("type")));
         runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
         return runtime;
     }

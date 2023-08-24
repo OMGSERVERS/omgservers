@@ -62,7 +62,7 @@ class StartEventDispatcherMethodImpl implements StartEventDispatcherMethod {
                     .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                     .setAsyncTask(scheduledExecution -> dispatchTask(scheduledExecution, dispatcherCount))
                     .schedule();
-            log.info("Event dispatcher was scheduled, limit={}, {}", dispatcherCount, trigger);
+            log.info("Event dispatcher was scheduled, count={}, {}", dispatcherCount, trigger);
         } else {
             log.error("Event dispatcher job was already scheduled, job={}", EVENT_DISPATCHER_JOB);
         }

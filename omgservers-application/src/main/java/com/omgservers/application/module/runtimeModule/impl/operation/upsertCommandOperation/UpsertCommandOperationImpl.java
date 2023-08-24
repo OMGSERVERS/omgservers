@@ -1,11 +1,11 @@
-package com.omgservers.application.module.runtimeModule.impl.operation.upsertActorOperation;
+package com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.exception.ServerSideInternalException;
 import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.runtimeModule.model.actor.ActorModel;
+import com.omgservers.application.module.runtimeModule.model.command.CommandModel;
 import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -22,13 +22,13 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpsertActorOperationImpl implements UpsertActorOperation {
+class UpsertCommandOperationImpl implements UpsertCommandOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime_actor(id, runtime_id, created, modified, user_id, client_id, config, status)
-            values($1, $2, $3, $4, $5, $6, $7, $8)
+            insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status)
+            values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
-            update set modified = $4, user_id = $5, client_id = $6, config = $7, status = $8
+            update set modified = $4, qualifier = $5, body = $6, status = $7
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -36,22 +36,22 @@ class UpsertActorOperationImpl implements UpsertActorOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertActor(final SqlConnection sqlConnection,
-                                    final int shard,
-                                    final ActorModel actor) {
+    public Uni<Boolean> upsertCommand(final SqlConnection sqlConnection,
+                                      final int shard,
+                                      final CommandModel command) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (actor == null) {
-            throw new ServerSideBadRequestException("actor is null");
+        if (command == null) {
+            throw new ServerSideBadRequestException("command is null");
         }
 
-        return upsertQuery(sqlConnection, shard, actor)
+        return upsertQuery(sqlConnection, shard, command)
                 .invoke(inserted -> {
                     if (inserted) {
-                        log.info("Actor was inserted, shard={}, actor={}", shard, actor);
+                        log.info("Command was inserted, shard={}, command={}", shard, command);
                     } else {
-                        log.info("Actor was updated, shard={}, actor={}", shard, actor);
+                        log.info("Command was updated, shard={}, command={}", shard, command);
                     }
                 })
                 .onFailure(PgException.class)
@@ -60,30 +60,29 @@ class UpsertActorOperationImpl implements UpsertActorOperation {
                     final var code = pgException.getSqlState();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("runtime was not found, actor=" + actor);
+                        return new ServerSideNotFoundException("runtime was not found, command=" + command);
                     } else {
                         return new ServerSideConflictException(String.format("unhandled PgException, " +
-                                "%s, actor=%s", t.getMessage(), actor));
+                                "%s, command=%s", t.getMessage(), command));
                     }
                 });
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
                              final int shard,
-                             final ActorModel actor) {
+                             final CommandModel command) {
         try {
+            var bodyString = objectMapper.writeValueAsString(command.getBody());
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
-            var configString = objectMapper.writeValueAsString(actor.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(actor.getId());
-                        add(actor.getRuntimeId());
-                        add(actor.getCreated().atOffset(ZoneOffset.UTC));
-                        add(actor.getModified().atOffset(ZoneOffset.UTC));
-                        add(actor.getUserId());
-                        add(actor.getClientId());
-                        add(configString);
-                        add(actor.getStatus());
+                        add(command.getId());
+                        add(command.getRuntimeId());
+                        add(command.getCreated().atOffset(ZoneOffset.UTC));
+                        add(command.getModified().atOffset(ZoneOffset.UTC));
+                        add(command.getQualifier());
+                        add(bodyString);
+                        add(command.getStatus());
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

@@ -8,16 +8,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteActorInternalRequest implements InternalRequest {
+public class DoUpdateInternalRequest implements InternalRequest {
 
-    static public void validate(DeleteActorInternalRequest request) {
+    static public void validate(DoUpdateInternalRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
     }
 
     Long runtimeId;
-    Long id;
 
     @Override
     public String getRequestShardKey() {

@@ -1,6 +1,7 @@
 package com.omgservers.application.module.runtimeModule.model.runtime;
 
 import com.omgservers.application.exception.ServerSideBadRequestException;
+import jakarta.ws.rs.RuntimeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,6 @@ public class RuntimeModel {
     Instant modified;
     Long matchmakerId;
     Long matchId;
+    RuntimeTypeEnum type;
     RuntimeConfigModel config;
 }

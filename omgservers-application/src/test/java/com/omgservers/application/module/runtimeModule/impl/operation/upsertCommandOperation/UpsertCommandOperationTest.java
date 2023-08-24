@@ -1,9 +1,9 @@
-package com.omgservers.application.module.runtimeModule.impl.operation.upsertActorOperation;
+package com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation;
 
 import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.application.module.runtimeModule.model.actor.ActorConfigModel;
-import com.omgservers.application.module.runtimeModule.model.actor.ActorModelFactory;
+import com.omgservers.application.module.runtimeModule.model.command.CommandModelFactory;
+import com.omgservers.application.module.runtimeModule.model.command.body.StartCommandBodyModel;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
@@ -17,20 +17,20 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertActorOperationTest extends Assertions {
+class UpsertCommandOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertActorOperation upsertActorOperation;
+    UpsertCommandOperation upsertCommandOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    ActorModelFactory actorModelFactory;
+    CommandModelFactory commandModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -39,33 +39,33 @@ class UpsertActorOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenActor_whenUpsertActor_thenInserted() {
+    void givenCommand_whenUpsertCommand_thenInserted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var actor = actorModelFactory.create(runtime.getId(), userId(), clientId(), ActorConfigModel.create());
-        assertTrue(upsertActorOperation.upsertActor(TIMEOUT, pgPool, shard, actor));
+        final var command = commandModelFactory.create(runtime.getId(), new StartCommandBodyModel());
+        assertTrue(upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command));
     }
 
     @Test
-    void givenActor_whenInsertActorAgain_thenUpdated() {
+    void givenCommand_whenUpserCommandAgain_thenUpdated() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var actor = actorModelFactory.create(runtime.getId(), userId(), clientId(), ActorConfigModel.create());
-        upsertActorOperation.upsertActor(TIMEOUT, pgPool, shard, actor);
+        final var command = commandModelFactory.create(runtime.getId(), new StartCommandBodyModel());
+        upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
 
-        assertFalse(upsertActorOperation.upsertActor(TIMEOUT, pgPool, shard, actor));
+        assertFalse(upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command));
     }
 
     @Test
-    void givenUnknownRuntimeUuid_whenUpsertActor_thenServerSideNotFoundException() {
+    void givenUnknownRuntimeUuid_whenUpsertCommand_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var actor = actorModelFactory.create(runtimeId(), userId(), clientId(), ActorConfigModel.create());
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertActorOperation
-                .upsertActor(TIMEOUT, pgPool, shard, actor));
+        final var command = commandModelFactory.create(runtimeId(), new StartCommandBodyModel());
+        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertCommandOperation
+                .upsertCommand(TIMEOUT, pgPool, shard, command));
         log.info("Exception: {}", exception.getMessage());
     }
 
@@ -78,14 +78,6 @@ class UpsertActorOperationTest extends Assertions {
     }
 
     Long matchId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long userId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long clientId() {
         return generateIdOperation.generateId();
     }
 }

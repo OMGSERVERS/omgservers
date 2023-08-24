@@ -39,8 +39,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getId();
         // TODO: Detect runtime type
-        final var runtime = runtimeModelFactory.create(matchmakerId, matchId, RuntimeConfigModel
-                .create(RuntimeTypeEnum.EMBEDDED_LUA));
+        final var runtime = runtimeModelFactory.create(matchmakerId, matchId, RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         final var syncRuntimeInternalRequest = new SyncRuntimeInternalRequest(runtime);
         return runtimeModule.getRuntimeInternalService().syncRuntime(syncRuntimeInternalRequest)
                 .replaceWith(true);

@@ -1,9 +1,9 @@
-package com.omgservers.application.module.runtimeModule.impl.operation.deleteActorOperation;
+package com.omgservers.application.module.runtimeModule.impl.operation.deleteCommandOperation;
 
-import com.omgservers.application.module.runtimeModule.impl.operation.upsertActorOperation.UpsertActorOperation;
+import com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation.UpsertCommandOperation;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.application.module.runtimeModule.model.actor.ActorConfigModel;
-import com.omgservers.application.module.runtimeModule.model.actor.ActorModelFactory;
+import com.omgservers.application.module.runtimeModule.model.command.CommandModelFactory;
+import com.omgservers.application.module.runtimeModule.model.command.body.StartCommandBodyModel;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
 import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
@@ -17,23 +17,23 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteActorOperationTest extends Assertions {
+class DeleteCommandOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    DeleteActorOperation deleteActorOperation;
+    DeleteCommandOperation deleteCommandOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertActorOperation upsertActorOperation;
+    UpsertCommandOperation upsertCommandOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    ActorModelFactory actorModelFactory;
+    CommandModelFactory commandModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -42,23 +42,23 @@ class DeleteActorOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenActor_whenDeleteActor_thenDeleted() {
+    void givenCommand_whenDeleteCommand_thenDeleted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var actor = actorModelFactory.create(runtime.getId(), userId(), clientId(), ActorConfigModel.create());
-        upsertActorOperation.upsertActor(TIMEOUT, pgPool, shard, actor);
+        final var command = commandModelFactory.create(runtime.getId(), new StartCommandBodyModel());
+        upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
 
-        assertTrue(deleteActorOperation.deleteActor(TIMEOUT, pgPool, shard, actor.getId()));
+        assertTrue(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, command.getId()));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteActor_thenSkip() {
+    void givenUnknownUuid_whenDeleteCommand_thenSkip() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteActorOperation.deleteActor(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, id));
     }
 
     Long matchmakerId() {
@@ -66,14 +66,6 @@ class DeleteActorOperationTest extends Assertions {
     }
 
     Long matchId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long userId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long clientId() {
         return generateIdOperation.generateId();
     }
 }

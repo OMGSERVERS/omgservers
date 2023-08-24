@@ -162,7 +162,18 @@ create table if not exists tab_runtime (
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
     match_id bigint not null,
+    type text not null,
     config json not null
+);
+
+create table if not exists tab_runtime_command (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    body json not null,
+    status text not null
 );
 
 create table if not exists tab_runtime_actor (

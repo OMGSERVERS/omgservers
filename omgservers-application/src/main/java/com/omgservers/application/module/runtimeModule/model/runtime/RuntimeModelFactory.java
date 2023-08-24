@@ -16,14 +16,16 @@ public class RuntimeModelFactory {
 
     public RuntimeModel create(final Long matchmakerId,
                                final Long matchId,
+                               final RuntimeTypeEnum type,
                                final RuntimeConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, matchmakerId, matchId, config);
+        return create(id, matchmakerId, matchId, type, config);
     }
 
     public RuntimeModel create(final Long id,
                                final Long matchmakerId,
                                final Long matchId,
+                               final RuntimeTypeEnum type,
                                final RuntimeConfigModel config) {
         Instant now = Instant.now();
 
@@ -33,6 +35,7 @@ public class RuntimeModelFactory {
         runtime.setModified(now);
         runtime.setMatchmakerId(matchmakerId);
         runtime.setMatchId(matchId);
+        runtime.setType(type);
         runtime.setConfig(config);
         return runtime;
     }

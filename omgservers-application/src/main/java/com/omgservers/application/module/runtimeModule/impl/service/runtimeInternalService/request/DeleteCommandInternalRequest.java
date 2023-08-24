@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteActorInternalRequest implements InternalRequest {
+public class DeleteCommandInternalRequest implements InternalRequest {
 
-    static public void validate(DeleteActorInternalRequest request) {
+    static public void validate(DeleteCommandInternalRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

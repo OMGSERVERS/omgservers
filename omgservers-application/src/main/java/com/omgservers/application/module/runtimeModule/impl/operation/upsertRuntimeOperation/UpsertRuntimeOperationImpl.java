@@ -24,10 +24,10 @@ import java.util.ArrayList;
 class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime(id, created, modified, matchmaker_id, match_id, config)
-            values($1, $2, $3, $4, $5, $6)
+            insert into $schema.tab_runtime(id, created, modified, matchmaker_id, match_id, type, config)
+            values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
-            update set modified = $3, matchmaker_id = $4, match_id = $5, config = $6
+            update set modified = $3, matchmaker_id = $4, match_id = $5, type = $6, config = $7
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -71,6 +71,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         add(runtime.getModified().atOffset(ZoneOffset.UTC));
                         add(runtime.getMatchmakerId());
                         add(runtime.getMatchId());
+                        add(runtime.getType());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
