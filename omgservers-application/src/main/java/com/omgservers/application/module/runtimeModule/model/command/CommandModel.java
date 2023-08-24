@@ -23,9 +23,7 @@ public class CommandModel {
 
     Long id;
     Long runtimeId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     CommandQualifierEnum qualifier;
     CommandBodyModel body;

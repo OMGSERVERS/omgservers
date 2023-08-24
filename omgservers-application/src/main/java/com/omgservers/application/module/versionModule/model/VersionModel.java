@@ -14,9 +14,7 @@ import java.util.UUID;
 public class VersionModel {
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long tenantId;
     Long stageId;

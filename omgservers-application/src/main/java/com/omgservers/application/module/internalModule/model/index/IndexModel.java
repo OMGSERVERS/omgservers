@@ -68,9 +68,7 @@ public class IndexModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     String name;
     Long version;

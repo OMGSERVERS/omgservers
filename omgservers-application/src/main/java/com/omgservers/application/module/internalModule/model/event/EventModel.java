@@ -21,9 +21,7 @@ public class EventModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long groupId;
     EventQualifierEnum qualifier;

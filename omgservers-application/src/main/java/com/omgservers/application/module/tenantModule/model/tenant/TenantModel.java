@@ -20,9 +20,7 @@ public class TenantModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     @ToString.Exclude
     TenantConfigModel config;

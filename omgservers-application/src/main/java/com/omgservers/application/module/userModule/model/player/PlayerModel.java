@@ -20,9 +20,7 @@ public class PlayerModel {
 
     Long id;
     Long userId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long stageId;
     @ToString.Exclude

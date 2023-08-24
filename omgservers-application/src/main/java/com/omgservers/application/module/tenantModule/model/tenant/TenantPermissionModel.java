@@ -21,7 +21,6 @@ public class TenantPermissionModel {
 
     Long id;
     Long tenantId;
-    @ToString.Exclude
     Instant created;
     Long userId;
     TenantPermissionEnum permission;

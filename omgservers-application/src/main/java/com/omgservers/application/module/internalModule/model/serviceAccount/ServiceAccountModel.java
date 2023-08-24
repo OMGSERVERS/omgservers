@@ -20,9 +20,7 @@ public class ServiceAccountModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     String username;
     @ToString.Exclude

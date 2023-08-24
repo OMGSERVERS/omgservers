@@ -21,7 +21,6 @@ public class ProjectPermissionModel {
 
     Long id;
     Long projectId;
-    @ToString.Exclude
     Instant created;
     Long userId;
     ProjectPermissionEnum permission;

@@ -22,9 +22,7 @@ public class ProjectModel {
 
     Long id;
     Long tenantId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long ownerId;
     @ToString.Exclude

@@ -22,7 +22,6 @@ public class ClientModel {
 
     Long id;
     Long playerId;
-    @ToString.Exclude
     Instant created;
     URI server;
     Long connectionId;

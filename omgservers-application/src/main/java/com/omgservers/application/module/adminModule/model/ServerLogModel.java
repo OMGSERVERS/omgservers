@@ -20,7 +20,6 @@ public class ServerLogModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
     URI server;
     String message;

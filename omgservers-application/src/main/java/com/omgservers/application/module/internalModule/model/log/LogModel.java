@@ -19,7 +19,6 @@ public class LogModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
     String message;
 }

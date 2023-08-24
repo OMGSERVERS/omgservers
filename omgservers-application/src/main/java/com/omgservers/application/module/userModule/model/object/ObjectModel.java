@@ -15,9 +15,7 @@ public class ObjectModel {
 
     Long id;
     Long playerId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     String name;
     @ToString.Exclude

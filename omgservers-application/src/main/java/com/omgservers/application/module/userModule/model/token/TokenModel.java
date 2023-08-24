@@ -62,7 +62,6 @@ public class TokenModel {
 
     Long id;
     Long userId;
-    @ToString.Exclude
     Instant created;
     Instant expire;
     @ToString.Exclude

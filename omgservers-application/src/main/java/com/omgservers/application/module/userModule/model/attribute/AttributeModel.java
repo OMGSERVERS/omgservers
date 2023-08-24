@@ -21,9 +21,7 @@ public class AttributeModel {
 
     Long id;
     Long playerId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     String name;
     String value;

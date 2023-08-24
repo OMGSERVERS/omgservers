@@ -22,9 +22,7 @@ public class MatchModel {
 
     Long id;
     Long matchmakerId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long runtimeId;
     MatchConfigModel config;

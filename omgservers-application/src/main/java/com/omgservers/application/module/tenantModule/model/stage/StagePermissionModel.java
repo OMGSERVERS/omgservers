@@ -21,7 +21,6 @@ public class StagePermissionModel {
 
     Long id;
     Long stageId;
-    @ToString.Exclude
     Instant created;
     Long userId;
     StagePermissionEnum permission;

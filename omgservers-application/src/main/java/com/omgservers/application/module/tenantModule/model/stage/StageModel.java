@@ -18,9 +18,7 @@ public class StageModel {
 
     Long id;
     Long projectId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long versionId;
     @ToString.Exclude

@@ -61,9 +61,7 @@ public class UserModel {
     }
 
     Long id;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     UserRoleEnum role;
     @ToString.Exclude

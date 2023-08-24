@@ -21,9 +21,7 @@ public class ActorModel {
 
     Long id;
     Long runtimeId;
-    @ToString.Exclude
     Instant created;
-    @ToString.Exclude
     Instant modified;
     Long userId;
     Long clientId;
