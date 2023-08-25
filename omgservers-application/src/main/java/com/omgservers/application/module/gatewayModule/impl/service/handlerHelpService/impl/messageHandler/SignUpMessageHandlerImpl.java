@@ -1,22 +1,18 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.eventInternalService.request.FireEventInternalRequest;
-import com.omgservers.application.module.internalModule.model.event.body.SignUpRequestedEventBodyModel;
-import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
-import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
-import com.omgservers.application.module.gatewayModule.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.InternalModule;
+import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
+import com.omgservers.model.message.MessageModel;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.SignUpMessageBodyModel;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

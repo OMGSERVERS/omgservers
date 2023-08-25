@@ -1,13 +1,12 @@
 package com.omgservers.application.module.luaModule.impl.operation.compileSourceCodeOperation;
 
-import com.omgservers.application.module.luaModule.model.LuaBytecodeModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.luaBytecode.LuaBytecodeModel;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Print;
 import org.luaj.vm2.compiler.DumpState;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

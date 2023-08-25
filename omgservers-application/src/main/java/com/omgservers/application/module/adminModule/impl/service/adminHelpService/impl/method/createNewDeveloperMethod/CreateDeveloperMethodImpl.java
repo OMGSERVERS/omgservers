@@ -1,17 +1,17 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewDeveloperMethod;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
+import com.omgservers.base.factory.TenantPermissionModelFactory;
+import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModelFactory;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.SyncUserInternalRequest;
-import com.omgservers.application.module.userModule.model.user.UserModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.userModule.SyncUserInternalRequest;
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.model.user.UserRoleEnum;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,8 +34,8 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     final UserModelFactory userModelFactory;
 
     @Override
-    public Uni<CreateDeveloperHelpResponse> createDeveloper(final CreateDeveloperHelpRequest request) {
-        CreateDeveloperHelpRequest.validate(request);
+    public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
+        CreateDeveloperAdminRequest.validate(request);
         final var userId = generateIdOperation.generateId();
         // TODO: improve it
         final var password = String.valueOf(Math.abs(new SecureRandom().nextLong()));
@@ -44,7 +44,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         return getTenant(tenantId)
                 .call(ignored -> createUser(userId, password))
                 .call(ignored -> syncCreateProjectPermission(tenantId, userId))
-                .replaceWith(new CreateDeveloperHelpResponse(userId, password));
+                .replaceWith(new CreateDeveloperAdminResponse(userId, password));
     }
 
     Uni<Void> getTenant(Long tenantId) {

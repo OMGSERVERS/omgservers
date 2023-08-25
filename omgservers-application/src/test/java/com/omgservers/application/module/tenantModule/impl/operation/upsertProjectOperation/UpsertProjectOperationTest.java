@@ -1,12 +1,12 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
+import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.base.factory.ProjectModelFactory;
+import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

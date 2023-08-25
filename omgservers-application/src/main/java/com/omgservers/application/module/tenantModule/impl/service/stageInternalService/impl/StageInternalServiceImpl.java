@@ -2,26 +2,29 @@ package com.omgservers.application.module.tenantModule.impl.service.stageInterna
 
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.TenantServiceApiClient;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.hasStagePermissionMethod.HasStagePermissionMethod;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStagePermissionMethod.SyncStagePermissionMethod;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.deleteStageMethod.DeleteStageMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.getStageMethod.GetStageMethod;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.hasStagePermissionMethod.HasStagePermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod.SyncStageMethod;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStagePermissionInternalResponse;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStagePermissionMethod.SyncStagePermissionMethod;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

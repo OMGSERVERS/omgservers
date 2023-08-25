@@ -1,20 +1,23 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
+import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
+import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
+import com.omgservers.dto.adminModule.PingServerAdminResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface AdminHelpService {
-    Uni<PingServerHelpResponse> pingServer();
+    Uni<PingServerAdminResponse> pingServer();
 
-    Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request);
+    Uni<GenerateIdAdminResponse> generateId();
 
-    Uni<CreateDeveloperHelpResponse> createDeveloper(final CreateDeveloperHelpRequest request);
+    Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
 
-    Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request);
+    Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request);
+
+    Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request);
 }

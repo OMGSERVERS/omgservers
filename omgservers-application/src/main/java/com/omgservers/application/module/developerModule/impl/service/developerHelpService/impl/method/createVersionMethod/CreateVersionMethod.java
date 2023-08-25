@@ -1,9 +1,9 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod;
 
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateVersionHelpResponse;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateVersionMethod {
-    Uni<CreateVersionHelpResponse> createVersion(CreateVersionHelpRequest request);
+    Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
 }

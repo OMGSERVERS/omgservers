@@ -1,15 +1,14 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getBytecodeMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectBytecodeOperation.SelectBytecodeOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetBytecodeInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

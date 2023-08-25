@@ -1,10 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService;
 
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantResponse;
+import com.omgservers.dto.tenantModule.DeleteTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantResponse;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface TenantInternalService {

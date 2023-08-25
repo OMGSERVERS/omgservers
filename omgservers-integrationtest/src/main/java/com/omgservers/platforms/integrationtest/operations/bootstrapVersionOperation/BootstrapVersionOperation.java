@@ -1,6 +1,6 @@
 package com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation;
 
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 
 public interface BootstrapVersionOperation {
     VersionParameters bootstrap(String script) throws InterruptedException;

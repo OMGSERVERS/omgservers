@@ -1,17 +1,16 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.player.PlayerModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
 import java.time.ZoneOffset;

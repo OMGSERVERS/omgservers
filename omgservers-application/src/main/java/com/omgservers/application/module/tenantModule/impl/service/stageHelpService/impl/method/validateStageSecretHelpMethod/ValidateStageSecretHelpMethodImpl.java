@@ -1,15 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageHelpService.impl.method.validateStageSecretHelpMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.response.ValidateStageSecretHelpResponse;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
+import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

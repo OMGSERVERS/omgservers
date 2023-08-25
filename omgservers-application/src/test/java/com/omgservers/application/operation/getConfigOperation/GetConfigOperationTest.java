@@ -1,5 +1,6 @@
 package com.omgservers.application.operation.getConfigOperation;
 
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

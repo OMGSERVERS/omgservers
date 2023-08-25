@@ -1,43 +1,44 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.DeleteIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.GetIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.response.GetIndexHelpResponse;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.response.ViewLogsHelpResponse;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.DeleteServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.GetServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.response.GetServiceAccountHelpResponse;
+import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
+import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
+import com.omgservers.dto.adminModule.DeleteIndexAdminRequest;
+import com.omgservers.dto.adminModule.DeleteServiceAccountAdminRequest;
+import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
+import com.omgservers.dto.adminModule.GetIndexAdminRequest;
+import com.omgservers.dto.adminModule.GetIndexAdminResponse;
+import com.omgservers.dto.adminModule.GetServiceAccountAdminRequest;
+import com.omgservers.dto.adminModule.GetServiceAccountAdminResponse;
+import com.omgservers.dto.adminModule.PingServerAdminResponse;
+import com.omgservers.dto.adminModule.SyncIndexAdminRequest;
+import com.omgservers.dto.adminModule.SyncServiceAccountAdminRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface AdminWebService {
 
-    Uni<PingServerHelpResponse> pingServer();
+    Uni<PingServerAdminResponse> pingServer();
 
-    Uni<GetIndexHelpResponse> getIndex(GetIndexHelpRequest request);
+    Uni<GenerateIdAdminResponse> generateId();
 
-    Uni<Void> syncIndex(SyncIndexHelpRequest request);
+    Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request);
 
-    Uni<Void> deleteIndex(DeleteIndexHelpRequest request);
+    Uni<Void> syncIndex(SyncIndexAdminRequest request);
 
-    Uni<GetServiceAccountHelpResponse> getServiceAccount(GetServiceAccountHelpRequest request);
+    Uni<Void> deleteIndex(DeleteIndexAdminRequest request);
 
-    Uni<Void> syncServiceAccount(SyncServiceAccountHelpRequest request);
+    Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request);
 
-    Uni<Void> deleteServiceAccount(DeleteServiceAccountHelpRequest request);
+    Uni<Void> syncServiceAccount(SyncServiceAccountAdminRequest request);
 
-    Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request);
+    Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request);
 
-    Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request);
+    Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
 
-    Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request);
+    Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
+
+    Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request);
 }

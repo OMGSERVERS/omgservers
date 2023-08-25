@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl;
 
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
+import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.request.RequestModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

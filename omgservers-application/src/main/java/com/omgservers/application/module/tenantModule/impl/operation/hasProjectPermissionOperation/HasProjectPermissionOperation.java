@@ -1,12 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.operation.hasProjectPermissionOperation;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
+import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
-import java.util.UUID;
 
 public interface HasProjectPermissionOperation {
     Uni<Boolean> hasProjectPermission(SqlConnection sqlConnection,

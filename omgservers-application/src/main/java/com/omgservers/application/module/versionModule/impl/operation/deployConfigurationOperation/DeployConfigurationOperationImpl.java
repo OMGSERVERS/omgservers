@@ -3,7 +3,7 @@ package com.omgservers.application.module.versionModule.impl.operation.deployCon
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.impl.operation.getVersionConfigOperation.GetVersionConfigOperation;
-import com.omgservers.application.module.versionModule.model.VersionModel;
+import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

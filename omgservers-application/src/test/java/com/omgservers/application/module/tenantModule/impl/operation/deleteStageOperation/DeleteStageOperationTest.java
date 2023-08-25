@@ -1,17 +1,15 @@
 package com.omgservers.application.module.tenantModule.impl.operation.deleteStageOperation;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
-import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
+import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.base.factory.ProjectModelFactory;
+import com.omgservers.model.stage.StageConfigModel;
+import com.omgservers.base.factory.StageModelFactory;
+import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

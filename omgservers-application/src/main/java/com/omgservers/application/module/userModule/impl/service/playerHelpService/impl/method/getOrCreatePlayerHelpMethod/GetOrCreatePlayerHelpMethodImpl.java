@@ -1,22 +1,20 @@
 package com.omgservers.application.module.userModule.impl.service.playerHelpService.impl.method.getOrCreatePlayerHelpMethod;
 
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.PlayerInternalService;
+import com.omgservers.base.factory.PlayerModelFactory;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
-import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
-import com.omgservers.application.module.userModule.model.player.PlayerModel;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
-import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.module.userModule.impl.service.playerInternalService.PlayerInternalService;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.userModule.GetPlayerInternalRequest;
+import com.omgservers.dto.userModule.GetPlayerInternalResponse;
+import com.omgservers.dto.userModule.SyncPlayerInternalRequest;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.player.PlayerConfigModel;
+import com.omgservers.model.player.PlayerModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

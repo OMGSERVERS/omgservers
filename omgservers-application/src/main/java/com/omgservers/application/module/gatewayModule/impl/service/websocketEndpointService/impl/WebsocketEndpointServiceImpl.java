@@ -10,11 +10,11 @@ import com.omgservers.application.module.gatewayModule.impl.service.gatewayInter
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.WebsocketEndpointService;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.CleanUpHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.ReceiveTextMessageHelpRequest;
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.application.module.internalModule.model.event.body.ClientDisconnectedEventBodyModel;
+import com.omgservers.base.InternalModule;
+import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.ClientInternalService;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;

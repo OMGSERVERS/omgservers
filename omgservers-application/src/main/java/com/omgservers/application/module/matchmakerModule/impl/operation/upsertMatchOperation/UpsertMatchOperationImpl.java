@@ -1,11 +1,11 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.match.MatchModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;

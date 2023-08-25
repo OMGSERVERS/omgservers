@@ -1,16 +1,12 @@
 package com.omgservers.application.module.tenantModule.impl.operation.deleteStageOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -18,7 +14,7 @@ import java.util.UUID;
 class DeleteStageOperationImpl implements DeleteStageOperation {
 
     static private final String sql = """
-            delete from $schema.tab_project_stage where id = $1
+            delete from $schema.tab_tenant_stage where id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;

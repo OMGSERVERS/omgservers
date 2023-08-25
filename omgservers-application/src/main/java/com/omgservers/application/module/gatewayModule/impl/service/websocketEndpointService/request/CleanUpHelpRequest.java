@@ -1,11 +1,10 @@
 package com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.websocket.Session;
 
 @Data
 @NoArgsConstructor

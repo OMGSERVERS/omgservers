@@ -1,11 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.deleteStageMethod;
 
-import com.omgservers.application.module.internalModule.model.event.body.StageDeletedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.deleteStageOperation.DeleteStageOperation;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.DeleteStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
+import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

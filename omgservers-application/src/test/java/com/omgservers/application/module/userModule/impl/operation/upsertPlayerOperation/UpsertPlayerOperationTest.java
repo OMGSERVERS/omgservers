@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation;
 
-import com.omgservers.application.module.userModule.model.player.PlayerConfigModel;
-import com.omgservers.application.module.userModule.model.player.PlayerModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
+import com.omgservers.model.player.PlayerConfigModel;
+import com.omgservers.base.factory.PlayerModelFactory;
+import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

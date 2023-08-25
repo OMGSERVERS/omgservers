@@ -2,13 +2,12 @@ package com.omgservers.application.module.gatewayModule.impl.service.handlerHelp
 
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.HandlerHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.request.HandleMessageHelpRequest;
-import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.message.MessageQualifierEnum;
 import io.smallrye.mutiny.Uni;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

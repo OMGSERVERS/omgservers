@@ -1,20 +1,19 @@
 package com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.introspectTokenMethod;
 
-import com.omgservers.application.module.userModule.model.token.TokenModel;
-import com.omgservers.application.module.userModule.model.user.UserTokenModel;
-import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.module.userModule.impl.operation.decodeTokenOperation.DecodeTokenOperation;
 import com.omgservers.application.module.userModule.impl.operation.selectTokenOperation.SelectTokenOperation;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.IntrospectTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.IntrospectTokenInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
+import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.token.TokenModel;
+import com.omgservers.model.user.UserTokenModel;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.Duration;
 import java.time.Instant;

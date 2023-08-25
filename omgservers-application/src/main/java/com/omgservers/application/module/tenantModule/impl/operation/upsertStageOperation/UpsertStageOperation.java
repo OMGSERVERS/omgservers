@@ -1,6 +1,6 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation;
 
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.model.stage.StageModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

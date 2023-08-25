@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.getStageMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetStageMethod {

@@ -1,9 +1,9 @@
 package com.omgservers.application.module.userModule.impl.service.tokenInternalService;
 
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.CreateTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.IntrospectTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.CreateTokenInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.IntrospectTokenInternalResponse;
+import com.omgservers.dto.userModule.CreateTokenInternalRequest;
+import com.omgservers.dto.userModule.CreateTokenInternalResponse;
+import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
+import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface TokenInternalService {

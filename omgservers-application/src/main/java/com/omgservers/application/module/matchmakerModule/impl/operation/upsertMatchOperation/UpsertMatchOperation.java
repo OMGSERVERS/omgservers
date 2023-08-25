@@ -1,6 +1,6 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation;
 
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
+import com.omgservers.model.match.MatchModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

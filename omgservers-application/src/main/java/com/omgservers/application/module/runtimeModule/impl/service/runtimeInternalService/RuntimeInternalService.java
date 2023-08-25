@@ -1,19 +1,16 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService;
 
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteActorInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteCommandInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncActorInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncCommandInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteActorInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteCommandInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncActorInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncCommandInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
+import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
+import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
+import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface RuntimeInternalService {
@@ -24,11 +21,9 @@ public interface RuntimeInternalService {
 
     Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request);
 
-    Uni<SyncActorInternalResponse> syncActor(SyncActorInternalRequest request);
-
-    Uni<DeleteActorInternalResponse> deleteActor(DeleteActorInternalRequest request);
-
     Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request);
 
     Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request);
+
+    Uni<Void> doUpdate(DoUpdateInternalRequest request);
 }

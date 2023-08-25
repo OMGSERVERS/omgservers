@@ -3,8 +3,6 @@ package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpS
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.UUID;
-
 @Getter
 @ToString(callSuper = true)
 public class LuaPlayerSignedInEvent extends LuaEvent {

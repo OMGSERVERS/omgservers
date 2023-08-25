@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService;
 
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.SyncPlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.SyncPlayerInternalResponse;
+import com.omgservers.dto.userModule.DeletePlayerInternalRequest;
+import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
+import com.omgservers.dto.userModule.GetPlayerInternalRequest;
+import com.omgservers.dto.userModule.GetPlayerInternalResponse;
+import com.omgservers.dto.userModule.SyncPlayerInternalRequest;
+import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface PlayerInternalService {

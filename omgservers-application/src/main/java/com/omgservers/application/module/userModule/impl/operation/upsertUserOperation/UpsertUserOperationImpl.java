@@ -1,16 +1,16 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertUserOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.user.UserModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 

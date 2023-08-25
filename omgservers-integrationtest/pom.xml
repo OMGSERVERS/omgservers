@@ -16,7 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-application</artifactId>
+            <artifactId>omgservers-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-dto</artifactId>
         </dependency>
         <!-- external -->
         <dependency>

@@ -1,10 +1,9 @@
 package com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
-import lombok.extern.slf4j.Slf4j;
-
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.tenant.TenantModel;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;

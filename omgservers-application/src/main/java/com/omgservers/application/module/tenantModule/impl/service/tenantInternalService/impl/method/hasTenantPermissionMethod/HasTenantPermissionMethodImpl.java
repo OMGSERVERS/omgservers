@@ -1,9 +1,9 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod;
 
 import com.omgservers.application.module.tenantModule.impl.operation.hasTenantPermissionOperation.HasTenantPermissionOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var userId= request.getUserId();
+                    final var userId = request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasTenantPermissionOperation
                             .hasTenantPermission(sqlConnection, shard.shard(), tenantId, userId, permission));

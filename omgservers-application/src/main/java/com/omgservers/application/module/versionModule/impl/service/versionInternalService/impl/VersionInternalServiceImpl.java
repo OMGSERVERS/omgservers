@@ -1,8 +1,5 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl;
 
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
 import com.omgservers.application.module.versionModule.impl.operation.getVersionServiceApiClientOperation.GetVersionServiceApiClientOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.deleteVersionMethod.DeleteVersionMethod;
@@ -10,18 +7,24 @@ import com.omgservers.application.module.versionModule.impl.service.versionInter
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getStageConfigMethod.GetStageConfigMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getVersionMethod.GetVersionMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.syncVersionMethod.SyncVersionMethod;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.*;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetVersionInternalResponse;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
+import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
+import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionInternalResponse;
+import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

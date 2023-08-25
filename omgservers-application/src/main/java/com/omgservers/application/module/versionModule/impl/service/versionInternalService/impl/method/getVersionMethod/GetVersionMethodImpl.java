@@ -1,15 +1,14 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getVersionMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectVersionOperation.SelectVersionOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetVersionInternalResponse;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

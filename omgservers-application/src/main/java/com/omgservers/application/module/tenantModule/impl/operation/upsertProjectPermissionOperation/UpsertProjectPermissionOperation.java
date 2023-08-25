@@ -1,6 +1,6 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertProjectPermissionOperation;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModel;
+import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

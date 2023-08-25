@@ -1,14 +1,13 @@
 package com.omgservers.application.module.versionModule.impl.service.versionHelpService.impl.method.buildVersionMethod;
 
+import com.omgservers.base.factory.VersionModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.compileVersionSourceCodeOperation.CompileVersionSourceCodeOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
-import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.CreateVersionInternalRequest;
-import com.omgservers.application.module.versionModule.model.VersionModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

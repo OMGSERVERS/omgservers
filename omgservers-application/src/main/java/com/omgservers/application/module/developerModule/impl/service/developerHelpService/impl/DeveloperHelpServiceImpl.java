@@ -5,14 +5,14 @@ import com.omgservers.application.module.developerModule.impl.service.developerH
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenMethod.CreateTokenMethod;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod.CreateVersionMethod;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.getVersionStatusOperation.GetVersionStatusMethod;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateTokenHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.GetVersionStatusHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateProjectHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateTokenHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateVersionHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.GetVersionStatusHelpResponse;
+import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developerModule.GetVersionStatusDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperResponse;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
+import com.omgservers.dto.developerModule.GetVersionStatusDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,22 +30,22 @@ class DeveloperHelpServiceImpl implements DeveloperHelpService {
     final CreateTokenMethod createTokenMethod;
 
     @Override
-    public Uni<CreateTokenHelpResponse> createToken(CreateTokenHelpRequest request) {
+    public Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request) {
         return createTokenMethod.createToken(request);
     }
 
     @Override
-    public Uni<CreateProjectHelpResponse> createProject(CreateProjectHelpRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request) {
         return createProjectMethod.createProject(request);
     }
 
     @Override
-    public Uni<CreateVersionHelpResponse> createVersion(CreateVersionHelpRequest request) {
+    public Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request) {
         return createVersionMethod.createVersion(request);
     }
 
     @Override
-    public Uni<GetVersionStatusHelpResponse> getVersionStatus(GetVersionStatusHelpRequest request) {
+    public Uni<GetVersionStatusDeveloperResponse> getVersionStatus(GetVersionStatusDeveloperRequest request) {
         return getVersionStatusMethod.getVersionStatus(request);
     }
 }

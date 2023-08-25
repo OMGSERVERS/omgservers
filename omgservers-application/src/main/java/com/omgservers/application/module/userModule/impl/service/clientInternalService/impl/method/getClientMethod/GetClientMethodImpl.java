@@ -1,16 +1,15 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.getClientMethod;
 
-import com.omgservers.application.exception.ServerSideGoneException;
 import com.omgservers.application.module.userModule.impl.operation.selectClientOperation.SelectClientOperation;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientInternalResponse;
+import com.omgservers.exception.ServerSideGoneException;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

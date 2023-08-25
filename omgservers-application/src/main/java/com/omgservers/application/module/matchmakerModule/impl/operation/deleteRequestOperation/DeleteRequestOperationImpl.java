@@ -1,14 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.deleteRequestOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

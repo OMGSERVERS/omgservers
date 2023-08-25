@@ -14,6 +14,26 @@
     <artifactId>omgservers-application</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-luaj</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-exception</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-dto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-base</artifactId>
+        </dependency>
         <!-- external -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -70,12 +90,10 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.3.Final</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

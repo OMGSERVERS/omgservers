@@ -1,13 +1,12 @@
 package com.omgservers.application.module.versionModule.impl.operation.selectVersionOperation;
 
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
-import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
-import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.versionModule.model.VersionModelFactory;
-import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.version.VersionBytecodeModel;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.base.factory.VersionModelFactory;
+import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

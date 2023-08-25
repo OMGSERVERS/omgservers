@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule.impl.operation.insertEventOperation;
 
-import com.omgservers.application.module.internalModule.impl.operation.selectEventOperation.SelectEventOperation;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.application.operation.upsertEventOperation.UpsertEventOperation;
+import com.omgservers.base.impl.operation.selectEventOperation.SelectEventOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.upsertEventOperation.UpsertEventOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

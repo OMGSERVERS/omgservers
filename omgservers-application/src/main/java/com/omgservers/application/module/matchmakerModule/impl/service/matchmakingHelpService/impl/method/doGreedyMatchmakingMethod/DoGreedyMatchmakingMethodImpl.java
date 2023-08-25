@@ -5,17 +5,17 @@ import com.omgservers.application.module.matchmakerModule.impl.operation.doGreed
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.MatchmakerInternalService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteRequestInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteRequestInternalResponse;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncMatchInternalResponse;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.matchmakerModule.DeleteRequestInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
+import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j

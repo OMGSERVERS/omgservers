@@ -1,13 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.service.versionHelpService.request;
 
-import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

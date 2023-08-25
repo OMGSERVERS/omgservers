@@ -3,11 +3,11 @@ package com.omgservers.application.module.versionModule.impl.operation.compileVe
 import com.omgservers.application.module.luaModule.LuaModule;
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.request.CompileSourceCodeHelpRequest;
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CompileSourceCodeHelpResponse;
-import com.omgservers.application.module.luaModule.model.LuaBytecodeModel;
-import com.omgservers.application.module.luaModule.model.LuaSourceCodeModel;
-import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
-import com.omgservers.application.module.versionModule.model.VersionFileModel;
-import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
+import com.omgservers.model.luaBytecode.LuaBytecodeModel;
+import com.omgservers.model.luaSourceCode.LuaSourceCodeModel;
+import com.omgservers.model.version.VersionBytecodeModel;
+import com.omgservers.model.version.VersionFileModel;
+import com.omgservers.model.version.VersionSourceCodeModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -1,8 +1,9 @@
 package com.omgservers.application.module.internalModule.impl.operation.upsertJobOperation;
 
-import com.omgservers.application.module.internalModule.model.job.JobModelFactory;
-import com.omgservers.application.module.internalModule.model.job.JobType;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.JobModelFactory;
+import com.omgservers.base.impl.operation.upsertJobOperation.UpsertJobOperation;
+import com.omgservers.model.job.JobType;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

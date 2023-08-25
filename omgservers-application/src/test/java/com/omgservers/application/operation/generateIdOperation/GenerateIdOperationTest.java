@@ -1,7 +1,8 @@
 package com.omgservers.application.operation.generateIdOperation;
 
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

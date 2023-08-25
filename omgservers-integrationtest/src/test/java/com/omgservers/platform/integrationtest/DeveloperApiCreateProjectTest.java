@@ -1,7 +1,7 @@
 package com.omgservers.platform.integrationtest;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
+import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.DeveloperCli;
 import com.omgservers.platforms.integrationtest.cli.TenantCli;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @Slf4j

@@ -1,12 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.operation.hasStagePermissionOperation;
 
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
+import com.omgservers.model.stagePermission.StagePermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
-import java.util.UUID;
 
 public interface HasStagePermissionOperation {
     Uni<Boolean> hasStagePermission(SqlConnection sqlConnection,

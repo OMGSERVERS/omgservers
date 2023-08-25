@@ -1,11 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.deleteVersionMethod;
 
-import com.omgservers.application.module.internalModule.model.event.body.VersionDeletedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.deleteVersionOperation.DeleteVersionOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.DeleteVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
+import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,15 +1,15 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi;
 
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.DeleteVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetBytecodeInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetStageConfigInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetVersionInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
+import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
+import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
+import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionInternalResponse;
+import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;

@@ -1,15 +1,14 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.getPlayerMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.selectPlayerOperation.SelectPlayerOperation;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.GetPlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.GetPlayerInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.userModule.GetPlayerInternalRequest;
+import com.omgservers.dto.userModule.GetPlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

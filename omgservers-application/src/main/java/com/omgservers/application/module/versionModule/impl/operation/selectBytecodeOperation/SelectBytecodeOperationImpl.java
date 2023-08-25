@@ -1,24 +1,22 @@
 package com.omgservers.application.module.versionModule.impl.operation.selectBytecodeOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.version.VersionBytecodeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import io.vertx.pgclient.PgException;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

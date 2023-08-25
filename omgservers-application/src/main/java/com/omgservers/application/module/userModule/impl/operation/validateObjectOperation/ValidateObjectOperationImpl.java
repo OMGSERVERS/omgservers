@@ -1,10 +1,10 @@
 package com.omgservers.application.module.userModule.impl.operation.validateObjectOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.module.userModule.model.object.ObjectModel;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.object.ObjectModel;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 

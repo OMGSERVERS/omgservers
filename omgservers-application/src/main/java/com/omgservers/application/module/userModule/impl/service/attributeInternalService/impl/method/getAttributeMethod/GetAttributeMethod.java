@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.getAttributeMethod;
 
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
+import com.omgservers.dto.userModule.GetAttributeInternalRequest;
+import com.omgservers.dto.userModule.GetAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetAttributeMethod {

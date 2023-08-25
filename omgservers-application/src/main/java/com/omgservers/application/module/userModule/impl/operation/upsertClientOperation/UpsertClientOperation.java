@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertClientOperation;
 
-import com.omgservers.application.module.userModule.model.client.ClientModel;
+import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

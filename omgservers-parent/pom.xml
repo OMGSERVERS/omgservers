@@ -16,14 +16,37 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.0.3.Final</quarkus.platform.version>
-        <quarkus.qpid.jms.group-id>${quarkus.platform.group-id}</quarkus.qpid.jms.group-id>
-        <quarkus.qpid.jms.version>${quarkus.platform.version}</quarkus.qpid.jms.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.0.0</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-luaj</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-exception</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-model</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-dto</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-base</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-application</artifactId>
@@ -49,13 +72,6 @@
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-bom</artifactId>
                 <version>${quarkus.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>${quarkus.qpid.jms.group-id}</groupId>
-                <artifactId>quarkus-qpid-jms-bom</artifactId>
-                <version>${quarkus.qpid.jms.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

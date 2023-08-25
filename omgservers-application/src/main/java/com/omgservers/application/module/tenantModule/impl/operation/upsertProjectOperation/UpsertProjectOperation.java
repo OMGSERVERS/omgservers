@@ -1,6 +1,6 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.model.project.ProjectModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

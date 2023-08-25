@@ -1,11 +1,11 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.request.RequestModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -24,10 +24,10 @@ import java.util.ArrayList;
 class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, config)
-            values($1, $2, $3, $4, $5)
+            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, user_id, client_id, config)
+            values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
-            update set matchmaker_id = $2, modified = $4, config = $5
+            update set matchmaker_id = $2, modified = $4, user_id = $5, client_id = $6, config = $7
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -70,6 +70,8 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                         add(request.getMatchmakerId());
                         add(request.getCreated().atOffset(ZoneOffset.UTC));
                         add(request.getModified().atOffset(ZoneOffset.UTC));
+                        add(request.getUserId());
+                        add(request.getClientId());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

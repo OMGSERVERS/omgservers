@@ -1,13 +1,13 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapStandaloneConfigurationMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.model.index.IndexConfigModel;
-import com.omgservers.application.module.internalModule.model.index.IndexModelFactory;
-import com.omgservers.application.module.internalModule.model.serviceAccount.ServiceAccountModelFactory;
+import com.omgservers.base.factory.IndexModelFactory;
+import com.omgservers.base.factory.ServiceAccountModelFactory;
+import com.omgservers.base.InternalModule;
+import com.omgservers.dto.internalModule.SyncIndexHelpRequest;
+import com.omgservers.dto.internalModule.SyncServiceAccountHelpRequest;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.model.index.IndexConfigModel;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

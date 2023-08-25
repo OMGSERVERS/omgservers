@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod;
 
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteMatchmakerInternalResponse;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

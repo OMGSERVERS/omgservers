@@ -1,7 +1,7 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getBytecodeMethod;
 
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetBytecodeInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetBytecodeMethod {

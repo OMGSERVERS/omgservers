@@ -1,10 +1,9 @@
 package com.omgservers.application.module.versionModule.impl.operation.getVersionServiceApiClientOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.net.URI;
 import java.util.Map;

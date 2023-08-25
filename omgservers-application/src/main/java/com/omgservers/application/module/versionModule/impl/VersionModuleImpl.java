@@ -1,13 +1,12 @@
 package com.omgservers.application.module.versionModule.impl;
 
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.VersionHelpService;
+import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

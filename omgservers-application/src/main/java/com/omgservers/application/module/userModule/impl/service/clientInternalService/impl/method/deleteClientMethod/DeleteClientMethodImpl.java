@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.deleteClientMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.userModule.impl.operation.deleteClientOperation.DeleteClientOperation;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.userModule.DeleteClientInternalRequest;
+import com.omgservers.dto.userModule.DeleteClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

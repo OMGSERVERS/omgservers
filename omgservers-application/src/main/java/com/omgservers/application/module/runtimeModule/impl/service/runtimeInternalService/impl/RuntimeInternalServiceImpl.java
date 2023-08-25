@@ -3,26 +3,24 @@ package com.omgservers.application.module.runtimeModule.impl.service.runtimeInte
 import com.omgservers.application.module.runtimeModule.impl.operation.getRuntimeServiceApiClientOperation.GetRuntimeServiceApiClientOperation;
 import com.omgservers.application.module.runtimeModule.impl.operation.getRuntimeServiceApiClientOperation.RuntimeServiceApiClient;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.RuntimeInternalService;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteActorMethod.DeleteActorMethod;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteCommandMethod.DeleteCommandMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteRuntimeMethod.DeleteRuntimeMethod;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.doUpdateMethod.DoUpdateMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.getRuntimeMethod.GetRuntimeMethod;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncActorMethod.SyncActorMethod;
+import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncCommandMethod.SyncCommandMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod.SyncRuntimeMethod;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteActorInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteCommandInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DeleteRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncActorInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncCommandInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.SyncRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteActorInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteCommandInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.DeleteRuntimeInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncActorInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncCommandInternalResponse;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.SyncRuntimeInternalResponse;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
+import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
+import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -38,10 +36,11 @@ public class RuntimeInternalServiceImpl implements RuntimeInternalService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     final DeleteRuntimeMethod deleteRuntimeMethod;
+    final DeleteCommandMethod deleteCommandMethod;
     final SyncRuntimeMethod syncRuntimeMethod;
-    final DeleteActorMethod deleteActorMethod;
+    final SyncCommandMethod syncCommandMethod;
     final GetRuntimeMethod getRuntimeMethod;
-    final SyncActorMethod syncActorMethod;
+    final DoUpdateMethod doUpdateMethod;
 
     @Override
     public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
@@ -71,30 +70,29 @@ public class RuntimeInternalServiceImpl implements RuntimeInternalService {
     }
 
     @Override
-    public Uni<SyncActorInternalResponse> syncActor(SyncActorInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncActorInternalRequest::validate,
-                getRuntimeServiceApiClientOperation::getClient,
-                RuntimeServiceApiClient::syncActor,
-                syncActorMethod::syncActor);
-    }
-
-    @Override
-    public Uni<DeleteActorInternalResponse> deleteActor(DeleteActorInternalRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteActorInternalRequest::validate,
-                getRuntimeServiceApiClientOperation::getClient,
-                RuntimeServiceApiClient::deleteActor,
-                deleteActorMethod::deleteActor);
-    }
-
-    @Override
     public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request) {
-        return null;
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                SyncCommandInternalRequest::validate,
+                getRuntimeServiceApiClientOperation::getClient,
+                RuntimeServiceApiClient::syncCommand,
+                syncCommandMethod::syncCommand);
     }
 
     @Override
     public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request) {
-        return null;
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                DeleteCommandInternalRequest::validate,
+                getRuntimeServiceApiClientOperation::getClient,
+                RuntimeServiceApiClient::deleteCommand,
+                deleteCommandMethod::deleteCommand);
+    }
+
+    @Override
+    public Uni<Void> doUpdate(DoUpdateInternalRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                DoUpdateInternalRequest::validate,
+                getRuntimeServiceApiClientOperation::getClient,
+                RuntimeServiceApiClient::doUpdate,
+                doUpdateMethod::doUpdate);
     }
 }

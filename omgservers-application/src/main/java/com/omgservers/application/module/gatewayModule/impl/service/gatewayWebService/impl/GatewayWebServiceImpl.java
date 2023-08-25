@@ -2,9 +2,8 @@ package com.omgservers.application.module.gatewayModule.impl.service.gatewayWebS
 
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.GatewayInternalService;
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayWebService.GatewayWebService;
-import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.WebsocketEndpointService;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.AssignPlayerInternalRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.RespondMessageInternalRequest;
+import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
+import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

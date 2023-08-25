@@ -1,11 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation.UpsertTenantPermissionOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

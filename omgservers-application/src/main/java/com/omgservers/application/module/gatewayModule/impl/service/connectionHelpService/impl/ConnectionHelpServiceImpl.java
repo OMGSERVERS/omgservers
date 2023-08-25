@@ -1,6 +1,5 @@
 package com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.impl;
 
-import com.omgservers.application.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.AssignPlayerHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.CreateConnectionHelpRequest;
@@ -12,8 +11,9 @@ import com.omgservers.application.module.gatewayModule.impl.service.connectionHe
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetAssignedPlayerHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetConnectionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetSessionHelpResponse;
-import com.omgservers.application.module.gatewayModule.model.assignedPlayer.AssignedPlayerModel;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;

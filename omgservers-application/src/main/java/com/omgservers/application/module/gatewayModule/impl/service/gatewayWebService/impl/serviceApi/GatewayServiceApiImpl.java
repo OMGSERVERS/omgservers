@@ -1,10 +1,10 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayWebService.impl.serviceApi;
 
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayWebService.GatewayWebService;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.AssignPlayerInternalRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.RespondMessageInternalRequest;
-import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
-import com.omgservers.application.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
+import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
+import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

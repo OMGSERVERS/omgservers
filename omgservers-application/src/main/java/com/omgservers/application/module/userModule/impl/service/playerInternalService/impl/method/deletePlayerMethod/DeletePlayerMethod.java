@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.deletePlayerMethod;
 
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.request.DeletePlayerInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.playerInternalService.response.DeletePlayerInternalResponse;
+import com.omgservers.dto.userModule.DeletePlayerInternalRequest;
+import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeletePlayerMethod {

@@ -1,13 +1,13 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.impl.method.assignPlayerMethod;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.SyncLogHelpRequest;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
-import com.omgservers.application.module.userModule.impl.operation.sendMessageOperation.SendMessageOperation;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.AssignPlayerHelpRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.AssignPlayerInternalRequest;
+import com.omgservers.base.InternalModule;
+import com.omgservers.base.impl.service.logHelpService.request.SyncLogHelpRequest;
+import com.omgservers.application.module.userModule.impl.operation.sendMessageOperation.SendMessageOperation;
+import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

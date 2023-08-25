@@ -1,10 +1,10 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod;
 
-import com.omgservers.application.module.internalModule.impl.service.eventHelpService.EventHelpService;
+import com.omgservers.base.impl.service.eventHelpService.EventHelpService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.getMatchmakerMethod.GetMatchmakerMethod;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalRequest;
+import com.omgservers.base.factory.MatchmakerModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import jakarta.inject.Inject;

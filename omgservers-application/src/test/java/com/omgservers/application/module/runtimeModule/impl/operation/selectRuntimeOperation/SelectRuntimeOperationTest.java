@@ -1,11 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.selectRuntimeOperation;
 
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.runtime.RuntimeConfigModel;
+import com.omgservers.base.factory.RuntimeModelFactory;
+import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

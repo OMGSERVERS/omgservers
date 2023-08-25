@@ -1,12 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchmakerOperation.DeleteMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DeleteMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DeleteMatchmakerInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
+import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

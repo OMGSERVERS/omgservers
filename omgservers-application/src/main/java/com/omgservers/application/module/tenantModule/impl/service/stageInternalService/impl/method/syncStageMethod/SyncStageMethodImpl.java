@@ -1,14 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.model.event.body.StageCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.StageUpdatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation.ValidateStageOperation;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
+import com.omgservers.model.event.body.StageCreatedEventBodyModel;
+import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

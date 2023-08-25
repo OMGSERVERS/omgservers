@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.operation.insertTokenOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.module.userModule.model.user.UserTokenContainerModel;
+import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.model.user.UserTokenContainerModel;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

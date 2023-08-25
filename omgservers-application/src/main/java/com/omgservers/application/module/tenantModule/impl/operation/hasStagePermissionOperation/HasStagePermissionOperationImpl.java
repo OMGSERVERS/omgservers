@@ -1,15 +1,13 @@
 package com.omgservers.application.module.tenantModule.impl.operation.hasStagePermissionOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.model.stagePermission.StagePermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -18,7 +16,7 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
     static private final String sql = """
             select id
-            from $schema.tab_stage_permission
+            from $schema.tab_tenant_stage_permission
             where stage_id = $1 and user_id = $2 and permission = $3
             limit 1
             """;

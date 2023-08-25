@@ -1,9 +1,9 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.runtime.player;
 
+import com.omgservers.base.factory.AttributeModelFactory;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
-import com.omgservers.application.module.userModule.model.attribute.AttributeModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.userModule.SyncAttributeInternalRequest;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;

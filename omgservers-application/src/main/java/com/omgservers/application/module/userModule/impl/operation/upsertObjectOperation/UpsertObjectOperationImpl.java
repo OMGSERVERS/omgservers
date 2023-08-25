@@ -1,15 +1,14 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertObjectOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.userModule.model.object.ObjectModel;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.object.ObjectModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 class UpsertObjectOperationImpl implements UpsertObjectOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_object(id, player_id, created, modified, name, body)
+            insert into $schema.tab_user_object(id, player_id, created, modified, name, body)
             values($1, $2, $3, $4, $5, $6)
             on conflict (player_id, name) do
             update set modified = $3, name = $5, body = $6

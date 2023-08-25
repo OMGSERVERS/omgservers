@@ -1,15 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.getStageMethod;
 
 import com.omgservers.application.module.tenantModule.impl.operation.selectStageOperation.SelectStageOperation;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

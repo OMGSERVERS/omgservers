@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncStageMethod {

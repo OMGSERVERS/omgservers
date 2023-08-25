@@ -2,9 +2,9 @@ package com.omgservers.application.module.userModule.impl.service.userInternalSe
 
 import com.omgservers.application.module.userModule.impl.operation.selectUserOperation.SelectUserOperation;
 import com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation.ValidateCredentialsOperation;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.request.ValidateCredentialsInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.userInternalService.response.ValidateCredentialsInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.userModule.ValidateCredentialsInternalRequest;
+import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

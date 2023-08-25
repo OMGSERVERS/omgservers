@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService;
 
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.DeleteClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.DeleteClientInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
+import com.omgservers.dto.userModule.DeleteClientInternalRequest;
+import com.omgservers.dto.userModule.DeleteClientInternalResponse;
+import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientInternalResponse;
+import com.omgservers.dto.userModule.SyncClientInternalRequest;
+import com.omgservers.dto.userModule.SyncClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ClientInternalService {

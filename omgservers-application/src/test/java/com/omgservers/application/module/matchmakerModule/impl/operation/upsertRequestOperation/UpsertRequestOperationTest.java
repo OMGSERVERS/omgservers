@@ -1,10 +1,10 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation;
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.MatchmakerModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.base.factory.RequestModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -43,8 +43,8 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
-        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
         assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
 
@@ -54,8 +54,8 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
-        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
 
         assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));

@@ -5,7 +5,6 @@ import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
-import java.util.UUID;
 
 public interface DeleteTenantOperation {
     Uni<Boolean> deleteTenant(SqlConnection sqlConnection, int shard, Long id);

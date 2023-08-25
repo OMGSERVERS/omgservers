@@ -26,7 +26,7 @@ create table if not exists tab_user_player (
     unique(user_id, stage_id)
 );
 
-create table if not exists tab_player_client (
+create table if not exists tab_user_client (
     id bigint primary key,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
@@ -35,7 +35,7 @@ create table if not exists tab_player_client (
     unique(connection_id)
 );
 
-create table if not exists tab_player_attribute (
+create table if not exists tab_user_attribute (
     id bigint primary key,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
@@ -45,7 +45,7 @@ create table if not exists tab_player_attribute (
     unique(player_id, attribute_name)
 );
 
-create table if not exists tab_player_object (
+create table if not exists tab_user_object (
     id bigint primary key,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
@@ -82,7 +82,7 @@ create table if not exists tab_tenant_project (
     config json not null
 );
 
-create table if not exists tab_project_permission (
+create table if not exists tab_tenant_project_permission (
     id bigint primary key,
     project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
@@ -91,7 +91,7 @@ create table if not exists tab_project_permission (
     unique(project_id, user_id, permission)
 );
 
-create table if not exists tab_project_stage (
+create table if not exists tab_tenant_stage (
     id bigint primary key,
     project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
@@ -102,9 +102,9 @@ create table if not exists tab_project_stage (
     version_id bigint
 );
 
-create table if not exists tab_stage_permission (
+create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
-    stage_id bigint not null references tab_project_stage(id) on delete cascade on update restrict,
+    stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
@@ -136,11 +136,23 @@ create table if not exists tab_matchmaker (
     stage_id bigint not null
 );
 
+create table if not exists tab_matchmaker_command (
+    id bigint primary key,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    body json not null,
+    status text not null
+);
+
 create table if not exists tab_matchmaker_request (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    user_id bigint not null,
+    client_id bigint not null,
     config json not null
 );
 
@@ -150,8 +162,7 @@ create table if not exists tab_matchmaker_match (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
-    config json not null,
-    unique(runtime_id)
+    config json not null
 );
 
 -- runtime module
@@ -173,16 +184,5 @@ create table if not exists tab_runtime_command (
     modified timestamp with time zone not null,
     qualifier text not null,
     body json not null,
-    status text not null
-);
-
-create table if not exists tab_runtime_actor (
-    id bigint primary key,
-    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    user_id bigint not null,
-    client_id bigint not null,
-    config json not null,
     status text not null
 );

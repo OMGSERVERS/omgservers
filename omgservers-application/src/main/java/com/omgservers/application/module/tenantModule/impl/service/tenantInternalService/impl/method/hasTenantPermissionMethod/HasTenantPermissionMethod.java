@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface HasTenantPermissionMethod {

@@ -1,15 +1,13 @@
 package com.omgservers.application.module.tenantModule.impl.operation.hasProjectPermissionOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -18,7 +16,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
 
     static private final String sql = """
             select id
-            from $schema.tab_project_permission
+            from $schema.tab_tenant_project_permission
             where project_id = $1 and user_id = $2 and permission = $3
             limit 1
             """;

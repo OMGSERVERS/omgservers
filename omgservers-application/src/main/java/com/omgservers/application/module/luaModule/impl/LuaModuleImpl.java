@@ -1,13 +1,12 @@
 package com.omgservers.application.module.luaModule.impl;
 
 import com.omgservers.application.module.luaModule.LuaModule;
-import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.RuntimeHelpService;
 import com.omgservers.application.module.luaModule.impl.service.luaHandlerHelpService.HandlerHelpService;
+import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.RuntimeHelpService;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

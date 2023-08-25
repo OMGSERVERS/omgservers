@@ -1,13 +1,13 @@
 package com.omgservers.platforms.integrationtest.serviceClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
-import com.omgservers.application.module.gatewayModule.model.message.MessageQualifierEnum;
-import com.omgservers.application.module.gatewayModule.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.application.module.gatewayModule.model.message.body.EventMessageBodyModel;
-import com.omgservers.application.module.gatewayModule.model.message.body.MatchmakerMessageBodyModel;
-import com.omgservers.application.module.gatewayModule.model.message.body.SignInMessageBodyModel;
-import com.omgservers.application.module.gatewayModule.model.message.body.SignUpMessageBodyModel;
+import com.omgservers.model.message.MessageModel;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.CredentialsMessageBodyModel;
+import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
+import com.omgservers.model.message.body.SignInMessageBodyModel;
+import com.omgservers.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation.VersionParameters;
 import jakarta.websocket.ClientEndpointConfig;
 import jakarta.websocket.ContainerProvider;
@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.UUID;
 
 @Slf4j
 public class ServiceClient {
@@ -61,7 +62,7 @@ public class ServiceClient {
     }
 
     public synchronized void signUp(VersionParameters versionParameters) throws InterruptedException, IOException {
-        final var messageModel = MessageModel.create(MessageQualifierEnum.SIGN_UP_MESSAGE,
+        final var messageModel = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.SIGN_UP_MESSAGE,
                 new SignUpMessageBodyModel(versionParameters.getTenantId(),
                         versionParameters.getStageId(), versionParameters.getStageSecret()));
         final var messageString = objectMapper.writeValueAsString(messageModel);
@@ -75,7 +76,7 @@ public class ServiceClient {
     }
 
     public synchronized void signIn(VersionParameters versionParameters) throws IOException {
-        final var messageModel = MessageModel.create(MessageQualifierEnum.SIGN_IN_MESSAGE,
+        final var messageModel = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.SIGN_IN_MESSAGE,
                 new SignInMessageBodyModel(versionParameters.getTenantId(),
                         versionParameters.getStageId(), versionParameters.getStageSecret(), userId, password));
         final var messageString = objectMapper.writeValueAsString(messageModel);
@@ -83,8 +84,7 @@ public class ServiceClient {
     }
 
     public synchronized void requestMatchmaking(String mode) throws IOException {
-        final var messageModel = MessageModel
-                .create(MessageQualifierEnum.MATCHMAKER_MESSAGE, new MatchmakerMessageBodyModel(mode));
+        final var messageModel = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.MATCHMAKER_MESSAGE, new MatchmakerMessageBodyModel(mode));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }

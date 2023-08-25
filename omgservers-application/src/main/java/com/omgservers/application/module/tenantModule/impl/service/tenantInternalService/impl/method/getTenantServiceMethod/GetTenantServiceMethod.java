@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.getTenantServiceMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

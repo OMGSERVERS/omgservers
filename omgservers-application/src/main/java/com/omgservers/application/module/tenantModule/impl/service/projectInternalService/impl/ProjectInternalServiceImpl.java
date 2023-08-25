@@ -2,25 +2,28 @@ package com.omgservers.application.module.tenantModule.impl.service.projectInter
 
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.TenantServiceApiClient;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.hasProjectPermissionMethod.HasProjectPermissionMethod;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod.SyncProjectPermissionMethod;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.GetProjectInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.HasProjectPermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectPermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectInternalResponse;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.ProjectInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.deleteProjectMethod.DeleteProjectMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.getProjectMethod.GetProjectMethod;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.hasProjectPermissionMethod.HasProjectPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectMethod.SyncProjectMethod;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod.SyncProjectPermissionMethod;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteProjectInternalRequest;
+import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenantModule.SyncProjectInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

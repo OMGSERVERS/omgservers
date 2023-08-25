@@ -1,19 +1,21 @@
 package com.omgservers.application.module.userModule.impl.operation.insertTokenOperation;
 
-import com.omgservers.application.module.userModule.model.token.TokenModel;
-import com.omgservers.application.module.userModule.model.user.*;
-import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.module.userModule.impl.operation.encodeTokenOperation.EncodeTokenOperation;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.token.TokenModel;
+import com.omgservers.model.user.UserModel;
+import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.model.user.UserTokenContainerModel;
+import com.omgservers.model.user.UserTokenModel;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 
 import java.security.SecureRandom;
 import java.time.Instant;

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.operation.decodeTokenOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserTokenModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.model.user.UserTokenModel;
+import com.omgservers.exception.ServerSideBadRequestException;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

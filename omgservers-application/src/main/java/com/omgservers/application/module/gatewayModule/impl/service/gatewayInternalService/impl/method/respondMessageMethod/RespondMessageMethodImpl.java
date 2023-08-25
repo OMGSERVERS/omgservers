@@ -1,15 +1,14 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.impl.method.respondMessageMethod;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.userModule.impl.operation.sendMessageOperation.SendMessageOperation;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetSessionHelpRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.RespondMessageInternalRequest;
+import com.omgservers.application.module.userModule.impl.operation.sendMessageOperation.SendMessageOperation;
+import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

@@ -1,13 +1,13 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService;
 
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.DeleteAttributeInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetPlayerAttributesInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.SyncAttributeInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.DeleteAttributeInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetPlayerAttributesInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.SyncAttributeInternalResponse;
+import com.omgservers.dto.userModule.DeleteAttributeInternalRequest;
+import com.omgservers.dto.userModule.DeleteAttributeInternalResponse;
+import com.omgservers.dto.userModule.GetAttributeInternalRequest;
+import com.omgservers.dto.userModule.GetAttributeInternalResponse;
+import com.omgservers.dto.userModule.GetPlayerAttributesInternalRequest;
+import com.omgservers.dto.userModule.GetPlayerAttributesInternalResponse;
+import com.omgservers.dto.userModule.SyncAttributeInternalRequest;
+import com.omgservers.dto.userModule.SyncAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

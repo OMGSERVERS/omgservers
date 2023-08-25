@@ -1,17 +1,16 @@
 package com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.createTokenMethod;
 
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation.ValidateCredentialsOperation;
 import com.omgservers.application.module.userModule.impl.operation.insertTokenOperation.InsertTokenOperation;
 import com.omgservers.application.module.userModule.impl.operation.selectUserOperation.SelectUserOperation;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.CreateTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.CreateTokenInternalResponse;
+import com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation.ValidateCredentialsOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.userModule.CreateTokenInternalRequest;
+import com.omgservers.dto.userModule.CreateTokenInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

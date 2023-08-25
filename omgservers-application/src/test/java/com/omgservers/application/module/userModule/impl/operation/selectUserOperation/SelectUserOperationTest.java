@@ -1,11 +1,10 @@
 package com.omgservers.application.module.userModule.impl.operation.selectUserOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModel;
-import com.omgservers.application.module.userModule.model.user.UserModelFactory;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

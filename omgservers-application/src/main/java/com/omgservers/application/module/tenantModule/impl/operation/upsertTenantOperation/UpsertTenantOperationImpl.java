@@ -1,19 +1,18 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.tenant.TenantModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import io.vertx.pgclient.PgException;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
 import java.time.ZoneOffset;

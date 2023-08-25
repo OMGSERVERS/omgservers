@@ -1,7 +1,7 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService;
 
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.AssignPlayerInternalRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.RespondMessageInternalRequest;
+import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
+import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

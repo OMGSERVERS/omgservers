@@ -1,11 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.doUpdateMethod;
 
 import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.DoUpdateInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.request.GetRuntimeInternalRequest;
-import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.response.GetRuntimeInternalResponse;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
+import com.omgservers.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

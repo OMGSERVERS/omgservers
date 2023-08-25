@@ -1,13 +1,12 @@
 package com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModel;
-import com.omgservers.application.exception.ServerSideUnauthorizedException;
+import com.omgservers.exception.ServerSideUnauthorizedException;
+import com.omgservers.model.user.UserModel;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 // TODO: unit test it
 

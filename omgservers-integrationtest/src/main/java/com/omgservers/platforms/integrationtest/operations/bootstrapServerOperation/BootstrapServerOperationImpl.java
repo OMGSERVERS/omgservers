@@ -1,6 +1,6 @@
 package com.omgservers.platforms.integrationtest.operations.bootstrapServerOperation;
 
-import com.omgservers.application.module.internalModule.model.index.IndexModel;
+import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -18,9 +18,9 @@ class BootstrapServerOperationImpl implements BootstrapServerOperation {
     final AdminCli adminCli;
 
     @Override
-    public void bootstrap(URI uri, IndexModel index, Map<String, String> serviceAccounts) {
+    public void bootstrap(URI uri, String indexName, IndexConfigModel indexConfig, Map<String, String> serviceAccounts) {
         adminCli.createClient(uri);
-        adminCli.syncIndex(index);
+        adminCli.createIndex(indexName, indexConfig);
         serviceAccounts.forEach(adminCli::createServiceAccount);
 
         log.info("Server was bootstrap, uri={}", uri);

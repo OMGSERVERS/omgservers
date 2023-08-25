@@ -1,15 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.getTenantServiceMethod;
 
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.selectTenantOperation.SelectTenantOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

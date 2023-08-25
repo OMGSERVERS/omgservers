@@ -1,8 +1,8 @@
 package com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation;
 
-import com.omgservers.application.module.versionModule.model.VersionFileModel;
-import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.model.version.VersionFileModel;
+import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.DeveloperCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;

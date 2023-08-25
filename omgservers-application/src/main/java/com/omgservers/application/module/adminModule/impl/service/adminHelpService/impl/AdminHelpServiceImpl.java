@@ -4,14 +4,16 @@ import com.omgservers.application.module.adminModule.impl.service.adminHelpServi
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.collectLogsMethod.CollectLogsMethod;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewDeveloperMethod.CreateDeveloperMethod;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewTenantMethod.CreateTenantMethod;
+import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.getIdMethod.GenerateIdMethod;
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.pingServerMethod.PingServerMethod;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
+import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
+import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
+import com.omgservers.dto.adminModule.PingServerAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,24 +29,30 @@ class AdminHelpServiceImpl implements AdminHelpService {
     final CreateTenantMethod createTenantAdminMethod;
     final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
+    final GenerateIdMethod generateIdMethod;
 
     @Override
-    public Uni<PingServerHelpResponse> pingServer() {
+    public Uni<PingServerAdminResponse> pingServer() {
         return pingServerMethod.pingServer();
     }
 
     @Override
-    public Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request) {
+    public Uni<GenerateIdAdminResponse> generateId() {
+        return generateIdMethod.getId();
+    }
+
+    @Override
+    public Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request) {
         return createTenantAdminMethod.createTenant(request);
     }
 
     @Override
-    public Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request) {
+    public Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request) {
         return createDeveloperAdminMethod.createDeveloper(request);
     }
 
     @Override
-    public Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request) {
+    public Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request) {
         return collectLogsMethod.collectLogs(request);
     }
 }

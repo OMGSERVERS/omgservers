@@ -1,10 +1,9 @@
 package com.omgservers.application.module.luaModule.impl.operation.decodeLuaBytecodeOperation;
 
-import com.omgservers.application.module.luaModule.model.LuaBytecodeModel;
-import com.omgservers.application.module.versionModule.model.VersionFileModel;
-import lombok.extern.slf4j.Slf4j;
-
+import com.omgservers.model.luaBytecode.LuaBytecodeModel;
+import com.omgservers.model.version.VersionFileModel;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Base64;
 import java.util.List;

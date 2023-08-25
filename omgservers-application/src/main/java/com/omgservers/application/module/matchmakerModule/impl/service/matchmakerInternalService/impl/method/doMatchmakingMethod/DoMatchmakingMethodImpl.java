@@ -1,29 +1,28 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.doMatchmakingMethod;
 
-import com.omgservers.application.exception.ServerSideConflictException;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteRequestOperation.DeleteRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation.DoGreedyMatchmakingOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.DoMatchmakingInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.GetMatchmakerInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.DoMatchmakingInternalResponse;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.GetMatchmakerInternalResponse;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.MatchmakingHelpService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModel;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetStageConfigInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.model.stage.StageModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,6 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     final CheckShardOperation checkShardOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
-    final PgPool pgPool;
 
     @Override
     public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingInternalRequest request) {

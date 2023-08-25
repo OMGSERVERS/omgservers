@@ -1,12 +1,12 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.syncVersionMethod;
 
-import com.omgservers.application.module.internalModule.model.event.body.VersionCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.VersionUpdatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.SyncVersionInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
+import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
+import com.omgservers.model.event.body.VersionUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

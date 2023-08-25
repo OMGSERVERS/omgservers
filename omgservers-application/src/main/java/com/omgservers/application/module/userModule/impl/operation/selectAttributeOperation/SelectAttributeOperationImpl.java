@@ -1,9 +1,9 @@
 package com.omgservers.application.module.userModule.impl.operation.selectAttributeOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.attribute.AttributeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -13,8 +13,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -22,7 +20,7 @@ class SelectAttributeOperationImpl implements SelectAttributeOperation {
 
     static private final String sql = """
             select id, player_id, created, modified, attribute_name, attribute_value
-            from $schema.tab_player_attribute a
+            from $schema.tab_user_attribute a
             where player_id = $1 and attribute_name = $2
             limit 1
             """;

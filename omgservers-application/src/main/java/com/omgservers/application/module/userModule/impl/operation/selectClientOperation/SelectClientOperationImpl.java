@@ -1,22 +1,20 @@
 package com.omgservers.application.module.userModule.impl.operation.selectClientOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.userModule.model.client.ClientModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.net.URI;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -25,7 +23,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
 
     static private final String sql = """
             select id, player_id, created, server, connection_id
-            from $schema.tab_player_client
+            from $schema.tab_user_client
             where id = $1
             limit 1
             """;

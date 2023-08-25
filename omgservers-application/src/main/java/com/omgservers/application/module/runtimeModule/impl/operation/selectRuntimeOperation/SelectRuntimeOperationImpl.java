@@ -1,12 +1,12 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.selectRuntimeOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.runtime.RuntimeConfigModel;
+import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtime.RuntimeTypeEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;

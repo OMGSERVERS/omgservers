@@ -1,6 +1,6 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response;
 
-import com.omgservers.application.module.luaModule.model.LuaBytecodeModel;
+import com.omgservers.model.luaBytecode.LuaBytecodeModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

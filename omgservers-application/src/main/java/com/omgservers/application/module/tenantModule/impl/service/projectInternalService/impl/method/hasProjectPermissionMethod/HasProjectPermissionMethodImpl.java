@@ -1,9 +1,9 @@
 package com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.hasProjectPermissionMethod;
 
 import com.omgservers.application.module.tenantModule.impl.operation.hasProjectPermissionOperation.HasProjectPermissionOperation;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.HasProjectPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.HasProjectPermissionInternalResponse;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

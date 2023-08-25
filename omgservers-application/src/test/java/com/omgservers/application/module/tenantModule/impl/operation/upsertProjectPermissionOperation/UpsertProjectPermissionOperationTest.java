@@ -2,23 +2,20 @@ package com.omgservers.application.module.tenantModule.impl.operation.upsertProj
 
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
-import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModel;
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModelFactory;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.base.factory.ProjectModelFactory;
+import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.base.factory.ProjectPermissionModelFactory;
+import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

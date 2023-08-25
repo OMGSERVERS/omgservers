@@ -1,12 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectRequestOperation;
 
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.MatchmakerModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.base.factory.RequestModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -48,8 +48,8 @@ class SelectRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
-        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
+        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
         final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getId());

@@ -1,6 +1,6 @@
 package com.omgservers.platform.integrationtest;
 
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.TenantCli;
 import com.omgservers.platforms.integrationtest.cli.UserCli;

@@ -3,10 +3,10 @@ package com.omgservers.application.module.userModule.impl.service.userHelpServic
 import com.omgservers.application.module.gatewayModule.GatewayModule;
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.userHelpService.request.RespondClientHelpRequest;
-import com.omgservers.application.module.userModule.model.client.ClientModel;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.request.RespondMessageInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
+import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
+import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientInternalResponse;
+import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

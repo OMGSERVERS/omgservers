@@ -1,17 +1,32 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerWebService.impl.serviceApi;
 
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.*;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.*;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerWebService.MatchmakerWebService;
-import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
-import com.omgservers.application.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.dto.matchmakerModule.DeleteMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchInternalResponse;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
+import com.omgservers.dto.matchmakerModule.DeleteRequestInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
+import com.omgservers.dto.matchmakerModule.GetMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncRequestInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
+import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

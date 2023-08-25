@@ -2,24 +2,17 @@ package com.omgservers.application.module.tenantModule.impl.operation.hasTenantP
 
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation.UpsertTenantPermissionOperation;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
-import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionModelFactory;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.base.factory.TenantPermissionModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

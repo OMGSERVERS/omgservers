@@ -1,6 +1,6 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.selectRuntimeOperation;
 
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModel;
+import com.omgservers.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

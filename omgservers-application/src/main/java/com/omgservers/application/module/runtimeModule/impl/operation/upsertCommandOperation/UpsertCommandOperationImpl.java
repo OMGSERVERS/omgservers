@@ -1,12 +1,12 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.runtimeModule.model.command.CommandModel;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -38,7 +38,7 @@ class UpsertCommandOperationImpl implements UpsertCommandOperation {
     @Override
     public Uni<Boolean> upsertCommand(final SqlConnection sqlConnection,
                                       final int shard,
-                                      final CommandModel command) {
+                                      final RuntimeCommandModel command) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -70,7 +70,7 @@ class UpsertCommandOperationImpl implements UpsertCommandOperation {
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
                              final int shard,
-                             final CommandModel command) {
+                             final RuntimeCommandModel command) {
         try {
             var bodyString = objectMapper.writeValueAsString(command.getBody());
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);

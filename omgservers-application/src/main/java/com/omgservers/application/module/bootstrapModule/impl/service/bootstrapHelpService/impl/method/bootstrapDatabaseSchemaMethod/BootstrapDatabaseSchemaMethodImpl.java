@@ -1,6 +1,6 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapDatabaseSchemaMethod;
 
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

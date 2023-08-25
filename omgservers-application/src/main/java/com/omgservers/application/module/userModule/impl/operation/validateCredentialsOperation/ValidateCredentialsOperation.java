@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserModel;
+import com.omgservers.model.user.UserModel;
 import io.smallrye.mutiny.Uni;
 
 public interface ValidateCredentialsOperation {

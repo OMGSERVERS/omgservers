@@ -1,12 +1,12 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewTenantMethod;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
+import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.model.tenant.TenantConfigModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,12 +24,12 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
     final GenerateIdOperation generateIdOperation;
 
     @Override
-    public Uni<CreateTenantHelpResponse> createTenant(final CreateTenantHelpRequest request) {
-        CreateTenantHelpRequest.validate(request);
+    public Uni<CreateTenantAdminResponse> createTenant(final CreateTenantAdminRequest request) {
+        CreateTenantAdminRequest.validate(request);
 
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         final var syncTenantInternalRequest = new SyncTenantInternalRequest(tenant);
         return tenantModule.getTenantInternalService().syncTenant(syncTenantInternalRequest)
-                .replaceWith(new CreateTenantHelpResponse(tenant.getId()));
+                .replaceWith(new CreateTenantAdminResponse(tenant.getId()));
     }
 }

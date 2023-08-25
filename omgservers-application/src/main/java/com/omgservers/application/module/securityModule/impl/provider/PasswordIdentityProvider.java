@@ -1,10 +1,10 @@
 package com.omgservers.application.module.securityModule.impl.provider;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.ValidateCredentialsHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.response.ValidateCredentialsHelpResponse;
-import com.omgservers.application.module.securityModule.model.InternalRoleEnum;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.InternalModule;
+import com.omgservers.base.impl.service.serviceAccountHelpService.request.ValidateCredentialsHelpRequest;
+import com.omgservers.base.impl.service.serviceAccountHelpService.response.ValidateCredentialsHelpResponse;
+import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
@@ -14,11 +14,10 @@ import io.quarkus.security.identity.request.UsernamePasswordAuthenticationReques
 import io.quarkus.security.runtime.QuarkusPrincipal;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import io.smallrye.mutiny.Uni;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.control.ActivateRequestContext;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped

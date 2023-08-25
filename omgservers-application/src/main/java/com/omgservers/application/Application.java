@@ -1,7 +1,6 @@
 package com.omgservers.application;
 
 import com.omgservers.application.module.bootstrapModule.BootstrapModule;
-import com.omgservers.application.operation.getConfigOperation.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.Startup;

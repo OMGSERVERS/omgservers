@@ -1,8 +1,8 @@
 package com.omgservers.platform.integrationtest;
 
-import com.omgservers.application.module.versionModule.model.VersionGroupModel;
-import com.omgservers.application.module.versionModule.model.VersionModeModel;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.model.version.VersionGroupModel;
+import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.platforms.integrationtest.operations.bootstrapVersionOperation.BootstrapVersionOperation;
 import com.omgservers.platforms.integrationtest.serviceClient.ServiceClientFactory;
 import io.quarkus.test.junit.QuarkusTest;

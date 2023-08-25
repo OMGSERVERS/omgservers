@@ -1,12 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation;
 
-import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchGroupModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
-import com.omgservers.application.module.versionModule.model.VersionModeModel;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.MatchModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.match.MatchConfigModel;
+import com.omgservers.model.match.MatchGroupModel;
+import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.version.VersionModeModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

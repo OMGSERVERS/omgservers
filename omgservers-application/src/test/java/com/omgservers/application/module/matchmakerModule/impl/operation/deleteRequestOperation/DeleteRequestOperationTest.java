@@ -2,10 +2,10 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.delete
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
-import com.omgservers.application.module.matchmakerModule.model.matchmaker.MatchmakerModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.MatchmakerModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.base.factory.RequestModelFactory;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -47,8 +47,8 @@ class DeleteRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var requestConfig = RequestConfigModel.create(userId(), clientId(), tenantId(), stageId(), modeName());
-        final var request = requestModelFactory.create(matchmaker.getId(), requestConfig);
+        final var requestConfig = RequestConfigModel.create(modeName());
+        final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), requestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
         assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getId()));

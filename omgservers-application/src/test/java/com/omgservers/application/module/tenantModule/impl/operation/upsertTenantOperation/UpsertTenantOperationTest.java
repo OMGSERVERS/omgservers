@@ -1,8 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation;
 
-import com.omgservers.application.module.tenantModule.model.tenant.TenantConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModelFactory;
+import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.base.factory.TenantModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

@@ -2,12 +2,12 @@ package com.omgservers.application.module.runtimeModule.impl.operation.deleteCom
 
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation.UpsertCommandOperation;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.application.module.runtimeModule.model.command.CommandModelFactory;
-import com.omgservers.application.module.runtimeModule.model.command.body.StartCommandBodyModel;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeConfigModel;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeModelFactory;
-import com.omgservers.application.module.runtimeModule.model.runtime.RuntimeTypeEnum;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.factory.RuntimeCommandModelFactory;
+import com.omgservers.model.runtimeCommand.body.StartRuntimeCommandBodyModel;
+import com.omgservers.model.runtime.RuntimeConfigModel;
+import com.omgservers.base.factory.RuntimeModelFactory;
+import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -33,7 +33,7 @@ class DeleteCommandOperationTest extends Assertions {
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    CommandModelFactory commandModelFactory;
+    RuntimeCommandModelFactory commandModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -47,7 +47,7 @@ class DeleteCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new StartCommandBodyModel());
+        final var command = commandModelFactory.create(runtime.getId(), new StartRuntimeCommandBodyModel());
         upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
 
         assertTrue(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, command.getId()));

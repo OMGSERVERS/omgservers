@@ -1,9 +1,9 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getStageConfigMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectStageConfigOperation.SelectStageConfigOperation;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetStageConfigInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

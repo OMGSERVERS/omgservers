@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchMethod;
 
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.SyncMatchInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.SyncMatchInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

@@ -1,6 +1,6 @@
 package com.omgservers.application.module.versionModule.impl.operation.selectStageConfigOperation;
 
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

@@ -1,13 +1,13 @@
 package com.omgservers.platforms.integrationtest.cli;
 
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionEnum;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.HasProjectPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.HasStagePermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
+import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.model.stagePermission.StagePermissionEnum;
+import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
 import com.omgservers.platforms.integrationtest.operations.getTenantServiceApiClientOperation.TenantServiceApiClient;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
 import com.omgservers.platforms.integrationtest.operations.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;

@@ -1,15 +1,15 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewTenantMethod;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;
 
 public interface CreateTenantMethod {
-    Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request);
+    Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
 
-    default CreateTenantHelpResponse createTenant(long timeout, CreateTenantHelpRequest request) {
+    default CreateTenantAdminResponse createTenant(long timeout, CreateTenantAdminRequest request) {
         return createTenant(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

@@ -1,26 +1,29 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl;
 
+import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.TenantServiceApiClient;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod.HasTenantPermissionMethod;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod.SyncTenantPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.TenantInternalService;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.deleteTenantMethod.DeleteTenantMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.getTenantServiceMethod.GetTenantServiceMethod;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod.HasTenantPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantMethod.SyncTenantMethod;
-import com.omgservers.application.module.tenantModule.impl.operation.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.*;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantResponse;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod.SyncTenantPermissionMethod;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantResponse;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

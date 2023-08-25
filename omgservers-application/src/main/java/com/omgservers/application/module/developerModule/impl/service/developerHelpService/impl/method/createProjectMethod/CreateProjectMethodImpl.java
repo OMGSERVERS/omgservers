@@ -1,21 +1,21 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectMethod;
 
+import com.omgservers.base.factory.ProjectModelFactory;
+import com.omgservers.base.factory.StageModelFactory;
+import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.SyncProjectInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModelFactory;
-import com.omgservers.application.module.tenantModule.model.stage.StageConfigModel;
-import com.omgservers.application.module.tenantModule.model.stage.StageModelFactory;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateProjectHelpResponse;
-import com.omgservers.application.module.tenantModule.model.project.ProjectConfigModel;
-import com.omgservers.application.module.tenantModule.model.tenant.TenantPermissionEnum;
-import com.omgservers.application.exception.ServerSideForbiddenException;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.GetTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.HasTenantPermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncProjectInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.exception.ServerSideForbiddenException;
+import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.model.stage.StageConfigModel;
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,8 +39,8 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateProjectHelpResponse> createProject(final CreateProjectHelpRequest request) {
-        CreateProjectHelpRequest.validate(request);
+    public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
+        CreateProjectDeveloperRequest.validate(request);
 
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
@@ -70,7 +70,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .replaceWithVoid();
     }
 
-    Uni<CreateProjectHelpResponse> createProject(final Long tenantId, final Long userId) {
+    Uni<CreateProjectDeveloperResponse> createProject(final Long tenantId, final Long userId) {
         final var project = projectModelFactory.create(tenantId, userId, ProjectConfigModel.create());
         final var syncProjectInternalRequest = new SyncProjectInternalRequest(project);
         return tenantModule.getProjectInternalService().syncProject(syncProjectInternalRequest)
@@ -80,7 +80,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                             new StageConfigModel());
                     final var syncStageInternalRequest = new SyncStageInternalRequest(tenantId, stage);
                     return tenantModule.getStageInternalService().syncStage(syncStageInternalRequest)
-                            .replaceWith(new CreateProjectHelpResponse(project.getId(), stage.getId(), stage.getSecret()));
+                            .replaceWith(new CreateProjectDeveloperResponse(project.getId(), stage.getId(), stage.getSecret()));
                 });
     }
 }

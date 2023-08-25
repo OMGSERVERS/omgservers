@@ -1,10 +1,10 @@
 package com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.stage.StageModel;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 

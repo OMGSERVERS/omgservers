@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.syncObjectMethod;
 
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertObjectOperation.UpsertObjectOperation;
 import com.omgservers.application.module.userModule.impl.operation.validateObjectOperation.ValidateObjectOperation;
-import com.omgservers.application.module.userModule.impl.service.objectInternalService.request.SyncObjectInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.objectInternalService.response.SyncObjectInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.userModule.SyncObjectInternalRequest;
+import com.omgservers.dto.userModule.SyncObjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

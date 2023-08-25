@@ -1,6 +1,6 @@
 package com.omgservers.application.module.internalModule.impl.service.eventHelpService.impl;
 
-import com.omgservers.application.Dispatcher;
+import com.omgservers.base.Dispatcher;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

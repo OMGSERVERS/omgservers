@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.operation.encodeTokenOperation;
 
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.module.userModule.model.user.UserTokenModel;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.model.user.UserTokenModel;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

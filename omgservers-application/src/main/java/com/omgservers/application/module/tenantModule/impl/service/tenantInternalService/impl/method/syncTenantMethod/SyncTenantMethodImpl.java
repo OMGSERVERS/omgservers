@@ -1,14 +1,14 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
-import com.omgservers.application.module.internalModule.model.event.body.TenantCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.TenantUpdatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation.ValidateTenantOperation;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.SyncTenantInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantResponse;
+import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.model.event.body.TenantUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

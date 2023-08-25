@@ -1,8 +1,7 @@
 package com.omgservers.platform.integrationtest;
 
-import com.omgservers.application.exception.ClientSideNotFoundException;
-import com.omgservers.application.exception.ClientSideUnauthorizedException;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.exception.ClientSideNotFoundException;
+import com.omgservers.exception.ClientSideUnauthorizedException;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.cli.DeveloperCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;
@@ -20,9 +19,6 @@ public class DeveloperApiCreateTokenTest extends Assertions {
 
     @Inject
     BootstrapEnvironmentOperation bootstrapEnvironmentOperation;
-
-    @Inject
-    GenerateIdOperation generateIdOperation;
 
     @Inject
     DeveloperCli developerCli;
@@ -65,7 +61,7 @@ public class DeveloperApiCreateTokenTest extends Assertions {
     void givenUnknownUser_whenCreateToken_thenNotFoundException() {
         bootstrapEnvironmentOperation.bootstrap();
 
-        final var unknownUser = generateIdOperation.generateId();
+        final var unknownUser = adminCli.generateId().getId();
         developerCli.createClient();
         final var exception = assertThrows(ClientSideNotFoundException.class, () -> developerCli
                 .createToken(unknownUser, randomString()));

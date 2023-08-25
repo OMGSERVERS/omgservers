@@ -1,9 +1,9 @@
 package com.omgservers.application.module.versionModule.impl.operation.getVersionConfigOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.version.VersionModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

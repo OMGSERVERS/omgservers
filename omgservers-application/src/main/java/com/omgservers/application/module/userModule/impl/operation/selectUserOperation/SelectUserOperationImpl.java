@@ -1,20 +1,19 @@
 package com.omgservers.application.module.userModule.impl.operation.selectUserOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.userModule.model.user.UserModel;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.user.UserModel;
+import com.omgservers.model.user.UserRoleEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

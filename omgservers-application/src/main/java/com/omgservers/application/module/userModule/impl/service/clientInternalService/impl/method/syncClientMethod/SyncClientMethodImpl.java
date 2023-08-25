@@ -1,12 +1,12 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.syncClientMethod;
 
-import com.omgservers.application.module.internalModule.model.event.body.ClientCreatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.event.body.ClientUpdatedEventBodyModel;
-import com.omgservers.application.module.internalModule.model.log.LogModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.SyncClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.SyncClientInternalResponse;
-import com.omgservers.application.operation.changeOperation.ChangeOperation;
+import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
+import com.omgservers.dto.userModule.SyncClientInternalRequest;
+import com.omgservers.dto.userModule.SyncClientInternalResponse;
+import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

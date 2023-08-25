@@ -1,27 +1,26 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod;
 
+import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateVersionHelpResponse;
-import com.omgservers.application.module.tenantModule.model.stage.StagePermissionEnum;
-import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;
-import com.omgservers.application.module.versionModule.model.VersionSourceCodeModel;
-import com.omgservers.application.module.versionModule.model.VersionStageConfigModel;
-import com.omgservers.application.exception.ServerSideForbiddenException;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.HasStagePermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.exception.ServerSideForbiddenException;
+import com.omgservers.model.stagePermission.StagePermissionEnum;
+import com.omgservers.model.version.VersionModel;
+import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.version.VersionStageConfigModel;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -34,8 +33,8 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateVersionHelpResponse> createVersion(final CreateVersionHelpRequest request) {
-        CreateVersionHelpRequest.validate(request);
+    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
+        CreateVersionDeveloperRequest.validate(request);
 
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
@@ -47,7 +46,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                 .call(voidItem -> checkStage(tenantId, stageId))
                 .flatMap(voidItem -> createVersion(tenantId, stageId, stageConfig, sourceCode))
                 .map(VersionModel::getId)
-                .map(CreateVersionHelpResponse::new);
+                .map(CreateVersionDeveloperResponse::new);
     }
 
     Uni<Void> checkCreateVersionPermission(final Long tenantId,

@@ -1,23 +1,22 @@
 package com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl;
 
+import com.omgservers.application.module.userModule.impl.operation.decodeTokenOperation.DecodeTokenOperation;
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.GetUserServiceApiClientOperation;
 import com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation.UserServiceApiClient;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.TokenInternalService;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.createTokenMethod.CreateTokenMethod;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.introspectTokenMethod.IntrospectTokenMethod;
-import com.omgservers.application.module.userModule.impl.operation.decodeTokenOperation.DecodeTokenOperation;
-import com.omgservers.application.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.CreateTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.IntrospectTokenInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.CreateTokenInternalResponse;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.response.IntrospectTokenInternalResponse;
-import com.omgservers.application.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.CreateTokenInternalRequest;
+import com.omgservers.dto.userModule.CreateTokenInternalResponse;
+import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
+import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

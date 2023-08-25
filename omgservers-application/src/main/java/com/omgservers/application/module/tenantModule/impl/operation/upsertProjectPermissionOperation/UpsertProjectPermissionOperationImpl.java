@@ -1,10 +1,10 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertProjectPermissionOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.project.ProjectPermissionModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -21,7 +21,7 @@ import java.time.ZoneOffset;
 class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOperation {
 
     static private final String sql = """
-            insert into $schema.tab_project_permission(id, project_id, created, user_id, permission)
+            insert into $schema.tab_tenant_project_permission(id, project_id, created, user_id, permission)
             values($1, $2, $3, $4, $5)
             on conflict (project_id, user_id, permission) do
             nothing

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.runtime.player;
 
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
+import com.omgservers.dto.userModule.GetAttributeInternalRequest;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;

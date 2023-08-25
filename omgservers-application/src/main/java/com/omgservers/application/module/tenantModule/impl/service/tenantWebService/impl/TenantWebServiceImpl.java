@@ -1,31 +1,42 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantWebService.impl;
 
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.ProjectInternalService;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.GetProjectInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.HasProjectPermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectPermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.SyncProjectInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStagePermissionInternalResponse;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.TenantInternalService;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.request.*;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.GetTenantResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.HasTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantPermissionResponse;
-import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.response.SyncTenantResponse;
 import com.omgservers.application.module.tenantModule.impl.service.tenantWebService.TenantWebService;
+import com.omgservers.dto.tenantModule.DeleteProjectInternalRequest;
+import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
+import com.omgservers.dto.tenantModule.DeleteTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.dto.tenantModule.GetTenantResponse;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncProjectInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenantModule.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

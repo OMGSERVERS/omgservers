@@ -1,19 +1,16 @@
 package com.omgservers.application.module.userModule.impl.operation.selectObjectOperation;
 
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.userModule.model.object.ObjectModel;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.object.ObjectModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -22,7 +19,7 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
 
     static private final String sql = """
             select id, player_id, created, modified, name, body
-            from $schema.tab_player_object
+            from $schema.tab_user_object
             where player_id = $1 and name = $2
             limit 1
             """;

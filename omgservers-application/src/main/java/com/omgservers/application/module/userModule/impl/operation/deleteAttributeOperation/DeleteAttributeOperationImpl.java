@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.deleteAttributeOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -8,15 +8,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
 
     static private final String sql = """
-            delete from $schema.tab_player_attribute
+            delete from $schema.tab_user_attribute
             where player_id = $1 and attribute_name = $2
             """;
 

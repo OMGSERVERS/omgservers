@@ -1,13 +1,13 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation;
 
-import com.omgservers.application.module.matchmakerModule.model.match.MatchConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchGroupModel;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModelFactory;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModelFactory;
-import com.omgservers.application.module.versionModule.model.VersionGroupModel;
-import com.omgservers.application.module.versionModule.model.VersionModeModel;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.model.match.MatchConfigModel;
+import com.omgservers.model.match.MatchGroupModel;
+import com.omgservers.base.factory.MatchModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.base.factory.RequestModelFactory;
+import com.omgservers.model.version.VersionGroupModel;
+import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
@@ -47,10 +47,10 @@ class DoGreedyMatchmakingOperationImplTest extends Assertions {
         final var matchConfig = MatchConfigModel.create(tenant, stage, versionId(), versionMode);
         final var match = matchModelFactory.create(matchmaker, runtimeId(), matchConfig);
 
-        final var request1 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
-        final var request2 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
-        final var request3 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
-        final var request4 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
+        final var request1 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
+        final var request2 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
+        final var request3 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
+        final var request4 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
 
         assertTrue(doGreedyMatchmakingOperation.matchRequestWithMatch(request1, match));
         assertTrue(match.getConfig().getGroups().get(0).getRequests().contains(request1));
@@ -73,8 +73,8 @@ class DoGreedyMatchmakingOperationImplTest extends Assertions {
 
         final var versionGroup = VersionGroupModel.create("group", 1, 1);
 
-        final var request1 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
-        final var request2 = requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode));
+        final var request1 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
+        final var request2 = requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode));
         final var matchGroup = MatchGroupModel.create(versionGroup);
 
         assertTrue(doGreedyMatchmakingOperation.matchRequestWithGroup(request1, matchGroup));
@@ -102,14 +102,14 @@ class DoGreedyMatchmakingOperationImplTest extends Assertions {
 
         assertEquals(0, doGreedyMatchmakingOperation.countMatchRequests(match));
 
-        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
-        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
+        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertEquals(2, doGreedyMatchmakingOperation.countMatchRequests(match));
 
-        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertEquals(3, doGreedyMatchmakingOperation.countMatchRequests(match));
 
-        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertEquals(4, doGreedyMatchmakingOperation.countMatchRequests(match));
     }
 
@@ -130,11 +130,11 @@ class DoGreedyMatchmakingOperationImplTest extends Assertions {
         final var matchConfig = MatchConfigModel.create(tenant, stage, versionId(), versionMode);
         final var match = matchModelFactory.create(matchmaker, runtimeId(), matchConfig);
 
-        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
-        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
+        matchConfig.getGroups().get(1).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertFalse(doGreedyMatchmakingOperation.checkMatchReadiness(match));
 
-        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchConfig.getGroups().get(0).getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertTrue(doGreedyMatchmakingOperation.checkMatchReadiness(match));
     }
 
@@ -147,11 +147,11 @@ class DoGreedyMatchmakingOperationImplTest extends Assertions {
         final var mode = "mode";
 
         final var matchGroup = MatchGroupModel.create(versionGroup, new ArrayList<>() {{
-            add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         }});
         assertFalse(doGreedyMatchmakingOperation.checkGroupReadiness(matchGroup));
 
-        matchGroup.getRequests().add(requestModelFactory.create(matchmaker, RequestConfigModel.create(userId(), clientId(), tenant, stage, mode)));
+        matchGroup.getRequests().add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
         assertTrue(doGreedyMatchmakingOperation.checkGroupReadiness(matchGroup));
     }
 

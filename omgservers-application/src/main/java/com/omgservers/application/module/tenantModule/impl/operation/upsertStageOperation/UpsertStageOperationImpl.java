@@ -1,19 +1,18 @@
 package com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideInternalException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.stage.StageModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 import io.vertx.pgclient.PgException;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_project_stage(id, project_id, created, modified, secret, matchmaker_id, config, version_id)
+            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, config, version_id)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
             update set modified = $4, secret = $5, matchmaker_id = $6, config = $7, version_id = $8

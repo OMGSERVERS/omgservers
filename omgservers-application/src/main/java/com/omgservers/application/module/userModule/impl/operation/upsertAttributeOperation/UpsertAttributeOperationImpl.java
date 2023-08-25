@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation;
 
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
-import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.attribute.AttributeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_attribute(id, player_id, created, modified, attribute_name, attribute_value)
+            insert into $schema.tab_user_attribute(id, player_id, created, modified, attribute_name, attribute_value)
             values($1, $2, $3, $4, $5, $6)
             on conflict (player_id, attribute_name) do
             update set modified = $3, attribute_value = $5

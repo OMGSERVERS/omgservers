@@ -11,16 +11,14 @@ import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpSe
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateLuaRuntimeHelpResponse;
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateMatchContextHelpResponse;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.request.GetMatchInternalRequest;
-import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.response.GetMatchInternalResponse;
-import com.omgservers.application.module.matchmakerModule.model.match.MatchModel;
+import com.omgservers.dto.matchmakerModule.GetMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
+import com.omgservers.model.match.MatchModel;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

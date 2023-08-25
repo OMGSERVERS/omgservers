@@ -1,11 +1,11 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectRequestOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestConfigModel;
-import com.omgservers.application.module.matchmakerModule.model.request.RequestModel;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.model.request.RequestModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -24,7 +23,7 @@ import java.util.UUID;
 class SelectRequestOperationImpl implements SelectRequestOperation {
 
     static private final String sql = """
-            select id, matchmaker_id, created, modified, config
+            select id, matchmaker_id, created, modified, user_id, client_id, config
             from $schema.tab_matchmaker_request
             where id = $1
             limit 1
@@ -69,6 +68,8 @@ class SelectRequestOperationImpl implements SelectRequestOperation {
         request.setMatchmakerId(row.getLong("matchmaker_id"));
         request.setCreated(row.getOffsetDateTime("created").toInstant());
         request.setModified(row.getOffsetDateTime("modified").toInstant());
+        request.setUserId(row.getLong("user_id"));
+        request.setClientId(row.getLong("client_id"));
         request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         return request;
     }

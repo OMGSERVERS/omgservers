@@ -1,6 +1,6 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapEventDispatcherMethod;
 
-import com.omgservers.application.module.internalModule.InternalModule;
+import com.omgservers.base.InternalModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

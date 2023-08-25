@@ -1,15 +1,14 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createTokenMethod;
 
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateTokenHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateTokenHelpResponse;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperResponse;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.tokenInternalService.request.CreateTokenInternalRequest;
+import com.omgservers.dto.userModule.CreateTokenInternalRequest;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -19,8 +18,8 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final UserModule userModule;
 
     @Override
-    public Uni<CreateTokenHelpResponse> createToken(final CreateTokenHelpRequest request) {
-        CreateTokenHelpRequest.validate(request);
+    public Uni<CreateTokenDeveloperResponse> createToken(final CreateTokenDeveloperRequest request) {
+        CreateTokenDeveloperRequest.validate(request);
 
         final var userId = request.getUserId();
         final var password = request.getPassword();
@@ -29,7 +28,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                 .map(response -> {
                     // TODO: does role have to be "Developer" only, block others?
                     final var rawToken = response.getRawToken();
-                    final var createTokenApiResponse = new CreateTokenHelpResponse(rawToken);
+                    final var createTokenApiResponse = new CreateTokenDeveloperResponse(rawToken);
                     return createTokenApiResponse;
                 });
     }

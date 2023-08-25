@@ -1,7 +1,7 @@
 package com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.getProjectMethod;
 
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.request.GetProjectInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.response.GetProjectInternalResponse;
+import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetProjectMethod {

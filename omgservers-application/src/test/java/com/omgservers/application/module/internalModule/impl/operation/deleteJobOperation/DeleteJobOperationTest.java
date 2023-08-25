@@ -1,18 +1,16 @@
 package com.omgservers.application.module.internalModule.impl.operation.deleteJobOperation;
 
-import com.omgservers.application.module.internalModule.impl.operation.upsertJobOperation.UpsertJobOperation;
-import com.omgservers.application.module.internalModule.model.job.JobModel;
-import com.omgservers.application.module.internalModule.model.job.JobModelFactory;
-import com.omgservers.application.module.internalModule.model.job.JobType;
-import com.omgservers.application.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.impl.operation.deleteJobOperation.DeleteJobOperation;
+import com.omgservers.base.impl.operation.upsertJobOperation.UpsertJobOperation;
+import com.omgservers.base.factory.JobModelFactory;
+import com.omgservers.model.job.JobType;
+import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest

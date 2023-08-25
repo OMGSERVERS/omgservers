@@ -1,8 +1,8 @@
 package com.omgservers.application.module.versionModule.impl.operation.deployHandlerOperation;
 
 import com.omgservers.application.module.luaModule.LuaModule;
-import com.omgservers.application.module.versionModule.model.VersionModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.getClientMethod;
 
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.request.GetClientInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.clientInternalService.response.GetClientInternalResponse;
+import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetClientMethod {

@@ -1,10 +1,10 @@
 package com.omgservers.application.module.tenantModule.impl.operation.validateProjectOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.module.tenantModule.model.project.ProjectModel;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.project.ProjectModel;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,9 +1,9 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewDeveloperMethod;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateDeveloperMethod {
-    Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request);
+    Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
 }

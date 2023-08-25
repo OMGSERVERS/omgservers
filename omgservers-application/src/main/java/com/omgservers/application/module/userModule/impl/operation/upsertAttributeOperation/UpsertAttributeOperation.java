@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation;
 
-import com.omgservers.application.module.userModule.model.attribute.AttributeModel;
+import com.omgservers.model.attribute.AttributeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

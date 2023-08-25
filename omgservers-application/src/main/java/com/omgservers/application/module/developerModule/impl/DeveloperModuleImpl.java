@@ -2,11 +2,10 @@ package com.omgservers.application.module.developerModule.impl;
 
 import com.omgservers.application.module.developerModule.DeveloperModule;
 import com.omgservers.application.module.developerModule.impl.service.developerHelpService.DeveloperHelpService;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

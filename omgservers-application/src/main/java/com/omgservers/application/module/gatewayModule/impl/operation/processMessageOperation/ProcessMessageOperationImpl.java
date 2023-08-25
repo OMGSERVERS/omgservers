@@ -1,16 +1,14 @@
 package com.omgservers.application.module.gatewayModule.impl.operation.processMessageOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.exception.ServerSideBadRequestException;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.HandlerHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.request.HandleMessageHelpRequest;
-import com.omgservers.application.module.gatewayModule.model.message.MessageModel;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.message.MessageModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

@@ -1,15 +1,13 @@
 package com.omgservers.application.module.userModule.impl.operation.deleteClientOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -17,7 +15,7 @@ import java.util.UUID;
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
     static private final String sql = """
-            delete from $schema.tab_player_client where id = $1
+            delete from $schema.tab_user_client where id = $1
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;

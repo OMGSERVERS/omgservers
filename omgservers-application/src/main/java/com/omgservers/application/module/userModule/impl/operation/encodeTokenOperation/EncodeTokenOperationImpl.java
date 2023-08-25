@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.operation.encodeTokenOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.userModule.model.user.UserTokenModel;
-import com.omgservers.application.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.user.UserTokenModel;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 

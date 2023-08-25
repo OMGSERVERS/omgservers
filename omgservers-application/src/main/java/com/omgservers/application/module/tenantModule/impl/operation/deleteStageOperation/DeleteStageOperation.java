@@ -5,8 +5,6 @@ import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
 
 public interface DeleteStageOperation {
     Uni<Boolean> deleteStage(SqlConnection sqlConnection, int shard, Long id);

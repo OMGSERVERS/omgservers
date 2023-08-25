@@ -8,20 +8,17 @@ import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpSe
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateLuaRuntimeHelpResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.application.module.tenantModule.model.stage.StageModel;
-import com.omgservers.application.module.versionModule.model.VersionBytecodeModel;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.GetBytecodeInternalRequest;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
+import com.omgservers.model.stage.StageModel;
+import com.omgservers.model.version.VersionBytecodeModel;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 import org.luaj.vm2.LuaValue;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped

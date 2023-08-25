@@ -1,23 +1,22 @@
 package com.omgservers.application.module.developerModule.impl.service.developerWebService.impl.developerApi;
 
+import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developerModule.GetVersionStatusDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
+import com.omgservers.dto.developerModule.CreateTokenDeveloperResponse;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
+import com.omgservers.dto.developerModule.GetVersionStatusDeveloperResponse;
 import com.omgservers.application.module.developerModule.impl.service.developerWebService.DeveloperWebService;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateProjectHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateTokenHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.CreateVersionHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.request.GetVersionStatusHelpRequest;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateProjectHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateTokenHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.CreateVersionHelpResponse;
-import com.omgservers.application.module.developerModule.impl.service.developerHelpService.response.GetVersionStatusHelpResponse;
-import com.omgservers.application.module.userModule.model.user.UserRoleEnum;
-import com.omgservers.application.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.model.user.UserRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped
@@ -29,25 +28,25 @@ class DeveloperApiImpl implements DeveloperApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenHelpResponse> createToken(final CreateTokenHelpRequest request) {
+    public Uni<CreateTokenDeveloperResponse> createToken(final CreateTokenDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, developerWebService::createToken);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
-    public Uni<CreateProjectHelpResponse> createProject(CreateProjectHelpRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, developerWebService::createProject);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
-    public Uni<CreateVersionHelpResponse> createVersion(final CreateVersionHelpRequest request) {
+    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, developerWebService::createVersion);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
-    public Uni<GetVersionStatusHelpResponse> getVersionStatus(GetVersionStatusHelpRequest request) {
+    public Uni<GetVersionStatusDeveloperResponse> getVersionStatus(GetVersionStatusDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, developerWebService::getVersionStatus);
     }
 }

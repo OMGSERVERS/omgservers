@@ -1,20 +1,21 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService.impl.adminApi;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateDeveloperHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CreateTenantHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateDeveloperHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CreateTenantHelpResponse;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.PingServerHelpResponse;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.DeleteIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.GetIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.request.SyncIndexHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.indexHelpService.response.GetIndexHelpResponse;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.DeleteServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.GetServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.request.SyncServiceAccountHelpRequest;
-import com.omgservers.application.module.internalModule.impl.service.serviceAccountHelpService.response.GetServiceAccountHelpResponse;
+import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
+import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
+import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
+import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
+import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
+import com.omgservers.dto.adminModule.DeleteIndexAdminRequest;
+import com.omgservers.dto.adminModule.DeleteServiceAccountAdminRequest;
+import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
+import com.omgservers.dto.adminModule.GetIndexAdminRequest;
+import com.omgservers.dto.adminModule.GetIndexAdminResponse;
+import com.omgservers.dto.adminModule.GetServiceAccountAdminRequest;
+import com.omgservers.dto.adminModule.GetServiceAccountAdminResponse;
+import com.omgservers.dto.adminModule.PingServerAdminResponse;
+import com.omgservers.dto.adminModule.SyncIndexAdminRequest;
+import com.omgservers.dto.adminModule.SyncServiceAccountAdminRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -26,90 +27,99 @@ public interface AdminApi {
 
     @PUT
     @Path("/ping-server")
-    Uni<PingServerHelpResponse> pingServer();
+    Uni<PingServerAdminResponse> pingServer();
 
-    default PingServerHelpResponse pingServer(long timeout) {
+    default PingServerAdminResponse pingServer(long timeout) {
         return pingServer()
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
-    @Path("/get-index")
-    Uni<GetIndexHelpResponse> getIndex(GetIndexHelpRequest request);
+    @Path("/generate-id")
+    Uni<GenerateIdAdminResponse> generateId();
 
-    default GetIndexHelpResponse getIndex(long timeout, GetIndexHelpRequest request) {
+    default GenerateIdAdminResponse generateId(long timeout) {
+        return generateId()
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/get-index")
+    Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request);
+
+    default GetIndexAdminResponse getIndex(long timeout, GetIndexAdminRequest request) {
         return getIndex(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-index")
-    Uni<Void> syncIndex(SyncIndexHelpRequest request);
+    Uni<Void> syncIndex(SyncIndexAdminRequest request);
 
-    default void syncIndex(long timeout, SyncIndexHelpRequest request) {
+    default void syncIndex(long timeout, SyncIndexAdminRequest request) {
         syncIndex(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-index")
-    Uni<Void> deleteIndex(DeleteIndexHelpRequest request);
+    Uni<Void> deleteIndex(DeleteIndexAdminRequest request);
 
-    default void deleteIndex(long timeout, DeleteIndexHelpRequest request) {
+    default void deleteIndex(long timeout, DeleteIndexAdminRequest request) {
         deleteIndex(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-service-account")
-    Uni<GetServiceAccountHelpResponse> getServiceAccount(GetServiceAccountHelpRequest request);
+    Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request);
 
-    default GetServiceAccountHelpResponse getServiceAccount(long timeout, GetServiceAccountHelpRequest request) {
+    default GetServiceAccountAdminResponse getServiceAccount(long timeout, GetServiceAccountAdminRequest request) {
         return getServiceAccount(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-service-account")
-    Uni<Void> syncServiceAccount(SyncServiceAccountHelpRequest request);
+    Uni<Void> syncServiceAccount(SyncServiceAccountAdminRequest request);
 
-    default void syncServiceAccount(long timeout, SyncServiceAccountHelpRequest request) {
+    default void syncServiceAccount(long timeout, SyncServiceAccountAdminRequest request) {
         syncServiceAccount(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-service-account")
-    Uni<Void> deleteServiceAccount(DeleteServiceAccountHelpRequest request);
+    Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request);
 
-    default void deleteServiceAccount(long timeout, DeleteServiceAccountHelpRequest request) {
+    default void deleteServiceAccount(long timeout, DeleteServiceAccountAdminRequest request) {
         deleteServiceAccount(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/create-tenant")
-    Uni<CreateTenantHelpResponse> createTenant(CreateTenantHelpRequest request);
+    Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
 
-    default CreateTenantHelpResponse createTenant(long timeout, CreateTenantHelpRequest request) {
+    default CreateTenantAdminResponse createTenant(long timeout, CreateTenantAdminRequest request) {
         return createTenant(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/create-developer")
-    Uni<CreateDeveloperHelpResponse> createDeveloper(CreateDeveloperHelpRequest request);
+    Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
 
-    default CreateDeveloperHelpResponse createDeveloper(long timeout, CreateDeveloperHelpRequest request) {
+    default CreateDeveloperAdminResponse createDeveloper(long timeout, CreateDeveloperAdminRequest request) {
         return createDeveloper(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/collect-logs")
-    Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request);
+    Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request);
 
-    default CollectLogsHelpResponse collectLogs(long timeout, CollectLogsHelpRequest request) {
+    default CollectLogsAdminResponse collectLogs(long timeout, CollectLogsAdminRequest request) {
         return collectLogs(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

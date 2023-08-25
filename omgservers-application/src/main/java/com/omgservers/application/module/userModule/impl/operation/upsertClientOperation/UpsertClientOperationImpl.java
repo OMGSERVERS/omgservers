@@ -1,10 +1,10 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertClientOperation;
 
-import com.omgservers.application.exception.ServerSideBadRequestException;
-import com.omgservers.application.exception.ServerSideConflictException;
-import com.omgservers.application.exception.ServerSideNotFoundException;
-import com.omgservers.application.module.userModule.model.client.ClientModel;
-import com.omgservers.application.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 class UpsertClientOperationImpl implements UpsertClientOperation {
 
     static private final String sql = """
-            insert into $schema.tab_player_client(id, player_id, created, server, connection_id)
+            insert into $schema.tab_user_client(id, player_id, created, server, connection_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
             update set server = $4, connection_id = $5

@@ -1,8 +1,6 @@
 package com.omgservers.platforms.integrationtest.operations.bootstrapEnvironmentOperation;
 
-import com.omgservers.application.module.internalModule.model.index.IndexConfigModel;
-import com.omgservers.application.module.internalModule.model.index.IndexModel;
-import com.omgservers.application.module.internalModule.model.index.IndexModelFactory;
+import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.platforms.integrationtest.cli.AdminCli;
 import com.omgservers.platforms.integrationtest.operations.bootstrapServerOperation.BootstrapServerOperation;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
@@ -23,8 +21,6 @@ class BootstrapEnvironmentOperationImpl implements BootstrapEnvironmentOperation
     final BootstrapServerOperation bootstrapServerOperation;
     final GetConfigOperation getConfigOperation;
 
-    final IndexModelFactory indexModelFactory;
-
     final AdminCli adminCli;
 
     @Override
@@ -35,8 +31,7 @@ class BootstrapEnvironmentOperationImpl implements BootstrapEnvironmentOperation
         }
 
         var indexName = getConfigOperation.getConfig().environment().indexName();
-        var config = IndexConfigModel.create(getConfigOperation.getInternalAddresses());
-        var index = indexModelFactory.create(indexName, config);
+        var indexConfig = IndexConfigModel.create(getConfigOperation.getInternalAddresses());
 
         var testerUsername = getConfigOperation.getConfig().tester().serviceUsername();
         var testerPassword = getConfigOperation.getConfig().tester().servicePassword();
@@ -45,7 +40,7 @@ class BootstrapEnvironmentOperationImpl implements BootstrapEnvironmentOperation
 
         var servers = getConfigOperation.getServers();
         servers.forEach(server -> bootstrapServerOperation
-                .bootstrap(server.externalAddress(), index, serviceAccounts));
+                .bootstrap(server.externalAddress(), indexName, indexConfig, serviceAccounts));
 
         finished.set(true);
         log.info("Environment was bootstrapped");

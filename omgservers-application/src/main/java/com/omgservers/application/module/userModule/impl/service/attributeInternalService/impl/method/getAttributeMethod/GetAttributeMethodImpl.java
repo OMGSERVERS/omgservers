@@ -1,9 +1,9 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.getAttributeMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.selectAttributeOperation.SelectAttributeOperation;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.request.GetAttributeInternalRequest;
-import com.omgservers.application.module.userModule.impl.service.attributeInternalService.response.GetAttributeInternalResponse;
-import com.omgservers.application.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
+import com.omgservers.dto.userModule.GetAttributeInternalRequest;
+import com.omgservers.dto.userModule.GetAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.method.createLuaRuntimeMethod;
 
-import com.omgservers.application.module.luaModule.model.LuaBytecodeModel;
-import com.omgservers.application.exception.ServerSideConflictException;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.luaBytecode.LuaBytecodeModel;
 import org.luaj.vm2.lib.ResourceFinder;
 
 import java.io.ByteArrayInputStream;

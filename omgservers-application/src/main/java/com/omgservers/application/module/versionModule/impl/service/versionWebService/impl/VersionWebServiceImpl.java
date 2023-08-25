@@ -1,19 +1,22 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl;
 
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.request.*;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.DeleteVersionInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.SyncVersionInternalResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.VersionWebService;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetBytecodeInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetStageConfigInternalResponse;
-import com.omgservers.application.module.versionModule.impl.service.versionInternalService.response.GetVersionInternalResponse;
+import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
+import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
+import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
+import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionInternalResponse;
+import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Slf4j
 @ApplicationScoped

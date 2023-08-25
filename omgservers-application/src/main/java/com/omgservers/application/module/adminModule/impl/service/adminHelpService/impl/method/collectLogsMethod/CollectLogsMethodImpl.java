@@ -1,11 +1,11 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.collectLogsMethod;
 
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.request.CollectLogsHelpRequest;
-import com.omgservers.application.module.adminModule.impl.service.adminHelpService.response.CollectLogsHelpResponse;
-import com.omgservers.application.module.adminModule.model.ServerLogModel;
-import com.omgservers.application.module.internalModule.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
-import com.omgservers.application.module.internalModule.impl.service.logHelpService.request.ViewLogsHelpRequest;
-import com.omgservers.application.operation.getServersOperation.GetServersOperation;
+import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
+import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
+import com.omgservers.base.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
+import com.omgservers.base.impl.service.logHelpService.request.ViewLogsHelpRequest;
+import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
+import com.omgservers.model.serverLog.ServerLogModel;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,12 +26,12 @@ class CollectLogsMethodImpl implements CollectLogsMethod {
     final GetServersOperation getServersOperation;
 
     @Override
-    public Uni<CollectLogsHelpResponse> collectLogs(CollectLogsHelpRequest request) {
-        CollectLogsHelpRequest.validate(request);
+    public Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request) {
+        CollectLogsAdminRequest.validate(request);
 
         return getServersOperation.getServers()
                 .flatMap(this::collectLogs)
-                .map(collectedLogs -> new CollectLogsHelpResponse(collectedLogs.size(), collectedLogs));
+                .map(collectedLogs -> new CollectLogsAdminResponse(collectedLogs.size(), collectedLogs));
     }
 
     Uni<List<ServerLogModel>> collectLogs(List<URI> servers) {

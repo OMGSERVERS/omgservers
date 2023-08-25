@@ -1,15 +1,15 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService;
 
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.DeleteStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.GetStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.HasStagePermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStageInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.request.SyncStagePermissionInternalRequest;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.DeleteStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.GetStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.HasStagePermissionInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStageInternalResponse;
-import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.response.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
+import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface StageInternalService {
