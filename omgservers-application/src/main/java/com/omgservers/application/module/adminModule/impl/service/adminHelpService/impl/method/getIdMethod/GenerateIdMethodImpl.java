@@ -1,6 +1,6 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.getIdMethod;
 
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

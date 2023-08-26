@@ -1,11 +1,11 @@
 package com.omgservers.application.module.internalModule2.handler;
 
 import com.omgservers.base.factory.JobModelFactory;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
-import com.omgservers.dto.internalModule.SyncJobInternalRequest;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.base.operation.getServers.GetServersOperation;
+import com.omgservers.dto.internalModule.SyncJobRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
@@ -38,8 +38,8 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
         final var job = jobModelFactory.create(id, id, JobType.MATCHMAKER);
-        final var request = new SyncJobInternalRequest(job);
-        return internalModule.getJobInternalService().syncJob(request)
+        final var request = new SyncJobRoutedRequest(job);
+        return internalModule.getJobRoutedService().syncJob(request)
                 .replaceWith(true);
     }
 }

@@ -2,9 +2,9 @@ package com.omgservers.application.module.adminModule.impl.service.adminHelpServ
 
 import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
 import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
-import com.omgservers.base.impl.operation.getInternalsServiceApiClientOperation.GetInternalsServiceApiClientOperation;
-import com.omgservers.base.impl.service.logHelpService.request.ViewLogsHelpRequest;
-import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
+import com.omgservers.base.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
+import com.omgservers.dto.internalModule.ViewLogRequest;
+import com.omgservers.base.operation.getServers.GetServersOperation;
 import com.omgservers.model.serverLog.ServerLogModel;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class CollectLogsMethodImpl implements CollectLogsMethod {
 
-    final GetInternalsServiceApiClientOperation getInternalsServiceApiClientOperation;
+    final GetInternalModuleClientOperation getInternalModuleClientOperation;
     final GetServersOperation getServersOperation;
 
     @Override
@@ -38,8 +38,8 @@ class CollectLogsMethodImpl implements CollectLogsMethod {
         log.info("Collect logs from servers, servers={}", servers);
         return Multi.createFrom().iterable(servers)
                 .onItem().transformToUniAndMerge(server -> {
-                    final var client = getInternalsServiceApiClientOperation.getClient(server);
-                    final var request = new ViewLogsHelpRequest();
+                    final var client = getInternalModuleClientOperation.getClient(server);
+                    final var request = new ViewLogRequest();
                     return client.viewLogs(request)
                             .map(response -> response.getLogs().stream()
                                     .map(log -> new ServerLogModel(log.getId(),

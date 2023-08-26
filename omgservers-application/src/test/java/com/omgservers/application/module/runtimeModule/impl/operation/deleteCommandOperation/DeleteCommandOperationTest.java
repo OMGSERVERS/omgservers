@@ -2,12 +2,12 @@ package com.omgservers.application.module.runtimeModule.impl.operation.deleteCom
 
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation.UpsertCommandOperation;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.base.factory.RuntimeCommandModelFactory;
+import com.omgservers.application.factory.RuntimeCommandModelFactory;
 import com.omgservers.model.runtimeCommand.body.StartRuntimeCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.base.factory.RuntimeModelFactory;
+import com.omgservers.application.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

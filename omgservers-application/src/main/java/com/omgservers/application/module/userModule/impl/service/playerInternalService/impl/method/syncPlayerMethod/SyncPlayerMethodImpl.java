@@ -1,11 +1,12 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.syncPlayerMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.validatePlayerOperation.ValidatePlayerOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.SyncPlayerInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.userModule.SyncPlayerRoutedRequest;
 import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerUpdatedEventBodyModel;
@@ -24,18 +25,17 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
 
     final ValidatePlayerOperation validatePlayerOperation;
     final UpsertPlayerOperation upsertPlayerOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerInternalRequest request) {
-        SyncPlayerInternalRequest.validate(request);
+    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerRoutedRequest request) {
+        SyncPlayerRoutedRequest.validate(request);
 
         final var player = request.getPlayer();
         final var userId = player.getUserId();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertPlayerOperation
                                 .upsertPlayer(sqlConnection, shardModel.shard(), player),
                         inserted -> {
@@ -54,7 +54,8 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                                 return new PlayerUpdatedEventBodyModel(userId, stageId, id);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(SyncPlayerInternalResponse::new);
     }
 }

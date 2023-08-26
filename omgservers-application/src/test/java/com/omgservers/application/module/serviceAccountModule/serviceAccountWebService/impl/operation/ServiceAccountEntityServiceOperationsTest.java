@@ -1,8 +1,8 @@
 package com.omgservers.application.module.serviceAccountModule.serviceAccountWebService.impl.operation;
 
-import com.omgservers.base.impl.operation.deleteServiceAccountOperation.DeleteServiceAccountOperation;
-import com.omgservers.base.impl.operation.selectServiceAccountOperation.SelectServiceAccountOperation;
-import com.omgservers.base.impl.operation.upsertServiceAccountOperation.UpsertServiceAccountOperation;
+import com.omgservers.base.module.internal.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
+import com.omgservers.base.module.internal.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
+import com.omgservers.base.module.internal.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.base.factory.ServiceAccountModelFactory;

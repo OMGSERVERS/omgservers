@@ -12,25 +12,25 @@ import com.omgservers.application.module.matchmakerModule.impl.service.matchmake
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod.SyncMatchmakerMethod;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncRequestMethod.SyncRequestMethod;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerWebService.impl.serviceApi.MatchmakerServiceApi;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.matchmakerModule.DeleteMatchInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.matchmakerModule.DeleteMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteRequestInternalRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncRequestInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -58,81 +58,81 @@ class MatchmakerInternalServiceImpl implements MatchmakerInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerInternalRequest request) {
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncMatchmakerInternalRequest::validate,
+                SyncMatchmakerRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::syncMatchmaker,
                 syncMatchmakerMethod::syncMatchmaker);
     }
 
     @Override
-    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerInternalRequest request) {
+    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetMatchmakerInternalRequest::validate,
+                GetMatchmakerRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::getMatchmaker,
                 getMatchmakerMethod::getMatchmaker);
     }
 
     @Override
-    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerInternalRequest request) {
+    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteMatchmakerInternalRequest::validate,
+                DeleteMatchmakerRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::deleteMatchmaker,
                 deleteMatchmakerMethod::deleteMatchmaker);
     }
 
     @Override
-    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncRequestInternalRequest::validate,
+                SyncRequestRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::syncRequest,
                 syncRequestMethod::syncRequest);
     }
 
     @Override
-    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestInternalRequest request) {
+    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteRequestInternalRequest::validate,
+                DeleteRequestRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::deleteRequest,
                 deleteRequestMethod::deleteRequest);
     }
 
     @Override
-    public Uni<GetMatchInternalResponse> getMatch(GetMatchInternalRequest request) {
+    public Uni<GetMatchInternalResponse> getMatch(GetMatchRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetMatchInternalRequest::validate,
+                GetMatchRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::getMatch,
                 getMatchMethod::getMatch);
     }
 
     @Override
-    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchInternalRequest request) {
+    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncMatchInternalRequest::validate,
+                SyncMatchRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::syncMatch,
                 syncMatchMethod::syncMatch);
     }
 
     @Override
-    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchInternalRequest request) {
+    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteMatchInternalRequest::validate,
+                DeleteMatchRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::deleteMatch,
                 deleteMatchMethod::deleteMatch);
     }
 
     @Override
-    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingInternalRequest request) {
+    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DoMatchmakingInternalRequest::validate,
+                DoMatchmakingRoutedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerServiceApi::doMatchmaking,
                 doMatchmakingMethod::doMatchmaking);

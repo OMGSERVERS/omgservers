@@ -2,12 +2,12 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.doGree
 
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.model.match.MatchGroupModel;
-import com.omgservers.base.factory.MatchModelFactory;
+import com.omgservers.application.factory.MatchModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
-import com.omgservers.base.factory.RequestModelFactory;
+import com.omgservers.application.factory.RequestModelFactory;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;

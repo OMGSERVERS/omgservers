@@ -1,9 +1,10 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -23,6 +24,8 @@ class SignUpMessageHandlerImpl implements MessageHandler {
 
     final GetConfigOperation getConfigOperation;
 
+    final EventModelFactory eventModelFactory;
+
     @Override
     public MessageQualifierEnum getQualifier() {
         return MessageQualifierEnum.SIGN_UP_MESSAGE;
@@ -37,8 +40,9 @@ class SignUpMessageHandlerImpl implements MessageHandler {
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
         final var eventBody = new SignUpRequestedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
-        final var request = new FireEventHelpRequest(eventBody);
-        return internalModule.getEventHelpService().fireEvent(request)
+        final var event = eventModelFactory.create(eventBody);
+        final var request = new FireEventRoutedRequest(event);
+        return internalModule.getEventRoutedService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

@@ -1,11 +1,11 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.factory.RuntimeModelFactory;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.application.factory.RuntimeModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
 import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -40,7 +40,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var matchId = body.getId();
         // TODO: Detect runtime type
         final var runtime = runtimeModelFactory.create(matchmakerId, matchId, RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
-        final var syncRuntimeInternalRequest = new SyncRuntimeInternalRequest(runtime);
+        final var syncRuntimeInternalRequest = new SyncRuntimeRoutedRequest(runtime);
         return runtimeModule.getRuntimeInternalService().syncRuntime(syncRuntimeInternalRequest)
                 .replaceWith(true);
     }

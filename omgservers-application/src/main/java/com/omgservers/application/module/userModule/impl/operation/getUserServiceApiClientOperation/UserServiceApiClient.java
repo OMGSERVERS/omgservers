@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.getUserServiceApiClientOperation;
 
-import com.omgservers.base.headersFactory.ServiceAccountClientHeadersFactory;
+import com.omgservers.base.module.security.impl.headersFactory.ServiceAccountClientHeadersFactory;
 import com.omgservers.application.module.userModule.impl.service.userWebService.impl.serviceApi.UserServiceApi;
 import com.omgservers.exception.ClientSideExceptionMapper;
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;

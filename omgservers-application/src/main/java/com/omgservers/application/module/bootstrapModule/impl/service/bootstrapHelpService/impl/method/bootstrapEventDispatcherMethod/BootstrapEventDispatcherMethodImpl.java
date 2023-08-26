@@ -1,6 +1,6 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapEventDispatcherMethod;
 
-import com.omgservers.base.InternalModule;
+import com.omgservers.base.module.internal.InternalModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ class BootstrapEventDispatcherMethodImpl implements BootstrapEventDispatcherMeth
     @Override
     public Uni<Void> bootstrapEventDispatcherMethod() {
         return Uni.createFrom().voidItem()
-                .call(voidItem -> internalModule.getEventHelpService().startEventDispatcher());
+                .call(voidItem -> internalModule.getEventService().startEventDispatcher());
     }
 }

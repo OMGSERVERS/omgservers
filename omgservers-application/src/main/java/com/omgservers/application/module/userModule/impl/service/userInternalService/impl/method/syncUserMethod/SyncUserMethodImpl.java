@@ -1,10 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.syncUserMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.SyncUserInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithLogRequest;
+import com.omgservers.dto.internalModule.ChangeWithLogResponse;
+import com.omgservers.dto.userModule.SyncUserRoutedRequest;
 import com.omgservers.dto.userModule.SyncUserInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,17 +21,16 @@ class SyncUserMethodImpl implements SyncUserMethod {
     final InternalModule internalModule;
 
     final UpsertUserOperation upsertUserOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncUserInternalResponse> syncUser(final SyncUserInternalRequest request) {
-        SyncUserInternalRequest.validate(request);
+    public Uni<SyncUserInternalResponse> syncUser(final SyncUserRoutedRequest request) {
+        SyncUserRoutedRequest.validate(request);
 
         final var user = request.getUser();
-        return changeOperation.changeWithLog(request,
+        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
                         (sqlConnection, shardModel) -> upsertUserOperation
                                 .upsertUser(sqlConnection, shardModel.shard(), user),
                         inserted -> {
@@ -40,7 +40,8 @@ class SyncUserMethodImpl implements SyncUserMethod {
                                 return logModelFactory.create("User was updated, user=" + user);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithLogResponse::getResult)
                 .map(SyncUserInternalResponse::new);
     }
 }

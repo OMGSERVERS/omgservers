@@ -1,15 +1,15 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import com.omgservers.exception.ServerSideClientErrorException;
 import com.omgservers.model.event.EventModel;
@@ -50,13 +50,13 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionModel> getVersion(Long id) {
-        final var getVersionServiceRequest = new GetVersionInternalRequest(id);
+        final var getVersionServiceRequest = new GetVersionRoutedRequest(id);
         return versionModule.getVersionInternalService().getVersion(getVersionServiceRequest)
                 .map(GetVersionInternalResponse::getVersion);
     }
 
     Uni<StageModel> getStage(Long tenantId, Long id) {
-        final var request = new GetStageInternalRequest(tenantId, id);
+        final var request = new GetStageRoutedRequest(tenantId, id);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage);
     }
@@ -75,13 +75,13 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncStage(Long tenantId, StageModel stage) {
-        final var request = new SyncStageInternalRequest(tenantId, stage);
+        final var request = new SyncStageRoutedRequest(tenantId, stage);
         return tenantModule.getStageInternalService().syncStage(request)
                 .map(SyncStageInternalResponse::getCreated);
     }
 
     Uni<Boolean> syncVersion(VersionModel version) {
-        final var request = new SyncVersionInternalRequest(version);
+        final var request = new SyncVersionRoutedRequest(version);
         return versionModule.getVersionInternalService().syncVersion(request)
                 .map(SyncVersionInternalResponse::getCreated);
     }

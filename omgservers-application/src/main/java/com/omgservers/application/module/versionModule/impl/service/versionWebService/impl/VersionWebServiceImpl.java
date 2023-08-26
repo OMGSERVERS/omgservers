@@ -2,15 +2,15 @@ package com.omgservers.application.module.versionModule.impl.service.versionWebS
 
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.VersionWebService;
-import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
-import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,27 +26,27 @@ class VersionWebServiceImpl implements VersionWebService {
     final VersionInternalService versionInternalService;
 
     @Override
-    public Uni<GetVersionInternalResponse> getVersion(GetVersionInternalRequest request) {
+    public Uni<GetVersionInternalResponse> getVersion(GetVersionRoutedRequest request) {
         return versionInternalService.getVersion(request);
     }
 
     @Override
-    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionRoutedRequest request) {
         return versionInternalService.syncVersion(request);
     }
 
     @Override
-    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionRoutedRequest request) {
         return versionInternalService.deleteVersion(request);
     }
 
     @Override
-    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeInternalRequest request) {
+    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeRoutedRequest request) {
         return versionInternalService.getBytecode(request);
     }
 
     @Override
-    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigInternalRequest request) {
+    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigRoutedRequest request) {
         return versionInternalService.getStageConfig(request);
     }
 }

@@ -1,10 +1,10 @@
 package com.omgservers.application.module.internalModule.impl.operation.deleteJobOperation;
 
-import com.omgservers.base.impl.operation.deleteJobOperation.DeleteJobOperation;
-import com.omgservers.base.impl.operation.upsertJobOperation.UpsertJobOperation;
+import com.omgservers.base.module.internal.impl.operation.deleteJob.DeleteJobOperation;
+import com.omgservers.base.module.internal.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.base.factory.JobModelFactory;
 import com.omgservers.model.job.JobType;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

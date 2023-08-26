@@ -1,10 +1,10 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod;
 
-import com.omgservers.base.impl.service.eventHelpService.EventHelpService;
+import com.omgservers.base.module.internal.impl.service.eventService.EventService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.getMatchmakerMethod.GetMatchmakerMethod;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalRequest;
-import com.omgservers.base.factory.MatchmakerModelFactory;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerRoutedRequest;
+import com.omgservers.application.factory.MatchmakerModelFactory;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import jakarta.inject.Inject;
@@ -30,16 +30,16 @@ class SyncMatchmakerMethodTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @InjectMock
-    EventHelpService eventHelpServiceMock;
+    EventService eventServiceMock;
 
     @Test
     void givenMatchmaker_whenSyncMatchmaker_thenEventInsertedAndEntityCreated() {
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId());
-        final var syncMatchmakerInternalRequest = new SyncMatchmakerInternalRequest(matchmaker1);
+        final var syncMatchmakerInternalRequest = new SyncMatchmakerRoutedRequest(matchmaker1);
         syncMatchmakerMethod.syncMatchmaker(TIMEOUT, syncMatchmakerInternalRequest);
 
-//        ArgumentCaptor<InsertEventHelpRequest> insertEventRequest = ArgumentCaptor.forClass(InsertEventHelpRequest.class);
-//        Mockito.verify(eventHelpServiceMock).insertEvent(insertEventRequest.capture());
+//        ArgumentCaptor<InsertEventRequest> insertEventRequest = ArgumentCaptor.forClass(InsertEventRequest.class);
+//        Mockito.verify(eventServiceMock).insertEvent(insertEventRequest.capture());
 //        final var event = insertEventRequest.getValue().getEventBody();
 //        assertEquals(EventQualifierEnum.MATCHMAKER_CREATED, event.getQualifier());
 //        final var eventBody = (EventCreatedEventBodyModel) event;
@@ -53,7 +53,7 @@ class SyncMatchmakerMethodTest extends Assertions {
 //        assertEquals(matchmaker1.getTenantId(), originBody.getTenant());
 //        assertEquals(matchmaker1.getStageId(), originBody.getStage());
 //
-//        final var getMatchmakerInternalRequest = new GetMatchmakerInternalRequest(matchmaker1.getId());
+//        final var getMatchmakerInternalRequest = new GetMatchmakerRoutedRequest(matchmaker1.getId());
 //        final var matchmaker2 = getMatchmakerMethod.getMatchmaker(TIMEOUT, getMatchmakerInternalRequest).getMatchmaker();
 //        assertEquals(matchmaker1, matchmaker2);
     }

@@ -1,29 +1,29 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService;
 
-import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface RuntimeInternalService {
 
-    Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request);
+    Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request);
 
-    Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request);
+    Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request);
 
-    Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request);
+    Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request);
 
-    Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request);
+    Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request);
 
-    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request);
+    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request);
 
-    Uni<Void> doUpdate(DoUpdateInternalRequest request);
+    Uni<Void> doUpdate(DoUpdateRoutedRequest request);
 }

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.gatewayModule.impl.service.gatewayWebService.impl.serviceApi;
 
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayWebService.GatewayWebService;
-import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
 import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
 import com.omgservers.model.internalRole.InternalRoleEnum;

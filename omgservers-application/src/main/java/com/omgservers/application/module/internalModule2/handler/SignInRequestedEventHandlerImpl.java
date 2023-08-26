@@ -1,17 +1,18 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.factory.ClientModelFactory;
-import com.omgservers.base.impl.service.eventHelpService.EventHelpService;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
-import com.omgservers.dto.userModule.SyncClientInternalRequest;
-import com.omgservers.dto.userModule.ValidateCredentialsInternalRequest;
+import com.omgservers.application.factory.ClientModelFactory;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
+import com.omgservers.dto.userModule.SyncClientRoutedRequest;
 import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
+import com.omgservers.dto.userModule.ValidateCredentialsRoutedRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -32,12 +33,12 @@ import java.net.URI;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SignInRequestedEventHandlerImpl implements EventHandler {
 
+    final InternalModule internalModule;
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final EventHelpService eventHelpService;
-
     final ClientModelFactory clientModelFactory;
+    final EventModelFactory eventModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -76,7 +77,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
     }
 
     Uni<UserModel> validateCredentials(final Long tenantId, final Long userId, final String password) {
-        final var validateCredentialsServiceRequest = new ValidateCredentialsInternalRequest(tenantId, userId, password);
+        final var validateCredentialsServiceRequest = new ValidateCredentialsRoutedRequest(tenantId, userId, password);
         return userModule.getUserInternalService().validateCredentials(validateCredentialsServiceRequest)
                 .map(ValidateCredentialsInternalResponse::getUser);
     }
@@ -92,7 +93,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId) {
         final var client = clientModelFactory.create(playerId, server, connectionId);
-        final var request = new SyncClientInternalRequest(userId, client);
+        final var request = new SyncClientRoutedRequest(userId, client);
         return userModule.getClientInternalService().syncClient(request)
                 .replaceWith(client);
     }
@@ -103,8 +104,9 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                         final Long playerId,
                         final Long clientId) {
         final var eventBody = new PlayerSignedInEventBodyModel(tenantId, stageId, userId, playerId, clientId);
-        final var request = new FireEventHelpRequest(eventBody);
-        return eventHelpService.fireEvent(request)
+        final var event = eventModelFactory.create(eventBody);
+        final var request = new FireEventRoutedRequest(event);
+        return internalModule.getEventRoutedService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

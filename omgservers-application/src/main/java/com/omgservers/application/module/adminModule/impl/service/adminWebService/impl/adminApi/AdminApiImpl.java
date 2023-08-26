@@ -1,7 +1,7 @@
 package com.omgservers.application.module.adminModule.impl.service.adminWebService.impl.adminApi;
 
 import com.omgservers.application.module.adminModule.impl.service.adminWebService.AdminWebService;
-import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
 import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
 import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;

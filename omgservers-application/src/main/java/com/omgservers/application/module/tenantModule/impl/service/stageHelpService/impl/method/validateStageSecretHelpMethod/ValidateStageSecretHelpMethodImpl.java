@@ -3,7 +3,7 @@ package com.omgservers.application.module.tenantModule.impl.service.stageHelpSer
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.response.ValidateStageSecretHelpResponse;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.StageInternalService;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +24,7 @@ class ValidateStageSecretHelpMethodImpl implements ValidateStageSecretHelpMethod
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageInternalRequest(tenantId, stageId);
+        final var getStageServiceRequest = new GetStageRoutedRequest(tenantId, stageId);
         return stageInternalService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();

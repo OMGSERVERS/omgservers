@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
-import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.base.operation.getServers.GetServersOperation;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;

@@ -1,12 +1,13 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchMethod;
 
-import com.omgservers.base.factory.EventModelFactory;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
@@ -24,7 +25,6 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     final InternalModule internalModule;
 
     final UpsertMatchOperation upsertMatchOperation;
-    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
     final EventModelFactory eventModelFactory;
@@ -32,11 +32,11 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchInternalRequest request) {
-        SyncMatchInternalRequest.validate(request);
+    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchRoutedRequest request) {
+        SyncMatchRoutedRequest.validate(request);
 
         final var match = request.getMatch();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertMatchOperation
                                 .upsertMatch(sqlConnection, shardModel.shard(), match),
                         inserted -> {
@@ -53,7 +53,8 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
                                 return new MatchUpdatedEventBodyModel(match.getMatchmakerId(), match.getId());
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .invoke(inserted -> matchmakerInMemoryCache.addMatch(match))
                 .map(SyncMatchInternalResponse::new);
     }

@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.getPlayerAttributesMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.selectPlayerAttributesOperation.SelectPlayerAttributesOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.userModule.GetPlayerAttributesInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.userModule.GetPlayerAttributesRoutedRequest;
 import com.omgservers.dto.userModule.GetPlayerAttributesInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,8 +20,8 @@ class GetPlayerAttributesMethodImpl implements GetPlayerAttributesMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetPlayerAttributesInternalResponse> getPlayerAttributes(GetPlayerAttributesInternalRequest request) {
-        GetPlayerAttributesInternalRequest.validate(request);
+    public Uni<GetPlayerAttributesInternalResponse> getPlayerAttributes(GetPlayerAttributesRoutedRequest request) {
+        GetPlayerAttributesRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

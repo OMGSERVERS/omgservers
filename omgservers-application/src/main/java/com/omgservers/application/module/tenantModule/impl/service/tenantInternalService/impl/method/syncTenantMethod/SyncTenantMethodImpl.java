@@ -1,11 +1,12 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateTenantOperation.ValidateTenantOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.tenantModule.SyncTenantRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncTenantResponse;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantUpdatedEventBodyModel;
@@ -24,18 +25,17 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
 
     final ValidateTenantOperation validateTenantOperation;
     final UpsertTenantOperation upsertTenantOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request) {
-        SyncTenantInternalRequest.validate(request);
+    public Uni<SyncTenantResponse> syncTenant(SyncTenantRoutedRequest request) {
+        SyncTenantRoutedRequest.validate(request);
 
         final var tenant = request.getTenant();
         validateTenantOperation.validateTenant(tenant);
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertTenantOperation
                                 .upsertTenant(sqlConnection, shardModel.shard(), tenant),
                         inserted -> {
@@ -53,7 +53,8 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
                                 return new TenantUpdatedEventBodyModel(id);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(SyncTenantResponse::new);
     }
 }

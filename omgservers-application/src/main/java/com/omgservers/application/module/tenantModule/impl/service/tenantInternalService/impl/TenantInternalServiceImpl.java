@@ -8,15 +8,15 @@ import com.omgservers.application.module.tenantModule.impl.service.tenantInterna
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod.HasTenantPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantMethod.SyncTenantMethod;
 import com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod.SyncTenantPermissionMethod;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.tenantModule.DeleteTenantInternalRequest;
-import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteTenantRoutedRequest;
+import com.omgservers.dto.tenantModule.GetTenantRoutedRequest;
 import com.omgservers.dto.tenantModule.GetTenantResponse;
-import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncTenantInternalRequest;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncTenantRoutedRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
 import com.omgservers.dto.tenantModule.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
@@ -41,45 +41,45 @@ public class TenantInternalServiceImpl implements TenantInternalService {
     final SyncTenantMethod syncTenantMethod;
 
     @Override
-    public Uni<GetTenantResponse> getTenant(GetTenantInternalRequest request) {
+    public Uni<GetTenantResponse> getTenant(GetTenantRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetTenantInternalRequest::validate,
+                GetTenantRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getTenant,
                 getTenantMethod::getTenant);
     }
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantInternalRequest request) {
+    public Uni<SyncTenantResponse> syncTenant(SyncTenantRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncTenantInternalRequest::validate,
+                SyncTenantRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncTenant,
                 syncTenantMethod::syncTenant);
     }
 
     @Override
-    public Uni<Void> deleteTenant(DeleteTenantInternalRequest request) {
+    public Uni<Void> deleteTenant(DeleteTenantRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteTenantInternalRequest::validate,
+                DeleteTenantRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::deleteTenant,
                 deleteTenantMethod::deleteTenant);
     }
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionInternalRequest request) {
+    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasTenantPermissionInternalRequest::validate,
+                HasTenantPermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::hasTenantPermission,
                 hasTenantPermissionMethod::hasTenantPermission);
     }
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionInternalRequest request) {
+    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncTenantPermissionInternalRequest::validate,
+                SyncTenantPermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncTenantPermission,
                 syncTenantPermissionMethod::syncTenantPermission);

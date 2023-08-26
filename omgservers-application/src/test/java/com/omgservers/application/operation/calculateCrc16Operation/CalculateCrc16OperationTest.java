@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.calculateCrc16Operation;
 
-import com.omgservers.base.impl.operation.calculateCrc16Operation.CalculateCrc16Operation;
+import com.omgservers.base.operation.calculateCrc16.CalculateCrc16Operation;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

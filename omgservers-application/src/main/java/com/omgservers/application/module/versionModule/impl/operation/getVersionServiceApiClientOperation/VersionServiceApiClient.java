@@ -1,6 +1,6 @@
 package com.omgservers.application.module.versionModule.impl.operation.getVersionServiceApiClientOperation;
 
-import com.omgservers.base.headersFactory.ServiceAccountClientHeadersFactory;
+import com.omgservers.base.module.security.impl.headersFactory.ServiceAccountClientHeadersFactory;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
 import com.omgservers.exception.ClientSideExceptionMapper;
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;

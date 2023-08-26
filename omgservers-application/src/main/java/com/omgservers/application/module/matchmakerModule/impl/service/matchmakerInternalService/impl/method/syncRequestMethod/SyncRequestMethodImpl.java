@@ -1,11 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncRequestMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.matchmakerModule.SyncRequestInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithLogRequest;
+import com.omgservers.dto.internalModule.ChangeWithLogResponse;
+import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,7 +22,6 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final InternalModule internalModule;
 
     final UpsertRequestOperation upsertRequestOperation;
-    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
@@ -29,11 +29,11 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestInternalRequest request) {
-        SyncRequestInternalRequest.validate(request);
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestRoutedRequest request) {
+        SyncRequestRoutedRequest.validate(request);
 
         final var requestModel = request.getRequest();
-        return changeOperation.changeWithLog(request,
+        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
                         (sqlConnection, shardModel) -> upsertRequestOperation
                                 .upsertRequest(sqlConnection, shardModel.shard(), requestModel),
                         inserted -> {
@@ -43,7 +43,8 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
                                 return logModelFactory.create("Request was updated, request=" + requestModel);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithLogResponse::getResult)
                 .invoke(inserted -> matchmakerInMemoryCache.addRequest(requestModel))
                 .map(SyncRequestInternalResponse::new);
     }

@@ -8,16 +8,16 @@ import com.omgservers.application.module.tenantModule.impl.service.projectIntern
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.hasProjectPermissionMethod.HasProjectPermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectMethod.SyncProjectMethod;
 import com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.syncProjectPermissionMethod.SyncProjectPermissionMethod;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.tenantModule.DeleteProjectInternalRequest;
-import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteProjectRoutedRequest;
+import com.omgservers.dto.tenantModule.GetProjectRoutedRequest;
 import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.HasProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,45 +41,45 @@ class ProjectInternalServiceImpl implements ProjectInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetProjectInternalResponse> getProject(final GetProjectInternalRequest request) {
+    public Uni<GetProjectInternalResponse> getProject(final GetProjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetProjectInternalRequest::validate,
+                GetProjectRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getProject,
                 getProjectMethod::getProject);
     }
 
     @Override
-    public Uni<SyncProjectInternalResponse> syncProject(final SyncProjectInternalRequest request) {
+    public Uni<SyncProjectInternalResponse> syncProject(final SyncProjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncProjectInternalRequest::validate,
+                SyncProjectRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncProject,
                 syncProjectMethod::syncProject);
     }
 
     @Override
-    public Uni<Void> deleteProject(final DeleteProjectInternalRequest request) {
+    public Uni<Void> deleteProject(final DeleteProjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteProjectInternalRequest::validate,
+                DeleteProjectRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::deleteProject,
                 deleteProjectMethod::deleteProject);
     }
 
     @Override
-    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionInternalRequest request) {
+    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasProjectPermissionInternalRequest::validate,
+                HasProjectPermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::hasProjectPermission,
                 hasProjectPermissionMethod::hasProjectPermission);
     }
 
     @Override
-    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionInternalRequest request) {
+    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncProjectPermissionInternalRequest::validate,
+                SyncProjectPermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncProjectPermission,
                 syncProjectPermissionMethod::syncProjectPermission);

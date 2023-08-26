@@ -2,8 +2,8 @@ package com.omgservers.application.module.userModule.impl.service.userInternalSe
 
 import com.omgservers.application.module.userModule.impl.operation.selectUserOperation.SelectUserOperation;
 import com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation.ValidateCredentialsOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.userModule.ValidateCredentialsInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.userModule.ValidateCredentialsRoutedRequest;
 import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,8 +23,8 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsInternalRequest request) {
-        ValidateCredentialsInternalRequest.validate(request);
+    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsRoutedRequest request) {
+        ValidateCredentialsRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -1,20 +1,21 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.factory.ClientModelFactory;
-import com.omgservers.base.factory.MessageModelFactory;
-import com.omgservers.base.factory.UserModelFactory;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.tenantModule.impl.service.stageHelpService.request.ValidateStageSecretHelpRequest;
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
 import com.omgservers.application.module.userModule.impl.service.userHelpService.request.RespondClientHelpRequest;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.dto.userModule.SyncClientInternalRequest;
-import com.omgservers.dto.userModule.SyncUserInternalRequest;
+import com.omgservers.application.factory.ClientModelFactory;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.application.factory.MessageModelFactory;
+import com.omgservers.application.factory.UserModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
+import com.omgservers.dto.userModule.SyncClientRoutedRequest;
+import com.omgservers.dto.userModule.SyncUserRoutedRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -48,6 +49,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
 
     final MessageModelFactory messageModelFactory;
     final ClientModelFactory clientModelFactory;
+    final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
 
     @Override
@@ -94,7 +96,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
     Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
-        final var syncUserInternalRequest = new SyncUserInternalRequest(user);
+        final var syncUserInternalRequest = new SyncUserRoutedRequest(user);
         return userModule.getUserInternalService().syncUser(syncUserInternalRequest)
                 .replaceWith(user);
     }
@@ -110,7 +112,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId) {
         final var client = clientModelFactory.create(playerId, server, connectionId);
-        final var request = new SyncClientInternalRequest(userId, client);
+        final var request = new SyncClientRoutedRequest(userId, client);
         return userModule.getClientInternalService().syncClient(request)
                 .replaceWith(client);
     }
@@ -129,8 +131,9 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                         final Long playerId,
                         final Long clientId) {
         final var eventBody = new PlayerSignedUpEventBodyModel(tenantId, stageId, userId, playerId, clientId);
-        final var request = new FireEventHelpRequest(eventBody);
-        return internalModule.getEventHelpService().fireEvent(request)
+        final var event = eventModelFactory.create(eventBody);
+        final var request = new FireEventRoutedRequest(event);
+        return internalModule.getEventRoutedService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

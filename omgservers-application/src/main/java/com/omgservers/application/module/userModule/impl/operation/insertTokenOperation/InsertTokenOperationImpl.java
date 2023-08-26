@@ -1,9 +1,9 @@
 package com.omgservers.application.module.userModule.impl.operation.insertTokenOperation;
 
 import com.omgservers.application.module.userModule.impl.operation.encodeTokenOperation.EncodeTokenOperation;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.model.user.UserModel;

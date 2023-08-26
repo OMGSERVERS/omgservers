@@ -9,7 +9,7 @@ import com.omgservers.dto.developerModule.CreateTokenDeveloperResponse;
 import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
 import com.omgservers.dto.developerModule.GetVersionStatusDeveloperResponse;
 import com.omgservers.application.module.developerModule.impl.service.developerWebService.DeveloperWebService;
-import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
+import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.model.user.UserRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;

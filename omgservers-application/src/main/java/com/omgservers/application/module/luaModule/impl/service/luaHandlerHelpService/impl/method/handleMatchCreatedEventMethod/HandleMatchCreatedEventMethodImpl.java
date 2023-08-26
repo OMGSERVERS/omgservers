@@ -11,7 +11,7 @@ import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpSe
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateLuaRuntimeHelpResponse;
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateMatchContextHelpResponse;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.dto.matchmakerModule.GetMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
 import com.omgservers.model.match.MatchModel;
 import io.smallrye.mutiny.Uni;
@@ -50,7 +50,7 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long id) {
-        final var requests = new GetMatchInternalRequest(matchmakerId, id);
+        final var requests = new GetMatchRoutedRequest(matchmakerId, id);
         return matchmakerModule.getMatchmakerInternalService().getMatch(requests)
                 .map(GetMatchInternalResponse::getMatch);
     }

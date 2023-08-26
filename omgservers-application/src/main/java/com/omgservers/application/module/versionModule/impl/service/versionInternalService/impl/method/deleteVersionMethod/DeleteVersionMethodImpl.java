@@ -1,9 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.deleteVersionMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.deleteVersionOperation.DeleteVersionOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -17,18 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
+    final InternalModule internalModule;
+
     final DeleteVersionOperation deleteVersionOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteVersionInternalResponse> deleteVersion(final DeleteVersionInternalRequest request) {
-        DeleteVersionInternalRequest.validate(request);
+    public Uni<DeleteVersionInternalResponse> deleteVersion(final DeleteVersionRoutedRequest request) {
+        DeleteVersionRoutedRequest.validate(request);
 
         final var id = request.getId();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> deleteVersionOperation
                                 .deleteVersion(sqlConnection, shardModel.shard(), id),
                         deleted -> {
@@ -45,7 +48,8 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
                                 return null;
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(DeleteVersionInternalResponse::new);
     }
 }

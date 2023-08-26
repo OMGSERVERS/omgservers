@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.prepareShardSqlOperation;
 
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

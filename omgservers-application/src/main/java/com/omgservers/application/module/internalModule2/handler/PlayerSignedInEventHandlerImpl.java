@@ -1,12 +1,12 @@
 package com.omgservers.application.module.internalModule2.handler;
 
 import com.omgservers.application.module.gatewayModule.GatewayModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.luaModule.LuaModule;
 import com.omgservers.application.module.luaModule.impl.service.luaHandlerHelpService.request.HandlePlayerSignedInEventHelpRequest;
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
-import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientRoutedRequest;
 import com.omgservers.dto.userModule.GetClientInternalResponse;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.client.ClientModel;
@@ -49,7 +49,7 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientInternalRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRoutedRequest(userId, clientId);
         return userModule.getClientInternalService().getClient(getClientServiceRequest)
                 .map(GetClientInternalResponse::getClient);
     }

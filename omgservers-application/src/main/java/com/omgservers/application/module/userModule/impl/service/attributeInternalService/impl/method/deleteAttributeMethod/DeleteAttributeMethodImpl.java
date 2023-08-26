@@ -1,8 +1,10 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.deleteAttributeMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.deleteAttributeOperation.DeleteAttributeOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.DeleteAttributeInternalRequest;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeRequest;
+import com.omgservers.dto.internalModule.ChangeResponse;
+import com.omgservers.dto.userModule.DeleteAttributeRoutedRequest;
 import com.omgservers.dto.userModule.DeleteAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,19 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
 
+    final InternalModule internalModule;
+
     final DeleteAttributeOperation deleteAttributeOperation;
-    final ChangeOperation changeOperation;
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteAttributeInternalResponse> deleteAttribute(final DeleteAttributeInternalRequest request) {
-        DeleteAttributeInternalRequest.validate(request);
+    public Uni<DeleteAttributeInternalResponse> deleteAttribute(final DeleteAttributeRoutedRequest request) {
+        DeleteAttributeRoutedRequest.validate(request);
 
         final var player = request.getPlayerId();
         final var name = request.getName();
-        return changeOperation.change(request,
-                        ((sqlConnection, shardModel) -> deleteAttributeOperation
-                                .deleteAttribute(sqlConnection, shardModel.shard(), player, name)))
+        final var changeRequest = new ChangeRequest(request,
+                (sqlConnection, shardModel) -> deleteAttributeOperation
+                        .deleteAttribute(sqlConnection, shardModel.shard(), player, name));
+        return internalModule.getChangeService().change(changeRequest)
+                .map(ChangeResponse::getResult)
                 .map(DeleteAttributeInternalResponse::new);
     }
 }

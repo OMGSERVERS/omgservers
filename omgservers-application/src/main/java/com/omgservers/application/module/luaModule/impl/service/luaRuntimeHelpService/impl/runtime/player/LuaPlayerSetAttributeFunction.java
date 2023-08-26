@@ -1,9 +1,9 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.runtime.player;
 
-import com.omgservers.base.factory.AttributeModelFactory;
+import com.omgservers.application.factory.AttributeModelFactory;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.dto.userModule.SyncAttributeInternalRequest;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.userModule.SyncAttributeRoutedRequest;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -36,7 +36,7 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
         String value = arg2.tojstring();
 
         final var attribute = attributeModelFactory.create(playerId, name, value);
-        final var syncAttributeServiceRequest = new SyncAttributeInternalRequest(userId, attribute);
+        final var syncAttributeServiceRequest = new SyncAttributeRoutedRequest(userId, attribute);
 
         try {
             userModule.getAttributeInternalService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);

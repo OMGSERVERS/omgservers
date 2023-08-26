@@ -1,8 +1,8 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.hasTenantPermissionMethod;
 
 import com.omgservers.application.module.tenantModule.impl.operation.hasTenantPermissionOperation.HasTenantPermissionOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.tenantModule.HasTenantPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,8 +21,8 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionInternalRequest request) {
-        HasTenantPermissionInternalRequest.validate(request);
+    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRoutedRequest request) {
+        HasTenantPermissionRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

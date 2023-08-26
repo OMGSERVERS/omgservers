@@ -2,16 +2,16 @@ package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebS
 
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.RuntimeInternalService;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.RuntimeWebService;
-import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,32 +27,32 @@ class RuntimeWebServiceImpl implements RuntimeWebService {
     final RuntimeInternalService runtimeInternalService;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request) {
         return runtimeInternalService.syncRuntime(request);
     }
 
     @Override
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request) {
+    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request) {
         return runtimeInternalService.getRuntime(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request) {
+    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request) {
         return runtimeInternalService.deleteRuntime(request);
     }
 
     @Override
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request) {
+    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request) {
         return runtimeInternalService.syncCommand(request);
     }
 
     @Override
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request) {
+    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request) {
         return runtimeInternalService.deleteCommand(request);
     }
 
     @Override
-    public Uni<Void> doUpdate(DoUpdateInternalRequest request) {
+    public Uni<Void> doUpdate(DoUpdateRoutedRequest request) {
         return runtimeInternalService.doUpdate(request);
     }
 }

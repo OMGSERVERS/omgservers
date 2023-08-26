@@ -3,10 +3,10 @@ package com.omgservers.application.module.versionModule.impl.operation.selectVer
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
 import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.factory.VersionModelFactory;
+import com.omgservers.application.factory.VersionModelFactory;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

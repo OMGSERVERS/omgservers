@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.dto.userModule.DeleteClientInternalRequest;
+import com.omgservers.dto.userModule.DeleteClientRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -29,7 +29,7 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var body = (ClientDisconnectedEventBodyModel) event.getBody();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
-        final var request = new DeleteClientInternalRequest(userId, clientId);
+        final var request = new DeleteClientRoutedRequest(userId, clientId);
         return userModule.getClientInternalService().deleteClient(request)
                 .replaceWith(true);
     }

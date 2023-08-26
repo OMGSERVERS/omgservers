@@ -1,6 +1,6 @@
 package com.omgservers.base.factory;
 
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobType;
 import jakarta.enterprise.context.ApplicationScoped;

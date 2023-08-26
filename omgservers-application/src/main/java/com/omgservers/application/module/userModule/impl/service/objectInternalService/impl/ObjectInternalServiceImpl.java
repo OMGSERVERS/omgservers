@@ -6,13 +6,13 @@ import com.omgservers.application.module.userModule.impl.service.objectInternalS
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.deleteObjectMethod.DeleteObjectMethod;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.getObjectMethod.GetObjectMethod;
 import com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.syncObjectMethod.SyncObjectMethod;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.userModule.DeleteObjectInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.DeleteObjectRoutedRequest;
 import com.omgservers.dto.userModule.DeleteObjectInternalResponse;
-import com.omgservers.dto.userModule.GetObjectInternalRequest;
+import com.omgservers.dto.userModule.GetObjectRoutedRequest;
 import com.omgservers.dto.userModule.GetObjectInternalResponse;
-import com.omgservers.dto.userModule.SyncObjectInternalRequest;
+import com.omgservers.dto.userModule.SyncObjectRoutedRequest;
 import com.omgservers.dto.userModule.SyncObjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,27 +34,27 @@ class ObjectInternalServiceImpl implements ObjectInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetObjectInternalResponse> getObject(GetObjectInternalRequest request) {
+    public Uni<GetObjectInternalResponse> getObject(GetObjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetObjectInternalRequest::validate,
+                GetObjectRoutedRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::getObject,
                 getObjectMethod::getObject);
     }
 
     @Override
-    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectInternalRequest request) {
+    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncObjectInternalRequest::validate,
+                SyncObjectRoutedRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::syncObject,
                 syncObjectMethod::syncObject);
     }
 
     @Override
-    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectInternalRequest request) {
+    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteObjectInternalRequest::validate,
+                DeleteObjectRoutedRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::deleteObject,
                 deleteObjectMethod::deleteObject);

@@ -1,8 +1,8 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getVersionMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectVersionOperation.SelectVersionOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,8 +20,8 @@ class GetVersionMethodImpl implements GetVersionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetVersionInternalResponse> getVersion(GetVersionInternalRequest request) {
-        GetVersionInternalRequest.validate(request);
+    public Uni<GetVersionInternalResponse> getVersion(GetVersionRoutedRequest request) {
+        GetVersionRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

@@ -1,9 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.deleteStageMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.deleteStageOperation.DeleteStageOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.tenantModule.DeleteStageRoutedRequest;
 import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -17,20 +19,21 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteStageMethodImpl implements DeleteStageMethod {
 
+    final InternalModule internalModule;
+
     final DeleteStageOperation deleteStageOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageInternalRequest request) {
-        DeleteStageInternalRequest.validate(request);
+    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageRoutedRequest request) {
+        DeleteStageRoutedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         ((sqlConnection, shardModel) -> deleteStageOperation
                                 .deleteStage(sqlConnection, shardModel.shard(), id)),
                         deleted -> {
@@ -47,7 +50,8 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
                             } else {
                                 return null;
                             }
-                        })
+                        }))
+                .map(ChangeWithEventResponse::getResult)
                 .map(DeleteStageInternalResponse::new);
     }
 }

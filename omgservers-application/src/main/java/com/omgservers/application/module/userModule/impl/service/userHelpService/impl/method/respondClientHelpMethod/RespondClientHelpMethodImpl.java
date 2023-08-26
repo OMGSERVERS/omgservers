@@ -4,7 +4,7 @@ import com.omgservers.application.module.gatewayModule.GatewayModule;
 import com.omgservers.application.module.userModule.UserModule;
 import com.omgservers.application.module.userModule.impl.service.userHelpService.request.RespondClientHelpRequest;
 import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
-import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.dto.userModule.GetClientRoutedRequest;
 import com.omgservers.dto.userModule.GetClientInternalResponse;
 import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
@@ -39,7 +39,7 @@ class RespondClientHelpMethodImpl implements RespondClientHelpMethod {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientInternalRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRoutedRequest(userId, clientId);
         return userModule.getClientInternalService().getClient(getClientServiceRequest)
                 .map(GetClientInternalResponse::getClient);
     }

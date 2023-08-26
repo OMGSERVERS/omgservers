@@ -1,8 +1,8 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getBytecodeMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectBytecodeOperation.SelectBytecodeOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,8 +20,8 @@ class GetBytecodeMethodImpl implements GetBytecodeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeInternalRequest request) {
-        GetBytecodeInternalRequest.validate(request);
+    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeRoutedRequest request) {
+        GetBytecodeRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

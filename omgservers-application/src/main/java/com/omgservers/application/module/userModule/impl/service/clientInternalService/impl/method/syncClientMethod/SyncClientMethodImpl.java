@@ -1,9 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.syncClientMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.SyncClientInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.userModule.SyncClientRoutedRequest;
 import com.omgservers.dto.userModule.SyncClientInternalResponse;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
@@ -18,19 +20,20 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncClientMethodImpl implements SyncClientMethod {
 
+    final InternalModule internalModule;
+
     final UpsertClientOperation upsertClientOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncClientInternalResponse> syncClient(final SyncClientInternalRequest request) {
-        SyncClientInternalRequest.validate(request);
+    public Uni<SyncClientInternalResponse> syncClient(final SyncClientRoutedRequest request) {
+        SyncClientRoutedRequest.validate(request);
 
         final var userId = request.getUserId();
         final var client = request.getClient();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertClientOperation
                                 .upsertClient(sqlConnection, shardModel.shard(), client),
                         inserted -> {
@@ -48,7 +51,8 @@ class SyncClientMethodImpl implements SyncClientMethod {
                                 return new ClientUpdatedEventBodyModel(userId, id);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(SyncClientInternalResponse::new);
     }
 }

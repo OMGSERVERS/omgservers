@@ -1,9 +1,9 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
-import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
-import com.omgservers.dto.internalModule.DeleteJobInternalRequest;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.base.operation.getServers.GetServersOperation;
+import com.omgservers.dto.internalModule.DeleteJobRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
@@ -30,8 +30,8 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     public Uni<Boolean> handle(EventModel event) {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
-        final var request = new DeleteJobInternalRequest(id, id);
-        return internalModule.getJobInternalService().deleteJob(request)
+        final var request = new DeleteJobRoutedRequest(id, id);
+        return internalModule.getJobRoutedService().deleteJob(request)
                 .replaceWith(true);
     }
 }

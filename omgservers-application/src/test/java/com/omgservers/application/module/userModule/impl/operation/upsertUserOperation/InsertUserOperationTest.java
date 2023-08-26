@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertUserOperation;
 
-import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.application.factory.UserModelFactory;
 import com.omgservers.model.user.UserRoleEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

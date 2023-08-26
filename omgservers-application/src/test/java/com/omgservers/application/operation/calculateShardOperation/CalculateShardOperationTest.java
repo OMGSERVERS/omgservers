@@ -1,6 +1,6 @@
 package com.omgservers.application.operation.calculateShardOperation;
 
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

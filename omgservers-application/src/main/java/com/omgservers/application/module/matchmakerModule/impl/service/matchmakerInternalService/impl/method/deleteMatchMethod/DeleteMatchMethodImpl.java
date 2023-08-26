@@ -1,11 +1,12 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchOperation.DeleteMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.matchmakerModule.DeleteMatchInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.matchmakerModule.DeleteMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchInternalResponse;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -22,7 +23,6 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     final InternalModule internalModule;
 
     final DeleteMatchOperation deleteMatchOperation;
-    final ChangeOperation changeOperation;
 
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
@@ -30,12 +30,12 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchInternalRequest request) {
-        DeleteMatchInternalRequest.validate(request);
+    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchRoutedRequest request) {
+        DeleteMatchRoutedRequest.validate(request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> deleteMatchOperation
                                 .deleteMatch(sqlConnection, shardModel.shard(), id),
                         deleted -> {
@@ -52,7 +52,8 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
                                 return null;
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .invoke(deleted -> matchmakerInMemoryCache.removeMatch(id))
                 .map(DeleteMatchInternalResponse::new);
     }

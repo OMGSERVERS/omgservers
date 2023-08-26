@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectMatchmakerOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import io.smallrye.mutiny.Uni;

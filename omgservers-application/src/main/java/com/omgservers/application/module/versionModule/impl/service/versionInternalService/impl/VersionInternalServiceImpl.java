@@ -8,17 +8,17 @@ import com.omgservers.application.module.versionModule.impl.service.versionInter
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getVersionMethod.GetVersionMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.syncVersionMethod.SyncVersionMethod;
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi.VersionServiceApi;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.versionModule.DeleteVersionInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
-import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,45 +42,45 @@ public class VersionInternalServiceImpl implements VersionInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetVersionInternalResponse> getVersion(GetVersionInternalRequest request) {
+    public Uni<GetVersionInternalResponse> getVersion(GetVersionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetVersionInternalRequest::validate,
+                GetVersionRoutedRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::getVersion,
                 getVersionMethod::getVersion);
     }
 
     @Override
-    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionInternalRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncVersionInternalRequest::validate,
+                SyncVersionRoutedRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::syncVersion,
                 syncVersionMethod::syncVersion);
     }
 
     @Override
-    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionInternalRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteVersionInternalRequest::validate,
+                DeleteVersionRoutedRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::deleteVersion,
                 deleteVersionMethod::deleteVersion);
     }
 
     @Override
-    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeInternalRequest request) {
+    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetBytecodeInternalRequest::validate,
+                GetBytecodeRoutedRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::getBytecode,
                 getBytecodeMethod::getBytecode);
     }
 
     @Override
-    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigInternalRequest request) {
+    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetStageConfigInternalRequest::validate,
+                GetStageConfigRoutedRequest::validate,
                 getVersionServiceApiClientOperation::getClient,
                 VersionServiceApi::getStageConfig,
                 getStageConfigMethod::getStageConfig);

@@ -1,15 +1,15 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.factory.RequestModelFactory;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.application.factory.RequestModelFactory;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.dto.matchmakerModule.SyncRequestInternalRequest;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerAttributesInternalRequest;
+import com.omgservers.dto.userModule.GetPlayerAttributesRoutedRequest;
 import com.omgservers.dto.userModule.GetPlayerAttributesInternalResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -59,7 +59,7 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
                             .flatMap(attributes -> {
                                 final var requestConfig = new RequestConfigModel(mode, attributes);
                                 final var requestModel = requestModelFactory.create(matchmakerId, userId, clientId, requestConfig);
-                                final var request = new SyncRequestInternalRequest(requestModel);
+                                final var request = new SyncRequestRoutedRequest(requestModel);
                                 return matchmakerModule.getMatchmakerInternalService().syncRequest(request);
                             });
                 })
@@ -67,13 +67,13 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StageModel> getStage(Long tenantId, Long stageId) {
-        final var request = new GetStageInternalRequest(tenantId, stageId);
+        final var request = new GetStageRoutedRequest(tenantId, stageId);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage);
     }
 
     Uni<Map<String, String>> getPlayerAttributes(Long userId, Long playerId) {
-        final var request = new GetPlayerAttributesInternalRequest(userId, playerId);
+        final var request = new GetPlayerAttributesRoutedRequest(userId, playerId);
         return userModule.getAttributeInternalService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesInternalResponse::getAttributes)
                 .map(entities -> {

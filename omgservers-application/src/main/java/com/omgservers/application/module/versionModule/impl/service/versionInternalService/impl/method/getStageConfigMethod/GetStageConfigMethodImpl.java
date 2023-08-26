@@ -1,8 +1,8 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.getStageConfigMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.selectStageConfigOperation.SelectStageConfigOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,8 +20,8 @@ class GetStageConfigMethodImpl implements GetStageConfigMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigInternalRequest request) {
-        GetStageConfigInternalRequest.validate(request);
+    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigRoutedRequest request) {
+        GetStageConfigRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

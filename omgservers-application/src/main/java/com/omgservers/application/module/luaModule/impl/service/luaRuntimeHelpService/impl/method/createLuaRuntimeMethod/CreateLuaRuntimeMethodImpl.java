@@ -8,9 +8,9 @@ import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpSe
 import com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.response.CreateLuaRuntimeHelpResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.versionModule.GetBytecodeInternalRequest;
+import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionBytecodeModel;
@@ -56,14 +56,14 @@ class CreateLuaRuntimeMethodImpl implements CreateLuaRuntimeMethod {
     }
 
     Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
-        final var request = new GetStageInternalRequest(tenantId, stageId);
+        final var request = new GetStageRoutedRequest(tenantId, stageId);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage)
                 .map(StageModel::getVersionId);
     }
 
     Uni<VersionBytecodeModel> getBytecode(final Long id) {
-        final var request = new GetBytecodeInternalRequest(id);
+        final var request = new GetBytecodeRoutedRequest(id);
         return versionModule.getVersionInternalService().getBytecode(request)
                 .map(GetBytecodeInternalResponse::getBytecode);
     }

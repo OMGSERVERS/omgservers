@@ -6,9 +6,9 @@ import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
@@ -54,7 +54,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                            final Long userId) {
         final var permission = StagePermissionEnum.CREATE_VERSION;
         final var hasStagePermissionServiceRequest =
-                new HasStagePermissionInternalRequest(tenantId, stageId, userId, permission);
+                new HasStagePermissionRoutedRequest(tenantId, stageId, userId, permission);
         return tenantModule.getStageInternalService().hasStagePermission(hasStagePermissionServiceRequest)
                 .map(HasStagePermissionInternalResponse::getResult)
                 .invoke(result -> {
@@ -67,7 +67,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     }
 
     Uni<Void> checkStage(final Long tenantId, final Long stageId) {
-        final var getStageServiceRequest = new GetStageInternalRequest(tenantId, stageId);
+        final var getStageServiceRequest = new GetStageRoutedRequest(tenantId, stageId);
         return tenantModule.getStageInternalService().getStage(getStageServiceRequest)
                 .map(GetStageInternalResponse::getStage)
                 .replaceWithVoid();

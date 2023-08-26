@@ -1,10 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.syncTenantPermissionMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantPermissionOperation.UpsertTenantPermissionOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithLogRequest;
+import com.omgservers.dto.internalModule.ChangeWithLogResponse;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,17 +21,16 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     final InternalModule internalModule;
 
     final UpsertTenantPermissionOperation upsertTenantPermissionOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionInternalRequest request) {
-        SyncTenantPermissionInternalRequest.validate(request);
+    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRoutedRequest request) {
+        SyncTenantPermissionRoutedRequest.validate(request);
 
         final var permission = request.getPermission();
-        return changeOperation.changeWithLog(request,
+        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
                         (sqlConnection, shardModel) -> upsertTenantPermissionOperation
                                 .upsertTenantPermission(sqlConnection, shardModel.shard(), permission),
                         inserted -> {
@@ -42,7 +42,8 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                                         "permission=" + permission);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithLogResponse::getResult)
                 .map(SyncTenantPermissionResponse::new);
     }
 }

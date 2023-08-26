@@ -1,9 +1,11 @@
 package com.omgservers.application.module.tenantModule.impl.service.tenantInternalService.impl.method.deleteTenantMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
 import com.omgservers.application.module.tenantModule.impl.operation.deleteTenantOperation.DeleteTenantOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.tenantModule.DeleteTenantInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.tenantModule.DeleteTenantRoutedRequest;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,18 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
+    final InternalModule internalModule;
+
     final DeleteTenantOperation deleteTenantOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteTenant(final DeleteTenantInternalRequest request) {
-        DeleteTenantInternalRequest.validate(request);
+    public Uni<Void> deleteTenant(final DeleteTenantRoutedRequest request) {
+        DeleteTenantRoutedRequest.validate(request);
 
         final var id = request.getId();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         ((sqlConnection, shardModel) -> deleteTenantOperation
                                 .deleteTenant(sqlConnection, shardModel.shard(), id)),
                         deleted -> {
@@ -43,7 +46,8 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
                             } else {
                                 return null;
                             }
-                        })
+                        }))
+                .map(ChangeWithEventResponse::getResult)
                 //TODO: implement response with deleted flag
                 .replaceWithVoid();
     }

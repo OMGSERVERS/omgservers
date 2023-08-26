@@ -1,8 +1,8 @@
 package com.omgservers.application.module.tenantModule.impl.service.projectInternalService.impl.method.getProjectMethod;
 
 import com.omgservers.application.module.tenantModule.impl.operation.selectProjectOperation.SelectProjectOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.tenantModule.GetProjectRoutedRequest;
 import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,8 +21,8 @@ GetProjectMethodImpl implements GetProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetProjectInternalResponse> getProject(final GetProjectInternalRequest request) {
-        GetProjectInternalRequest.validate(request);
+    public Uni<GetProjectInternalResponse> getProject(final GetProjectRoutedRequest request) {
+        GetProjectRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

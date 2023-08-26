@@ -1,8 +1,10 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.syncAttributeMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation.UpsertAttributeOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.SyncAttributeInternalRequest;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeRequest;
+import com.omgservers.dto.internalModule.ChangeResponse;
+import com.omgservers.dto.userModule.SyncAttributeRoutedRequest;
 import com.omgservers.dto.userModule.SyncAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,19 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncAttributeMethodImpl implements SyncAttributeMethod {
 
+    final InternalModule internalModule;
+
     final UpsertAttributeOperation upsertAttributeOperation;
-    final ChangeOperation changeOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncAttributeInternalResponse> syncAttribute(SyncAttributeInternalRequest request) {
-        SyncAttributeInternalRequest.validate(request);
+    public Uni<SyncAttributeInternalResponse> syncAttribute(SyncAttributeRoutedRequest request) {
+        SyncAttributeRoutedRequest.validate(request);
 
         final var attribute = request.getAttribute();
-        return changeOperation.change(request,
-                        ((sqlConnection, shardModel) -> upsertAttributeOperation
-                                .upsertAttribute(sqlConnection, shardModel.shard(), attribute)))
+        final var changeRequest = new ChangeRequest(request,
+                (sqlConnection, shardModel) -> upsertAttributeOperation
+                        .upsertAttribute(sqlConnection, shardModel.shard(), attribute));
+        return internalModule.getChangeService().change(changeRequest)
+                .map(ChangeResponse::getResult)
                 .map(SyncAttributeInternalResponse::new);
     }
 }

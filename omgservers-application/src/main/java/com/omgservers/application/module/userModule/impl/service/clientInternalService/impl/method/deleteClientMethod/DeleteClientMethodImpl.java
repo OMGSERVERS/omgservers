@@ -1,10 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.deleteClientMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.userModule.impl.operation.deleteClientOperation.DeleteClientOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.userModule.DeleteClientInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithLogRequest;
+import com.omgservers.dto.internalModule.ChangeWithLogResponse;
+import com.omgservers.dto.userModule.DeleteClientRoutedRequest;
 import com.omgservers.dto.userModule.DeleteClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,17 +21,16 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final InternalModule internalModule;
 
     final DeleteClientOperation deleteClientOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteClientInternalResponse> deleteClient(final DeleteClientInternalRequest request) {
-        DeleteClientInternalRequest.validate(request);
+    public Uni<DeleteClientInternalResponse> deleteClient(final DeleteClientRoutedRequest request) {
+        DeleteClientRoutedRequest.validate(request);
 
         final var clientId = request.getClientId();
-        return changeOperation.changeWithLog(request,
+        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
                         ((sqlConnection, shardModel) -> deleteClientOperation
                                 .deleteClient(sqlConnection, shardModel.shard(), clientId)),
                         deleted -> {
@@ -40,7 +40,8 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
                             } else {
                                 return null;
                             }
-                        })
+                        }))
+                .map(ChangeWithLogResponse::getResult)
                 .map(DeleteClientInternalResponse::new);
     }
 }

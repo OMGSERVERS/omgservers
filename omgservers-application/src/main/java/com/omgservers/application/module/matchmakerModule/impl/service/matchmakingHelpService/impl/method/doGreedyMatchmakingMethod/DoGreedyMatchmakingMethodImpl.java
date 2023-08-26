@@ -8,10 +8,10 @@ import com.omgservers.application.module.matchmakerModule.impl.service.matchmake
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.matchmakerModule.DeleteRequestInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchInternalRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
@@ -129,7 +129,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
         // TODO: use batching???
         return Multi.createFrom().iterable(preparedMatches)
                 .onItem().transformToUniAndMerge(match -> {
-                    final var request = new SyncMatchInternalRequest(match);
+                    final var request = new SyncMatchRoutedRequest(match);
                     return matchmakerInternalService.syncMatch(request);
                 })
                 .collect().asList()
@@ -147,7 +147,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                 .onItem().transformToUniAndMerge(request -> {
                     final var matchmaker = request.getMatchmakerId();
                     final var id = request.getId();
-                    final var deleteRequestInternalRequest = new DeleteRequestInternalRequest(matchmaker, id);
+                    final var deleteRequestInternalRequest = new DeleteRequestRoutedRequest(matchmaker, id);
                     return matchmakerInternalService.deleteRequest(deleteRequestInternalRequest);
                 })
                 .collect().asList()

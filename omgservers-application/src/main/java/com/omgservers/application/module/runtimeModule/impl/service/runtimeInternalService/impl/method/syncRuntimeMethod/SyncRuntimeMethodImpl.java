@@ -1,10 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
@@ -22,17 +23,16 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final InternalModule internalModule;
 
     final UpsertRuntimeOperation upsertRuntimeOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
-        SyncRuntimeInternalRequest.validate(request);
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request) {
+        SyncRuntimeRoutedRequest.validate(request);
 
         final var runtime = request.getRuntime();
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertRuntimeOperation
                                 .upsertRuntime(sqlConnection, shardModel.shard(), runtime),
                         inserted -> {
@@ -52,7 +52,8 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                                 return new RuntimeUpdatedEventBodyModel(id, matchmakerId, matchId);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(SyncRuntimeInternalResponse::new);
     }
 }

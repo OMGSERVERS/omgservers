@@ -6,9 +6,9 @@ import com.omgservers.application.module.userModule.impl.operation.getUserServic
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.TokenInternalService;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.createTokenMethod.CreateTokenMethod;
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.impl.method.introspectTokenMethod.IntrospectTokenMethod;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.userModule.CreateTokenInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.CreateTokenRoutedRequest;
 import com.omgservers.dto.userModule.CreateTokenInternalResponse;
 import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
 import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
@@ -32,9 +32,9 @@ class TokenInternalServiceImpl implements TokenInternalService {
     final DecodeTokenOperation decodeTokenOperation;
 
     @Override
-    public Uni<CreateTokenInternalResponse> createToken(final CreateTokenInternalRequest request) {
+    public Uni<CreateTokenInternalResponse> createToken(final CreateTokenRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateTokenInternalRequest::validate,
+                CreateTokenRoutedRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::createToken,
                 createTokenMethod::createToken);

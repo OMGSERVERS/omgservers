@@ -2,11 +2,11 @@ package com.omgservers.application.module.matchmakerModule.impl.operation.upsert
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchmakerOperation.UpsertMatchmakerOperation;
 import com.omgservers.model.match.MatchConfigModel;
-import com.omgservers.base.factory.MatchModelFactory;
-import com.omgservers.base.factory.MatchmakerModelFactory;
+import com.omgservers.application.factory.MatchModelFactory;
+import com.omgservers.application.factory.MatchmakerModelFactory;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

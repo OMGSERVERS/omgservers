@@ -3,7 +3,7 @@ package com.omgservers.application.module.developerModule.impl.service.developer
 import com.omgservers.dto.developerModule.GetVersionStatusDeveloperRequest;
 import com.omgservers.dto.developerModule.GetVersionStatusDeveloperResponse;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.dto.versionModule.GetVersionInternalRequest;
+import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ class GetVersionStatusMethodImpl implements GetVersionStatusMethod {
         GetVersionStatusDeveloperRequest.validate(request);
 
         final var id = request.getId();
-        final var getVersionServiceRequest = new GetVersionInternalRequest(id);
+        final var getVersionServiceRequest = new GetVersionRoutedRequest(id);
         return versionModule.getVersionInternalService().getVersion(getVersionServiceRequest)
                 .map(getVersionServiceResponse -> getVersionServiceResponse.getVersion().getStatus())
                 .map(GetVersionStatusDeveloperResponse::new);

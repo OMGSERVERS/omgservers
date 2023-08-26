@@ -1,12 +1,12 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapStandaloneConfigurationMethod;
 
+import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.base.factory.IndexModelFactory;
 import com.omgservers.base.factory.ServiceAccountModelFactory;
-import com.omgservers.base.InternalModule;
-import com.omgservers.dto.internalModule.SyncIndexHelpRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountHelpRequest;
-import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.SyncIndexRequest;
+import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
 import com.omgservers.model.index.IndexConfigModel;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -47,8 +47,8 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
         final var serverUri = getConfigOperation.getConfig().serverUri();
         final var indexConfig = IndexConfigModel.create(Collections.singletonList(serverUri));
         final var indexModel = indexModelFactory.create(indexName, indexConfig);
-        final var request = new SyncIndexHelpRequest(indexModel);
-        return internalModule.getIndexHelpService().syncIndex(request);
+        final var request = new SyncIndexRequest(indexModel);
+        return internalModule.getIndexService().syncIndex(request);
     }
 
     Uni<Void> syncServiceAccount() {
@@ -56,7 +56,7 @@ class BootstrapStandaloneConfigurationMethodImpl implements BootstrapStandaloneC
         final var servicePassword = getConfigOperation.getConfig().servicePassword();
         final var passwordHash = BcryptUtil.bcryptHash(servicePassword);
         final var serviceAccountModel = serviceAccountModelFactory.create(serviceUsername, passwordHash);
-        final var request = new SyncServiceAccountHelpRequest(serviceAccountModel);
-        return internalModule.getServiceAccountHelpService().syncServiceAccount(request);
+        final var request = new SyncServiceAccountRequest(serviceAccountModel);
+        return internalModule.getServiceAccountService().syncServiceAccount(request);
     }
 }

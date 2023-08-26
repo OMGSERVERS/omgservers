@@ -2,11 +2,11 @@ package com.omgservers.application.module.tenantModule.impl.operation.upsertTena
 
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.model.tenant.TenantConfigModel;
-import com.omgservers.base.factory.TenantModelFactory;
+import com.omgservers.application.factory.TenantModelFactory;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.factory.TenantPermissionModelFactory;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.factory.TenantPermissionModelFactory;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

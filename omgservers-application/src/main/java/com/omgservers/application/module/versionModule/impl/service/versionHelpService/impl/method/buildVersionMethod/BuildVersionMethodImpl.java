@@ -1,12 +1,12 @@
 package com.omgservers.application.module.versionModule.impl.service.versionHelpService.impl.method.buildVersionMethod;
 
-import com.omgservers.base.factory.VersionModelFactory;
+import com.omgservers.application.factory.VersionModelFactory;
 import com.omgservers.application.module.versionModule.impl.operation.compileVersionSourceCodeOperation.CompileVersionSourceCodeOperation;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.dto.versionModule.SyncVersionInternalRequest;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
 import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,7 +41,7 @@ public class BuildVersionMethodImpl implements BuildVersionMethod {
     }
 
     Uni<VersionModel> createVersion(final VersionModel version) {
-        final var syncVersionInternalRequest = new SyncVersionInternalRequest(version);
+        final var syncVersionInternalRequest = new SyncVersionRoutedRequest(version);
         return versionInternalService.syncVersion(syncVersionInternalRequest)
                 .replaceWith(version);
     }

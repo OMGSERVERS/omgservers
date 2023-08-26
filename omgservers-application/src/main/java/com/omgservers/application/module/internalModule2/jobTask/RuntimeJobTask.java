@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule2.jobTask;
 
-import com.omgservers.base.impl.service.jobSchedulerService.impl.JobTask;
+import com.omgservers.base.module.internal.impl.service.jobRoutedService.impl.JobTask;
 import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
 import com.omgservers.model.job.JobType;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +24,7 @@ public class RuntimeJobTask implements JobTask {
 
     @Override
     public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new DoUpdateInternalRequest(entity);
+        final var request = new DoUpdateRoutedRequest(entity);
         return runtimeModule.getRuntimeInternalService().doUpdate(request)
                 .replaceWith(true);
     }

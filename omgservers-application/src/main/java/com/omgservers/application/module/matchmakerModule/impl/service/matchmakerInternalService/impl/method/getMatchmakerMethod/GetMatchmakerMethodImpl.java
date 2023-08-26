@@ -1,8 +1,8 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.getMatchmakerMethod;
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.selectMatchmakerOperation.SelectMatchmakerOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,8 +21,8 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerInternalRequest request) {
-        GetMatchmakerInternalRequest.validate(request);
+    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerRoutedRequest request) {
+        GetMatchmakerRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

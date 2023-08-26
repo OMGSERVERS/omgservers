@@ -1,11 +1,12 @@
 package com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertStageOperation.UpsertStageOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.validateStageOperation.ValidateStageOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithEventRequest;
+import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.tenantModule.SyncStageRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
@@ -24,19 +25,18 @@ class SyncStageMethodImpl implements SyncStageMethod {
 
     final ValidateStageOperation validateStageOperation;
     final UpsertStageOperation upsertStageOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request) {
-        SyncStageInternalRequest.validate(request);
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageRoutedRequest request) {
+        SyncStageRoutedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var stage = request.getStage();
         validateStageOperation.validateStage(stage);
-        return changeOperation.changeWithEvent(request,
+        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
                         (sqlConnection, shardModel) -> upsertStageOperation
                                 .upsertStage(sqlConnection, shardModel.shard(), stage),
                         inserted -> {
@@ -54,7 +54,8 @@ class SyncStageMethodImpl implements SyncStageMethod {
                                 return new StageUpdatedEventBodyModel(tenantId, id);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithEventResponse::getResult)
                 .map(SyncStageInternalResponse::new);
     }
 }

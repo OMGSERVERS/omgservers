@@ -1,17 +1,17 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl.serviceApi;
 
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.RuntimeWebService;
-import com.omgservers.base.impl.operation.handleApiRequestOperation.HandleApiRequestOperation;
-import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
@@ -31,37 +31,37 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request) {
+    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::getRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request) {
+    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request) {
+    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request) {
+    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> doUpdate(DoUpdateInternalRequest request) {
+    public Uni<Void> doUpdate(DoUpdateRoutedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::doUpdate);
     }
 }

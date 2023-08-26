@@ -2,7 +2,7 @@ package com.omgservers.application.module.adminModule.impl.service.adminWebServi
 
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.AdminHelpService;
 import com.omgservers.application.module.adminModule.impl.service.adminWebService.AdminWebService;
-import com.omgservers.base.InternalModule;
+import com.omgservers.base.module.internal.InternalModule;
 import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
 import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
 import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
@@ -19,14 +19,14 @@ import com.omgservers.dto.adminModule.GetServiceAccountAdminResponse;
 import com.omgservers.dto.adminModule.PingServerAdminResponse;
 import com.omgservers.dto.adminModule.SyncIndexAdminRequest;
 import com.omgservers.dto.adminModule.SyncServiceAccountAdminRequest;
-import com.omgservers.dto.internalModule.DeleteIndexHelpRequest;
+import com.omgservers.dto.internalModule.DeleteIndexRequest;
 import com.omgservers.dto.internalModule.DeleteServiceAccountHelpRequest;
-import com.omgservers.dto.internalModule.GetIndexHelpRequest;
+import com.omgservers.dto.internalModule.GetIndexRequest;
 import com.omgservers.dto.internalModule.GetIndexHelpResponse;
 import com.omgservers.dto.internalModule.GetServiceAccountHelpRequest;
 import com.omgservers.dto.internalModule.GetServiceAccountHelpResponse;
-import com.omgservers.dto.internalModule.SyncIndexHelpRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountHelpRequest;
+import com.omgservers.dto.internalModule.SyncIndexRequest;
+import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -53,7 +53,7 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request) {
         final var name = request.getName();
-        return internalModule.getIndexHelpService().getIndex(new GetIndexHelpRequest(name))
+        return internalModule.getIndexService().getIndex(new GetIndexRequest(name))
                 .map(GetIndexHelpResponse::getIndex)
                 .map(GetIndexAdminResponse::new);
     }
@@ -61,19 +61,19 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<Void> syncIndex(SyncIndexAdminRequest request) {
         final var index = request.getIndex();
-        return internalModule.getIndexHelpService().syncIndex(new SyncIndexHelpRequest(index));
+        return internalModule.getIndexService().syncIndex(new SyncIndexRequest(index));
     }
 
     @Override
     public Uni<Void> deleteIndex(DeleteIndexAdminRequest request) {
         final var id = request.getId();
-        return internalModule.getIndexHelpService().deleteIndex(new DeleteIndexHelpRequest(id));
+        return internalModule.getIndexService().deleteIndex(new DeleteIndexRequest(id));
     }
 
     @Override
     public Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request) {
         final var username = request.getUsername();
-        return internalModule.getServiceAccountHelpService()
+        return internalModule.getServiceAccountService()
                 .getServiceAccount(new GetServiceAccountHelpRequest(username))
                 .map(GetServiceAccountHelpResponse::getServiceAccount)
                 .map(GetServiceAccountAdminResponse::new);
@@ -82,14 +82,14 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<Void> syncServiceAccount(SyncServiceAccountAdminRequest request) {
         final var serviceAccount = request.getServiceAccount();
-        return internalModule.getServiceAccountHelpService()
-                .syncServiceAccount(new SyncServiceAccountHelpRequest(serviceAccount));
+        return internalModule.getServiceAccountService()
+                .syncServiceAccount(new SyncServiceAccountRequest(serviceAccount));
     }
 
     @Override
     public Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request) {
         final var id = request.getId();
-        return internalModule.getServiceAccountHelpService()
+        return internalModule.getServiceAccountService()
                 .deleteServiceAccount(new DeleteServiceAccountHelpRequest(id));
     }
 

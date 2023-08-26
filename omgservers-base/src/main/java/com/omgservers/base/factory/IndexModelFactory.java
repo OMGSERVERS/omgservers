@@ -1,6 +1,6 @@
 package com.omgservers.base.factory;
 
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
 import jakarta.enterprise.context.ApplicationScoped;

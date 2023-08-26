@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.selectAttributeOperation;
 
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.attribute.AttributeModel;

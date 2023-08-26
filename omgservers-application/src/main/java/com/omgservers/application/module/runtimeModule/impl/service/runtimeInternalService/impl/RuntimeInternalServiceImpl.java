@@ -9,17 +9,17 @@ import com.omgservers.application.module.runtimeModule.impl.service.runtimeInter
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.getRuntimeMethod.GetRuntimeMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncCommandMethod.SyncCommandMethod;
 import com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod.SyncRuntimeMethod;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.runtimeModule.DeleteCommandInternalRequest;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.DoUpdateInternalRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeInternalRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,54 +43,54 @@ public class RuntimeInternalServiceImpl implements RuntimeInternalService {
     final DoUpdateMethod doUpdateMethod;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeInternalRequest request) {
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncRuntimeInternalRequest::validate,
+                SyncRuntimeRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::syncRuntime,
                 syncRuntimeMethod::syncRuntime);
     }
 
     @Override
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request) {
+    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetRuntimeInternalRequest::validate,
+                GetRuntimeRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::getRuntime,
                 getRuntimeMethod::getRuntime);
     }
 
     @Override
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeInternalRequest request) {
+    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteRuntimeInternalRequest::validate,
+                DeleteRuntimeRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::deleteRuntime,
                 deleteRuntimeMethod::deleteRuntime);
     }
 
     @Override
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request) {
+    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncCommandInternalRequest::validate,
+                SyncCommandRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::syncCommand,
                 syncCommandMethod::syncCommand);
     }
 
     @Override
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandInternalRequest request) {
+    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteCommandInternalRequest::validate,
+                DeleteCommandRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::deleteCommand,
                 deleteCommandMethod::deleteCommand);
     }
 
     @Override
-    public Uni<Void> doUpdate(DoUpdateInternalRequest request) {
+    public Uni<Void> doUpdate(DoUpdateRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DoUpdateInternalRequest::validate,
+                DoUpdateRoutedRequest::validate,
                 getRuntimeServiceApiClientOperation::getClient,
                 RuntimeServiceApiClient::doUpdate,
                 doUpdateMethod::doUpdate);

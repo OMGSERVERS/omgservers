@@ -1,9 +1,10 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -23,6 +24,8 @@ class SignInMessageHandlerImpl implements MessageHandler {
 
     final GetConfigOperation getConfigOperation;
 
+    final EventModelFactory eventModelFactory;
+
     @Override
     public MessageQualifierEnum getQualifier() {
         return MessageQualifierEnum.SIGN_IN_MESSAGE;
@@ -38,9 +41,10 @@ class SignInMessageHandlerImpl implements MessageHandler {
         final var userPassword = messageBody.getPassword();
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
-        final var event = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
-        final var request = new FireEventHelpRequest(event);
-        return internalModule.getEventHelpService().fireEvent(request)
+        final var eventBody = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
+        final var event = eventModelFactory.create(eventBody);
+        final var request = new FireEventRoutedRequest(event);
+        return internalModule.getEventRoutedService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

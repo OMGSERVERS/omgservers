@@ -1,10 +1,10 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod;
 
-import com.omgservers.base.impl.service.eventHelpService.EventHelpService;
+import com.omgservers.base.module.internal.impl.service.eventService.EventService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.syncMatchmakerMethod.SyncMatchmakerMethod;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalRequest;
-import com.omgservers.base.factory.MatchmakerModelFactory;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerRoutedRequest;
+import com.omgservers.application.factory.MatchmakerModelFactory;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import jakarta.inject.Inject;
@@ -30,19 +30,19 @@ class DeleteMatchmakerMethodTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @InjectMock
-    EventHelpService eventHelpServiceMock;
+    EventService eventServiceMock;
 
     @Test
     void givenMatchmaker_whenDeleteMatchmaker_thenEventInsertedAndEntityDeleted() {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        final var createMatchmakerInternalRequest = new SyncMatchmakerInternalRequest(matchmaker);
+        final var createMatchmakerInternalRequest = new SyncMatchmakerRoutedRequest(matchmaker);
         syncMatchmakerMethod.syncMatchmaker(TIMEOUT, createMatchmakerInternalRequest);
 
-//        final var deleteMatchmakerInternalRequest = new DeleteMatchmakerInternalRequest(matchmaker.getId());
+//        final var deleteMatchmakerInternalRequest = new DeleteMatchmakerRoutedRequest(matchmaker.getId());
 //        assertTrue(deleteMatchmakerMethod.deleteMatchmaker(TIMEOUT, deleteMatchmakerInternalRequest).getDeleted());
 //
-//        ArgumentCaptor<InsertEventHelpRequest> insertEventRequest = ArgumentCaptor.forClass(InsertEventHelpRequest.class);
-//        Mockito.verify(eventHelpServiceMock, Mockito.times(2)).insertEvent(insertEventRequest.capture());
+//        ArgumentCaptor<InsertEventRequest> insertEventRequest = ArgumentCaptor.forClass(InsertEventRequest.class);
+//        Mockito.verify(eventServiceMock, Mockito.times(2)).insertEvent(insertEventRequest.capture());
 //        final var event = insertEventRequest.getValue().getEvent();
 //        assertEquals(EventQualifierEnum.EVENT_CREATED, event.getQualifier());
 //        final var eventBody = (EventCreatedEventBodyModel) event.getBody();

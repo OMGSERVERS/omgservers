@@ -1,8 +1,8 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.getRuntimeMethod;
 
 import com.omgservers.application.module.runtimeModule.impl.operation.selectRuntimeOperation.SelectRuntimeOperation;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.runtimeModule.GetRuntimeInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,8 +21,8 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeInternalRequest request) {
-        GetRuntimeInternalRequest.validate(request);
+    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request) {
+        GetRuntimeRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

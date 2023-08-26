@@ -1,17 +1,17 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createProjectMethod;
 
-import com.omgservers.base.factory.ProjectModelFactory;
-import com.omgservers.base.factory.StageModelFactory;
+import com.omgservers.application.factory.ProjectModelFactory;
+import com.omgservers.application.factory.StageModelFactory;
 import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.dto.tenantModule.GetTenantInternalRequest;
-import com.omgservers.dto.tenantModule.HasTenantPermissionInternalRequest;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.tenantModule.GetTenantRoutedRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncProjectInternalRequest;
-import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectRoutedRequest;
+import com.omgservers.dto.tenantModule.SyncStageRoutedRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
@@ -52,7 +52,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     Uni<Void> checkCreateProjectPermission(final Long tenantId, final Long userId) {
         final var permission = TenantPermissionEnum.CREATE_PROJECT;
-        final var hasTenantPermissionServiceRequest = new HasTenantPermissionInternalRequest(tenantId, userId, permission);
+        final var hasTenantPermissionServiceRequest = new HasTenantPermissionRoutedRequest(tenantId, userId, permission);
         return tenantModule.getTenantInternalService().hasTenantPermission(hasTenantPermissionServiceRequest)
                 .map(HasTenantPermissionResponse::getResult)
                 .invoke(result -> {
@@ -65,20 +65,20 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     }
 
     Uni<Void> checkTenant(final Long tenantId) {
-        final var getTenantServiceRequest = new GetTenantInternalRequest(tenantId);
+        final var getTenantServiceRequest = new GetTenantRoutedRequest(tenantId);
         return tenantModule.getTenantInternalService().getTenant(getTenantServiceRequest)
                 .replaceWithVoid();
     }
 
     Uni<CreateProjectDeveloperResponse> createProject(final Long tenantId, final Long userId) {
         final var project = projectModelFactory.create(tenantId, userId, ProjectConfigModel.create());
-        final var syncProjectInternalRequest = new SyncProjectInternalRequest(project);
+        final var syncProjectInternalRequest = new SyncProjectRoutedRequest(project);
         return tenantModule.getProjectInternalService().syncProject(syncProjectInternalRequest)
                 .flatMap(response -> {
                     final var stage = stageModelFactory.create(project.getId(),
                             generateIdOperation.generateId(),
                             new StageConfigModel());
-                    final var syncStageInternalRequest = new SyncStageInternalRequest(tenantId, stage);
+                    final var syncStageInternalRequest = new SyncStageRoutedRequest(tenantId, stage);
                     return tenantModule.getStageInternalService().syncStage(syncStageInternalRequest)
                             .replaceWith(new CreateProjectDeveloperResponse(project.getId(), stage.getId(), stage.getSecret()));
                 });

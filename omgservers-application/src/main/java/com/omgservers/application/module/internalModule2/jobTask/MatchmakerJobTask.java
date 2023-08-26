@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule2.jobTask;
 
-import com.omgservers.base.impl.service.jobSchedulerService.impl.JobTask;
+import com.omgservers.base.module.internal.impl.service.jobRoutedService.impl.JobTask;
 import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
 import com.omgservers.model.job.JobType;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +24,7 @@ public class MatchmakerJobTask implements JobTask {
 
     @Override
     public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new DoMatchmakingInternalRequest(entity);
+        final var request = new DoMatchmakingRoutedRequest(entity);
         //TODO: handle response (proceed or not)
         return matchmakerModule.getMatchmakerInternalService().doMatchmaking(request)
                 .replaceWith(true);

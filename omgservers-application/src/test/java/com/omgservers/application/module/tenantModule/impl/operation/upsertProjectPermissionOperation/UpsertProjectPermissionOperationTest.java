@@ -3,13 +3,13 @@ package com.omgservers.application.module.tenantModule.impl.operation.upsertProj
 import com.omgservers.application.module.tenantModule.impl.operation.upsertProjectOperation.UpsertProjectOperation;
 import com.omgservers.application.module.tenantModule.impl.operation.upsertTenantOperation.UpsertTenantOperation;
 import com.omgservers.model.project.ProjectConfigModel;
-import com.omgservers.base.factory.ProjectModelFactory;
+import com.omgservers.application.factory.ProjectModelFactory;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
-import com.omgservers.base.factory.ProjectPermissionModelFactory;
+import com.omgservers.application.factory.ProjectPermissionModelFactory;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.factory.TenantModelFactory;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.factory.TenantModelFactory;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

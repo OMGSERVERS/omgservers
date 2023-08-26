@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertUserOperation;
 
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.user.UserModel;
 import io.smallrye.mutiny.Uni;

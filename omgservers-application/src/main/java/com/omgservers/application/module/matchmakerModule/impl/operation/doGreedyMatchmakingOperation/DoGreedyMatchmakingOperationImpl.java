@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.doGreedyMatchmakingOperation;
 
-import com.omgservers.base.factory.MatchModelFactory;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.application.factory.MatchModelFactory;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.model.match.MatchGroupModel;
 import com.omgservers.model.match.MatchModel;

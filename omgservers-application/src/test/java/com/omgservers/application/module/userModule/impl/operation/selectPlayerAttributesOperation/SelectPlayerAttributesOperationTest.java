@@ -1,14 +1,14 @@
 package com.omgservers.application.module.userModule.impl.operation.selectPlayerAttributesOperation;
 
-import com.omgservers.base.factory.AttributeModelFactory;
+import com.omgservers.application.factory.AttributeModelFactory;
 import com.omgservers.model.player.PlayerConfigModel;
-import com.omgservers.base.factory.PlayerModelFactory;
-import com.omgservers.base.factory.UserModelFactory;
+import com.omgservers.application.factory.PlayerModelFactory;
+import com.omgservers.application.factory.UserModelFactory;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation.UpsertAttributeOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

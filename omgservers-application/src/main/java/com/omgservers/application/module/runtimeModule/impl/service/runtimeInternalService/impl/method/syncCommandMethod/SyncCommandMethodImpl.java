@@ -1,10 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncCommandMethod;
 
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.InternalModule;
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertCommandOperation.UpsertCommandOperation;
-import com.omgservers.base.impl.operation.changeOperation.ChangeOperation;
-import com.omgservers.dto.runtimeModule.SyncCommandInternalRequest;
+import com.omgservers.base.factory.LogModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.dto.internalModule.ChangeWithLogRequest;
+import com.omgservers.dto.internalModule.ChangeWithLogResponse;
+import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,17 +21,16 @@ class SyncCommandMethodImpl implements SyncCommandMethod {
     final InternalModule internalModule;
 
     final UpsertCommandOperation upsertCommandOperation;
-    final ChangeOperation changeOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandInternalRequest request) {
-        SyncCommandInternalRequest.validate(request);
+    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request) {
+        SyncCommandRoutedRequest.validate(request);
 
         final var command = request.getCommand();
-        return changeOperation.changeWithLog(request,
+        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
                         (sqlConnection, shardModel) -> upsertCommandOperation
                                 .upsertCommand(sqlConnection, shardModel.shard(), command),
                         inserted -> {
@@ -40,7 +40,8 @@ class SyncCommandMethodImpl implements SyncCommandMethod {
                                 return logModelFactory.create("Command was update, command=" + command);
                             }
                         }
-                )
+                ))
+                .map(ChangeWithLogResponse::getResult)
                 .map(SyncCommandInternalResponse::new);
     }
 }

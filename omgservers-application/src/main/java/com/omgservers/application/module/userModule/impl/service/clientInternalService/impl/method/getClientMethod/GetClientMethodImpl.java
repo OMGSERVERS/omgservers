@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.getClientMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.selectClientOperation.SelectClientOperation;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.dto.userModule.GetClientInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.dto.userModule.GetClientRoutedRequest;
 import com.omgservers.dto.userModule.GetClientInternalResponse;
 import com.omgservers.exception.ServerSideGoneException;
 import io.smallrye.mutiny.Uni;
@@ -21,8 +21,8 @@ class GetClientMethodImpl implements GetClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetClientInternalResponse> getClient(final GetClientInternalRequest request) {
-        GetClientInternalRequest.validate(request);
+    public Uni<GetClientInternalResponse> getClient(final GetClientRoutedRequest request) {
+        GetClientRoutedRequest.validate(request);
 
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

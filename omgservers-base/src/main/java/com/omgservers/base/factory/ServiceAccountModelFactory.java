@@ -1,6 +1,6 @@
 package com.omgservers.base.factory;
 
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.omgservers.application.module.tenantModule.impl.operation.hasProjectPermissionOperation;
 
-import com.omgservers.base.impl.operation.prepareShardSqlOperation.PrepareShardSqlOperation;
+import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

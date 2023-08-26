@@ -10,10 +10,11 @@ import com.omgservers.application.module.gatewayModule.impl.service.gatewayInter
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.WebsocketEndpointService;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.CleanUpHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.ReceiveTextMessageHelpRequest;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.ClientInternalService;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.CloseReason;
@@ -41,6 +42,8 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
     final ProcessMessageOperation processMessageOperation;
     final GetConfigOperation getConfigOperation;
 
+    final EventModelFactory eventModelFactory;
+
     @Override
     public void cleanUp(final CleanUpHelpRequest request) {
         CleanUpHelpRequest.validate(request);
@@ -58,8 +61,9 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
                 final var userId = assignedPlayer.getUserId();
                 final var clientId = assignedPlayer.getClientId();
                 final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
-                final var fireEventInternalRequest = new FireEventHelpRequest(eventBody);
-                internalModule.getEventHelpService().fireEvent(fireEventInternalRequest)
+                final var event = eventModelFactory.create(eventBody);
+                final var fireEventRoutedRequest = new FireEventRoutedRequest(event);
+                internalModule.getEventRoutedService().fireEvent(fireEventRoutedRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
             } else {
                 log.info("There wasn't assigned player, connection was deleted without notification, " +

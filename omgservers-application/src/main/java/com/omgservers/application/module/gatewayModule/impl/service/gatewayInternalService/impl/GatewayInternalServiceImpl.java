@@ -4,7 +4,7 @@ import com.omgservers.application.module.gatewayModule.impl.operation.getGateway
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.GatewayInternalService;
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.impl.method.assignPlayerMethod.AssignPlayerMethod;
 import com.omgservers.application.module.gatewayModule.impl.service.gatewayInternalService.impl.method.respondMessageMethod.RespondMessageMethod;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
 import com.omgservers.dto.gatewayModule.AssignPlayerInternalRequest;
 import com.omgservers.dto.gatewayModule.RespondMessageInternalRequest;
 import io.smallrye.mutiny.Uni;

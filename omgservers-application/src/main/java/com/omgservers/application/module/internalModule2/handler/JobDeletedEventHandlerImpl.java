@@ -1,8 +1,8 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
-import com.omgservers.dto.internalModule.UnscheduleJobInternalRequest;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.dto.internalModule.UnscheduleJobRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
@@ -29,8 +29,8 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();
         final var entity = body.getEntity();
-        final var request = new UnscheduleJobInternalRequest(shardKey, entity);
-        return internalModule.getJobSchedulerService().unscheduleJob(request)
+        final var request = new UnscheduleJobRoutedRequest(shardKey, entity);
+        return internalModule.getJobRoutedService().unscheduleJob(request)
                 .replaceWith(true);
     }
 }

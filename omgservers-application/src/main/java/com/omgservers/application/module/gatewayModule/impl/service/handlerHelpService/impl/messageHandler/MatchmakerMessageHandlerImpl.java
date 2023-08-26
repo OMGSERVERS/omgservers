@@ -3,10 +3,11 @@ package com.omgservers.application.module.gatewayModule.impl.service.handlerHelp
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetAssignedPlayerHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.eventHelpService.request.FireEventHelpRequest;
 import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.base.impl.operation.getConfigOperation.GetConfigOperation;
+import com.omgservers.base.factory.EventModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventRoutedRequest;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
@@ -30,6 +31,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
 
     final GetConfigOperation getConfigOperation;
 
+    final EventModelFactory eventModelFactory;
+
     @Override
     public MessageQualifierEnum getQualifier() {
         return MessageQualifierEnum.MATCHMAKER_MESSAGE;
@@ -47,8 +50,9 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
         final var mode = messageBody.getMode();
 
         final var eventBody = new MatchmakerRequestedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
-        final var request = new FireEventHelpRequest(eventBody);
-        return internalModule.getEventHelpService().fireEvent(request)
+        final var event = eventModelFactory.create(eventBody);
+        final var request = new FireEventRoutedRequest(event);
+        return internalModule.getEventRoutedService().fireEvent(request)
                 .replaceWithVoid();
     }
 

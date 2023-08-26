@@ -1,15 +1,15 @@
 package com.omgservers.application.module.internalModule2.handler;
 
-import com.omgservers.base.factory.ProjectPermissionModelFactory;
-import com.omgservers.base.InternalModule;
-import com.omgservers.base.impl.service.handlerHelpService.impl.EventHandler;
+import com.omgservers.application.factory.ProjectPermissionModelFactory;
+import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.base.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.impl.operation.generateIdOperation.GenerateIdOperation;
-import com.omgservers.base.impl.operation.getServersOperation.GetServersOperation;
-import com.omgservers.dto.tenantModule.GetProjectInternalRequest;
+import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.base.operation.getServers.GetServersOperation;
+import com.omgservers.dto.tenantModule.GetProjectRoutedRequest;
 import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncProjectPermissionRoutedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
@@ -51,14 +51,14 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ProjectModel> getProject(Long tenantId, Long id) {
-        final var request = new GetProjectInternalRequest(tenantId, id);
+        final var request = new GetProjectRoutedRequest(tenantId, id);
         return tenantModule.getProjectInternalService().getProject(request)
                 .map(GetProjectInternalResponse::getProject);
     }
 
     Uni<Void> syncCreateStagePermission(Long tenantId, Long projectId, Long userId) {
         final var permission = projectPermissionModelFactory.create(projectId, userId, ProjectPermissionEnum.CREATE_STAGE);
-        final var request = new SyncProjectPermissionInternalRequest(tenantId, permission);
+        final var request = new SyncProjectPermissionRoutedRequest(tenantId, permission);
         return tenantModule.getProjectInternalService().syncProjectPermission(request)
                 .replaceWithVoid();
     }

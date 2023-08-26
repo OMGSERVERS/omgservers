@@ -9,14 +9,14 @@ import com.omgservers.application.module.matchmakerModule.impl.service.matchmaki
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
 import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.base.impl.operation.checkShardOperation.CheckShardOperation;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalRequest;
+import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
 import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigInternalRequest;
+import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.matchmaker.MatchmakerModel;
@@ -46,8 +46,8 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
     @Override
-    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingInternalRequest request) {
-        DoMatchmakingInternalRequest.validate(request);
+    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingRoutedRequest request) {
+        DoMatchmakingRoutedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
@@ -70,13 +70,13 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     }
 
     Uni<MatchmakerModel> getMatchmaker(Long id) {
-        final var request = new GetMatchmakerInternalRequest(id);
+        final var request = new GetMatchmakerRoutedRequest(id);
         return matchmakerModule.getMatchmakerInternalService().getMatchmaker(request)
                 .map(GetMatchmakerInternalResponse::getMatchmaker);
     }
 
     Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
-        final var request = new GetStageInternalRequest(tenantId, stageId);
+        final var request = new GetStageRoutedRequest(tenantId, stageId);
         return tenantModule.getStageInternalService().getStage(request)
                 .map(GetStageInternalResponse::getStage)
                 .map(StageModel::getVersionId)
@@ -85,7 +85,7 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     }
 
     Uni<VersionStageConfigModel> getStageConfig(final Long versionId) {
-        final var request = new GetStageConfigInternalRequest(versionId);
+        final var request = new GetStageConfigRoutedRequest(versionId);
         return versionModule.getVersionInternalService().getStageConfig(request)
                 .map(GetStageConfigInternalResponse::getStageConfig);
     }

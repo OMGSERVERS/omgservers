@@ -8,17 +8,17 @@ import com.omgservers.application.module.tenantModule.impl.service.stageInternal
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.hasStagePermissionMethod.HasStagePermissionMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStageMethod.SyncStageMethod;
 import com.omgservers.application.module.tenantModule.impl.service.stageInternalService.impl.method.syncStagePermissionMethod.SyncStagePermissionMethod;
-import com.omgservers.base.impl.operation.calculateShardOperation.CalculateShardOperation;
-import com.omgservers.base.impl.operation.handleInternalRequestOperation.HandleInternalRequestOperation;
-import com.omgservers.dto.tenantModule.DeleteStageInternalRequest;
+import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.tenantModule.DeleteStageRoutedRequest;
 import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageInternalRequest;
+import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.HasStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStageInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStageRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStagePermissionInternalRequest;
+import com.omgservers.dto.tenantModule.SyncStagePermissionRoutedRequest;
 import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,45 +42,45 @@ public class StageInternalServiceImpl implements StageInternalService {
     final GetStageMethod getStageMethod;
 
     @Override
-    public Uni<GetStageInternalResponse> getStage(GetStageInternalRequest request) {
+    public Uni<GetStageInternalResponse> getStage(GetStageRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetStageInternalRequest::validate,
+                GetStageRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getStage,
                 getStageMethod::getStage);
     }
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageInternalRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncStageInternalRequest::validate,
+                SyncStageRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncStage,
                 syncStageMethod::syncStage);
     }
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageInternalRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteStageInternalRequest::validate,
+                DeleteStageRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::deleteStage,
                 deleteStageMethod::deleteStage);
     }
 
     @Override
-    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionInternalRequest request) {
+    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasStagePermissionInternalRequest::validate,
+                HasStagePermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::hasStagePermission,
                 hasStagePermissionMethod::hasStagePermission);
     }
 
     @Override
-    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionInternalRequest request) {
+    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionRoutedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncStagePermissionInternalRequest::validate,
+                SyncStagePermissionRoutedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncStagePermission,
                 syncStagePermissionMethod::syncStagePermission);
