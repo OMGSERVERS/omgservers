@@ -9,7 +9,7 @@ import com.omgservers.application.factory.PlayerModelFactory;
 import com.omgservers.application.factory.UserModelFactory;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

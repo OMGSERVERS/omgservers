@@ -1,10 +1,10 @@
 package com.omgservers.application.module.userModule.impl.service.attributeInternalService.impl.method.deleteAttributeMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.deleteAttributeOperation.DeleteAttributeOperation;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeRequest;
 import com.omgservers.dto.internalModule.ChangeResponse;
-import com.omgservers.dto.userModule.DeleteAttributeRoutedRequest;
+import com.omgservers.dto.userModule.DeleteAttributeShardRequest;
 import com.omgservers.dto.userModule.DeleteAttributeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,8 +23,8 @@ class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteAttributeInternalResponse> deleteAttribute(final DeleteAttributeRoutedRequest request) {
-        DeleteAttributeRoutedRequest.validate(request);
+    public Uni<DeleteAttributeInternalResponse> deleteAttribute(final DeleteAttributeShardRequest request) {
+        DeleteAttributeShardRequest.validate(request);
 
         final var player = request.getPlayerId();
         final var name = request.getName();

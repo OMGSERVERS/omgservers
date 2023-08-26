@@ -1,14 +1,14 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi;
 
-import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
+import com.omgservers.dto.versionModule.DeleteVersionShardRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
-import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
+import com.omgservers.dto.versionModule.GetBytecodeShardRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
+import com.omgservers.dto.versionModule.GetStageConfigShardRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
+import com.omgservers.dto.versionModule.GetVersionShardRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
+import com.omgservers.dto.versionModule.SyncVersionShardRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
@@ -21,45 +21,45 @@ public interface VersionServiceApi {
 
     @PUT
     @Path("/get-version")
-    Uni<GetVersionInternalResponse> getVersion(GetVersionRoutedRequest request);
+    Uni<GetVersionInternalResponse> getVersion(GetVersionShardRequest request);
 
-    default GetVersionInternalResponse getVersion(long timeout, GetVersionRoutedRequest request) {
+    default GetVersionInternalResponse getVersion(long timeout, GetVersionShardRequest request) {
         return getVersion(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-version")
-    Uni<SyncVersionInternalResponse> syncVersion(SyncVersionRoutedRequest request);
+    Uni<SyncVersionInternalResponse> syncVersion(SyncVersionShardRequest request);
 
-    default SyncVersionInternalResponse syncVersion(long timeout, SyncVersionRoutedRequest request) {
+    default SyncVersionInternalResponse syncVersion(long timeout, SyncVersionShardRequest request) {
         return syncVersion(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-version")
-    Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionRoutedRequest request);
+    Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionShardRequest request);
 
-    default void deleteVersion(long timeout, DeleteVersionRoutedRequest request) {
+    default void deleteVersion(long timeout, DeleteVersionShardRequest request) {
         deleteVersion(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-bytecode")
-    Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeRoutedRequest request);
+    Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeShardRequest request);
 
-    default GetBytecodeInternalResponse getBytecode(long timeout, GetBytecodeRoutedRequest request) {
+    default GetBytecodeInternalResponse getBytecode(long timeout, GetBytecodeShardRequest request) {
         return getBytecode(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-stage-config")
-    Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigRoutedRequest request);
+    Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigShardRequest request);
 
-    default GetStageConfigInternalResponse getStageConfig(long timeout, GetStageConfigRoutedRequest request) {
+    default GetStageConfigInternalResponse getStageConfig(long timeout, GetStageConfigShardRequest request) {
         return getStageConfig(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

@@ -2,7 +2,7 @@ package com.omgservers.application.module.adminModule.impl.service.adminWebServi
 
 import com.omgservers.application.module.adminModule.impl.service.adminHelpService.AdminHelpService;
 import com.omgservers.application.module.adminModule.impl.service.adminWebService.AdminWebService;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
 import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
 import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;

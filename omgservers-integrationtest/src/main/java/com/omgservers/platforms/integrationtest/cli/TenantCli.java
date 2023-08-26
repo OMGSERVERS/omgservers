@@ -1,13 +1,13 @@
 package com.omgservers.platforms.integrationtest.cli;
 
-import com.omgservers.dto.tenantModule.HasProjectPermissionRoutedRequest;
-import com.omgservers.dto.tenantModule.HasStagePermissionRoutedRequest;
-import com.omgservers.dto.tenantModule.HasTenantPermissionRoutedRequest;
+import com.omgservers.dto.tenantModule.GetTenantShardRequest;
+import com.omgservers.dto.tenantModule.HasProjectPermissionShardRequest;
+import com.omgservers.dto.tenantModule.HasStagePermissionShardRequest;
+import com.omgservers.dto.tenantModule.HasTenantPermissionShardRequest;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.dto.tenantModule.GetTenantRoutedRequest;
 import com.omgservers.platforms.integrationtest.operations.getTenantServiceApiClientOperation.TenantServiceApiClient;
 import com.omgservers.platforms.integrationtest.operations.getConfigOperation.GetConfigOperation;
 import com.omgservers.platforms.integrationtest.operations.getTenantServiceApiClientOperation.GetTenantServiceApiClientOperation;
@@ -42,25 +42,25 @@ public class TenantCli {
     }
 
     public TenantModel getTenant(Long id) {
-        final var response = tenantClient.getTenant(TIMEOUT, new GetTenantRoutedRequest(id));
+        final var response = tenantClient.getTenant(TIMEOUT, new GetTenantShardRequest(id));
         return response.getTenant();
     }
 
     public Boolean hasTenantPermission(Long tenantId, Long userId, TenantPermissionEnum permission) {
         final var response = tenantClient
-                .hasTenantPermission(TIMEOUT, new HasTenantPermissionRoutedRequest(tenantId, userId, permission));
+                .hasTenantPermission(TIMEOUT, new HasTenantPermissionShardRequest(tenantId, userId, permission));
         return response.getResult();
     }
 
     public Boolean hasProjectPermission(Long tenantId, Long projectId, Long userId, ProjectPermissionEnum permission) {
         final var response = tenantClient
-                .hasProjectPermission(TIMEOUT, new HasProjectPermissionRoutedRequest(tenantId, projectId, userId, permission));
+                .hasProjectPermission(TIMEOUT, new HasProjectPermissionShardRequest(tenantId, projectId, userId, permission));
         return response.getResult();
     }
 
     public Boolean hasStagePermission(Long tenantId, Long stageId, Long userId, StagePermissionEnum permission) {
         final var response = tenantClient
-                .hasStagePermission(TIMEOUT, new HasStagePermissionRoutedRequest(tenantId, stageId, userId, permission));
+                .hasStagePermission(TIMEOUT, new HasStagePermissionShardRequest(tenantId, stageId, userId, permission));
         return response.getResult();
     }
 }

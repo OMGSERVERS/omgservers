@@ -7,39 +7,39 @@ import com.omgservers.application.module.userModule.impl.service.playerInternalS
 import com.omgservers.application.module.userModule.impl.service.tokenInternalService.TokenInternalService;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.UserInternalService;
 import com.omgservers.application.module.userModule.impl.service.userWebService.UserWebService;
-import com.omgservers.dto.userModule.CreateTokenRoutedRequest;
+import com.omgservers.dto.userModule.CreateTokenShardRequest;
 import com.omgservers.dto.userModule.CreateTokenInternalResponse;
-import com.omgservers.dto.userModule.DeleteAttributeRoutedRequest;
+import com.omgservers.dto.userModule.DeleteAttributeShardRequest;
 import com.omgservers.dto.userModule.DeleteAttributeInternalResponse;
-import com.omgservers.dto.userModule.DeleteClientRoutedRequest;
+import com.omgservers.dto.userModule.DeleteClientShardRequest;
 import com.omgservers.dto.userModule.DeleteClientInternalResponse;
-import com.omgservers.dto.userModule.DeleteObjectRoutedRequest;
+import com.omgservers.dto.userModule.DeleteObjectShardRequest;
 import com.omgservers.dto.userModule.DeleteObjectInternalResponse;
-import com.omgservers.dto.userModule.DeletePlayerRoutedRequest;
+import com.omgservers.dto.userModule.DeletePlayerShardRequest;
 import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
-import com.omgservers.dto.userModule.GetAttributeRoutedRequest;
+import com.omgservers.dto.userModule.GetAttributeShardRequest;
 import com.omgservers.dto.userModule.GetAttributeInternalResponse;
-import com.omgservers.dto.userModule.GetClientRoutedRequest;
+import com.omgservers.dto.userModule.GetClientShardRequest;
 import com.omgservers.dto.userModule.GetClientInternalResponse;
-import com.omgservers.dto.userModule.GetObjectRoutedRequest;
+import com.omgservers.dto.userModule.GetObjectShardRequest;
 import com.omgservers.dto.userModule.GetObjectInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerAttributesRoutedRequest;
+import com.omgservers.dto.userModule.GetPlayerAttributesShardRequest;
 import com.omgservers.dto.userModule.GetPlayerAttributesInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerRoutedRequest;
+import com.omgservers.dto.userModule.GetPlayerShardRequest;
 import com.omgservers.dto.userModule.GetPlayerInternalResponse;
 import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
 import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
-import com.omgservers.dto.userModule.SyncAttributeRoutedRequest;
+import com.omgservers.dto.userModule.SyncAttributeShardRequest;
 import com.omgservers.dto.userModule.SyncAttributeInternalResponse;
-import com.omgservers.dto.userModule.SyncClientRoutedRequest;
+import com.omgservers.dto.userModule.SyncClientShardRequest;
 import com.omgservers.dto.userModule.SyncClientInternalResponse;
-import com.omgservers.dto.userModule.SyncObjectRoutedRequest;
+import com.omgservers.dto.userModule.SyncObjectShardRequest;
 import com.omgservers.dto.userModule.SyncObjectInternalResponse;
-import com.omgservers.dto.userModule.SyncPlayerRoutedRequest;
+import com.omgservers.dto.userModule.SyncPlayerShardRequest;
 import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
-import com.omgservers.dto.userModule.SyncUserRoutedRequest;
+import com.omgservers.dto.userModule.SyncUserShardRequest;
 import com.omgservers.dto.userModule.SyncUserInternalResponse;
-import com.omgservers.dto.userModule.ValidateCredentialsRoutedRequest;
+import com.omgservers.dto.userModule.ValidateCredentialsShardRequest;
 import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -60,17 +60,17 @@ class UserWebServiceImpl implements UserWebService {
     final ClientInternalService internalService;
 
     @Override
-    public Uni<SyncUserInternalResponse> syncUser(SyncUserRoutedRequest request) {
+    public Uni<SyncUserInternalResponse> syncUser(SyncUserShardRequest request) {
         return userInternalService.syncUser(request);
     }
 
     @Override
-    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsRoutedRequest request) {
+    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsShardRequest request) {
         return userInternalService.validateCredentials(request);
     }
 
     @Override
-    public Uni<CreateTokenInternalResponse> createToken(CreateTokenRoutedRequest request) {
+    public Uni<CreateTokenInternalResponse> createToken(CreateTokenShardRequest request) {
         return tokenInternalService.createToken(request);
     }
 
@@ -80,67 +80,67 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<GetPlayerInternalResponse> getPlayer(GetPlayerRoutedRequest request) {
+    public Uni<GetPlayerInternalResponse> getPlayer(GetPlayerShardRequest request) {
         return playerInternalService.getPlayer(request);
     }
 
     @Override
-    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerRoutedRequest request) {
+    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerShardRequest request) {
         return playerInternalService.syncPlayer(request);
     }
 
     @Override
-    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerRoutedRequest request) {
+    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerShardRequest request) {
         return playerInternalService.deletePlayer(request);
     }
 
     @Override
-    public Uni<SyncClientInternalResponse> syncClient(SyncClientRoutedRequest request) {
+    public Uni<SyncClientInternalResponse> syncClient(SyncClientShardRequest request) {
         return internalService.syncClient(request);
     }
 
     @Override
-    public Uni<GetClientInternalResponse> getClient(GetClientRoutedRequest request) {
+    public Uni<GetClientInternalResponse> getClient(GetClientShardRequest request) {
         return internalService.getClient(request);
     }
 
     @Override
-    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientRoutedRequest request) {
+    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientShardRequest request) {
         return internalService.deleteClient(request);
     }
 
     @Override
-    public Uni<GetAttributeInternalResponse> getAttribute(GetAttributeRoutedRequest request) {
+    public Uni<GetAttributeInternalResponse> getAttribute(GetAttributeShardRequest request) {
         return attributeInternalService.getAttribute(request);
     }
 
     @Override
-    public Uni<GetPlayerAttributesInternalResponse> getPlayerAttributes(GetPlayerAttributesRoutedRequest request) {
+    public Uni<GetPlayerAttributesInternalResponse> getPlayerAttributes(GetPlayerAttributesShardRequest request) {
         return attributeInternalService.getPlayerAttributes(request);
     }
 
     @Override
-    public Uni<SyncAttributeInternalResponse> syncAttribute(SyncAttributeRoutedRequest request) {
+    public Uni<SyncAttributeInternalResponse> syncAttribute(SyncAttributeShardRequest request) {
         return attributeInternalService.syncAttribute(request);
     }
 
     @Override
-    public Uni<DeleteAttributeInternalResponse> deleteAttribute(DeleteAttributeRoutedRequest request) {
+    public Uni<DeleteAttributeInternalResponse> deleteAttribute(DeleteAttributeShardRequest request) {
         return attributeInternalService.deleteAttribute(request);
     }
 
     @Override
-    public Uni<GetObjectInternalResponse> getObject(GetObjectRoutedRequest request) {
+    public Uni<GetObjectInternalResponse> getObject(GetObjectShardRequest request) {
         return objectInternalService.getObject(request);
     }
 
     @Override
-    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectRoutedRequest request) {
+    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectShardRequest request) {
         return objectInternalService.syncObject(request);
     }
 
     @Override
-    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectRoutedRequest request) {
+    public Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectShardRequest request) {
         return objectInternalService.deleteObject(request);
     }
 }

@@ -1,11 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteCommandMethod;
 
 import com.omgservers.application.module.runtimeModule.impl.operation.deleteCommandOperation.DeleteCommandOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandShardRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeleteCommandMethodImpl implements DeleteCommandMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request) {
-        DeleteCommandRoutedRequest.validate(request);
+    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardRequest request) {
+        DeleteCommandShardRequest.validate(request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

@@ -1,11 +1,11 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.method.deleteMatchmakerMethod;
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteMatchmakerOperation.DeleteMatchmakerOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.matchmakerModule.DeleteMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +27,8 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerRoutedRequest request) {
-        DeleteMatchmakerRoutedRequest.validate(request);
+    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerShardRequest request) {
+        DeleteMatchmakerShardRequest.validate(request);
 
         final var id = request.getId();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

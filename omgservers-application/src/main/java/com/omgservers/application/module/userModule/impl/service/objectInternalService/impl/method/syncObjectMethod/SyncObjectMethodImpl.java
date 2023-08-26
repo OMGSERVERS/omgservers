@@ -2,11 +2,11 @@ package com.omgservers.application.module.userModule.impl.service.objectInternal
 
 import com.omgservers.application.module.userModule.impl.operation.upsertObjectOperation.UpsertObjectOperation;
 import com.omgservers.application.module.userModule.impl.operation.validateObjectOperation.ValidateObjectOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.userModule.SyncObjectRoutedRequest;
+import com.omgservers.dto.userModule.SyncObjectShardRequest;
 import com.omgservers.dto.userModule.SyncObjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -28,8 +28,8 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectRoutedRequest request) {
-        SyncObjectRoutedRequest.validate(request);
+    public Uni<SyncObjectInternalResponse> syncObject(SyncObjectShardRequest request) {
+        SyncObjectShardRequest.validate(request);
 
         final var userId = request.getUserId();
         final var object = request.getObject();

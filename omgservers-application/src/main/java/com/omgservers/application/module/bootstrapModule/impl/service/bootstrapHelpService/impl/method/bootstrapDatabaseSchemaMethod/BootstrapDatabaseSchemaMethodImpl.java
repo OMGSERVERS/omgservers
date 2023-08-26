@@ -1,6 +1,6 @@
 package com.omgservers.application.module.bootstrapModule.impl.service.bootstrapHelpService.impl.method.bootstrapDatabaseSchemaMethod;
 
-import com.omgservers.base.operation.getConfig.GetConfigOperation;
+import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
-import java.util.stream.IntStream;
 
 @Slf4j
 @ApplicationScoped
@@ -21,21 +20,22 @@ class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod
 
     @Override
     public Uni<Void> bootstrapDatabaseSchema() {
-        if (getConfigOperation.getConfig().disableMigration()) {
-            return Uni.createFrom().voidItem()
-                    .invoke(voidItem -> log.warn("Migration was disabled, skip operation"));
-        } else {
-            return Uni.createFrom().voidItem()
-                    .flatMap(voidItem -> migrateInternalSchema())
-                    .flatMap(voidItem -> {
-                        final var shardCount = getConfigOperation.getConfig().shardCount();
-                        final var migrationConcurrency = getConfigOperation.getConfig().migrationConcurrency();
-                        final var migrationTasks = IntStream.range(0, shardCount).mapToObj(this::migrateShard).toList();
-                        return Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)
-                                .andFailFast().replaceWithVoid();
-                    })
-                    .invoke(voidItem -> log.info("Migration was finished"));
-        }
+        return Uni.createFrom().voidItem();
+//        if (getConfigOperation.getConfig().disableMigration()) {
+//            return Uni.createFrom().voidItem()
+//                    .invoke(voidItem -> log.warn("Migration was disabled, skip operation"));
+//        } else {
+//            return Uni.createFrom().voidItem()
+//                    .flatMap(voidItem -> migrateInternalSchema())
+//                    .flatMap(voidItem -> {
+//                        final var shardCount = getConfigOperation.getConfig().shardCount();
+//                        final var migrationConcurrency = getConfigOperation.getConfig().migrationConcurrency();
+//                        final var migrationTasks = IntStream.range(0, shardCount).mapToObj(this::migrateShard).toList();
+//                        return Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)
+//                                .andFailFast().replaceWithVoid();
+//                    })
+//                    .invoke(voidItem -> log.info("Migration was finished"));
+//        }
     }
 
     Uni<Void> migrateInternalSchema() {
@@ -63,14 +63,14 @@ class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod
                 .dataSource(dataSource)
                 .locations("db/internal")
                 .createSchemas(true)
-                .defaultSchema("internal")
+                .defaultSchema("db/internal")
                 .load();
     }
 
     Flyway getFlywayForShardSchema(Integer shard) {
         return Flyway.configure()
                 .dataSource(dataSource)
-                .locations("db/shard")
+                .locations("shard")
                 .createSchemas(true)
                 .defaultSchema(String.format("shard_%05d", shard))
                 .load();

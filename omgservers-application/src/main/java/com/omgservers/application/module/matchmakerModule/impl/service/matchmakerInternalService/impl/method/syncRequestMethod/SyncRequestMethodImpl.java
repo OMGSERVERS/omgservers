@@ -2,11 +2,11 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertRequestOperation.UpsertRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -29,8 +29,8 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestRoutedRequest request) {
-        SyncRequestRoutedRequest.validate(request);
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestShardRequest request) {
+        SyncRequestShardRequest.validate(request);
 
         final var requestModel = request.getRequest();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,

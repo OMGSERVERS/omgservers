@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.syncUserMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.userModule.SyncUserRoutedRequest;
+import com.omgservers.dto.userModule.SyncUserShardRequest;
 import com.omgservers.dto.userModule.SyncUserInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class SyncUserMethodImpl implements SyncUserMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncUserInternalResponse> syncUser(final SyncUserRoutedRequest request) {
-        SyncUserRoutedRequest.validate(request);
+    public Uni<SyncUserInternalResponse> syncUser(final SyncUserShardRequest request) {
+        SyncUserShardRequest.validate(request);
 
         final var user = request.getUser();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,

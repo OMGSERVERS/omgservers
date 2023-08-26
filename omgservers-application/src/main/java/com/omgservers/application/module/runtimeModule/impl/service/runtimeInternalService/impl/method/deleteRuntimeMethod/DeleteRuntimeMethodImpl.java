@@ -1,11 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.deleteRuntimeMethod;
 
 import com.omgservers.application.module.runtimeModule.impl.operation.deleteRuntimeOperation.DeleteRuntimeOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +27,8 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request) {
-        DeleteRuntimeRoutedRequest.validate(request);
+    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardRequest request) {
+        DeleteRuntimeShardRequest.validate(request);
 
         final var id = request.getId();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

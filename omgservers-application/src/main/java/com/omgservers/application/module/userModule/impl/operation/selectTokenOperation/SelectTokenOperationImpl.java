@@ -1,7 +1,7 @@
 package com.omgservers.application.module.userModule.impl.operation.selectTokenOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.token.TokenModel;

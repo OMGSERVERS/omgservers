@@ -2,12 +2,12 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.upsertMatchOperation.UpsertMatchOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.factory.EventModelFactory;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.EventModelFactory;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
@@ -32,8 +32,8 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchRoutedRequest request) {
-        SyncMatchRoutedRequest.validate(request);
+    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchShardRequest request) {
+        SyncMatchShardRequest.validate(request);
 
         final var match = request.getMatch();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

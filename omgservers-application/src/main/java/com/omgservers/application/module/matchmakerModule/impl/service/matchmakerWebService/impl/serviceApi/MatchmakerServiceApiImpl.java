@@ -1,24 +1,24 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerWebService.impl.serviceApi;
 
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerWebService.MatchmakerWebService;
-import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
-import com.omgservers.dto.matchmakerModule.DeleteMatchRoutedRequest;
+import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.dto.matchmakerModule.DeleteMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingShardRequest;
 import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
@@ -38,55 +38,55 @@ public class MatchmakerServiceApiImpl implements MatchmakerServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerRoutedRequest request) {
+    public Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncMatchmaker);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerRoutedRequest request) {
+    public Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::getMatchmaker);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerRoutedRequest request) {
+    public Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteMatchmaker);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestRoutedRequest request) {
+    public Uni<SyncRequestInternalResponse> syncRequest(SyncRequestShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncRequest);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestRoutedRequest request) {
+    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteRequest);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetMatchInternalResponse> getMatch(GetMatchRoutedRequest request) {
+    public Uni<GetMatchInternalResponse> getMatch(GetMatchShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::getMatch);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchRoutedRequest request) {
+    public Uni<SyncMatchInternalResponse> syncMatch(SyncMatchShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncMatch);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchRoutedRequest request) {
+    public Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteMatch);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingRoutedRequest request) {
+    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::doMatchmaking);
     }
 }

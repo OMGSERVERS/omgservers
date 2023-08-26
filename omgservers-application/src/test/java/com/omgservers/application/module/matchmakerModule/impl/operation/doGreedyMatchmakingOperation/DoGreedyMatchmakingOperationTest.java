@@ -5,7 +5,7 @@ import com.omgservers.model.request.RequestModel;
 import com.omgservers.application.factory.RequestModelFactory;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

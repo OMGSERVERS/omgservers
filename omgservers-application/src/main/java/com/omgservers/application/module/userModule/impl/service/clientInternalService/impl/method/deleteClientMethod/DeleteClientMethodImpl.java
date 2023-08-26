@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.deleteClientMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.deleteClientOperation.DeleteClientOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.userModule.DeleteClientRoutedRequest;
+import com.omgservers.dto.userModule.DeleteClientShardRequest;
 import com.omgservers.dto.userModule.DeleteClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteClientInternalResponse> deleteClient(final DeleteClientRoutedRequest request) {
-        DeleteClientRoutedRequest.validate(request);
+    public Uni<DeleteClientInternalResponse> deleteClient(final DeleteClientShardRequest request) {
+        DeleteClientShardRequest.validate(request);
 
         final var clientId = request.getClientId();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,

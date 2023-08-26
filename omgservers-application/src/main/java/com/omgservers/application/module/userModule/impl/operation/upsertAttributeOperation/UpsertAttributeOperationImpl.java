@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertAttributeOperation;
 
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.attribute.AttributeModel;
 import io.smallrye.mutiny.Uni;

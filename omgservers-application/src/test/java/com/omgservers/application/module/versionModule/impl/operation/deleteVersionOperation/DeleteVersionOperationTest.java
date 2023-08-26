@@ -5,7 +5,7 @@ import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.application.factory.VersionModelFactory;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

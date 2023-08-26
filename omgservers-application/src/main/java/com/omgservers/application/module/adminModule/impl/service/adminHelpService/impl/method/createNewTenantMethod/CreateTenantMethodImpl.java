@@ -1,12 +1,12 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewTenantMethod;
 
-import com.omgservers.application.factory.TenantModelFactory;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
 import com.omgservers.dto.adminModule.CreateTenantAdminResponse;
-import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
-import com.omgservers.dto.tenantModule.SyncTenantRoutedRequest;
+import com.omgservers.dto.tenantModule.SyncTenantShardRequest;
 import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.impl.factory.TenantModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -28,8 +28,8 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
         CreateTenantAdminRequest.validate(request);
 
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        final var syncTenantInternalRequest = new SyncTenantRoutedRequest(tenant);
-        return tenantModule.getTenantInternalService().syncTenant(syncTenantInternalRequest)
+        final var syncTenantInternalRequest = new SyncTenantShardRequest(tenant);
+        return tenantModule.getTenantShardedService().syncTenant(syncTenantInternalRequest)
                 .replaceWith(new CreateTenantAdminResponse(tenant.getId()));
     }
 }

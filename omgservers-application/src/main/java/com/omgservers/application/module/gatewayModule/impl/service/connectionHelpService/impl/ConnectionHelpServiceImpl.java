@@ -11,7 +11,7 @@ import com.omgservers.application.module.gatewayModule.impl.service.connectionHe
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetAssignedPlayerHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetConnectionHelpResponse;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.response.GetSessionHelpResponse;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import jakarta.enterprise.context.ApplicationScoped;

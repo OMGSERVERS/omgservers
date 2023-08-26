@@ -1,16 +1,16 @@
 package com.omgservers.application.module.versionModule.impl.service.versionWebService.impl.serviceApi;
 
 import com.omgservers.application.module.versionModule.impl.service.versionWebService.VersionWebService;
-import com.omgservers.base.operation.handleApiRequest.HandleApiRequestOperation;
-import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
+import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.dto.versionModule.DeleteVersionShardRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
-import com.omgservers.dto.versionModule.GetBytecodeRoutedRequest;
+import com.omgservers.dto.versionModule.GetBytecodeShardRequest;
 import com.omgservers.dto.versionModule.GetBytecodeInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
+import com.omgservers.dto.versionModule.GetStageConfigShardRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionRoutedRequest;
+import com.omgservers.dto.versionModule.GetVersionShardRequest;
 import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
+import com.omgservers.dto.versionModule.SyncVersionShardRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
@@ -29,31 +29,31 @@ public class VersionServiceApiImpl implements VersionServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetVersionInternalResponse> getVersion(GetVersionRoutedRequest request) {
+    public Uni<GetVersionInternalResponse> getVersion(GetVersionShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::getVersion);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionRoutedRequest request) {
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::syncVersion);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionRoutedRequest request) {
+    public Uni<DeleteVersionInternalResponse> deleteVersion(DeleteVersionShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::deleteVersion);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeRoutedRequest request) {
+    public Uni<GetBytecodeInternalResponse> getBytecode(GetBytecodeShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::getBytecode);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigRoutedRequest request) {
+    public Uni<GetStageConfigInternalResponse> getStageConfig(GetStageConfigShardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, versionWebService::getStageConfig);
     }
 }

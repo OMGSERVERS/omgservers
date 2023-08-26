@@ -7,7 +7,7 @@ import com.omgservers.model.runtimeCommand.body.StartRuntimeCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.application.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

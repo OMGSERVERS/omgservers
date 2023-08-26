@@ -1,6 +1,6 @@
 package com.omgservers.dto.internalModule;
 
-import com.omgservers.dto.RoutedRequest;
+import com.omgservers.dto.ShardRequest;
 import com.omgservers.model.shard.ShardModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -21,6 +21,6 @@ public class ChangeRequest {
         }
     }
 
-    RoutedRequest request;
+    ShardRequest request;
     BiFunction<SqlConnection, ShardModel, Uni<Boolean>> changeFunction;
 }

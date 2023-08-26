@@ -1,6 +1,6 @@
 package com.omgservers.application.factory;
 
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;

@@ -1,15 +1,15 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.dto.runtimeModule.DeleteCommandRoutedRequest;
+import com.omgservers.dto.runtimeModule.DeleteCommandShardRequest;
 import com.omgservers.dto.runtimeModule.DeleteCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.DeleteRuntimeRoutedRequest;
+import com.omgservers.dto.runtimeModule.DeleteRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.DeleteRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
+import com.omgservers.dto.runtimeModule.DoUpdateShardRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncCommandRoutedRequest;
+import com.omgservers.dto.runtimeModule.SyncCommandShardRequest;
 import com.omgservers.dto.runtimeModule.SyncCommandInternalResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
@@ -20,25 +20,25 @@ public interface RuntimeServiceApi {
 
     @PUT
     @Path("/get-runtime")
-    Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeRoutedRequest request);
+    Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeShardRequest request);
 
     @PUT
     @Path("/sync-runtime")
-    Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request);
+    Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardRequest request);
 
     @PUT
     @Path("/delete-runtime")
-    Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeRoutedRequest request);
+    Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardRequest request);
 
     @PUT
     @Path("/sync-command")
-    Uni<SyncCommandInternalResponse> syncCommand(SyncCommandRoutedRequest request);
+    Uni<SyncCommandInternalResponse> syncCommand(SyncCommandShardRequest request);
 
     @PUT
     @Path("/delete-command")
-    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandRoutedRequest request);
+    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardRequest request);
 
     @PUT
     @Path("/do-update")
-    Uni<Void> doUpdate(DoUpdateRoutedRequest request);
+    Uni<Void> doUpdate(DoUpdateShardRequest request);
 }

@@ -9,7 +9,7 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.application.module.userModule.impl.operation.upsertObjectOperation.UpsertObjectOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.upsertUserOperation.UpsertUserOperation;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

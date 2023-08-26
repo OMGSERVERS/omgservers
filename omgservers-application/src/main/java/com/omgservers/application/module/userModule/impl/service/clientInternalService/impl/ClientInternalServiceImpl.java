@@ -6,13 +6,13 @@ import com.omgservers.application.module.userModule.impl.service.clientInternalS
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.deleteClientMethod.DeleteClientMethod;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.getClientMethod.GetClientMethod;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.syncClientMethod.SyncClientMethod;
-import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.userModule.DeleteClientRoutedRequest;
+import com.omgservers.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.DeleteClientShardRequest;
 import com.omgservers.dto.userModule.DeleteClientInternalResponse;
-import com.omgservers.dto.userModule.GetClientRoutedRequest;
+import com.omgservers.dto.userModule.GetClientShardRequest;
 import com.omgservers.dto.userModule.GetClientInternalResponse;
-import com.omgservers.dto.userModule.SyncClientRoutedRequest;
+import com.omgservers.dto.userModule.SyncClientShardRequest;
 import com.omgservers.dto.userModule.SyncClientInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,27 +34,27 @@ class ClientInternalServiceImpl implements ClientInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<SyncClientInternalResponse> syncClient(SyncClientRoutedRequest request) {
+    public Uni<SyncClientInternalResponse> syncClient(SyncClientShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncClientRoutedRequest::validate,
+                SyncClientShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::syncClient,
                 syncClientMethod::syncClient);
     }
 
     @Override
-    public Uni<GetClientInternalResponse> getClient(GetClientRoutedRequest request) {
+    public Uni<GetClientInternalResponse> getClient(GetClientShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetClientRoutedRequest::validate,
+                GetClientShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::getClient,
                 getClientMethod::getClient);
     }
 
     @Override
-    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientRoutedRequest request) {
+    public Uni<DeleteClientInternalResponse> deleteClient(DeleteClientShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteClientRoutedRequest::validate,
+                DeleteClientShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::deleteClient,
                 deleteClientMethod::deleteClient);

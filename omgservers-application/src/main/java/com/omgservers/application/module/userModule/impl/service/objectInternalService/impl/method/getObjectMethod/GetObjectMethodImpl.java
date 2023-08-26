@@ -1,8 +1,8 @@
 package com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.getObjectMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.selectObjectOperation.SelectObjectOperation;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.userModule.GetObjectRoutedRequest;
+import com.omgservers.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.userModule.GetObjectShardRequest;
 import com.omgservers.dto.userModule.GetObjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,8 +20,8 @@ class GetObjectMethodImpl implements GetObjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetObjectInternalResponse> getObject(final GetObjectRoutedRequest request) {
-        GetObjectRoutedRequest.validate(request);
+    public Uni<GetObjectInternalResponse> getObject(final GetObjectShardRequest request) {
+        GetObjectShardRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

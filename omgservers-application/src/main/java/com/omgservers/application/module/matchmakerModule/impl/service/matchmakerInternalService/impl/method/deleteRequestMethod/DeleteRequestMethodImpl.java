@@ -2,11 +2,11 @@ package com.omgservers.application.module.matchmakerModule.impl.service.matchmak
 
 import com.omgservers.application.module.matchmakerModule.impl.operation.deleteRequestOperation.DeleteRequestOperation;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -29,8 +29,8 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestRoutedRequest request) {
-        DeleteRequestRoutedRequest.validate(request);
+    public Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestShardRequest request) {
+        DeleteRequestShardRequest.validate(request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();

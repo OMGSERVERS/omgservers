@@ -2,9 +2,9 @@ package com.omgservers.application.module.adminModule.impl.service.adminHelpServ
 
 import com.omgservers.dto.adminModule.CollectLogsAdminRequest;
 import com.omgservers.dto.adminModule.CollectLogsAdminResponse;
-import com.omgservers.base.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
+import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import com.omgservers.dto.internalModule.ViewLogRequest;
-import com.omgservers.base.operation.getServers.GetServersOperation;
+import com.omgservers.operation.getServers.GetServersOperation;
 import com.omgservers.model.serverLog.ServerLogModel;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

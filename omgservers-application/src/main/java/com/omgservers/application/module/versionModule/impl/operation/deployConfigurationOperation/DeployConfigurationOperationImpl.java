@@ -1,9 +1,9 @@
 package com.omgservers.application.module.versionModule.impl.operation.deployConfigurationOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.impl.operation.getVersionConfigOperation.GetVersionConfigOperation;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -39,7 +39,7 @@ class DeployConfigurationOperationImpl implements DeployConfigurationOperation {
 //                .map(stageConfig -> {
 //                    final var stage = StageModel.create(project, stageConfig.getName(), StageConfigModel.create());
 //                    final var syncStageServiceRequest = new SyncStageServiceRequest(tenant, stage);
-//                    return tenantModule.getStageInternalService().syncStage(syncStageServiceRequest);
+//                    return tenantModule.getStageShardedService().syncStage(syncStageServiceRequest);
 //                })
 //                .toList();
 //
@@ -50,7 +50,7 @@ class DeployConfigurationOperationImpl implements DeployConfigurationOperation {
 //    Uni<Void> cleanProjectStages(final String tenant,
 //                                 final Long projectId,
 //                                 final VersionConfigModel config) {
-//        return tenantModule.getStageInternalService()
+//        return tenantModule.getStageShardedService()
 //                .getProjectStages(new GetProjectStagesServiceRequest(tenant, project))
 //                .map(GetProjectStagesServiceResponse::getStages)
 //                .flatMap(projectStages -> {
@@ -64,7 +64,7 @@ class DeployConfigurationOperationImpl implements DeployConfigurationOperation {
 //
 //                    if (wastedStages.size() > 0) {
 //                        final var deleteStagesServiceRequest = new DeleteStagesServiceRequest(tenant, wastedStages);
-//                        return tenantModule.getStageInternalService().deleteStages(deleteStagesServiceRequest)
+//                        return tenantModule.getStageShardedService().deleteStages(deleteStagesServiceRequest)
 //                                .replaceWithVoid();
 //                    } else {
 //                        return Uni.createFrom().voidItem();

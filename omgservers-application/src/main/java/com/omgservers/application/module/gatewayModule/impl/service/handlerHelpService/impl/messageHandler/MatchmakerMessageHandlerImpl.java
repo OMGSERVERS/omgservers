@@ -3,16 +3,16 @@ package com.omgservers.application.module.gatewayModule.impl.service.handlerHelp
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.ConnectionHelpService;
 import com.omgservers.application.module.gatewayModule.impl.service.connectionHelpService.request.GetAssignedPlayerHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.base.factory.EventModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
-import com.omgservers.base.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internalModule.FireEventRoutedRequest;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.EventModelFactory;
+import com.omgservers.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventShardRequest;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
+import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -51,8 +51,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new MatchmakerRequestedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventRoutedRequest(event);
-        return internalModule.getEventRoutedService().fireEvent(request)
+        final var request = new FireEventShardRequest(event);
+        return internalModule.getEventShardedService().fireEvent(request)
                 .replaceWithVoid();
     }
 

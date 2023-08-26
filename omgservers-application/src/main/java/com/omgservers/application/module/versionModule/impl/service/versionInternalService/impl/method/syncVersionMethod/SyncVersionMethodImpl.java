@@ -1,11 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.syncVersionMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.upsertVersionOperation.UpsertVersionOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
+import com.omgservers.dto.versionModule.SyncVersionShardRequest;
 import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionUpdatedEventBodyModel;
@@ -28,8 +28,8 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionRoutedRequest request) {
-        SyncVersionRoutedRequest.validate(request);
+    public Uni<SyncVersionInternalResponse> syncVersion(SyncVersionShardRequest request) {
+        SyncVersionShardRequest.validate(request);
 
         final var version = request.getVersion();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

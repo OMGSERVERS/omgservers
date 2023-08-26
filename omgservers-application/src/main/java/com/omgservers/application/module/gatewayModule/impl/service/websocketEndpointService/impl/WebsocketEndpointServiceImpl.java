@@ -11,10 +11,10 @@ import com.omgservers.application.module.gatewayModule.impl.service.websocketEnd
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.CleanUpHelpRequest;
 import com.omgservers.application.module.gatewayModule.impl.service.websocketEndpointService.request.ReceiveTextMessageHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.clientInternalService.ClientInternalService;
-import com.omgservers.base.factory.EventModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
-import com.omgservers.base.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internalModule.FireEventRoutedRequest;
+import com.omgservers.module.internal.impl.factory.EventModelFactory;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventShardRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.CloseReason;
@@ -62,8 +62,8 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
                 final var clientId = assignedPlayer.getClientId();
                 final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
                 final var event = eventModelFactory.create(eventBody);
-                final var fireEventRoutedRequest = new FireEventRoutedRequest(event);
-                internalModule.getEventRoutedService().fireEvent(fireEventRoutedRequest)
+                final var fireEventRoutedRequest = new FireEventShardRequest(event);
+                internalModule.getEventShardedService().fireEvent(fireEventRoutedRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
             } else {
                 log.info("There wasn't assigned player, connection was deleted without notification, " +

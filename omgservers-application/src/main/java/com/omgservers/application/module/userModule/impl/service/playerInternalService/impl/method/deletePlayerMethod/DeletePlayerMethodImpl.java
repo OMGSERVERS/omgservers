@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.deletePlayerMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.deletePlayerOperation.DeletePlayerOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.userModule.DeletePlayerRoutedRequest;
+import com.omgservers.dto.userModule.DeletePlayerShardRequest;
 import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeletePlayerInternalResponse> deletePlayer(final DeletePlayerRoutedRequest request) {
-        DeletePlayerRoutedRequest.validate(request);
+    public Uni<DeletePlayerInternalResponse> deletePlayer(final DeletePlayerShardRequest request) {
+        DeletePlayerShardRequest.validate(request);
 
         final var userId = request.getUserId();
         final var id = request.getId();

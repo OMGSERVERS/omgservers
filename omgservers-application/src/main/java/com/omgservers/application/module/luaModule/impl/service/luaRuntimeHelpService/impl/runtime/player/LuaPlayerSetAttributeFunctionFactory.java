@@ -2,7 +2,7 @@ package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpS
 
 import com.omgservers.application.factory.AttributeModelFactory;
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

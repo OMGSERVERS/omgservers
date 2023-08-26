@@ -2,7 +2,7 @@ package com.omgservers.application.module.userModule.impl.service.tokenInternalS
 
 import com.omgservers.application.module.userModule.impl.operation.decodeTokenOperation.DecodeTokenOperation;
 import com.omgservers.application.module.userModule.impl.operation.selectTokenOperation.SelectTokenOperation;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
 import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
 import com.omgservers.exception.ServerSideConflictException;

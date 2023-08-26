@@ -1,41 +1,41 @@
 package com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService;
 
-import com.omgservers.dto.matchmakerModule.DeleteMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingShardRequest;
 import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncMatchmakerShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchmakerInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncRequestRoutedRequest;
+import com.omgservers.dto.matchmakerModule.SyncRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncRequestInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface MatchmakerInternalService {
-    Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerRoutedRequest request);
+    Uni<SyncMatchmakerInternalResponse> syncMatchmaker(SyncMatchmakerShardRequest request);
 
-    Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerRoutedRequest request);
+    Uni<GetMatchmakerInternalResponse> getMatchmaker(GetMatchmakerShardRequest request);
 
-    Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerRoutedRequest request);
+    Uni<DeleteMatchmakerInternalResponse> deleteMatchmaker(DeleteMatchmakerShardRequest request);
 
-    Uni<SyncRequestInternalResponse> syncRequest(SyncRequestRoutedRequest request);
+    Uni<SyncRequestInternalResponse> syncRequest(SyncRequestShardRequest request);
 
-    Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestRoutedRequest request);
+    Uni<DeleteRequestInternalResponse> deleteRequest(DeleteRequestShardRequest request);
 
-    Uni<GetMatchInternalResponse> getMatch(GetMatchRoutedRequest request);
+    Uni<GetMatchInternalResponse> getMatch(GetMatchShardRequest request);
 
-    Uni<SyncMatchInternalResponse> syncMatch(SyncMatchRoutedRequest request);
+    Uni<SyncMatchInternalResponse> syncMatch(SyncMatchShardRequest request);
 
-    Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchRoutedRequest request);
+    Uni<DeleteMatchInternalResponse> deleteMatch(DeleteMatchShardRequest request);
 
-    Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingRoutedRequest request);
+    Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingShardRequest request);
 }

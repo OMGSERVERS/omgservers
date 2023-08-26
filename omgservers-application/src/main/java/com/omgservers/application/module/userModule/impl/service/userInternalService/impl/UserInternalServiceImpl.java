@@ -5,11 +5,11 @@ import com.omgservers.application.module.userModule.impl.operation.getUserServic
 import com.omgservers.application.module.userModule.impl.service.userInternalService.UserInternalService;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.syncUserMethod.SyncUserMethod;
 import com.omgservers.application.module.userModule.impl.service.userInternalService.impl.method.validateCredentials.ValidateCredentialsMethod;
-import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.userModule.SyncUserRoutedRequest;
+import com.omgservers.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.SyncUserShardRequest;
 import com.omgservers.dto.userModule.SyncUserInternalResponse;
-import com.omgservers.dto.userModule.ValidateCredentialsRoutedRequest;
+import com.omgservers.dto.userModule.ValidateCredentialsShardRequest;
 import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,18 +30,18 @@ class UserInternalServiceImpl implements UserInternalService {
     final SyncUserMethod syncUserMethod;
 
     @Override
-    public Uni<SyncUserInternalResponse> syncUser(final SyncUserRoutedRequest request) {
+    public Uni<SyncUserInternalResponse> syncUser(final SyncUserShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncUserRoutedRequest::validate,
+                SyncUserShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::syncUser,
                 syncUserMethod::syncUser);
     }
 
     @Override
-    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsRoutedRequest request) {
+    public Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                ValidateCredentialsRoutedRequest::validate,
+                ValidateCredentialsShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::validateCredentials,
                 validateCredentialsMethod::validateCredentials);

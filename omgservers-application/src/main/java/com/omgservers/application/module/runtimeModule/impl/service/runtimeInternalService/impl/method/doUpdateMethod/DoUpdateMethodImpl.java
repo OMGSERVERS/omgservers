@@ -1,9 +1,9 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.doUpdateMethod;
 
 import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.runtimeModule.DoUpdateRoutedRequest;
-import com.omgservers.dto.runtimeModule.GetRuntimeRoutedRequest;
+import com.omgservers.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.runtimeModule.DoUpdateShardRequest;
+import com.omgservers.dto.runtimeModule.GetRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.GetRuntimeInternalResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
@@ -24,8 +24,8 @@ class DoUpdateMethodImpl implements DoUpdateMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> doUpdate(DoUpdateRoutedRequest request) {
-        DoUpdateRoutedRequest.validate(request);
+    public Uni<Void> doUpdate(DoUpdateShardRequest request) {
+        DoUpdateShardRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
@@ -36,7 +36,7 @@ class DoUpdateMethodImpl implements DoUpdateMethod {
     }
 
     Uni<RuntimeModel> getRuntime(Long id) {
-        final var request = new GetRuntimeRoutedRequest(id);
+        final var request = new GetRuntimeShardRequest(id);
         return runtimeModule.getRuntimeInternalService().getRuntime(request)
                 .map(GetRuntimeInternalResponse::getRuntime);
     }

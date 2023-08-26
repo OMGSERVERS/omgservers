@@ -1,17 +1,17 @@
 package com.omgservers.application.module.adminModule.impl.service.adminHelpService.impl.method.createNewDeveloperMethod;
 
-import com.omgservers.application.factory.TenantPermissionModelFactory;
 import com.omgservers.application.factory.UserModelFactory;
+import com.omgservers.application.module.userModule.UserModule;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
 import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
-import com.omgservers.application.module.tenantModule.TenantModule;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
-import com.omgservers.dto.tenantModule.GetTenantRoutedRequest;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionRoutedRequest;
-import com.omgservers.dto.userModule.SyncUserRoutedRequest;
+import com.omgservers.dto.tenantModule.GetTenantShardRequest;
+import com.omgservers.dto.tenantModule.SyncTenantPermissionShardRequest;
+import com.omgservers.dto.userModule.SyncUserShardRequest;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.impl.factory.TenantPermissionModelFactory;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,23 +48,23 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     }
 
     Uni<Void> getTenant(Long tenantId) {
-        final var getTenantServiceRequest = new GetTenantRoutedRequest(tenantId);
-        return tenantModule.getTenantInternalService().getTenant(getTenantServiceRequest)
+        final var getTenantServiceRequest = new GetTenantShardRequest(tenantId);
+        return tenantModule.getTenantShardedService().getTenant(getTenantServiceRequest)
                 .replaceWithVoid();
     }
 
     Uni<Void> createUser(Long id, String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.DEVELOPER, passwordHash);
-        final var syncUserInternalRequest = new SyncUserRoutedRequest(user);
+        final var syncUserInternalRequest = new SyncUserShardRequest(user);
         return userModule.getUserInternalService().syncUser(syncUserInternalRequest)
                 .replaceWithVoid();
     }
 
     Uni<Void> syncCreateProjectPermission(Long tenantId, Long userId) {
         final var entity = tenantPermissionModelFactory.create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
-        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRoutedRequest(entity);
-        return tenantModule.getTenantInternalService().syncTenantPermission(syncTenantPermissionServiceRequest)
+        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionShardRequest(entity);
+        return tenantModule.getTenantShardedService().syncTenantPermission(syncTenantPermissionServiceRequest)
                 .replaceWithVoid();
     }
 }

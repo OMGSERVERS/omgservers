@@ -1,6 +1,6 @@
 package com.omgservers.application.factory;
 
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.object.ObjectModel;
 import jakarta.enterprise.context.ApplicationScoped;

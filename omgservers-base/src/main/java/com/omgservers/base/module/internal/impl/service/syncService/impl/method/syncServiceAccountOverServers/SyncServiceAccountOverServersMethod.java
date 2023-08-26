@@ -1,8 +1,0 @@
-package com.omgservers.base.module.internal.impl.service.syncService.impl.method.syncServiceAccountOverServers;
-
-import com.omgservers.dto.internalModule.SyncServiceAccountOverServersInternalRequest;
-import io.smallrye.mutiny.Uni;
-
-public interface SyncServiceAccountOverServersMethod {
-    Uni<Void> syncServiceAccount(SyncServiceAccountOverServersInternalRequest request);
-}

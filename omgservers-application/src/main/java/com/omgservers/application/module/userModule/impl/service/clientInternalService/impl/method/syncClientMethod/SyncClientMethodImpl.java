@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.clientInternalService.impl.method.syncClientMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.upsertClientOperation.UpsertClientOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.userModule.SyncClientRoutedRequest;
+import com.omgservers.dto.userModule.SyncClientShardRequest;
 import com.omgservers.dto.userModule.SyncClientInternalResponse;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
@@ -28,8 +28,8 @@ class SyncClientMethodImpl implements SyncClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncClientInternalResponse> syncClient(final SyncClientRoutedRequest request) {
-        SyncClientRoutedRequest.validate(request);
+    public Uni<SyncClientInternalResponse> syncClient(final SyncClientShardRequest request) {
+        SyncClientShardRequest.validate(request);
 
         final var userId = request.getUserId();
         final var client = request.getClient();

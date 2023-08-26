@@ -5,8 +5,8 @@ import com.omgservers.application.module.versionModule.impl.operation.compileVer
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
 import com.omgservers.application.module.versionModule.impl.service.versionInternalService.VersionInternalService;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
-import com.omgservers.dto.versionModule.SyncVersionRoutedRequest;
+import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.versionModule.SyncVersionShardRequest;
 import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,7 +41,7 @@ public class BuildVersionMethodImpl implements BuildVersionMethod {
     }
 
     Uni<VersionModel> createVersion(final VersionModel version) {
-        final var syncVersionInternalRequest = new SyncVersionRoutedRequest(version);
+        final var syncVersionInternalRequest = new SyncVersionShardRequest(version);
         return versionInternalService.syncVersion(syncVersionInternalRequest)
                 .replaceWith(version);
     }

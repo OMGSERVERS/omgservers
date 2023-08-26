@@ -1,11 +1,11 @@
 package com.omgservers.application.module.versionModule.impl.service.versionInternalService.impl.method.deleteVersionMethod;
 
 import com.omgservers.application.module.versionModule.impl.operation.deleteVersionOperation.DeleteVersionOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.versionModule.DeleteVersionRoutedRequest;
+import com.omgservers.dto.versionModule.DeleteVersionShardRequest;
 import com.omgservers.dto.versionModule.DeleteVersionInternalResponse;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +27,8 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteVersionInternalResponse> deleteVersion(final DeleteVersionRoutedRequest request) {
-        DeleteVersionRoutedRequest.validate(request);
+    public Uni<DeleteVersionInternalResponse> deleteVersion(final DeleteVersionShardRequest request) {
+        DeleteVersionShardRequest.validate(request);
 
         final var id = request.getId();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

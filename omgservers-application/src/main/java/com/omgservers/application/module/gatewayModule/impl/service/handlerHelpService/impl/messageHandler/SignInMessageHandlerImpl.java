@@ -1,10 +1,10 @@
 package com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.messageHandler;
 
 import com.omgservers.application.module.gatewayModule.impl.service.handlerHelpService.impl.MessageHandler;
-import com.omgservers.base.factory.EventModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
-import com.omgservers.base.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internalModule.FireEventRoutedRequest;
+import com.omgservers.module.internal.impl.factory.EventModelFactory;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.operation.getConfig.GetConfigOperation;
+import com.omgservers.dto.internalModule.FireEventShardRequest;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -43,8 +43,8 @@ class SignInMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventRoutedRequest(event);
-        return internalModule.getEventRoutedService().fireEvent(request)
+        final var request = new FireEventShardRequest(event);
+        return internalModule.getEventShardedService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

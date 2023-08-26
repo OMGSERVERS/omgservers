@@ -1,7 +1,7 @@
 package com.omgservers.application.module.matchmakerModule.impl.operation.selectRequestOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.request.RequestConfigModel;

@@ -2,11 +2,11 @@ package com.omgservers.application.module.userModule.impl.service.playerInternal
 
 import com.omgservers.application.module.userModule.impl.operation.upsertPlayerOperation.UpsertPlayerOperation;
 import com.omgservers.application.module.userModule.impl.operation.validatePlayerOperation.ValidatePlayerOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.userModule.SyncPlayerRoutedRequest;
+import com.omgservers.dto.userModule.SyncPlayerShardRequest;
 import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerUpdatedEventBodyModel;
@@ -30,8 +30,8 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerRoutedRequest request) {
-        SyncPlayerRoutedRequest.validate(request);
+    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerShardRequest request) {
+        SyncPlayerShardRequest.validate(request);
 
         final var player = request.getPlayer();
         final var userId = player.getUserId();

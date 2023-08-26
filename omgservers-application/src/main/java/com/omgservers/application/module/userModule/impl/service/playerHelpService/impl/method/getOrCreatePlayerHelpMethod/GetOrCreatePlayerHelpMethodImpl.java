@@ -4,10 +4,10 @@ import com.omgservers.application.factory.PlayerModelFactory;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
 import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.PlayerInternalService;
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
-import com.omgservers.dto.userModule.GetPlayerRoutedRequest;
+import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.dto.userModule.GetPlayerShardRequest;
 import com.omgservers.dto.userModule.GetPlayerInternalResponse;
-import com.omgservers.dto.userModule.SyncPlayerRoutedRequest;
+import com.omgservers.dto.userModule.SyncPlayerShardRequest;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
@@ -40,7 +40,7 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
     }
 
     Uni<PlayerModel> getPlayer(Long userId, Long stageId) {
-        final var request = new GetPlayerRoutedRequest(userId, stageId);
+        final var request = new GetPlayerShardRequest(userId, stageId);
         return playerInternalService.getPlayer(request)
                 .map(GetPlayerInternalResponse::getPlayer);
     }
@@ -48,7 +48,7 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
     Uni<PlayerModel> syncPlayer(Long userId, Long stageId) {
         final var player = playerModelFactory
                 .create(userId, stageId, PlayerConfigModel.create());
-        final var request = new SyncPlayerRoutedRequest(player);
+        final var request = new SyncPlayerShardRequest(player);
         return playerInternalService.syncPlayer(request)
                 .replaceWith(player);
     }

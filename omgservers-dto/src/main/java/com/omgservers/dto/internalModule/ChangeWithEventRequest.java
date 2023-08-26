@@ -1,6 +1,6 @@
 package com.omgservers.dto.internalModule;
 
-import com.omgservers.dto.RoutedRequest;
+import com.omgservers.dto.ShardRequest;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.model.shard.ShardModel;
@@ -24,7 +24,7 @@ public class ChangeWithEventRequest {
         }
     }
 
-    RoutedRequest request;
+    ShardRequest request;
     BiFunction<SqlConnection, ShardModel, Uni<Boolean>> changeFunction;
     Function<Boolean, LogModel> logFunction;
     Function<Boolean, EventBodyModel> eventBodyFunction;

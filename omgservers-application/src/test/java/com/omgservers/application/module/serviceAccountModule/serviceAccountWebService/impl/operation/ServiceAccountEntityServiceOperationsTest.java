@@ -1,11 +1,11 @@
 package com.omgservers.application.module.serviceAccountModule.serviceAccountWebService.impl.operation;
 
-import com.omgservers.base.module.internal.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
-import com.omgservers.base.module.internal.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
-import com.omgservers.base.module.internal.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
+import com.omgservers.module.internal.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
+import com.omgservers.module.internal.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
+import com.omgservers.module.internal.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.factory.ServiceAccountModelFactory;
+import com.omgservers.module.internal.impl.factory.ServiceAccountModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.omgservers.application.module.runtimeModule.impl.operation.selectNewCommandsOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;

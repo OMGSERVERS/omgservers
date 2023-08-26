@@ -1,7 +1,7 @@
 package com.omgservers.application.module.versionModule.impl.operation.selectBytecodeOperation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;

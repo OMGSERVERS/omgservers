@@ -1,20 +1,20 @@
 package com.omgservers.application.module.developerModule.impl.service.developerHelpService.impl.method.createVersionMethod;
 
-import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
-import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.request.BuildVersionHelpRequest;
 import com.omgservers.application.module.versionModule.impl.service.versionHelpService.response.BuildVersionHelpResponse;
-import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.HasStagePermissionRoutedRequest;
+import com.omgservers.dto.tenantModule.GetStageShardRequest;
 import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenantModule.HasStagePermissionShardRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.module.tenant.TenantModule;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -54,8 +54,8 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                            final Long userId) {
         final var permission = StagePermissionEnum.CREATE_VERSION;
         final var hasStagePermissionServiceRequest =
-                new HasStagePermissionRoutedRequest(tenantId, stageId, userId, permission);
-        return tenantModule.getStageInternalService().hasStagePermission(hasStagePermissionServiceRequest)
+                new HasStagePermissionShardRequest(tenantId, stageId, userId, permission);
+        return tenantModule.getStageShardedService().hasStagePermission(hasStagePermissionServiceRequest)
                 .map(HasStagePermissionInternalResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
@@ -67,8 +67,8 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     }
 
     Uni<Void> checkStage(final Long tenantId, final Long stageId) {
-        final var getStageServiceRequest = new GetStageRoutedRequest(tenantId, stageId);
-        return tenantModule.getStageInternalService().getStage(getStageServiceRequest)
+        final var getStageServiceRequest = new GetStageShardRequest(tenantId, stageId);
+        return tenantModule.getStageShardedService().getStage(getStageServiceRequest)
                 .map(GetStageInternalResponse::getStage)
                 .replaceWithVoid();
     }

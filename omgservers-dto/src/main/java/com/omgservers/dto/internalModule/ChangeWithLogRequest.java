@@ -1,6 +1,6 @@
 package com.omgservers.dto.internalModule;
 
-import com.omgservers.dto.RoutedRequest;
+import com.omgservers.dto.ShardRequest;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.model.shard.ShardModel;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +23,7 @@ public class ChangeWithLogRequest {
         }
     }
 
-    RoutedRequest request;
+    ShardRequest request;
     BiFunction<SqlConnection, ShardModel, Uni<Boolean>> changeFunction;
     Function<Boolean, LogModel> logFunction;
 }

@@ -6,16 +6,16 @@ import com.omgservers.application.module.matchmakerModule.impl.operation.upsertM
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.MatchmakerInternalService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
-import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.matchmakerModule.DeleteRequestRoutedRequest;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.matchmakerModule.DeleteRequestInternalResponse;
-import com.omgservers.dto.matchmakerModule.SyncMatchRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DeleteRequestShardRequest;
 import com.omgservers.dto.matchmakerModule.SyncMatchInternalResponse;
+import com.omgservers.dto.matchmakerModule.SyncMatchShardRequest;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -129,7 +129,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
         // TODO: use batching???
         return Multi.createFrom().iterable(preparedMatches)
                 .onItem().transformToUniAndMerge(match -> {
-                    final var request = new SyncMatchRoutedRequest(match);
+                    final var request = new SyncMatchShardRequest(match);
                     return matchmakerInternalService.syncMatch(request);
                 })
                 .collect().asList()
@@ -147,7 +147,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                 .onItem().transformToUniAndMerge(request -> {
                     final var matchmaker = request.getMatchmakerId();
                     final var id = request.getId();
-                    final var deleteRequestInternalRequest = new DeleteRequestRoutedRequest(matchmaker, id);
+                    final var deleteRequestInternalRequest = new DeleteRequestShardRequest(matchmaker, id);
                     return matchmakerInternalService.deleteRequest(deleteRequestInternalRequest);
                 })
                 .collect().asList()

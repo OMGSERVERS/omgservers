@@ -1,11 +1,11 @@
 package com.omgservers.application.module.userModule.impl.service.objectInternalService.impl.method.deleteObjectMethod;
 
 import com.omgservers.application.module.userModule.impl.operation.deleteObjectOperation.DeleteObjectOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithLogRequest;
 import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.userModule.DeleteObjectRoutedRequest;
+import com.omgservers.dto.userModule.DeleteObjectShardRequest;
 import com.omgservers.dto.userModule.DeleteObjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeleteObjectMethodImpl implements DeleteObjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteObjectInternalResponse> deleteObject(final DeleteObjectRoutedRequest request) {
-        DeleteObjectRoutedRequest.validate(request);
+    public Uni<DeleteObjectInternalResponse> deleteObject(final DeleteObjectShardRequest request) {
+        DeleteObjectShardRequest.validate(request);
 
         final var userId = request.getUserId();
         final var id = request.getId();

@@ -1,11 +1,11 @@
 package com.omgservers.application.module.runtimeModule.impl.service.runtimeInternalService.impl.method.syncRuntimeMethod;
 
 import com.omgservers.application.module.runtimeModule.impl.operation.upsertRuntimeOperation.UpsertRuntimeOperation;
-import com.omgservers.base.factory.LogModelFactory;
-import com.omgservers.base.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internalModule.ChangeWithEventRequest;
 import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.runtimeModule.SyncRuntimeRoutedRequest;
+import com.omgservers.dto.runtimeModule.SyncRuntimeShardRequest;
 import com.omgservers.dto.runtimeModule.SyncRuntimeInternalResponse;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
@@ -28,8 +28,8 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeRoutedRequest request) {
-        SyncRuntimeRoutedRequest.validate(request);
+    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardRequest request) {
+        SyncRuntimeShardRequest.validate(request);
 
         final var runtime = request.getRuntime();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

@@ -3,8 +3,8 @@ package com.omgservers.application.module.userModule.impl.service.tokenInternalS
 import com.omgservers.application.module.userModule.impl.operation.insertTokenOperation.InsertTokenOperation;
 import com.omgservers.application.module.userModule.impl.operation.selectUserOperation.SelectUserOperation;
 import com.omgservers.application.module.userModule.impl.operation.validateCredentialsOperation.ValidateCredentialsOperation;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.userModule.CreateTokenRoutedRequest;
+import com.omgservers.operation.checkShard.CheckShardOperation;
+import com.omgservers.dto.userModule.CreateTokenShardRequest;
 import com.omgservers.dto.userModule.CreateTokenInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -24,8 +24,8 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<CreateTokenInternalResponse> createToken(final CreateTokenRoutedRequest request) {
-        CreateTokenRoutedRequest.validate(request);
+    public Uni<CreateTokenInternalResponse> createToken(final CreateTokenShardRequest request) {
+        CreateTokenShardRequest.validate(request);
 
         final var userUuid = request.getUserId();
         return checkShardOperation.checkShard(request.getRequestShardKey())

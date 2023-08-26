@@ -7,21 +7,21 @@ import com.omgservers.application.module.matchmakerModule.impl.operation.upsertM
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakerInternalService.impl.MatchmakerInMemoryCache;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.MatchmakingHelpService;
 import com.omgservers.application.module.matchmakerModule.impl.service.matchmakingHelpService.request.DoGreedyMatchmakingHelpRequest;
-import com.omgservers.application.module.tenantModule.TenantModule;
 import com.omgservers.application.module.versionModule.VersionModule;
-import com.omgservers.base.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.matchmakerModule.DoMatchmakingRoutedRequest;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.matchmakerModule.DoMatchmakingInternalResponse;
-import com.omgservers.dto.matchmakerModule.GetMatchmakerRoutedRequest;
+import com.omgservers.dto.matchmakerModule.DoMatchmakingShardRequest;
 import com.omgservers.dto.matchmakerModule.GetMatchmakerInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageRoutedRequest;
+import com.omgservers.dto.matchmakerModule.GetMatchmakerShardRequest;
 import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.versionModule.GetStageConfigRoutedRequest;
+import com.omgservers.dto.tenantModule.GetStageShardRequest;
 import com.omgservers.dto.versionModule.GetStageConfigInternalResponse;
+import com.omgservers.dto.versionModule.GetStageConfigShardRequest;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -46,8 +46,8 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
     @Override
-    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingRoutedRequest request) {
-        DoMatchmakingRoutedRequest.validate(request);
+    public Uni<DoMatchmakingInternalResponse> doMatchmaking(DoMatchmakingShardRequest request) {
+        DoMatchmakingShardRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
@@ -70,14 +70,14 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     }
 
     Uni<MatchmakerModel> getMatchmaker(Long id) {
-        final var request = new GetMatchmakerRoutedRequest(id);
+        final var request = new GetMatchmakerShardRequest(id);
         return matchmakerModule.getMatchmakerInternalService().getMatchmaker(request)
                 .map(GetMatchmakerInternalResponse::getMatchmaker);
     }
 
     Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
-        final var request = new GetStageRoutedRequest(tenantId, stageId);
-        return tenantModule.getStageInternalService().getStage(request)
+        final var request = new GetStageShardRequest(tenantId, stageId);
+        return tenantModule.getStageShardedService().getStage(request)
                 .map(GetStageInternalResponse::getStage)
                 .map(StageModel::getVersionId)
                 .onItem().ifNull().failWith(new ServerSideConflictException(String
@@ -85,7 +85,7 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     }
 
     Uni<VersionStageConfigModel> getStageConfig(final Long versionId) {
-        final var request = new GetStageConfigRoutedRequest(versionId);
+        final var request = new GetStageConfigShardRequest(versionId);
         return versionModule.getVersionInternalService().getStageConfig(request)
                 .map(GetStageConfigInternalResponse::getStageConfig);
     }

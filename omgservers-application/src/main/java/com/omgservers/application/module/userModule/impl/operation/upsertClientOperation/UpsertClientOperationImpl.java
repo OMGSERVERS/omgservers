@@ -1,6 +1,6 @@
 package com.omgservers.application.module.userModule.impl.operation.upsertClientOperation;
 
-import com.omgservers.base.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;

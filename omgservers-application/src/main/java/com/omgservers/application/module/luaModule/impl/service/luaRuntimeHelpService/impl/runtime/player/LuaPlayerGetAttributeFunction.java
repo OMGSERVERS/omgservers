@@ -1,7 +1,7 @@
 package com.omgservers.application.module.luaModule.impl.service.luaRuntimeHelpService.impl.runtime.player;
 
 import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.dto.userModule.GetAttributeRoutedRequest;
+import com.omgservers.dto.userModule.GetAttributeShardRequest;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -26,7 +26,7 @@ public class LuaPlayerGetAttributeFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs args) {
         final var name = args.checkjstring(1);
-        final var request = new GetAttributeRoutedRequest(userId, playerId, name);
+        final var request = new GetAttributeShardRequest(userId, playerId, name);
 
         try {
             final var response = userModule.getAttributeInternalService().getAttribute(TIMEOUT, request);

@@ -6,13 +6,13 @@ import com.omgservers.application.module.userModule.impl.service.playerInternalS
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.deletePlayerMethod.DeletePlayerMethod;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.getPlayerMethod.GetPlayerMethod;
 import com.omgservers.application.module.userModule.impl.service.playerInternalService.impl.method.syncPlayerMethod.SyncPlayerMethod;
-import com.omgservers.base.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.base.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.userModule.DeletePlayerRoutedRequest;
+import com.omgservers.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.dto.userModule.DeletePlayerShardRequest;
 import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerRoutedRequest;
+import com.omgservers.dto.userModule.GetPlayerShardRequest;
 import com.omgservers.dto.userModule.GetPlayerInternalResponse;
-import com.omgservers.dto.userModule.SyncPlayerRoutedRequest;
+import com.omgservers.dto.userModule.SyncPlayerShardRequest;
 import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,27 +34,27 @@ public class PlayerInternalServiceImpl implements PlayerInternalService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetPlayerInternalResponse> getPlayer(GetPlayerRoutedRequest request) {
+    public Uni<GetPlayerInternalResponse> getPlayer(GetPlayerShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetPlayerRoutedRequest::validate,
+                GetPlayerShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::getPlayer,
                 getPlayerMethod::getPlayer);
     }
 
     @Override
-    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerRoutedRequest request) {
+    public Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncPlayerRoutedRequest::validate,
+                SyncPlayerShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::syncPlayer,
                 syncPlayerMethod::syncPlayer);
     }
 
     @Override
-    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerRoutedRequest request) {
+    public Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerShardRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeletePlayerRoutedRequest::validate,
+                DeletePlayerShardRequest::validate,
                 getUserServiceApiClientOperation::getClient,
                 UserServiceApiClient::deletePlayer,
                 deletePlayerMethod::deletePlayer);

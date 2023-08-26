@@ -1,12 +1,12 @@
 package com.omgservers.application.module.indexModule.indexWebService.impl.operation;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.base.module.internal.impl.operation.deleteIndex.DeleteIndexOperation;
-import com.omgservers.base.module.internal.impl.operation.getIndex.GetIndexOperation;
-import com.omgservers.base.module.internal.impl.operation.upsertIndex.UpsertIndexOperation;
+import com.omgservers.module.internal.impl.operation.deleteIndex.DeleteIndexOperation;
+import com.omgservers.module.internal.impl.operation.getIndex.GetIndexOperation;
+import com.omgservers.module.internal.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
-import com.omgservers.base.factory.IndexModelFactory;
+import com.omgservers.module.internal.impl.factory.IndexModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import lombok.extern.slf4j.Slf4j;

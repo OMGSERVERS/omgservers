@@ -1,6 +1,6 @@
 package com.omgservers.application.factory;
 
-import com.omgservers.base.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import jakarta.enterprise.context.ApplicationScoped;
