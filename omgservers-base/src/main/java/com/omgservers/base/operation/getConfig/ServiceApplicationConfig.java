@@ -4,7 +4,7 @@ import io.smallrye.config.ConfigMapping;
 
 import java.net.URI;
 
-@ConfigMapping(prefix = "omgservers.application")
+@ConfigMapping(prefix = "omgservers")
 public interface ServiceApplicationConfig {
     long datacenterId();
 
