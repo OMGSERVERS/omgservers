@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.deleteStage;
 
 import com.omgservers.module.tenant.impl.operation.deleteStage.DeleteStageOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.tenantModule.DeleteStageShardRequest;
-import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.tenant.DeleteStageShardedRequest;
+import com.omgservers.dto.tenant.DeleteStageInternalResponse;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,8 +27,8 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageShardRequest request) {
-        DeleteStageShardRequest.validate(request);
+    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageShardedRequest request) {
+        DeleteStageShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

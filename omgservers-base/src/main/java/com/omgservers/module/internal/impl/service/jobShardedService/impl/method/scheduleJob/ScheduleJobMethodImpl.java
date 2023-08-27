@@ -1,12 +1,12 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.scheduleJob;
 
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
 import com.omgservers.module.internal.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.module.internal.impl.operation.getJobName.GetJobNameOperation;
 import com.omgservers.module.internal.impl.service.logService.LogService;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.SyncLogRequest;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.model.job.JobType;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -58,8 +58,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
     }
 
     @Override
-    public Uni<Void> scheduleJob(ScheduleJobShardRequest request) {
-        ScheduleJobShardRequest.validate(request);
+    public Uni<Void> scheduleJob(ScheduleJobShardedRequest request) {
+        ScheduleJobShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

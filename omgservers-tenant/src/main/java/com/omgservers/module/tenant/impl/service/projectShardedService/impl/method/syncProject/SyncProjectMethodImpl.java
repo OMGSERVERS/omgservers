@@ -2,12 +2,12 @@ package com.omgservers.module.tenant.impl.service.projectShardedService.impl.met
 
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.validateProject.ValidateProjectOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.tenantModule.SyncProjectShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.tenant.SyncProjectShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectInternalResponse;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,8 +30,8 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardRequest request) {
-        SyncProjectShardRequest.validate(request);
+    public Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardedRequest request) {
+        SyncProjectShardedRequest.validate(request);
 
         final var project = request.getProject();
         final var tenantId = project.getTenantId();

@@ -2,12 +2,12 @@ package com.omgservers.module.tenant.impl.service.stageShardedService.impl.metho
 
 import com.omgservers.module.tenant.impl.operation.validateStage.ValidateStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.tenantModule.SyncStageShardRequest;
-import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.tenant.SyncStageShardedRequest;
+import com.omgservers.dto.tenant.SyncStageInternalResponse;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,8 +30,8 @@ class SyncStageMethodImpl implements SyncStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardRequest request) {
-        SyncStageShardRequest.validate(request);
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request) {
+        SyncStageShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var stage = request.getStage();

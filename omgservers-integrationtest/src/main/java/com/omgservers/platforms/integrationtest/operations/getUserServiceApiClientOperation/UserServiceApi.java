@@ -1,39 +1,39 @@
 package com.omgservers.platforms.integrationtest.operations.getUserServiceApiClientOperation;
 
-import com.omgservers.dto.userModule.CreateTokenShardRequest;
-import com.omgservers.dto.userModule.CreateTokenInternalResponse;
-import com.omgservers.dto.userModule.DeleteAttributeShardRequest;
-import com.omgservers.dto.userModule.DeleteAttributeInternalResponse;
-import com.omgservers.dto.userModule.DeleteClientShardRequest;
-import com.omgservers.dto.userModule.DeleteClientInternalResponse;
-import com.omgservers.dto.userModule.DeleteObjectShardRequest;
-import com.omgservers.dto.userModule.DeleteObjectInternalResponse;
-import com.omgservers.dto.userModule.DeletePlayerShardRequest;
-import com.omgservers.dto.userModule.DeletePlayerInternalResponse;
-import com.omgservers.dto.userModule.GetAttributeShardRequest;
-import com.omgservers.dto.userModule.GetAttributeInternalResponse;
-import com.omgservers.dto.userModule.GetClientShardRequest;
-import com.omgservers.dto.userModule.GetClientInternalResponse;
-import com.omgservers.dto.userModule.GetObjectShardRequest;
-import com.omgservers.dto.userModule.GetObjectInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerAttributesShardRequest;
-import com.omgservers.dto.userModule.GetPlayerAttributesInternalResponse;
-import com.omgservers.dto.userModule.GetPlayerShardRequest;
-import com.omgservers.dto.userModule.GetPlayerInternalResponse;
-import com.omgservers.dto.userModule.IntrospectTokenInternalRequest;
-import com.omgservers.dto.userModule.IntrospectTokenInternalResponse;
-import com.omgservers.dto.userModule.SyncAttributeShardRequest;
-import com.omgservers.dto.userModule.SyncAttributeInternalResponse;
-import com.omgservers.dto.userModule.SyncClientShardRequest;
-import com.omgservers.dto.userModule.SyncClientInternalResponse;
-import com.omgservers.dto.userModule.SyncObjectShardRequest;
-import com.omgservers.dto.userModule.SyncObjectInternalResponse;
-import com.omgservers.dto.userModule.SyncPlayerShardRequest;
-import com.omgservers.dto.userModule.SyncPlayerInternalResponse;
-import com.omgservers.dto.userModule.SyncUserShardRequest;
-import com.omgservers.dto.userModule.SyncUserInternalResponse;
-import com.omgservers.dto.userModule.ValidateCredentialsShardRequest;
-import com.omgservers.dto.userModule.ValidateCredentialsInternalResponse;
+import com.omgservers.dto.user.CreateTokenShardedRequest;
+import com.omgservers.dto.user.CreateTokenShardedResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedRequest;
+import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedRequest;
+import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteObjectShardedRequest;
+import com.omgservers.dto.user.DeleteObjectShardedResponse;
+import com.omgservers.dto.user.DeletePlayerShardedRequest;
+import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.GetAttributeShardedRequest;
+import com.omgservers.dto.user.GetAttributeShardedResponse;
+import com.omgservers.dto.user.GetClientShardedRequest;
+import com.omgservers.dto.user.GetClientShardedResponse;
+import com.omgservers.dto.user.GetObjectShardedRequest;
+import com.omgservers.dto.user.GetObjectShardedResponse;
+import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
+import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
+import com.omgservers.dto.user.GetPlayerShardedRequest;
+import com.omgservers.dto.user.GetPlayerShardedResponse;
+import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedResponse;
+import com.omgservers.dto.user.SyncAttributeShardedRequest;
+import com.omgservers.dto.user.SyncAttributeShardedResponse;
+import com.omgservers.dto.user.SyncClientShardedRequest;
+import com.omgservers.dto.user.SyncClientShardedResponse;
+import com.omgservers.dto.user.SyncObjectShardedRequest;
+import com.omgservers.dto.user.SyncObjectShardedResponse;
+import com.omgservers.dto.user.SyncPlayerShardedRequest;
+import com.omgservers.dto.user.SyncPlayerShardedResponse;
+import com.omgservers.dto.user.SyncUserShardedRequest;
+import com.omgservers.dto.user.SyncUserShardedResponse;
+import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
+import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -45,117 +45,117 @@ public interface UserServiceApi {
 
     @PUT
     @Path("/sync-user")
-    Uni<SyncUserInternalResponse> syncUser(SyncUserShardRequest request);
+    Uni<SyncUserShardedResponse> syncUser(SyncUserShardedRequest request);
 
-    default SyncUserInternalResponse syncUser(long timeout, SyncUserShardRequest request) {
+    default SyncUserShardedResponse syncUser(long timeout, SyncUserShardedRequest request) {
         return syncUser(request).await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/validate-credentials")
-    Uni<ValidateCredentialsInternalResponse> validateCredentials(ValidateCredentialsShardRequest request);
+    Uni<ValidateCredentialsShardedResponse> validateCredentials(ValidateCredentialsShardedRequest request);
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenInternalResponse> createToken(CreateTokenShardRequest request);
+    Uni<CreateTokenShardedResponse> createToken(CreateTokenShardedRequest request);
 
     @PUT
     @Path("/introspect-token")
-    Uni<IntrospectTokenInternalResponse> introspectToken(IntrospectTokenInternalRequest request);
+    Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardRequest request);
 
     @PUT
     @Path("/get-player")
-    Uni<GetPlayerInternalResponse> getPlayer(GetPlayerShardRequest request);
+    Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request);
 
     @PUT
     @Path("/sync-player")
-    Uni<SyncPlayerInternalResponse> syncPlayer(SyncPlayerShardRequest request);
+    Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request);
 
     @PUT
     @Path("/delete-player")
-    Uni<DeletePlayerInternalResponse> deletePlayer(DeletePlayerShardRequest request);
+    Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request);
 
-    default DeletePlayerInternalResponse deletePlayer(long timeout, DeletePlayerShardRequest request) {
+    default DeletePlayerShardResponse deletePlayer(long timeout, DeletePlayerShardedRequest request) {
         return deletePlayer(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-client")
-    Uni<SyncClientInternalResponse> syncClient(SyncClientShardRequest request);
+    Uni<SyncClientShardedResponse> syncClient(SyncClientShardedRequest request);
 
     @PUT
     @Path("/get-client")
-    Uni<GetClientInternalResponse> getClient(GetClientShardRequest request);
+    Uni<GetClientShardedResponse> getClient(GetClientShardedRequest request);
 
     @PUT
     @Path("/delete-client")
-    Uni<DeleteClientInternalResponse> deleteClient(DeleteClientShardRequest request);
+    Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request);
 
-    default DeleteClientInternalResponse deleteClient(long timeout, DeleteClientShardRequest request) {
+    default DeleteClientShardResponse deleteClient(long timeout, DeleteClientShardedRequest request) {
         return deleteClient(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-attribute")
-    Uni<GetAttributeInternalResponse> getAttribute(GetAttributeShardRequest request);
+    Uni<GetAttributeShardedResponse> getAttribute(GetAttributeShardedRequest request);
 
-    default GetAttributeInternalResponse getAttribute(long timeout, GetAttributeShardRequest request) {
+    default GetAttributeShardedResponse getAttribute(long timeout, GetAttributeShardedRequest request) {
         return getAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-player-attributes")
-    Uni<GetPlayerAttributesInternalResponse> getPlayerAttributes(GetPlayerAttributesShardRequest request);
+    Uni<GetPlayerAttributesShardedResponse> getPlayerAttributes(GetPlayerAttributesShardedRequest request);
 
-    default GetPlayerAttributesInternalResponse getPlayerAttributes(long timeout, GetPlayerAttributesShardRequest request) {
+    default GetPlayerAttributesShardedResponse getPlayerAttributes(long timeout, GetPlayerAttributesShardedRequest request) {
         return getPlayerAttributes(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-attribute")
-    Uni<SyncAttributeInternalResponse> syncAttribute(SyncAttributeShardRequest request);
+    Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request);
 
-    default SyncAttributeInternalResponse syncAttribute(long timeout, SyncAttributeShardRequest request) {
+    default SyncAttributeShardedResponse syncAttribute(long timeout, SyncAttributeShardedRequest request) {
         return syncAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-attribute")
-    Uni<DeleteAttributeInternalResponse> deleteAttribute(DeleteAttributeShardRequest request);
+    Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request);
 
-    default DeleteAttributeInternalResponse deleteAttribute(long timeout, DeleteAttributeShardRequest request) {
+    default DeleteAttributeShardResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
         return deleteAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/get-object")
-    Uni<GetObjectInternalResponse> getObject(GetObjectShardRequest request);
+    Uni<GetObjectShardedResponse> getObject(GetObjectShardedRequest request);
 
-    default GetObjectInternalResponse getObject(long timeout, GetObjectShardRequest request) {
+    default GetObjectShardedResponse getObject(long timeout, GetObjectShardedRequest request) {
         return getObject(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-object")
-    Uni<SyncObjectInternalResponse> syncObject(SyncObjectShardRequest request);
+    Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request);
 
-    default SyncObjectInternalResponse syncObject(long timeout, SyncObjectShardRequest request) {
+    default SyncObjectShardedResponse syncObject(long timeout, SyncObjectShardedRequest request) {
         return syncObject(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-object")
-    Uni<DeleteObjectInternalResponse> deleteObject(DeleteObjectShardRequest request);
+    Uni<DeleteObjectShardedResponse> deleteObject(DeleteObjectShardedRequest request);
 
-    default DeleteObjectInternalResponse deleteObject(long timeout, DeleteObjectShardRequest request) {
+    default DeleteObjectShardedResponse deleteObject(long timeout, DeleteObjectShardedRequest request) {
         return deleteObject(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

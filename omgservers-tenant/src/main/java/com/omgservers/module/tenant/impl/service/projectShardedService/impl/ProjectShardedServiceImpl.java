@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl;
 
-import com.omgservers.dto.tenantModule.DeleteProjectShardRequest;
-import com.omgservers.dto.tenantModule.HasProjectPermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectShardRequest;
+import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
+import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectShardedRequest;
 import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.GetTenantServiceApiClientOperation;
 import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.TenantServiceApiClient;
 import com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.getProject.GetProjectMethod;
@@ -14,11 +14,11 @@ import com.omgservers.module.tenant.impl.service.projectShardedService.impl.meth
 import com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProjectPermission.SyncProjectPermissionMethod;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.tenantModule.GetProjectShardRequest;
-import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedRequest;
+import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -41,45 +41,45 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetProjectInternalResponse> getProject(final GetProjectShardRequest request) {
+    public Uni<GetProjectInternalResponse> getProject(final GetProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetProjectShardRequest::validate,
+                GetProjectShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getProject,
                 getProjectMethod::getProject);
     }
 
     @Override
-    public Uni<SyncProjectInternalResponse> syncProject(final SyncProjectShardRequest request) {
+    public Uni<SyncProjectInternalResponse> syncProject(final SyncProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncProjectShardRequest::validate,
+                SyncProjectShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncProject,
                 syncProjectMethod::syncProject);
     }
 
     @Override
-    public Uni<Void> deleteProject(final DeleteProjectShardRequest request) {
+    public Uni<Void> deleteProject(final DeleteProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteProjectShardRequest::validate,
+                DeleteProjectShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::deleteProject,
                 deleteProjectMethod::deleteProject);
     }
 
     @Override
-    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardRequest request) {
+    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasProjectPermissionShardRequest::validate,
+                HasProjectPermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::hasProjectPermission,
                 hasProjectPermissionMethod::hasProjectPermission);
     }
 
     @Override
-    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardRequest request) {
+    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncProjectPermissionShardRequest::validate,
+                SyncProjectPermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncProjectPermission,
                 syncProjectPermissionMethod::syncProjectPermission);

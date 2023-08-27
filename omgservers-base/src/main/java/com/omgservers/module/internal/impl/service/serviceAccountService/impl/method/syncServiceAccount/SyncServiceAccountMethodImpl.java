@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.syncServiceAccount;
 
 import com.omgservers.module.internal.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

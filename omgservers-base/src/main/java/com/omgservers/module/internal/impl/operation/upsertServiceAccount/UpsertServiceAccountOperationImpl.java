@@ -20,7 +20,7 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
     static private final String sql = """
             insert into internal.tab_service_account(id, created, modified, username, password_hash)
             values($1, $2, $3, $4, $5)
-            on conflict (id) do
+            on conflict (username) do
             update set modified = $3, password_hash = $5
             """;
 

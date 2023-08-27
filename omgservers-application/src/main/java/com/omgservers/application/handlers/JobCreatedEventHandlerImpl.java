@@ -2,7 +2,7 @@ package com.omgservers.application.handlers;
 
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
@@ -30,7 +30,7 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
         final var shardKey = body.getShardKey();
         final var entity = body.getEntity();
         final var type = body.getType();
-        final var request = new ScheduleJobShardRequest(shardKey, entity, type);
+        final var request = new ScheduleJobShardedRequest(shardKey, entity, type);
         return internalModule.getJobShardedService().scheduleJob(request)
                 .replaceWith(true);
     }

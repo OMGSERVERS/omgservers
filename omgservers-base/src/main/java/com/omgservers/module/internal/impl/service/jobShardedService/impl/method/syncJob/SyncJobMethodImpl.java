@@ -1,12 +1,12 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.syncJob;
 
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperation;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -28,8 +28,8 @@ class SyncJobMethodImpl implements SyncJobMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request) {
-        SyncJobShardRequest.validate(request);
+    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
+        SyncJobShardedRequest.validate(request);
 
         final var job = request.getJob();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

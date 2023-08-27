@@ -1,11 +1,11 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.unscheduleJob;
 
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.impl.operation.getJobName.GetJobNameOperation;
 import com.omgservers.module.internal.impl.service.logService.LogService;
-import com.omgservers.dto.internalModule.SyncLogRequest;
+import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class UnscheduleJobMethodImpl implements UnscheduleJobMethod {
     final Scheduler scheduler;
 
     @Override
-    public Uni<Void> unscheduleJob(final UnscheduleJobShardRequest request) {
-        UnscheduleJobShardRequest.validate(request);
+    public Uni<Void> unscheduleJob(final UnscheduleJobShardedRequest request) {
+        UnscheduleJobShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.service.logService.impl.method.syncLog;
 
-import com.omgservers.dto.internalModule.SyncLogRequest;
-import com.omgservers.dto.internalModule.SyncLogResponse;
+import com.omgservers.dto.internal.SyncLogRequest;
+import com.omgservers.dto.internal.SyncLogResponse;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

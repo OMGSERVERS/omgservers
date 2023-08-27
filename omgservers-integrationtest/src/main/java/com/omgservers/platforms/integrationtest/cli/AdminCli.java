@@ -1,16 +1,16 @@
 package com.omgservers.platforms.integrationtest.cli;
 
-import com.omgservers.dto.adminModule.CreateDeveloperAdminRequest;
-import com.omgservers.dto.adminModule.CreateDeveloperAdminResponse;
-import com.omgservers.dto.adminModule.CreateTenantAdminRequest;
-import com.omgservers.dto.adminModule.DeleteIndexAdminRequest;
-import com.omgservers.dto.adminModule.DeleteServiceAccountAdminRequest;
-import com.omgservers.dto.adminModule.GenerateIdAdminResponse;
-import com.omgservers.dto.adminModule.GetIndexAdminRequest;
-import com.omgservers.dto.adminModule.GetServiceAccountAdminRequest;
-import com.omgservers.dto.adminModule.PingServerAdminResponse;
-import com.omgservers.dto.adminModule.SyncIndexAdminRequest;
-import com.omgservers.dto.adminModule.SyncServiceAccountAdminRequest;
+import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
+import com.omgservers.dto.admin.CreateDeveloperAdminResponse;
+import com.omgservers.dto.admin.CreateTenantAdminRequest;
+import com.omgservers.dto.admin.DeleteIndexAdminRequest;
+import com.omgservers.dto.admin.DeleteServiceAccountAdminRequest;
+import com.omgservers.dto.admin.GenerateIdAdminResponse;
+import com.omgservers.dto.admin.GetIndexAdminRequest;
+import com.omgservers.dto.admin.GetServiceAccountAdminRequest;
+import com.omgservers.dto.admin.PingServerAdminResponse;
+import com.omgservers.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.dto.admin.SyncServiceAccountAdminRequest;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;

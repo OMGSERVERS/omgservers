@@ -2,14 +2,12 @@ package com.omgservers.module.internal.impl;
 
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.changeService.ChangeService;
-import com.omgservers.module.internal.impl.service.eventService.EventService;
 import com.omgservers.module.internal.impl.service.eventShardedService.EventShardedService;
 import com.omgservers.module.internal.impl.service.indexService.IndexService;
 import com.omgservers.module.internal.impl.service.jobShardedService.JobShardedService;
 import com.omgservers.module.internal.impl.service.logService.LogService;
 import com.omgservers.module.internal.impl.service.serviceAccountService.ServiceAccountService;
 import com.omgservers.module.internal.impl.service.syncService.SyncService;
-import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,13 +23,8 @@ public class InternalModuleImpl implements InternalModule {
     final JobShardedService jobShardedService;
     final ChangeService changeService;
     final IndexService indexService;
-    final EventService eventService;
     final SyncService syncService;
     final LogService logService;
-
-    public EventService getEventService() {
-        return eventService;
-    }
 
     public EventShardedService getEventShardedService() {
         return eventShardedService;

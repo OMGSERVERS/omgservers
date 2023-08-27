@@ -1,10 +1,10 @@
 package com.omgservers.platforms.integrationtest.cli;
 
-import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
-import com.omgservers.dto.developerModule.CreateTokenDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
-import com.omgservers.dto.developerModule.GetVersionStatusDeveloperRequest;
+import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
+import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
+import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
+import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developer.GetVersionStatusDeveloperRequest;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.model.version.VersionStatusEnum;

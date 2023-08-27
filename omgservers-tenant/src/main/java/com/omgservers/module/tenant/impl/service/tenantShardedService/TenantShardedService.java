@@ -1,25 +1,25 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService;
 
-import com.omgservers.dto.tenantModule.DeleteTenantShardRequest;
-import com.omgservers.dto.tenantModule.GetTenantShardRequest;
-import com.omgservers.dto.tenantModule.GetTenantResponse;
-import com.omgservers.dto.tenantModule.HasTenantPermissionShardRequest;
-import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncTenantShardRequest;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncTenantResponse;
+import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
+import com.omgservers.dto.tenant.GetTenantShardedRequest;
+import com.omgservers.dto.tenant.GetTenantResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
+import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenant.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface TenantShardedService {
 
-    Uni<GetTenantResponse> getTenant(GetTenantShardRequest request);
+    Uni<GetTenantResponse> getTenant(GetTenantShardedRequest request);
 
-    Uni<SyncTenantResponse> syncTenant(SyncTenantShardRequest request);
+    Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request);
 
-    Uni<Void> deleteTenant(DeleteTenantShardRequest request);
+    Uni<Void> deleteTenant(DeleteTenantShardedRequest request);
 
-    Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardRequest request);
+    Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardedRequest request);
 
-    Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardRequest request);
+    Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request);
 }

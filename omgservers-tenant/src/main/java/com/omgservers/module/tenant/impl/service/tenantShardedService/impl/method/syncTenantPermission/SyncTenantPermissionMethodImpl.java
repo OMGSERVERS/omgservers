@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenantPermission;
 
-import com.omgservers.dto.tenantModule.SyncTenantPermissionShardRequest;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithLogRequest;
-import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
+import com.omgservers.dto.internal.ChangeWithLogRequest;
+import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionShardRequest request) {
-        SyncTenantPermissionShardRequest.validate(request);
+    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionShardedRequest request) {
+        SyncTenantPermissionShardedRequest.validate(request);
 
         final var permission = request.getPermission();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,

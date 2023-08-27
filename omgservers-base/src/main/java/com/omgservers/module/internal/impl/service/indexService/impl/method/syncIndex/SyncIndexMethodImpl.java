@@ -2,7 +2,7 @@ package com.omgservers.module.internal.impl.service.indexService.impl.method.syn
 
 import com.omgservers.module.internal.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.module.internal.impl.operation.validateIndex.ValidateIndexOperation;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

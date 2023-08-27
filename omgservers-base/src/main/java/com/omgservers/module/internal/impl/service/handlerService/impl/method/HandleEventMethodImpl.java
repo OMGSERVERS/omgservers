@@ -2,8 +2,8 @@ package com.omgservers.module.internal.impl.service.handlerService.impl.method;
 
 import com.omgservers.module.internal.impl.operation.selectEvent.SelectEventOperation;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.internalModule.HandleEventRequest;
-import com.omgservers.dto.internalModule.HandleEventResponse;
+import com.omgservers.dto.internal.HandleEventRequest;
+import com.omgservers.dto.internal.HandleEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import io.opentelemetry.instrumentation.annotations.WithSpan;

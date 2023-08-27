@@ -1,12 +1,12 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.deleteJob;
 
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.deleteJob.DeleteJobOperation;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,8 +27,8 @@ class DeleteJobMethodImpl implements DeleteJobMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request) {
-        DeleteJobShardRequest.validate(request);
+    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request) {
+        DeleteJobShardedRequest.validate(request);
 
         final var shardKey = request.getShardKey();
         final var entity = request.getEntity();

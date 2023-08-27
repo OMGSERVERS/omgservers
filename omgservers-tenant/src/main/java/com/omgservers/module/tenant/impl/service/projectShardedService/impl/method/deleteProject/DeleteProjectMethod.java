@@ -1,8 +1,8 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.deleteProject;
 
-import com.omgservers.dto.tenantModule.DeleteProjectShardRequest;
+import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteProjectMethod {
-    Uni<Void> deleteProject(DeleteProjectShardRequest request);
+    Uni<Void> deleteProject(DeleteProjectShardedRequest request);
 }

@@ -1,16 +1,16 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.application.factory.RuntimeModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.dto.runtimeModule.SyncRuntimeShardRequest;
+import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.matchmaker.MatchmakerModule;
+import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -40,8 +40,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var matchId = body.getId();
         // TODO: Detect runtime type
         final var runtime = runtimeModelFactory.create(matchmakerId, matchId, RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
-        final var syncRuntimeInternalRequest = new SyncRuntimeShardRequest(runtime);
-        return runtimeModule.getRuntimeInternalService().syncRuntime(syncRuntimeInternalRequest)
+        final var syncRuntimeInternalRequest = new SyncRuntimeShardedRequest(runtime);
+        return runtimeModule.getRuntimeShardedService().syncRuntime(syncRuntimeInternalRequest)
                 .replaceWith(true);
     }
 }

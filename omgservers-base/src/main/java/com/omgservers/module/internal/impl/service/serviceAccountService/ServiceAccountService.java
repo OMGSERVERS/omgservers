@@ -1,11 +1,11 @@
 package com.omgservers.module.internal.impl.service.serviceAccountService;
 
-import com.omgservers.dto.internalModule.ValidateCredentialsResponse;
-import com.omgservers.dto.internalModule.ValidateCredentialsRequest;
-import com.omgservers.dto.internalModule.DeleteServiceAccountHelpRequest;
-import com.omgservers.dto.internalModule.GetServiceAccountHelpRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
-import com.omgservers.dto.internalModule.GetServiceAccountHelpResponse;
+import com.omgservers.dto.internal.ValidateCredentialsResponse;
+import com.omgservers.dto.internal.ValidateCredentialsRequest;
+import com.omgservers.dto.internal.DeleteServiceAccountHelpRequest;
+import com.omgservers.dto.internal.GetServiceAccountHelpRequest;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.GetServiceAccountHelpResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ServiceAccountService {

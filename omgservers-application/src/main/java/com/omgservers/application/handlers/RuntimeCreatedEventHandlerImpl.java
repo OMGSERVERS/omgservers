@@ -1,11 +1,11 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.module.internal.impl.factory.JobModelFactory;
+import com.omgservers.module.internal.factory.JobModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getServers.GetServersOperation;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
@@ -38,7 +38,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
         final var job = jobModelFactory.create(id, id, JobType.RUNTIME);
-        final var request = new SyncJobShardRequest(job);
+        final var request = new SyncJobShardedRequest(job);
         return internalModule.getJobShardedService().syncJob(request)
                 .replaceWith(true);
     }

@@ -2,8 +2,8 @@ package com.omgservers.module.internal.impl.service.handlerService.impl;
 
 import com.omgservers.module.internal.impl.service.handlerService.HandlerService;
 import com.omgservers.module.internal.impl.service.handlerService.impl.method.HandleEventMethod;
-import com.omgservers.dto.internalModule.HandleEventRequest;
-import com.omgservers.dto.internalModule.HandleEventResponse;
+import com.omgservers.dto.internal.HandleEventRequest;
+import com.omgservers.dto.internal.HandleEventResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

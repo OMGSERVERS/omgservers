@@ -1,19 +1,19 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.application.factory.ClientModelFactory;
+import com.omgservers.module.user.factory.ClientModelFactory;
 import com.omgservers.application.factory.MessageModelFactory;
-import com.omgservers.application.factory.UserModelFactory;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.application.module.userModule.impl.service.playerHelpService.request.GetOrCreatePlayerHelpRequest;
-import com.omgservers.application.module.userModule.impl.service.playerHelpService.response.GetOrCreatePlayerHelpResponse;
-import com.omgservers.application.module.userModule.impl.service.userHelpService.request.RespondClientHelpRequest;
+import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.module.user.impl.service.playerService.request.GetOrCreatePlayerHelpRequest;
+import com.omgservers.module.user.impl.service.playerService.response.GetOrCreatePlayerHelpResponse;
+import com.omgservers.module.user.impl.service.userService.request.RespondClientRequest;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.generateId.GenerateIdOperation;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.userModule.SyncClientShardRequest;
-import com.omgservers.dto.userModule.SyncUserShardRequest;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.user.SyncClientShardedRequest;
+import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -25,7 +25,7 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.dto.tenantModule.ValidateStageSecretRequest;
+import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -96,14 +96,14 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
     Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
-        final var syncUserInternalRequest = new SyncUserShardRequest(user);
-        return userModule.getUserInternalService().syncUser(syncUserInternalRequest)
+        final var syncUserInternalRequest = new SyncUserShardedRequest(user);
+        return userModule.getUserShardedService().syncUser(syncUserInternalRequest)
                 .replaceWith(user);
     }
 
     Uni<PlayerModel> createPlayer(Long userId, Long stageId) {
         final var createPlayerHelpRequest = new GetOrCreatePlayerHelpRequest(userId, stageId);
-        return userModule.getPlayerHelpService().getOrCreatePlayer(createPlayerHelpRequest)
+        return userModule.getPlayerService().getOrCreatePlayer(createPlayerHelpRequest)
                 .map(GetOrCreatePlayerHelpResponse::getPlayer);
     }
 
@@ -112,16 +112,16 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId) {
         final var client = clientModelFactory.create(playerId, server, connectionId);
-        final var request = new SyncClientShardRequest(userId, client);
-        return userModule.getClientInternalService().syncClient(request)
+        final var request = new SyncClientShardedRequest(userId, client);
+        return userModule.getClientShardedService().syncClient(request)
                 .replaceWith(client);
     }
 
     Uni<Void> respondCredentials(Long userId, Long clientId, String password) {
         final var body = new CredentialsMessageBodyModel(userId, password);
         final var message = messageModelFactory.create(MessageQualifierEnum.CREDENTIALS_MESSAGE, body);
-        final var respondClientHelpRequest = new RespondClientHelpRequest(userId, clientId, message);
-        return userModule.getUserHelpService().respondClient(respondClientHelpRequest)
+        final var respondClientHelpRequest = new RespondClientRequest(userId, clientId, message);
+        return userModule.getUserService().respondClient(respondClientHelpRequest)
                 .replaceWithVoid();
     }
 
@@ -132,7 +132,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                         final Long clientId) {
         final var eventBody = new PlayerSignedUpEventBodyModel(tenantId, stageId, userId, playerId, clientId);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventShardRequest(event);
+        final var request = new FireEventShardedRequest(event);
         return internalModule.getEventShardedService().fireEvent(request)
                 .replaceWithVoid();
     }

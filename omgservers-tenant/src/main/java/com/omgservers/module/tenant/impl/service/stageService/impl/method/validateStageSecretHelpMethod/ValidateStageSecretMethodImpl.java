@@ -1,8 +1,8 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecretHelpMethod;
 
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.ValidateStageSecretRequest;
-import com.omgservers.dto.tenantModule.ValidateStageSecretResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.ValidateStageSecretRequest;
+import com.omgservers.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.module.tenant.impl.service.stageShardedService.StageShardedService;
 import com.omgservers.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +24,7 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageShardRequest(tenantId, stageId);
+        final var getStageServiceRequest = new GetStageShardedRequest(tenantId, stageId);
         return stageShardedService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();

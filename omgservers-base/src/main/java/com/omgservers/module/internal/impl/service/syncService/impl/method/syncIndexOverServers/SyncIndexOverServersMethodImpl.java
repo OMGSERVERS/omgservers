@@ -1,8 +1,8 @@
 package com.omgservers.module.internal.impl.service.syncService.impl.method.syncIndexOverServers;
 
 import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.SyncIndexOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncIndexOverServersInternalRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

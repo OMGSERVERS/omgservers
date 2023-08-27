@@ -1,15 +1,15 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.application.module.versionModule.VersionModule;
+import com.omgservers.module.version.VersionModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStageShardRequest;
-import com.omgservers.dto.versionModule.GetVersionInternalResponse;
-import com.omgservers.dto.versionModule.GetVersionShardRequest;
-import com.omgservers.dto.versionModule.SyncVersionInternalResponse;
-import com.omgservers.dto.versionModule.SyncVersionShardRequest;
+import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.SyncStageInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedRequest;
+import com.omgservers.dto.version.GetVersionShardedResponse;
+import com.omgservers.dto.version.GetVersionShardedRequest;
+import com.omgservers.dto.version.SyncVersionShardedResponse;
+import com.omgservers.dto.version.SyncVersionShardedRequest;
 import com.omgservers.exception.ServerSideClientErrorException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -50,13 +50,13 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionModel> getVersion(Long id) {
-        final var getVersionServiceRequest = new GetVersionShardRequest(id);
-        return versionModule.getVersionInternalService().getVersion(getVersionServiceRequest)
-                .map(GetVersionInternalResponse::getVersion);
+        final var getVersionServiceRequest = new GetVersionShardedRequest(id);
+        return versionModule.getVersionShardedService().getVersion(getVersionServiceRequest)
+                .map(GetVersionShardedResponse::getVersion);
     }
 
     Uni<StageModel> getStage(Long tenantId, Long id) {
-        final var request = new GetStageShardRequest(tenantId, id);
+        final var request = new GetStageShardedRequest(tenantId, id);
         return tenantModule.getStageShardedService().getStage(request)
                 .map(GetStageInternalResponse::getStage);
     }
@@ -75,14 +75,14 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncStage(Long tenantId, StageModel stage) {
-        final var request = new SyncStageShardRequest(tenantId, stage);
+        final var request = new SyncStageShardedRequest(tenantId, stage);
         return tenantModule.getStageShardedService().syncStage(request)
                 .map(SyncStageInternalResponse::getCreated);
     }
 
     Uni<Boolean> syncVersion(VersionModel version) {
-        final var request = new SyncVersionShardRequest(version);
-        return versionModule.getVersionInternalService().syncVersion(request)
-                .map(SyncVersionInternalResponse::getCreated);
+        final var request = new SyncVersionShardedRequest(version);
+        return versionModule.getVersionShardedService().syncVersion(request)
+                .map(SyncVersionShardedResponse::getCreated);
     }
 }

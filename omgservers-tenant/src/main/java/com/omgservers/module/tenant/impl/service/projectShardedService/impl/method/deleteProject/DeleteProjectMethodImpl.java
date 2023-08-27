@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.deleteProject;
 
 import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.tenantModule.DeleteProjectShardRequest;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteProject(final DeleteProjectShardRequest request) {
-        DeleteProjectShardRequest.validate(request);
+    public Uni<Void> deleteProject(final DeleteProjectShardedRequest request) {
+        DeleteProjectShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.service.syncService;
 
-import com.omgservers.dto.internalModule.SyncIndexOverServersInternalRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncIndexOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncServiceAccountOverServersInternalRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncService {

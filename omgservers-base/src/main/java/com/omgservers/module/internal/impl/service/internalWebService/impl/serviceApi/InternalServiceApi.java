@@ -1,17 +1,17 @@
 package com.omgservers.module.internal.impl.service.internalWebService.impl.serviceApi;
 
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.ViewLogRequest;
-import com.omgservers.dto.internalModule.ViewLogsResponse;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
-import com.omgservers.dto.internalModule.FireEventShardedResponse;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.ViewLogRequest;
+import com.omgservers.dto.internal.ViewLogsResponse;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.FireEventShardedResponse;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -39,42 +39,42 @@ public interface InternalServiceApi {
 
     @PUT
     @Path("/fire-event")
-    Uni<FireEventShardedResponse> fireEvent(FireEventShardRequest request);
+    Uni<FireEventShardedResponse> fireEvent(FireEventShardedRequest request);
 
-    default FireEventShardedResponse fireEvent(long timeout, FireEventShardRequest request) {
+    default FireEventShardedResponse fireEvent(long timeout, FireEventShardedRequest request) {
         return fireEvent(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/sync-job")
-    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request);
+    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request);
 
-    default SyncJobRoutedResponse syncJob(long timeout, SyncJobShardRequest request) {
+    default SyncJobRoutedResponse syncJob(long timeout, SyncJobShardedRequest request) {
         return syncJob(request).await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/delete-job")
-    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request);
+    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request);
 
-    default DeleteJobShardedResponse deleteJob(long timeout, DeleteJobShardRequest request) {
+    default DeleteJobShardedResponse deleteJob(long timeout, DeleteJobShardedRequest request) {
         return deleteJob(request).await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/schedule-job")
-    Uni<Void> scheduleJob(ScheduleJobShardRequest request);
+    Uni<Void> scheduleJob(ScheduleJobShardedRequest request);
 
-    default void scheduleJob(long timeout, ScheduleJobShardRequest request) {
+    default void scheduleJob(long timeout, ScheduleJobShardedRequest request) {
         scheduleJob(request).await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/unschedule-job")
-    Uni<Void> unscheduleJob(UnscheduleJobShardRequest request);
+    Uni<Void> unscheduleJob(UnscheduleJobShardedRequest request);
 
-    default void unscheduleJob(long timeout, UnscheduleJobShardRequest request) {
+    default void unscheduleJob(long timeout, UnscheduleJobShardedRequest request) {
         unscheduleJob(request).await().atMost(Duration.ofSeconds(timeout));
     }
 

@@ -6,18 +6,18 @@ import com.omgservers.module.internal.impl.service.internalWebService.InternalWe
 import com.omgservers.module.internal.impl.service.jobShardedService.JobShardedService;
 import com.omgservers.module.internal.impl.service.logService.LogService;
 import com.omgservers.module.internal.impl.service.serviceAccountService.ServiceAccountService;
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.internalModule.FireEventShardedResponse;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
-import com.omgservers.dto.internalModule.ViewLogRequest;
-import com.omgservers.dto.internalModule.ViewLogsResponse;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventShardedResponse;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
+import com.omgservers.dto.internal.ViewLogRequest;
+import com.omgservers.dto.internal.ViewLogsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -46,27 +46,27 @@ class InternalWebServiceImpl implements InternalWebService {
     }
 
     @Override
-    public Uni<FireEventShardedResponse> fireEvent(FireEventShardRequest request) {
+    public Uni<FireEventShardedResponse> fireEvent(FireEventShardedRequest request) {
         return eventShardedService.fireEvent(request);
     }
 
     @Override
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request) {
+    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
         return jobShardedService.syncJob(request);
     }
 
     @Override
-    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request) {
+    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request) {
         return jobShardedService.deleteJob(request);
     }
 
     @Override
-    public Uni<Void> scheduleJob(ScheduleJobShardRequest request) {
+    public Uni<Void> scheduleJob(ScheduleJobShardedRequest request) {
         return jobShardedService.scheduleJob(request);
     }
 
     @Override
-    public Uni<Void> unscheduleJob(UnscheduleJobShardRequest request) {
+    public Uni<Void> unscheduleJob(UnscheduleJobShardedRequest request) {
         return jobShardedService.unscheduleJob(request);
     }
 

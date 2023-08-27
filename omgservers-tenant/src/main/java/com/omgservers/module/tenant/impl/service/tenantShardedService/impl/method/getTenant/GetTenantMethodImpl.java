@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.getTenant;
 
-import com.omgservers.dto.tenantModule.GetTenantShardRequest;
+import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.module.tenant.impl.operation.selectTenant.SelectTenantOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenantModule.GetTenantResponse;
+import com.omgservers.dto.tenant.GetTenantResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,8 +21,8 @@ class GetTenantMethodImpl implements GetTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantResponse> getTenant(final GetTenantShardRequest request) {
-        GetTenantShardRequest.validate(request);
+    public Uni<GetTenantResponse> getTenant(final GetTenantShardedRequest request) {
+        GetTenantShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

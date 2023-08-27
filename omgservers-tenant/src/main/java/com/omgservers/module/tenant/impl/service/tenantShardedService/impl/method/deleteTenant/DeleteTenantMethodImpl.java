@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.deleteTenant;
 
-import com.omgservers.dto.tenantModule.DeleteTenantShardRequest;
+import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,8 +26,8 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteTenant(final DeleteTenantShardRequest request) {
-        DeleteTenantShardRequest.validate(request);
+    public Uni<Void> deleteTenant(final DeleteTenantShardedRequest request) {
+        DeleteTenantShardedRequest.validate(request);
 
         final var id = request.getId();
         return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,

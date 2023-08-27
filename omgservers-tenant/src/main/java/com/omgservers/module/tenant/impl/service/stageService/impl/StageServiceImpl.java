@@ -2,8 +2,8 @@ package com.omgservers.module.tenant.impl.service.stageService.impl;
 
 import com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecretHelpMethod.ValidateStageSecretMethod;
 import com.omgservers.module.tenant.impl.service.stageService.StageService;
-import com.omgservers.dto.tenantModule.ValidateStageSecretRequest;
-import com.omgservers.dto.tenantModule.ValidateStageSecretResponse;
+import com.omgservers.dto.tenant.ValidateStageSecretRequest;
+import com.omgservers.dto.tenant.ValidateStageSecretResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

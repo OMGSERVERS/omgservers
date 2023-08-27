@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.operation.deleteJob;
 
 import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperation;
-import com.omgservers.module.internal.impl.factory.JobModelFactory;
+import com.omgservers.module.internal.factory.JobModelFactory;
 import com.omgservers.model.job.JobType;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

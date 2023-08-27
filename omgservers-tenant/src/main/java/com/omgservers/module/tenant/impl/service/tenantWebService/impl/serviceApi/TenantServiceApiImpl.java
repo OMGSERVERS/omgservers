@@ -1,35 +1,35 @@
 package com.omgservers.module.tenant.impl.service.tenantWebService.impl.serviceApi;
 
-import com.omgservers.dto.tenantModule.DeleteProjectShardRequest;
-import com.omgservers.dto.tenantModule.GetProjectShardRequest;
-import com.omgservers.dto.tenantModule.GetTenantShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectShardRequest;
-import com.omgservers.dto.tenantModule.SyncStageShardRequest;
+import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
+import com.omgservers.dto.tenant.GetProjectShardedRequest;
+import com.omgservers.dto.tenant.GetTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectShardedRequest;
+import com.omgservers.dto.tenant.SyncStageShardedRequest;
 import com.omgservers.module.tenant.impl.service.tenantWebService.TenantWebService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
-import com.omgservers.dto.tenantModule.DeleteStageShardRequest;
-import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
-import com.omgservers.dto.tenantModule.DeleteTenantShardRequest;
-import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.GetTenantResponse;
-import com.omgservers.dto.tenantModule.HasProjectPermissionShardRequest;
-import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
-import com.omgservers.dto.tenantModule.HasStagePermissionShardRequest;
-import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
-import com.omgservers.dto.tenantModule.HasTenantPermissionShardRequest;
-import com.omgservers.dto.tenantModule.HasTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStagePermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncTenantShardRequest;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncTenantPermissionResponse;
-import com.omgservers.dto.tenantModule.SyncTenantResponse;
+import com.omgservers.dto.tenant.DeleteStageShardedRequest;
+import com.omgservers.dto.tenant.DeleteStageInternalResponse;
+import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
+import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetTenantResponse;
+import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
+import com.omgservers.dto.tenant.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
+import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
+import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SyncProjectInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncStageInternalResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenant.SyncTenantResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -47,91 +47,91 @@ class TenantServiceApiImpl implements TenantServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetTenantResponse> getTenant(GetTenantShardRequest request) {
+    public Uni<GetTenantResponse> getTenant(GetTenantShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getTenant);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardRequest request) {
+    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncTenant);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> deleteTenant(DeleteTenantShardRequest request) {
+    public Uni<Void> deleteTenant(DeleteTenantShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::deleteTenant);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardRequest request) {
+    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::hasTenantPermission);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardRequest request) {
+    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncTenantPermission);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetProjectInternalResponse> getProject(GetProjectShardRequest request) {
+    public Uni<GetProjectInternalResponse> getProject(GetProjectShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getProject);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardRequest request) {
+    public Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncProject);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> deleteProject(DeleteProjectShardRequest request) {
+    public Uni<Void> deleteProject(DeleteProjectShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::deleteProject);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardRequest request) {
+    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::hasProjectPermission);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardRequest request) {
+    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncProjectPermission);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetStageInternalResponse> getStage(GetStageShardRequest request) {
+    public Uni<GetStageInternalResponse> getStage(GetStageShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getStage);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncStage);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::deleteStage);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardRequest request) {
+    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::hasStagePermission);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardRequest request) {
+    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncStagePermission);
     }
 }

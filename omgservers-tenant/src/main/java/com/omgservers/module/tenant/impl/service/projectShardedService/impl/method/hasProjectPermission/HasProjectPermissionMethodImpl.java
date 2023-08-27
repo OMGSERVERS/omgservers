@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.hasProjectPermission;
 
-import com.omgservers.dto.tenantModule.HasProjectPermissionShardRequest;
+import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.hasProjectPermission.HasProjectPermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenantModule.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.HasProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,8 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardRequest request) {
-        HasProjectPermissionShardRequest.validate(request);
+    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
+        HasProjectPermissionShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

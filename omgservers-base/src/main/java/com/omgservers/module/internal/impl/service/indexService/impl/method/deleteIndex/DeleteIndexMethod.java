@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.indexService.impl.method.deleteIndex;
 
-import com.omgservers.dto.internalModule.DeleteIndexRequest;
+import com.omgservers.dto.internal.DeleteIndexRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteIndexMethod {

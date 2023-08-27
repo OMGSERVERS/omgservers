@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProject;
 
-import com.omgservers.dto.tenantModule.SyncProjectShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectInternalResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncProjectMethod {
-    Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardRequest request);
+    Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardedRequest request);
 }

@@ -1,8 +1,8 @@
 package com.omgservers.application.handlers;
 
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.dto.userModule.DeleteClientShardRequest;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -29,8 +29,8 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var body = (ClientDisconnectedEventBodyModel) event.getBody();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
-        final var request = new DeleteClientShardRequest(userId, clientId);
-        return userModule.getClientInternalService().deleteClient(request)
+        final var request = new DeleteClientShardedRequest(userId, clientId);
+        return userModule.getClientShardedService().deleteClient(request)
                 .replaceWith(true);
     }
 }

@@ -1,9 +1,9 @@
 package com.omgservers.application.jobs;
 
-import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
-import com.omgservers.application.module.runtimeModule.RuntimeModule;
-import com.omgservers.dto.runtimeModule.DoUpdateShardRequest;
+import com.omgservers.dto.runtime.DoUpdateShardedRequest;
 import com.omgservers.model.job.JobType;
+import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
+import com.omgservers.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,8 +24,8 @@ public class RuntimeJobTask implements JobTask {
 
     @Override
     public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new DoUpdateShardRequest(entity);
-        return runtimeModule.getRuntimeInternalService().doUpdate(request)
+        final var request = new DoUpdateShardedRequest(entity);
+        return runtimeModule.getRuntimeShardedService().doUpdate(request)
                 .replaceWith(true);
     }
 }

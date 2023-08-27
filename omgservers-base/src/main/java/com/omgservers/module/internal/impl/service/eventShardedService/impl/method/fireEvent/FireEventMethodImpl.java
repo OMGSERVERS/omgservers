@@ -1,12 +1,12 @@
 package com.omgservers.module.internal.impl.service.eventShardedService.impl.method.fireEvent;
 
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.Dispatcher;
+import com.omgservers.Dispatcher;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.dto.internalModule.ChangeRequest;
-import com.omgservers.dto.internalModule.ChangeResponse;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.internalModule.FireEventShardedResponse;
+import com.omgservers.dto.internal.ChangeRequest;
+import com.omgservers.dto.internal.ChangeResponse;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class FireEventMethodImpl implements FireEventMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<FireEventShardedResponse> fireEvent(final FireEventShardRequest request) {
-        FireEventShardRequest.validate(request);
+    public Uni<FireEventShardedResponse> fireEvent(final FireEventShardedRequest request) {
+        FireEventShardedRequest.validate(request);
 
         final var event = request.getEvent();
         return internalModule.getChangeService().change(new ChangeRequest(request,

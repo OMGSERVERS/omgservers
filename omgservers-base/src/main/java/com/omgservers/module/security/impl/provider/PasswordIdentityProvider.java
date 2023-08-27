@@ -1,8 +1,8 @@
 package com.omgservers.module.security.impl.provider;
 
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ValidateCredentialsRequest;
-import com.omgservers.dto.internalModule.ValidateCredentialsResponse;
+import com.omgservers.dto.internal.ValidateCredentialsRequest;
+import com.omgservers.dto.internal.ValidateCredentialsResponse;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.quarkus.elytron.security.common.BcryptUtil;

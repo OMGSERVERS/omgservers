@@ -2,8 +2,8 @@ package com.omgservers.module.tenant.impl.service.stageShardedService.impl.metho
 
 import com.omgservers.module.tenant.impl.operation.selectStage.SelectStageOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.GetStageInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,8 @@ class GetStageMethodImpl implements GetStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetStageInternalResponse> getStage(final GetStageShardRequest request) {
-        GetStageShardRequest.validate(request);
+    public Uni<GetStageInternalResponse> getStage(final GetStageShardedRequest request) {
+        GetStageShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

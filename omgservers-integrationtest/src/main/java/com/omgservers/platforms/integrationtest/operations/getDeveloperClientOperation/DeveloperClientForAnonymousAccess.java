@@ -1,13 +1,13 @@
 package com.omgservers.platforms.integrationtest.operations.getDeveloperClientOperation;
 
-import com.omgservers.dto.developerModule.CreateProjectDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateProjectDeveloperResponse;
-import com.omgservers.dto.developerModule.CreateTokenDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateTokenDeveloperResponse;
-import com.omgservers.dto.developerModule.CreateVersionDeveloperRequest;
-import com.omgservers.dto.developerModule.CreateVersionDeveloperResponse;
-import com.omgservers.dto.developerModule.GetVersionStatusDeveloperRequest;
-import com.omgservers.dto.developerModule.GetVersionStatusDeveloperResponse;
+import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
+import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
+import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
+import com.omgservers.dto.developer.CreateTokenDeveloperResponse;
+import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
+import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.dto.developer.GetVersionStatusDeveloperRequest;
+import com.omgservers.dto.developer.GetVersionStatusDeveloperResponse;
 import com.omgservers.exception.ClientSideExceptionMapper;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;

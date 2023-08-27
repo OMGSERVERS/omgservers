@@ -1,9 +1,9 @@
 package com.omgservers.module.internal.impl.service.indexService;
 
-import com.omgservers.dto.internalModule.DeleteIndexRequest;
-import com.omgservers.dto.internalModule.GetIndexRequest;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.GetIndexHelpResponse;
+import com.omgservers.dto.internal.DeleteIndexRequest;
+import com.omgservers.dto.internal.GetIndexRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.GetIndexHelpResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface IndexService {

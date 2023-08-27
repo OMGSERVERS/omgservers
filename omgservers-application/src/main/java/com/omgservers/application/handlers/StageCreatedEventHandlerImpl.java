@@ -1,26 +1,26 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.application.factory.MatchmakerModelFactory;
-import com.omgservers.application.module.matchmakerModule.MatchmakerModule;
-import com.omgservers.application.module.userModule.UserModule;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.operation.generateId.GenerateIdOperation;
-import com.omgservers.operation.getServers.GetServersOperation;
-import com.omgservers.dto.matchmakerModule.SyncMatchmakerShardRequest;
-import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.GetProjectShardRequest;
-import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.SyncStagePermissionShardRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
+import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedRequest;
+import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.matchmaker.MatchmakerModule;
+import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.impl.factory.StagePermissionModelFactory;
+import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.operation.getServers.GetServersOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -63,7 +63,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StageModel> getStage(Long tenantId, Long id) {
-        final var request = new GetStageShardRequest(tenantId, id);
+        final var request = new GetStageShardedRequest(tenantId, id);
         return tenantModule.getStageShardedService().getStage(request)
                 .map(GetStageInternalResponse::getStage);
     }
@@ -75,22 +75,22 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ProjectModel> getProject(Long tenantId, Long id) {
-        final var request = new GetProjectShardRequest(tenantId, id);
+        final var request = new GetProjectShardedRequest(tenantId, id);
         return tenantModule.getProjectShardedService().getProject(request)
                 .map(GetProjectInternalResponse::getProject);
     }
 
     Uni<Void> syncCreateVersionPermission(Long tenantId, Long stageId, Long userId) {
         final var permission = stagePermissionModelFactory.create(stageId, userId, StagePermissionEnum.CREATE_VERSION);
-        final var request = new SyncStagePermissionShardRequest(tenantId, permission);
+        final var request = new SyncStagePermissionShardedRequest(tenantId, permission);
         return tenantModule.getStageShardedService().syncStagePermission(request)
                 .replaceWithVoid();
     }
 
     Uni<Void> syncMatchmaker(final Long tenantId, final Long stageId, final Long id) {
         final var matchmaker = matchmakerModelFactory.create(id, tenantId, stageId);
-        final var request = new SyncMatchmakerShardRequest(matchmaker);
-        return matchmakerModule.getMatchmakerInternalService()
+        final var request = new SyncMatchmakerShardedRequest(matchmaker);
+        return matchmakerModule.getMatchmakerShardedService()
                 .syncMatchmaker(request)
                 .replaceWithVoid();
     }

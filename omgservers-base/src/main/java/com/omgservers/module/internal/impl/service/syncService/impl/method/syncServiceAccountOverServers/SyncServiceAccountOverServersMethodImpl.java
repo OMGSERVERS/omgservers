@@ -1,8 +1,8 @@
 package com.omgservers.module.internal.impl.service.syncService.impl.method.syncServiceAccountOverServers;
 
 import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.SyncServiceAccountOverServersInternalRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

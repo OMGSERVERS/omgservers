@@ -2,7 +2,6 @@ package com.omgservers.module.internal;
 
 import com.omgservers.module.internal.impl.service.changeService.ChangeService;
 import com.omgservers.module.internal.impl.service.eventShardedService.EventShardedService;
-import com.omgservers.module.internal.impl.service.eventService.EventService;
 import com.omgservers.module.internal.impl.service.indexService.IndexService;
 import com.omgservers.module.internal.impl.service.jobShardedService.JobShardedService;
 import com.omgservers.module.internal.impl.service.logService.LogService;
@@ -20,8 +19,6 @@ public interface InternalModule {
     JobShardedService getJobShardedService();
 
     ChangeService getChangeService();
-
-    EventService getEventService();
 
     IndexService getIndexService();
 

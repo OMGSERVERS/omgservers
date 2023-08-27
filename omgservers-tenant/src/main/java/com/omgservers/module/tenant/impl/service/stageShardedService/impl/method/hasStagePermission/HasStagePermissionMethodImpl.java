@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.hasStagePermission;
 
-import com.omgservers.dto.tenantModule.HasStagePermissionShardRequest;
+import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.hasStagePermission.HasStagePermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,8 @@ class HasStagePermissionMethodImpl implements HasStagePermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardRequest request) {
-        HasStagePermissionShardRequest.validate(request);
+    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardedRequest request) {
+        HasStagePermissionShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

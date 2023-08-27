@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.syncStagePermission;
 
-import com.omgservers.dto.tenantModule.SyncStagePermissionShardRequest;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithLogRequest;
-import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.internal.ChangeWithLogRequest;
+import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(final SyncStagePermissionShardRequest request) {
-        SyncStagePermissionShardRequest.validate(request);
+    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(final SyncStagePermissionShardedRequest request) {
+        SyncStagePermissionShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
         final var permission = request.getPermission();

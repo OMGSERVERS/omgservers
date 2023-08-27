@@ -2,12 +2,12 @@ package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.meth
 
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.module.tenant.impl.operation.validateTenant.ValidateTenantOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
-import com.omgservers.dto.tenantModule.SyncTenantShardRequest;
-import com.omgservers.dto.tenantModule.SyncTenantResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantResponse;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,8 +30,8 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardRequest request) {
-        SyncTenantShardRequest.validate(request);
+    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request) {
+        SyncTenantShardedRequest.validate(request);
 
         final var tenant = request.getTenant();
         validateTenantOperation.validateTenant(tenant);

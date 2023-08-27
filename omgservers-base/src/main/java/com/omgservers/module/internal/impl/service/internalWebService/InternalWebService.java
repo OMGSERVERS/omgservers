@@ -1,17 +1,17 @@
 package com.omgservers.module.internal.impl.service.internalWebService;
 
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.internalModule.FireEventShardedResponse;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
-import com.omgservers.dto.internalModule.ViewLogRequest;
-import com.omgservers.dto.internalModule.ViewLogsResponse;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventShardedResponse;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
+import com.omgservers.dto.internal.ViewLogRequest;
+import com.omgservers.dto.internal.ViewLogsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface InternalWebService {
@@ -19,15 +19,15 @@ public interface InternalWebService {
 
     Uni<Void> syncServiceAccount(SyncServiceAccountRequest request);
 
-    Uni<FireEventShardedResponse> fireEvent(FireEventShardRequest request);
+    Uni<FireEventShardedResponse> fireEvent(FireEventShardedRequest request);
 
-    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request);
+    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request);
 
-    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request);
+    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request);
 
-    Uni<Void> scheduleJob(ScheduleJobShardRequest request);
+    Uni<Void> scheduleJob(ScheduleJobShardedRequest request);
 
-    Uni<Void> unscheduleJob(UnscheduleJobShardRequest request);
+    Uni<Void> unscheduleJob(UnscheduleJobShardedRequest request);
 
     Uni<ViewLogsResponse> viewLogs(ViewLogRequest request);
 }

@@ -1,19 +1,19 @@
 package com.omgservers.module.internal.impl.service.jobShardedService;
 
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface JobShardedService {
-    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request);
+    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request);
 
-    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request);
+    Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request);
 
-    Uni<Void> scheduleJob(ScheduleJobShardRequest request);
+    Uni<Void> scheduleJob(ScheduleJobShardedRequest request);
 
-    Uni<Void> unscheduleJob(UnscheduleJobShardRequest request);
+    Uni<Void> unscheduleJob(UnscheduleJobShardedRequest request);
 }

@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProjectPermission;
 
-import com.omgservers.dto.tenantModule.SyncProjectPermissionShardRequest;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
-import com.omgservers.module.internal.impl.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internalModule.ChangeWithLogRequest;
-import com.omgservers.dto.internalModule.ChangeWithLogResponse;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionInternalResponse;
+import com.omgservers.dto.internal.ChangeWithLogRequest;
+import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.dto.tenant.SyncProjectPermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardRequest request) {
-        SyncProjectPermissionShardRequest.validate(request);
+    public Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request) {
+        SyncProjectPermissionShardedRequest.validate(request);
 
         final var permission = request.getPermission();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,

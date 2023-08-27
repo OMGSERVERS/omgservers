@@ -1,11 +1,11 @@
 package com.omgservers.module.internal.impl.service.changeService.impl.method.changeWithEvent;
 
-import com.omgservers.module.internal.impl.factory.EventModelFactory;
-import com.omgservers.module.internal.impl.Dispatcher;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.Dispatcher;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.dto.internalModule.ChangeWithEventRequest;
-import com.omgservers.dto.internalModule.ChangeWithEventResponse;
+import com.omgservers.dto.internal.ChangeWithEventRequest;
+import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;

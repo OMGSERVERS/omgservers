@@ -1,8 +1,8 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl;
 
-import com.omgservers.dto.tenantModule.DeleteStageShardRequest;
-import com.omgservers.dto.tenantModule.HasStagePermissionShardRequest;
-import com.omgservers.dto.tenantModule.SyncStagePermissionShardRequest;
+import com.omgservers.dto.tenant.DeleteStageShardedRequest;
+import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.GetTenantServiceApiClientOperation;
 import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.TenantServiceApiClient;
 import com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.deleteStage.DeleteStageMethod;
@@ -13,13 +13,13 @@ import com.omgservers.module.tenant.impl.service.stageShardedService.impl.method
 import com.omgservers.module.tenant.impl.service.stageShardedService.StageShardedService;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.tenantModule.DeleteStageInternalResponse;
-import com.omgservers.dto.tenantModule.GetStageShardRequest;
-import com.omgservers.dto.tenantModule.GetStageInternalResponse;
-import com.omgservers.dto.tenantModule.HasStagePermissionInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStageShardRequest;
-import com.omgservers.dto.tenantModule.SyncStageInternalResponse;
-import com.omgservers.dto.tenantModule.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.DeleteStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedRequest;
+import com.omgservers.dto.tenant.SyncStageInternalResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionInternalResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -42,45 +42,45 @@ public class StageShardedServiceImpl implements StageShardedService {
     final GetStageMethod getStageMethod;
 
     @Override
-    public Uni<GetStageInternalResponse> getStage(GetStageShardRequest request) {
+    public Uni<GetStageInternalResponse> getStage(GetStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetStageShardRequest::validate,
+                GetStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::getStage,
                 getStageMethod::getStage);
     }
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardRequest request) {
+    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncStageShardRequest::validate,
+                SyncStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncStage,
                 syncStageMethod::syncStage);
     }
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardRequest request) {
+    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteStageShardRequest::validate,
+                DeleteStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::deleteStage,
                 deleteStageMethod::deleteStage);
     }
 
     @Override
-    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardRequest request) {
+    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasStagePermissionShardRequest::validate,
+                HasStagePermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::hasStagePermission,
                 hasStagePermissionMethod::hasStagePermission);
     }
 
     @Override
-    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardRequest request) {
+    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncStagePermissionShardRequest::validate,
+                SyncStagePermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
                 TenantServiceApiClient::syncStagePermission,
                 syncStagePermissionMethod::syncStagePermission);

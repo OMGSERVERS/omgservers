@@ -16,10 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-luaj</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-exception</artifactId>
         </dependency>
         <dependency>
@@ -36,7 +32,43 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-lua</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-version</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-tenant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-matchmaker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-handler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-developer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-admin</artifactId>
         </dependency>
         <!-- external -->
         <dependency>

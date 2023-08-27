@@ -1,20 +1,20 @@
 package com.omgservers.application.handlers;
 
-import com.omgservers.application.module.userModule.UserModule;
+import com.omgservers.module.user.UserModule;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getServers.GetServersOperation;
-import com.omgservers.dto.tenantModule.GetProjectInternalResponse;
-import com.omgservers.dto.tenantModule.GetProjectShardRequest;
-import com.omgservers.dto.tenantModule.SyncProjectPermissionShardRequest;
+import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.impl.factory.ProjectPermissionModelFactory;
+import com.omgservers.module.tenant.factory.ProjectPermissionModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -51,14 +51,14 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ProjectModel> getProject(Long tenantId, Long id) {
-        final var request = new GetProjectShardRequest(tenantId, id);
+        final var request = new GetProjectShardedRequest(tenantId, id);
         return tenantModule.getProjectShardedService().getProject(request)
                 .map(GetProjectInternalResponse::getProject);
     }
 
     Uni<Void> syncCreateStagePermission(Long tenantId, Long projectId, Long userId) {
         final var permission = projectPermissionModelFactory.create(projectId, userId, ProjectPermissionEnum.CREATE_STAGE);
-        final var request = new SyncProjectPermissionShardRequest(tenantId, permission);
+        final var request = new SyncProjectPermissionShardedRequest(tenantId, permission);
         return tenantModule.getProjectShardedService().syncProjectPermission(request)
                 .replaceWithVoid();
     }

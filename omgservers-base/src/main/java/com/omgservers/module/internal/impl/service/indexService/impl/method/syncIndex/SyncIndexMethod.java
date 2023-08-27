@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.indexService.impl.method.syncIndex;
 
-import com.omgservers.dto.internalModule.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncIndexMethod {

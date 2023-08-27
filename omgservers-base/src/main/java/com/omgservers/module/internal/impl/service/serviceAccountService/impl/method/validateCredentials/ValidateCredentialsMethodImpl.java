@@ -1,10 +1,10 @@
 package com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.validateCredentials;
 
 import com.omgservers.module.internal.impl.service.serviceAccountService.ServiceAccountService;
-import com.omgservers.dto.internalModule.ValidateCredentialsRequest;
-import com.omgservers.dto.internalModule.ValidateCredentialsResponse;
-import com.omgservers.dto.internalModule.GetServiceAccountHelpRequest;
-import com.omgservers.dto.internalModule.GetServiceAccountHelpResponse;
+import com.omgservers.dto.internal.ValidateCredentialsRequest;
+import com.omgservers.dto.internal.ValidateCredentialsResponse;
+import com.omgservers.dto.internal.GetServiceAccountHelpRequest;
+import com.omgservers.dto.internal.GetServiceAccountHelpResponse;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

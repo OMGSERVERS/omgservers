@@ -24,11 +24,6 @@
         <dependencies>
             <dependency>
                 <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-luaj</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-exception</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
@@ -49,7 +44,52 @@
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-gateway</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-user</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-tenant</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-lua</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-version</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-matchmaker</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-handler</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-runtime</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-developer</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-admin</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>

@@ -1,12 +1,11 @@
 package com.omgservers.module.tenant.impl.operation.upsertTenantPermission;
 
-import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.module.tenant.impl.factory.TenantModelFactory;
-import com.omgservers.module.tenant.impl.factory.TenantPermissionModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

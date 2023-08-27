@@ -1,19 +1,19 @@
 package com.omgservers.module.internal.impl.service.internalWebService.impl.serviceApi;
 
 import com.omgservers.module.internal.impl.service.internalWebService.InternalWebService;
-import com.omgservers.dto.internalModule.DeleteJobShardRequest;
-import com.omgservers.dto.internalModule.FireEventShardRequest;
-import com.omgservers.dto.internalModule.ScheduleJobShardRequest;
-import com.omgservers.dto.internalModule.ViewLogRequest;
-import com.omgservers.dto.internalModule.ViewLogsResponse;
-import com.omgservers.dto.internalModule.SyncIndexRequest;
-import com.omgservers.dto.internalModule.SyncServiceAccountRequest;
+import com.omgservers.dto.internal.DeleteJobShardedRequest;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.ScheduleJobShardedRequest;
+import com.omgservers.dto.internal.ViewLogRequest;
+import com.omgservers.dto.internal.ViewLogsResponse;
+import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
-import com.omgservers.dto.internalModule.DeleteJobShardedResponse;
-import com.omgservers.dto.internalModule.FireEventShardedResponse;
-import com.omgservers.dto.internalModule.SyncJobShardRequest;
-import com.omgservers.dto.internalModule.SyncJobRoutedResponse;
-import com.omgservers.dto.internalModule.UnscheduleJobShardRequest;
+import com.omgservers.dto.internal.DeleteJobShardedResponse;
+import com.omgservers.dto.internal.FireEventShardedResponse;
+import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -43,31 +43,31 @@ class InternalServiceApiImpl implements InternalServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FireEventShardedResponse> fireEvent(FireEventShardRequest request) {
+    public Uni<FireEventShardedResponse> fireEvent(FireEventShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::fireEvent);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardRequest request) {
+    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::syncJob);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardRequest request) {
+    public Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::deleteJob);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> scheduleJob(ScheduleJobShardRequest request) {
+    public Uni<Void> scheduleJob(ScheduleJobShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::scheduleJob);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> unscheduleJob(UnscheduleJobShardRequest request) {
+    public Uni<Void> unscheduleJob(UnscheduleJobShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::unscheduleJob);
     }
 
