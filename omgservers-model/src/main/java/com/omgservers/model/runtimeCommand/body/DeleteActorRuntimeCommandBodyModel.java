@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class LeaveRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
+public class DeleteActorRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     Long userId;
+    Long playerId;
     Long clientId;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {
-        return RuntimeCommandQualifierEnum.LEAVE;
+        return RuntimeCommandQualifierEnum.DELETE_ACTOR;
     }
 }

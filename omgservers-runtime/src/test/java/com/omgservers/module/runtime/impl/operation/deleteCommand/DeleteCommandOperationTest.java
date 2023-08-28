@@ -2,7 +2,7 @@ package com.omgservers.module.runtime.impl.operation.deleteCommand;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.runtimeCommand.body.StartRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertCommand.UpsertCommandOperation;
@@ -47,7 +47,7 @@ class DeleteCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new StartRuntimeCommandBodyModel());
+        final var command = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
 
         assertTrue(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, command.getId()));

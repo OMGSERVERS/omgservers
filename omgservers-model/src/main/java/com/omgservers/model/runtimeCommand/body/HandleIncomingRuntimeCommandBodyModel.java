@@ -11,14 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class IncomingRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
+public class HandleIncomingRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     Long userId;
+    Long playerId;
     Long clientId;
-    String body;
+    String incoming;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {
-        return RuntimeCommandQualifierEnum.INCOMING;
+        return RuntimeCommandQualifierEnum.HANDLE_INCOMING;
     }
 }

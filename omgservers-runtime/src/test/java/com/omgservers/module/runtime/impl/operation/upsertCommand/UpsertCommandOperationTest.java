@@ -3,7 +3,7 @@ package com.omgservers.module.runtime.impl.operation.upsertCommand;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.runtimeCommand.body.StartRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
@@ -44,7 +44,7 @@ class UpsertCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new StartRuntimeCommandBodyModel());
+        final var command = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         assertTrue(upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command));
     }
 
@@ -54,7 +54,7 @@ class UpsertCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new StartRuntimeCommandBodyModel());
+        final var command = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
 
         assertFalse(upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command));
@@ -63,7 +63,7 @@ class UpsertCommandOperationTest extends Assertions {
     @Test
     void givenUnknownRuntimeUuid_whenUpsertCommand_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var command = commandModelFactory.create(runtimeId(), new StartRuntimeCommandBodyModel());
+        final var command = commandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertCommandOperation
                 .upsertCommand(TIMEOUT, pgPool, shard, command));
         log.info("Exception: {}", exception.getMessage());
