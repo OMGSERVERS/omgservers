@@ -27,4 +27,5 @@ public class RuntimeCommandModel {
     RuntimeCommandQualifierEnum qualifier;
     RuntimeCommandBodyModel body;
     RuntimeCommandStatusEnum status;
+    Long step;
 }

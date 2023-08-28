@@ -3,6 +3,7 @@ package com.omgservers.module.runtime.impl.operation.upsertRuntime;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -18,6 +19,9 @@ class UpsertRuntimeOperationTest extends Assertions {
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
+
+    @Inject
+    SyncRuntimeMethod syncRuntimeMethod;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;

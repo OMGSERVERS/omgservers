@@ -33,7 +33,7 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    RuntimeCommandModelFactory commandModelFactory;
+    RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -47,7 +47,7 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var runtimeCommand = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
 
         assertTrue(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand.getId()));

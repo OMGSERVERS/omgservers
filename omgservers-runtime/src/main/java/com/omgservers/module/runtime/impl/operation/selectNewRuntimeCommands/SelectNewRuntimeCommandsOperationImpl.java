@@ -24,7 +24,7 @@ import java.util.List;
 class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsOperation {
 
     static private final String sql = """
-            select id, runtime_id, created, modified, qualifier, body, status
+            select id, runtime_id, created, modified, qualifier, body, status, step
             from $schema.tab_runtime_command
             where runtime_id = $1 and status = $2
             order by id asc
@@ -55,7 +55,10 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
                         runtimeCommands.add(command);
                     }
                     if (runtimeCommands.size() > 0) {
-                        log.info("New runtime commands were selected, count={}", runtimeCommands.size());
+                        log.info("New runtime commands were selected, " +
+                                "count={}, runtimeId={}", runtimeCommands.size(), runtimeId);
+                    } else {
+                        log.info("New runtime commands were not found, runtimeId={}", runtimeId);
                     }
                     return runtimeCommands;
                 });
@@ -76,6 +79,7 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
             log.error("runtime command can't be parsed, id=" + runtimeCommand.getId(), e);
         }
         runtimeCommand.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
+        runtimeCommand.setStep(row.getLong("step"));
         return runtimeCommand;
     }
 }

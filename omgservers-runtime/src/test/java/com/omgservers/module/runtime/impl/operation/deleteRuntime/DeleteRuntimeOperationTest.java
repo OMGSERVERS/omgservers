@@ -1,8 +1,8 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntime;
 
+import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

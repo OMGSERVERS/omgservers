@@ -37,4 +37,6 @@ public interface ServiceApplicationConfig {
     int postponeInterval();
 
     boolean standalone();
+
+    boolean verbose();
 }

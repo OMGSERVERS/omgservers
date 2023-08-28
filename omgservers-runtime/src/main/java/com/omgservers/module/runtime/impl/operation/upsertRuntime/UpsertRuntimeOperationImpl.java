@@ -1,11 +1,11 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -24,10 +24,10 @@ import java.util.ArrayList;
 class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime(id, created, modified, matchmaker_id, match_id, type, config)
-            values($1, $2, $3, $4, $5, $6, $7)
+            insert into $schema.tab_runtime(id, created, modified, matchmaker_id, match_id, type, current_step, config)
+            values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set modified = $3, matchmaker_id = $4, match_id = $5, type = $6, config = $7
+            update set modified = $3, matchmaker_id = $4, match_id = $5, type = $6, current_step = $7, config = $8
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -72,6 +72,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         add(runtime.getMatchmakerId());
                         add(runtime.getMatchId());
                         add(runtime.getType());
+                        add(runtime.getCurrentStep());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

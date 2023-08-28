@@ -1,9 +1,9 @@
 package com.omgservers.factory;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +39,7 @@ public class RuntimeModelFactory {
         runtime.setMatchmakerId(matchmakerId);
         runtime.setMatchId(matchId);
         runtime.setType(type);
+        runtime.setCurrentStep(0L);
         runtime.setConfig(config);
         return runtime;
     }

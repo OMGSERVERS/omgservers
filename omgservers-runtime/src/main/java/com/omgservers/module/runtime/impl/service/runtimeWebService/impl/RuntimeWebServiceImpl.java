@@ -1,5 +1,6 @@
 package com.omgservers.module.runtime.impl.service.runtimeWebService.impl;
 
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedResponse;
 import com.omgservers.module.runtime.impl.service.runtimeShardedService.RuntimeShardedService;
 import com.omgservers.module.runtime.impl.service.runtimeWebService.RuntimeWebService;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
@@ -52,7 +53,7 @@ class RuntimeWebServiceImpl implements RuntimeWebService {
     }
 
     @Override
-    public Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
+    public Uni<DoRuntimeUpdateShardedResponse> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
         return runtimeShardedService.doRuntimeUpdate(request);
     }
 }

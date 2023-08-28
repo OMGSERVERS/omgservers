@@ -24,5 +24,6 @@ public class RuntimeModel {
     Long matchmakerId;
     Long matchId;
     RuntimeTypeEnum type;
+    Long currentStep;
     RuntimeConfigModel config;
 }

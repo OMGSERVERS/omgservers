@@ -1,12 +1,11 @@
 package com.omgservers.module.runtime.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.module.runtime.impl.service.runtimeWebService.RuntimeWebService;
-import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedResponse;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
@@ -14,6 +13,8 @@ import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
+import com.omgservers.module.runtime.impl.service.runtimeWebService.RuntimeWebService;
+import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -61,7 +62,7 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
+    public Uni<DoRuntimeUpdateShardedResponse> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::doRuntimeUpdate);
     }
 }

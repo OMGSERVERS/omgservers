@@ -16,8 +16,8 @@ pushd omgservers-lua; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-version; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-tenant; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-matchmaker; ./mvnw ${MVN_ARGS}; popd
-pushd omgservers-runtime; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-context; ./mvnw ${MVN_ARGS}; popd
+pushd omgservers-runtime; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-handler; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-job; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-developer; ./mvnw ${MVN_ARGS}; popd

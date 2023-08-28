@@ -1,12 +1,12 @@
 package com.omgservers.module.runtime.impl.operation.selectRuntime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -24,7 +24,7 @@ import java.io.IOException;
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     static private final String sql = """
-            select id, created, modified, matchmaker_id, match_id, type, config
+            select id, created, modified, matchmaker_id, match_id, type, current_step, config
             from $schema.tab_runtime
             where id = $1
             limit 1
@@ -71,6 +71,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
         runtime.setMatchmakerId(row.getLong("matchmaker_id"));
         runtime.setMatchId(row.getLong("match_id"));
         runtime.setType(RuntimeTypeEnum.valueOf(row.getString("type")));
+        runtime.setCurrentStep(row.getLong("current_step"));
         runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
         return runtime;
     }

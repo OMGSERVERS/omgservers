@@ -30,7 +30,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    RuntimeCommandModelFactory commandModelFactory;
+    RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -44,8 +44,8 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
-        assertTrue(upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, command));
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
+        assertTrue(upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
     }
 
     @Test
@@ -54,7 +54,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var runtimeCommand = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
 
         assertFalse(upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
@@ -63,9 +63,9 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenUnknownRuntimeId_whenUpsertRuntimeCommand_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var command = commandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeCommandOperation
-                .upsertRuntimeCommand(TIMEOUT, pgPool, shard, command));
+                .upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
         log.info("Exception: {}", exception.getMessage());
     }
 

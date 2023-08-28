@@ -174,6 +174,7 @@ create table if not exists tab_runtime (
     matchmaker_id bigint not null,
     match_id bigint not null,
     type text not null,
+    current_step bigint not null,
     config json not null
 );
 
@@ -184,5 +185,6 @@ create table if not exists tab_runtime_command (
     modified timestamp with time zone not null,
     qualifier text not null,
     body json not null,
-    status text not null
+    status text not null,
+    step bigint
 );

@@ -25,10 +25,10 @@ import java.util.ArrayList;
 class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation {
 
     static private final String sql = """
-            insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status)
-            values($1, $2, $3, $4, $5, $6, $7)
+            insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status, step)
+            values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set modified = $4, qualifier = $5, body = $6, status = $7
+            update set modified = $4, qualifier = $5, body = $6, status = $7, step = $8
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -83,6 +83,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                         add(runtimeCommand.getQualifier());
                         add(bodyString);
                         add(runtimeCommand.getStatus());
+                        add(runtimeCommand.getStep());
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

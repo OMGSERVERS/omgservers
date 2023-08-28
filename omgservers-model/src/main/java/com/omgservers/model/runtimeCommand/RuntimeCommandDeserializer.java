@@ -74,6 +74,12 @@ public class RuntimeCommandDeserializer extends StdDeserializer<RuntimeCommandMo
             commandModel.setStatus(status);
         }
 
+        final var stepNode = root.get("step");
+        if (stepNode != null) {
+            final var step = statusNode.asLong();
+            commandModel.setStep(step);
+        }
+
         return commandModel;
     }
 }
