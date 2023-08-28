@@ -4,7 +4,7 @@ import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
-import com.omgservers.dto.runtime.DoUpdateShardedRequest;
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
@@ -31,14 +31,14 @@ public interface RuntimeServiceApi {
     Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request);
 
     @PUT
-    @Path("/sync-command")
-    Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request);
+    @Path("/sync-runtime-command")
+    Uni<SyncRuntimeCommandShardedResponse> syncRuntimeCommand(SyncRuntimeCommandShardedRequest request);
 
     @PUT
-    @Path("/delete-command")
-    Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request);
+    @Path("/delete-runtime-command")
+    Uni<DeleteRuntimeCommandShardedResponse> deleteRuntimeCommand(DeleteRuntimeCommandShardedRequest request);
 
     @PUT
-    @Path("/do-update")
-    Uni<Void> doUpdate(DoUpdateShardedRequest request);
+    @Path("/do-runtime-update")
+    Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request);
 }

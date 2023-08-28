@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.factory;
+package com.omgservers.factory;
 
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.runtime.RuntimeConfigModel;

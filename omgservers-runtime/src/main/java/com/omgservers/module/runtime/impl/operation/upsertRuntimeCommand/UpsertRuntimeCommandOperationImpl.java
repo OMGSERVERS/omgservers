@@ -1,12 +1,12 @@
-package com.omgservers.module.runtime.impl.operation.upsertCommand;
+package com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpsertCommandOperationImpl implements UpsertCommandOperation {
+class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation {
 
     static private final String sql = """
             insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status)
@@ -36,22 +36,22 @@ class UpsertCommandOperationImpl implements UpsertCommandOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertCommand(final SqlConnection sqlConnection,
-                                      final int shard,
-                                      final RuntimeCommandModel command) {
+    public Uni<Boolean> upsertRuntimeCommand(final SqlConnection sqlConnection,
+                                             final int shard,
+                                             final RuntimeCommandModel runtimeCommand) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
-        if (command == null) {
-            throw new ServerSideBadRequestException("command is null");
+        if (runtimeCommand == null) {
+            throw new ServerSideBadRequestException("runtimeCommand is null");
         }
 
-        return upsertQuery(sqlConnection, shard, command)
+        return upsertQuery(sqlConnection, shard, runtimeCommand)
                 .invoke(inserted -> {
                     if (inserted) {
-                        log.info("Command was inserted, shard={}, command={}", shard, command);
+                        log.info("Runtime command was inserted, shard={}, runtimeCommand={}", shard, runtimeCommand);
                     } else {
-                        log.info("Command was updated, shard={}, command={}", shard, command);
+                        log.info("Runtime command was updated, shard={}, runtimeCommand={}", shard, runtimeCommand);
                     }
                 })
                 .onFailure(PgException.class)
@@ -60,29 +60,29 @@ class UpsertCommandOperationImpl implements UpsertCommandOperation {
                     final var code = pgException.getSqlState();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("runtime was not found, command=" + command);
+                        return new ServerSideNotFoundException("runtime was not found, runtimeCommand=" + runtimeCommand);
                     } else {
                         return new ServerSideConflictException(String.format("unhandled PgException, " +
-                                "%s, command=%s", t.getMessage(), command));
+                                "%s, runtimeCommand=%s", t.getMessage(), runtimeCommand));
                     }
                 });
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
                              final int shard,
-                             final RuntimeCommandModel command) {
+                             final RuntimeCommandModel runtimeCommand) {
         try {
-            var bodyString = objectMapper.writeValueAsString(command.getBody());
+            var bodyString = objectMapper.writeValueAsString(runtimeCommand.getBody());
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(new ArrayList<>() {{
-                        add(command.getId());
-                        add(command.getRuntimeId());
-                        add(command.getCreated().atOffset(ZoneOffset.UTC));
-                        add(command.getModified().atOffset(ZoneOffset.UTC));
-                        add(command.getQualifier());
+                        add(runtimeCommand.getId());
+                        add(runtimeCommand.getRuntimeId());
+                        add(runtimeCommand.getCreated().atOffset(ZoneOffset.UTC));
+                        add(runtimeCommand.getModified().atOffset(ZoneOffset.UTC));
+                        add(runtimeCommand.getQualifier());
                         add(bodyString);
-                        add(command.getStatus());
+                        add(runtimeCommand.getStatus());
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
         } catch (IOException e) {

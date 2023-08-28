@@ -17,10 +17,10 @@ public class SyncRuntimeCommandShardedRequest implements ShardedRequest {
         }
     }
 
-    RuntimeCommandModel command;
+    RuntimeCommandModel runtimeCommand;
 
     @Override
     public String getRequestShardKey() {
-        return command.getRuntimeId().toString();
+        return runtimeCommand.getRuntimeId().toString();
     }
 }

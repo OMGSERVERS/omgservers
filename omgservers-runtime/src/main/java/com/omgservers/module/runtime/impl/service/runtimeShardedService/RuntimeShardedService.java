@@ -4,7 +4,7 @@ import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
-import com.omgservers.dto.runtime.DoUpdateShardedRequest;
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
@@ -21,9 +21,9 @@ public interface RuntimeShardedService {
 
     Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request);
 
-    Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request);
+    Uni<SyncRuntimeCommandShardedResponse> syncRuntimeCommand(SyncRuntimeCommandShardedRequest request);
 
-    Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request);
+    Uni<DeleteRuntimeCommandShardedResponse> deleteRuntimeCommand(DeleteRuntimeCommandShardedRequest request);
 
-    Uni<Void> doUpdate(DoUpdateShardedRequest request);
+    Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request);
 }

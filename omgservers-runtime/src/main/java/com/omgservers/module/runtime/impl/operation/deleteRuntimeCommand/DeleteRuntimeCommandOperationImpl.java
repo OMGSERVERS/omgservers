@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.impl.operation.deleteCommand;
+package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class DeleteCommandOperationImpl implements DeleteCommandOperation {
+class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation {
 
     static private final String sql = """
             delete from $schema.tab_runtime_command where id = $1
@@ -20,7 +20,7 @@ class DeleteCommandOperationImpl implements DeleteCommandOperation {
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
-    public Uni<Boolean> deleteCommand(SqlConnection sqlConnection, int shard, Long id) {
+    public Uni<Boolean> deleteRuntimeCommand(SqlConnection sqlConnection, int shard, Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }

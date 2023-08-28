@@ -6,7 +6,7 @@ import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
-import com.omgservers.dto.runtime.DoUpdateShardedRequest;
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
@@ -42,17 +42,17 @@ class RuntimeWebServiceImpl implements RuntimeWebService {
     }
 
     @Override
-    public Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request) {
-        return runtimeShardedService.syncCommand(request);
+    public Uni<SyncRuntimeCommandShardedResponse> syncRuntimeCommand(SyncRuntimeCommandShardedRequest request) {
+        return runtimeShardedService.syncRuntimeCommand(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request) {
-        return runtimeShardedService.deleteCommand(request);
+    public Uni<DeleteRuntimeCommandShardedResponse> deleteRuntimeCommand(DeleteRuntimeCommandShardedRequest request) {
+        return runtimeShardedService.deleteRuntimeCommand(request);
     }
 
     @Override
-    public Uni<Void> doUpdate(DoUpdateShardedRequest request) {
-        return runtimeShardedService.doUpdate(request);
+    public Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
+        return runtimeShardedService.doRuntimeUpdate(request);
     }
 }

@@ -10,7 +10,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.module.runtime.factory.RuntimeModelFactory;
+import com.omgservers.factory.RuntimeModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

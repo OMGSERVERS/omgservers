@@ -1,12 +1,12 @@
-package com.omgservers.module.runtime.impl.operation.deleteCommand;
+package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
+import com.omgservers.factory.RuntimeCommandModelFactory;
+import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
-import com.omgservers.module.runtime.factory.RuntimeModelFactory;
-import com.omgservers.module.runtime.impl.operation.upsertCommand.UpsertCommandOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
+import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,17 +17,17 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteCommandOperationTest extends Assertions {
+class DeleteRuntimeCommandOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    DeleteCommandOperation deleteCommandOperation;
+    DeleteRuntimeCommandOperation deleteRuntimeCommandOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertCommandOperation upsertCommandOperation;
+    UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -42,23 +42,23 @@ class DeleteCommandOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenCommand_whenDeleteCommand_thenDeleted() {
+    void givenRuntimeCommand_whenDeleteRuntimeCommand_thenDeleted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var command = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
-        upsertCommandOperation.upsertCommand(TIMEOUT, pgPool, shard, command);
+        final var runtimeCommand = commandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
+        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
 
-        assertTrue(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, command.getId()));
+        assertTrue(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand.getId()));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteCommand_thenSkip() {
+    void givenUnknownRuntimeId_whenDeleteRuntimeCommand_thenSkip() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteCommandOperation.deleteCommand(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, id));
     }
 
     Long matchmakerId() {

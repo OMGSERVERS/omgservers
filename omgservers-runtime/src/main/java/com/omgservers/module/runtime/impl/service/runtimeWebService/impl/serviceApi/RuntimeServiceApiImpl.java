@@ -6,7 +6,7 @@ import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
-import com.omgservers.dto.runtime.DoUpdateShardedRequest;
+import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
@@ -49,19 +49,19 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncCommand);
+    public Uni<SyncRuntimeCommandShardedResponse> syncRuntimeCommand(SyncRuntimeCommandShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncRuntimeCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteCommand);
+    public Uni<DeleteRuntimeCommandShardedResponse> deleteRuntimeCommand(DeleteRuntimeCommandShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteRuntimeCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> doUpdate(DoUpdateShardedRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::doUpdate);
+    public Uni<Void> doRuntimeUpdate(DoRuntimeUpdateShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::doRuntimeUpdate);
     }
 }

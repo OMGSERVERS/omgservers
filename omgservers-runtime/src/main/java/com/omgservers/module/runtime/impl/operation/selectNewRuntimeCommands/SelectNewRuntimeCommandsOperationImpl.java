@@ -1,10 +1,10 @@
-package com.omgservers.module.runtime.impl.operation.selectNewCommands;
+package com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectNewCommandsOperationImpl implements SelectNewCommandsOperation {
+class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsOperation {
 
     static private final String sql = """
             select id, runtime_id, created, modified, qualifier, body, status
@@ -34,9 +34,9 @@ class SelectNewCommandsOperationImpl implements SelectNewCommandsOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<List<RuntimeCommandModel>> selectNewCommands(final SqlConnection sqlConnection,
-                                                            final int shard,
-                                                            final Long runtimeId) {
+    public Uni<List<RuntimeCommandModel>> selectNewRuntimeCommands(final SqlConnection sqlConnection,
+                                                                   final int shard,
+                                                                   final Long runtimeId) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
@@ -49,33 +49,33 @@ class SelectNewCommandsOperationImpl implements SelectNewCommandsOperation {
                 .execute(Tuple.of(runtimeId, RuntimeCommandStatusEnum.NEW))
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var commands = new ArrayList<RuntimeCommandModel>();
+                    final var runtimeCommands = new ArrayList<RuntimeCommandModel>();
                     while (iterator.hasNext()) {
-                        final var command = createCommand(iterator.next());
-                        commands.add(command);
+                        final var command = createRuntimeCommand(iterator.next());
+                        runtimeCommands.add(command);
                     }
-                    if (commands.size() > 0) {
-                        log.info("New commands were selected, count={}, commands={}", commands.size(), commands);
+                    if (runtimeCommands.size() > 0) {
+                        log.info("New runtime commands were selected, count={}", runtimeCommands.size());
                     }
-                    return commands;
+                    return runtimeCommands;
                 });
     }
 
-    RuntimeCommandModel createCommand(Row row) {
-        RuntimeCommandModel command = new RuntimeCommandModel();
-        command.setId(row.getLong("id"));
-        command.setRuntimeId(row.getLong("runtime_id"));
-        command.setCreated(row.getOffsetDateTime("created").toInstant());
-        command.setModified(row.getOffsetDateTime("modified").toInstant());
+    RuntimeCommandModel createRuntimeCommand(Row row) {
+        RuntimeCommandModel runtimeCommand = new RuntimeCommandModel();
+        runtimeCommand.setId(row.getLong("id"));
+        runtimeCommand.setRuntimeId(row.getLong("runtime_id"));
+        runtimeCommand.setCreated(row.getOffsetDateTime("created").toInstant());
+        runtimeCommand.setModified(row.getOffsetDateTime("modified").toInstant());
         final var qualifier = RuntimeCommandQualifierEnum.valueOf(row.getString("qualifier"));
-        command.setQualifier(qualifier);
+        runtimeCommand.setQualifier(qualifier);
         try {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
-            command.setBody(body);
+            runtimeCommand.setBody(body);
         } catch (IOException e) {
-            log.error("command can't be parsed, id=" + command.getId(), e);
+            log.error("runtime command can't be parsed, id=" + runtimeCommand.getId(), e);
         }
-        command.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
-        return command;
+        runtimeCommand.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
+        return runtimeCommand;
     }
 }
