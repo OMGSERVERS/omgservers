@@ -3,8 +3,8 @@ package com.omgservers.module.internal.impl.service.syncService.impl;
 import com.omgservers.module.internal.impl.service.syncService.SyncService;
 import com.omgservers.module.internal.impl.service.syncService.impl.method.syncIndexOverServers.SyncIndexOverServersMethod;
 import com.omgservers.module.internal.impl.service.syncService.impl.method.syncServiceAccountOverServers.SyncServiceAccountOverServersMethod;
-import com.omgservers.dto.internal.SyncIndexOverServersInternalRequest;
-import com.omgservers.dto.internal.SyncServiceAccountOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncIndexOverServersRequest;
+import com.omgservers.dto.internal.SyncServiceAccountOverServersRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,12 +20,12 @@ class SyncServiceImpl implements SyncService {
     final SyncServiceAccountOverServersMethod syncServiceAccountOverServersMethod;
 
     @Override
-    public Uni<Void> syncIndex(SyncIndexOverServersInternalRequest request) {
+    public Uni<Void> syncIndex(SyncIndexOverServersRequest request) {
         return syncIndexOverServersMethod.syncIndex(request);
     }
 
     @Override
-    public Uni<Void> syncServiceAccount(SyncServiceAccountOverServersInternalRequest request) {
+    public Uni<Void> syncServiceAccount(SyncServiceAccountOverServersRequest request) {
         return syncServiceAccountOverServersMethod.syncServiceAccount(request);
     }
 }

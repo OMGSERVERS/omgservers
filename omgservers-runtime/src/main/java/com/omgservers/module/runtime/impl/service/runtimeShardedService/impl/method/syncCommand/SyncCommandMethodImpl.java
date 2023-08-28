@@ -5,8 +5,8 @@ import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.runtime.SyncCommandShardedRequest;
-import com.omgservers.dto.runtime.SyncCommandInternalResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class SyncCommandMethodImpl implements SyncCommandMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandShardedRequest request) {
-        SyncCommandShardedRequest.validate(request);
+    public Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request) {
+        SyncRuntimeCommandShardedRequest.validate(request);
 
         final var command = request.getCommand();
         return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
@@ -42,6 +42,6 @@ class SyncCommandMethodImpl implements SyncCommandMethod {
                         }
                 ))
                 .map(ChangeWithLogResponse::getResult)
-                .map(SyncCommandInternalResponse::new);
+                .map(SyncRuntimeCommandShardedResponse::new);
     }
 }

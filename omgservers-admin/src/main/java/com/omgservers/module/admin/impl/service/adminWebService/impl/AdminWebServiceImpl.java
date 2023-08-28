@@ -20,11 +20,11 @@ import com.omgservers.dto.admin.PingServerAdminResponse;
 import com.omgservers.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.dto.admin.SyncServiceAccountAdminRequest;
 import com.omgservers.dto.internal.DeleteIndexRequest;
-import com.omgservers.dto.internal.DeleteServiceAccountHelpRequest;
+import com.omgservers.dto.internal.DeleteServiceAccountRequest;
 import com.omgservers.dto.internal.GetIndexRequest;
-import com.omgservers.dto.internal.GetIndexHelpResponse;
-import com.omgservers.dto.internal.GetServiceAccountHelpRequest;
-import com.omgservers.dto.internal.GetServiceAccountHelpResponse;
+import com.omgservers.dto.internal.GetIndexResponse;
+import com.omgservers.dto.internal.GetServiceAccountRequest;
+import com.omgservers.dto.internal.GetServiceAccountResponse;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import io.smallrye.mutiny.Uni;
@@ -54,7 +54,7 @@ class AdminWebServiceImpl implements AdminWebService {
     public Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request) {
         final var name = request.getName();
         return internalModule.getIndexService().getIndex(new GetIndexRequest(name))
-                .map(GetIndexHelpResponse::getIndex)
+                .map(GetIndexResponse::getIndex)
                 .map(GetIndexAdminResponse::new);
     }
 
@@ -74,8 +74,8 @@ class AdminWebServiceImpl implements AdminWebService {
     public Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request) {
         final var username = request.getUsername();
         return internalModule.getServiceAccountService()
-                .getServiceAccount(new GetServiceAccountHelpRequest(username))
-                .map(GetServiceAccountHelpResponse::getServiceAccount)
+                .getServiceAccount(new GetServiceAccountRequest(username))
+                .map(GetServiceAccountResponse::getServiceAccount)
                 .map(GetServiceAccountAdminResponse::new);
     }
 
@@ -90,7 +90,7 @@ class AdminWebServiceImpl implements AdminWebService {
     public Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request) {
         final var id = request.getId();
         return internalModule.getServiceAccountService()
-                .deleteServiceAccount(new DeleteServiceAccountHelpRequest(id));
+                .deleteServiceAccount(new DeleteServiceAccountRequest(id));
     }
 
     @Override

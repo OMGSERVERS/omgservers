@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.service.clientShardedService.impl.method
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.factory.LogModelFactory;
@@ -26,7 +26,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteClientShardResponse> deleteClient(final DeleteClientShardedRequest request) {
+    public Uni<DeleteClientShardedResponse> deleteClient(final DeleteClientShardedRequest request) {
         DeleteClientShardedRequest.validate(request);
 
         final var clientId = request.getClientId();
@@ -42,6 +42,6 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
                             }
                         }))
                 .map(ChangeWithLogResponse::getResult)
-                .map(DeleteClientShardResponse::new);
+                .map(DeleteClientShardedResponse::new);
     }
 }

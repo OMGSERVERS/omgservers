@@ -2,17 +2,17 @@ package com.omgservers.module.runtime.impl.service.runtimeWebService.impl.servic
 
 import com.omgservers.module.runtime.impl.service.runtimeWebService.RuntimeWebService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
-import com.omgservers.dto.runtime.DeleteCommandShardedRequest;
-import com.omgservers.dto.runtime.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
-import com.omgservers.dto.runtime.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.dto.runtime.DoUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtime.SyncCommandShardedRequest;
-import com.omgservers.dto.runtime.SyncCommandInternalResponse;
+import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.runtime.SyncRuntimeInternalResponse;
+import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -31,31 +31,31 @@ public class RuntimeServiceApiImpl implements RuntimeServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardedRequest request) {
+    public Uni<SyncRuntimeShardedResponse> syncRuntime(SyncRuntimeShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeShardedRequest request) {
+    public Uni<GetRuntimeShardedResponse> getRuntime(GetRuntimeShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::getRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
+    public Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandShardedRequest request) {
+    public Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::syncCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardedRequest request) {
+    public Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, runtimeWebService::deleteCommand);
     }
 

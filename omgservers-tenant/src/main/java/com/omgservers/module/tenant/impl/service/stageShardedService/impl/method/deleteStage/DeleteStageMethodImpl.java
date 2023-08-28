@@ -6,7 +6,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
-import com.omgservers.dto.tenant.DeleteStageInternalResponse;
+import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,7 +27,7 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(final DeleteStageShardedRequest request) {
+    public Uni<DeleteStageShardedResponse> deleteStage(final DeleteStageShardedRequest request) {
         DeleteStageShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -52,6 +52,6 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
                             }
                         }))
                 .map(ChangeWithEventResponse::getResult)
-                .map(DeleteStageInternalResponse::new);
+                .map(DeleteStageShardedResponse::new);
     }
 }

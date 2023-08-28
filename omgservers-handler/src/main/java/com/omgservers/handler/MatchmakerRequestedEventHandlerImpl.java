@@ -1,7 +1,7 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
@@ -69,7 +69,7 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
     Uni<StageModel> getStage(Long tenantId, Long stageId) {
         final var request = new GetStageShardedRequest(tenantId, stageId);
         return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageInternalResponse::getStage);
+                .map(GetStageShardedResponse::getStage);
     }
 
     Uni<Map<String, String>> getPlayerAttributes(Long userId, Long playerId) {

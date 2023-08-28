@@ -1,12 +1,12 @@
 package com.omgservers.module.gateway.impl.service.gatewayService.impl;
 
+import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
+import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer.AssignPlayerMethod;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.respondMessage.RespondMessageMethod;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.gateway.AssignPlayerRequest;
-import com.omgservers.dto.gateway.RespondMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ class GatewayServiceImpl implements GatewayService {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
+    public Uni<Void> respondMessage(RespondMessageRoutedRequest request) {
         final var currentServer = getConfigOperation.getConfig().serverUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -38,7 +38,7 @@ class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
+    public Uni<Void> assignPlayer(AssignPlayerRoutedRequest request) {
         final var currentServer = getConfigOperation.getConfig().serverUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {

@@ -6,7 +6,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.runtime.SyncRuntimeInternalResponse;
+import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -28,7 +28,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardedRequest request) {
+    public Uni<SyncRuntimeShardedResponse> syncRuntime(SyncRuntimeShardedRequest request) {
         SyncRuntimeShardedRequest.validate(request);
 
         final var runtime = request.getRuntime();
@@ -54,6 +54,6 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(SyncRuntimeInternalResponse::new);
+                .map(SyncRuntimeShardedResponse::new);
     }
 }

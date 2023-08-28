@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.service.playerShardedService.impl.method
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.factory.LogModelFactory;
@@ -26,7 +26,7 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeletePlayerShardResponse> deletePlayer(final DeletePlayerShardedRequest request) {
+    public Uni<DeletePlayerShardedResponse> deletePlayer(final DeletePlayerShardedRequest request) {
         DeletePlayerShardedRequest.validate(request);
 
         final var userId = request.getUserId();
@@ -43,6 +43,6 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
                             }
                         }))
                 .map(ChangeWithLogResponse::getResult)
-                .map(DeletePlayerShardResponse::new);
+                .map(DeletePlayerShardedResponse::new);
     }
 }

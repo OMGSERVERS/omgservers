@@ -1,6 +1,6 @@
 package com.omgservers.module.context.impl.operation.createLuaRuntime.impl;
 
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.version.GetBytecodeShardedRequest;
 import com.omgservers.dto.version.GetBytecodeShardedResponse;
@@ -59,7 +59,7 @@ class CreateLuaRuntimeOperationImpl implements CreateLuaRuntimeOperation {
     Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
         final var request = new GetStageShardedRequest(tenantId, stageId);
         return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageInternalResponse::getStage)
+                .map(GetStageShardedResponse::getStage)
                 .map(StageModel::getVersionId);
     }
 

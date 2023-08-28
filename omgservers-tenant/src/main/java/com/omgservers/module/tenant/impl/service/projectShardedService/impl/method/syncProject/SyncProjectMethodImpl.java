@@ -7,7 +7,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
-import com.omgservers.dto.tenant.SyncProjectInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectShardedResponse;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardedRequest request) {
+    public Uni<SyncProjectShardedResponse> syncProject(SyncProjectShardedRequest request) {
         SyncProjectShardedRequest.validate(request);
 
         final var project = request.getProject();
@@ -57,6 +57,6 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(SyncProjectInternalResponse::new);
+                .map(SyncProjectShardedResponse::new);
     }
 }

@@ -1,22 +1,22 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerWebService.impl;
 
-import com.omgservers.dto.matchmaker.DeleteMatchShardResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteRequestShardResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
-import com.omgservers.dto.matchmaker.DoMatchmakingShardResponse;
+import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
 import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncRequestShardResponse;
+import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.MatchmakerShardedService;
 import com.omgservers.module.matchmaker.impl.service.matchmakerWebService.MatchmakerWebService;
@@ -34,47 +34,47 @@ class MatchmakerWebServiceImpl implements MatchmakerWebService {
     final MatchmakerShardedService matchmakerShardedService;
 
     @Override
-    public Uni<SyncMatchmakerShardResponse> syncMatchmaker(SyncMatchmakerShardedRequest request) {
+    public Uni<SyncMatchmakerShardedResponse> syncMatchmaker(SyncMatchmakerShardedRequest request) {
         return matchmakerShardedService.syncMatchmaker(request);
     }
 
     @Override
-    public Uni<GetMatchmakerShardResponse> getMatchmaker(GetMatchmakerShardedRequest request) {
+    public Uni<GetMatchmakerShardedResponse> getMatchmaker(GetMatchmakerShardedRequest request) {
         return matchmakerShardedService.getMatchmaker(request);
     }
 
     @Override
-    public Uni<DeleteMatchmakerShardResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request) {
+    public Uni<DeleteMatchmakerShardedResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request) {
         return matchmakerShardedService.deleteMatchmaker(request);
     }
 
     @Override
-    public Uni<SyncRequestShardResponse> syncRequest(SyncRequestShardedRequest request) {
+    public Uni<SyncRequestShardedResponse> syncRequest(SyncRequestShardedRequest request) {
         return matchmakerShardedService.syncRequest(request);
     }
 
     @Override
-    public Uni<DeleteRequestShardResponse> deleteRequest(DeleteRequestShardedRequest request) {
+    public Uni<DeleteRequestShardedResponse> deleteRequest(DeleteRequestShardedRequest request) {
         return matchmakerShardedService.deleteRequest(request);
     }
 
     @Override
-    public Uni<GetMatchShardResponse> getMatch(GetMatchShardedRequest request) {
+    public Uni<GetMatchShardedResponse> getMatch(GetMatchShardedRequest request) {
         return matchmakerShardedService.getMatch(request);
     }
 
     @Override
-    public Uni<SyncMatchShardResponse> syncMatch(SyncMatchShardedRequest request) {
+    public Uni<SyncMatchShardedResponse> syncMatch(SyncMatchShardedRequest request) {
         return matchmakerShardedService.syncMatch(request);
     }
 
     @Override
-    public Uni<DeleteMatchShardResponse> deleteMatch(DeleteMatchShardedRequest request) {
+    public Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request) {
         return matchmakerShardedService.deleteMatch(request);
     }
 
     @Override
-    public Uni<DoMatchmakingShardResponse> doMatchmaking(DoMatchmakingShardedRequest request) {
+    public Uni<DoMatchmakingShardedResponse> doMatchmaking(DoMatchmakingShardedRequest request) {
         return matchmakerShardedService.doMatchmaking(request);
     }
 }

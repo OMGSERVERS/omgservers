@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.matchmaker.DeleteRequestShardResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.factory.LogModelFactory;
@@ -29,7 +29,7 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteRequestShardResponse> deleteRequest(DeleteRequestShardedRequest request) {
+    public Uni<DeleteRequestShardedResponse> deleteRequest(DeleteRequestShardedRequest request) {
         DeleteRequestShardedRequest.validate(request);
 
         final var matchmakerId = request.getMatchmakerId();
@@ -48,6 +48,6 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
         return internalModule.getChangeService().changeWithLog(changeWithLogRequest)
                 .map(ChangeWithLogResponse::getResult)
                 .invoke(deleted -> matchmakerInMemoryCache.removeRequest(id))
-                .map(DeleteRequestShardResponse::new);
+                .map(DeleteRequestShardedResponse::new);
     }
 }

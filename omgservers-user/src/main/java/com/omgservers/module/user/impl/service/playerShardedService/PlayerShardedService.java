@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.playerShardedService;
 
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
@@ -14,5 +14,5 @@ public interface PlayerShardedService {
 
     Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request);
 
-    Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request);
+    Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request);
 }

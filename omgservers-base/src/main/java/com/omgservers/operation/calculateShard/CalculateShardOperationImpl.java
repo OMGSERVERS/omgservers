@@ -3,7 +3,7 @@ package com.omgservers.operation.calculateShard;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internal.GetIndexHelpResponse;
+import com.omgservers.dto.internal.GetIndexResponse;
 import com.omgservers.dto.internal.GetIndexRequest;
 import com.omgservers.model.shard.ShardModel;
 import io.smallrye.mutiny.Uni;
@@ -40,7 +40,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
     public Uni<ShardModel> calculateShard(String indexName, List<String> keys) {
         final var getIndexInternalRequest = new GetIndexRequest(indexName);
         return internalModule.getIndexService().getIndex(getIndexInternalRequest)
-                .map(GetIndexHelpResponse::getIndex)
+                .map(GetIndexResponse::getIndex)
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);

@@ -12,7 +12,7 @@ import com.omgservers.dto.internal.DeleteJobShardedRequest;
 import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.dto.internal.ScheduleJobShardedRequest;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
-import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,7 +34,7 @@ class JobShardedServiceImpl implements JobShardedService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     @Override
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
+    public Uni<SyncJobShardedResponse> syncJob(SyncJobShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncJobShardedRequest::validate,
                 getInternalModuleClientOperation::getClient,

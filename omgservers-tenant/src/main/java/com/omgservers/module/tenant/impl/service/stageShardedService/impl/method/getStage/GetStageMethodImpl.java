@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.service.stageShardedService.impl.metho
 import com.omgservers.module.tenant.impl.operation.selectStage.SelectStageOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class GetStageMethodImpl implements GetStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetStageInternalResponse> getStage(final GetStageShardedRequest request) {
+    public Uni<GetStageShardedResponse> getStage(final GetStageShardedRequest request) {
         GetStageShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -29,6 +29,6 @@ class GetStageMethodImpl implements GetStageMethod {
                     return pgPool.withTransaction(sqlConnection -> selectStageOperation
                             .selectStage(sqlConnection, shardModel.shard(), id));
                 })
-                .map(GetStageInternalResponse::new);
+                .map(GetStageShardedResponse::new);
     }
 }

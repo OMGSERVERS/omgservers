@@ -1,7 +1,7 @@
 package com.omgservers.module.gateway.impl.service.gatewayWebService.impl.serviceApi;
 
-import com.omgservers.dto.gateway.AssignPlayerRequest;
-import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
+import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -13,18 +13,18 @@ public interface GatewayServiceApi {
 
     @PUT
     @Path("/respond-message")
-    Uni<Void> respondMessage(RespondMessageRequest request);
+    Uni<Void> respondMessage(RespondMessageRoutedRequest request);
 
-    default void respondMessage(long timeout, RespondMessageRequest request) {
+    default void respondMessage(long timeout, RespondMessageRoutedRequest request) {
         respondMessage(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT
     @Path("/assign-player")
-    Uni<Void> assignPlayer(AssignPlayerRequest request);
+    Uni<Void> assignPlayer(AssignPlayerRoutedRequest request);
 
-    default void assignPlayer(long timeout, AssignPlayerRequest request) {
+    default void assignPlayer(long timeout, AssignPlayerRoutedRequest request) {
         assignPlayer(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

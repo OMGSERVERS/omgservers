@@ -1,7 +1,7 @@
 package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionHelpService;
 import com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerHelpRequest;
@@ -25,8 +25,8 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
-        AssignPlayerRequest.validate(request);
+    public Uni<Void> assignPlayer(AssignPlayerRoutedRequest request) {
+        AssignPlayerRoutedRequest.validate(request);
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {

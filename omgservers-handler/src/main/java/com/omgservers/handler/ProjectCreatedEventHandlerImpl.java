@@ -5,7 +5,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getServers.GetServersOperation;
-import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.model.event.EventModel;
@@ -53,7 +53,7 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
     Uni<ProjectModel> getProject(Long tenantId, Long id) {
         final var request = new GetProjectShardedRequest(tenantId, id);
         return tenantModule.getProjectShardedService().getProject(request)
-                .map(GetProjectInternalResponse::getProject);
+                .map(GetProjectShardedResponse::getProject);
     }
 
     Uni<Void> syncCreateStagePermission(Long tenantId, Long projectId, Long userId) {

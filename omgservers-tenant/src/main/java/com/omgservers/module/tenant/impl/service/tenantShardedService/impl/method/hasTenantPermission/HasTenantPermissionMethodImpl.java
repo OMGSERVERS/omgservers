@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.meth
 import com.omgservers.module.tenant.impl.operation.hasTenantPermission.HasTenantPermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
-import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
+    public Uni<HasTenantPermissionShardedResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
         HasTenantPermissionShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -32,6 +32,6 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
                     return pgPool.withTransaction(sqlConnection -> hasTenantPermissionOperation
                             .hasTenantPermission(sqlConnection, shard.shard(), tenantId, userId, permission));
                 })
-                .map(HasTenantPermissionResponse::new);
+                .map(HasTenantPermissionShardedResponse::new);
     }
 }

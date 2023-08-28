@@ -13,13 +13,13 @@ import com.omgservers.module.tenant.impl.service.stageShardedService.impl.method
 import com.omgservers.module.tenant.impl.service.stageShardedService.StageShardedService;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.tenant.DeleteStageInternalResponse;
+import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
-import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
+import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
-import com.omgservers.dto.tenant.SyncStageInternalResponse;
-import com.omgservers.dto.tenant.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -42,7 +42,7 @@ public class StageShardedServiceImpl implements StageShardedService {
     final GetStageMethod getStageMethod;
 
     @Override
-    public Uni<GetStageInternalResponse> getStage(GetStageShardedRequest request) {
+    public Uni<GetStageShardedResponse> getStage(GetStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 GetStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -51,7 +51,7 @@ public class StageShardedServiceImpl implements StageShardedService {
     }
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request) {
+    public Uni<SyncStageShardedResponse> syncStage(SyncStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -60,7 +60,7 @@ public class StageShardedServiceImpl implements StageShardedService {
     }
 
     @Override
-    public Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardedRequest request) {
+    public Uni<DeleteStageShardedResponse> deleteStage(DeleteStageShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteStageShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -69,7 +69,7 @@ public class StageShardedServiceImpl implements StageShardedService {
     }
 
     @Override
-    public Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardedRequest request) {
+    public Uni<HasStagePermissionShardedResponse> hasStagePermission(HasStagePermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 HasStagePermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -78,7 +78,7 @@ public class StageShardedServiceImpl implements StageShardedService {
     }
 
     @Override
-    public Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardedRequest request) {
+    public Uni<SyncStagePermissionShardedResponse> syncStagePermission(SyncStagePermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncStagePermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,

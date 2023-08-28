@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.dto.matchmaker.SyncMatchShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
@@ -32,7 +32,7 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncMatchShardResponse> syncMatch(SyncMatchShardedRequest request) {
+    public Uni<SyncMatchShardedResponse> syncMatch(SyncMatchShardedRequest request) {
         SyncMatchShardedRequest.validate(request);
 
         final var match = request.getMatch();
@@ -56,6 +56,6 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
                 ))
                 .map(ChangeWithEventResponse::getResult)
                 .invoke(inserted -> matchmakerInMemoryCache.addMatch(match))
-                .map(SyncMatchShardResponse::new);
+                .map(SyncMatchShardedResponse::new);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.attributeShardedService;
 
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
@@ -35,9 +35,9 @@ public interface AttributeShardedService {
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request);
+    Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request);
 
-    default DeleteAttributeShardResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
+    default DeleteAttributeShardedResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
         return deleteAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

@@ -1,42 +1,42 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerWebService;
 
-import com.omgservers.dto.matchmaker.DeleteMatchShardResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteRequestShardResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
-import com.omgservers.dto.matchmaker.DoMatchmakingShardResponse;
+import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
 import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncRequestShardResponse;
+import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface MatchmakerWebService {
 
-    Uni<SyncMatchmakerShardResponse> syncMatchmaker(SyncMatchmakerShardedRequest request);
+    Uni<SyncMatchmakerShardedResponse> syncMatchmaker(SyncMatchmakerShardedRequest request);
 
-    Uni<GetMatchmakerShardResponse> getMatchmaker(GetMatchmakerShardedRequest request);
+    Uni<GetMatchmakerShardedResponse> getMatchmaker(GetMatchmakerShardedRequest request);
 
-    Uni<DeleteMatchmakerShardResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request);
+    Uni<DeleteMatchmakerShardedResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request);
 
-    Uni<SyncRequestShardResponse> syncRequest(SyncRequestShardedRequest request);
+    Uni<SyncRequestShardedResponse> syncRequest(SyncRequestShardedRequest request);
 
-    Uni<DeleteRequestShardResponse> deleteRequest(DeleteRequestShardedRequest request);
+    Uni<DeleteRequestShardedResponse> deleteRequest(DeleteRequestShardedRequest request);
 
-    Uni<GetMatchShardResponse> getMatch(GetMatchShardedRequest request);
+    Uni<GetMatchShardedResponse> getMatch(GetMatchShardedRequest request);
 
-    Uni<SyncMatchShardResponse> syncMatch(SyncMatchShardedRequest request);
+    Uni<SyncMatchShardedResponse> syncMatch(SyncMatchShardedRequest request);
 
-    Uni<DeleteMatchShardResponse> deleteMatch(DeleteMatchShardedRequest request);
+    Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request);
 
-    Uni<DoMatchmakingShardResponse> doMatchmaking(DoMatchmakingShardedRequest request);
+    Uni<DoMatchmakingShardedResponse> doMatchmaking(DoMatchmakingShardedRequest request);
 }

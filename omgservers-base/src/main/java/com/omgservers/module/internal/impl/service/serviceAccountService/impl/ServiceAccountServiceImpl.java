@@ -5,9 +5,9 @@ import com.omgservers.module.internal.impl.service.serviceAccountService.impl.me
 import com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.getServiceAccount.GetServiceAccountMethod;
 import com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.syncServiceAccount.SyncServiceAccountMethod;
 import com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.validateCredentials.ValidateCredentialsMethod;
-import com.omgservers.dto.internal.DeleteServiceAccountHelpRequest;
-import com.omgservers.dto.internal.GetServiceAccountHelpRequest;
-import com.omgservers.dto.internal.GetServiceAccountHelpResponse;
+import com.omgservers.dto.internal.DeleteServiceAccountRequest;
+import com.omgservers.dto.internal.GetServiceAccountRequest;
+import com.omgservers.dto.internal.GetServiceAccountResponse;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.dto.internal.ValidateCredentialsRequest;
 import com.omgservers.dto.internal.ValidateCredentialsResponse;
@@ -28,7 +28,7 @@ class ServiceAccountServiceImpl implements ServiceAccountService {
     final GetServiceAccountMethod getServiceAccountMethod;
 
     @Override
-    public Uni<GetServiceAccountHelpResponse> getServiceAccount(GetServiceAccountHelpRequest request) {
+    public Uni<GetServiceAccountResponse> getServiceAccount(GetServiceAccountRequest request) {
         return getServiceAccountMethod.getServiceAccount(request);
     }
 
@@ -38,7 +38,7 @@ class ServiceAccountServiceImpl implements ServiceAccountService {
     }
 
     @Override
-    public Uni<Void> deleteServiceAccount(DeleteServiceAccountHelpRequest request) {
+    public Uni<Void> deleteServiceAccount(DeleteServiceAccountRequest request) {
         return deleteServiceAccountMethod.deleteServiceAccount(request);
     }
 

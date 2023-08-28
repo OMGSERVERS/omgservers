@@ -1,16 +1,16 @@
 package com.omgservers.module.runtime.impl.service.runtimeWebService.impl.serviceApi;
 
-import com.omgservers.dto.runtime.DeleteCommandShardedRequest;
-import com.omgservers.dto.runtime.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
-import com.omgservers.dto.runtime.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.dto.runtime.DoUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtime.SyncCommandShardedRequest;
-import com.omgservers.dto.runtime.SyncCommandInternalResponse;
+import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.runtime.SyncRuntimeInternalResponse;
+import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -20,23 +20,23 @@ public interface RuntimeServiceApi {
 
     @PUT
     @Path("/get-runtime")
-    Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeShardedRequest request);
+    Uni<GetRuntimeShardedResponse> getRuntime(GetRuntimeShardedRequest request);
 
     @PUT
     @Path("/sync-runtime")
-    Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardedRequest request);
+    Uni<SyncRuntimeShardedResponse> syncRuntime(SyncRuntimeShardedRequest request);
 
     @PUT
     @Path("/delete-runtime")
-    Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardedRequest request);
+    Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request);
 
     @PUT
     @Path("/sync-command")
-    Uni<SyncCommandInternalResponse> syncCommand(SyncCommandShardedRequest request);
+    Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request);
 
     @PUT
     @Path("/delete-command")
-    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardedRequest request);
+    Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request);
 
     @PUT
     @Path("/do-update")

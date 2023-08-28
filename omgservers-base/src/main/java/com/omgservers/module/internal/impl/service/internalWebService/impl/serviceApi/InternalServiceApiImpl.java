@@ -12,7 +12,7 @@ import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.dto.internal.FireEventShardedResponse;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
-import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import io.smallrye.mutiny.Uni;
@@ -49,7 +49,7 @@ class InternalServiceApiImpl implements InternalServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
+    public Uni<SyncJobShardedResponse> syncJob(SyncJobShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, internalWebService::syncJob);
     }
 

@@ -7,7 +7,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
-import com.omgservers.dto.tenant.SyncTenantResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedResponse;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request) {
+    public Uni<SyncTenantShardedResponse> syncTenant(SyncTenantShardedRequest request) {
         SyncTenantShardedRequest.validate(request);
 
         final var tenant = request.getTenant();
@@ -55,6 +55,6 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(SyncTenantResponse::new);
+                .map(SyncTenantShardedResponse::new);
     }
 }

@@ -2,9 +2,9 @@ package com.omgservers.module.developer.impl.service.developerService.impl.metho
 
 import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
@@ -56,7 +56,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
         final var hasStagePermissionServiceRequest =
                 new HasStagePermissionShardedRequest(tenantId, stageId, userId, permission);
         return tenantModule.getStageShardedService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionInternalResponse::getResult)
+                .map(HasStagePermissionShardedResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(String.format("lack of permission, " +
@@ -69,7 +69,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     Uni<Void> checkStage(final Long tenantId, final Long stageId) {
         final var getStageServiceRequest = new GetStageShardedRequest(tenantId, stageId);
         return tenantModule.getStageShardedService().getStage(getStageServiceRequest)
-                .map(GetStageInternalResponse::getStage)
+                .map(GetStageShardedResponse::getStage)
                 .replaceWithVoid();
     }
 

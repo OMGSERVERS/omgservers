@@ -10,7 +10,7 @@ import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.dto.internal.FireEventShardedResponse;
-import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
@@ -48,9 +48,9 @@ public interface InternalServiceApi {
 
     @PUT
     @Path("/sync-job")
-    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request);
+    Uni<SyncJobShardedResponse> syncJob(SyncJobShardedRequest request);
 
-    default SyncJobRoutedResponse syncJob(long timeout, SyncJobShardedRequest request) {
+    default SyncJobShardedResponse syncJob(long timeout, SyncJobShardedRequest request) {
         return syncJob(request).await().atMost(Duration.ofSeconds(timeout));
     }
 

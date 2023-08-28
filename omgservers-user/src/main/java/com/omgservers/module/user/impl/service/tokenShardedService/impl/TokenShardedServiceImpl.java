@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.service.tokenShardedService.impl;
 
 import com.omgservers.dto.user.CreateTokenShardedRequest;
 import com.omgservers.dto.user.CreateTokenShardedResponse;
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.module.user.impl.operation.decodeToken.DecodeTokenOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
@@ -41,8 +41,8 @@ class TokenShardedServiceImpl implements TokenShardedService {
     }
 
     @Override
-    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardRequest request) {
-        IntrospectTokenShardRequest.validate(request);
+    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardedRequest request) {
+        IntrospectTokenShardedRequest.validate(request);
 
         final var rawToken = request.getRawToken();
         return Uni.createFrom().item(rawToken)

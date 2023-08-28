@@ -1,10 +1,10 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.doMatchmaking;
 
-import com.omgservers.dto.matchmaker.DoMatchmakingShardResponse;
+import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
 import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.version.GetStageConfigShardedResponse;
 import com.omgservers.dto.version.GetStageConfigShardedRequest;
@@ -46,7 +46,7 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
     @Override
-    public Uni<DoMatchmakingShardResponse> doMatchmaking(DoMatchmakingShardedRequest request) {
+    public Uni<DoMatchmakingShardedResponse> doMatchmaking(DoMatchmakingShardedRequest request) {
         DoMatchmakingShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -64,7 +64,7 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
                                                         version,
                                                         matchmakerId,
                                                         stageConfig)))
-                                        .map(DoMatchmakingShardResponse::new);
+                                        .map(DoMatchmakingShardedResponse::new);
                             });
                 });
     }
@@ -72,13 +72,13 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
     Uni<MatchmakerModel> getMatchmaker(Long id) {
         final var request = new GetMatchmakerShardedRequest(id);
         return matchmakerModule.getMatchmakerShardedService().getMatchmaker(request)
-                .map(GetMatchmakerShardResponse::getMatchmaker);
+                .map(GetMatchmakerShardedResponse::getMatchmaker);
     }
 
     Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
         final var request = new GetStageShardedRequest(tenantId, stageId);
         return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageInternalResponse::getStage)
+                .map(GetStageShardedResponse::getStage)
                 .map(StageModel::getVersionId)
                 .onItem().ifNull().failWith(new ServerSideConflictException(String
                         .format("no any stage's version wasn't deployed yet, tenantId=%d, stageId=%d", tenantId, stageId)));

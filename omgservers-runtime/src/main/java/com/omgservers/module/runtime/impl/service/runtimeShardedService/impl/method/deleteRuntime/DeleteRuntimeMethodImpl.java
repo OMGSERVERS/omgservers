@@ -6,7 +6,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
-import com.omgservers.dto.runtime.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,7 +27,7 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
+    public Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
         DeleteRuntimeShardedRequest.validate(request);
 
         final var id = request.getId();
@@ -50,6 +50,6 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(DeleteRuntimeInternalResponse::new);
+                .map(DeleteRuntimeShardedResponse::new);
     }
 }

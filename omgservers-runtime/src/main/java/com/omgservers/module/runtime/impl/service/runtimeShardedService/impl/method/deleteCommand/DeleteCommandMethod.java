@@ -1,9 +1,9 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.deleteCommand;
 
-import com.omgservers.dto.runtime.DeleteCommandShardedRequest;
-import com.omgservers.dto.runtime.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteCommandMethod {
-    Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardedRequest request);
+    Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request);
 }

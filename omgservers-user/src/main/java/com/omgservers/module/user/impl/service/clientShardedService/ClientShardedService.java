@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.clientShardedService;
 
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.dto.user.GetClientShardedRequest;
@@ -14,5 +14,5 @@ public interface ClientShardedService {
 
     Uni<GetClientShardedResponse> getClient(GetClientShardedRequest request);
 
-    Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request);
+    Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request);
 }

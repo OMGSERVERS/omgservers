@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.matchmaker.SyncRequestShardResponse;
+import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.factory.LogModelFactory;
@@ -29,7 +29,7 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRequestShardResponse> syncRequest(SyncRequestShardedRequest request) {
+    public Uni<SyncRequestShardedResponse> syncRequest(SyncRequestShardedRequest request) {
         SyncRequestShardedRequest.validate(request);
 
         final var requestModel = request.getRequest();
@@ -46,6 +46,6 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
                 ))
                 .map(ChangeWithLogResponse::getResult)
                 .invoke(inserted -> matchmakerInMemoryCache.addRequest(requestModel))
-                .map(SyncRequestShardResponse::new);
+                .map(SyncRequestShardedResponse::new);
     }
 }

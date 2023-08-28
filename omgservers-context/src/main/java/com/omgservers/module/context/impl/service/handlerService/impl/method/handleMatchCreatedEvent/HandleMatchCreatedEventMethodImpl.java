@@ -1,7 +1,7 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handleMatchCreatedEvent;
 
 import com.omgservers.dto.handler.HandleMatchCreatedEventRequest;
-import com.omgservers.dto.matchmaker.GetMatchShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.context.impl.operation.createLuaMatchContext.CreateLuaMatchContextOperation;
@@ -53,7 +53,7 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long id) {
         final var requests = new GetMatchShardedRequest(matchmakerId, id);
         return matchmakerModule.getMatchmakerShardedService().getMatch(requests)
-                .map(GetMatchShardResponse::getMatch);
+                .map(GetMatchShardedResponse::getMatch);
     }
 
     Uni<Void> handleEvent(final LuaRuntime luaRuntime,

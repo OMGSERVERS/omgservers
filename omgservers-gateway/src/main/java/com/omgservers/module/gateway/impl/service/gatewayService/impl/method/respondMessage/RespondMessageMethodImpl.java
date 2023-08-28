@@ -1,7 +1,7 @@
 package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.respondMessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
 import com.omgservers.module.gateway.impl.operation.sendMessage.SendMessageOperation;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionHelpService;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetSessionHelpRequest;
@@ -20,8 +20,8 @@ class RespondMessageMethodImpl implements RespondMessageMethod {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
-        RespondMessageRequest.validate(request);
+    public Uni<Void> respondMessage(RespondMessageRoutedRequest request) {
+        RespondMessageRoutedRequest.validate(request);
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> {

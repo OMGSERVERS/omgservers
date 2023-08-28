@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.dto.matchmaker.DeleteMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
@@ -27,7 +27,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteMatchmakerShardResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request) {
+    public Uni<DeleteMatchmakerShardedResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request) {
         DeleteMatchmakerShardedRequest.validate(request);
 
         final var id = request.getId();
@@ -50,6 +50,6 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(DeleteMatchmakerShardResponse::new);
+                .map(DeleteMatchmakerShardedResponse::new);
     }
 }

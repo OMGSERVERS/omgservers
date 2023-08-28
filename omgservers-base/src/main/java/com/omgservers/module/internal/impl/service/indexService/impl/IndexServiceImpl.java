@@ -7,7 +7,7 @@ import com.omgservers.module.internal.impl.service.indexService.impl.method.sync
 import com.omgservers.dto.internal.DeleteIndexRequest;
 import com.omgservers.dto.internal.GetIndexRequest;
 import com.omgservers.dto.internal.SyncIndexRequest;
-import com.omgservers.dto.internal.GetIndexHelpResponse;
+import com.omgservers.dto.internal.GetIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ class IndexServiceImpl implements IndexService {
     final DeleteIndexMethod deleteIndexMethod;
 
     @Override
-    public Uni<GetIndexHelpResponse> getIndex(GetIndexRequest request) {
+    public Uni<GetIndexResponse> getIndex(GetIndexRequest request) {
         return getIndexMethod.getIndex(request);
     }
 

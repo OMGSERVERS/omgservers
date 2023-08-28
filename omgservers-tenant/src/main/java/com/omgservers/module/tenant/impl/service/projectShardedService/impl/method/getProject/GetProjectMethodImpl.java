@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.service.projectShardedService.impl.met
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ GetProjectMethodImpl implements GetProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetProjectInternalResponse> getProject(final GetProjectShardedRequest request) {
+    public Uni<GetProjectShardedResponse> getProject(final GetProjectShardedRequest request) {
         GetProjectShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -30,6 +30,6 @@ GetProjectMethodImpl implements GetProjectMethod {
                     return pgPool.withTransaction(sqlConnection -> selectProjectOperation
                             .selectProject(sqlConnection, shard.shard(), id));
                 })
-                .map(GetProjectInternalResponse::new);
+                .map(GetProjectShardedResponse::new);
     }
 }

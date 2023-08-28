@@ -2,7 +2,7 @@ package com.omgservers.module.internal.impl.service.syncService.impl.method.sync
 
 import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import com.omgservers.dto.internal.SyncIndexRequest;
-import com.omgservers.dto.internal.SyncIndexOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncIndexOverServersRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,8 +17,8 @@ class SyncIndexOverServersMethodImpl implements SyncIndexOverServersMethod {
     final GetInternalModuleClientOperation getInternalModuleClientOperation;
 
     @Override
-    public Uni<Void> syncIndex(SyncIndexOverServersInternalRequest request) {
-        SyncIndexOverServersInternalRequest.validateSyncIndexOverServersInternalRequest(request);
+    public Uni<Void> syncIndex(SyncIndexOverServersRequest request) {
+        SyncIndexOverServersRequest.validateSyncIndexOverServersInternalRequest(request);
 
         final var servers = request.getServers();
         final var index = request.getIndex();

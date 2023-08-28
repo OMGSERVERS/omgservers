@@ -2,13 +2,13 @@ package com.omgservers.module.user.impl.service.userWebService;
 
 import com.omgservers.dto.user.CreateTokenShardedResponse;
 import com.omgservers.dto.user.CreateTokenShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
@@ -20,7 +20,7 @@ import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
@@ -44,19 +44,19 @@ public interface UserWebService {
 
     Uni<CreateTokenShardedResponse> createToken(CreateTokenShardedRequest request);
 
-    Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardRequest request);
+    Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardedRequest request);
 
     Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request);
 
     Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request);
 
-    Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request);
+    Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request);
 
     Uni<SyncClientShardedResponse> syncClient(SyncClientShardedRequest request);
 
     Uni<GetClientShardedResponse> getClient(GetClientShardedRequest request);
 
-    Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request);
+    Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request);
 
     Uni<GetAttributeShardedResponse> getAttribute(GetAttributeShardedRequest request);
 
@@ -64,7 +64,7 @@ public interface UserWebService {
 
     Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request);
 
-    Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request);
+    Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request);
 
     Uni<GetObjectShardedResponse> getObject(GetObjectShardedRequest request);
 

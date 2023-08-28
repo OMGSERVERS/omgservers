@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.meth
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.module.tenant.impl.operation.selectTenant.SelectTenantOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.GetTenantResponse;
+import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class GetTenantMethodImpl implements GetTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantResponse> getTenant(final GetTenantShardedRequest request) {
+    public Uni<GetTenantShardedResponse> getTenant(final GetTenantShardedRequest request) {
         GetTenantShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -30,6 +30,6 @@ class GetTenantMethodImpl implements GetTenantMethod {
                     return pgPool.withTransaction(sqlConnection -> selectTenantOperation
                             .selectTenant(sqlConnection, shard.shard(), id));
                 })
-                .map(GetTenantResponse::new);
+                .map(GetTenantShardedResponse::new);
     }
 }

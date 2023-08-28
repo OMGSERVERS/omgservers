@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.playerShardedService.impl;
 
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
@@ -50,7 +50,7 @@ public class PlayerShardedServiceImpl implements PlayerShardedService {
     }
 
     @Override
-    public Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request) {
+    public Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeletePlayerShardedRequest::validate,
                 getUserModuleClientOperation::getClient,

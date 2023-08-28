@@ -2,63 +2,63 @@ package com.omgservers.module.tenant.impl.service.tenantWebService;
 
 import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
-import com.omgservers.dto.tenant.DeleteStageInternalResponse;
+import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
-import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
-import com.omgservers.dto.tenant.GetTenantResponse;
+import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
-import com.omgservers.dto.tenant.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.HasProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
-import com.omgservers.dto.tenant.HasStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
-import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
-import com.omgservers.dto.tenant.SyncProjectInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectShardedResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
-import com.omgservers.dto.tenant.SyncProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
-import com.omgservers.dto.tenant.SyncStageInternalResponse;
-import com.omgservers.dto.tenant.SyncStagePermissionInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedResponse;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
-import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.dto.tenant.SyncTenantResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface TenantWebService {
 
-    Uni<GetTenantResponse> getTenant(GetTenantShardedRequest request);
+    Uni<GetTenantShardedResponse> getTenant(GetTenantShardedRequest request);
 
-    Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardedRequest request);
+    Uni<HasTenantPermissionShardedResponse> hasTenantPermission(HasTenantPermissionShardedRequest request);
 
-    Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request);
+    Uni<SyncTenantShardedResponse> syncTenant(SyncTenantShardedRequest request);
 
     Uni<Void> deleteTenant(DeleteTenantShardedRequest request);
 
-    Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request);
+    Uni<SyncTenantPermissionShardedResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request);
 
-    Uni<GetProjectInternalResponse> getProject(GetProjectShardedRequest request);
+    Uni<GetProjectShardedResponse> getProject(GetProjectShardedRequest request);
 
-    Uni<SyncProjectInternalResponse> syncProject(SyncProjectShardedRequest request);
+    Uni<SyncProjectShardedResponse> syncProject(SyncProjectShardedRequest request);
 
     Uni<Void> deleteProject(DeleteProjectShardedRequest request);
 
-    Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardedRequest request);
+    Uni<HasProjectPermissionShardedResponse> hasProjectPermission(HasProjectPermissionShardedRequest request);
 
-    Uni<SyncProjectPermissionInternalResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request);
+    Uni<SyncProjectPermissionShardedResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request);
 
-    Uni<GetStageInternalResponse> getStage(GetStageShardedRequest request);
+    Uni<GetStageShardedResponse> getStage(GetStageShardedRequest request);
 
-    Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request);
+    Uni<SyncStageShardedResponse> syncStage(SyncStageShardedRequest request);
 
-    Uni<DeleteStageInternalResponse> deleteStage(DeleteStageShardedRequest request);
+    Uni<DeleteStageShardedResponse> deleteStage(DeleteStageShardedRequest request);
 
-    Uni<HasStagePermissionInternalResponse> hasStagePermission(HasStagePermissionShardedRequest request);
+    Uni<HasStagePermissionShardedResponse> hasStagePermission(HasStagePermissionShardedRequest request);
 
-    Uni<SyncStagePermissionInternalResponse> syncStagePermission(SyncStagePermissionShardedRequest request);
+    Uni<SyncStagePermissionShardedResponse> syncStagePermission(SyncStagePermissionShardedRequest request);
 }

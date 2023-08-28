@@ -5,7 +5,7 @@ import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
-import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
@@ -54,7 +54,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
         final var permission = TenantPermissionEnum.CREATE_PROJECT;
         final var hasTenantPermissionServiceRequest = new HasTenantPermissionShardedRequest(tenantId, userId, permission);
         return tenantModule.getTenantShardedService().hasTenantPermission(hasTenantPermissionServiceRequest)
-                .map(HasTenantPermissionResponse::getResult)
+                .map(HasTenantPermissionShardedResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(String.format("lack of permission, " +

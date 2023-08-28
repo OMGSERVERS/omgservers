@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.userService.impl.method.respondClient;
 
-import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
 import com.omgservers.dto.user.GetClientShardedRequest;
 import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.model.client.ClientModel;
@@ -33,7 +33,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
                     final var connection = client.getConnectionId();
                     final var message = request.getMessage();
                     final var respondMessageInternalRequest =
-                            new RespondMessageRequest(server, connection, message);
+                            new RespondMessageRoutedRequest(server, connection, message);
                     return gatewayModule.getGatewayService().respondMessage(respondMessageInternalRequest);
                 });
     }

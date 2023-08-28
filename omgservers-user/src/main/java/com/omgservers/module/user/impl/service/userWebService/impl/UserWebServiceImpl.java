@@ -2,13 +2,13 @@ package com.omgservers.module.user.impl.service.userWebService.impl;
 
 import com.omgservers.dto.user.CreateTokenShardedResponse;
 import com.omgservers.dto.user.CreateTokenShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
@@ -20,7 +20,7 @@ import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
@@ -75,7 +75,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardRequest request) {
+    public Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardedRequest request) {
         return tokenShardedService.introspectToken(request);
     }
 
@@ -90,7 +90,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request) {
+    public Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request) {
         return playerShardedService.deletePlayer(request);
     }
 
@@ -105,7 +105,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request) {
+    public Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request) {
         return internalService.deleteClient(request);
     }
 
@@ -125,7 +125,7 @@ class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
+    public Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
         return attributeShardedService.deleteAttribute(request);
     }
 

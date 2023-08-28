@@ -2,7 +2,7 @@ package com.omgservers.module.internal.impl.service.syncService.impl.method.sync
 
 import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
-import com.omgservers.dto.internal.SyncServiceAccountOverServersInternalRequest;
+import com.omgservers.dto.internal.SyncServiceAccountOverServersRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,8 +17,8 @@ class SyncServiceAccountOverServersMethodImpl implements SyncServiceAccountOverS
     final GetInternalModuleClientOperation getInternalModuleClientOperation;
 
     @Override
-    public Uni<Void> syncServiceAccount(SyncServiceAccountOverServersInternalRequest request) {
-        SyncServiceAccountOverServersInternalRequest.validateSyncServiceAccountOverServersInternalRequest(request);
+    public Uni<Void> syncServiceAccount(SyncServiceAccountOverServersRequest request) {
+        SyncServiceAccountOverServersRequest.validateSyncServiceAccountOverServersInternalRequest(request);
 
         final var servers = request.getServers();
         final var serviceAccount = request.getServiceAccount();

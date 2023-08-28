@@ -2,13 +2,13 @@ package com.omgservers.module.user.impl.service.userWebService.impl.serviceApi;
 
 import com.omgservers.dto.user.CreateTokenShardedResponse;
 import com.omgservers.dto.user.CreateTokenShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
@@ -20,7 +20,7 @@ import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
@@ -71,7 +71,7 @@ class UserServiceApiImpl implements UserServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardRequest request) {
+    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, userWebService::introspectToken);
     }
 
@@ -89,7 +89,7 @@ class UserServiceApiImpl implements UserServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request) {
+    public Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, userWebService::deletePlayer);
     }
 
@@ -106,7 +106,7 @@ class UserServiceApiImpl implements UserServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request) {
+    public Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, userWebService::deleteClient);
     }
 
@@ -130,7 +130,7 @@ class UserServiceApiImpl implements UserServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
+    public Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, userWebService::deleteAttribute);
     }
 

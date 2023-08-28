@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl;
 
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.dto.user.GetClientShardedRequest;
@@ -52,7 +52,7 @@ class ClientShardedServiceImpl implements ClientShardedService {
     }
 
     @Override
-    public Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request) {
+    public Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteClientShardedRequest::validate,
                 getUserModuleClientOperation::getClient,

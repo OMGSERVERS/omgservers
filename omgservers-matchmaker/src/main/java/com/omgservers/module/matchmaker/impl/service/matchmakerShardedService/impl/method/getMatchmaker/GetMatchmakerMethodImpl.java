@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.getMatchmaker;
 
-import com.omgservers.dto.matchmaker.GetMatchmakerShardResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.module.matchmaker.impl.operation.selectMatchmaker.SelectMatchmakerOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -21,7 +21,7 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchmakerShardResponse> getMatchmaker(GetMatchmakerShardedRequest request) {
+    public Uni<GetMatchmakerShardedResponse> getMatchmaker(GetMatchmakerShardedRequest request) {
         GetMatchmakerShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -30,6 +30,6 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
                     return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
                             .selectMatchmaker(sqlConnection, shard.shard(), id));
                 })
-                .map(GetMatchmakerShardResponse::new);
+                .map(GetMatchmakerShardedResponse::new);
     }
 }

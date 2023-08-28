@@ -2,9 +2,9 @@ package com.omgservers.handler;
 
 import com.omgservers.module.version.VersionModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.SyncStageInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
 import com.omgservers.dto.version.GetVersionShardedResponse;
 import com.omgservers.dto.version.GetVersionShardedRequest;
@@ -58,7 +58,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     Uni<StageModel> getStage(Long tenantId, Long id) {
         final var request = new GetStageShardedRequest(tenantId, id);
         return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageInternalResponse::getStage);
+                .map(GetStageShardedResponse::getStage);
     }
 
     Uni<Void> deployVersion(VersionModel version, StageModel stage) {
@@ -77,7 +77,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncStage(Long tenantId, StageModel stage) {
         final var request = new SyncStageShardedRequest(tenantId, stage);
         return tenantModule.getStageShardedService().syncStage(request)
-                .map(SyncStageInternalResponse::getCreated);
+                .map(SyncStageShardedResponse::getCreated);
     }
 
     Uni<Boolean> syncVersion(VersionModel version) {

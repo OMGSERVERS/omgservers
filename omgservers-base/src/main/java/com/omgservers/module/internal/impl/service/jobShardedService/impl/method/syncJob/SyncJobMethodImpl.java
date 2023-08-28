@@ -6,7 +6,7 @@ import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperatio
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
-import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -28,7 +28,7 @@ class SyncJobMethodImpl implements SyncJobMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request) {
+    public Uni<SyncJobShardedResponse> syncJob(SyncJobShardedRequest request) {
         SyncJobShardedRequest.validate(request);
 
         final var job = request.getJob();
@@ -54,6 +54,6 @@ class SyncJobMethodImpl implements SyncJobMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(SyncJobRoutedResponse::new);
+                .map(SyncJobShardedResponse::new);
     }
 }

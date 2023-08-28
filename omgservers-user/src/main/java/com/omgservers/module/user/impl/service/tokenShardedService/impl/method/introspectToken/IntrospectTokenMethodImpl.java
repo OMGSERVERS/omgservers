@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.tokenShardedService.impl.method.introspectToken;
 
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.token.TokenModel;
@@ -29,8 +29,8 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardRequest request) {
-        IntrospectTokenShardRequest.validate(request);
+    public Uni<IntrospectTokenShardedResponse> introspectToken(final IntrospectTokenShardedRequest request) {
+        IntrospectTokenShardedRequest.validate(request);
 
         final var rawToken = request.getRawToken();
         final var tokenObject = decodeTokenOperation.decodeToken(rawToken);

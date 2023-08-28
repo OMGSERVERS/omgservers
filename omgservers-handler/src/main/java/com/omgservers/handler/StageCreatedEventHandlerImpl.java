@@ -1,9 +1,9 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
-import com.omgservers.dto.tenant.GetProjectInternalResponse;
+import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
-import com.omgservers.dto.tenant.GetStageInternalResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.model.event.EventModel;
@@ -65,7 +65,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     Uni<StageModel> getStage(Long tenantId, Long id) {
         final var request = new GetStageShardedRequest(tenantId, id);
         return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageInternalResponse::getStage);
+                .map(GetStageShardedResponse::getStage);
     }
 
     Uni<Void> syncPermissions(final Long tenantId, StageModel stage) {
@@ -77,7 +77,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     Uni<ProjectModel> getProject(Long tenantId, Long id) {
         final var request = new GetProjectShardedRequest(tenantId, id);
         return tenantModule.getProjectShardedService().getProject(request)
-                .map(GetProjectInternalResponse::getProject);
+                .map(GetProjectShardedResponse::getProject);
     }
 
     Uni<Void> syncCreateVersionPermission(Long tenantId, Long stageId, Long userId) {

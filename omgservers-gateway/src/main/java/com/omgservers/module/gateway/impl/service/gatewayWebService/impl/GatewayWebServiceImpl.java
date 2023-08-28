@@ -2,8 +2,8 @@ package com.omgservers.module.gateway.impl.service.gatewayWebService.impl;
 
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.module.gateway.impl.service.gatewayWebService.GatewayWebService;
-import com.omgservers.dto.gateway.AssignPlayerRequest;
-import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
+import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -18,12 +18,12 @@ class GatewayWebServiceImpl implements GatewayWebService {
     final GatewayService gatewayService;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
+    public Uni<Void> respondMessage(RespondMessageRoutedRequest request) {
         return gatewayService.respondMessage(request);
     }
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
+    public Uni<Void> assignPlayer(AssignPlayerRoutedRequest request) {
         return gatewayService.assignPlayer(request);
     }
 }

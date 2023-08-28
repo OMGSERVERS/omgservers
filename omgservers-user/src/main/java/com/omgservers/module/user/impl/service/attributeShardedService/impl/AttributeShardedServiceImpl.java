@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl;
 
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
@@ -63,7 +63,7 @@ class AttributeShardedServiceImpl implements AttributeShardedService {
     }
 
     @Override
-    public Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
+    public Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteAttributeShardedRequest::validate,
                 getUserModuleClientOperation::getClient,

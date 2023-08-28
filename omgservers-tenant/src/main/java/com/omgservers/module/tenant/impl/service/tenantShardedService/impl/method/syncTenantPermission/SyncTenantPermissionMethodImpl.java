@@ -6,7 +6,7 @@ import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionShardedRequest request) {
+    public Uni<SyncTenantPermissionShardedResponse> syncTenantPermission(final SyncTenantPermissionShardedRequest request) {
         SyncTenantPermissionShardedRequest.validate(request);
 
         final var permission = request.getPermission();
@@ -44,6 +44,6 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                         }
                 ))
                 .map(ChangeWithLogResponse::getResult)
-                .map(SyncTenantPermissionResponse::new);
+                .map(SyncTenantPermissionShardedResponse::new);
     }
 }

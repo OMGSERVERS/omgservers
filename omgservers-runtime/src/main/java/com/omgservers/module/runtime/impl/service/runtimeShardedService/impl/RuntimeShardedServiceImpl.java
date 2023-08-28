@@ -10,17 +10,17 @@ import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.met
 import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncCommand.SyncCommandMethod;
 import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.runtime.DeleteCommandShardedRequest;
-import com.omgservers.dto.runtime.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
-import com.omgservers.dto.runtime.DeleteRuntimeInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.dto.runtime.DoUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeInternalResponse;
-import com.omgservers.dto.runtime.SyncCommandShardedRequest;
-import com.omgservers.dto.runtime.SyncCommandInternalResponse;
+import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.runtime.SyncRuntimeInternalResponse;
+import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -43,7 +43,7 @@ public class RuntimeShardedServiceImpl implements RuntimeShardedService {
     final DoUpdateMethod doUpdateMethod;
 
     @Override
-    public Uni<SyncRuntimeInternalResponse> syncRuntime(SyncRuntimeShardedRequest request) {
+    public Uni<SyncRuntimeShardedResponse> syncRuntime(SyncRuntimeShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncRuntimeShardedRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
@@ -52,7 +52,7 @@ public class RuntimeShardedServiceImpl implements RuntimeShardedService {
     }
 
     @Override
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeShardedRequest request) {
+    public Uni<GetRuntimeShardedResponse> getRuntime(GetRuntimeShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 GetRuntimeShardedRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
@@ -61,7 +61,7 @@ public class RuntimeShardedServiceImpl implements RuntimeShardedService {
     }
 
     @Override
-    public Uni<DeleteRuntimeInternalResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
+    public Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteRuntimeShardedRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
@@ -70,18 +70,18 @@ public class RuntimeShardedServiceImpl implements RuntimeShardedService {
     }
 
     @Override
-    public Uni<SyncCommandInternalResponse> syncCommand(SyncCommandShardedRequest request) {
+    public Uni<SyncRuntimeCommandShardedResponse> syncCommand(SyncRuntimeCommandShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncCommandShardedRequest::validate,
+                SyncRuntimeCommandShardedRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncCommand,
                 syncCommandMethod::syncCommand);
     }
 
     @Override
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardedRequest request) {
+    public Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteCommandShardedRequest::validate,
+                DeleteRuntimeCommandShardedRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteCommand,
                 deleteCommandMethod::deleteCommand);

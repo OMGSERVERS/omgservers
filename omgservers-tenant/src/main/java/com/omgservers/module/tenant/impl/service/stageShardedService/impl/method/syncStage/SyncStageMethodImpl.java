@@ -7,7 +7,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
-import com.omgservers.dto.tenant.SyncStageInternalResponse;
+import com.omgservers.dto.tenant.SyncStageShardedResponse;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ class SyncStageMethodImpl implements SyncStageMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncStageInternalResponse> syncStage(SyncStageShardedRequest request) {
+    public Uni<SyncStageShardedResponse> syncStage(SyncStageShardedRequest request) {
         SyncStageShardedRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -56,6 +56,6 @@ class SyncStageMethodImpl implements SyncStageMethod {
                         }
                 ))
                 .map(ChangeWithEventResponse::getResult)
-                .map(SyncStageInternalResponse::new);
+                .map(SyncStageShardedResponse::new);
     }
 }

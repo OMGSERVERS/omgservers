@@ -4,7 +4,7 @@ import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.runtime.DoUpdateShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeInternalResponse;
+import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -38,6 +38,6 @@ class DoUpdateMethodImpl implements DoUpdateMethod {
     Uni<RuntimeModel> getRuntime(Long id) {
         final var request = new GetRuntimeShardedRequest(id);
         return runtimeModule.getRuntimeShardedService().getRuntime(request)
-                .map(GetRuntimeInternalResponse::getRuntime);
+                .map(GetRuntimeShardedResponse::getRuntime);
     }
 }

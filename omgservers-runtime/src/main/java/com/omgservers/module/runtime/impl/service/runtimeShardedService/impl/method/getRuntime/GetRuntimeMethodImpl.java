@@ -3,7 +3,7 @@ package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.me
 import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeInternalResponse;
+import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetRuntimeInternalResponse> getRuntime(GetRuntimeShardedRequest request) {
+    public Uni<GetRuntimeShardedResponse> getRuntime(GetRuntimeShardedRequest request) {
         GetRuntimeShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -30,6 +30,6 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
                     return pgPool.withTransaction(sqlConnection -> selectRuntimeOperation
                             .selectRuntime(sqlConnection, shard.shard(), id));
                 })
-                .map(GetRuntimeInternalResponse::new);
+                .map(GetRuntimeShardedResponse::new);
     }
 }

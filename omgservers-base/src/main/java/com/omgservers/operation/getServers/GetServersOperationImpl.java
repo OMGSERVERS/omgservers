@@ -4,7 +4,7 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.dto.internal.GetIndexRequest;
-import com.omgservers.dto.internal.GetIndexHelpResponse;
+import com.omgservers.dto.internal.GetIndexResponse;
 import com.omgservers.model.index.IndexServerModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +29,7 @@ class GetServersOperationImpl implements GetServersOperation {
         final var indexName = getConfigOperation.getConfig().indexName();
         final var getIndexInternalRequest = new GetIndexRequest(indexName);
         return internalModule.getIndexService().getIndex(getIndexInternalRequest)
-                .map(GetIndexHelpResponse::getIndex)
+                .map(GetIndexResponse::getIndex)
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerModel::getUri)
                         .toList());

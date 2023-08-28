@@ -7,7 +7,7 @@ import com.omgservers.dto.internal.FireEventShardedResponse;
 import com.omgservers.dto.internal.ScheduleJobShardedRequest;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
-import com.omgservers.dto.internal.SyncJobRoutedResponse;
+import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
 import com.omgservers.dto.internal.ViewLogRequest;
@@ -21,7 +21,7 @@ public interface InternalWebService {
 
     Uni<FireEventShardedResponse> fireEvent(FireEventShardedRequest request);
 
-    Uni<SyncJobRoutedResponse> syncJob(SyncJobShardedRequest request);
+    Uni<SyncJobShardedResponse> syncJob(SyncJobShardedRequest request);
 
     Uni<DeleteJobShardedResponse> deleteJob(DeleteJobShardedRequest request);
 

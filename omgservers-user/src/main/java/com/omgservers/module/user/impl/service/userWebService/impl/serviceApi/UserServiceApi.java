@@ -3,13 +3,13 @@ package com.omgservers.module.user.impl.service.userWebService.impl.serviceApi;
 import com.omgservers.dto.user.CreateTokenShardedRequest;
 import com.omgservers.dto.user.CreateTokenShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardResponse;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
-import com.omgservers.dto.user.DeleteClientShardResponse;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardResponse;
+import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.GetAttributeShardedRequest;
 import com.omgservers.dto.user.GetAttributeShardedResponse;
 import com.omgservers.dto.user.GetClientShardedRequest;
@@ -20,7 +20,7 @@ import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
 import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
 import com.omgservers.dto.user.GetPlayerShardedRequest;
 import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.IntrospectTokenShardRequest;
+import com.omgservers.dto.user.IntrospectTokenShardedRequest;
 import com.omgservers.dto.user.IntrospectTokenShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
@@ -61,7 +61,7 @@ public interface UserServiceApi {
 
     @PUT
     @Path("/introspect-token")
-    Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardRequest request);
+    Uni<IntrospectTokenShardedResponse> introspectToken(IntrospectTokenShardedRequest request);
 
     @PUT
     @Path("/get-player")
@@ -73,9 +73,9 @@ public interface UserServiceApi {
 
     @PUT
     @Path("/delete-player")
-    Uni<DeletePlayerShardResponse> deletePlayer(DeletePlayerShardedRequest request);
+    Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request);
 
-    default DeletePlayerShardResponse deletePlayer(long timeout, DeletePlayerShardedRequest request) {
+    default DeletePlayerShardedResponse deletePlayer(long timeout, DeletePlayerShardedRequest request) {
         return deletePlayer(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
@@ -90,9 +90,9 @@ public interface UserServiceApi {
 
     @PUT
     @Path("/delete-client")
-    Uni<DeleteClientShardResponse> deleteClient(DeleteClientShardedRequest request);
+    Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request);
 
-    default DeleteClientShardResponse deleteClient(long timeout, DeleteClientShardedRequest request) {
+    default DeleteClientShardedResponse deleteClient(long timeout, DeleteClientShardedRequest request) {
         return deleteClient(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
@@ -126,9 +126,9 @@ public interface UserServiceApi {
 
     @PUT
     @Path("/delete-attribute")
-    Uni<DeleteAttributeShardResponse> deleteAttribute(DeleteAttributeShardedRequest request);
+    Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request);
 
-    default DeleteAttributeShardResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
+    default DeleteAttributeShardedResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
         return deleteAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

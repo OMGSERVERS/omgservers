@@ -1,8 +1,8 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.doGreedyMatchmakingMethod;
 
-import com.omgservers.dto.matchmaker.DeleteRequestShardResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchShardResponse;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
@@ -134,7 +134,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                 })
                 .collect().asList()
                 .invoke(results -> {
-                    final var createdCount = results.stream().filter(SyncMatchShardResponse::getCreated).count();
+                    final var createdCount = results.stream().filter(SyncMatchShardedResponse::getCreated).count();
                     final var updatedCount = results.size() - createdCount;
                     log.info("Prepared matches were synchronized, created={}, updated={}", createdCount, updatedCount);
                 })
@@ -152,7 +152,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                 })
                 .collect().asList()
                 .invoke(results -> {
-                    final var deletedCount = results.stream().filter(DeleteRequestShardResponse::getDeleted).count();
+                    final var deletedCount = results.stream().filter(DeleteRequestShardedResponse::getDeleted).count();
                     log.info("Completed requests were deleted, count={}", deletedCount);
                 })
                 .replaceWithVoid();

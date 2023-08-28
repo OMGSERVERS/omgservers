@@ -5,8 +5,8 @@ import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.runtime.DeleteCommandShardedRequest;
-import com.omgservers.dto.runtime.DeleteCommandInternalResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +26,8 @@ class DeleteCommandMethodImpl implements DeleteCommandMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteCommandInternalResponse> deleteCommand(DeleteCommandShardedRequest request) {
-        DeleteCommandShardedRequest.validate(request);
+    public Uni<DeleteRuntimeCommandShardedResponse> deleteCommand(DeleteRuntimeCommandShardedRequest request) {
+        DeleteRuntimeCommandShardedRequest.validate(request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();
@@ -44,6 +44,6 @@ class DeleteCommandMethodImpl implements DeleteCommandMethod {
                         }
                 ))
                 .map(ChangeWithLogResponse::getResult)
-                .map(DeleteCommandInternalResponse::new);
+                .map(DeleteRuntimeCommandShardedResponse::new);
     }
 }

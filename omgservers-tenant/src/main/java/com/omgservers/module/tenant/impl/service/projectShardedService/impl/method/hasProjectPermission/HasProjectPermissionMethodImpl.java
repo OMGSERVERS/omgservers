@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.service.projectShardedService.impl.met
 import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.hasProjectPermission.HasProjectPermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.HasProjectPermissionInternalResponse;
+import com.omgservers.dto.tenant.HasProjectPermissionShardedResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<HasProjectPermissionInternalResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
+    public Uni<HasProjectPermissionShardedResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
         HasProjectPermissionShardedRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -31,6 +31,6 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
                     return pgPool.withTransaction(sqlConnection -> hasProjectPermissionOperation
                             .hasProjectPermission(sqlConnection, shard.shard(), projectId, userId, permission));
                 })
-                .map(HasProjectPermissionInternalResponse::new);
+                .map(HasProjectPermissionShardedResponse::new);
     }
 }

@@ -15,10 +15,10 @@ import com.omgservers.module.tenant.impl.service.tenantShardedService.impl.metho
 import com.omgservers.module.tenant.impl.service.tenantShardedService.TenantShardedService;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.tenant.GetTenantResponse;
-import com.omgservers.dto.tenant.HasTenantPermissionResponse;
-import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.dto.tenant.SyncTenantResponse;
+import com.omgservers.dto.tenant.GetTenantShardedResponse;
+import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -41,7 +41,7 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     final SyncTenantMethod syncTenantMethod;
 
     @Override
-    public Uni<GetTenantResponse> getTenant(GetTenantShardedRequest request) {
+    public Uni<GetTenantShardedResponse> getTenant(GetTenantShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 GetTenantShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -50,7 +50,7 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     }
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantShardedRequest request) {
+    public Uni<SyncTenantShardedResponse> syncTenant(SyncTenantShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncTenantShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -68,7 +68,7 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     }
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
+    public Uni<HasTenantPermissionShardedResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 HasTenantPermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
@@ -77,7 +77,7 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     }
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request) {
+    public Uni<SyncTenantPermissionShardedResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncTenantPermissionShardedRequest::validate,
                 getTenantServiceApiClientOperation::getClient,
