@@ -7,7 +7,7 @@ import com.omgservers.dto.user.SyncPlayerShardedRequest;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerUpdatedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.validatePlayer.ValidatePlayerOperation;
 import io.smallrye.mutiny.Uni;

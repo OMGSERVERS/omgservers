@@ -6,7 +6,7 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerShardResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

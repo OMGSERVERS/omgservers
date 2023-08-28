@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.deleteJob;
 
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.deleteJob.DeleteJobOperation;
 import com.omgservers.dto.internal.ChangeWithEventRequest;

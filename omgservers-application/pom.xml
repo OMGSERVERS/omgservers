@@ -20,6 +20,14 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-migration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-model</artifactId>
         </dependency>
         <dependency>
@@ -56,11 +64,19 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-handler</artifactId>
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-runtime</artifactId>
+            <artifactId>omgservers-job</artifactId>
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>

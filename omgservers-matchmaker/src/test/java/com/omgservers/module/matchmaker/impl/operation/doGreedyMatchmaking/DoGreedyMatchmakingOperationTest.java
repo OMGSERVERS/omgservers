@@ -4,7 +4,7 @@ import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.module.matchmaker.factory.RequestModelFactory;
+import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

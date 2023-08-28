@@ -16,15 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-exception</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-dto</artifactId>
+            <artifactId>omgservers-base</artifactId>
         </dependency>
         <!-- external -->
         <dependency>

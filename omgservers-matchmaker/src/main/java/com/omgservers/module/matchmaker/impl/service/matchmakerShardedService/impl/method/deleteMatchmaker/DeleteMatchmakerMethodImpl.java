@@ -6,7 +6,7 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerShardResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker.DeleteMatchmakerOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

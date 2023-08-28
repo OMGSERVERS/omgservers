@@ -1,7 +1,7 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.dto.internal.FireEventShardedRequest;

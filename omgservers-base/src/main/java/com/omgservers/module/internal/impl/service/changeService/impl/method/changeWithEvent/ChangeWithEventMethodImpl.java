@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.changeService.impl.method.changeWithEvent;
 
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.Dispatcher;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;

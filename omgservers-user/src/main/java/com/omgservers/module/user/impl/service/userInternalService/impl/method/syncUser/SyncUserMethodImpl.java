@@ -5,7 +5,7 @@ import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.user.SyncUserShardedResponse;
 import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

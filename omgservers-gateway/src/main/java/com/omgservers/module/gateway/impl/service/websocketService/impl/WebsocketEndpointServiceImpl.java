@@ -13,7 +13,7 @@ import com.omgservers.module.gateway.impl.service.websocketService.WebsocketEndp
 import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpHelpRequest;
 import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageHelpRequest;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.CloseReason;

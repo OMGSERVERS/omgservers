@@ -3,6 +3,8 @@ set -e
 
 pushd omgservers-parent; ./mvnw clean install; popd
 pushd omgservers-exception; ./mvnw clean install; popd
+pushd omgservers-common; ./mvnw clean install; popd
+pushd omgservers-migration; ./mvnw clean install; popd
 pushd omgservers-model; ./mvnw clean install; popd
 pushd omgservers-dto; ./mvnw clean install; popd
 pushd omgservers-base; ./mvnw clean install; popd
@@ -12,8 +14,10 @@ pushd omgservers-lua; ./mvnw clean install; popd
 pushd omgservers-version; ./mvnw clean install; popd
 pushd omgservers-tenant; ./mvnw clean install; popd
 pushd omgservers-matchmaker; ./mvnw clean install; popd
-pushd omgservers-handler; ./mvnw clean install; popd
 pushd omgservers-runtime; ./mvnw clean install; popd
+pushd omgservers-context; ./mvnw clean install; popd
+pushd omgservers-handler; ./mvnw clean install; popd
+pushd omgservers-job; ./mvnw clean install; popd
 pushd omgservers-developer; ./mvnw clean install; popd
 pushd omgservers-admin; ./mvnw clean install; popd
 pushd omgservers-application; ./mvnw clean install; popd

@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncCommand;
 
 import com.omgservers.module.runtime.impl.operation.upsertCommand.UpsertCommandOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;

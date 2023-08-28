@@ -5,7 +5,7 @@ import com.omgservers.model.match.MatchGroupModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.module.matchmaker.factory.MatchModelFactory;
+import com.omgservers.factory.MatchModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

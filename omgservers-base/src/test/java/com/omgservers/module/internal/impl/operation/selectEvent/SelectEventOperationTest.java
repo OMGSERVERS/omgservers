@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.selectEvent;
 
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;

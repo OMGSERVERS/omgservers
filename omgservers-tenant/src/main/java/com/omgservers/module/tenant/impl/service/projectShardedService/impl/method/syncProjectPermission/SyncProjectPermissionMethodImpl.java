@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.service.projectShardedService.impl.met
 
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
