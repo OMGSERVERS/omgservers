@@ -1,29 +1,37 @@
 package com.omgservers.module.context.impl.service.handlerService;
 
-import com.omgservers.dto.handler.HandleAddActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleDeleteActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleHandleIncomingRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleInitRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleMatchCreatedEventRequest;
-import com.omgservers.dto.handler.HandlePlayerSignedInEventRequest;
-import com.omgservers.dto.handler.HandlePlayerSignedUpEventRequest;
-import com.omgservers.dto.handler.HandleStopRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleAddActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleAddActorRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleHandleIncomingRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleHandleIncomingRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleInitRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleInitRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleMatchCreatedEventRequest;
+import com.omgservers.dto.context.HandleMatchCreatedEventResponse;
+import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
+import com.omgservers.dto.context.HandleStopRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleStopRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ContextService {
-    Uni<Void> handlePlayerSignedUpEvent(HandlePlayerSignedUpEventRequest request);
+    Uni<HandlePlayerSignedUpEventResponse> handlePlayerSignedUpEvent(HandlePlayerSignedUpEventRequest request);
 
-    Uni<Void> handlePlayerSignedInEvent(HandlePlayerSignedInEventRequest request);
+    Uni<HandlePlayerSignedInEventResponse> handlePlayerSignedInEvent(HandlePlayerSignedInEventRequest request);
 
-    Uni<Void> handleMatchCreatedEvent(HandleMatchCreatedEventRequest request);
+    Uni<HandleMatchCreatedEventResponse> handleMatchCreatedEvent(HandleMatchCreatedEventRequest request);
 
-    Uni<Void> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
+    Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
 
-    Uni<Void> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request);
+    Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request);
 
-    Uni<Void> handleAddActorRuntimeCommand(HandleAddActorRuntimeCommandRequest request);
+    Uni<HandleAddActorRuntimeCommandResponse> handleAddActorRuntimeCommand(HandleAddActorRuntimeCommandRequest request);
 
-    Uni<Void> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request);
+    Uni<HandleDeleteActorRuntimeCommandResponse> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request);
 
-    Uni<Void> handleHandleIncomingRuntimeCommand(HandleHandleIncomingRuntimeCommandRequest request);
+    Uni<HandleHandleIncomingRuntimeCommandResponse> handleHandleIncomingRuntimeCommand(HandleHandleIncomingRuntimeCommandRequest request);
 }

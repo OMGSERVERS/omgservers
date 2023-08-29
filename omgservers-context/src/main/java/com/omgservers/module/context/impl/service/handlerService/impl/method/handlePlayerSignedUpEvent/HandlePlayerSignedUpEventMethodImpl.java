@@ -1,6 +1,7 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handlePlayerSignedUpEvent;
 
-import com.omgservers.dto.handler.HandlePlayerSignedUpEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
 import com.omgservers.module.context.impl.operation.createLuaRuntime.CreateLuaRuntimeOperation;
 import com.omgservers.module.context.impl.operation.createLuaRuntime.impl.LuaRuntime;
 import com.omgservers.module.context.impl.operation.createLuaRuntime.impl.event.LuaEvent;
@@ -25,7 +26,7 @@ class HandlePlayerSignedUpEventMethodImpl implements HandlePlayerSignedUpEventMe
     final CreateLuaPlayerContextOperation createLuaPlayerContextOperation;
 
     @Override
-    public Uni<Void> handleLuaPlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
+    public Uni<HandlePlayerSignedUpEventResponse> handleLuaPlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
         HandlePlayerSignedUpEventRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -40,7 +41,7 @@ class HandlePlayerSignedUpEventMethodImpl implements HandlePlayerSignedUpEventMe
                             final var luaEvent = new LuaPlayerSignedUpEvent(userId, playerId, clientId);
                             return handleEvent(luaRuntime, luaEvent, luaPlayerContext);
                         }))
-                .replaceWithVoid();
+                .replaceWith(new HandlePlayerSignedUpEventResponse(true));
     }
 
     Uni<Void> handleEvent(final LuaRuntime luaRuntime,

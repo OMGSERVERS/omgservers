@@ -1,10 +1,5 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.doRuntimeUpdate;
 
-import com.omgservers.dto.handler.HandleAddActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleDeleteActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleHandleIncomingRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleInitRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleStopRuntimeCommandRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedResponse;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
@@ -12,13 +7,9 @@ import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
-import com.omgservers.model.runtimeCommand.body.AddActorRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.DeleteActorRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.HandleIncomingRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 import com.omgservers.module.context.ContextModule;
 import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleRuntimeCommandOperation;
 import com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands.SelectNewRuntimeCommandsOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
@@ -44,6 +35,7 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
     final SelectNewRuntimeCommandsOperation selectNewRuntimeCommandsOperation;
     final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
+    final HandleRuntimeCommandOperation handleRuntimeCommandOperation;
     final UpsertRuntimeOperation upsertRuntimeOperation;
     final CheckShardOperation checkShardOperation;
     final GetConfigOperation getConfigOperation;
@@ -58,18 +50,8 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 .flatMap(shardModel -> {
                     final var runtimeId = request.getRuntimeId();
                     return getRuntime(runtimeId)
-                            .flatMap(runtime -> pgPool.withTransaction(sqlConnection ->
-                                    updateRuntime(sqlConnection, shardModel.shard(), runtime)))
-                            .map(updateRuntimeResult -> {
-                                final var affectedCommands = updateRuntimeResult.affectedCommands;
-                                final var doRuntimeUpdateShardedResponse = new DoRuntimeUpdateShardedResponse();
-                                doRuntimeUpdateShardedResponse.setHandledCommands(affectedCommands.size());
-                                if (getConfigOperation.getConfig().verbose()) {
-                                    final var extendedResponse = new DoRuntimeUpdateShardedResponse.ExtendedResponse(affectedCommands);
-                                    doRuntimeUpdateShardedResponse.setExtendedResponse(extendedResponse);
-                                }
-                                return doRuntimeUpdateShardedResponse;
-                            });
+                            .flatMap(runtime -> updateRuntimeInTransaction(shardModel.shard(), runtime)
+                                    .map(this::prepareMethodResponse));
                 });
     }
 
@@ -77,6 +59,22 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
         final var request = new GetRuntimeShardedRequest(id);
         return runtimeModule.getRuntimeShardedService().getRuntime(request)
                 .map(GetRuntimeShardedResponse::getRuntime);
+    }
+
+    Uni<UpdateRuntimeResult> updateRuntimeInTransaction(final int shard,
+                                                        final RuntimeModel runtime) {
+        return pgPool.withTransaction(sqlConnection -> updateRuntime(sqlConnection, shard, runtime));
+    }
+
+    DoRuntimeUpdateShardedResponse prepareMethodResponse(UpdateRuntimeResult result) {
+        final var affectedCommands = result.affectedCommands;
+        final var doRuntimeUpdateShardedResponse = new DoRuntimeUpdateShardedResponse();
+        doRuntimeUpdateShardedResponse.setHandledCommands(affectedCommands.size());
+        if (getConfigOperation.getConfig().verbose()) {
+            final var extendedResponse = new DoRuntimeUpdateShardedResponse.ExtendedResponse(affectedCommands);
+            doRuntimeUpdateShardedResponse.setExtendedResponse(extendedResponse);
+        }
+        return doRuntimeUpdateShardedResponse;
     }
 
     Uni<UpdateRuntimeResult> updateRuntime(final SqlConnection sqlConnection,
@@ -104,71 +102,14 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                                                   final int shard,
                                                   final RuntimeCommandModel runtimeCommand,
                                                   final Long currentStep) {
-        runtimeCommand.setStep(currentStep);
-        return callContextHandler(runtimeCommand)
-                .flatMap(voidItem -> upsertRuntimeCommandOperation
-                        .upsertRuntimeCommand(sqlConnection, shard, runtimeCommand))
-                .replaceWith(runtimeCommand);
-    }
-
-    Uni<Void> callContextHandler(final RuntimeCommandModel runtimeCommand) {
-        final var qualifier = runtimeCommand.getQualifier();
-        final var commandBody = runtimeCommand.getBody();
-
-        if (qualifier.getBodyClass().isInstance(commandBody)) {
-            // TODO: take result from context handler
-            runtimeCommand.setStatus(RuntimeCommandStatusEnum.PROCESSED);
-            final var runtimeId = runtimeCommand.getRuntimeId();
-            final var contextService = contextModule.getContextService();
-            switch (qualifier) {
-                case INIT_RUNTIME -> {
-                    final var initRuntimeCommandBody = (InitRuntimeCommandBodyModel) commandBody;
-                    final var handleInitRuntimeCommandRequest = new HandleInitRuntimeCommandRequest(runtimeId);
-                    return contextService.handleInitRuntimeCommand(handleInitRuntimeCommandRequest);
-                }
-                case STOP_RUNTIME -> {
-                    final var stopRuntimeCommandBody = (StopRuntimeCommandBodyModel) commandBody;
-                    final var handleStopRuntimeCommandRequest = new HandleStopRuntimeCommandRequest(runtimeId);
-                    return contextService.handleStopRuntimeCommand(handleStopRuntimeCommandRequest);
-                }
-                case ADD_ACTOR -> {
-                    final var addActorRuntimeCommandBody = (AddActorRuntimeCommandBodyModel) commandBody;
-                    final var userId = addActorRuntimeCommandBody.getUserId();
-                    final var playerId = addActorRuntimeCommandBody.getPlayerId();
-                    final var clientId = addActorRuntimeCommandBody.getClientId();
-                    final var handleAddActorRuntimeCommandRequest =
-                            new HandleAddActorRuntimeCommandRequest(runtimeId, userId, playerId, clientId);
-                    return contextService.handleAddActorRuntimeCommand(handleAddActorRuntimeCommandRequest);
-                }
-                case DELETE_ACTOR -> {
-                    final var deleteActorRuntimeCommandBody = (DeleteActorRuntimeCommandBodyModel) commandBody;
-                    final var userId = deleteActorRuntimeCommandBody.getUserId();
-                    final var playerId = deleteActorRuntimeCommandBody.getPlayerId();
-                    final var clientId = deleteActorRuntimeCommandBody.getClientId();
-                    final var handleDeleteActorRuntimeCommandRequest =
-                            new HandleDeleteActorRuntimeCommandRequest(runtimeId, userId, playerId, clientId);
-                    return contextService.handleDeleteActorRuntimeCommand(handleDeleteActorRuntimeCommandRequest);
-                }
-                case HANDLE_INCOMING -> {
-                    final var handleIncomingRuntimeCommandBody = (HandleIncomingRuntimeCommandBodyModel) commandBody;
-                    final var userId = handleIncomingRuntimeCommandBody.getUserId();
-                    final var playerId = handleIncomingRuntimeCommandBody.getPlayerId();
-                    final var clientId = handleIncomingRuntimeCommandBody.getClientId();
-                    final var incoming = handleIncomingRuntimeCommandBody.getIncoming();
-                    final var handleHandleIncomingRuntimeCommandRequest =
-                            new HandleHandleIncomingRuntimeCommandRequest(runtimeId, userId, playerId, clientId,
-                                    incoming);
-                    return contextService.handleHandleIncomingRuntimeCommand(handleHandleIncomingRuntimeCommandRequest);
-                }
-                default -> {
-                    runtimeCommand.setStatus(RuntimeCommandStatusEnum.FAILED);
-                    return Uni.createFrom().voidItem();
-                }
-            }
-        } else {
-            runtimeCommand.setStatus(RuntimeCommandStatusEnum.FAILED);
-            return Uni.createFrom().voidItem();
-        }
+        return handleRuntimeCommandOperation.handleRuntimeCommand(runtimeCommand)
+                .flatMap(result -> {
+                    final var status = result ? RuntimeCommandStatusEnum.PROCESSED : RuntimeCommandStatusEnum.FAILED;
+                    runtimeCommand.setStatus(status);
+                    runtimeCommand.setStep(currentStep);
+                    return upsertRuntimeCommandOperation.upsertRuntimeCommand(sqlConnection, shard, runtimeCommand)
+                            .replaceWith(runtimeCommand);
+                });
     }
 
     private record UpdateRuntimeResult(List<RuntimeCommandModel> affectedCommands) {

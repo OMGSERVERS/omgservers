@@ -1,4 +1,4 @@
-package com.omgservers.dto.handler;
+package com.omgservers.dto.context;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;
@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleDeleteActorRuntimeCommandRequest {
+public class HandleMatchCreatedEventRequest {
 
-    static public void validate(final HandleDeleteActorRuntimeCommandRequest request) {
+    static public void validate(final HandleMatchCreatedEventRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }
         // TODO: validate fields
     }
 
-    Long runtimeId;
-    Long userId;
-    Long playerId;
-    Long clientId;
+    Long matchmakerId;
+    Long id;
 }

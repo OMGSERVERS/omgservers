@@ -1,8 +1,9 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handleInitRuntimeCommand;
 
-import com.omgservers.dto.handler.HandleInitRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleInitRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleInitRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface HandleInitRuntimeCommandMethod {
-    Uni<Void> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
+    Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
 }

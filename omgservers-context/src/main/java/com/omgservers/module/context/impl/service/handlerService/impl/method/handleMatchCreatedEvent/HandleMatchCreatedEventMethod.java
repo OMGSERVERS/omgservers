@@ -1,8 +1,9 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handleMatchCreatedEvent;
 
-import com.omgservers.dto.handler.HandleMatchCreatedEventRequest;
+import com.omgservers.dto.context.HandleMatchCreatedEventRequest;
+import com.omgservers.dto.context.HandleMatchCreatedEventResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface HandleMatchCreatedEventMethod {
-    Uni<Void> handleMatchCreatedEvent(HandleMatchCreatedEventRequest request);
+    Uni<HandleMatchCreatedEventResponse> handleMatchCreatedEvent(HandleMatchCreatedEventRequest request);
 }

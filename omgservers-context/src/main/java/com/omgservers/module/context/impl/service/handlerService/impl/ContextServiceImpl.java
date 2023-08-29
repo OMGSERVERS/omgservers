@@ -1,13 +1,21 @@
 package com.omgservers.module.context.impl.service.handlerService.impl;
 
-import com.omgservers.dto.handler.HandleAddActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleDeleteActorRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleHandleIncomingRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleInitRuntimeCommandRequest;
-import com.omgservers.dto.handler.HandleMatchCreatedEventRequest;
-import com.omgservers.dto.handler.HandlePlayerSignedInEventRequest;
-import com.omgservers.dto.handler.HandlePlayerSignedUpEventRequest;
-import com.omgservers.dto.handler.HandleStopRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleAddActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleAddActorRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleHandleIncomingRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleHandleIncomingRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleInitRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleInitRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleMatchCreatedEventRequest;
+import com.omgservers.dto.context.HandleMatchCreatedEventResponse;
+import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
+import com.omgservers.dto.context.HandleStopRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleStopRuntimeCommandResponse;
 import com.omgservers.module.context.impl.service.handlerService.ContextService;
 import com.omgservers.module.context.impl.service.handlerService.impl.method.handleAddActorRuntimeCommand.HandleAddActorRuntimeCommandMethod;
 import com.omgservers.module.context.impl.service.handlerService.impl.method.handleDeleteActorRuntimeCommand.HandleDeleteActorRuntimeCommandMethod;
@@ -38,42 +46,42 @@ class ContextServiceImpl implements ContextService {
     final HandleStopRuntimeCommandMethod handleStopRuntimeCommandMethod;
 
     @Override
-    public Uni<Void> handlePlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
+    public Uni<HandlePlayerSignedUpEventResponse> handlePlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
         return handlePlayerSignedUpEventHelpMethod.handleLuaPlayerSignedUpEvent(request);
     }
 
     @Override
-    public Uni<Void> handlePlayerSignedInEvent(final HandlePlayerSignedInEventRequest request) {
+    public Uni<HandlePlayerSignedInEventResponse> handlePlayerSignedInEvent(final HandlePlayerSignedInEventRequest request) {
         return handlePlayerSignedInEventHelpMethod.handleLuaPlayerSignedInEvent(request);
     }
 
     @Override
-    public Uni<Void> handleMatchCreatedEvent(final HandleMatchCreatedEventRequest request) {
+    public Uni<HandleMatchCreatedEventResponse> handleMatchCreatedEvent(final HandleMatchCreatedEventRequest request) {
         return handleMatchCreatedEventMethod.handleMatchCreatedEvent(request);
     }
 
     @Override
-    public Uni<Void> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request) {
+    public Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request) {
         return handleInitRuntimeCommandMethod.handleInitRuntimeCommand(request);
     }
 
     @Override
-    public Uni<Void> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request) {
+    public Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request) {
         return handleStopRuntimeCommandMethod.handleStopRuntimeCommand(request);
     }
 
     @Override
-    public Uni<Void> handleAddActorRuntimeCommand(HandleAddActorRuntimeCommandRequest request) {
+    public Uni<HandleAddActorRuntimeCommandResponse> handleAddActorRuntimeCommand(HandleAddActorRuntimeCommandRequest request) {
         return handleAddActorRuntimeCommandMethod.handleAddActorRuntimeCommand(request);
     }
 
     @Override
-    public Uni<Void> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request) {
+    public Uni<HandleDeleteActorRuntimeCommandResponse> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request) {
         return handleDeleteActorRuntimeCommandMethod.handleDeleteActorRuntimeCommand(request);
     }
 
     @Override
-    public Uni<Void> handleHandleIncomingRuntimeCommand(HandleHandleIncomingRuntimeCommandRequest request) {
+    public Uni<HandleHandleIncomingRuntimeCommandResponse> handleHandleIncomingRuntimeCommand(HandleHandleIncomingRuntimeCommandRequest request) {
         return handleHandleIncomingRuntimeCommandMethod.handleHandleIncomingRuntimeCommand(request);
     }
 }

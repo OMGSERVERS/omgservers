@@ -1,4 +1,4 @@
-package com.omgservers.dto.handler;
+package com.omgservers.dto.context;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;
@@ -8,18 +8,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandlePlayerSignedInEventRequest {
+public class HandleHandleIncomingRuntimeCommandRequest {
 
-    static public void validate(HandlePlayerSignedInEventRequest request) {
+    static public void validate(final HandleHandleIncomingRuntimeCommandRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }
         // TODO: validate fields
     }
 
-    Long tenantId;
-    Long stageId;
+    Long runtimeId;
     Long userId;
     Long playerId;
     Long clientId;
+    String incoming;
 }

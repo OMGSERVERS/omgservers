@@ -1,8 +1,9 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handleMatchCreatedEvent;
 
-import com.omgservers.dto.handler.HandleMatchCreatedEventRequest;
-import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
+import com.omgservers.dto.context.HandleMatchCreatedEventRequest;
+import com.omgservers.dto.context.HandleMatchCreatedEventResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
+import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.context.impl.operation.createLuaMatchContext.CreateLuaMatchContextOperation;
 import com.omgservers.module.context.impl.operation.createLuaMatchContext.impl.LuaMatchContext;
@@ -30,7 +31,7 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
     final CreateLuaMatchContextOperation createLuaMatchContextOperation;
 
     @Override
-    public Uni<Void> handleMatchCreatedEvent(final HandleMatchCreatedEventRequest request) {
+    public Uni<HandleMatchCreatedEventResponse> handleMatchCreatedEvent(final HandleMatchCreatedEventRequest request) {
         HandleMatchCreatedEventRequest.validate(request);
 
         final var matchmakerId = request.getMatchmakerId();
@@ -47,7 +48,8 @@ class HandleMatchCreatedEventMethodImpl implements HandleMatchCreatedEventMethod
                                         final var luaEvent = new LuaMatchCreatedEvent(mode);
                                         return handleEvent(luaRuntime, luaEvent, luaMatchContext);
                                     }));
-                });
+                })
+                .replaceWith(new HandleMatchCreatedEventResponse(true));
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long id) {

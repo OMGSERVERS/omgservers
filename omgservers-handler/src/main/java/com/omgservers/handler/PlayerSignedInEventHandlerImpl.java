@@ -1,7 +1,8 @@
 package com.omgservers.handler;
 
+import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
+import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
 import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
-import com.omgservers.dto.handler.HandlePlayerSignedInEventRequest;
 import com.omgservers.dto.user.GetClientShardedRequest;
 import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
@@ -44,8 +45,7 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
 
         return getClient(userId, clientId)
                 .flatMap(client -> assignPlayer(tenantId, stageId, userId, playerId, client))
-                .flatMap(voidItem -> handleEvent(tenantId, stageId, userId, playerId, clientId))
-                .replaceWith(true);
+                .flatMap(voidItem -> handleEvent(tenantId, stageId, userId, playerId, clientId));
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
@@ -62,8 +62,9 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
         return gatewayModule.getGatewayService().assignPlayer(request);
     }
 
-    Uni<Void> handleEvent(Long tenantId, Long stageId, Long userId, Long playerId, Long clientId) {
+    Uni<Boolean> handleEvent(Long tenantId, Long stageId, Long userId, Long playerId, Long clientId) {
         final var request = new HandlePlayerSignedInEventRequest(tenantId, stageId, userId, playerId, clientId);
-        return contextModule.getContextService().handlePlayerSignedInEvent(request);
+        return contextModule.getContextService().handlePlayerSignedInEvent(request)
+                .map(HandlePlayerSignedInEventResponse::getResult);
     }
 }

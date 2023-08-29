@@ -1,6 +1,7 @@
 package com.omgservers.module.context.impl.service.handlerService.impl.method.handleDeleteActorRuntimeCommand;
 
-import com.omgservers.dto.handler.HandleDeleteActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleDeleteActorRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 class HandleDeleteActorRuntimeCommandMethodImpl implements HandleDeleteActorRuntimeCommandMethod {
 
     @Override
-    public Uni<Void> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request) {
+    public Uni<HandleDeleteActorRuntimeCommandResponse> handleDeleteActorRuntimeCommand(HandleDeleteActorRuntimeCommandRequest request) {
         HandleDeleteActorRuntimeCommandRequest.validate(request);
         // TODO: implement
-        return Uni.createFrom().voidItem();
+        return Uni.createFrom().voidItem()
+                .replaceWith(new HandleDeleteActorRuntimeCommandResponse(true));
     }
 }

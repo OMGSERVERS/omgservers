@@ -1,4 +1,4 @@
-package com.omgservers.dto.handler;
+package com.omgservers.dto.context;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleHandleIncomingRuntimeCommandRequest {
+public class HandleDeleteActorRuntimeCommandRequest {
 
-    static public void validate(final HandleHandleIncomingRuntimeCommandRequest request) {
+    static public void validate(final HandleDeleteActorRuntimeCommandRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }
@@ -21,5 +21,4 @@ public class HandleHandleIncomingRuntimeCommandRequest {
     Long userId;
     Long playerId;
     Long clientId;
-    String incoming;
 }
