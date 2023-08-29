@@ -171,6 +171,8 @@ create table if not exists tab_runtime (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    tenant_id bigint not null,
+    stage_id bigint not null,
     matchmaker_id bigint not null,
     match_id bigint not null,
     type text not null,

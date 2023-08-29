@@ -51,7 +51,7 @@ class DoRuntimeUpdateMethodTest extends Assertions {
 
     @Test
     void doRuntimeUpdateTest() {
-        final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         final var syncRuntimeShardedRequest = new SyncRuntimeShardedRequest(runtime);
         syncRuntimeMethod.syncRuntime(TIMEOUT, syncRuntimeShardedRequest);
 
@@ -80,6 +80,14 @@ class DoRuntimeUpdateMethodTest extends Assertions {
         assertEquals(runtimeCommand2.getId(), affectedCommand2.getId());
         assertEquals(RuntimeCommandStatusEnum.FAILED, affectedCommand2.getStatus());
         assertEquals(1, affectedCommand2.getStep());
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     Long matchmakerId() {

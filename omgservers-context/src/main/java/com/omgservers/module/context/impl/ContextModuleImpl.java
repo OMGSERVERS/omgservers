@@ -1,7 +1,7 @@
 package com.omgservers.module.context.impl;
 
 import com.omgservers.module.context.ContextModule;
-import com.omgservers.module.context.impl.service.handlerService.ContextService;
+import com.omgservers.module.context.impl.service.contextService.ContextService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

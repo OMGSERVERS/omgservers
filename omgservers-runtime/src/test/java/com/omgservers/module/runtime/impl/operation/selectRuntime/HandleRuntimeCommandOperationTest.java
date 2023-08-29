@@ -1,9 +1,9 @@
 package com.omgservers.module.runtime.impl.operation.selectRuntime;
 
 import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -36,7 +36,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntime_whenSelectRuntime_thenSelected() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         final var runtime2 = selectRuntimeOperation.selectRuntime(TIMEOUT, pgPool, shard, runtime1.getId());
@@ -51,6 +51,14 @@ class HandleRuntimeCommandOperationTest extends Assertions {
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRuntimeOperation
                 .selectRuntime(TIMEOUT, pgPool, shard, id));
         log.info("Exception: {}", exception.getMessage());
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     Long matchmakerId() {

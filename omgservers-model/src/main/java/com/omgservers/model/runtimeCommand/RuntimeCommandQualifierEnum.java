@@ -1,17 +1,17 @@
 package com.omgservers.model.runtimeCommand;
 
-import com.omgservers.model.runtimeCommand.body.AddActorRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.DeleteActorRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.HandleIncomingRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.AddPlayerRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.DeletePlayerRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.HandleEventRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 
 public enum RuntimeCommandQualifierEnum {
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
     STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
-    ADD_ACTOR(AddActorRuntimeCommandBodyModel.class),
-    DELETE_ACTOR(DeleteActorRuntimeCommandBodyModel.class),
-    HANDLE_INCOMING(HandleIncomingRuntimeCommandBodyModel.class);
+    ADD_PLAYER(AddPlayerRuntimeCommandBodyModel.class),
+    DELETE_PLAYER(DeletePlayerRuntimeCommandBodyModel.class),
+    HANDLE_EVENT(HandleEventRuntimeCommandBodyModel.class);
 
     Class<? extends RuntimeCommandBodyModel> bodyClass;
 

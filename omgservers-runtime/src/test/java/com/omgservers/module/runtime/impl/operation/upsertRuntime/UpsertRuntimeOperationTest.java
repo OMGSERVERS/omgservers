@@ -1,8 +1,8 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntime;
 
+import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -35,17 +35,25 @@ class UpsertRuntimeOperationTest extends Assertions {
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         assertTrue(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1));
     }
 
     @Test
     void givenRuntime_whenInsertRuntimeAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         assertFalse(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long stageId() {
+        return generateIdOperation.generateId();
     }
 
     Long matchmakerId() {
