@@ -1,4 +1,4 @@
-package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecretHelpMethod;
+package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecret;
 
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretResponse;

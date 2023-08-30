@@ -3,9 +3,8 @@ package com.omgservers.handler;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.dto.tenant.GetStageVersionRequest;
+import com.omgservers.dto.tenant.GetStageVersionResponse;
 import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -13,7 +12,6 @@ import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -52,7 +50,9 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(matchmaker -> {
                     final var tenantId = matchmaker.getTenantId();
                     final var stageId = matchmaker.getTenantId();
-                    return getStageVersionId(tenantId, stageId)
+                    final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
+                    return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
+                            .map(GetStageVersionResponse::getVersionId)
                             .flatMap(versionId -> {
                                 // TODO: Detect runtime type
                                 final var runtime = runtimeModelFactory.create(
@@ -74,15 +74,5 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetMatchmakerShardedRequest(matchmakerId);
         return matchmakerModule.getMatchmakerShardedService().getMatchmaker(request)
                 .map(GetMatchmakerShardedResponse::getMatchmaker);
-    }
-
-    Uni<Long> getStageVersionId(final Long tenantId, final Long stageId) {
-        final var request = new GetStageShardedRequest(tenantId, stageId);
-        return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageShardedResponse::getStage)
-                .map(StageModel::getVersionId)
-                .onItem().ifNull().failWith(new ServerSideConflictException(String
-                        .format("no any stage's version wasn't deployed yet, " +
-                                "tenantId=%d, stageId=%d", tenantId, stageId)));
     }
 }

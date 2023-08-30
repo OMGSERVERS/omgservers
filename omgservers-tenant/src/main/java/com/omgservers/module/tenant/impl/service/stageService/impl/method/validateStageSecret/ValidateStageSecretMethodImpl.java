@@ -1,4 +1,4 @@
-package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecretHelpMethod;
+package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecret;
 
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
@@ -18,7 +18,7 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
     final StageShardedService stageShardedService;
 
     @Override
-    public Uni<ValidateStageSecretResponse> validateStageSecret(ValidateStageSecretRequest request) {
+    public Uni<ValidateStageSecretResponse> validateStageSecret(final ValidateStageSecretRequest request) {
         ValidateStageSecretRequest.validateGetStageModuleRequest(request);
 
         final var tenantId = request.getTenantId();

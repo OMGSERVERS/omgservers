@@ -2,10 +2,8 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 
 import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.dto.tenant.GetStageVersionRequest;
+import com.omgservers.dto.tenant.GetStageVersionResponse;
 import com.omgservers.module.context.impl.luaEvent.player.LuaPlayerSignedInEvent;
 import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import com.omgservers.module.context.impl.operation.createLuaPlayerContext.CreateLuaPlayerContextOperation;
@@ -44,21 +42,13 @@ class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMe
 
         final var luaEvent = new LuaPlayerSignedInEvent(userId, playerId, clientId);
 
-        return getStageVersionId(tenantId, stageId)
+        final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
+        return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
+                .map(GetStageVersionResponse::getVersionId)
                 .flatMap(versionId -> createLuaPlayerContextOperation
                         .createLuaPlayerContext(userId, playerId, clientId)
                         .flatMap(luaPlayerContext -> handleLuaEventOperation
                                 .handleLuaEvent(versionId, luaEvent, luaPlayerContext)))
                 .replaceWith(new HandlePlayerSignedInEventResponse(true));
-    }
-
-    Uni<Long> getStageVersionId(final Long tenantId, final Long stageId) {
-        final var request = new GetStageShardedRequest(tenantId, stageId);
-        return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageShardedResponse::getStage)
-                .map(StageModel::getVersionId)
-                .onItem().ifNull().failWith(new ServerSideConflictException(String
-                        .format("no any stage's version wasn't deployed yet, " +
-                                "tenantId=%d, stageId=%d", tenantId, stageId)));
     }
 }
