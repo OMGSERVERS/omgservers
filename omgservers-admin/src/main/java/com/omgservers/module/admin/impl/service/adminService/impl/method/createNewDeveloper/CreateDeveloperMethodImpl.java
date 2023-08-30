@@ -11,7 +11,7 @@ import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
+import com.omgservers.factory.TenantPermissionModelFactory;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

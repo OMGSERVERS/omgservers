@@ -14,7 +14,7 @@ import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.factory.ProjectPermissionModelFactory;
+import com.omgservers.factory.ProjectPermissionModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

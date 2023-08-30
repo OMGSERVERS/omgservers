@@ -17,7 +17,7 @@ import com.omgservers.module.internal.impl.service.handlerService.impl.EventHand
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
+import com.omgservers.factory.StagePermissionModelFactory;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getServers.GetServersOperation;

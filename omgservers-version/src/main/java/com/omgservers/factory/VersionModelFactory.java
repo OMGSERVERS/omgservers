@@ -1,4 +1,4 @@
-package com.omgservers.module.version.factory;
+package com.omgservers.factory;
 
 import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionModel;

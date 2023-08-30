@@ -5,7 +5,7 @@ import com.omgservers.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.factory.TenantModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

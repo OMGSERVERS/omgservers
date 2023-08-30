@@ -4,7 +4,7 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.module.version.factory.VersionModelFactory;
+import com.omgservers.factory.VersionModelFactory;
 import com.omgservers.module.version.impl.operation.upsertVersion.UpsertVersionOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
