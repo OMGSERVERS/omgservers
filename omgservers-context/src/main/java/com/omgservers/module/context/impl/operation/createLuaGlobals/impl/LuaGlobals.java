@@ -26,7 +26,7 @@ public class LuaGlobals {
                 closure.call(luaEvent, context);
             } catch (LuaError luaError) {
                 log.warn("Closure call failed, id={}, reason={}", eventId, luaError.getMessage());
-                throw new ServerSideBadRequestException("Lua error, " + luaError.getMessage());
+                throw new ServerSideBadRequestException("Lua error, id=" + eventId + ", " + luaError.getMessage());
             }
         }
     }

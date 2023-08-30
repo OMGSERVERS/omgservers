@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class LuaAddPlayerRuntimeCommandReceivedEventTest extends Assertions {
+class LuaDeletePlayerRuntimeCommandReceivedEventTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
@@ -24,11 +24,11 @@ class LuaAddPlayerRuntimeCommandReceivedEventTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void testLuaAddPlayerRuntimeCommandReceivedEvent() {
+    void testLuaDeletePlayerRuntimeCommandReceivedEvent() {
         final var luaGlobals = testLuaGlobals.createTestGlobalsForScript("""
                 -- main.lua
                    
-                function runtime_add_player(event, runtime)
+                function runtime_delete_player(event, runtime)
                     print("event.id=" .. event.id)
                     print("event.user_id=" .. event.user_id)
                     print("event.player_id=" .. event.player_id)
@@ -37,17 +37,17 @@ class LuaAddPlayerRuntimeCommandReceivedEventTest extends Assertions {
                     print("runtime.match_id=" .. runtime.match_id)
                     print("runtime.runtime_id=" .. runtime.runtime_id)
                     -- assert
-                    assert(event.id == "runtime_add_player", "event.id is wrong")
+                    assert(event.id == "runtime_delete_player", "event.id is wrong")
                     assert(event.user_id == "27535430859688960", "event.user_id is wrong")
                     assert(event.player_id == "27535430859688961", "event.player_id is wrong")
-                    assert(event.client_id == "27535430859688962", "event.client_id is wrong")                    
+                    assert(event.client_id == "27535430859688962", "event.client_id is wrong")
                     assert(runtime.matchmaker_id == "27535430859688964", "runtime.matchmaker_id is wrong")
                     assert(runtime.match_id == "27535430859688965", "runtime.match_id is wrong")
                     assert(runtime.runtime_id == "27535430859688966", "runtime.runtime_id is wrong")
                 end
                 """);
 
-        final var luaEvent = new LuaAddPlayerRuntimeCommandReceivedEvent(
+        final var luaEvent = new LuaDeletePlayerRuntimeCommandReceivedEvent(
                 27535430859688960L,
                 27535430859688961L,
                 27535430859688962L);
@@ -58,4 +58,5 @@ class LuaAddPlayerRuntimeCommandReceivedEventTest extends Assertions {
 
         luaGlobals.handleEvent(luaEvent, luaContext);
     }
+
 }
