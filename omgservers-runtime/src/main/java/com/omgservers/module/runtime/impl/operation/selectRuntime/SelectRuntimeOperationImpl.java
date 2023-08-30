@@ -24,7 +24,7 @@ import java.io.IOException;
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     static private final String sql = """
-            select id, created, modified, tenant_id, stage_id, matchmaker_id, match_id, type, current_step, config
+            select id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, type, current_step, config
             from $schema.tab_runtime
             where id = $1
             limit 1
@@ -70,6 +70,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
         runtime.setModified(row.getOffsetDateTime("modified").toInstant());
         runtime.setTenantId(row.getLong("tenant_id"));
         runtime.setStageId(row.getLong("stage_id"));
+        runtime.setVersionId(row.getLong("version_id"));
         runtime.setMatchmakerId(row.getLong("matchmaker_id"));
         runtime.setMatchId(row.getLong("match_id"));
         runtime.setType(RuntimeTypeEnum.valueOf(row.getString("type")));

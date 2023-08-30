@@ -22,16 +22,17 @@ class HandleUpdateRuntimeCommandMethodImpl implements HandleUpdateRuntimeCommand
     public Uni<HandleUpdateRuntimeCommandResponse> handleUpdateRuntimeCommand(HandleUpdateRuntimeCommandRequest request) {
         HandleUpdateRuntimeCommandRequest.validate(request);
 
-        final Long tenantId = request.getTenantId();
-        final Long stageId = request.getStageId();
-        final Long matchmakerId = request.getMatchmakerId();
-        final Long matchId = request.getMatchId();
-        final Long runtimeId = request.getRuntimeId();
-        final Long step = request.getStep();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
+        final var versionId = request.getVersionId();
+        final var matchmakerId = request.getMatchmakerId();
+        final var matchId = request.getMatchId();
+        final var runtimeId = request.getRuntimeId();
+        final var step = request.getStep();
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaUpdateRuntimeCommandReceivedEvent(step);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, stageId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleUpdateRuntimeCommandResponse(true));
     }

@@ -21,6 +21,7 @@ public class HandleDeletePlayerRuntimeCommandRequest {
 
     Long tenantId;
     Long stageId;
+    Long versionId;
     Long matchmakerId;
     Long matchId;
     Long runtimeId;

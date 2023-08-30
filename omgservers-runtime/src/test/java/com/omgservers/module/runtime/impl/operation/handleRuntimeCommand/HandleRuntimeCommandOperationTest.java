@@ -51,7 +51,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntimeCommand_whenHandleRuntimeCommandAndContextServiceReturnsTrue_thenTrue() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -65,7 +65,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntimeCommand_whenHandleRuntimeCommandAndContextServiceReturnsFalse_thenFalse() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -79,7 +79,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntimeCommand_whenHandleRuntimeCommandAndContextServiceReturnFailure_thenFalse() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -93,7 +93,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntimeCommandWithWrongBodyType_whenHandleRuntimeCommand_thenFalse() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -108,6 +108,10 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     }
 
     Long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
         return generateIdOperation.generateId();
     }
 

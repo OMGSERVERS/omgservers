@@ -6,10 +6,10 @@ import io.smallrye.mutiny.Uni;
 import java.time.Duration;
 
 public interface CreateLuaGlobalsOperation {
-    Uni<LuaGlobals> createLuaGlobals(Long tenantId, Long stageId);
+    Uni<LuaGlobals> createLuaGlobals(Long versionId);
 
-    default LuaGlobals createLuaGlobals(long timeout, Long tenantId, Long stageId) {
-        return createLuaGlobals(tenantId, stageId)
+    default LuaGlobals createLuaGlobals(long timeout, Long versionId) {
+        return createLuaGlobals(versionId)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

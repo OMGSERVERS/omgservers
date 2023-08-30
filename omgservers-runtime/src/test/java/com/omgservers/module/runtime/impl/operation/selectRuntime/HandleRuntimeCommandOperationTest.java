@@ -36,7 +36,7 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntime_whenSelectRuntime_thenSelected() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         final var runtime2 = selectRuntimeOperation.selectRuntime(TIMEOUT, pgPool, shard, runtime1.getId());
@@ -58,6 +58,10 @@ class HandleRuntimeCommandOperationTest extends Assertions {
     }
 
     Long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
         return generateIdOperation.generateId();
     }
 

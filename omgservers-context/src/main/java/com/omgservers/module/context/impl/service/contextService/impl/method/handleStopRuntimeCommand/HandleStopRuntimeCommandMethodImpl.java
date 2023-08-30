@@ -22,15 +22,16 @@ class HandleStopRuntimeCommandMethodImpl implements HandleStopRuntimeCommandMeth
     public Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request) {
         HandleStopRuntimeCommandRequest.validate(request);
 
-        final Long tenantId = request.getTenantId();
-        final Long stageId = request.getStageId();
-        final Long matchmakerId = request.getMatchmakerId();
-        final Long matchId = request.getMatchId();
-        final Long runtimeId = request.getRuntimeId();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
+        final var versionId = request.getVersionId();
+        final var matchmakerId = request.getMatchmakerId();
+        final var matchId = request.getMatchId();
+        final var runtimeId = request.getRuntimeId();
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaStopRuntimeCommandReceivedEvent();
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, stageId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleStopRuntimeCommandResponse(true));
     }

@@ -22,18 +22,19 @@ class HandleAddPlayerRuntimeCommandMethodImpl implements HandleAddPlayerRuntimeC
     public Uni<HandleAddPlayerRuntimeCommandResponse> handleAddPlayerRuntimeCommand(final HandleAddPlayerRuntimeCommandRequest request) {
         HandleAddPlayerRuntimeCommandRequest.validate(request);
 
-        final Long tenantId = request.getTenantId();
-        final Long stageId = request.getStageId();
-        final Long matchmakerId = request.getMatchmakerId();
-        final Long matchId = request.getMatchId();
-        final Long runtimeId = request.getRuntimeId();
-        final Long userId = request.getUserId();
-        final Long playerId = request.getPlayerId();
-        final Long clientId = request.getClientId();
+        final var tenantId = request.getTenantId();
+        final var stageId = request.getStageId();
+        final var versionId = request.getVersionId();
+        final var matchmakerId = request.getMatchmakerId();
+        final var matchId = request.getMatchId();
+        final var runtimeId = request.getRuntimeId();
+        final var userId = request.getUserId();
+        final var playerId = request.getPlayerId();
+        final var clientId = request.getClientId();
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaAddPlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, stageId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleAddPlayerRuntimeCommandResponse(true));
     }

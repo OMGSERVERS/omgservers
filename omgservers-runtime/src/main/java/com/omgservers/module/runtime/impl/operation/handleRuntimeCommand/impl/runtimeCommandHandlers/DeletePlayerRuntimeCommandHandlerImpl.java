@@ -40,6 +40,7 @@ class DeletePlayerRuntimeCommandHandlerImpl implements RuntimeCommandHandler {
                     final var handleDeleteActorRuntimeCommandRequest = HandleDeletePlayerRuntimeCommandRequest.builder()
                             .tenantId(runtime.getTenantId())
                             .stageId(runtime.getStageId())
+                            .versionId(runtime.getVersionId())
                             .matchmakerId(runtime.getMatchmakerId())
                             .matchId(runtime.getMatchId())
                             .runtimeId(runtimeId)

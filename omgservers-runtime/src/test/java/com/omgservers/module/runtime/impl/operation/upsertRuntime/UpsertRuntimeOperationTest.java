@@ -35,14 +35,14 @@ class UpsertRuntimeOperationTest extends Assertions {
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         assertTrue(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1));
     }
 
     @Test
     void givenRuntime_whenInsertRuntimeAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         assertFalse(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime));
@@ -53,6 +53,10 @@ class UpsertRuntimeOperationTest extends Assertions {
     }
 
     Long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long versionId() {
         return generateIdOperation.generateId();
     }
 

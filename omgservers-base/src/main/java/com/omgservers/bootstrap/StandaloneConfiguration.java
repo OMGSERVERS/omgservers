@@ -2,10 +2,10 @@ package com.omgservers.bootstrap;
 
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
-import com.omgservers.model.index.IndexConfigModel;
-import com.omgservers.module.internal.InternalModule;
 import com.omgservers.factory.IndexModelFactory;
 import com.omgservers.factory.ServiceAccountModelFactory;
+import com.omgservers.model.index.IndexConfigModel;
+import com.omgservers.module.internal.InternalModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.runtime.Startup;
@@ -37,10 +37,10 @@ public class StandaloneConfiguration {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> syncIndex())
                     .flatMap(voidItem -> syncServiceAccount())
-                    .invoke(voidItem -> log.info("StandaloneConfiguration configuration was created"))
+                    .invoke(voidItem -> log.info("Standalone configuration was created"))
                     .await().indefinitely();
         } else {
-            log.warn("StandaloneConfiguration of standalone configuration was skipped");
+            log.warn("Bootstrap of standalone configuration was skipped");
         }
     }
 

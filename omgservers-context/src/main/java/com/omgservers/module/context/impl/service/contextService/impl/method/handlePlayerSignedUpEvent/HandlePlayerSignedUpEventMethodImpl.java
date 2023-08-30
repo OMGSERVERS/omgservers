@@ -2,15 +2,15 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 
 import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
-import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
-import com.omgservers.module.context.impl.operation.createLuaGlobals.impl.LuaGlobals;
-import com.omgservers.module.context.impl.luaEvent.LuaEvent;
+import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
+import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.context.impl.luaEvent.player.LuaPlayerSignedUpEvent;
 import com.omgservers.module.context.impl.operation.createLuaPlayerContext.CreateLuaPlayerContextOperation;
-import com.omgservers.module.context.impl.operation.createLuaPlayerContext.impl.LuaPlayerContext;
-import com.omgservers.module.lua.impl.service.luaService.LuaService;
+import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
+import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandlePlayerSignedUpEventMethodImpl implements HandlePlayerSignedUpEventMethod {
 
-    final LuaService luaService;
+    final TenantModule tenantModule;
 
-    final CreateLuaGlobalsOperation createLuaGlobalsOperation;
     final CreateLuaPlayerContextOperation createLuaPlayerContextOperation;
+    final HandleLuaEventOperation handleLuaEventOperation;
 
     @Override
     public Uni<HandlePlayerSignedUpEventResponse> handleLuaPlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
@@ -35,20 +35,23 @@ class HandlePlayerSignedUpEventMethodImpl implements HandlePlayerSignedUpEventMe
         final var playerId = request.getPlayerId();
         final var clientId = request.getClientId();
 
-        return createLuaGlobalsOperation.createLuaGlobals(tenantId, stageId)
-                .flatMap(luaGlobals -> createLuaPlayerContextOperation.createLuaPlayerContext(userId, playerId, clientId)
+        return getStageVersionId(tenantId, stageId)
+                .flatMap(versionId -> createLuaPlayerContextOperation
+                        .createLuaPlayerContext(userId, playerId, clientId)
                         .flatMap(luaPlayerContext -> {
                             final var luaEvent = new LuaPlayerSignedUpEvent(userId, playerId, clientId);
-                            return handleEvent(luaGlobals, luaEvent, luaPlayerContext);
+                            return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaPlayerContext);
                         }))
                 .replaceWith(new HandlePlayerSignedUpEventResponse(true));
     }
 
-    Uni<Void> handleEvent(final LuaGlobals luaGlobals,
-                          final LuaEvent luaEvent,
-                          final LuaPlayerContext luaPlayerContext) {
-        return Uni.createFrom().voidItem()
-                .emitOn(Infrastructure.getDefaultWorkerPool())
-                .invoke(voidItem -> luaGlobals.handleEvent(luaEvent, luaPlayerContext));
+    Uni<Long> getStageVersionId(final Long tenantId, final Long stageId) {
+        final var request = new GetStageShardedRequest(tenantId, stageId);
+        return tenantModule.getStageShardedService().getStage(request)
+                .map(GetStageShardedResponse::getStage)
+                .map(StageModel::getVersionId)
+                .onItem().ifNull().failWith(new ServerSideConflictException(String
+                        .format("no any stage's version wasn't deployed yet, " +
+                                "tenantId=%d, stageId=%d", tenantId, stageId)));
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.module.context.impl.operation.handleLuaEvent;
 
-import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import com.omgservers.module.context.impl.luaEvent.LuaEvent;
+import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,14 +17,13 @@ class HandleLuaEventOperationImpl implements HandleLuaEventOperation {
     final CreateLuaGlobalsOperation createLuaGlobalsOperation;
 
     @Override
-    public Uni<Void> handleLuaEvent(final Long tenantId,
-                                    final Long stageId,
+    public Uni<Void> handleLuaEvent(final Long versionId,
                                     final LuaEvent luaEvent,
                                     final LuaTable context) {
         // TODO: cache/reuse by some cache key
-        return createLuaGlobalsOperation.createLuaGlobals(tenantId, stageId)
+        return createLuaGlobalsOperation.createLuaGlobals(versionId)
                 .emitOn(Infrastructure.getDefaultWorkerPool())
-                .invoke(luaRuntime -> luaRuntime.handleEvent(luaEvent, context))
+                .invoke(luaGlobals -> luaGlobals.handleEvent(luaEvent, context))
                 .replaceWithVoid();
     }
 }

@@ -23,6 +23,7 @@ public class RuntimeModel {
     Instant modified;
     Long tenantId;
     Long stageId;
+    Long versionId;
     Long matchmakerId;
     Long matchId;
     RuntimeTypeEnum type;

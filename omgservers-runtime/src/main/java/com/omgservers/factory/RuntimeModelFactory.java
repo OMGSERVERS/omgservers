@@ -19,17 +19,19 @@ public class RuntimeModelFactory {
 
     public RuntimeModel create(final Long tenantId,
                                final Long stageId,
+                               final Long versionId,
                                final Long matchmakerId,
                                final Long matchId,
                                final RuntimeTypeEnum type,
                                final RuntimeConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, stageId, matchmakerId, matchId, type, config);
+        return create(id, tenantId, stageId, versionId, matchmakerId, matchId, type, config);
     }
 
     public RuntimeModel create(final Long id,
                                final Long tenantId,
                                final Long stageId,
+                               final Long versionId,
                                final Long matchmakerId,
                                final Long matchId,
                                final RuntimeTypeEnum type,
@@ -42,6 +44,7 @@ public class RuntimeModelFactory {
         runtime.setModified(now);
         runtime.setTenantId(tenantId);
         runtime.setStageId(stageId);
+        runtime.setVersionId(versionId);
         runtime.setMatchmakerId(matchmakerId);
         runtime.setMatchId(matchId);
         runtime.setType(type);

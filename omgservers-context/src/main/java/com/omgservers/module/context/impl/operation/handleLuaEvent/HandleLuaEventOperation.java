@@ -5,5 +5,7 @@ import io.smallrye.mutiny.Uni;
 import org.luaj.vm2.LuaTable;
 
 public interface HandleLuaEventOperation {
-    Uni<Void> handleLuaEvent(Long tenantId, Long stageId, LuaEvent luaEvent, LuaTable context);
+    Uni<Void> handleLuaEvent(Long versionId,
+                             LuaEvent luaEvent,
+                             LuaTable context);
 }

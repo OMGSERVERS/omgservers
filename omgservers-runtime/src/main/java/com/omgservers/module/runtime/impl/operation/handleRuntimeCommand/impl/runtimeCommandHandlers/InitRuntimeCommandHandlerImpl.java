@@ -40,6 +40,7 @@ class InitRuntimeCommandHandlerImpl implements RuntimeCommandHandler {
                     final var request = HandleInitRuntimeCommandRequest.builder()
                             .tenantId(runtime.getTenantId())
                             .stageId(runtime.getStageId())
+                            .versionId(runtime.getVersionId())
                             .matchmakerId(runtime.getMatchmakerId())
                             .matchId(runtime.getMatchId())
                             .runtimeId(runtimeId)

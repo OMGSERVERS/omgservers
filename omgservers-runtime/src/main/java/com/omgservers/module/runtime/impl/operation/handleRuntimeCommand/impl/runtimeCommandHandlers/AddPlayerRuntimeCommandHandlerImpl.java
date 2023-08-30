@@ -40,6 +40,7 @@ class AddPlayerRuntimeCommandHandlerImpl implements RuntimeCommandHandler {
                     final var handleAddActorRuntimeCommandRequest = HandleAddPlayerRuntimeCommandRequest.builder()
                             .tenantId(runtime.getTenantId())
                             .stageId(runtime.getStageId())
+                            .versionId(runtime.getVersionId())
                             .matchmakerId(runtime.getMatchmakerId())
                             .matchId(runtime.getMatchId())
                             .runtimeId(runtimeId)
