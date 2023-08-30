@@ -75,7 +75,8 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
         final var doRuntimeUpdateShardedResponse = new DoRuntimeUpdateShardedResponse();
         doRuntimeUpdateShardedResponse.setHandledCommands(affectedCommands.size());
         if (getConfigOperation.getConfig().verbose()) {
-            final var extendedResponse = new DoRuntimeUpdateShardedResponse.ExtendedResponse(affectedCommands);
+            final var extendedResponse = new DoRuntimeUpdateShardedResponse.ExtendedResponse();
+            extendedResponse.setAffectedCommands(affectedCommands);
             doRuntimeUpdateShardedResponse.setExtendedResponse(extendedResponse);
         }
         return doRuntimeUpdateShardedResponse;

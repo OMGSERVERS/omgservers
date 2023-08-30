@@ -1,15 +1,16 @@
 package com.omgservers.module.internal.impl.service.changeService.impl.method.changeWithEvent;
 
-import com.omgservers.factory.EventModelFactory;
 import com.omgservers.Dispatcher;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.operation.checkShard.CheckShardOperation;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.log.LogModel;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
+import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -27,6 +28,7 @@ class ChangeWithEventMethodImpl implements ChangeWithEventMethod {
     final UpsertEventOperation upsertEventOperation;
     final CheckShardOperation checkShardOperation;
     final UpsertLogOperation upsertLogOperation;
+    final GetConfigOperation getConfigOperation;
 
     final EventModelFactory eventModelFactory;
     final Dispatcher dispatcher;
@@ -55,8 +57,7 @@ class ChangeWithEventMethodImpl implements ChangeWithEventMethod {
                         cacheEvent(transactionResult.insertedEvent);
                     }
                 })
-                .map(transactionResult -> transactionResult.result)
-                .map(ChangeWithEventResponse::new);
+                .map(this::prepareMethodResponse);
     }
 
     Uni<LogModel> upsertLog(final SqlConnection sqlConnection,
@@ -88,6 +89,18 @@ class ChangeWithEventMethodImpl implements ChangeWithEventMethod {
         final var eventId = event.getId();
         final var groupId = event.getGroupId();
         dispatcher.addEvent(eventId, groupId);
+    }
+
+    ChangeWithEventResponse prepareMethodResponse(TransactionResult transactionResult) {
+        final var changeWithEventResponse = new ChangeWithEventResponse();
+        changeWithEventResponse.setResult(transactionResult.result);
+        if (getConfigOperation.getConfig().verbose()) {
+            final var extendedResponse = new ChangeWithEventResponse.ExtendedResponse();
+            extendedResponse.setChangeLog(transactionResult.changeLog);
+            extendedResponse.setInsertedEvent(transactionResult.insertedEvent);
+            changeWithEventResponse.setExtendedResponse(extendedResponse);
+        }
+        return changeWithEventResponse;
     }
 
     private record TransactionResult(boolean result,

@@ -1,14 +1,15 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime;
 
-import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
+import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,6 +24,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     final InternalModule internalModule;
 
     final UpsertRuntimeOperation upsertRuntimeOperation;
+    final GetConfigOperation getConfigOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -53,7 +55,17 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                             }
                         }
                 ))
-                .map(ChangeWithEventResponse::getResult)
-                .map(SyncRuntimeShardedResponse::new);
+                .map(this::prepareMethodResponse);
+    }
+
+    SyncRuntimeShardedResponse prepareMethodResponse(ChangeWithEventResponse changeWithEventResponse) {
+        final var syncRuntimeShardedResponse = new SyncRuntimeShardedResponse();
+        syncRuntimeShardedResponse.setCreated(changeWithEventResponse.getResult());
+        if (getConfigOperation.getConfig().verbose()) {
+            final var extendedResponse = new SyncRuntimeShardedResponse.ExtendedResponse();
+            extendedResponse.setChangeExtendedResponse(changeWithEventResponse.getExtendedResponse());
+            syncRuntimeShardedResponse.setExtendedResponse(extendedResponse);
+        }
+        return syncRuntimeShardedResponse;
     }
 }

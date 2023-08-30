@@ -1,5 +1,7 @@
 package com.omgservers.dto.internal;
 
+import com.omgservers.model.event.EventModel;
+import com.omgservers.model.log.LogModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,4 +12,13 @@ import lombok.NoArgsConstructor;
 public class ChangeWithEventResponse {
 
     Boolean result;
+    ExtendedResponse extendedResponse;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ExtendedResponse {
+        LogModel changeLog;
+        EventModel insertedEvent;
+    }
 }
