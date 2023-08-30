@@ -14,6 +14,8 @@ import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
 import com.omgservers.dto.context.HandleStopRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleStopRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleUpdateRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ContextService {
@@ -22,6 +24,8 @@ public interface ContextService {
     Uni<HandlePlayerSignedInEventResponse> handlePlayerSignedInEvent(HandlePlayerSignedInEventRequest request);
 
     Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
+
+    Uni<HandleUpdateRuntimeCommandResponse> handleUpdateRuntimeCommand(HandleUpdateRuntimeCommandRequest request);
 
     Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request);
 

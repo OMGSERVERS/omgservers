@@ -7,6 +7,7 @@ import com.omgservers.factory.RuntimeCommandModelFactory;
 import com.omgservers.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
@@ -69,7 +70,8 @@ class DoRuntimeUpdateMethodTest extends Assertions {
 
         final var doRuntimeUpdateShardedRequest = new DoRuntimeUpdateShardedRequest(runtime.getId());
         final var response = doRuntimeUpdateMethod.doRuntimeUpdate(TIMEOUT, doRuntimeUpdateShardedRequest);
-        assertEquals(2, response.getHandledCommands());
+        // Update command is added by automatically every step
+        assertEquals(2 + 1, response.getHandledCommands());
 
         final var affectedCommand1 = response.getExtendedResponse().getAffectedCommands().get(0);
         assertEquals(runtimeCommand1.getId(), affectedCommand1.getId());
@@ -80,6 +82,9 @@ class DoRuntimeUpdateMethodTest extends Assertions {
         assertEquals(runtimeCommand2.getId(), affectedCommand2.getId());
         assertEquals(RuntimeCommandStatusEnum.FAILED, affectedCommand2.getStatus());
         assertEquals(1, affectedCommand2.getStep());
+
+        final var affectedCommand3 = response.getExtendedResponse().getAffectedCommands().get(2);
+        assertEquals(RuntimeCommandQualifierEnum.UPDATE_RUNTIME, affectedCommand3.getQualifier());
     }
 
     Long tenantId() {

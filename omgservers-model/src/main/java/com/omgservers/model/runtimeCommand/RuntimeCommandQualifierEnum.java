@@ -5,10 +5,12 @@ import com.omgservers.model.runtimeCommand.body.DeletePlayerRuntimeCommandBodyMo
 import com.omgservers.model.runtimeCommand.body.HandleEventRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 
 public enum RuntimeCommandQualifierEnum {
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
     STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
+    UPDATE_RUNTIME(UpdateRuntimeCommandBodyModel.class),
     ADD_PLAYER(AddPlayerRuntimeCommandBodyModel.class),
     DELETE_PLAYER(DeletePlayerRuntimeCommandBodyModel.class),
     HANDLE_EVENT(HandleEventRuntimeCommandBodyModel.class);

@@ -14,6 +14,8 @@ import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
 import com.omgservers.dto.context.HandleStopRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleStopRuntimeCommandResponse;
+import com.omgservers.dto.context.HandleUpdateRuntimeCommandRequest;
+import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import com.omgservers.module.context.impl.service.contextService.ContextService;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleAddPlayerRuntimeCommand.HandleAddPlayerRuntimeCommandMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleDeletePlayerRuntimeCommand.HandleDeletePlayerRuntimeCommandMethod;
@@ -22,6 +24,7 @@ import com.omgservers.module.context.impl.service.contextService.impl.method.han
 import com.omgservers.module.context.impl.service.contextService.impl.method.handlePlayerSignedInEvent.HandlePlayerSignedInEventMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handlePlayerSignedUpEvent.HandlePlayerSignedUpEventMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleStopRuntimeCommand.HandleStopRuntimeCommandMethod;
+import com.omgservers.module.context.impl.service.contextService.impl.method.handleUpdateRuntimeCommand.HandleUpdateRuntimeCommandMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -38,6 +41,7 @@ class ContextServiceImpl implements ContextService {
     final HandleHandleEventRuntimeCommandMethod handleHandleEventRuntimeCommandMethod;
     final HandleDeletePlayerRuntimeCommandMethod handleDeletePlayerRuntimeCommandMethod;
     final HandleAddPlayerRuntimeCommandMethod handleAddPlayerRuntimeCommandMethod;
+    final HandleUpdateRuntimeCommandMethod handleUpdateRuntimeCommandMethod;
     final HandleInitRuntimeCommandMethod handleInitRuntimeCommandMethod;
     final HandleStopRuntimeCommandMethod handleStopRuntimeCommandMethod;
 
@@ -52,27 +56,32 @@ class ContextServiceImpl implements ContextService {
     }
 
     @Override
-    public Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request) {
+    public Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(final HandleInitRuntimeCommandRequest request) {
         return handleInitRuntimeCommandMethod.handleInitRuntimeCommand(request);
     }
 
     @Override
-    public Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(HandleStopRuntimeCommandRequest request) {
+    public Uni<HandleUpdateRuntimeCommandResponse> handleUpdateRuntimeCommand(final HandleUpdateRuntimeCommandRequest request) {
+        return handleUpdateRuntimeCommandMethod.handleUpdateRuntimeCommand(request);
+    }
+
+    @Override
+    public Uni<HandleStopRuntimeCommandResponse> handleStopRuntimeCommand(final HandleStopRuntimeCommandRequest request) {
         return handleStopRuntimeCommandMethod.handleStopRuntimeCommand(request);
     }
 
     @Override
-    public Uni<HandleAddPlayerRuntimeCommandResponse> handleAddPlayerRuntimeCommand(HandleAddPlayerRuntimeCommandRequest request) {
+    public Uni<HandleAddPlayerRuntimeCommandResponse> handleAddPlayerRuntimeCommand(final HandleAddPlayerRuntimeCommandRequest request) {
         return handleAddPlayerRuntimeCommandMethod.handleAddPlayerRuntimeCommand(request);
     }
 
     @Override
-    public Uni<HandleDeletePlayerRuntimeCommandResponse> handleDeletePlayerRuntimeCommand(HandleDeletePlayerRuntimeCommandRequest request) {
+    public Uni<HandleDeletePlayerRuntimeCommandResponse> handleDeletePlayerRuntimeCommand(final HandleDeletePlayerRuntimeCommandRequest request) {
         return handleDeletePlayerRuntimeCommandMethod.handleDeletePlayerRuntimeCommand(request);
     }
 
     @Override
-    public Uni<HandleHandleEventRuntimeCommandResponse> handleHandleEventRuntimeCommand(HandleHandleEventRuntimeCommandRequest request) {
+    public Uni<HandleHandleEventRuntimeCommandResponse> handleHandleEventRuntimeCommand(final HandleHandleEventRuntimeCommandRequest request) {
         return handleHandleEventRuntimeCommandMethod.handleHandleEventRuntimeCommand(request);
     }
 }
