@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.upsertProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectModel;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -25,10 +25,10 @@ import java.util.ArrayList;
 class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_project(id, tenant_id, created, modified, owner_id, config)
-            values($1, $2, $3, $4, $5, $6)
+            insert into $schema.tab_tenant_project(id, tenant_id, created, modified, config)
+            values($1, $2, $3, $4, $5)
             on conflict (id) do
-            update set modified = $4, owner_id = $5, config = $6
+            update set modified = $4, config = $5
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -77,7 +77,6 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                         add(project.getTenantId());
                         add(project.getCreated().atOffset(ZoneOffset.UTC));
                         add(project.getModified().atOffset(ZoneOffset.UTC));
-                        add(project.getOwnerId());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

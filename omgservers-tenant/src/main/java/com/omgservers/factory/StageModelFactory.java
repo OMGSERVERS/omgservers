@@ -19,9 +19,9 @@ public class StageModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public StageModel create(final Long projectId,
-                             final Long matchmakerId,
                              final StageConfigModel config) {
         final var id = generateIdOperation.generateId();
+        final var matchmakerId = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
         return create(id, projectId, secret, matchmakerId, config);
     }

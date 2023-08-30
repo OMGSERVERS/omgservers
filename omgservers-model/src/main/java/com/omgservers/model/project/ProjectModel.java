@@ -23,7 +23,6 @@ public class ProjectModel {
     Long tenantId;
     Instant created;
     Instant modified;
-    Long ownerId;
     @ToString.Exclude
     ProjectConfigModel config;
 }

@@ -1,4 +1,4 @@
-package com.omgservers.module.admin.impl.service.adminService.impl.method.createNewDeveloper;
+package com.omgservers.module.admin.impl.service.adminService.impl.method.createDeveloper;
 
 import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.dto.admin.CreateDeveloperAdminResponse;

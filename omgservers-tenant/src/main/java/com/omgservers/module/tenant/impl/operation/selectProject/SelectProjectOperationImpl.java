@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.operation.selectProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.project.ProjectModel;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -23,7 +23,7 @@ import java.io.IOException;
 class SelectProjectOperationImpl implements SelectProjectOperation {
 
     static private final String sql = """
-            select id, tenant_id, created, modified, owner_id, config
+            select id, tenant_id, created, modified, config
             from $schema.tab_tenant_project
             where id = $1
             limit 1
@@ -69,7 +69,6 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
         project.setTenantId(row.getLong("tenant_id"));
         project.setCreated(row.getOffsetDateTime("created").toInstant());
         project.setModified(row.getOffsetDateTime("modified").toInstant());
-        project.setOwnerId(row.getLong("owner_id"));
         project.setConfig(objectMapper.readValue(row.getString("config"), ProjectConfigModel.class));
         return project;
     }

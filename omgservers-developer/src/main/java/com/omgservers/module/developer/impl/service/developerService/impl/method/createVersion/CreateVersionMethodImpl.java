@@ -2,10 +2,10 @@ package com.omgservers.module.developer.impl.service.developerService.impl.metho
 
 import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
+import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
+import com.omgservers.dto.version.BuildVersionRequest;
+import com.omgservers.dto.version.BuildVersionResponse;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionModel;
@@ -13,8 +13,6 @@ import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.version.VersionModule;
-import com.omgservers.dto.version.BuildVersionRequest;
-import com.omgservers.dto.version.BuildVersionResponse;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,7 +41,6 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
         final var sourceCode = request.getSourceCode();
 
         return checkCreateVersionPermission(tenantId, stageId, userId)
-                .call(voidItem -> checkStage(tenantId, stageId))
                 .flatMap(voidItem -> createVersion(tenantId, stageId, stageConfig, sourceCode))
                 .map(VersionModel::getId)
                 .map(CreateVersionDeveloperResponse::new);
@@ -63,13 +60,6 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                 "tenant=%s, stage=%s, user=%s, permission=%s", tenantId, stageId, userId, permission));
                     }
                 })
-                .replaceWithVoid();
-    }
-
-    Uni<Void> checkStage(final Long tenantId, final Long stageId) {
-        final var getStageServiceRequest = new GetStageShardedRequest(tenantId, stageId);
-        return tenantModule.getStageShardedService().getStage(getStageServiceRequest)
-                .map(GetStageShardedResponse::getStage)
                 .replaceWithVoid();
     }
 

@@ -1,17 +1,21 @@
-package com.omgservers.module.admin.impl.service.adminService.impl.method.createNewDeveloper;
+package com.omgservers.module.admin.impl.service.adminService.impl.method.createDeveloper;
 
-import com.omgservers.module.user.factory.UserModelFactory;
-import com.omgservers.module.user.UserModule;
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
+import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedRequest;
+import com.omgservers.factory.TenantPermissionModelFactory;
+import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.factory.TenantPermissionModelFactory;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,35 +40,34 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     @Override
     public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
         CreateDeveloperAdminRequest.validate(request);
-        final var userId = generateIdOperation.generateId();
+        final var tenantId = request.getTenantId();
         // TODO: improve it
         final var password = String.valueOf(Math.abs(new SecureRandom().nextLong()));
-        final var tenantId = request.getTenantId();
-
         return getTenant(tenantId)
-                .call(ignored -> createUser(userId, password))
-                .call(ignored -> syncCreateProjectPermission(tenantId, userId))
-                .replaceWith(new CreateDeveloperAdminResponse(userId, password));
+                .flatMap(tenant -> createUser(password))
+                .call(user -> syncCreateProjectPermission(tenantId, user.getId()))
+                .map(user -> new CreateDeveloperAdminResponse(user.getId(), password));
     }
 
-    Uni<Void> getTenant(Long tenantId) {
+    Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantServiceRequest = new GetTenantShardedRequest(tenantId);
         return tenantModule.getTenantShardedService().getTenant(getTenantServiceRequest)
-                .replaceWithVoid();
+                .map(GetTenantShardedResponse::getTenant);
     }
 
-    Uni<Void> createUser(Long id, String password) {
+    Uni<UserModel> createUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(id, UserRoleEnum.DEVELOPER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
         final var syncUserInternalRequest = new SyncUserShardedRequest(user);
         return userModule.getUserShardedService().syncUser(syncUserInternalRequest)
-                .replaceWithVoid();
+                .replaceWith(user);
     }
 
-    Uni<Void> syncCreateProjectPermission(Long tenantId, Long userId) {
-        final var entity = tenantPermissionModelFactory.create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
-        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionShardedRequest(entity);
+    Uni<TenantPermissionModel> syncCreateProjectPermission(Long tenantId, Long userId) {
+        final var tenantPermission = tenantPermissionModelFactory
+                .create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
+        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionShardedRequest(tenantPermission);
         return tenantModule.getTenantShardedService().syncTenantPermission(syncTenantPermissionServiceRequest)
-                .replaceWithVoid();
+                .replaceWith(tenantPermission);
     }
 }

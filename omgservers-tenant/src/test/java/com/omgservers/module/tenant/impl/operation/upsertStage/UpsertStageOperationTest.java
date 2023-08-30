@@ -1,15 +1,15 @@
 package com.omgservers.module.tenant.impl.operation.upsertStage;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.project.ProjectConfigModel;
-import com.omgservers.model.stage.StageConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.factory.ProjectModelFactory;
 import com.omgservers.factory.StageModelFactory;
 import com.omgservers.factory.TenantModelFactory;
+import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.model.stage.StageConfigModel;
+import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -55,7 +55,7 @@ class UpsertStageOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), matchmakerId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         assertTrue(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
     }
 
@@ -66,7 +66,7 @@ class UpsertStageOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), matchmakerId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
 
         assertFalse(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));

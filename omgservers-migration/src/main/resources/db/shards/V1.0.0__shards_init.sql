@@ -78,7 +78,6 @@ create table if not exists tab_tenant_project (
     tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    owner_id bigint not null,
     config json not null
 );
 

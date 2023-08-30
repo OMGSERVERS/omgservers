@@ -1,4 +1,4 @@
-package com.omgservers.module.admin.impl.service.adminService.impl.method.createNewTenant;
+package com.omgservers.module.admin.impl.service.adminService.impl.method.createTenant;
 
 import com.omgservers.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.dto.admin.CreateTenantAdminResponse;

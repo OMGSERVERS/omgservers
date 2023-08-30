@@ -47,18 +47,18 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
         final var stageId = createProjectDeveloperResponse.getStageId();
         final var secret = createProjectDeveloperResponse.getSecret();
 
-        Thread.sleep(5000);
-
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, stageConfig, sourceCode);
         final var version = createVersionDeveloperResponse.getId();
 
+        var attempt = 0;
         var status = developerCli.getVersionStatus(token, version);
-        while (status == VersionStatusEnum.NEW) {
+        while (status == VersionStatusEnum.NEW && attempt < 10) {
             Thread.sleep(1000);
             status = developerCli.getVersionStatus(token, version);
+            attempt++;
         }
     }
 }
