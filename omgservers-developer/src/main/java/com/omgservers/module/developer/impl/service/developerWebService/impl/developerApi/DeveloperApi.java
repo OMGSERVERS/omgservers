@@ -45,7 +45,7 @@ public interface DeveloperApi {
     }
 
     @PUT
-    @Path("/has-version-deployed")
+    @Path("/get-version-status")
     Uni<GetVersionStatusDeveloperResponse> getVersionStatus(GetVersionStatusDeveloperRequest request);
 
     default GetVersionStatusDeveloperResponse getVersionStatus(long timeout, GetVersionStatusDeveloperRequest request) {

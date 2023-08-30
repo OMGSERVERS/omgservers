@@ -48,7 +48,7 @@ public interface DeveloperClientForAuthenticatedAccess {
     }
 
     @PUT
-    @Path("/has-version-deployed")
+    @Path("/get-version-status")
     Uni<GetVersionStatusDeveloperResponse> getVersionStatus(@NotBody String token, GetVersionStatusDeveloperRequest request);
 
     default GetVersionStatusDeveloperResponse getVersionStatus(long timeout, @NotBody String token, GetVersionStatusDeveloperRequest request) {

@@ -1,12 +1,10 @@
 package com.omgservers.dto.admin;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class CreateTenantAdminRequest {
 
     static public void validate(CreateTenantAdminRequest request) {
@@ -14,7 +12,4 @@ public class CreateTenantAdminRequest {
             throw new IllegalArgumentException("request is null");
         }
     }
-
-    //TODO: remove ??
-    String title;
 }

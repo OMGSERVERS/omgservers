@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class Customizer implements ObjectMapperCustomizer {
 
-    public void customize(ObjectMapper mapper) {
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    public void customize(ObjectMapper objectMapper) {
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 }

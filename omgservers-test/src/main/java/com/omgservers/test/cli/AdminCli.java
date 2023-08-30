@@ -95,7 +95,7 @@ public class AdminCli {
     }
 
     public Long createTenant(String title) {
-        final var response = adminClient.createTenant(TIMEOUT, new CreateTenantAdminRequest(title));
+        final var response = adminClient.createTenant(TIMEOUT, new CreateTenantAdminRequest());
         return response.getId();
     }
 
