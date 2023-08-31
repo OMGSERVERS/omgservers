@@ -28,8 +28,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
             insert into $schema.tab_tenant_project(id, tenant_id, created, modified, config)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
-            update set modified = $4, config = $5
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -79,7 +78,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                         add(project.getModified().atOffset(ZoneOffset.UTC));
                         add(configString);
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

@@ -23,8 +23,7 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
             insert into $schema.tab_user(id, created, modified, role, password_hash)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
-            update set modified = $3, role = $4, password_hash = $5
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -60,6 +59,6 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                         userModel.getModified().atOffset(ZoneOffset.UTC),
                         userModel.getRole(),
                         userModel.getPasswordHash())))
-                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

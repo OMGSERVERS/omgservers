@@ -25,8 +25,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
             insert into $schema.tab_user_client(id, player_id, created, server, connection_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
-            update set server = $4, connection_id = $5
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -74,6 +73,6 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                     add(client.getServer().toString());
                     add(client.getConnectionId());
                 }}))
-                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

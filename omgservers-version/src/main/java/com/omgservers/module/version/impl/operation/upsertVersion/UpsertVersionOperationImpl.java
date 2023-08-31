@@ -26,8 +26,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
             insert into $schema.tab_version(id, created, modified, tenant_id, stage_id, stage_config, source_code, bytecode, status, errors)
             values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             on conflict (id) do
-            update set modified = $3, tenant_id = $4, stage_id = $5, stage_config = $6, source_code = $7, bytecode = $8, status = $9, errors = $10
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -73,7 +72,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                             version.getStatus(),
                             version.getErrors()
                     )))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

@@ -24,9 +24,8 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
     static private final String sql = """
             insert into $schema.tab_user_player(id, user_id, created, modified, stage_id, config)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (user_id, stage_id) do
-            update set modified = $3, config = $6
-            returning xmax::text::int = 0 as inserted
+            on conflict (id) do
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -66,7 +65,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                         add(player.getStageId());
                         add(configString);
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

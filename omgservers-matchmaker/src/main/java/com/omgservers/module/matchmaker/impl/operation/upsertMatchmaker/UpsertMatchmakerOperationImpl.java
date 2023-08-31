@@ -25,8 +25,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
             insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
-            update set modified = $3, tenant_id = $4, stage_id = $5
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -68,6 +67,6 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                     add(matchmaker.getTenantId());
                     add(matchmaker.getStageId());
                 }}))
-                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

@@ -27,8 +27,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
             insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, config, matchmaker_id, version_id)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set modified = $4, secret = $5, config = $6, matchmaker_id = $7, version_id = $8
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -73,7 +72,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                         add(stage.getMatchmakerId());
                         add(stage.getVersionId());
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

@@ -21,9 +21,8 @@ class UpsertObjectOperationImpl implements UpsertObjectOperation {
     static private final String sql = """
             insert into $schema.tab_user_object(id, player_id, created, modified, name, body)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (player_id, name) do
-            update set modified = $3, name = $5, body = $6
-            returning xmax::text::int = 0 as inserted
+            on conflict (id) do
+            nothing            
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -60,6 +59,6 @@ class UpsertObjectOperationImpl implements UpsertObjectOperation {
                     add(object.getName());
                     add(object.getBody());
                 }}))
-                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

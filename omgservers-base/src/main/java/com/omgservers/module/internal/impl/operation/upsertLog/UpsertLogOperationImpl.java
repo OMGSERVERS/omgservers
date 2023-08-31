@@ -23,8 +23,7 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
             insert into internal.tab_log(id, created, message)
             values($1, $2, $3)
             on conflict (id) do
-            update set message = $3
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     @Override

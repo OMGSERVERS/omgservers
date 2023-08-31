@@ -27,8 +27,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
             insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, user_id, client_id, mode, config)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set matchmaker_id = $2, modified = $4, user_id = $5, client_id = $6, mode = $7, config = $8
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -75,7 +74,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                         add(request.getMode());
                         add(configString);
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

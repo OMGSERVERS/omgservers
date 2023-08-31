@@ -25,8 +25,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
             insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
             values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
-            update set modified = $3, group_id = $4, qualifier = $5, body = $6, status = $7
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final ObjectMapper objectMapper;
@@ -66,7 +65,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                         add(bodyString);
                         add(event.getStatus());
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

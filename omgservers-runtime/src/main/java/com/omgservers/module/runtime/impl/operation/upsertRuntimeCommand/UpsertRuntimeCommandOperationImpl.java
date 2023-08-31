@@ -28,8 +28,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
             insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status, step)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set modified = $4, qualifier = $5, body = $6, status = $7, step = $8
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -85,7 +84,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                         add(runtimeCommand.getStatus());
                         add(runtimeCommand.getStep());
                     }}))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

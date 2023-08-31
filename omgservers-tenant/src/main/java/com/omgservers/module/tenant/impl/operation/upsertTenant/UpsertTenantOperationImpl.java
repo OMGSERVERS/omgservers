@@ -26,8 +26,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
             insert into $schema.tab_tenant(id, created, modified, config)
             values($1, $2, $3, $4)
             on conflict (id) do
-            update set modified = $3, config = $4
-            returning xmax::text::int = 0 as inserted
+            nothing
             """;
 
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -67,7 +66,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
                             tenant.getCreated().atOffset(ZoneOffset.UTC),
                             tenant.getModified().atOffset(ZoneOffset.UTC),
                             configString))
-                    .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
         }

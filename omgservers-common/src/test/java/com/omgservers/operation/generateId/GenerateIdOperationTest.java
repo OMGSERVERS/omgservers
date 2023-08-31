@@ -29,7 +29,7 @@ class GenerateIdOperationTest extends Assertions {
     @Test
     void overflowTest() {
         assertThrows(ServerSideInternalException.class, () -> {
-            for (int i = 0; i < 2048; i++) {
+            for (int i = 0; i < 8192; i++) {
                 generateIdOperation.generateId();
             }
         });

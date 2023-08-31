@@ -22,9 +22,8 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
     static private final String sql = """
             insert into internal.tab_job(id, created, shard_key, entity, type)
             values($1, $2, $3, $4, $5)
-            on conflict (shard_key, entity) do
-            update set type = $5
-            returning xmax::text::int = 0 as inserted
+            on conflict (id) do
+            nothing
             """;
 
     final ObjectMapper objectMapper;
@@ -59,6 +58,6 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
                         job.getShardKey(),
                         job.getEntity(),
                         job.getType()))
-                .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));
+                .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

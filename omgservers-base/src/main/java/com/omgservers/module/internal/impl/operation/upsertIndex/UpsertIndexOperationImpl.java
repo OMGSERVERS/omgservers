@@ -22,8 +22,8 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
     static private final String sql = """
             insert into internal.tab_index(id, created, modified, name, version, config)
             values($1, $2, $3, $4, $5, $6)
-            on conflict (name) do
-            update set modified = $3, version = $5, config = $6
+            on conflict (id) do
+            nothing
             """;
 
     final ObjectMapper objectMapper;
