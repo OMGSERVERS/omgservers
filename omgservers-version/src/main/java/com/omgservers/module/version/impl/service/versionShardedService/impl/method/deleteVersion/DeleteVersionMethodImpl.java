@@ -1,7 +1,7 @@
 package com.omgservers.module.version.impl.service.versionShardedService.impl.method.deleteVersion;
 
 import com.omgservers.module.version.impl.operation.deleteVersion.DeleteVersionOperation;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;

@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntime;
 
-import com.omgservers.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime.SyncRuntimeMethod;

@@ -10,7 +10,7 @@ import com.omgservers.module.gateway.impl.service.connectionService.ConnectionHe
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedPlayerHelpRequest;
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

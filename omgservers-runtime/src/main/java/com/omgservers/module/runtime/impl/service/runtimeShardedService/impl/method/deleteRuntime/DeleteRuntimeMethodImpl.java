@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.deleteRuntime;
 
 import com.omgservers.module.runtime.impl.operation.deleteRuntime.DeleteRuntimeOperation;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;

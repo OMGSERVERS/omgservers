@@ -5,7 +5,7 @@ import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.tenant.GetStageVersionRequest;
 import com.omgservers.dto.tenant.GetStageVersionResponse;
-import com.omgservers.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;

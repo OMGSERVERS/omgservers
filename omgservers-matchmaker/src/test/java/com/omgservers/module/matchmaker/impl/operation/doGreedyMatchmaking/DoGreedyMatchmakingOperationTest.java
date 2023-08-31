@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking;
 
-import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;

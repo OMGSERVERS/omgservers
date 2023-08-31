@@ -3,8 +3,8 @@ package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.me
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.factory.RuntimeCommandModelFactory;
-import com.omgservers.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;

@@ -32,7 +32,7 @@ create table if not exists tab_user_client (
     created timestamp with time zone not null,
     server text not null,
     connection_id bigint not null,
-    unique(connection_id)
+    unique(player_id, connection_id)
 );
 
 create table if not exists tab_user_attribute (
@@ -97,7 +97,7 @@ create table if not exists tab_tenant_stage (
     modified timestamp with time zone not null,
     secret text not null,
     config json not null,
-    matchmaker_id bigint,
+    matchmaker_id bigint not null,
     version_id bigint
 );
 

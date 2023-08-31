@@ -5,7 +5,7 @@ import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
 import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
-import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;

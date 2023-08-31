@@ -1,6 +1,6 @@
 package com.omgservers.handler;
 
-import com.omgservers.factory.JobModelFactory;
+import com.omgservers.module.internal.factory.JobModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.generateId.GenerateIdOperation;

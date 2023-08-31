@@ -6,7 +6,7 @@ import com.omgservers.module.version.impl.operation.compileVersionSourceCode.Com
 import com.omgservers.dto.version.BuildVersionRequest;
 import com.omgservers.dto.version.BuildVersionResponse;
 import com.omgservers.module.version.impl.service.versionShardedService.VersionShardedService;
-import com.omgservers.factory.VersionModelFactory;
+import com.omgservers.module.version.factory.VersionModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

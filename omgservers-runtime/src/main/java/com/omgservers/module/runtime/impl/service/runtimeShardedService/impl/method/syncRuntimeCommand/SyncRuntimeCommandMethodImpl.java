@@ -4,7 +4,7 @@ import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandShardedResponse;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import io.smallrye.mutiny.Uni;

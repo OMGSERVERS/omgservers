@@ -6,7 +6,7 @@ import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.factory.TenantPermissionModelFactory;
+import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;

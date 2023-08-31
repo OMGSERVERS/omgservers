@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.meth
 
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;

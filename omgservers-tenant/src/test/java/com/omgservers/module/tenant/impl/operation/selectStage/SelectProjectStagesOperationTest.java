@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.operation.selectStage;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.factory.ProjectModelFactory;
-import com.omgservers.factory.StageModelFactory;
-import com.omgservers.factory.TenantModelFactory;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;

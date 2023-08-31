@@ -1,7 +1,7 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
-import com.omgservers.factory.MatchmakerModelFactory;
-import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;

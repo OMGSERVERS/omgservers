@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.service.stageShardedService.impl.metho
 
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;

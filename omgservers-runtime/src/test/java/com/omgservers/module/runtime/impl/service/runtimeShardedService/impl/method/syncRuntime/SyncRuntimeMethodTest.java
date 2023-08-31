@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime;
 
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;

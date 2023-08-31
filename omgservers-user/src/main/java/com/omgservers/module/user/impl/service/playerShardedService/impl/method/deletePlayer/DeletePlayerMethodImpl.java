@@ -5,7 +5,7 @@ import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.deletePlayer.DeletePlayerOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

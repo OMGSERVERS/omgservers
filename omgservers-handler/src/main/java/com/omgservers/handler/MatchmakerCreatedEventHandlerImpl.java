@@ -4,7 +4,7 @@ import com.omgservers.dto.internal.SyncJobShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
-import com.omgservers.factory.JobModelFactory;
+import com.omgservers.module.internal.factory.JobModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;

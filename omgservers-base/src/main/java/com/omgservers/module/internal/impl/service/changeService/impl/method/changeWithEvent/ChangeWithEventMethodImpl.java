@@ -3,7 +3,7 @@ package com.omgservers.module.internal.impl.service.changeService.impl.method.ch
 import com.omgservers.Dispatcher;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.log.LogModel;

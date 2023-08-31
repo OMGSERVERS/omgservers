@@ -7,7 +7,7 @@ import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

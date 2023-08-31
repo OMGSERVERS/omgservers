@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.service.stageShardedService.impl.metho
 
 import com.omgservers.module.tenant.impl.operation.validateStage.ValidateStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.dto.internal.ChangeWithEventRequest;
 import com.omgservers.dto.internal.ChangeWithEventResponse;

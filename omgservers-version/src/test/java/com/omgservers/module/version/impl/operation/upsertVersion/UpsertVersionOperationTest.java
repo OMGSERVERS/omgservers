@@ -3,7 +3,7 @@ package com.omgservers.module.version.impl.operation.upsertVersion;
 import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.factory.VersionModelFactory;
+import com.omgservers.module.version.factory.VersionModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

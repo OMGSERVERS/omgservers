@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.syncJob;
 
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.dto.internal.ChangeWithEventRequest;

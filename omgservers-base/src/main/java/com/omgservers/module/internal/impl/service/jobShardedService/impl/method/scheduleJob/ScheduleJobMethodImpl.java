@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.scheduleJob;
 
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
 import com.omgservers.module.internal.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.module.internal.impl.operation.getJobName.GetJobNameOperation;

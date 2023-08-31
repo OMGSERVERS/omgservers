@@ -4,7 +4,7 @@ import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedResponse;
 import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
 import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
-import com.omgservers.factory.RuntimeCommandModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;

@@ -6,7 +6,7 @@ import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionHelpService;
 import com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerHelpRequest;
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.factory.LogModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

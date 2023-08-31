@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker;
 
-import com.omgservers.factory.MatchmakerModelFactory;
+import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
