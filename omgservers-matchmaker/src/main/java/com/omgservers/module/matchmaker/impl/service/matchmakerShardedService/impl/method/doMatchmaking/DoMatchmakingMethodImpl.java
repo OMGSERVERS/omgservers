@@ -1,24 +1,22 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.doMatchmaking;
 
-import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
+import com.omgservers.dto.matchmaker.DoGreedyMatchmakingRequest;
 import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.version.GetStageConfigShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionRequest;
+import com.omgservers.dto.tenant.GetStageVersionResponse;
 import com.omgservers.dto.version.GetStageConfigShardedRequest;
-import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.dto.version.GetStageConfigShardedResponse;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
 import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
-import com.omgservers.dto.matchmaker.DoGreedyMatchmakingRequest;
+import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.version.VersionModule;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -54,14 +52,16 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
                     final var matchmakerId = request.getMatchmakerId();
                     return getMatchmaker(matchmakerId)
                             .flatMap(matchmaker -> {
-                                final var tenant = matchmaker.getTenantId();
-                                final var stage = matchmaker.getStageId();
-                                return getStageVersion(tenant, stage)
-                                        .flatMap(version -> getStageConfig(version)
+                                final var tenantId = matchmaker.getTenantId();
+                                final var stageId = matchmaker.getStageId();
+                                final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
+                                return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
+                                        .map(GetStageVersionResponse::getVersionId)
+                                        .flatMap(versionId -> getVersionStageConfig(versionId)
                                                 .flatMap(stageConfig -> doMatchmaking(
-                                                        tenant,
-                                                        stage,
-                                                        version,
+                                                        tenantId,
+                                                        stageId,
+                                                        versionId,
                                                         matchmakerId,
                                                         stageConfig)))
                                         .map(DoMatchmakingShardedResponse::new);
@@ -75,16 +75,7 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
                 .map(GetMatchmakerShardedResponse::getMatchmaker);
     }
 
-    Uni<Long> getStageVersion(final Long tenantId, final Long stageId) {
-        final var request = new GetStageShardedRequest(tenantId, stageId);
-        return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageShardedResponse::getStage)
-                .map(StageModel::getVersionId)
-                .onItem().ifNull().failWith(new ServerSideConflictException(String
-                        .format("no any stage's version wasn't deployed yet, tenantId=%d, stageId=%d", tenantId, stageId)));
-    }
-
-    Uni<VersionStageConfigModel> getStageConfig(final Long versionId) {
+    Uni<VersionStageConfigModel> getVersionStageConfig(final Long versionId) {
         final var request = new GetStageConfigShardedRequest(versionId);
         return versionModule.getVersionShardedService().getStageConfig(request)
                 .map(GetStageConfigShardedResponse::getStageConfig);
@@ -98,17 +89,19 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
         final var requests = matchmakerInMemoryCache.getRequests(matchmakerId);
         final var matches = matchmakerInMemoryCache.getMatches(matchmakerId);
         if (requests.isEmpty()) {
-            log.info("There aren't any requests to matchmaking, matchmakerId={}", matchmakerId);
+            log.info("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);
             return Uni.createFrom().item(false);
         } else {
-            final var request = new DoGreedyMatchmakingRequest(
-                    tenantId,
-                    stageId,
-                    versionId,
-                    matchmakerId,
-                    requests,
-                    matches,
-                    stageConfig);
+            final var request = DoGreedyMatchmakingRequest.builder()
+                    .tenantId(tenantId)
+                    .stageId(stageId)
+                    .versionId(versionId)
+                    .matchmakerId(matchmakerId)
+                    .requests(requests)
+                    .matches(matches)
+                    .stageConfig(stageConfig)
+                    .build();
+            // TODO: detect type of matchmaking
             return matchmakerService.doGreedyMatchmaking(request)
                     .replaceWith(true);
         }

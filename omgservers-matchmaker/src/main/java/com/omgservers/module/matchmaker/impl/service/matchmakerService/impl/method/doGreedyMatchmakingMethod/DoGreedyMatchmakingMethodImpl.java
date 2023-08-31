@@ -73,15 +73,15 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                                             final Long stageId,
                                             final Long versionId,
                                             final Long matchmakerId,
-                                            final List<RequestModel> matchmakerRequests,
-                                            final List<MatchModel> matchmakerMatches,
+                                            final List<RequestModel> requests,
+                                            final List<MatchModel> matches,
                                             final VersionStageConfigModel stageConfig) {
         // TODO: this code is not a thread-safe, do we need to use lock for matchmakerId here to prevent concurrent execution
 
-        final var groupedRequests = matchmakerRequests.stream()
+        final var groupedRequests = requests.stream()
                 .collect(Collectors.groupingBy(request -> request.getConfig().getMode()));
 
-        final var groupedMatches = matchmakerMatches.stream()
+        final var groupedMatches = matches.stream()
                 .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
 
         final var overallResults = new OverallMatchmakingResults();

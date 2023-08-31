@@ -50,7 +50,7 @@ public class MatchmakerInMemoryCache {
 
     public List<MatchModel> getMatches(Long matchmakerId) {
         return matches.values().stream()
-                .filter(request -> request.getMatchmakerId().equals(matchmakerId))
+                .filter(match -> match.getMatchmakerId().equals(matchmakerId))
                 .toList();
     }
 }
