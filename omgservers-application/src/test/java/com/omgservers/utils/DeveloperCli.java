@@ -1,4 +1,4 @@
-package com.omgservers.test;
+package com.omgservers.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

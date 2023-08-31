@@ -60,7 +60,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
@@ -74,7 +74,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
@@ -92,10 +92,6 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertStagePermissionOperation
                 .upsertStagePermission(TIMEOUT, pgPool, shard, permission));
         log.info("Exception: {}", exception.getMessage());
-    }
-
-    Long ownerId() {
-        return generateIdOperation.generateId();
     }
 
     Long userId() {

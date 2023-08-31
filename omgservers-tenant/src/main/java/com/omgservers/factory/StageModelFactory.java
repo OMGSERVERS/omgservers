@@ -21,15 +21,13 @@ public class StageModelFactory {
     public StageModel create(final Long projectId,
                              final StageConfigModel config) {
         final var id = generateIdOperation.generateId();
-        final var matchmakerId = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
-        return create(id, projectId, secret, matchmakerId, config);
+        return create(id, projectId, secret, config);
     }
 
     public StageModel create(final Long id,
                              final Long projectId,
                              final String secret,
-                             final Long matchmakerId,
                              final StageConfigModel config) {
         if (id == null) {
             throw new ServerSideBadRequestException("id is null");
@@ -39,9 +37,6 @@ public class StageModelFactory {
         }
         if (secret == null) {
             throw new ServerSideBadRequestException("secret is null");
-        }
-        if (matchmakerId == null) {
-            throw new ServerSideBadRequestException("matchmakerId is null");
         }
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
@@ -55,7 +50,6 @@ public class StageModelFactory {
         stage.setCreated(now);
         stage.setModified(now);
         stage.setSecret(secret);
-        stage.setMatchmakerId(matchmakerId);
         stage.setConfig(config);
         return stage;
     }

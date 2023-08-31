@@ -1,7 +1,10 @@
 package com.omgservers.model.stage;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -20,10 +23,10 @@ public class StageModel {
     Long projectId;
     Instant created;
     Instant modified;
-    Long versionId;
     @ToString.Exclude
     String secret;
-    Long matchmakerId;
     @ToString.Exclude
     StageConfigModel config;
+    Long matchmakerId;
+    Long versionId;
 }

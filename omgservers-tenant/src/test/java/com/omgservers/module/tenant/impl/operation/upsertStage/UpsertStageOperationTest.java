@@ -17,8 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 @Slf4j
 @QuarkusTest
 class UpsertStageOperationTest extends Assertions {
@@ -53,7 +51,7 @@ class UpsertStageOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         assertTrue(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
@@ -64,7 +62,7 @@ class UpsertStageOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
@@ -75,17 +73,13 @@ class UpsertStageOperationTest extends Assertions {
     @Test
     void givenUnknownProjectUuid_whenUpsertStage_thenServerSideConflictException() {
         final var shard = 0;
-        final var stage = stageModelFactory.create(projectId(), versionId(), UUID.randomUUID().toString(), matchmakerId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(projectId(), StageConfigModel.create());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
         log.info("Exception: {}", exception.getMessage());
     }
 
     Long projectId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long ownerId() {
         return generateIdOperation.generateId();
     }
 

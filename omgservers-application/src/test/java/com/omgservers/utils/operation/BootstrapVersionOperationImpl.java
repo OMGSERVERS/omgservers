@@ -1,12 +1,12 @@
-package com.omgservers.test.operation;
+package com.omgservers.utils.operation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omgservers.model.version.VersionFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.model.version.VersionStatusEnum;
-import com.omgservers.test.AdminCli;
-import com.omgservers.test.DeveloperCli;
+import com.omgservers.utils.AdminCli;
+import com.omgservers.utils.DeveloperCli;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AccessLevel;
@@ -29,12 +29,12 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
 
 
     @Override
-    public void bootstrapVersion(String script) throws JsonProcessingException, InterruptedException {
-        bootstrapVersion(script, VersionStageConfigModel.create());
+    public VersionParameters bootstrapVersion(String script) throws JsonProcessingException, InterruptedException {
+        return bootstrapVersion(script, VersionStageConfigModel.create());
     }
 
     @Override
-    public void bootstrapVersion(String script, VersionStageConfigModel stageConfig) throws JsonProcessingException, InterruptedException {
+    public VersionParameters bootstrapVersion(String script, VersionStageConfigModel stageConfig) throws JsonProcessingException, InterruptedException {
         final var tenantId = adminCli.createTenant();
 
         final var createDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
@@ -45,20 +45,30 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
         final var createProjectDeveloperResponse = developerCli.createProject(token, tenantId);
         final var projectId = createProjectDeveloperResponse.getProjectId();
         final var stageId = createProjectDeveloperResponse.getStageId();
-        final var secret = createProjectDeveloperResponse.getSecret();
+        final var stageSecret = createProjectDeveloperResponse.getSecret();
 
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, stageConfig, sourceCode);
-        final var version = createVersionDeveloperResponse.getId();
+        final var versionId = createVersionDeveloperResponse.getId();
 
         var attempt = 0;
-        var status = developerCli.getVersionStatus(token, version);
+        var status = developerCli.getVersionStatus(token, versionId);
         while (status == VersionStatusEnum.NEW && attempt < 10) {
             Thread.sleep(1000);
-            status = developerCli.getVersionStatus(token, version);
+            status = developerCli.getVersionStatus(token, versionId);
             attempt++;
         }
+
+        return VersionParameters.builder()
+                .tenantId(tenantId)
+                .developerUserId(developerUserId)
+                .developerPassword(developerPassword)
+                .projectId(projectId)
+                .stageId(stageId)
+                .stageSecret(stageSecret)
+                .versionId(versionId)
+                .build();
     }
 }

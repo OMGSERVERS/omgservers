@@ -49,7 +49,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
                     final var tenantId = matchmaker.getTenantId();
-                    final var stageId = matchmaker.getTenantId();
+                    final var stageId = matchmaker.getStageId();
                     final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
                     return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
                             .map(GetStageVersionResponse::getVersionId)

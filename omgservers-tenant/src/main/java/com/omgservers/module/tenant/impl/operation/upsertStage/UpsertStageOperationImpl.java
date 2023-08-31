@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.operation.upsertStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.stage.StageModel;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -24,10 +24,10 @@ import java.util.ArrayList;
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, config, version_id)
+            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, config, matchmaker_id, version_id)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set modified = $4, secret = $5, matchmaker_id = $6, config = $7, version_id = $8
+            update set modified = $4, secret = $5, config = $6, matchmaker_id = $7, version_id = $8
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -69,8 +69,8 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                         add(stage.getCreated().atOffset(ZoneOffset.UTC));
                         add(stage.getModified().atOffset(ZoneOffset.UTC));
                         add(stage.getSecret());
-                        add(stage.getMatchmakerId());
                         add(configString);
+                        add(stage.getMatchmakerId());
                         add(stage.getVersionId());
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

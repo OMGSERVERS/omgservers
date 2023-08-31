@@ -1,11 +1,11 @@
 package com.omgservers.module.internal.impl.service.handlerService.impl.method;
 
-import com.omgservers.module.internal.impl.operation.selectEvent.SelectEventOperation;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.dto.internal.HandleEventRequest;
 import com.omgservers.dto.internal.HandleEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.module.internal.impl.operation.selectEvent.SelectEventOperation;
+import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -64,7 +64,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return Uni.createFrom().item(true);
             }
         } else {
-            log.error("Event handler wasn't found, event={}", event);
+            log.warn("Event handler wasn't found, event={}", event);
             return Uni.createFrom().item(true);
         }
     }

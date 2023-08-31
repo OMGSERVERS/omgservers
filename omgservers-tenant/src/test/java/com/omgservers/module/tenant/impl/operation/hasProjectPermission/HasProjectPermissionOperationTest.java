@@ -55,7 +55,7 @@ class HasProjectPermissionOperationTest extends Assertions {
         final var userId = userId();
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), userId, ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var permission = projectPermissionModelFactory.create(project.getId(), userId, ProjectPermissionEnum.CREATE_STAGE);
         upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);

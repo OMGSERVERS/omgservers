@@ -43,7 +43,7 @@ class UpsertProjectOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         assertTrue(upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
     }
 
@@ -52,7 +52,7 @@ class UpsertProjectOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
         assertFalse(upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
@@ -61,17 +61,13 @@ class UpsertProjectOperationTest extends Assertions {
     @Test
     void givenUnknownTenant_whenUpsertProject_thenServerSideNotFoundException() {
         final var shard = 0;
-        final var project = projectModelFactory.create(tenantId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenantId(), ProjectConfigModel.create());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
         log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long ownerId() {
         return generateIdOperation.generateId();
     }
 }

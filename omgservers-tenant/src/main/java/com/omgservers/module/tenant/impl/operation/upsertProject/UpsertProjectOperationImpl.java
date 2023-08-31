@@ -60,7 +60,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                     final var code = pgException.getSqlState();
                     if (code.equals("23503")) {
                         // foreign_key_violation
-                        return new ServerSideNotFoundException("tenant was not found, name=" + project.getTenantId());
+                        return new ServerSideNotFoundException("tenant was not found, tenantId=" + project.getTenantId());
                     } else {
                         return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
                     }

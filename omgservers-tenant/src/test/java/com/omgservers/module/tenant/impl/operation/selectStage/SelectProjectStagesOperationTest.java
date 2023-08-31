@@ -56,7 +56,7 @@ class SelectProjectStagesOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
         final var stage1 = stageModelFactory.create(project.getId(), StageConfigModel.create());
@@ -73,9 +73,5 @@ class SelectProjectStagesOperationTest extends Assertions {
 
         assertThrows(ServerSideNotFoundException.class, () -> selectStageOperation
                 .selectStage(TIMEOUT, pgPool, shard, id));
-    }
-
-    Long ownerId() {
-        return generateIdOperation.generateId();
     }
 }

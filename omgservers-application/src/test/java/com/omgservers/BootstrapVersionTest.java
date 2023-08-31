@@ -1,6 +1,6 @@
-package com.omgservers.application;
+package com.omgservers;
 
-import com.omgservers.test.operation.BootstrapVersionOperation;
+import com.omgservers.utils.operation.BootstrapVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
@@ -17,7 +17,6 @@ public class BootstrapVersionTest extends Assertions {
 
     @Test
     void bootstrapVersionTest() throws Exception {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         bootstrapVersionOperation.bootstrapVersion("print(\"version was initialized\")");
     }
 }

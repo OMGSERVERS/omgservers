@@ -45,7 +45,7 @@ class DeleteProjectOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ownerId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         final var id = project.getId();
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
@@ -58,9 +58,5 @@ class DeleteProjectOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
 
         assertFalse(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, id));
-    }
-
-    Long ownerId() {
-        return generateIdOperation.generateId();
     }
 }
