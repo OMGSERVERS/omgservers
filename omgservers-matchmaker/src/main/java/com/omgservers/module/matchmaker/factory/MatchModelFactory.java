@@ -17,9 +17,9 @@ public class MatchModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public MatchModel create(final Long matchmakerId,
-                             final Long runtimeId,
                              final MatchConfigModel config) {
         final var id = generateIdOperation.generateId();
+        final var runtimeId = generateIdOperation.generateId();
         return create(id, matchmakerId, runtimeId, config);
     }
 

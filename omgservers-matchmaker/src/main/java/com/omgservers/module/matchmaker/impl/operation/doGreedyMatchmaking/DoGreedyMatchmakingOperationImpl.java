@@ -50,7 +50,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
             if (!matched) {
                 final var matchConfig = MatchConfigModel.create(tenantId, stageId, versionId, modeConfig);
-                final var newMatch = matchModelFactory.create(matchmakerId, generateIdOperation.generateId(), matchConfig);
+                final var newMatch = matchModelFactory.create(matchmakerId, matchConfig);
                 temporaryMatches.add(newMatch);
 
                 if (!matchRequestWithMatch(request, newMatch)) {

@@ -58,7 +58,7 @@ class DeleteMatchOperationTest extends Assertions {
                 stageId(),
                 versionId(),
                 modeConfig);
-        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
         assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, match.getId()));

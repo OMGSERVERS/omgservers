@@ -54,7 +54,7 @@ class UpsertMatchOperationTest extends Assertions {
                 stageId(),
                 versionId(),
                 modeConfig);
-        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         assertTrue(upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match));
     }
 
@@ -72,7 +72,7 @@ class UpsertMatchOperationTest extends Assertions {
                 stageId(),
                 versionId(),
                 modeConfig);
-        final var match = matchModelFactory.create(matchmaker.getId(), runtimeId(), matchConfig);
+        final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
         assertFalse(upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match));
