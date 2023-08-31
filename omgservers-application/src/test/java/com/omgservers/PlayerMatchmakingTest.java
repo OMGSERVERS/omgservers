@@ -38,7 +38,7 @@ public class PlayerMatchmakingTest extends Assertions {
                         function player_signed_in(event, player)
                             player.respond("signed_in")
                         end
-                        
+                                                
                         function runtime_update(event, runtime)
                             print(event.step)
                         end

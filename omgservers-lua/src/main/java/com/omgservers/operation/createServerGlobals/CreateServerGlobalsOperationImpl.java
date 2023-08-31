@@ -1,6 +1,8 @@
 package com.omgservers.operation.createServerGlobals;
 
+import com.omgservers.operation.enrichLuaGlobals.EnrichLuaGlobalsOperation;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
@@ -14,7 +16,10 @@ import org.luaj.vm2.lib.jse.JseStringLib;
 
 @Slf4j
 @ApplicationScoped
+@AllArgsConstructor
 class CreateServerGlobalsOperationImpl implements CreateServerGlobalsOperation {
+
+    final EnrichLuaGlobalsOperation enrichLuaGlobalsOperation;
 
     @Override
     public Globals createServerGlobals() {
@@ -27,6 +32,6 @@ class CreateServerGlobalsOperationImpl implements CreateServerGlobalsOperation {
         globals.load(new JseMathLib());
         LoadState.install(globals);
         LuaC.install(globals);
-        return globals;
+        return enrichLuaGlobalsOperation.enrichLuaGlobals(globals);
     }
 }
