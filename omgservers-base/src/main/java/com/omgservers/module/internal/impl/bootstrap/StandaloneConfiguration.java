@@ -2,16 +2,17 @@ package com.omgservers.module.internal.impl.bootstrap;
 
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
-import com.omgservers.module.internal.factory.IndexModelFactory;
-import com.omgservers.module.internal.factory.ServiceAccountModelFactory;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.factory.IndexModelFactory;
+import com.omgservers.module.internal.factory.ServiceAccountModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
-import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Collections;
 
 @Slf4j
-@Startup
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StandaloneConfiguration {
@@ -31,8 +31,9 @@ public class StandaloneConfiguration {
     final IndexModelFactory indexModelFactory;
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
-    @PostConstruct
-    void postConstruct() {
+    void startup(@Observes @Priority(200) StartupEvent event) {
+        log.info("Standalone configuration bootstrap");
+
         if (getConfigOperation.getConfig().standalone()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> syncIndex())

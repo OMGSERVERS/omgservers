@@ -12,15 +12,16 @@ import com.omgservers.module.internal.impl.operation.updateEventStatus.UpdateEve
 import com.omgservers.module.internal.impl.service.handlerService.HandlerService;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
-import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.ScheduledExecution;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
-import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 
 @Slf4j
-@Startup
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class EventDispatching {
@@ -46,8 +46,9 @@ public class EventDispatching {
     final PgPool pgPool;
 
     @WithSpan
-    @PostConstruct
-    void postConstruct() {
+    void startup(@Observes @Priority(200) StartupEvent event) {
+        log.info("Event dispatching bootstrap");
+
         final var disableDispatcher = getConfigOperation.getConfig().disableDispatcher();
         if (disableDispatcher) {
             log.warn("Event dispatcher was disabled, skip method");
