@@ -5,8 +5,8 @@ import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
-import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.GetTenantServiceApiClientOperation;
-import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.TenantServiceApiClient;
+import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
+import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.deleteTenant.DeleteTenantMethod;
 import com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.getTenant.GetTenantMethod;
 import com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.hasTenantPermission.HasTenantPermissionMethod;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantShardedServiceImpl implements TenantShardedService {
 
-    final GetTenantServiceApiClientOperation getTenantServiceApiClientOperation;
+    final GetTenantModuleClientOperation getTenantModuleClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
@@ -44,8 +44,8 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     public Uni<GetTenantShardedResponse> getTenant(GetTenantShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 GetTenantShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::getTenant,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getTenant,
                 getTenantMethod::getTenant);
     }
 
@@ -53,8 +53,8 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     public Uni<SyncTenantShardedResponse> syncTenant(SyncTenantShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncTenantShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::syncTenant,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncTenant,
                 syncTenantMethod::syncTenant);
     }
 
@@ -62,8 +62,8 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     public Uni<Void> deleteTenant(DeleteTenantShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteTenantShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::deleteTenant,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteTenant,
                 deleteTenantMethod::deleteTenant);
     }
 
@@ -71,8 +71,8 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     public Uni<HasTenantPermissionShardedResponse> hasTenantPermission(HasTenantPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 HasTenantPermissionShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::hasTenantPermission,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::hasTenantPermission,
                 hasTenantPermissionMethod::hasTenantPermission);
     }
 
@@ -80,8 +80,8 @@ public class TenantShardedServiceImpl implements TenantShardedService {
     public Uni<SyncTenantPermissionShardedResponse> syncTenantPermission(SyncTenantPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncTenantPermissionShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::syncTenantPermission,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncTenantPermission,
                 syncTenantPermissionMethod::syncTenantPermission);
     }
 }

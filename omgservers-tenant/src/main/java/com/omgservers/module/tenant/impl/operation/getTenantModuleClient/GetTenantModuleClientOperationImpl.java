@@ -1,4 +1,4 @@
-package com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient;
+package com.omgservers.module.tenant.impl.operation.getTenantModuleClient;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,24 +11,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @ApplicationScoped
-class GetTenantServiceApiClientOperationImpl implements GetTenantServiceApiClientOperation {
+class GetTenantModuleClientOperationImpl implements GetTenantModuleClientOperation {
 
-    final Map<URI, TenantServiceApiClient> cache;
+    final Map<URI, TenantModuleClient> cache;
 
-    GetTenantServiceApiClientOperationImpl() {
+    GetTenantModuleClientOperationImpl() {
         cache = new ConcurrentHashMap<>();
     }
 
     @Override
-    public synchronized TenantServiceApiClient getClient(final URI uri) {
+    public synchronized TenantModuleClient getClient(final URI uri) {
         if (uri == null) {
             throw new ServerSideBadRequestException("uri is null");
         }
 
         if (!cache.containsKey(uri)) {
-            TenantServiceApiClient restClient = RestClientBuilder.newBuilder()
+            TenantModuleClient restClient = RestClientBuilder.newBuilder()
                     .baseUri(uri)
-                    .build(TenantServiceApiClient.class);
+                    .build(TenantModuleClient.class);
             cache.put(uri, restClient);
             log.info("Internal client was created and cached, uri={}", uri);
         }

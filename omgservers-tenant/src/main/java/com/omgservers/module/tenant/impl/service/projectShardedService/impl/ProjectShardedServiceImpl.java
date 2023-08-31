@@ -4,8 +4,8 @@ import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
-import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.GetTenantServiceApiClientOperation;
-import com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient.TenantServiceApiClient;
+import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
+import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.getProject.GetProjectMethod;
 import com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProject.SyncProjectMethod;
 import com.omgservers.module.tenant.impl.service.projectShardedService.ProjectShardedService;
@@ -36,7 +36,7 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     final SyncProjectMethod syncProjectMethod;
     final GetProjectMethod getProjectMethod;
 
-    final GetTenantServiceApiClientOperation getTenantServiceApiClientOperation;
+    final GetTenantModuleClientOperation getTenantModuleClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
@@ -44,8 +44,8 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     public Uni<GetProjectShardedResponse> getProject(final GetProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 GetProjectShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::getProject,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getProject,
                 getProjectMethod::getProject);
     }
 
@@ -53,8 +53,8 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     public Uni<SyncProjectShardedResponse> syncProject(final SyncProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncProjectShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::syncProject,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncProject,
                 syncProjectMethod::syncProject);
     }
 
@@ -62,8 +62,8 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     public Uni<Void> deleteProject(final DeleteProjectShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 DeleteProjectShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::deleteProject,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteProject,
                 deleteProjectMethod::deleteProject);
     }
 
@@ -71,8 +71,8 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     public Uni<HasProjectPermissionShardedResponse> hasProjectPermission(HasProjectPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 HasProjectPermissionShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::hasProjectPermission,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::hasProjectPermission,
                 hasProjectPermissionMethod::hasProjectPermission);
     }
 
@@ -80,8 +80,8 @@ class ProjectShardedServiceImpl implements ProjectShardedService {
     public Uni<SyncProjectPermissionShardedResponse> syncProjectPermission(SyncProjectPermissionShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncProjectPermissionShardedRequest::validate,
-                getTenantServiceApiClientOperation::getClient,
-                TenantServiceApiClient::syncProjectPermission,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncProjectPermission,
                 syncProjectPermissionMethod::syncProjectPermission);
     }
 }

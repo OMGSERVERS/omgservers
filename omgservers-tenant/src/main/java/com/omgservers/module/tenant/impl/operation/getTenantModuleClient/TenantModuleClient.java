@@ -1,4 +1,4 @@
-package com.omgservers.module.tenant.impl.operation.getTenantServiceApiClient;
+package com.omgservers.module.tenant.impl.operation.getTenantModuleClient;
 
 import com.omgservers.module.security.impl.headersFactory.ServiceAccountClientHeadersFactory;
 import com.omgservers.module.tenant.impl.service.tenantWebService.impl.serviceApi.TenantServiceApi;
@@ -8,5 +8,5 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 @RegisterProvider(ClientSideExceptionMapper.class)
 @RegisterClientHeaders(ServiceAccountClientHeadersFactory.class)
-public interface TenantServiceApiClient extends TenantServiceApi {
+public interface TenantModuleClient extends TenantServiceApi {
 }
