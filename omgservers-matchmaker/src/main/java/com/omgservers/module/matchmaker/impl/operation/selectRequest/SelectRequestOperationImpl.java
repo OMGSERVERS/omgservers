@@ -23,7 +23,7 @@ import java.io.IOException;
 class SelectRequestOperationImpl implements SelectRequestOperation {
 
     static private final String sql = """
-            select id, matchmaker_id, created, modified, user_id, client_id, config
+            select id, matchmaker_id, created, modified, user_id, client_id, mode, config
             from $schema.tab_matchmaker_request
             where id = $1
             limit 1
@@ -70,6 +70,7 @@ class SelectRequestOperationImpl implements SelectRequestOperation {
         request.setModified(row.getOffsetDateTime("modified").toInstant());
         request.setUserId(row.getLong("user_id"));
         request.setClientId(row.getLong("client_id"));
+        request.setMode(row.getString("mode"));
         request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         return request;
     }

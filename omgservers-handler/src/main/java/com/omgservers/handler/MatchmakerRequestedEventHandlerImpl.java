@@ -1,10 +1,11 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
+import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
+import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
+import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
@@ -12,7 +13,6 @@ import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -57,8 +57,13 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
                     final var matchmakerId = stage.getMatchmakerId();
                     return getPlayerAttributes(userId, playerId)
                             .flatMap(attributes -> {
-                                final var requestConfig = new RequestConfigModel(mode, attributes);
-                                final var requestModel = requestModelFactory.create(matchmakerId, userId, clientId, requestConfig);
+                                final var requestConfig = new RequestConfigModel(attributes);
+                                final var requestModel = requestModelFactory.create(
+                                        matchmakerId,
+                                        userId,
+                                        clientId,
+                                        mode,
+                                        requestConfig);
                                 final var request = new SyncRequestShardedRequest(requestModel);
                                 return matchmakerModule.getMatchmakerShardedService().syncRequest(request);
                             });

@@ -1,8 +1,8 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 
-import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -43,8 +43,8 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
-        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
 
@@ -54,8 +54,8 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
-        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
 
         assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));

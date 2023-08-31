@@ -152,6 +152,7 @@ create table if not exists tab_matchmaker_request (
     modified timestamp with time zone not null,
     user_id bigint not null,
     client_id bigint not null,
+    mode varchar(64) not null,
     config json not null
 );
 

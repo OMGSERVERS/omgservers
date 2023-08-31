@@ -1,8 +1,8 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
-import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -47,8 +47,8 @@ class DeleteRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var requestConfig = RequestConfigModel.create(modeName());
-        final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), requestConfig);
+        final var requestConfig = RequestConfigModel.create();
+        final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
         assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getId()));

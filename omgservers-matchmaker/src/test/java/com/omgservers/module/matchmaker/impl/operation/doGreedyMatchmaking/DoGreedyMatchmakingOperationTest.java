@@ -1,10 +1,10 @@
 package com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking;
 
+import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -40,25 +40,25 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
         }});
 
         final var activeRequests = new ArrayList<RequestModel>() {{
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
 
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
 
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), RequestConfigModel.create(mode)));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
         }};
 
         final var result = doGreedyMatchmakingOperation.doGreedyMatchmaking(

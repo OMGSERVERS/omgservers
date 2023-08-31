@@ -13,13 +13,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class RequestConfigModel {
 
-    static public RequestConfigModel create(final String mode) {
-        if (mode == null) {
-            throw new ServerSideBadRequestException("mode is null");
-        }
-
+    static public RequestConfigModel create() {
         final var config = new RequestConfigModel();
-        config.setMode(mode);
         config.setAttributes(new HashMap<>());
         return config;
     }
@@ -30,6 +25,5 @@ public class RequestConfigModel {
         }
     }
 
-    String mode;
     Map<String, String> attributes;
 }

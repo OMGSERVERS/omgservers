@@ -1,9 +1,10 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.doGreedyMatchmakingMethod;
 
-import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
+import com.omgservers.dto.matchmaker.DoGreedyMatchmakingRequest;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionStageConfigModel;
@@ -12,7 +13,6 @@ import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGre
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.MatchmakerShardedService;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
-import com.omgservers.dto.matchmaker.DoGreedyMatchmakingRequest;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.version.VersionModule;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -73,15 +73,15 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                                             final Long stageId,
                                             final Long versionId,
                                             final Long matchmakerId,
-                                            final List<RequestModel> requests,
-                                            final List<MatchModel> matches,
+                                            final List<RequestModel> matchmakerRequests,
+                                            final List<MatchModel> matchmakerMatches,
                                             final VersionStageConfigModel stageConfig) {
         // TODO: this code is not a thread-safe, do we need to use lock for matchmakerId here to prevent concurrent execution
 
-        final var groupedRequests = requests.stream()
-                .collect(Collectors.groupingBy(request -> request.getConfig().getMode()));
+        final var groupedRequests = matchmakerRequests.stream()
+                .collect(Collectors.groupingBy(RequestModel::getMode));
 
-        final var groupedMatches = matches.stream()
+        final var groupedMatches = matchmakerMatches.stream()
                 .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
 
         final var overallResults = new OverallMatchmakingResults();
@@ -93,7 +93,8 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                     .filter(mode -> mode.getName().equals(modeName)).findFirst();
             if (modeConfigOptional.isPresent()) {
                 final var modeConfig = modeConfigOptional.get();
-                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(tenantId,
+                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(
+                        tenantId,
                         stageId,
                         versionId,
                         matchmakerId,
@@ -104,6 +105,7 @@ class DoGreedyMatchmakingMethodImpl implements DoGreedyMatchmakingMethod {
                 overallResults.getFailedRequests().addAll(greedyMatchmakingResult.failedRequests());
                 overallResults.getPreparedMatches().addAll(greedyMatchmakingResult.preparedMatches());
             } else {
+                log.info("Unknown mode for matchmaking within requests, mode={}", modeName);
                 overallResults.getFailedRequests().addAll(activeRequests);
             }
         });

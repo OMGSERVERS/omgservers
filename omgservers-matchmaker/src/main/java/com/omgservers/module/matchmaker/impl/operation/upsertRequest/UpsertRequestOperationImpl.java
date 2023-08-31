@@ -24,10 +24,10 @@ import java.util.ArrayList;
 class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, user_id, client_id, config)
-            values($1, $2, $3, $4, $5, $6, $7)
+            insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, user_id, client_id, mode, config)
+            values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
-            update set matchmaker_id = $2, modified = $4, user_id = $5, client_id = $6, config = $7
+            update set matchmaker_id = $2, modified = $4, user_id = $5, client_id = $6, mode = $7, config = $8
             returning xmax::text::int = 0 as inserted
             """;
 
@@ -72,6 +72,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                         add(request.getModified().atOffset(ZoneOffset.UTC));
                         add(request.getUserId());
                         add(request.getClientId());
+                        add(request.getMode());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.iterator().next().getBoolean("inserted"));

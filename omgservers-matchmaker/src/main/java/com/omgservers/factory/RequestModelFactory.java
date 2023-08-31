@@ -19,15 +19,17 @@ public class RequestModelFactory {
     public RequestModel create(Long matchmakerId,
                                Long userId,
                                Long clientId,
+                               String mode,
                                RequestConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, matchmakerId, userId, clientId, config);
+        return create(id, matchmakerId, userId, clientId, mode, config);
     }
 
     public RequestModel create(Long id,
                                Long matchmakerId,
                                Long userId,
                                Long clientId,
+                               String mode,
                                RequestConfigModel config) {
         Instant now = Instant.now();
 
@@ -38,6 +40,7 @@ public class RequestModelFactory {
         request.setModified(now);
         request.setUserId(userId);
         request.setClientId(clientId);
+        request.setMode(mode);
         request.setConfig(config);
         return request;
     }

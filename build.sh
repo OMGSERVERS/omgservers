@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+STARTED_AT=$(date)
+
 MVN_ARGS="clean install"
 
 pushd omgservers-parent; ./mvnw ${MVN_ARGS}; popd
@@ -24,4 +26,6 @@ pushd omgservers-developer; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-admin; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-application; ./mvnw ${MVN_ARGS}; popd
 
-echo Build finished!
+FINISHED_AT=$(date)
+
+echo Build finished, started=$STARTED_AT, finished=$FINISHED_AT!

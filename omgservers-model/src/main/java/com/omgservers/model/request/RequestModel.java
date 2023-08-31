@@ -24,5 +24,6 @@ public class RequestModel {
     Instant modified;
     Long userId;
     Long clientId;
+    String mode;
     RequestConfigModel config;
 }

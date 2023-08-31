@@ -1,9 +1,9 @@
 package com.omgservers.module.matchmaker.impl.operation.selectRequest;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.factory.RequestModelFactory;
+import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -48,8 +48,8 @@ class SelectRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create(modeName());
-        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), matchmakerRequestConfig);
+        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
         final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getId());
