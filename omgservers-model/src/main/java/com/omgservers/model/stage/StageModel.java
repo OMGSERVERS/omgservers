@@ -25,8 +25,8 @@ public class StageModel {
     Instant modified;
     @ToString.Exclude
     String secret;
-    @ToString.Exclude
-    StageConfigModel config;
     Long matchmakerId;
     Long versionId;
+    @ToString.Exclude
+    StageConfigModel config;
 }

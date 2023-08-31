@@ -23,7 +23,7 @@ import java.io.IOException;
 class SelectStageOperationImpl implements SelectStageOperation {
 
     static private final String sql = """
-            select id, project_id, created, modified, secret, config, matchmaker_id, version_id
+            select id, project_id, created, modified, secret, matchmaker_id, version_id, config
             from $schema.tab_tenant_stage
             where id = $1
             limit 1
@@ -69,9 +69,9 @@ class SelectStageOperationImpl implements SelectStageOperation {
         stage.setCreated(row.getOffsetDateTime("created").toInstant());
         stage.setModified(row.getOffsetDateTime("modified").toInstant());
         stage.setSecret(row.getString("secret"));
-        stage.setConfig(objectMapper.readValue(row.getString("config"), StageConfigModel.class));
         stage.setMatchmakerId(row.getLong("matchmaker_id"));
         stage.setVersionId(row.getLong("version_id"));
+        stage.setConfig(objectMapper.readValue(row.getString("config"), StageConfigModel.class));
         return stage;
     }
 }

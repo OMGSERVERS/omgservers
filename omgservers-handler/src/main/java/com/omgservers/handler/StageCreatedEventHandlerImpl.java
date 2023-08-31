@@ -3,8 +3,6 @@ package com.omgservers.handler;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
-import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
@@ -13,7 +11,9 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
+import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getServers.GetServersOperation;
@@ -51,7 +51,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
         return getStage(tenantId, id)
-                .flatMap(stage -> syncMatchmaker(tenantId, stage.getId()))
+                .flatMap(stage -> syncMatchmaker(stage.getMatchmakerId(), tenantId, stage.getId()))
                 .replaceWith(true);
     }
 
@@ -61,8 +61,8 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .map(GetStageShardedResponse::getStage);
     }
 
-    Uni<MatchmakerModel> syncMatchmaker(final Long tenantId, final Long stageId) {
-        final var matchmaker = matchmakerModelFactory.create(tenantId, stageId);
+    Uni<MatchmakerModel> syncMatchmaker(final Long matchmakerId, final Long tenantId, final Long stageId) {
+        final var matchmaker = matchmakerModelFactory.create(matchmakerId, tenantId, stageId);
         final var request = new SyncMatchmakerShardedRequest(matchmaker);
         return matchmakerModule.getMatchmakerShardedService().syncMatchmaker(request)
                 .replaceWith(matchmaker);

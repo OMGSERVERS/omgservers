@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.factory;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stage.StageModel;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,15 @@ public class StageModelFactory {
     public StageModel create(final Long projectId,
                              final StageConfigModel config) {
         final var id = generateIdOperation.generateId();
+        final var matchmakerId = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
-        return create(id, projectId, secret, config);
+        return create(id, projectId, secret, matchmakerId, config);
     }
 
     public StageModel create(final Long id,
                              final Long projectId,
                              final String secret,
+                             final Long matchmakerId,
                              final StageConfigModel config) {
         if (id == null) {
             throw new ServerSideBadRequestException("id is null");
@@ -37,6 +39,9 @@ public class StageModelFactory {
         }
         if (secret == null) {
             throw new ServerSideBadRequestException("secret is null");
+        }
+        if (matchmakerId == null) {
+            throw new ServerSideBadRequestException("matchmakerId is null");
         }
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
@@ -50,6 +55,7 @@ public class StageModelFactory {
         stage.setCreated(now);
         stage.setModified(now);
         stage.setSecret(secret);
+        stage.setMatchmakerId(matchmakerId);
         stage.setConfig(config);
         return stage;
     }

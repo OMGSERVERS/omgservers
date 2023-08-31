@@ -24,7 +24,7 @@ import java.util.ArrayList;
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, config, matchmaker_id, version_id)
+            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, version_id, config)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
             nothing
@@ -68,9 +68,9 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                         add(stage.getCreated().atOffset(ZoneOffset.UTC));
                         add(stage.getModified().atOffset(ZoneOffset.UTC));
                         add(stage.getSecret());
-                        add(configString);
                         add(stage.getMatchmakerId());
                         add(stage.getVersionId());
+                        add(configString);
                     }}))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
