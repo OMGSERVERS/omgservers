@@ -2,11 +2,10 @@ package com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -31,6 +30,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -54,17 +54,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> {
-                    final var pgException = (PgException) t;
-                    final var code = pgException.getSqlState();
-                    if (code.equals("23503")) {
-                        // foreign_key_violation
-                        return new ServerSideNotFoundException("runtime was not found, runtimeCommand=" + runtimeCommand);
-                    } else {
-                        return new ServerSideConflictException(String.format("unhandled PgException, " +
-                                "%s, runtimeCommand=%s", t.getMessage(), runtimeCommand));
-                    }
-                });
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,

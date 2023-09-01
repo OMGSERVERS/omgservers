@@ -3,10 +3,12 @@ package com.omgservers.module.internal.impl.operation.selectLogs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.log.LogModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ class SelectLogsOperationImpl implements SelectLogsOperation {
             from internal.tab_log
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -36,7 +40,7 @@ class SelectLogsOperationImpl implements SelectLogsOperation {
                 .execute()
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var results = new ArrayList<LogModel>();
+                    final List<LogModel> results = new ArrayList<LogModel>();
                     while (iterator.hasNext()) {
                         final var log = createLog(iterator.next());
                         results.add(log);
@@ -47,7 +51,9 @@ class SelectLogsOperationImpl implements SelectLogsOperation {
                         log.info("Logs were not found");
                     }
                     return results;
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     LogModel createLog(Row row) {

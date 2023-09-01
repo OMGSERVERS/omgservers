@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.upsertStage;
 
-import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.StageModelFactory;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -71,10 +71,10 @@ class UpsertStageOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownProjectUuid_whenUpsertStage_thenServerSideConflictException() {
+    void givenUnknownProjectUuid_whenUpsertStage_thenException() {
         final var shard = 0;
         final var stage = stageModelFactory.create(projectId(), StageConfigModel.create());
-        final var exception = assertThrows(ServerSideConflictException.class, () ->
+        final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage));
         log.info("Exception: {}", exception.getMessage());
     }

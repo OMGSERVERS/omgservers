@@ -1,17 +1,19 @@
 package com.omgservers.module.internal.impl.operation.selectEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ class SelectEventOperationImpl implements SelectEventOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -58,7 +61,9 @@ class SelectEventOperationImpl implements SelectEventOperation {
                     } else {
                         throw new ServerSideNotFoundException("event was not found, id=" + id);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     EventModel createEvent(Row row) throws IOException {

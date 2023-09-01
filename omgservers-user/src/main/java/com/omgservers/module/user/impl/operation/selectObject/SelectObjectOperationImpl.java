@@ -3,11 +3,13 @@ package com.omgservers.module.user.impl.operation.selectObject;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.object.ObjectModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -54,7 +57,9 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
                         throw new ServerSideNotFoundException(String.format("object was not found, " +
                                 "playerId=%s, name=%s", playerId, name));
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     ObjectModel createObject(Row row) {

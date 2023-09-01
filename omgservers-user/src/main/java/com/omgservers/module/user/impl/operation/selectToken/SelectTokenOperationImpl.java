@@ -5,11 +5,13 @@ import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -53,7 +56,9 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
                         throw new ServerSideNotFoundException(String.format("token was not found, tokenId=%s",
                                 tokenId));
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     TokenModel createToken(Row row) {

@@ -1,15 +1,17 @@
 package com.omgservers.module.internal.impl.operation.selectNewEvents;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,9 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
             limit $2
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -44,7 +48,7 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
                 .execute(Tuple.of(EventStatusEnum.NEW, limit))
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var events = new ArrayList<EventModel>();
+                    final List<EventModel> events = new ArrayList<EventModel>();
                     while (iterator.hasNext()) {
                         final var event = createEvent(iterator.next());
                         events.add(event);
@@ -53,7 +57,9 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
                         log.info("New events were selected, count={}, events={}", events.size(), events);
                     }
                     return events;
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     EventModel createEvent(Row row) {

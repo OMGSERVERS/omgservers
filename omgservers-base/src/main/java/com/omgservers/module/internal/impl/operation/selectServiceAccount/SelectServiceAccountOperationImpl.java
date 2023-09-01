@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
             select id, created, modified, username, password_hash
             from internal.tab_service_account where username = $1 limit 1
             """;
+
+    final TransformPgExceptionOperation transformPgExceptionOperation;
 
     final ObjectMapper objectMapper;
 
@@ -44,7 +48,9 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
                     } else {
                         throw new ServerSideNotFoundException("service account was not found, username=" + username);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     ServiceAccountModel createServiceAccount(Row row) {

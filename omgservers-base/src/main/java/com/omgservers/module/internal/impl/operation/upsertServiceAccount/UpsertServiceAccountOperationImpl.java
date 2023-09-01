@@ -3,9 +3,11 @@ package com.omgservers.module.internal.impl.operation.upsertServiceAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -36,7 +40,9 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
         }
 
         return upsertQuery(sqlConnection, serviceAccount)
-                .invoke(voidItem -> log.info("Service account was synchronized, serviceAccount={}", serviceAccount));
+                .invoke(voidItem -> log.info("Service account was synchronized, serviceAccount={}", serviceAccount))
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Void> upsertQuery(SqlConnection sqlConnection, ServiceAccountModel serviceAccount) {

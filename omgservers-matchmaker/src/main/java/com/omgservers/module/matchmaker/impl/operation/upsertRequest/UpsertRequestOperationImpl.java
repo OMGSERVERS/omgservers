@@ -6,6 +6,7 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -30,6 +31,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -53,8 +55,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s, matchmakerRequest=%s", t.getMessage(), request)));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,

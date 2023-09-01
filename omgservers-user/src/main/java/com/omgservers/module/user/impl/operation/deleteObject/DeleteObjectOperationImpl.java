@@ -1,6 +1,7 @@
 package com.omgservers.module.user.impl.operation.deleteObject;
 
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -17,6 +18,7 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
             delete from $schema.tab_user_object where id = $1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override

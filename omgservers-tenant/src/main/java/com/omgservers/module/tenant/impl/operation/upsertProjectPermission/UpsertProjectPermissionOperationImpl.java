@@ -5,6 +5,7 @@ import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -27,6 +28,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -49,17 +51,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> {
-                    final var pgException = (PgException) t;
-                    final var code = pgException.getSqlState();
-                    final var column = pgException.getColumn();
-                    if (code.equals("23503")) {
-                        // foreign_key_violation
-                        return new ServerSideNotFoundException("project was not found, permission=" + permission);
-                    } else {
-                        return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
-                    }
-                });
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, ProjectPermissionModel permission) {

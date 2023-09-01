@@ -1,10 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.hasProjectPermission;
 
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -46,6 +49,14 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(projectId, userId, permission))
-                .map(rowSet -> rowSet.rowCount() > 0);
+                .map(rowSet -> rowSet.rowCount() > 0)
+                .invoke(selected -> {
+                    if (selected) {
+                        log.info("Project's permission was found, projectId={}, userId={}, permission={}",
+                                projectId, userId, permission);
+                    }
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 }

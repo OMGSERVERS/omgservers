@@ -2,11 +2,13 @@ package com.omgservers.module.user.impl.operation.selectPlayerAttributes;
 
 import com.omgservers.model.attribute.AttributeModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
             where player_id = $1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -44,7 +47,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                 .execute(Tuple.of(playerId))
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var result = new ArrayList<AttributeModel>();
+                    final List<AttributeModel> result = new ArrayList<AttributeModel>();
                     while (iterator.hasNext()) {
                         final var attribute = createAttribute(iterator.next());
                         result.add(attribute);
@@ -56,7 +59,9 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                     }
 
                     return result;
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     AttributeModel createAttribute(Row row) {

@@ -1,10 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.hasTenantPermission;
 
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -52,6 +55,8 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
                         log.info("Tenant's permission was found, tenant={}, userId={}, permission={}",
                                 tenantId, userId, permission);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 }

@@ -6,11 +6,13 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ class SelectUserOperationImpl implements SelectUserOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -48,11 +51,15 @@ class SelectUserOperationImpl implements SelectUserOperation {
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        return createUser(iterator.next());
+                        final var user = createUser(iterator.next());
+                        log.info("User was found, user={}", user);
+                        return user;
                     } else {
                         throw new ServerSideNotFoundException("user was not found, id=" + id);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     UserModel createUser(Row row) {

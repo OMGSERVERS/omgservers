@@ -1,10 +1,9 @@
 package com.omgservers.module.user.impl.operation.upsertClient;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -28,6 +27,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -49,18 +49,8 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                         log.info("Client was updated, client={}", client);
                     }
                 })
-                // TODO: use this handler for other operations
                 .onFailure(PgException.class)
-                .transform(t -> {
-                    final var pgException = (PgException) t;
-                    final var code = pgException.getSqlState();
-                    if (code.equals("23503")) {
-                        // foreign_key_violation
-                        return new ServerSideNotFoundException("player was not found, id=" + client.getPlayerId());
-                    } else {
-                        return new ServerSideConflictException("unhandled PgException, " + t.getMessage());
-                    }
-                });
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, ClientModel client) {

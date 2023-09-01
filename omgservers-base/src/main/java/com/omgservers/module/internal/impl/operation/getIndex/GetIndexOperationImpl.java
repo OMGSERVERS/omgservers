@@ -5,11 +5,13 @@ import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ class GetIndexOperationImpl implements GetIndexOperation {
             select id, created, modified, name, version, config
             from internal.tab_index where name = $1 limit 1
             """;
+
+    final TransformPgExceptionOperation transformPgExceptionOperation;
 
     final ObjectMapper objectMapper;
 
@@ -51,7 +55,9 @@ class GetIndexOperationImpl implements GetIndexOperation {
                     } else {
                         throw new ServerSideNotFoundException("index was not found, name=" + name);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     IndexModel createIndex(Row row) throws IOException {

@@ -24,6 +24,7 @@ class DeleteServiceAccountMethodImpl implements DeleteServiceAccountMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> deleteServiceAccountOperation
-                .deleteServiceAccount(sqlConnection, id));
+                .deleteServiceAccount(sqlConnection, id))
+                .replaceWithVoid();
     }
 }

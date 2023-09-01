@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.event.EventModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -28,6 +29,8 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -48,8 +51,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideInternalException(String
-                        .format("unhandled PgException, %s, event=%s", t.getMessage(), event)));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final EventModel event) {

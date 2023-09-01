@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.service.indexService.impl.method.deleteIndex;
 
-import com.omgservers.module.internal.impl.operation.deleteIndex.DeleteIndexOperation;
 import com.omgservers.dto.internal.DeleteIndexRequest;
+import com.omgservers.module.internal.impl.operation.deleteIndex.DeleteIndexOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,6 +22,7 @@ class DeleteIndexMethodImpl implements DeleteIndexMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> deleteIndexOperation
-                .deleteIndex(sqlConnection, id));
+                        .deleteIndex(sqlConnection, id))
+                .replaceWithVoid();
     }
 }

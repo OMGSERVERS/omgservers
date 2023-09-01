@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.job.JobModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -26,6 +27,8 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -46,8 +49,7 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s, job=%s", t.getMessage(), job)));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, JobModel job) {

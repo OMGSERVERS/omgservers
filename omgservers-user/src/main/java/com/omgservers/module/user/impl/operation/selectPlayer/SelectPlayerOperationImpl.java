@@ -6,11 +6,13 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,9 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -66,7 +70,9 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
                         throw new ServerSideNotFoundException(String.format("player was not found, " +
                                 "userId=%s, stageId=%s", userId, stageId));
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     PlayerModel createPlayer(Row row) throws IOException {

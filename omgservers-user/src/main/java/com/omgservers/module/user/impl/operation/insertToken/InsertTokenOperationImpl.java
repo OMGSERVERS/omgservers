@@ -10,10 +10,12 @@ import com.omgservers.module.user.impl.operation.encodeToken.EncodeTokenOperatio
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +33,7 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
             values($1, $2, $3, $4, $5)
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final EncodeTokenOperation encodeTokenOperation;
     final GenerateIdOperation generateIdOperation;
@@ -38,14 +41,16 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
 
     final SecureRandom secureRandom;
 
-    public InsertTokenOperationImpl(GetConfigOperation getConfigOperation,
+    public InsertTokenOperationImpl(TransformPgExceptionOperation transformPgExceptionOperation,
+                                    PrepareShardSqlOperation prepareShardSqlOperation,
                                     EncodeTokenOperation encodeTokenOperation,
                                     GenerateIdOperation generateIdOperation,
-                                    PrepareShardSqlOperation prepareShardSqlOperation) {
-        this.getConfigOperation = getConfigOperation;
-        this.encodeTokenOperation = encodeTokenOperation;
+                                    GetConfigOperation getConfigOperation) {
+        this.transformPgExceptionOperation = transformPgExceptionOperation;
         this.prepareShardSqlOperation = prepareShardSqlOperation;
+        this.encodeTokenOperation = encodeTokenOperation;
         this.generateIdOperation = generateIdOperation;
+        this.getConfigOperation = getConfigOperation;
         this.secureRandom = new SecureRandom();
     }
 
@@ -79,7 +84,10 @@ class InsertTokenOperationImpl implements InsertTokenOperation {
 
         return insertQuery(sqlConnection, shard, tokenModel)
                 .invoke(voidItem -> log.info("Token was inserted, shard={}, token={}", shard, tokenObject))
-                .replaceWith(result);
+                .replaceWith(result)
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+
 
     }
 

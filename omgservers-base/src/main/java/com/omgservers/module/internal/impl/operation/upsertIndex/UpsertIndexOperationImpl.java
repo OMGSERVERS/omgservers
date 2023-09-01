@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     final ObjectMapper objectMapper;
 
     @Override
@@ -39,7 +43,9 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
 
         return upsertQuery(sqlConnection, index)
                 .invoke(voidItem -> log.info("Index was synchronized, name={}, version={}",
-                        index.getName(), index.getVersion()));
+                        index.getName(), index.getVersion()))
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Void> upsertQuery(SqlConnection sqlConnection, IndexModel index) {

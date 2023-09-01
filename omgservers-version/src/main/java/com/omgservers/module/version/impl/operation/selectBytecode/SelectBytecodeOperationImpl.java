@@ -7,6 +7,7 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionBytecodeModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -30,6 +31,7 @@ class SelectBytecodeOperationImpl implements SelectBytecodeOperation {
             limit 1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -66,7 +68,6 @@ class SelectBytecodeOperationImpl implements SelectBytecodeOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s", t.getMessage())));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 }

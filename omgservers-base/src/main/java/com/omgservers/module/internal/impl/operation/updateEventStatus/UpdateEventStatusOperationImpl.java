@@ -2,8 +2,8 @@ package com.omgservers.module.internal.impl.operation.updateEventStatus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -22,6 +22,7 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
             where id = $1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final ObjectMapper objectMapper;
 
     @Override
@@ -47,8 +48,7 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s, id=%s, newStatus=%s", t.getMessage(), id, newStatus)));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> updateQuery(SqlConnection sqlConnection, Long id, EventStatusEnum status) {

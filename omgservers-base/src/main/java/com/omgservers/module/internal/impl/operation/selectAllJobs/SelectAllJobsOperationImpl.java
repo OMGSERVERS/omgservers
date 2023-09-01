@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobType;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,11 @@ import java.util.List;
 class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
 
     static private final String sql = """
-            select id, created, shard_key, entity, type 
+            select id, created, shard_key, entity, type
             from internal.tab_job
             """;
+
+    final TransformPgExceptionOperation transformPgExceptionOperation;
 
     final ObjectMapper objectMapper;
 
@@ -37,7 +41,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
                 .execute()
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var results = new ArrayList<JobModel>();
+                    final List<JobModel> results = new ArrayList<JobModel>();
                     while (iterator.hasNext()) {
                         final var job = createJob(iterator.next());
                         results.add(job);
@@ -48,7 +52,9 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
                         log.info("Jobs were not found");
                     }
                     return results;
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     JobModel createJob(Row row) {

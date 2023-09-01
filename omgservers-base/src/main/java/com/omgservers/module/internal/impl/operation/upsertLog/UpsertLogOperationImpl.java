@@ -1,8 +1,8 @@
 package com.omgservers.module.internal.impl.operation.upsertLog;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.log.LogModel;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -26,6 +26,8 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
+
     @Override
     public Uni<Boolean> upsertLog(final SqlConnection sqlConnection, final LogModel logModel) {
         if (sqlConnection == null) {
@@ -36,10 +38,15 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
         }
 
         return upsertQuery(sqlConnection, logModel)
-                .invoke(voidItem -> log.info("Log was inserted, log={}", logModel))
+                .invoke(inserted -> {
+                    if (inserted) {
+                        log.info("Log was inserted, log={}", logModel);
+                    } else {
+                        log.info("Log was updated, log={}", logModel);
+                    }
+                })
                 .onFailure(PgException.class)
-                .transform(t -> new ServerSideConflictException(String
-                        .format("unhandled PgException, %s, log=%s", t.getMessage(), logModel)));
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final LogModel logModel) {

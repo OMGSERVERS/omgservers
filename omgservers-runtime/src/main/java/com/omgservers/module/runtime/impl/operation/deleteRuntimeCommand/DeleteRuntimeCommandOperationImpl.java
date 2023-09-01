@@ -1,9 +1,11 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
             delete from $schema.tab_runtime_command where id = $1
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -38,6 +41,8 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
                     } else {
                         log.warn("Command was not found, skip operation, shard={}, id={}", shard, id);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 }

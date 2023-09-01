@@ -3,9 +3,11 @@ package com.omgservers.module.user.impl.operation.upsertAttribute;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.attribute.AttributeModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
             nothing
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
@@ -45,7 +48,9 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
                     } else {
                         log.info("Attribute was updated, object={}", attribute);
                     }
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, AttributeModel attribute) {

@@ -5,11 +5,13 @@ import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
+import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
             order by id asc
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
@@ -49,7 +52,7 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
                 .execute(Tuple.of(runtimeId, RuntimeCommandStatusEnum.NEW))
                 .map(RowSet::iterator)
                 .map(iterator -> {
-                    final var runtimeCommands = new ArrayList<RuntimeCommandModel>();
+                    final List<RuntimeCommandModel> runtimeCommands = new ArrayList<RuntimeCommandModel>();
                     while (iterator.hasNext()) {
                         final var command = createRuntimeCommand(iterator.next());
                         runtimeCommands.add(command);
@@ -61,7 +64,9 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
                         log.info("New runtime commands were not found, runtimeId={}", runtimeId);
                     }
                     return runtimeCommands;
-                });
+                })
+                .onFailure(PgException.class)
+                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
     RuntimeCommandModel createRuntimeCommand(Row row) {

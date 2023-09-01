@@ -1,6 +1,7 @@
 package com.omgservers.module.user.impl.operation.deleteAttribute;
 
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -18,6 +19,7 @@ class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
             where player_id = $1 and attribute_name = $2
             """;
 
+    final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Override
