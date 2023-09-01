@@ -165,6 +165,19 @@ create table if not exists tab_matchmaker_match (
     config json not null
 );
 
+create table if not exists tab_matchmaker_match_client (
+    id bigint primary key,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
+    match_id bigint not null references tab_matchmaker_match(id) on delete cascade on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    user_id bigint not null,
+    client_id bigint not null,
+    request_id bigint not null,
+    unique(match_id, user_id, client_id),
+    unique(match_id, request_id)
+);
+
 -- runtime module
 
 create table if not exists tab_runtime (

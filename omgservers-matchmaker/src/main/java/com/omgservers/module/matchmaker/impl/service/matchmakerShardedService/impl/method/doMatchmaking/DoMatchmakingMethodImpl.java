@@ -63,8 +63,8 @@ class DoMatchmakingMethodImpl implements DoMatchmakingMethod {
                                                         stageId,
                                                         versionId,
                                                         matchmakerId,
-                                                        stageConfig)))
-                                        .map(DoMatchmakingShardedResponse::new);
+                                                        stageConfig)
+                                                        .map(DoMatchmakingShardedResponse::new)));
                             });
                 });
     }
