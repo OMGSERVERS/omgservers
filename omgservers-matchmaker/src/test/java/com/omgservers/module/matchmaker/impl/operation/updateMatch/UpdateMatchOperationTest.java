@@ -52,7 +52,7 @@ class UpdateMatchOperationTest extends Assertions {
 
         match.setModified(Instant.now());
         match.setConfig(new MatchConfigModel());
-        
+
         updateMatchOperation.updateMatch(TIMEOUT, pgPool, shard, match);
     }
 
@@ -69,7 +69,7 @@ class UpdateMatchOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> updateMatchOperation
                 .updateMatch(TIMEOUT, pgPool, shard, match));
-        log.info("Exception: {}", exception);
+        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

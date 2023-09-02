@@ -44,6 +44,6 @@ class CreateUserTokenOperationTest extends Assertions {
     void givenInvalidToken_whenDecodeToken_thenException() {
         String rawToken = "invalidtoken";
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> decodeTokenOperation.decodeToken(rawToken));
-        log.info("Exception: {}", exception);
+        log.info("Exception: {}", exception.getMessage());
     }
 }
