@@ -1,9 +1,8 @@
 package com.omgservers.test;
 
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStatusEnum;
-import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.test.cli.AdminCli;
 import com.omgservers.test.cli.DeveloperCli;
 import com.omgservers.test.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;
@@ -47,14 +46,13 @@ public class DeveloperApiCreateVersionTest extends Assertions {
 
         Thread.sleep(5000);
 
-        final var stageConfig = VersionStageConfigModel.create();
+        final var stageConfig = VersionConfigModel.create();
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder().encodeToString("""
                 print('hello, world')
                 """.getBytes(StandardCharsets.UTF_8))));
         final var version = developerCli.createVersion(tenantUuid, stageId, stageConfig, sourceCode);
         Thread.sleep(5000);
-        assertEquals(VersionStatusEnum.DEPLOYED, developerCli.getVersionStatus(version));
     }
 
     String tenantTitle() {

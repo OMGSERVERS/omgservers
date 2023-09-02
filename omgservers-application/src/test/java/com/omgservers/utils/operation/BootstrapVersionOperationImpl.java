@@ -1,10 +1,9 @@
 package com.omgservers.utils.operation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.model.version.VersionStatusEnum;
 import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.DeveloperCli;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,11 +29,11 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
 
     @Override
     public VersionParameters bootstrapVersion(String script) throws JsonProcessingException, InterruptedException {
-        return bootstrapVersion(script, VersionStageConfigModel.create());
+        return bootstrapVersion(script, VersionConfigModel.create());
     }
 
     @Override
-    public VersionParameters bootstrapVersion(String script, VersionStageConfigModel stageConfig) throws JsonProcessingException, InterruptedException {
+    public VersionParameters bootstrapVersion(String script, VersionConfigModel versionConfig) throws JsonProcessingException, InterruptedException {
         final var tenantId = adminCli.createTenant();
 
         final var createDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
@@ -50,16 +49,8 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
-        final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, stageConfig, sourceCode);
+        final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();
-
-        var attempt = 0;
-        var status = developerCli.getVersionStatus(token, versionId);
-        while (status == VersionStatusEnum.NEW && attempt < 10) {
-            Thread.sleep(1000);
-            status = developerCli.getVersionStatus(token, versionId);
-            attempt++;
-        }
 
         return VersionParameters.builder()
                 .tenantId(tenantId)

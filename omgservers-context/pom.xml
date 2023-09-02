@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-version</artifactId>
+            <artifactId>omgservers-tenant</artifactId>
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>

@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class VersionCreatedEventBodyModel extends EventBodyModel {
 
     Long tenantId;
-    Long stageId;
     Long id;
 
     @Override
@@ -24,6 +23,6 @@ public class VersionCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return id;
+        return tenantId;
     }
 }

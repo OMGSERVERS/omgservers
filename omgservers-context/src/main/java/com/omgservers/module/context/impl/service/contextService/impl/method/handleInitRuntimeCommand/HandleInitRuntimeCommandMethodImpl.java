@@ -31,7 +31,7 @@ class HandleInitRuntimeCommandMethodImpl implements HandleInitRuntimeCommandMeth
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaInitRuntimeCommandReceivedEvent(runtimeId);
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleInitRuntimeCommandResponse(true));
     }

@@ -31,7 +31,7 @@ class HandleStopRuntimeCommandMethodImpl implements HandleStopRuntimeCommandMeth
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaStopRuntimeCommandReceivedEvent();
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleStopRuntimeCommandResponse(true));
     }

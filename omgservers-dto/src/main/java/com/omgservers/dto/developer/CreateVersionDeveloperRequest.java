@@ -1,7 +1,7 @@
 package com.omgservers.dto.developer;
 
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.model.version.VersionConfigModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +20,6 @@ public class CreateVersionDeveloperRequest {
 
     Long tenantId;
     Long stageId;
-    VersionStageConfigModel stageConfig;
+    VersionConfigModel versionConfig;
     VersionSourceCodeModel sourceCode;
 }

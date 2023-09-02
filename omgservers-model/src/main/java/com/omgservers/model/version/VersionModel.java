@@ -2,6 +2,7 @@ package com.omgservers.model.version;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -13,17 +14,19 @@ import java.time.Instant;
 public class VersionModel {
 
     Long id;
+    Long stageId;
     Instant created;
     Instant modified;
-    Long tenantId;
-    Long stageId;
     @ToString.Exclude
-    VersionStageConfigModel stageConfig;
+    @EqualsAndHashCode.Exclude
+    VersionConfigModel config;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     VersionSourceCodeModel sourceCode;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     VersionBytecodeModel bytecode;
-    VersionStatusEnum status;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     String errors;
 }

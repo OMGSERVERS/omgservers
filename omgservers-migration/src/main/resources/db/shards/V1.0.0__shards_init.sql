@@ -96,9 +96,8 @@ create table if not exists tab_tenant_stage (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     secret text not null,
-    config json not null,
     matchmaker_id bigint not null,
-    version_id bigint
+    config json not null
 );
 
 create table if not exists tab_tenant_stage_permission (
@@ -110,18 +109,14 @@ create table if not exists tab_tenant_stage_permission (
     unique(stage_id, user_id, permission)
 );
 
--- version module
-
-create table if not exists tab_version (
+create table if not exists tab_tenant_version (
     id bigint primary key,
+    stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    tenant_id bigint not null,
-    stage_id bigint not null,
-    stage_config json not null,
+    config json not null,
     source_code json not null,
     bytecode json not null,
-    status text not null,
     errors text
 );
 

@@ -52,10 +52,6 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-version</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-tenant</artifactId>
         </dependency>
         <dependency>

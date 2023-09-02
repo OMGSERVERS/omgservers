@@ -34,7 +34,7 @@ class HandleAddPlayerRuntimeCommandMethodImpl implements HandleAddPlayerRuntimeC
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaAddPlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleAddPlayerRuntimeCommandResponse(true));
     }

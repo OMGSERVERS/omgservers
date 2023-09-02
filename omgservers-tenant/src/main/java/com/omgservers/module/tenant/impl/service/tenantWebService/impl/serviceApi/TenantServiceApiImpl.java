@@ -1,36 +1,48 @@
 package com.omgservers.module.tenant.impl.service.tenantWebService.impl.serviceApi;
 
 import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
-import com.omgservers.dto.tenant.GetProjectShardedRequest;
-import com.omgservers.dto.tenant.GetTenantShardedRequest;
-import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
-import com.omgservers.dto.tenant.SyncProjectShardedRequest;
-import com.omgservers.dto.tenant.SyncStageShardedRequest;
-import com.omgservers.module.tenant.impl.service.tenantWebService.TenantWebService;
-import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
+import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
+import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
+import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.GetTenantShardedResponse;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedResponse;
+import com.omgservers.dto.tenant.GetVersionConfigShardedRequest;
+import com.omgservers.dto.tenant.GetVersionConfigShardedResponse;
+import com.omgservers.dto.tenant.GetVersionShardedRequest;
+import com.omgservers.dto.tenant.GetVersionShardedResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
 import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
-import com.omgservers.dto.tenant.SyncProjectShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectShardedResponse;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
-import com.omgservers.dto.tenant.SyncStageShardedResponse;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
-import com.omgservers.dto.tenant.SyncTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncStageShardedRequest;
+import com.omgservers.dto.tenant.SyncStageShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedResponse;
+import com.omgservers.dto.tenant.SyncVersionShardedRequest;
+import com.omgservers.dto.tenant.SyncVersionShardedResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
+import com.omgservers.module.tenant.impl.service.tenantWebService.TenantWebService;
+import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -133,5 +145,41 @@ class TenantServiceApiImpl implements TenantServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncStagePermissionShardedResponse> syncStagePermission(SyncStagePermissionShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncStagePermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetVersionShardedResponse> getVersion(GetVersionShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getVersion);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncVersionShardedResponse> syncVersion(SyncVersionShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::syncVersion);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteVersionShardedResponse> deleteVersion(DeleteVersionShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::deleteVersion);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetVersionBytecodeShardedResponse> getVersionBytecode(GetVersionBytecodeShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getBytecode);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetVersionConfigShardedResponse> getVersionConfig(GetVersionConfigShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getVersionConfig);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetCurrentVersionIdShardedResponse> getCurrentVersionId(GetCurrentVersionIdShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, tenantWebService::getCurrentVersionId);
     }
 }

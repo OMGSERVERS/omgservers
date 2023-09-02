@@ -5,6 +5,8 @@ import com.omgservers.module.tenant.impl.service.projectShardedService.ProjectSh
 import com.omgservers.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.module.tenant.impl.service.stageShardedService.StageShardedService;
 import com.omgservers.module.tenant.impl.service.tenantShardedService.TenantShardedService;
+import com.omgservers.module.tenant.impl.service.versionService.VersionService;
+import com.omgservers.module.tenant.impl.service.versionShardedService.VersionShardedService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 class TenantModuleImpl implements TenantModule {
 
     final ProjectShardedService projectShardedService;
+    final VersionShardedService versionShardedService;
     final TenantShardedService tenantShardedService;
     final StageShardedService stageShardedService;
+    final VersionService versionService;
     final StageService stageService;
 
     public TenantShardedService getTenantShardedService() {
@@ -34,5 +38,14 @@ class TenantModuleImpl implements TenantModule {
 
     public StageService getStageService() {
         return stageService;
+    }
+
+    public VersionShardedService getVersionShardedService() {
+        return versionShardedService;
+    }
+
+    @Override
+    public VersionService getVersionService() {
+        return versionService;
     }
 }

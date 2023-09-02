@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-base</artifactId>
+            <artifactId>omgservers-lua</artifactId>
         </dependency>
         <!-- external -->
         <dependency>

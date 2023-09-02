@@ -5,8 +5,8 @@ import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.tenant.GetStageVersionRequest;
-import com.omgservers.dto.tenant.GetStageVersionResponse;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -54,9 +54,11 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             final var tenantId = matchmaker.getTenantId();
                             final var stageId = matchmaker.getStageId();
-                            final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
-                            return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
-                                    .map(GetStageVersionResponse::getVersionId)
+                            final var getCurrentVersionIdShardedRequest = new
+                                    GetCurrentVersionIdShardedRequest(tenantId, stageId);
+                            return tenantModule.getVersionShardedService()
+                                    .getCurrentVersionId(getCurrentVersionIdShardedRequest)
+                                    .map(GetCurrentVersionIdShardedResponse::getVersionId)
                                     .flatMap(versionId -> {
                                         final var runtimeId = match.getRuntimeId();
                                         // TODO: Detect runtime type
@@ -70,7 +72,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                                                 RuntimeTypeEnum.EMBEDDED_LUA,
                                                 RuntimeConfigModel.create());
                                         final var syncRuntimeInternalRequest = new SyncRuntimeShardedRequest(runtime);
-                                        return runtimeModule.getRuntimeShardedService().syncRuntime(syncRuntimeInternalRequest)
+                                        return runtimeModule.getRuntimeShardedService()
+                                                .syncRuntime(syncRuntimeInternalRequest)
                                                 .replaceWith(true);
                                     });
                         })

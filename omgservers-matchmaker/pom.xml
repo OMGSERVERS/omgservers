@@ -18,10 +18,6 @@
             <groupId>com.omgservers</groupId>
             <artifactId>omgservers-tenant</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-version</artifactId>
-        </dependency>
         <!-- external -->
         <dependency>
             <groupId>io.quarkus</groupId>

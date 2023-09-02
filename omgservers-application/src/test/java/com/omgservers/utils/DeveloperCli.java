@@ -8,11 +8,8 @@ import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.dto.developer.GetVersionStatusDeveloperRequest;
-import com.omgservers.dto.developer.GetVersionStatusDeveloperResponse;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.model.version.VersionStatusEnum;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -53,12 +50,12 @@ public class DeveloperCli {
         return response;
     }
 
-    public CreateVersionDeveloperResponse createVersion(String token, Long tenantId, Long stageId, VersionStageConfigModel stageConfig, VersionSourceCodeModel sourceCode) throws JsonProcessingException {
+    public CreateVersionDeveloperResponse createVersion(String token, Long tenantId, Long stageId, VersionConfigModel versionConfig, VersionSourceCodeModel sourceCode) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateVersionDeveloperRequest(tenantId, stageId, stageConfig, sourceCode)))
+                .body(objectMapper.writeValueAsString(new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
                 .when().put("/omgservers/developer-api/v1/requests/create-version");
         responseSpecification.then().statusCode(200);
 
@@ -66,31 +63,4 @@ public class DeveloperCli {
         log.info("Version was created, response={}", response);
         return response;
     }
-
-    public VersionStatusEnum getVersionStatus(String token, Long versionId) throws JsonProcessingException {
-        final var responseSpecification = RestAssured
-                .with()
-                .auth().oauth2(token)
-                .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new GetVersionStatusDeveloperRequest(versionId)))
-                .when().put("/omgservers/developer-api/v1/requests/get-version-status");
-        responseSpecification.then().statusCode(200);
-
-        final var response = responseSpecification.getBody().as(GetVersionStatusDeveloperResponse.class);
-        log.info("Version status was found, response={}", response);
-        return response.getStatus();
-    }
-
-//
-//    public Long createVersion(Long tenantId, Long stageId, VersionStageConfigModel stageConfig, VersionSourceCodeModel sourceCode) {
-//        final var createVersionDeveloperRequest = new CreateVersionDeveloperRequest(tenantId, stageId, stageConfig, sourceCode);
-//        final var createVersionDeveloperResponse = clientForAuthenticatedAccess.createVersion(TIMEOUT, rawToken, createVersionDeveloperRequest);
-//        return createVersionDeveloperResponse.getId();
-//    }
-//
-//    public VersionStatusEnum getVersionStatus(Long versionId) {
-//        final var response = clientForAuthenticatedAccess
-//                .getVersionStatus(TIMEOUT, rawToken, new GetVersionStatusDeveloperRequest(versionId));
-//        return response.getStatus();
-//    }
 }

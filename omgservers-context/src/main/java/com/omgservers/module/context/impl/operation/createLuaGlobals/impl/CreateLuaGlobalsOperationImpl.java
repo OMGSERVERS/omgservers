@@ -1,14 +1,11 @@
 package com.omgservers.module.context.impl.operation.createLuaGlobals.impl;
 
-import com.omgservers.dto.version.GetVersionShardedRequest;
-import com.omgservers.dto.version.GetVersionShardedResponse;
-import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionStatusEnum;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedResponse;
+import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import com.omgservers.module.context.impl.operation.decodeLuaBytecode.DecodeLuaBytecodeOperation;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.version.VersionModule;
 import com.omgservers.operation.createServerGlobals.CreateServerGlobalsOperation;
 import com.omgservers.operation.createUserGlobals.CreateUserGlobalsOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,7 +19,6 @@ import org.luaj.vm2.LuaValue;
 @AllArgsConstructor
 class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
 
-    final VersionModule versionModule;
     final TenantModule tenantModule;
 
     final DecodeLuaBytecodeOperation decodeLuaBytecodeOperation;
@@ -30,19 +26,16 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
     final CreateServerGlobalsOperation createServerGlobalsOperation;
 
     @Override
-    public Uni<LuaGlobals> createLuaGlobals(final Long versionId) {
+    public Uni<LuaGlobals> createLuaGlobals(final Long tenantId, final Long versionId) {
+        if (tenantId == null) {
+            throw new IllegalArgumentException("tenantId is null");
+        }
         if (versionId == null) {
             throw new IllegalArgumentException("versionId is null");
         }
 
         // TODO: Use version from runtime
-        return getVersion(versionId)
-                .map(version -> {
-                    if (version.getStatus() != VersionStatusEnum.DEPLOYED) {
-                        throw new ServerSideConflictException("Version wasn't deployed yet, version=" + version);
-                    }
-                    return version.getBytecode();
-                })
+        return getVersionBytecode(tenantId, versionId)
                 .map(versionBytecode -> {
                     final var base64Files = versionBytecode.getFiles();
                     log.info("Create lua runtime, countOfFiles={}", base64Files.size());
@@ -58,9 +51,9 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
                 .invoke(luaGlobals -> log.info("Lua runtime was created, {}", luaGlobals));
     }
 
-    Uni<VersionModel> getVersion(final Long versionId) {
-        final var request = new GetVersionShardedRequest(versionId);
-        return versionModule.getVersionShardedService().getVersion(request)
-                .map(GetVersionShardedResponse::getVersion);
+    Uni<VersionBytecodeModel> getVersionBytecode(final Long tenantId, final Long versionId) {
+        final var request = new GetVersionBytecodeShardedRequest(tenantId, versionId);
+        return tenantModule.getVersionShardedService().getVersionBytecode(request)
+                .map(GetVersionBytecodeShardedResponse::getBytecode);
     }
 }

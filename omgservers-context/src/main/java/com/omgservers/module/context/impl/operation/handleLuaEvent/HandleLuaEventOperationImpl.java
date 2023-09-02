@@ -17,11 +17,12 @@ class HandleLuaEventOperationImpl implements HandleLuaEventOperation {
     final CreateLuaGlobalsOperation createLuaGlobalsOperation;
 
     @Override
-    public Uni<Void> handleLuaEvent(final Long versionId,
+    public Uni<Void> handleLuaEvent(final Long tenantId,
+                                    final Long versionId,
                                     final LuaEvent luaEvent,
                                     final LuaTable context) {
         // TODO: cache/reuse by some cache key
-        return createLuaGlobalsOperation.createLuaGlobals(versionId)
+        return createLuaGlobalsOperation.createLuaGlobals(tenantId, versionId)
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(luaGlobals -> luaGlobals.handleEvent(luaEvent, context))
                 .replaceWithVoid();

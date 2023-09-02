@@ -2,7 +2,6 @@ package com.omgservers.module.tenant.impl.operation.upsertStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
@@ -25,8 +24,8 @@ import java.util.ArrayList;
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
     static private final String sql = """
-            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, version_id, config)
-            values($1, $2, $3, $4, $5, $6, $7, $8)
+            insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, config)
+            values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
             nothing
             """;
@@ -70,7 +69,6 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                         add(stage.getModified().atOffset(ZoneOffset.UTC));
                         add(stage.getSecret());
                         add(stage.getMatchmakerId());
-                        add(stage.getVersionId());
                         add(configString);
                     }}))
                     .map(rowSet -> rowSet.rowCount() > 0);

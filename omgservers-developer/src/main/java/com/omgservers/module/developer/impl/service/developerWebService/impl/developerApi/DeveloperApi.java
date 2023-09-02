@@ -1,13 +1,11 @@
 package com.omgservers.module.developer.impl.service.developerWebService.impl.developerApi;
 
 import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
-import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
-import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.dto.developer.GetVersionStatusDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
+import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.dto.developer.CreateTokenDeveloperResponse;
+import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.dto.developer.GetVersionStatusDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -41,15 +39,6 @@ public interface DeveloperApi {
 
     default CreateVersionDeveloperResponse createVersion(long timeout, CreateVersionDeveloperRequest request) {
         return createVersion(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
-    @PUT
-    @Path("/get-version-status")
-    Uni<GetVersionStatusDeveloperResponse> getVersionStatus(GetVersionStatusDeveloperRequest request);
-
-    default GetVersionStatusDeveloperResponse getVersionStatus(long timeout, GetVersionStatusDeveloperRequest request) {
-        return getVersionStatus(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

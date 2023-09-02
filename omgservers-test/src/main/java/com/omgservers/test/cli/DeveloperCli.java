@@ -4,10 +4,8 @@ import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.dto.developer.GetVersionStatusDeveloperRequest;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
-import com.omgservers.model.version.VersionStatusEnum;
 import com.omgservers.test.operations.getConfigOperation.GetConfigOperation;
 import com.omgservers.test.operations.getDeveloperClientOperation.DeveloperClientForAnonymousAccess;
 import com.omgservers.test.operations.getDeveloperClientOperation.DeveloperClientForAuthenticatedAccess;
@@ -63,15 +61,9 @@ public class DeveloperCli {
         return response;
     }
 
-    public Long createVersion(Long tenantId, Long stageId, VersionStageConfigModel stageConfig, VersionSourceCodeModel sourceCode) {
-        final var createVersionDeveloperRequest = new CreateVersionDeveloperRequest(tenantId, stageId, stageConfig, sourceCode);
+    public Long createVersion(Long tenantId, Long stageId, VersionConfigModel versionConfig, VersionSourceCodeModel sourceCode) {
+        final var createVersionDeveloperRequest = new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode);
         final var createVersionDeveloperResponse = clientForAuthenticatedAccess.createVersion(TIMEOUT, rawToken, createVersionDeveloperRequest);
         return createVersionDeveloperResponse.getId();
-    }
-
-    public VersionStatusEnum getVersionStatus(Long versionId) {
-        final var response = clientForAuthenticatedAccess
-                .getVersionStatus(TIMEOUT, rawToken, new GetVersionStatusDeveloperRequest(versionId));
-        return response.getStatus();
     }
 }

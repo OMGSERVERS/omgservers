@@ -2,8 +2,8 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 
 import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
-import com.omgservers.dto.tenant.GetStageVersionRequest;
-import com.omgservers.dto.tenant.GetStageVersionResponse;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
 import com.omgservers.module.context.impl.luaEvent.player.LuaPlayerSignedInEvent;
 import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import com.omgservers.module.context.impl.operation.createLuaPlayerContext.CreateLuaPlayerContextOperation;
@@ -42,13 +42,13 @@ class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMe
 
         final var luaEvent = new LuaPlayerSignedInEvent(userId, playerId, clientId);
 
-        final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
-        return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
-                .map(GetStageVersionResponse::getVersionId)
+        final var getCurrentVersionIdShardedRequest = new GetCurrentVersionIdShardedRequest(tenantId, stageId);
+        return tenantModule.getVersionShardedService().getCurrentVersionId(getCurrentVersionIdShardedRequest)
+                .map(GetCurrentVersionIdShardedResponse::getVersionId)
                 .flatMap(versionId -> createLuaPlayerContextOperation
                         .createLuaPlayerContext(userId, playerId, clientId)
                         .flatMap(luaPlayerContext -> handleLuaEventOperation
-                                .handleLuaEvent(versionId, luaEvent, luaPlayerContext)))
+                                .handleLuaEvent(tenantId, versionId, luaEvent, luaPlayerContext)))
                 .replaceWith(new HandlePlayerSignedInEventResponse(true));
     }
 }

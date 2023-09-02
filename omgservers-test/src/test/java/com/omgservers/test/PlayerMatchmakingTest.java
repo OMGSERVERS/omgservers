@@ -1,8 +1,8 @@
 package com.omgservers.test;
 
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.test.operations.bootstrapVersionOperation.BootstrapVersionOperation;
 import com.omgservers.test.serviceClient.ServiceClientFactory;
 import io.quarkus.test.junit.QuarkusTest;
@@ -35,7 +35,7 @@ public class PlayerMatchmakingTest extends Assertions {
 
                         print("version was initialized")
                         """,
-                new VersionStageConfigModel(new ArrayList<>() {{
+                new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("death-match", 2, 16, new ArrayList<>() {{
                         add(new VersionGroupModel("players", 2, 16));
                     }}));

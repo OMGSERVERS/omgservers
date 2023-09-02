@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class VersionDeletedEventBodyModel extends EventBodyModel {
 
+    Long tenantId;
     Long id;
 
     @Override
@@ -22,6 +23,6 @@ public class VersionDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return id;
+        return tenantId;
     }
 }

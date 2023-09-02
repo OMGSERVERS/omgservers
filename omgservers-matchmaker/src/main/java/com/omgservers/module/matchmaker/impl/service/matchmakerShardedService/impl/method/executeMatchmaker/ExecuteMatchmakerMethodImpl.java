@@ -4,16 +4,16 @@ import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
-import com.omgservers.dto.tenant.GetStageVersionRequest;
-import com.omgservers.dto.tenant.GetStageVersionResponse;
-import com.omgservers.dto.version.GetStageConfigShardedRequest;
-import com.omgservers.dto.version.GetStageConfigShardedResponse;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetVersionConfigShardedRequest;
+import com.omgservers.dto.tenant.GetVersionConfigShardedResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakingResults.MatchmakingResultsModel;
 import com.omgservers.model.request.RequestModel;
-import com.omgservers.model.version.VersionStageConfigModel;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
 import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
@@ -22,7 +22,6 @@ import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOp
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.version.VersionModule;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -43,7 +42,6 @@ import java.util.stream.Collectors;
 class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
 
     final MatchmakerModule matchmakerModule;
-    final VersionModule versionModule;
     final TenantModule tenantModule;
 
     final DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
@@ -68,10 +66,12 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                             .flatMap(matchmaker -> {
                                 final var tenantId = matchmaker.getTenantId();
                                 final var stageId = matchmaker.getStageId();
-                                final var getStageVersionRequest = new GetStageVersionRequest(tenantId, stageId);
-                                return tenantModule.getStageService().getStageVersion(getStageVersionRequest)
-                                        .map(GetStageVersionResponse::getVersionId)
-                                        .flatMap(versionId -> getVersionStageConfig(versionId)
+                                final var getCurrentVersionIdShardedRequest =
+                                        new GetCurrentVersionIdShardedRequest(tenantId, stageId);
+                                return tenantModule.getVersionShardedService()
+                                        .getCurrentVersionId(getCurrentVersionIdShardedRequest)
+                                        .map(GetCurrentVersionIdShardedResponse::getVersionId)
+                                        .flatMap(versionId -> getVersionStageConfig(tenantId, versionId)
                                                 .flatMap(stageConfig -> executeMatchmaker(
                                                         shardModel.shard(),
                                                         tenantId,
@@ -90,10 +90,10 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 .map(GetMatchmakerShardedResponse::getMatchmaker);
     }
 
-    Uni<VersionStageConfigModel> getVersionStageConfig(final Long versionId) {
-        final var request = new GetStageConfigShardedRequest(versionId);
-        return versionModule.getVersionShardedService().getStageConfig(request)
-                .map(GetStageConfigShardedResponse::getStageConfig);
+    Uni<VersionConfigModel> getVersionStageConfig(final Long tenantId, final Long versionId) {
+        final var request = new GetVersionConfigShardedRequest(tenantId, versionId);
+        return tenantModule.getVersionShardedService().getVersionConfig(request)
+                .map(GetVersionConfigShardedResponse::getVersionConfig);
     }
 
     Uni<Boolean> executeMatchmaker(final int shard,
@@ -101,7 +101,7 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                                    final Long stageId,
                                    final Long versionId,
                                    final Long matchmakerId,
-                                   final VersionStageConfigModel stageConfig) {
+                                   final VersionConfigModel versionConfig) {
         final var matchmakerRequests = matchmakerInMemoryCache.getRequests(matchmakerId);
         final var matchmakerMatches = matchmakerInMemoryCache.getMatches(matchmakerId);
         if (matchmakerRequests.isEmpty()) {
@@ -116,7 +116,7 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                     matchmakerId,
                     matchmakerRequests,
                     matchmakerMatches,
-                    stageConfig)
+                    versionConfig)
                     .flatMap(matchmakingResults -> syncMatchmakingResults(matchmakerId, shard, matchmakingResults))
                     .replaceWith(true);
         }
@@ -128,7 +128,7 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                                                final Long matchmakerId,
                                                final List<RequestModel> matchmakerRequests,
                                                final List<MatchModel> matchmakerMatches,
-                                               final VersionStageConfigModel stageConfig) {
+                                               final VersionConfigModel versionConfig) {
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -144,7 +144,7 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                     groupedRequests.forEach((modeName, modeRequests) -> {
                         final var modeMatches = groupedMatches.getOrDefault(modeName, new ArrayList<>());
 
-                        final var modeConfigOptional = stageConfig.getModes().stream()
+                        final var modeConfigOptional = versionConfig.getModes().stream()
                                 .filter(mode -> mode.getName().equals(modeName)).findFirst();
                         if (modeConfigOptional.isPresent()) {
                             final var modeConfig = modeConfigOptional.get();

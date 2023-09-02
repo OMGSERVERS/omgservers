@@ -32,7 +32,7 @@ class HandleUpdateRuntimeCommandMethodImpl implements HandleUpdateRuntimeCommand
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaUpdateRuntimeCommandReceivedEvent(step);
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleUpdateRuntimeCommandResponse(true));
     }

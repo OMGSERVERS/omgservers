@@ -31,7 +31,6 @@ import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
-import com.omgservers.model.event.body.VersionUpdatedEventBodyModel;
 
 public enum EventQualifierEnum {
     JOB_CREATED(JobCreatedEventBodyModel.class),
@@ -47,7 +46,6 @@ public enum EventQualifierEnum {
     STAGE_UPDATED(StageUpdatedEventBodyModel.class),
     STAGE_DELETED(StageDeletedEventBodyModel.class),
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
-    VERSION_UPDATED(VersionUpdatedEventBodyModel.class),
     VERSION_DELETED(VersionDeletedEventBodyModel.class),
     PLAYER_CREATED(PlayerCreatedEventBodyModel.class),
     PLAYER_UPDATED(PlayerCreatedEventBodyModel.class),

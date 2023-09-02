@@ -1,8 +1,8 @@
 package com.omgservers.test.operations.bootstrapVersionOperation;
 
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.model.version.VersionStageConfigModel;
 import com.omgservers.test.cli.AdminCli;
 import com.omgservers.test.cli.DeveloperCli;
 import com.omgservers.test.operations.bootstrapEnvironmentOperation.BootstrapEnvironmentOperation;
@@ -26,11 +26,11 @@ class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
 
     @Override
     public VersionParameters bootstrap(String script) throws InterruptedException {
-        return bootstrap(script, VersionStageConfigModel.create());
+        return bootstrap(script, VersionConfigModel.create());
     }
 
     @Override
-    public VersionParameters bootstrap(String script, VersionStageConfigModel stageConfig) throws InterruptedException {
+    public VersionParameters bootstrap(String script, VersionConfigModel versionConfig) throws InterruptedException {
         bootstrapEnvironmentOperation.bootstrap();
         adminCli.createClient();
         developerCli.createClient();
@@ -51,7 +51,7 @@ class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
-        final var version = developerCli.createVersion(tenantId, stageId, stageConfig, sourceCode);
+        final var version = developerCli.createVersion(tenantId, stageId, versionConfig, sourceCode);
 
         Thread.sleep(2000);
 

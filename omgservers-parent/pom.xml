@@ -74,11 +74,6 @@
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-version</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-matchmaker</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>

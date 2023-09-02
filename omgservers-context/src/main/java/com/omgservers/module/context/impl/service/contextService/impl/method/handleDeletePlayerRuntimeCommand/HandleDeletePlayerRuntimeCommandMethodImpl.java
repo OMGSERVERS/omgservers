@@ -34,7 +34,7 @@ class HandleDeletePlayerRuntimeCommandMethodImpl implements HandleDeletePlayerRu
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaDeletePlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleDeletePlayerRuntimeCommandResponse(true));
     }

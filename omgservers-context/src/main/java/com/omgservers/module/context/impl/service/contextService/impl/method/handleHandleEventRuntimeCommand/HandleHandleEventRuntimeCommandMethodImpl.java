@@ -35,7 +35,7 @@ class HandleHandleEventRuntimeCommandMethodImpl implements HandleHandleEventRunt
         return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .flatMap(luaRuntimeContext -> {
                     final var luaEvent = new LuaHandleEventRuntimeCommandReceivedEvent(userId, playerId, clientId, data);
-                    return handleLuaEventOperation.handleLuaEvent(versionId, luaEvent, luaRuntimeContext);
+                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
                 })
                 .replaceWith(new HandleHandleEventRuntimeCommandResponse(true));
     }

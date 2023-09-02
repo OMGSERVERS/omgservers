@@ -4,12 +4,22 @@ import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
+import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
+import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.GetTenantShardedResponse;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
+import com.omgservers.dto.tenant.GetVersionBytecodeShardedResponse;
+import com.omgservers.dto.tenant.GetVersionConfigShardedRequest;
+import com.omgservers.dto.tenant.GetVersionConfigShardedResponse;
+import com.omgservers.dto.tenant.GetVersionShardedRequest;
+import com.omgservers.dto.tenant.GetVersionShardedResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
@@ -17,17 +27,19 @@ import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectShardedResponse;
-import com.omgservers.dto.tenant.SyncProjectPermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
+import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
 import com.omgservers.dto.tenant.SyncStageShardedResponse;
-import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
-import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
+import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedResponse;
+import com.omgservers.dto.tenant.SyncVersionShardedRequest;
+import com.omgservers.dto.tenant.SyncVersionShardedResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -168,6 +180,60 @@ public interface TenantServiceApi {
 
     default SyncStagePermissionShardedResponse syncStagePermission(long timeout, SyncStagePermissionShardedRequest request) {
         return syncStagePermission(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/get-version")
+    Uni<GetVersionShardedResponse> getVersion(GetVersionShardedRequest request);
+
+    default GetVersionShardedResponse getVersion(long timeout, GetVersionShardedRequest request) {
+        return getVersion(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/sync-version")
+    Uni<SyncVersionShardedResponse> syncVersion(SyncVersionShardedRequest request);
+
+    default SyncVersionShardedResponse syncVersion(long timeout, SyncVersionShardedRequest request) {
+        return syncVersion(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/delete-version")
+    Uni<DeleteVersionShardedResponse> deleteVersion(DeleteVersionShardedRequest request);
+
+    default void deleteVersion(long timeout, DeleteVersionShardedRequest request) {
+        deleteVersion(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/get-version-bytecode")
+    Uni<GetVersionBytecodeShardedResponse> getVersionBytecode(GetVersionBytecodeShardedRequest request);
+
+    default GetVersionBytecodeShardedResponse getVersionBytecode(long timeout, GetVersionBytecodeShardedRequest request) {
+        return getVersionBytecode(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/get-version-config")
+    Uni<GetVersionConfigShardedResponse> getVersionConfig(GetVersionConfigShardedRequest request);
+
+    default GetVersionConfigShardedResponse getVersionConfig(long timeout, GetVersionConfigShardedRequest request) {
+        return getVersionConfig(request)
+                .await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    @PUT
+    @Path("/get-current-version-id")
+    Uni<GetCurrentVersionIdShardedResponse> getCurrentVersionId(GetCurrentVersionIdShardedRequest request);
+
+    default GetCurrentVersionIdShardedResponse getCurrentVersionId(long timeout, GetCurrentVersionIdShardedRequest request) {
+        return getCurrentVersionId(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }
