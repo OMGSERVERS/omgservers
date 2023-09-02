@@ -3,8 +3,10 @@ package com.omgservers.module.user.impl.operation.selectToken;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.module.user.factory.TokenModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
-import com.omgservers.module.user.impl.operation.insertToken.InsertTokenOperation;
+import com.omgservers.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
+import com.omgservers.module.user.impl.operation.upsertToken.UpsertTokenOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,16 +25,22 @@ class SelectTokenOperationTest extends Assertions {
     SelectTokenOperation selectTokenOperation;
 
     @Inject
-    InsertTokenOperation insertTokenOperation;
+    UpsertTokenOperation upsertTokenOperation;
 
     @Inject
     UpsertUserOperation upsertUserOperation;
 
     @Inject
-    UserModelFactory userModelFactory;
+    CreateUserTokenOperation createUserTokenOperation;
 
     @Inject
     GenerateIdOperation generateIdOperation;
+
+    @Inject
+    UserModelFactory userModelFactory;
+
+    @Inject
+    TokenModelFactory tokenModelFactory;
 
     @Inject
     PgPool pgPool;
@@ -42,20 +50,23 @@ class SelectTokenOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var tokenObject = insertTokenOperation.insertToken(TIMEOUT, pgPool, shard, user).getTokenObject();
-        final var tokenUuid = tokenObject.getId();
+        final var tokenContainer = createUserTokenOperation.createUserToken(user);
+        final var tokenModel1 = tokenModelFactory.create(tokenContainer);
+        assertTrue(upsertTokenOperation.upsertToken(TIMEOUT, pgPool, shard, tokenModel1));
 
-        TokenModel tokenModel = selectTokenOperation.selectToken(TIMEOUT, pgPool, shard, tokenUuid);
-        assertEquals(tokenObject.getUserId(), tokenModel.getUserId());
-        assertEquals(tokenObject.getId(), tokenModel.getId());
+        TokenModel tokenModel2 = selectTokenOperation.selectToken(TIMEOUT, pgPool, shard, tokenModel1.getId());
+        assertEquals(tokenModel2, tokenModel1);
     }
 
     @Test
-    void givenUnknownUuid_whenSelectToken_thenServerSideNotFoundException() {
+    void givenUnknownId_whenSelectToken_thenException() {
         final var shard = 0;
-        final var tokenId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectTokenOperation
-                .selectToken(TIMEOUT, pgPool, shard, tokenId));
+                .selectToken(TIMEOUT, pgPool, shard, tokenId()));
+    }
+
+    Long tokenId() {
+        return generateIdOperation.generateId();
     }
 }

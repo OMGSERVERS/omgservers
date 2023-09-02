@@ -31,7 +31,7 @@ class DecodeTokenOperationImpl implements DecodeTokenOperation {
             log.info("Token was decoded, token={}", userTokenModel);
             return userTokenModel;
         } catch (Exception e) {
-            throw new ServerSideBadRequestException("decoding failed, " + e.getMessage(), e);
+            throw new ServerSideBadRequestException("raw token is wrong, " + e.getMessage(), e);
         }
     }
 }

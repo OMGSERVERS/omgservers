@@ -1,8 +1,9 @@
-package com.omgservers.module.user.impl.operation.insertToken;
+package com.omgservers.module.user.impl.operation.upsertToken;
 
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.user.UserTokenContainerModel;
+import com.omgservers.module.user.factory.TokenModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -13,32 +14,36 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class InsertTokenOperationTest extends Assertions {
+class UpsertTokenOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    InsertTokenOperation insertTokenOperation;
+    UpsertTokenOperation upsertTokenOperation;
 
     @Inject
     UpsertUserOperation upsertUserOperation;
 
     @Inject
+    CreateUserTokenOperation createUserTokenOperation;
+
+    @Inject
     UserModelFactory userModelFactory;
+
+    @Inject
+    TokenModelFactory tokenModelFactory;
 
     @Inject
     PgPool pgPool;
 
     @Test
-    void givenUser_whenInsertToken_thenInserted() {
+    void givenToken_whenUpsertToken_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
 
-        final var tokenContainer = insertTokenOperation.insertToken(TIMEOUT, pgPool, shard, user);
-        assertNotNull(tokenContainer);
-        UserTokenContainerModel.validateUserTokenContainerModel(tokenContainer);
-        assertEquals(user.getId(), tokenContainer.getTokenObject().getUserId());
-        assertEquals(user.getRole(), tokenContainer.getTokenObject().getRole());
-        assertTrue(tokenContainer.getLifetime() > 0);
+        final var tokenContainer = createUserTokenOperation.createUserToken(user);
+        final var tokenModel = tokenModelFactory.create(tokenContainer);
+
+        assertTrue(upsertTokenOperation.upsertToken(TIMEOUT, pgPool, shard, tokenModel));
     }
 }

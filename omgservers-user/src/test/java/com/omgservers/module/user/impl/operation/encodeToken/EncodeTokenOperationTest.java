@@ -20,7 +20,7 @@ class EncodeTokenOperationTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenToken_whenEncodeToken_thenRawToken() {
+    void givenUserToken_whenEncodeToken_thenRawToken() {
         UserTokenModel token = new UserTokenModel();
         token.setId(generateIdOperation.generateId());
         token.setUserId(generateIdOperation.generateId());

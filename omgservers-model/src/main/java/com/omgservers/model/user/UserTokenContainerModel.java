@@ -7,10 +7,9 @@ import lombok.ToString;
 
 @Data
 @AllArgsConstructor
-@ToString(exclude = {"rawToken"})
 public class UserTokenContainerModel {
 
-    static public void validateUserTokenContainerModel(UserTokenContainerModel userTokenContainerModel) {
+    static public void validate(UserTokenContainerModel userTokenContainerModel) {
         if (userTokenContainerModel == null) {
             throw new ServerSideBadRequestException("tokenContainer is null");
         }
@@ -30,7 +29,8 @@ public class UserTokenContainerModel {
         }
     }
 
-    final UserTokenModel tokenObject;
-    final String rawToken;
-    final long lifetime;
+    UserTokenModel tokenObject;
+    @ToString.Exclude
+    String rawToken;
+    long lifetime;
 }
