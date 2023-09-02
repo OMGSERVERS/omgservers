@@ -24,7 +24,8 @@ pushd omgservers-handler; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-job; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-developer; ./mvnw ${MVN_ARGS}; popd
 pushd omgservers-admin; ./mvnw ${MVN_ARGS}; popd
-pushd omgservers-application; ./mvnw ${MVN_ARGS}; popd
+#pushd omgservers-application; ./mvnw ${MVN_ARGS}; popd
+pushd omgservers-documentation; ./mvnw ${MVN_ARGS}; popd
 
 FINISHED_AT=$(date)
 
