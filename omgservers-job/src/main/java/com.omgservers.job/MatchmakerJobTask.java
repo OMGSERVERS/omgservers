@@ -1,6 +1,6 @@
 package com.omgservers.job;
 
-import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
+import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.model.job.JobType;
 import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -24,9 +24,9 @@ public class MatchmakerJobTask implements JobTask {
 
     @Override
     public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new DoMatchmakingShardedRequest(entity);
+        final var request = new ExecuteMatchmakerShardedRequest(entity);
         //TODO: handle response (proceed or not)
-        return matchmakerModule.getMatchmakerShardedService().doMatchmaking(request)
+        return matchmakerModule.getMatchmakerShardedService().executeMatchmaker(request)
                 .replaceWith(true);
     }
 }

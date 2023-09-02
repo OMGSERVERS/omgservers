@@ -30,19 +30,19 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
     final GenerateIdOperation generateIdOperation;
 
     @Override
-    public GreedyMatchmakingResult doGreedyMatchmaking(final Long tenantId,
-                                                       final Long stageId,
-                                                       final Long versionId,
-                                                       final Long matchmakerId,
-                                                       final VersionModeModel modeConfig,
-                                                       final List<RequestModel> matchmakerRequests,
-                                                       final List<MatchModel> matchmakerMatches) {
+    public DoGreedyMatchmakingResult doGreedyMatchmaking(final Long tenantId,
+                                                         final Long stageId,
+                                                         final Long versionId,
+                                                         final Long matchmakerId,
+                                                         final VersionModeModel modeConfig,
+                                                         final List<RequestModel> matchmakerRequests,
+                                                         final List<MatchModel> matchmakerMatches) {
         final var currentMatches = new ArrayList<>(matchmakerMatches);
         final var createdMatches = new HashSet<MatchModel>();
         final var updatedMatches = new HashSet<MatchModel>();
 
         final var matchedRequests = new HashMap<RequestModel, MatchModel>();
-        final var failedRequests = new ArrayList<RequestModel>();
+        final var completedRequests = new ArrayList<RequestModel>();
 
         matchmakerRequests.forEach(request -> {
             boolean matched = false;
@@ -56,6 +56,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                         updatedMatches.add(match);
                     }
                     matchedRequests.put(request, match);
+                    completedRequests.add(request);
                     break;
                 }
             }
@@ -70,9 +71,9 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                     createdMatches.add(newMatch);
                     matchedRequests.put(request, newMatch);
                 } else {
-                    // Request can't be matched even with new match
-                    failedRequests.add(request);
+                    log.warn("Request can't be matched event with new match, request={}", request);
                 }
+                completedRequests.add(request);
             }
         });
 
@@ -103,13 +104,13 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 })
                 .toList();
 
-        final var resultFailedRequests = failedRequests.stream().toList();
+        final var resultCompletedRequests = completedRequests.stream().toList();
 
-        return new GreedyMatchmakingResult(
+        return new DoGreedyMatchmakingResult(
                 resultCreatedMatches,
                 resultUpdatedMatches,
                 resultMatchedClients,
-                resultFailedRequests);
+                resultCompletedRequests);
     }
 
     boolean matchRequestWithMatch(RequestModel request, MatchModel match) {

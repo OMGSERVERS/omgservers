@@ -8,8 +8,8 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
-import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
+import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
+import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
@@ -28,7 +28,7 @@ import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.im
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteMatchClient.DeleteMatchClientMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteMatchmaker.DeleteMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteRequest.DeleteRequestMethod;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.doMatchmaking.DoMatchmakingMethod;
+import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.executeMatchmaker.ExecuteMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.getMatch.GetMatchMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.getMatchmaker.GetMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncMatch.SyncMatchMethod;
@@ -55,7 +55,7 @@ class MatchmakerShardedServiceImpl implements MatchmakerShardedService {
     final SyncMatchmakerMethod syncMatchmakerMethod;
     final GetMatchmakerMethod getMatchmakerMethod;
     final DeleteRequestMethod deleteRequestMethod;
-    final DoMatchmakingMethod doMatchmakingMethod;
+    final ExecuteMatchmakerMethod executeMatchmakerMethod;
     final SyncRequestMethod syncRequestMethod;
     final DeleteMatchMethod deleteMatchMethod;
     final SyncMatchMethod syncMatchMethod;
@@ -156,11 +156,11 @@ class MatchmakerShardedServiceImpl implements MatchmakerShardedService {
     }
 
     @Override
-    public Uni<DoMatchmakingShardedResponse> doMatchmaking(DoMatchmakingShardedRequest request) {
+    public Uni<ExecuteMatchmakerShardedResponse> executeMatchmaker(ExecuteMatchmakerShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DoMatchmakingShardedRequest::validate,
+                ExecuteMatchmakerShardedRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
-                MatchmakerServiceApi::doMatchmaking,
-                doMatchmakingMethod::doMatchmaking);
+                MatchmakerServiceApi::executeMatchmaker,
+                executeMatchmakerMethod::executeMatchmaker);
     }
 }

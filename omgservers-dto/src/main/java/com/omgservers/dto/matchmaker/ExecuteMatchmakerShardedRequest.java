@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoMatchmakingShardedRequest implements ShardedRequest {
+public class ExecuteMatchmakerShardedRequest implements ShardedRequest {
 
-    static public void validate(DoMatchmakingShardedRequest request) {
+    static public void validate(ExecuteMatchmakerShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

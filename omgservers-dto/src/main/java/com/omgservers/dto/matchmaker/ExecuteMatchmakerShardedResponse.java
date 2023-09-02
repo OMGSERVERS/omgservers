@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DoMatchmakingShardedResponse {
+public class ExecuteMatchmakerShardedResponse {
 
     Boolean proceed;
 }

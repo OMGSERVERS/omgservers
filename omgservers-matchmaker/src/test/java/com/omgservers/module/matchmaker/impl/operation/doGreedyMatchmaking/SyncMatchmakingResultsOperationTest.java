@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-class DoGreedyMatchmakingOperationTest extends Assertions {
+class SyncMatchmakingResultsOperationTest extends Assertions {
 
     @Inject
     DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
@@ -90,7 +90,7 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
         assertEquals(3, result.createdMatches().size());
         assertTrue(result.updatedMatches().isEmpty());
         assertEquals(matchmakerRequests.size(), result.matchedClients().size());
-        assertTrue(result.failedRequests().isEmpty());
+        assertEquals(matchmakerRequests.size(), result.completedRequests().size());
 
         // match 1
         assertEquals(4, result.createdMatches().get(0).getConfig().getGroups().get(0).getRequests().size());

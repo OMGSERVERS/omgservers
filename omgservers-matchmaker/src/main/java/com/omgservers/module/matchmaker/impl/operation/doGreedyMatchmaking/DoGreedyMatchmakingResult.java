@@ -6,9 +6,10 @@ import com.omgservers.model.request.RequestModel;
 
 import java.util.List;
 
-public record GreedyMatchmakingResult(
+public record DoGreedyMatchmakingResult(
+
         List<MatchModel> createdMatches,
         List<MatchModel> updatedMatches,
         List<MatchClientModel> matchedClients,
-        List<RequestModel> failedRequests) {
+        List<RequestModel> completedRequests) {
 }

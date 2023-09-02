@@ -7,11 +7,11 @@ import com.omgservers.model.version.VersionModeModel;
 import java.util.List;
 
 public interface DoGreedyMatchmakingOperation {
-    GreedyMatchmakingResult doGreedyMatchmaking(Long tenantId,
-                                                Long stageId,
-                                                Long versionId,
-                                                Long matchmakerId,
-                                                VersionModeModel modeConfig,
-                                                List<RequestModel> matchmakerRequests,
-                                                List<MatchModel> matchmakerMatches);
+    DoGreedyMatchmakingResult doGreedyMatchmaking(Long tenantId,
+                                                  Long stageId,
+                                                  Long versionId,
+                                                  Long matchmakerId,
+                                                  VersionModeModel modeConfig,
+                                                  List<RequestModel> matchmakerRequests,
+                                                  List<MatchModel> matchmakerMatches);
 }
