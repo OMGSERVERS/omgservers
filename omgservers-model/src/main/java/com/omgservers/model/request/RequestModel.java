@@ -3,6 +3,7 @@ package com.omgservers.model.request;
 import com.omgservers.exception.ServerSideBadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
@@ -19,11 +20,13 @@ public class RequestModel {
     }
 
     Long id;
+
     Long matchmakerId;
     Instant created;
     Instant modified;
     Long userId;
     Long clientId;
     String mode;
+    @EqualsAndHashCode.Exclude
     RequestConfigModel config;
 }

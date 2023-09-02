@@ -1,10 +1,10 @@
 package com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking;
 
-import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -29,7 +29,7 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
 
     @Test
     void testDoGreedyMatchmaking() {
-        final var mode = "teams";
+        final var mode = "2team";
         final var matchmaker = matchmakerId();
         final var tenant = tenantId();
         final var stage = stageId();
@@ -39,25 +39,42 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
             add(VersionGroupModel.create("blue", 1, 2));
         }});
 
-        final var activeRequests = new ArrayList<RequestModel>() {{
+        final var matchmakerRequests = new ArrayList<RequestModel>() {{
+            // match 1, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 1, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 1, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 1, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 1, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 1, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
 
+            // match 2, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 2, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 2, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 2, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 2, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 2, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
 
+            // match 3, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 3, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 3, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 3, group - blue
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            // match 3, group - red
             add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
         }};
 
@@ -67,21 +84,23 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
                 versionId(),
                 matchmaker,
                 modeConfig,
-                activeRequests,
+                matchmakerRequests,
                 new ArrayList<>());
 
-        assertEquals(activeRequests.size(), result.matchedRequests().size());
+        assertEquals(3, result.createdMatches().size());
+        assertTrue(result.updatedMatches().isEmpty());
+        assertEquals(matchmakerRequests.size(), result.matchedClients().size());
         assertTrue(result.failedRequests().isEmpty());
-        assertEquals(3, result.preparedMatches().size());
+
         // match 1
-        assertEquals(4, result.preparedMatches().get(0).getConfig().getGroups().get(0).getRequests().size());
-        assertEquals(2, result.preparedMatches().get(0).getConfig().getGroups().get(1).getRequests().size());
+        assertEquals(4, result.createdMatches().get(0).getConfig().getGroups().get(0).getRequests().size());
+        assertEquals(2, result.createdMatches().get(0).getConfig().getGroups().get(1).getRequests().size());
         // match 2
-        assertEquals(4, result.preparedMatches().get(1).getConfig().getGroups().get(0).getRequests().size());
-        assertEquals(2, result.preparedMatches().get(1).getConfig().getGroups().get(1).getRequests().size());
+        assertEquals(4, result.createdMatches().get(1).getConfig().getGroups().get(0).getRequests().size());
+        assertEquals(2, result.createdMatches().get(1).getConfig().getGroups().get(1).getRequests().size());
         // match 3
-        assertEquals(3, result.preparedMatches().get(2).getConfig().getGroups().get(0).getRequests().size());
-        assertEquals(2, result.preparedMatches().get(2).getConfig().getGroups().get(1).getRequests().size());
+        assertEquals(3, result.createdMatches().get(2).getConfig().getGroups().get(0).getRequests().size());
+        assertEquals(2, result.createdMatches().get(2).getConfig().getGroups().get(1).getRequests().size());
     }
 
     Long matchmakerId() {

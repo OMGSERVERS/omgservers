@@ -14,9 +14,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoGreedyMatchmakingRequest {
+public class DoMatchmakingRequest {
 
-    static public void validate(DoGreedyMatchmakingRequest request) {
+    static public void validate(DoMatchmakingRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

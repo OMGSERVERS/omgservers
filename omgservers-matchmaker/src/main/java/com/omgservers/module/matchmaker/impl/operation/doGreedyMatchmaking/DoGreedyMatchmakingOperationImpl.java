@@ -5,6 +5,7 @@ import com.omgservers.model.match.MatchGroupModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,14 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
+    final MatchClientModelFactory matchClientModelFactory;
     final MatchModelFactory matchModelFactory;
+
     final GenerateIdOperation generateIdOperation;
 
     @Override
@@ -29,21 +35,27 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                                                        final Long versionId,
                                                        final Long matchmakerId,
                                                        final VersionModeModel modeConfig,
-                                                       final List<RequestModel> activeRequests,
-                                                       final List<MatchModel> launchedMatches) {
-        // Temporary do not update already launched matches
-        // List<MatchModel> temporaryMatches = new ArrayList<>(launchedMatches);
-        List<MatchModel> temporaryMatches = new ArrayList<>();
-        List<RequestModel> failedRequests = new ArrayList<>();
+                                                       final List<RequestModel> matchmakerRequests,
+                                                       final List<MatchModel> matchmakerMatches) {
+        final var currentMatches = new ArrayList<>(matchmakerMatches);
+        final var createdMatches = new HashSet<MatchModel>();
+        final var updatedMatches = new HashSet<MatchModel>();
 
-        activeRequests.forEach(request -> {
+        final var matchedRequests = new HashMap<RequestModel, MatchModel>();
+        final var failedRequests = new ArrayList<RequestModel>();
+
+        matchmakerRequests.forEach(request -> {
             boolean matched = false;
 
-            final var sortedMatches = temporaryMatches.stream()
-                    .sorted(Comparator.comparingInt(this::countMatchRequests)).toList();
+            final var sortedMatches = currentMatches.stream()
+                    .sorted(Comparator.comparing(this::countMatchRequests)).toList();
             for (var match : sortedMatches) {
                 matched = matchRequestWithMatch(request, match);
                 if (matched) {
+                    if (!createdMatches.contains(match)) {
+                        updatedMatches.add(match);
+                    }
+                    matchedRequests.put(request, match);
                     break;
                 }
             }
@@ -51,24 +63,53 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
             if (!matched) {
                 final var matchConfig = MatchConfigModel.create(tenantId, stageId, versionId, modeConfig);
                 final var newMatch = matchModelFactory.create(matchmakerId, matchConfig);
-                temporaryMatches.add(newMatch);
+                currentMatches.add(newMatch);
 
-                if (!matchRequestWithMatch(request, newMatch)) {
+                matched = matchRequestWithMatch(request, newMatch);
+                if (matched) {
+                    createdMatches.add(newMatch);
+                    matchedRequests.put(request, newMatch);
+                } else {
                     // Request can't be matched even with new match
                     failedRequests.add(request);
                 }
             }
         });
 
-        final var preparedMatches = temporaryMatches.stream()
+        final var resultCreatedMatches = createdMatches.stream()
                 .filter(this::checkMatchReadiness)
+                .sorted(Comparator.comparing(MatchModel::getId))
                 .toList();
 
-        final var matchedRequests = preparedMatches.stream()
+        final var resultUpdatedMatches = updatedMatches.stream()
+                .filter(this::checkMatchReadiness)
+                .sorted(Comparator.comparing(MatchModel::getId))
+                .toList();
+
+        final var resultMatchedClients = Stream.concat(
+                        resultCreatedMatches.stream(),
+                        resultUpdatedMatches.stream())
                 .flatMap(match -> getMatchRequests(match).stream())
+                .filter(matchedRequests::containsKey)
+                .map(request -> {
+                    final var match = matchedRequests.get(request);
+                    final var matchClient = matchClientModelFactory.create(
+                            matchmakerId,
+                            match.getId(),
+                            request.getUserId(),
+                            request.getClientId(),
+                            request.getId());
+                    return matchClient;
+                })
                 .toList();
 
-        return new GreedyMatchmakingResult(matchedRequests, failedRequests, preparedMatches);
+        final var resultFailedRequests = failedRequests.stream().toList();
+
+        return new GreedyMatchmakingResult(
+                resultCreatedMatches,
+                resultUpdatedMatches,
+                resultMatchedClients,
+                resultFailedRequests);
     }
 
     boolean matchRequestWithMatch(RequestModel request, MatchModel match) {
@@ -82,9 +123,11 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
         }
 
         final var sortedGroups = matchGroups.stream()
-                .sorted(Comparator.comparingInt(g -> g.getRequests().size())).toList();
+                .sorted(Comparator.comparing(g -> g.getRequests().size())).toList();
         for (var group : sortedGroups) {
             if (matchRequestWithGroup(request, group)) {
+                log.info("requestId={} was matched with matchId={}, groupId={}",
+                        request.getId(), match.getId(), group.getConfig().getName());
                 return true;
             }
         }

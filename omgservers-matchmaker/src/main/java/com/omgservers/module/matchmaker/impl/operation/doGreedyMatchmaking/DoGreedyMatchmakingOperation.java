@@ -12,6 +12,6 @@ public interface DoGreedyMatchmakingOperation {
                                                 Long versionId,
                                                 Long matchmakerId,
                                                 VersionModeModel modeConfig,
-                                                List<RequestModel> activeRequests,
-                                                List<MatchModel> launchedMatches);
+                                                List<RequestModel> matchmakerRequests,
+                                                List<MatchModel> matchmakerMatches);
 }

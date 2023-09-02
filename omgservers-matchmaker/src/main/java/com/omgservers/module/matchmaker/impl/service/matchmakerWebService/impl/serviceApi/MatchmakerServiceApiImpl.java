@@ -1,23 +1,27 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerWebService.impl.serviceApi;
 
-import com.omgservers.dto.matchmaker.DeleteMatchShardedResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchClientShardedRequest;
+import com.omgservers.dto.matchmaker.DeleteMatchClientShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
-import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DoMatchmakingShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
+import com.omgservers.dto.matchmaker.DoMatchmakingShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
-import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.SyncMatchClientShardedRequest;
+import com.omgservers.dto.matchmaker.SyncMatchClientShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
-import com.omgservers.dto.matchmaker.SyncMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
-import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
+import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.module.matchmaker.impl.service.matchmakerWebService.MatchmakerWebService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
@@ -82,6 +86,18 @@ public class MatchmakerServiceApiImpl implements MatchmakerServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteMatch);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncMatchClientShardedResponse> syncMatchClient(SyncMatchClientShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::syncMatchClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteMatchClientShardedResponse> deleteMatchClient(DeleteMatchClientShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteMatchClient);
     }
 
     @Override
