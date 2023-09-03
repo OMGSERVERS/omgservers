@@ -8,7 +8,6 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +23,6 @@ class SyncMatchClientMethodImpl implements SyncMatchClientMethod {
 
     final UpsertMatchClientOperation upsertMatchClientOperation;
 
-    final MatchmakerInMemoryCache matchmakerInMemoryCache;
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
     final PgPool pgPool;

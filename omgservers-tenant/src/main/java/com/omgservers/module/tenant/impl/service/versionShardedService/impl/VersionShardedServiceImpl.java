@@ -2,8 +2,8 @@ package com.omgservers.module.tenant.impl.service.versionShardedService.impl;
 
 import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeShardedResponse;
 import com.omgservers.dto.tenant.GetVersionConfigShardedRequest;
@@ -16,7 +16,7 @@ import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.GetTena
 import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.module.tenant.impl.service.versionShardedService.VersionShardedService;
 import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.deleteVersion.DeleteVersionMethod;
-import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.getCurrentVersionId.GetCurrentVersionIdMethod;
+import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.getStageVersionId.GetStageVersionIdMethod;
 import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.getVersion.GetVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.getVersionBytecode.GetVersionBytecodeMethod;
 import com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.getVersionConfig.GetVersionConfigMethod;
@@ -36,7 +36,7 @@ public class VersionShardedServiceImpl implements VersionShardedService {
 
     final GetVersionBytecodeMethod getVersionBytecodeMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
-    final GetCurrentVersionIdMethod getCurrentVersionId;
+    final GetStageVersionIdMethod getStageVersionIdMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final SyncVersionMethod syncVersionMethod;
     final GetVersionMethod getVersionMethod;
@@ -91,11 +91,11 @@ public class VersionShardedServiceImpl implements VersionShardedService {
     }
 
     @Override
-    public Uni<GetCurrentVersionIdShardedResponse> getCurrentVersionId(GetCurrentVersionIdShardedRequest request) {
+    public Uni<GetStageVersionIdShardedResponse> getStageVersionId(GetStageVersionIdShardedRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetCurrentVersionIdShardedRequest::validate,
+                GetStageVersionIdShardedRequest::validate,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getCurrentVersionId,
-                getCurrentVersionId::getCurrentVersionId);
+                TenantModuleClient::getStageVersionId,
+                getStageVersionIdMethod::getStageVersionId);
     }
 }

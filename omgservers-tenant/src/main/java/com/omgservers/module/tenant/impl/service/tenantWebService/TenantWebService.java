@@ -6,8 +6,8 @@ import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
@@ -84,5 +84,5 @@ public interface TenantWebService {
 
     Uni<GetVersionConfigShardedResponse> getVersionConfig(GetVersionConfigShardedRequest request);
 
-    Uni<GetCurrentVersionIdShardedResponse> getCurrentVersionId(GetCurrentVersionIdShardedRequest request);
+    Uni<GetStageVersionIdShardedResponse> getStageVersionId(GetStageVersionIdShardedRequest request);
 }

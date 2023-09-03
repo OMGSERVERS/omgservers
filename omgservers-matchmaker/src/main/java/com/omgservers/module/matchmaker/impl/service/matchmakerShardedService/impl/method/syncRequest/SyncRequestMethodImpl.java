@@ -2,12 +2,11 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
+import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +21,6 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     final InternalModule internalModule;
 
     final UpsertRequestOperation upsertRequestOperation;
-
-    final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -45,7 +42,6 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
                         }
                 ))
                 .map(ChangeWithLogResponse::getResult)
-                .invoke(inserted -> matchmakerInMemoryCache.addRequest(requestModel))
                 .map(SyncRequestShardedResponse::new);
     }
 }

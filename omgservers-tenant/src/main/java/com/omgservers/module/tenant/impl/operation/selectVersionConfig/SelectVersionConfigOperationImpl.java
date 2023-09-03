@@ -24,7 +24,7 @@ import java.io.IOException;
 class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
 
     static private final String sql = """
-            select stage_config
+            select config
             from $schema.tab_tenant_version
             where id = $1
             limit 1
@@ -55,9 +55,9 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                         try {
                             log.info("Version was found, versionId={}", versionId);
                             final var row = iterator.next();
-                            final var stageConfig = objectMapper.readValue(row.getString("stage_config"),
+                            final var versionConfig = objectMapper.readValue(row.getString("config"),
                                     VersionConfigModel.class);
-                            return stageConfig;
+                            return versionConfig;
                         } catch (IOException e) {
                             throw new ServerSideInternalException("stage config can't be parsed, " +
                                     "versionId=" + versionId);

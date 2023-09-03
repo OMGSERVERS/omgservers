@@ -1,16 +1,15 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncMatch;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
 import com.omgservers.dto.matchmaker.SyncMatchShardedRequest;
-import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
-import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
+import com.omgservers.dto.matchmaker.SyncMatchShardedResponse;
+import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,9 +23,10 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
 
     final InternalModule internalModule;
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchOperation upsertMatchOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final MatchmakerInMemoryCache matchmakerInMemoryCache;
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -36,26 +36,14 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
         SyncMatchShardedRequest.validate(request);
 
         final var match = request.getMatch();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> upsertMatchOperation
-                                .upsertMatch(sqlConnection, shardModel.shard(), match),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Match was created, match=" + match);
-                            } else {
-                                return logModelFactory.create("Match was updated, match=" + match);
-                            }
-                        },
-                        inserted -> {
-                            if (inserted) {
-                                return new MatchCreatedEventBodyModel(match.getMatchmakerId(), match.getId());
-                            } else {
-                                return new MatchUpdatedEventBodyModel(match.getMatchmakerId(), match.getId());
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
-                .invoke(inserted -> matchmakerInMemoryCache.addMatch(match))
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, match))
                 .map(SyncMatchShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, MatchModel match) {
+        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
+                upsertMatchOperation.upsertMatch(context, sqlConnection, shardModel.shard(), match));
     }
 }

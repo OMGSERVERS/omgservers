@@ -38,7 +38,7 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
         return getVersionBytecode(tenantId, versionId)
                 .map(versionBytecode -> {
                     final var base64Files = versionBytecode.getFiles();
-                    log.info("Create lua runtime, countOfFiles={}", base64Files.size());
+                    log.info("Create lua globals, countOfFiles={}", base64Files.size());
                     final var luaBytecode = decodeLuaBytecodeOperation.decodeLuaBytecode(base64Files);
                     // TODO: use user globals?
                     final var globals = createServerGlobalsOperation.createServerGlobals();
@@ -48,7 +48,7 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
                     luaGlobals.getGlobals().get("dofile").call(LuaValue.valueOf("main.lua"));
                     return luaGlobals;
                 })
-                .invoke(luaGlobals -> log.info("Lua runtime was created, {}", luaGlobals));
+                .invoke(luaGlobals -> log.info("Lua globals was created, {}", luaGlobals));
     }
 
     Uni<VersionBytecodeModel> getVersionBytecode(final Long tenantId, final Long versionId) {

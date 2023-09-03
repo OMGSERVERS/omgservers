@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetCurrentVersionIdShardedResponse {
+public class GetStageVersionIdShardedResponse {
 
     Long versionId;
 }

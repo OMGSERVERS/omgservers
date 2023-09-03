@@ -1,11 +1,13 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.executeMatchmaker;
 
+import com.omgservers.ChangeContext;
+import com.omgservers.Dispatcher;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetVersionConfigShardedRequest;
 import com.omgservers.dto.tenant.GetVersionConfigShardedResponse;
 import com.omgservers.model.match.MatchModel;
@@ -14,14 +16,20 @@ import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakingResults.MatchmakingResultsModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
 import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
+import com.omgservers.module.matchmaker.impl.operation.selectMatchesByMatchmakerId.SelectMatchesByMatchmakerIdOperation;
+import com.omgservers.module.matchmaker.impl.operation.selectRequestsByMatchmakerId.SelectRequestsByMatchmakerIdOperation;
 import com.omgservers.module.matchmaker.impl.operation.updateMatch.UpdateMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -44,14 +52,22 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
 
+    final SelectRequestsByMatchmakerIdOperation selectRequestsByMatchmakerIdOperation;
+    final SelectMatchesByMatchmakerIdOperation selectMatchesByMatchmakerIdOperation;
     final DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
     final UpsertMatchClientOperation upsertMatchClientOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteRequestOperation deleteRequestOperation;
     final UpsertMatchOperation upsertMatchOperation;
     final UpdateMatchOperation updateMatchOperation;
+    final UpsertEventOperation upsertEventOperation;
     final CheckShardOperation checkShardOperation;
+    final UpsertLogOperation upsertLogOperation;
 
-    final MatchmakerInMemoryCache matchmakerInMemoryCache;
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
+
+    final Dispatcher dispatcher;
 
     final PgPool pgPool;
 
@@ -67,10 +83,10 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                                 final var tenantId = matchmaker.getTenantId();
                                 final var stageId = matchmaker.getStageId();
                                 final var getCurrentVersionIdShardedRequest =
-                                        new GetCurrentVersionIdShardedRequest(tenantId, stageId);
+                                        new GetStageVersionIdShardedRequest(tenantId, stageId);
                                 return tenantModule.getVersionShardedService()
-                                        .getCurrentVersionId(getCurrentVersionIdShardedRequest)
-                                        .map(GetCurrentVersionIdShardedResponse::getVersionId)
+                                        .getStageVersionId(getCurrentVersionIdShardedRequest)
+                                        .map(GetStageVersionIdShardedResponse::getVersionId)
                                         .flatMap(versionId -> getVersionStageConfig(tenantId, versionId)
                                                 .flatMap(stageConfig -> executeMatchmaker(
                                                         shardModel.shard(),
@@ -102,24 +118,36 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                                    final Long versionId,
                                    final Long matchmakerId,
                                    final VersionConfigModel versionConfig) {
-        final var matchmakerRequests = matchmakerInMemoryCache.getRequests(matchmakerId);
-        final var matchmakerMatches = matchmakerInMemoryCache.getMatches(matchmakerId);
-        if (matchmakerRequests.isEmpty()) {
-            log.info("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);
-            return Uni.createFrom().item(false);
-        } else {
-            // TODO: detect type of matchmaking
-            return doMatchmaking(
-                    tenantId,
-                    stageId,
-                    versionId,
-                    matchmakerId,
-                    matchmakerRequests,
-                    matchmakerMatches,
-                    versionConfig)
-                    .flatMap(matchmakingResults -> syncMatchmakingResults(matchmakerId, shard, matchmakingResults))
-                    .replaceWith(true);
-        }
+        return collectMatchmakerData(shard, matchmakerId)
+                .flatMap(matchmakerData -> {
+                    final var matchmakerRequests = matchmakerData.requests;
+                    final var matchmakerMatches = matchmakerData.matches;
+                    if (matchmakerRequests.isEmpty()) {
+                        log.info("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);
+                        return Uni.createFrom().item(false);
+                    } else {
+                        log.info("Execute matchmaker, matchmakerId={}, requests={}, matches={}",
+                                matchmakerId, matchmakerRequests.size(), matchmakerMatches.size());
+                        return doMatchmaking(
+                                tenantId,
+                                stageId,
+                                versionId,
+                                matchmakerId,
+                                matchmakerRequests,
+                                matchmakerMatches,
+                                versionConfig)
+                                .flatMap(matchmakingResults ->
+                                        syncMatchmakingResults(matchmakerId, shard, matchmakingResults));
+                    }
+                });
+    }
+
+    Uni<MatchmakerData> collectMatchmakerData(final int shard, final Long matchmakerId) {
+        return pgPool.withTransaction(sqlConnection -> selectRequestsByMatchmakerIdOperation
+                .selectRequestsByMatchmakerId(sqlConnection, shard, matchmakerId)
+                .flatMap(matchmakerRequests -> selectMatchesByMatchmakerIdOperation
+                        .selectMatchesByMatchmakerId(sqlConnection, shard, matchmakerId)
+                        .map(matchmakerMatches -> new MatchmakerData(matchmakerRequests, matchmakerMatches))));
     }
 
     Uni<MatchmakingResultsModel> doMatchmaking(final Long tenantId,
@@ -171,39 +199,34 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 });
     }
 
-    Uni<Void> syncMatchmakingResults(final Long matchmakerId,
-                                     final int shard,
-                                     final MatchmakingResultsModel matchmakingResults) {
-        return pgPool.withTransaction(sqlConnection ->
-                upsertCreatedMatches(
-                        matchmakerId,
-                        sqlConnection,
-                        shard,
-                        matchmakingResults.getCreatedMatches())
-                        .flatMap(voidItem -> updateUpdatedMatches(matchmakerId, sqlConnection, shard,
-                                matchmakingResults.getUpdatedMatches()))
-                        .flatMap(voidItem -> upsertMatchedClients(matchmakerId, sqlConnection, shard,
-                                matchmakingResults.getMatchedClients()))
-                        .flatMap(voidItem -> deleteCompletedRequests(matchmakerId, sqlConnection, shard,
-                                matchmakingResults.getCompletedRequests())));
+    Uni<Boolean> syncMatchmakingResults(final Long matchmakerId,
+                                        final int shard,
+                                        final MatchmakingResultsModel matchmakingResults) {
+        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
+                upsertCreatedMatches(context, sqlConnection, shard, matchmakerId, matchmakingResults.getCreatedMatches())
+                        .flatMap(voidItem -> updateUpdatedMatches(sqlConnection, shard, matchmakerId, matchmakingResults.getUpdatedMatches()))
+                        .flatMap(voidItem -> upsertMatchedClients(sqlConnection, shard, matchmakerId, matchmakingResults.getMatchedClients()))
+                        .flatMap(voidItem -> deleteCompletedRequests(sqlConnection, shard, matchmakerId, matchmakingResults.getCompletedRequests()))
+                        .replaceWith(true));
     }
 
-    Uni<Void> upsertCreatedMatches(final Long matchmakerId,
+    Uni<Void> upsertCreatedMatches(final ChangeContext context,
                                    final SqlConnection sqlConnection,
                                    final int shard,
+                                   final Long matchmakerId,
                                    final List<MatchModel> createdMatches) {
         return Multi.createFrom().iterable(createdMatches)
-                .onItem().transformToUniAndConcatenate(createdMatch -> upsertMatchOperation
-                        .upsertMatch(sqlConnection, shard, createdMatch))
+                .onItem().transformToUniAndConcatenate(createdMatch ->
+                        upsertMatchOperation.upsertMatch(context, sqlConnection, shard, createdMatch))
                 .collect().asList()
                 .invoke(results -> log.info("Created matches were synchronized, " +
                         "matchmakerId={}, count={}", matchmakerId, createdMatches.size()))
                 .replaceWithVoid();
     }
 
-    Uni<Void> updateUpdatedMatches(final Long matchmakerId,
-                                   final SqlConnection sqlConnection,
+    Uni<Void> updateUpdatedMatches(final SqlConnection sqlConnection,
                                    final int shard,
+                                   final Long matchmakerId,
                                    final List<MatchModel> updatedMatches) {
         return Multi.createFrom().iterable(updatedMatches)
                 .onItem().transformToUniAndConcatenate(updatedMatch -> updateMatchOperation
@@ -214,9 +237,9 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> upsertMatchedClients(final Long matchmakerId,
-                                   final SqlConnection sqlConnection,
+    Uni<Void> upsertMatchedClients(final SqlConnection sqlConnection,
                                    final int shard,
+                                   final Long matchmakerId,
                                    final List<MatchClientModel> matchedClients) {
         return Multi.createFrom().iterable(matchedClients)
                 .onItem().transformToUniAndConcatenate(matchedClient -> upsertMatchClientOperation
@@ -227,9 +250,9 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> deleteCompletedRequests(final Long matchmakerId,
-                                      final SqlConnection sqlConnection,
+    Uni<Void> deleteCompletedRequests(final SqlConnection sqlConnection,
                                       final int shard,
+                                      final Long matchmakerId,
                                       final List<RequestModel> completedRequests) {
         return Multi.createFrom().iterable(completedRequests)
                 .onItem().transformToUniAndMerge(completedRequest -> deleteRequestOperation
@@ -238,5 +261,12 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 .invoke(results -> log.info("Completed requests were deleted, " +
                         "matchmakerId={}, count={}", matchmakerId, completedRequests.size()))
                 .replaceWithVoid();
+    }
+
+    @AllArgsConstructor
+    static class MatchmakerData {
+
+        List<RequestModel> requests;
+        List<MatchModel> matches;
     }
 }

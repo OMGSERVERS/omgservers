@@ -1,10 +1,15 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertMatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,13 +37,21 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
 
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertMatch(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertMatch(final ChangeContext changeContext,
+                                    final SqlConnection sqlConnection,
                                     final int shard,
                                     final MatchModel match) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -46,19 +59,19 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
             throw new ServerSideBadRequestException("match is null");
         }
 
-        return upsertQuery(sqlConnection, shard, match)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Match was created, shard={}, match={}", shard, match);
-                    } else {
-                        log.info("Match was updated, shard={}, match={}", shard, match);
+        return upsertObject(sqlConnection, shard, match)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, match))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, match))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Match was inserted, shard={}, match={}", shard, match);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, MatchModel match) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, MatchModel match) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(match.getConfig());
@@ -73,6 +86,41 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final MatchModel match) {
+        if (objectWasInserted) {
+            final var body = new MatchCreatedEventBodyModel(match.getMatchmakerId(), match.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
+                    .invoke(eventWasInserted -> {
+                        if (eventWasInserted) {
+                            changeContext.add(event);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final MatchModel match) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Match was created, match=" + match);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

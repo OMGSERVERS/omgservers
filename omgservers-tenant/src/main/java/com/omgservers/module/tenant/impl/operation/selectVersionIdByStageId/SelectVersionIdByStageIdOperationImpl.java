@@ -1,4 +1,4 @@
-package com.omgservers.module.tenant.impl.operation.selectCurrentVersionId;
+package com.omgservers.module.tenant.impl.operation.selectVersionIdByStageId;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectCurrentVersionIdOperationImpl implements SelectCurrentVersionIdOperation {
+class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdOperation {
 
     static private final String sql = """
             select id
@@ -32,9 +32,9 @@ class SelectCurrentVersionIdOperationImpl implements SelectCurrentVersionIdOpera
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Long> selectCurrentVersionId(final SqlConnection sqlConnection,
-                                            final int shard,
-                                            final Long stageId) {
+    public Uni<Long> selectVersionIdByStageId(final SqlConnection sqlConnection,
+                                              final int shard,
+                                              final Long stageId) {
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -48,12 +48,12 @@ class SelectCurrentVersionIdOperationImpl implements SelectCurrentVersionIdOpera
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
-                        log.info("Current version was found, stageId={}", stageId);
                         final var row = iterator.next();
                         final var versionId = row.getLong("id");
+                        log.info("VersionId was selected by stageId, stageId={}, versionId={}", stageId, versionId);
                         return versionId;
                     } else {
-                        throw new ServerSideNotFoundException(String.format("current version was not found, " +
+                        throw new ServerSideNotFoundException(String.format("VersionId was not found, " +
                                 "stageId=%s", stageId));
                     }
                 })

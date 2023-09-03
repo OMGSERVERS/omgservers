@@ -5,8 +5,8 @@ import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -55,10 +55,10 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                             final var tenantId = matchmaker.getTenantId();
                             final var stageId = matchmaker.getStageId();
                             final var getCurrentVersionIdShardedRequest = new
-                                    GetCurrentVersionIdShardedRequest(tenantId, stageId);
+                                    GetStageVersionIdShardedRequest(tenantId, stageId);
                             return tenantModule.getVersionShardedService()
-                                    .getCurrentVersionId(getCurrentVersionIdShardedRequest)
-                                    .map(GetCurrentVersionIdShardedResponse::getVersionId)
+                                    .getStageVersionId(getCurrentVersionIdShardedRequest)
+                                    .map(GetStageVersionIdShardedResponse::getVersionId)
                                     .flatMap(versionId -> {
                                         final var runtimeId = match.getRuntimeId();
                                         // TODO: Detect runtime type

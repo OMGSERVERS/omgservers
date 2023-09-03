@@ -56,7 +56,6 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                         updatedMatches.add(match);
                     }
                     matchedRequests.put(request, match);
-                    completedRequests.add(request);
                     break;
                 }
             }
@@ -72,8 +71,8 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                     matchedRequests.put(request, newMatch);
                 } else {
                     log.warn("Request can't be matched event with new match, request={}", request);
+                    completedRequests.add(request);
                 }
-                completedRequests.add(request);
             }
         });
 
@@ -93,6 +92,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 .flatMap(match -> getMatchRequests(match).stream())
                 .filter(matchedRequests::containsKey)
                 .map(request -> {
+                    completedRequests.add(request);
                     final var match = matchedRequests.get(request);
                     final var matchClient = matchClientModelFactory.create(
                             matchmakerId,
@@ -104,6 +104,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 })
                 .toList();
 
+        // failed + matched requests
         final var resultCompletedRequests = completedRequests.stream().toList();
 
         return new DoGreedyMatchmakingResult(
@@ -127,7 +128,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 .sorted(Comparator.comparing(g -> g.getRequests().size())).toList();
         for (var group : sortedGroups) {
             if (matchRequestWithGroup(request, group)) {
-                log.info("requestId={} was matched with matchId={}, groupId={}",
+                log.info("RequestId={} was matched with matchId={}, groupId={}",
                         request.getId(), match.getId(), group.getConfig().getName());
                 return true;
             }

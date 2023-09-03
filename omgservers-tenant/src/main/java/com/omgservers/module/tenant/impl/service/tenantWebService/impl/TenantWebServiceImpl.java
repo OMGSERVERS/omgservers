@@ -6,12 +6,12 @@ import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedRequest;
-import com.omgservers.dto.tenant.GetCurrentVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetProjectShardedRequest;
 import com.omgservers.dto.tenant.GetProjectShardedResponse;
 import com.omgservers.dto.tenant.GetStageShardedRequest;
 import com.omgservers.dto.tenant.GetStageShardedResponse;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdShardedResponse;
 import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
@@ -162,7 +162,7 @@ public class TenantWebServiceImpl implements TenantWebService {
     }
 
     @Override
-    public Uni<GetCurrentVersionIdShardedResponse> getCurrentVersionId(GetCurrentVersionIdShardedRequest request) {
-        return versionShardedService.getCurrentVersionId(request);
+    public Uni<GetStageVersionIdShardedResponse> getStageVersionId(GetStageVersionIdShardedRequest request) {
+        return versionShardedService.getStageVersionId(request);
     }
 }

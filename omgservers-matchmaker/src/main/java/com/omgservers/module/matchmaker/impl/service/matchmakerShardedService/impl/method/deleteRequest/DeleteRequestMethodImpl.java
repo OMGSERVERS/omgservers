@@ -2,12 +2,11 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.i
 
 import com.omgservers.dto.internal.ChangeWithLogRequest;
 import com.omgservers.dto.internal.ChangeWithLogResponse;
-import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
+import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.MatchmakerInMemoryCache;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +21,6 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     final InternalModule internalModule;
 
     final DeleteRequestOperation deleteRequestOperation;
-
-    final MatchmakerInMemoryCache matchmakerInMemoryCache;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -47,7 +44,6 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
                 });
         return internalModule.getChangeService().changeWithLog(changeWithLogRequest)
                 .map(ChangeWithLogResponse::getResult)
-                .invoke(deleted -> matchmakerInMemoryCache.removeRequest(id))
                 .map(DeleteRequestShardedResponse::new);
     }
 }
