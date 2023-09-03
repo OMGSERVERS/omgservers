@@ -20,7 +20,7 @@ class ChangeWithContextOperationImpl implements ChangeWithContextOperation {
     final PgPool pgPool;
 
     @Override
-    public Uni<Boolean> changeWithContext(BiFunction<ChangeContext, SqlConnection, Uni<Boolean>> changeFunction) {
+    public <T> Uni<T> changeWithContext(BiFunction<ChangeContext, SqlConnection, Uni<T>> changeFunction) {
         return Uni.createFrom().context(context -> {
             final var changeContext = new ChangeContext(context);
             return pgPool.withTransaction(sqlConnection -> changeFunction.apply(changeContext, sqlConnection))

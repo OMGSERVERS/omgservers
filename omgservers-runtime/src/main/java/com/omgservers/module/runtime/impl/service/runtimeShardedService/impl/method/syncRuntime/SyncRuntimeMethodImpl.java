@@ -1,15 +1,12 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
-import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.operation.getConfig.GetConfigOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertRuntimeOperation upsertRuntimeOperation;
-    final GetConfigOperation getConfigOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -34,38 +29,18 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
         SyncRuntimeShardedRequest.validate(request);
 
         final var runtime = request.getRuntime();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> upsertRuntimeOperation
-                                .upsertRuntime(sqlConnection, shardModel.shard(), runtime),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Runtime was created, runtime=" + runtime);
-                            } else {
-                                return logModelFactory.create("Runtime was update, runtime=" + runtime);
-                            }
-                        },
-                        inserted -> {
-                            final var id = runtime.getId();
-                            final var matchmakerId = runtime.getMatchmakerId();
-                            final var matchId = runtime.getMatchId();
-                            if (inserted) {
-                                return new RuntimeCreatedEventBodyModel(id, matchmakerId, matchId);
-                            } else {
-                                return new RuntimeUpdatedEventBodyModel(id, matchmakerId, matchId);
-                            }
-                        }
-                ))
-                .map(this::prepareMethodResponse);
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, runtime))
+                .map(SyncRuntimeShardedResponse::new);
     }
 
-    SyncRuntimeShardedResponse prepareMethodResponse(ChangeWithEventResponse changeWithEventResponse) {
-        final var syncRuntimeShardedResponse = new SyncRuntimeShardedResponse();
-        syncRuntimeShardedResponse.setCreated(changeWithEventResponse.getResult());
-        if (getConfigOperation.getConfig().verbose()) {
-            final var extendedResponse = new SyncRuntimeShardedResponse.ExtendedResponse();
-            extendedResponse.setChangeExtendedResponse(changeWithEventResponse.getExtendedResponse());
-            syncRuntimeShardedResponse.setExtendedResponse(extendedResponse);
-        }
-        return syncRuntimeShardedResponse;
+    Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeModel runtime) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                upsertRuntimeOperation.upsertRuntime(
+                        changeContext,
+                        sqlConnection,
+                        shardModel.shard(),
+                        runtime));
     }
 }

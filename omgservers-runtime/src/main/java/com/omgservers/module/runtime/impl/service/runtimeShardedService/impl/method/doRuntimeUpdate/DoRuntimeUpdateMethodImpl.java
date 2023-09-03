@@ -1,22 +1,20 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.doRuntimeUpdate;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateShardedResponse;
-import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
-import com.omgservers.module.context.ContextModule;
-import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleRuntimeCommandOperation;
 import com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands.SelectNewRuntimeCommandsOperation;
-import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
+import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
+import com.omgservers.module.runtime.impl.operation.updateRuntimeCommandStatusAndStep.UpdateRuntimeCommandStatusAndStepOperation;
+import com.omgservers.module.runtime.impl.operation.updateRuntimeCurrentStep.UpdateRuntimeCurrentStepOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -32,15 +30,13 @@ import java.util.List;
 @AllArgsConstructor
 class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
-    final RuntimeModule runtimeModule;
-    final ContextModule contextModule;
-
+    final UpdateRuntimeCommandStatusAndStepOperation updateRuntimeCommandStatusAndStepOperation;
     final SelectNewRuntimeCommandsOperation selectNewRuntimeCommandsOperation;
-    final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
+    final UpdateRuntimeCurrentStepOperation updateRuntimeCurrentStepOperation;
     final HandleRuntimeCommandOperation handleRuntimeCommandOperation;
-    final UpsertRuntimeOperation upsertRuntimeOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
+    final SelectRuntimeOperation selectRuntimeOperation;
     final CheckShardOperation checkShardOperation;
-    final GetConfigOperation getConfigOperation;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
@@ -52,73 +48,79 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
                     final var runtimeId = request.getRuntimeId();
-                    return getRuntime(runtimeId)
-                            .flatMap(runtime -> updateRuntimeInTransaction(shardModel.shard(), runtime)
-                                    .map(this::prepareMethodResponse));
+                    return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                            selectRuntimeOperation.selectRuntime(sqlConnection, shard, runtimeId)
+                                    .flatMap(runtime -> updateRuntime(changeContext, sqlConnection, shard, runtime))
+                    );
+                })
+                .map(updateRuntimeResult -> {
+                    final var handledCommands = updateRuntimeResult.affectedCommands.size();
+                    return new DoRuntimeUpdateShardedResponse(handledCommands);
                 });
     }
 
-    Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeShardedRequest(id);
-        return runtimeModule.getRuntimeShardedService().getRuntime(request)
-                .map(GetRuntimeShardedResponse::getRuntime);
-    }
-
-    Uni<UpdateRuntimeResult> updateRuntimeInTransaction(final int shard,
-                                                        final RuntimeModel runtime) {
-        return pgPool.withTransaction(sqlConnection -> updateRuntime(sqlConnection, shard, runtime));
-    }
-
-    DoRuntimeUpdateShardedResponse prepareMethodResponse(UpdateRuntimeResult result) {
-        final var affectedCommands = result.affectedCommands;
-        final var doRuntimeUpdateShardedResponse = new DoRuntimeUpdateShardedResponse();
-        doRuntimeUpdateShardedResponse.setHandledCommands(affectedCommands.size());
-        if (getConfigOperation.getConfig().verbose()) {
-            final var extendedResponse = new DoRuntimeUpdateShardedResponse.ExtendedResponse();
-            extendedResponse.setAffectedCommands(affectedCommands);
-            doRuntimeUpdateShardedResponse.setExtendedResponse(extendedResponse);
-        }
-        return doRuntimeUpdateShardedResponse;
-    }
-
-    Uni<UpdateRuntimeResult> updateRuntime(final SqlConnection sqlConnection,
+    Uni<UpdateRuntimeResult> updateRuntime(final ChangeContext changeContext,
+                                           final SqlConnection sqlConnection,
                                            final int shard,
                                            final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
-        runtime.setCurrentStep(runtime.getCurrentStep() + 1);
+        final var currentStep = runtime.getCurrentStep() + 1;
         return selectNewRuntimeCommandsOperation.selectNewRuntimeCommands(sqlConnection, shard, runtimeId)
                 .flatMap(runtimeCommands -> {
                     final var updateRuntimeCommand = runtimeCommandModelFactory
-                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(runtime.getCurrentStep()));
-                    // Every step enrich list by update command
+                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(currentStep));
+                    // Enrich list by update command every step automatically
                     runtimeCommands.add(updateRuntimeCommand);
-                    return handleRuntimeCommands(sqlConnection, shard, runtimeCommands, runtime.getCurrentStep())
-                            .flatMap(affectedCommands -> upsertRuntimeOperation.upsertRuntime(sqlConnection, shard, runtime)
-                                    .map(inserted -> new UpdateRuntimeResult(affectedCommands)));
+
+                    return updateRuntimeCurrentStepOperation.updateRuntimeCurrentStep(
+                                    changeContext,
+                                    sqlConnection,
+                                    shard,
+                                    runtimeId,
+                                    currentStep)
+                            .flatMap(runtimeWasUpdated -> handleRuntimeCommands(
+                                    changeContext,
+                                    sqlConnection,
+                                    shard,
+                                    runtimeCommands,
+                                    currentStep).map(UpdateRuntimeResult::new));
                 });
     }
 
-    Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final SqlConnection sqlConnection,
+    Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final ChangeContext changeContext,
+                                                         final SqlConnection sqlConnection,
                                                          final int shard,
                                                          final List<RuntimeCommandModel> runtimeCommands,
                                                          final Long currentStep) {
         return Multi.createFrom().iterable(runtimeCommands)
                 .onItem().transformToUniAndConcatenate(runtimeCommand ->
-                        handleRuntimeCommand(sqlConnection, shard, runtimeCommand, currentStep))
+                        handleRuntimeCommand(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                runtimeCommand,
+                                currentStep))
                 .collect().asList();
     }
 
-    Uni<RuntimeCommandModel> handleRuntimeCommand(final SqlConnection sqlConnection,
+    Uni<RuntimeCommandModel> handleRuntimeCommand(final ChangeContext changeContext,
+                                                  final SqlConnection sqlConnection,
                                                   final int shard,
                                                   final RuntimeCommandModel runtimeCommand,
                                                   final Long currentStep) {
         return handleRuntimeCommandOperation.handleRuntimeCommand(runtimeCommand)
                 .flatMap(result -> {
+                    final var runtimeCommandId = runtimeCommand.getId();
                     final var status = result ? RuntimeCommandStatusEnum.PROCESSED : RuntimeCommandStatusEnum.FAILED;
-                    runtimeCommand.setStatus(status);
-                    runtimeCommand.setStep(currentStep);
-                    return upsertRuntimeCommandOperation.upsertRuntimeCommand(sqlConnection, shard, runtimeCommand)
+                    return updateRuntimeCommandStatusAndStepOperation.updateRuntimeCommandStatusAndStep(
+                                    changeContext,
+                                    sqlConnection,
+                                    shard,
+                                    runtimeCommandId,
+                                    status,
+                                    currentStep)
                             .replaceWith(runtimeCommand);
                 });
     }

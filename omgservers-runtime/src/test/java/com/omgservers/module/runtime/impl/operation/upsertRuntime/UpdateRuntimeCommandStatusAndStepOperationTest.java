@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertRuntimeOperationTest extends Assertions {
+class UpdateRuntimeCommandStatusAndStepOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject

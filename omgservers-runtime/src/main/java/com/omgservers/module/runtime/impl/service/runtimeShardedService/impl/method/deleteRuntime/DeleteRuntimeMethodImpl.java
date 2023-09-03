@@ -1,15 +1,13 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.deleteRuntime;
 
-import com.omgservers.module.runtime.impl.operation.deleteRuntime.DeleteRuntimeOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
-import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.runtime.impl.operation.deleteRuntime.DeleteRuntimeOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,35 +19,27 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
 
     final InternalModule internalModule;
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteRuntimeOperation deleteRuntimeOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<DeleteRuntimeShardedResponse> deleteRuntime(DeleteRuntimeShardedRequest request) {
         DeleteRuntimeShardedRequest.validate(request);
 
         final var id = request.getId();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> deleteRuntimeOperation
-                                .deleteRuntime(sqlConnection, shardModel.shard(), id),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create("Runtime was deleted, id=" + id);
-                            } else {
-                                return null;
-                            }
-                        },
-                        deleted -> {
-                            if (deleted) {
-                                return new RuntimeDeletedEventBodyModel(id);
-                            } else {
-                                return null;
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, id))
                 .map(DeleteRuntimeShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long id) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                deleteRuntimeOperation.deleteRuntime(
+                        changeContext,
+                        sqlConnection,
+                        shardModel.shard(),
+                        id));
     }
 }

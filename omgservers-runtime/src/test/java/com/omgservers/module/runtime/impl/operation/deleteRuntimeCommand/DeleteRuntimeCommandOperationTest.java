@@ -1,10 +1,10 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
-import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -50,15 +50,16 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
 
-        assertTrue(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand.getId()));
+        assertTrue(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtime.getId(), runtimeCommand.getId()));
     }
 
     @Test
-    void givenUnknownRuntimeId_whenDeleteRuntimeCommand_thenSkip() {
+    void givenUnknownIds_whenDeleteRuntimeCommand_thenSkip() {
         final var shard = 0;
+        final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtimeId, id));
     }
 
     Long tenantId() {

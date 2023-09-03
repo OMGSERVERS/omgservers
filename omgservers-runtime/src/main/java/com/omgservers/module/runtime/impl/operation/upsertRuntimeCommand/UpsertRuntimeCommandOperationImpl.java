@@ -1,9 +1,14 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,12 +37,22 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
+
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertRuntimeCommand(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertRuntimeCommand(final ChangeContext changeContext,
+                                             final SqlConnection sqlConnection,
                                              final int shard,
                                              final RuntimeCommandModel runtimeCommand) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -45,21 +60,21 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
             throw new ServerSideBadRequestException("runtimeCommand is null");
         }
 
-        return upsertQuery(sqlConnection, shard, runtimeCommand)
-                .invoke(inserted -> {
-                    if (inserted) {
+        return upsertObject(sqlConnection, shard, runtimeCommand)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, runtimeCommand))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, runtimeCommand))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
                         log.info("Runtime command was inserted, shard={}, runtimeCommand={}", shard, runtimeCommand);
-                    } else {
-                        log.info("Runtime command was updated, shard={}, runtimeCommand={}", shard, runtimeCommand);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
-                             final int shard,
-                             final RuntimeCommandModel runtimeCommand) {
+    Uni<Boolean> upsertObject(final SqlConnection sqlConnection,
+                              final int shard,
+                              final RuntimeCommandModel runtimeCommand) {
         try {
             var bodyString = objectMapper.writeValueAsString(runtimeCommand.getBody());
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
@@ -77,6 +92,31 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final RuntimeCommandModel runtimeCommand) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasDeleted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final RuntimeCommandModel runtimeCommand) {
+        if (objectWasDeleted) {
+            final var changeLog = logModelFactory.create("Runtime command was inserted, " +
+                    "runtimeCommand=" + runtimeCommand);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }
