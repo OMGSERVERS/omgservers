@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.selectStage;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.StageModelFactory;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
@@ -60,7 +60,7 @@ class SelectProjectStagesOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
         final var stage1 = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage1);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage1);
 
         final var stage2 = selectStageOperation.selectStage(TIMEOUT, pgPool, shard, stage1.getId());
         assertEquals(stage1, stage2);

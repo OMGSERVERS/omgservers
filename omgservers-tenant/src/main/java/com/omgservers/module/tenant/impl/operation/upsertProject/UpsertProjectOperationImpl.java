@@ -1,9 +1,15 @@
 package com.omgservers.module.tenant.impl.operation.upsertProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,12 +38,21 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertProject(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertProject(final ChangeContext changeContext,
+                                      final SqlConnection sqlConnection,
                                       final int shard,
                                       final ProjectModel project) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -45,19 +60,19 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
             throw new ServerSideBadRequestException("project is null");
         }
 
-        return upsertQuery(sqlConnection, shard, project)
-                .invoke(inserted -> {
-                    if (inserted) {
+        return upsertObject(sqlConnection, shard, project)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, project))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, project))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
                         log.info("Project was inserted, shard={}, project={}", shard, project);
-                    } else {
-                        log.info("Project was updated, shard={}, project={}", shard, project);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, ProjectModel project) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, ProjectModel project) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(project.getConfig());
@@ -72,6 +87,41 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final ProjectModel project) {
+        if (objectWasInserted) {
+            final var body = new ProjectCreatedEventBodyModel(project.getTenantId(), project.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
+                    .invoke(eventWasInserted -> {
+                        if (eventWasInserted) {
+                            changeContext.add(event);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final ProjectModel project) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Project was created, project=" + project);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

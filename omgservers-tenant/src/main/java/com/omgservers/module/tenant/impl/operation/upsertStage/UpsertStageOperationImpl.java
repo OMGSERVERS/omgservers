@@ -1,9 +1,15 @@
 package com.omgservers.module.tenant.impl.operation.upsertStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,32 +38,45 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertStage(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertStage(final ChangeContext changeContext,
+                                    final SqlConnection sqlConnection,
                                     final int shard,
+                                    final Long tenantId,
                                     final StageModel stage) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
+        }
+        if (tenantId == null) {
+            throw new ServerSideBadRequestException("tenantId is null");
         }
         if (stage == null) {
             throw new ServerSideBadRequestException("stage is null");
         }
 
-        return upsertQuery(sqlConnection, shard, stage)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Stage was inserted, shard={}, stage={}", shard, stage);
-                    } else {
-                        log.info("Stage was updated, shard={}, stage={}", shard, stage);
+        return upsertObject(sqlConnection, shard, stage)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, tenantId, stage))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, tenantId, stage))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Stage was inserted, shard={}, tenantId={}, stage={}", shard, tenantId, stage);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, StageModel stage) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, StageModel stage) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(stage.getConfig());
@@ -74,6 +93,44 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final Long tenantId,
+                             final StageModel stage) {
+        if (objectWasInserted) {
+            final var body = new StageCreatedEventBodyModel(tenantId, stage.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
+                    .invoke(eventWasInserted -> {
+                        if (eventWasInserted) {
+                            changeContext.add(event);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final Long tenantId,
+                           final StageModel stage) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create(String.format("Stage was created, " +
+                    "tenantId=%d, stage=%s", tenantId, stage));
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

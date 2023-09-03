@@ -1,13 +1,12 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.deleteStage;
 
-import com.omgservers.module.tenant.impl.operation.deleteStage.DeleteStageOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedResponse;
-import com.omgservers.model.event.body.StageDeletedEventBodyModel;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.tenant.impl.operation.deleteStage.DeleteStageOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,9 +20,10 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
 
     final InternalModule internalModule;
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteStageOperation deleteStageOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -33,25 +33,14 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        ((sqlConnection, shardModel) -> deleteStageOperation
-                                .deleteStage(sqlConnection, shardModel.shard(), id)),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create(String.format("Stage was deleted, " +
-                                        "tenantId=%d, id=%d", tenantId, id));
-                            } else {
-                                return null;
-                            }
-                        },
-                        deleted -> {
-                            if (deleted) {
-                                return new StageDeletedEventBodyModel(tenantId, id);
-                            } else {
-                                return null;
-                            }
-                        }))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenantId, id))
                 .map(DeleteStageShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                deleteStageOperation.deleteStage(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
     }
 }

@@ -1,6 +1,5 @@
 package com.omgservers.module.tenant.impl.operation.hasProjectPermission;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.model.tenant.TenantConfigModel;
@@ -10,6 +9,7 @@ import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -58,7 +58,7 @@ class HasProjectPermissionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var permission = projectPermissionModelFactory.create(project.getId(), userId, ProjectPermissionEnum.CREATE_STAGE);
-        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
+        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission);
 
         assertTrue(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, project.getId(), permission.getUserId(), permission.getPermission()));
     }

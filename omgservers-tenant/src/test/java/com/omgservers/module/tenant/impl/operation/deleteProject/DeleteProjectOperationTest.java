@@ -49,14 +49,15 @@ class DeleteProjectOperationTest extends Assertions {
         final var id = project.getId();
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        assertTrue(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, id));
+        assertTrue(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, tenant.getId(), id));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteProject_thenSkip() {
         final var shard = 0;
+        final var tenantId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, tenantId, id));
     }
 }

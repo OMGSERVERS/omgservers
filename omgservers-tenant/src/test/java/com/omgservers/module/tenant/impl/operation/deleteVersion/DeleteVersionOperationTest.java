@@ -68,20 +68,20 @@ class DeleteVersionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
         final var id = version.getId();
-        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version);
+        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version);
 
-        assertTrue(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, id));
+        assertTrue(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, tenant.getId(), id));
     }
 
     @Test
-    void givenUnknownId_whenDeleteVersion_thenSkip() {
+    void givenUnknownIds_whenDeleteVersion_thenSkip() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, tenantId(), id));
     }
 
     Long tenantId() {

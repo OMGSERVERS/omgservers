@@ -1,15 +1,13 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenant;
 
-import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
-import com.omgservers.module.tenant.impl.operation.validateTenant.ValidateTenantOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedResponse;
-import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
-import com.omgservers.model.event.body.TenantUpdatedEventBodyModel;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.module.tenant.impl.operation.validateTenant.ValidateTenantOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncTenantMethodImpl implements SyncTenantMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final ValidateTenantOperation validateTenantOperation;
     final UpsertTenantOperation upsertTenantOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -34,27 +31,14 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
         SyncTenantShardedRequest.validate(request);
 
         final var tenant = request.getTenant();
-        validateTenantOperation.validateTenant(tenant);
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> upsertTenantOperation
-                                .upsertTenant(sqlConnection, shardModel.shard(), tenant),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Tenant was created, tenant=" + tenant);
-                            } else {
-                                return logModelFactory.create("Tenant was updated, tenant=" + tenant);
-                            }
-                        },
-                        inserted -> {
-                            final var id = tenant.getId();
-                            if (inserted) {
-                                return new TenantCreatedEventBodyModel(id);
-                            } else {
-                                return new TenantUpdatedEventBodyModel(id);
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenant))
                 .map(SyncTenantShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, TenantModel tenantModel) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                upsertTenantOperation.upsertTenant(changeContext, sqlConnection, shardModel.shard(), tenantModel));
     }
 }

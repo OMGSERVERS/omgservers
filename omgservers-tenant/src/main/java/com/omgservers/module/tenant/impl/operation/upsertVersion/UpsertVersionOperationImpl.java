@@ -1,9 +1,15 @@
 package com.omgservers.module.tenant.impl.operation.upsertVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -33,33 +39,45 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
 
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertVersion(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertVersion(final ChangeContext changeContext,
+                                      final SqlConnection sqlConnection,
                                       final int shard,
+                                      final Long tenantId,
                                       final VersionModel version) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
+        }
+        if (tenantId == null) {
+            throw new ServerSideBadRequestException("tenantId is null");
         }
         if (version == null) {
             throw new ServerSideBadRequestException("version is null");
         }
 
-        return upsertQuery(sqlConnection, shard, version)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Version was inserted, version={}", version);
-                    } else {
-                        log.info("Version was updated, version={}", version);
+        return upsertObject(sqlConnection, shard, version)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, tenantId, version))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, tenantId, version))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Version was inserted, tenantId={}, version={}", tenantId, version);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, VersionModel version) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, VersionModel version) {
         try {
             final var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             final var config = objectMapper.writeValueAsString(version.getConfig());
@@ -79,6 +97,44 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final Long tenantId,
+                             final VersionModel version) {
+        if (objectWasInserted) {
+            final var body = new VersionCreatedEventBodyModel(tenantId, version.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
+                    .invoke(eventWasInserted -> {
+                        if (eventWasInserted) {
+                            changeContext.add(event);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final Long tenantId,
+                           final VersionModel version) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create(String.format("Stage was created, " +
+                    "tenantId=%d, version=%s", tenantId, version));
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

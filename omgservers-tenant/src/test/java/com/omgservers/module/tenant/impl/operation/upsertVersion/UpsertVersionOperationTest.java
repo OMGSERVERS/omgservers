@@ -64,9 +64,9 @@ class UpsertVersionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
-        assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version));
+        assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version));
     }
 
     @Test
@@ -77,18 +77,10 @@ class UpsertVersionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
-        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version);
+        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version);
 
-        assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version));
-    }
-
-    Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long stageId() {
-        return generateIdOperation.generateId();
+        assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version));
     }
 }

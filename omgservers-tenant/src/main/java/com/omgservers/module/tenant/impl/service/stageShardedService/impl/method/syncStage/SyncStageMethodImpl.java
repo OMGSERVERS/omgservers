@@ -1,15 +1,13 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.syncStage;
 
-import com.omgservers.module.tenant.impl.operation.validateStage.ValidateStageOperation;
-import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
 import com.omgservers.dto.tenant.SyncStageShardedResponse;
-import com.omgservers.model.event.body.StageCreatedEventBodyModel;
-import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.model.stage.StageModel;
+import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
+import com.omgservers.module.tenant.impl.operation.validateStage.ValidateStageOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncStageMethodImpl implements SyncStageMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final ValidateStageOperation validateStageOperation;
     final UpsertStageOperation upsertStageOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -36,26 +33,15 @@ class SyncStageMethodImpl implements SyncStageMethod {
         final var tenantId = request.getTenantId();
         final var stage = request.getStage();
         validateStageOperation.validateStage(stage);
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> upsertStageOperation
-                                .upsertStage(sqlConnection, shardModel.shard(), stage),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Stage was created, stage=" + stage);
-                            } else {
-                                return logModelFactory.create("Stage was updated, stage=" + stage);
-                            }
-                        },
-                        inserted -> {
-                            final var id = stage.getId();
-                            if (inserted) {
-                                return new StageCreatedEventBodyModel(tenantId, id);
-                            } else {
-                                return new StageUpdatedEventBodyModel(tenantId, id);
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenantId, stage))
                 .map(SyncStageShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, StageModel stage) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                upsertStageOperation.upsertStage(changeContext, sqlConnection, shardModel.shard(), tenantId, stage));
     }
 }

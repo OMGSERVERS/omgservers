@@ -1,13 +1,11 @@
 package com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.deleteVersion;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
-import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteVersion.DeleteVersionOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,11 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteVersionOperation deleteVersionOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -32,27 +29,14 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();
-
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> deleteVersionOperation
-                                .deleteVersion(sqlConnection, shardModel.shard(), id),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create(String.format("Tenant was deleted, " +
-                                        "tenantId=%d, id=%d", tenantId, id));
-                            } else {
-                                return null;
-                            }
-                        },
-                        deleted -> {
-                            if (deleted) {
-                                return new VersionDeletedEventBodyModel(tenantId, id);
-                            } else {
-                                return null;
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenantId, id))
                 .map(DeleteVersionShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                deleteVersionOperation.deleteVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
     }
 }

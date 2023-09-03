@@ -1,12 +1,10 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.deleteProject;
 
-import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
 import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
-import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,11 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteProjectMethodImpl implements DeleteProjectMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteProjectOperation deleteProjectOperation;
+    final CheckShardOperation checkShardOperation;
 
-    final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -31,25 +28,16 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        ((sqlConnection, shardModel) -> deleteProjectOperation
-                                .deleteProject(sqlConnection, shardModel.shard(), id)),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create(String.format("Project was deleted, tenantId=%d, id=%d", tenantId, id));
-                            } else {
-                                return null;
-                            }
-                        },
-                        deleted -> {
-                            if (deleted) {
-                                return new ProjectDeletedEventBodyModel(tenantId, id);
-                            } else {
-                                return null;
-                            }
-                        }))
-                .map(ChangeWithEventResponse::getResult)
+
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenantId, id))
                 //TODO implement response with deleted flag
                 .replaceWithVoid();
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                deleteProjectOperation.deleteProject(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
     }
 }

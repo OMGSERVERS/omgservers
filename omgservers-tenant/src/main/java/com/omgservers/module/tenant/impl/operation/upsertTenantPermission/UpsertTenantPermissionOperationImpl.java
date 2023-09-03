@@ -1,7 +1,12 @@
 package com.omgservers.module.tenant.impl.operation.upsertTenantPermission;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -28,11 +33,20 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertTenantPermission(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertTenantPermission(final ChangeContext changeContext,
+                                               final SqlConnection sqlConnection,
                                                final int shard,
                                                final TenantPermissionModel permission) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -40,19 +54,19 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
             throw new ServerSideBadRequestException("permission is null");
         }
 
-        return upsertQuery(sqlConnection, shard, permission)
-                .invoke(inserted -> {
-                    if (inserted) {
+        return upsertObject(sqlConnection, shard, permission)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, permission))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, permission))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
                         log.info("Tenant permission was inserted, permission={}", permission);
-                    } else {
-                        log.info("Tenant permission was updated, permission={}", permission);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, TenantPermissionModel permission) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, TenantPermissionModel permission) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
@@ -62,5 +76,30 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
                         permission.getUserId(),
                         permission.getPermission()))
                 .map(rowSet -> rowSet.rowCount() > 0);
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final TenantPermissionModel permission) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final TenantPermissionModel permission) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Tenant permission was inserted, " +
+                    "permission=" + permission);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenantPermission;
 
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
-import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +22,9 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
 
     final InternalModule internalModule;
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertTenantPermissionOperation upsertTenantPermissionOperation;
+    final CheckShardOperation checkShardOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -30,20 +34,18 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
         SyncTenantPermissionShardedRequest.validate(request);
 
         final var permission = request.getPermission();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        (sqlConnection, shardModel) -> upsertTenantPermissionOperation
-                                .upsertTenantPermission(sqlConnection, shardModel.shard(), permission),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Tenant permission was created, " +
-                                        "permission=" + permission);
-                            } else {
-                                return logModelFactory.create("Tenant permission was updated, " +
-                                        "permission=" + permission);
-                            }
-                        }
-                ))
-                .map(ChangeWithLogResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, permission))
                 .map(SyncTenantPermissionShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, TenantPermissionModel permission) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                upsertTenantPermissionOperation.upsertTenantPermission(
+                        changeContext,
+                        sqlConnection,
+                        shardModel.shard(),
+                        permission));
     }
 }

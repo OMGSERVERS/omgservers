@@ -1,13 +1,13 @@
 package com.omgservers.module.tenant.impl.operation.hasStagePermission;
 
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.StageModelFactory;
-import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
@@ -67,15 +67,15 @@ class HasStagePermissionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var permission = stagePermissionModelFactory.create(stage.getId(), userId, StagePermissionEnum.CREATE_VERSION);
-        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
+        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, tenant.getId(), permission);
 
         assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, stage.getId(), permission.getUserId(), permission.getPermission()));
     }
 
     @Test
-    void givenUnknownUuids_whenHasStagePermission_thenNo() {
+    void givenUnknownIds_whenHasStagePermission_thenFalse() {
         final var shard = 0;
 
         assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, projectId(), userId(), StagePermissionEnum.CREATE_VERSION));

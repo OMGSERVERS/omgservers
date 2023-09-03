@@ -69,9 +69,9 @@ class SelectVersionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version1 = versionModelFactory.create(stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
-        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, version1);
+        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version1);
 
         final var version2 = selectVersionOperation.selectVersion(TIMEOUT, pgPool, shard, version1.getId());
         assertEquals(version1, version2);

@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.operation.deleteStage;
 
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.StageModelFactory;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
@@ -59,16 +59,17 @@ class DeleteStageOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
         final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, stage);
+        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
 
-        assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, stage.getId()));
+        assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId()));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteStage_thenSkip() {
+    void givenUnknownIds_whenDeleteStage_thenSkip() {
         final var shard = 0;
+        final var tenantId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, tenantId, id));
     }
 }
