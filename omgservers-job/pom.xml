@@ -6,8 +6,9 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers-project</artifactId>
+        <artifactId>omgservers-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../omgservers-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.omgservers</groupId>

@@ -4,7 +4,12 @@
          xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.omgservers</groupId>
+    <parent>
+        <groupId>com.omgservers</groupId>
+        <artifactId>omgservers-project</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>omgservers-bom</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>

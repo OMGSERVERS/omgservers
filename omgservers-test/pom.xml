@@ -4,14 +4,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.omgservers</groupId>
-        <artifactId>omgservers-project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
     <groupId>com.omgservers</groupId>
     <artifactId>omgservers-test</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-bom</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -65,4 +72,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>
