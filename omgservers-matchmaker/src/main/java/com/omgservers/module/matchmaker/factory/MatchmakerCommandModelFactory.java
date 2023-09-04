@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -26,7 +27,7 @@ public class MatchmakerCommandModelFactory {
     public MatchmakerCommandModel create(final Long id,
                                          final Long runtimeId,
                                          final MatchmakerCommandBodyModel body) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var matchmakerCommand = new MatchmakerCommandModel();
         matchmakerCommand.setId(id);

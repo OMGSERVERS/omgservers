@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -31,7 +32,7 @@ public class RequestModelFactory {
                                Long clientId,
                                String mode,
                                RequestConfigModel config) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var request = new RequestModel();
         request.setId(id);

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -36,7 +37,7 @@ public class RuntimeModelFactory {
                                final Long matchId,
                                final RuntimeTypeEnum type,
                                final RuntimeConfigModel config) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var runtime = new RuntimeModel();
         runtime.setId(id);

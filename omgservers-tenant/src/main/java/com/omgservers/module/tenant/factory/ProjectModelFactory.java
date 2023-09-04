@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -23,17 +24,7 @@ public class ProjectModelFactory {
     }
 
     public ProjectModel create(Long id, Long tenantId, ProjectConfigModel config) {
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-        if (tenantId == null) {
-            throw new ServerSideBadRequestException("tenantId is null");
-        }
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-
-        var now = Instant.now();
+        var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         ProjectModel project = new ProjectModel();
         project.setId(id);

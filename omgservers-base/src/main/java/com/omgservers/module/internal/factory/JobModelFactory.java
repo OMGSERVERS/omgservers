@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -27,7 +28,7 @@ public class JobModelFactory {
                            final Long shardKey,
                            final Long entity,
                            final JobType type) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         JobModel job = new JobModel();
         job.setId(id);

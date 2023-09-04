@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -22,7 +23,8 @@ public class LogModelFactory {
 
     public LogModel create(final Long id,
                            final String message) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
         LogModel log = new LogModel();
         log.setId(id);
         log.setCreated(now);

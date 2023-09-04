@@ -1,10 +1,10 @@
 package com.omgservers.module.internal.impl.operation.selectEvent;
 
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
-import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

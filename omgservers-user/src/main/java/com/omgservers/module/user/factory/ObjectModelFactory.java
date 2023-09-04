@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -27,20 +28,7 @@ public class ObjectModelFactory {
                               final Long playerId,
                               final String name,
                               final byte[] body) {
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-        if (playerId == null) {
-            throw new ServerSideBadRequestException("player is null");
-        }
-        if (name == null) {
-            throw new ServerSideBadRequestException("fileName is null");
-        }
-        if (body == null) {
-            throw new ServerSideBadRequestException("body is null");
-        }
-
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         ObjectModel object = new ObjectModel();
         object.setId(id);

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -27,7 +28,7 @@ public class ClientModelFactory {
                               final Long playerId,
                               final URI server,
                               final Long connectionId) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         ClientModel client = new ClientModel();
         client.setId(id);

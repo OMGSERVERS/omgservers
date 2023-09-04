@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -27,7 +28,7 @@ public class StagePermissionModelFactory {
                                        final Long stageId,
                                        final Long userId,
                                        final StagePermissionEnum permission) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         StagePermissionModel model = new StagePermissionModel();
         model.setId(id);

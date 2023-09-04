@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -32,7 +33,7 @@ public class VersionModelFactory {
                                final VersionConfigModel versionConfig,
                                final VersionSourceCodeModel sourceCode,
                                final VersionBytecodeModel bytecode) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         VersionModel version = new VersionModel();
         version.setId(id);

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -28,20 +29,7 @@ public class PlayerModelFactory {
                               final Long userId,
                               final Long stageId,
                               final PlayerConfigModel config) {
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-        if (userId == null) {
-            throw new ServerSideBadRequestException("userId is null");
-        }
-        if (stageId == null) {
-            throw new ServerSideBadRequestException("stageId is null");
-        }
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         PlayerModel player = new PlayerModel();
         player.setId(id);

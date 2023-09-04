@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -31,23 +32,7 @@ public class StageModelFactory {
                              final String secret,
                              final Long matchmakerId,
                              final StageConfigModel config) {
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-        if (projectId == null) {
-            throw new ServerSideBadRequestException("projectId is null");
-        }
-        if (secret == null) {
-            throw new ServerSideBadRequestException("secret is null");
-        }
-        if (matchmakerId == null) {
-            throw new ServerSideBadRequestException("matchmakerId is null");
-        }
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-
-        var now = Instant.now();
+        var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         StageModel stage = new StageModel();
         stage.setId(id);

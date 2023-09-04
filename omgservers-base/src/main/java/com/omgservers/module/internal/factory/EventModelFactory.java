@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -23,7 +25,7 @@ public class EventModelFactory {
     }
 
     public EventModel create(Long id, EventBodyModel body) {
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var event = new EventModel();
         event.setId(id);

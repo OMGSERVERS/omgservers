@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -23,14 +24,10 @@ public class TenantModelFactory {
     }
 
     public TenantModel create(final Long id, final TenantConfigModel config) {
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-
-        var now = Instant.now();
+        var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         TenantModel tenant = new TenantModel();
-        tenant.setId(generateIdOperation.generateId());
+        tenant.setId(id);
         tenant.setCreated(now);
         tenant.setModified(now);
         tenant.setConfig(config);
