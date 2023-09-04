@@ -11,121 +11,99 @@
     </parent>
 
     <artifactId>omgservers-bom</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
-    <properties>
-        <omgservers.exception.version>1.0.0-SNAPSHOT</omgservers.exception.version>
-        <omgservers.common.version>1.0.0-SNAPSHOT</omgservers.common.version>
-        <omgservers.migration.version>1.0.0-SNAPSHOT</omgservers.migration.version>
-        <omgservers.model.version>1.0.0-SNAPSHOT</omgservers.model.version>
-        <omgservers.dto.version>1.0.0-SNAPSHOT</omgservers.dto.version>
-        <omgservers.base.version>1.0.0-SNAPSHOT</omgservers.base.version>
-        <omgservers.gateway.version>1.0.0-SNAPSHOT</omgservers.gateway.version>
-        <omgservers.user.version>1.0.0-SNAPSHOT</omgservers.user.version>
-        <omgservers.tenant.version>1.0.0-SNAPSHOT</omgservers.tenant.version>
-        <omgservers.lua.version>1.0.0-SNAPSHOT</omgservers.lua.version>
-        <omgservers.matchmaker.version>1.0.0-SNAPSHOT</omgservers.matchmaker.version>
-        <omgservers.runtime.version>1.0.0-SNAPSHOT</omgservers.runtime.version>
-        <omgservers.context.version>1.0.0-SNAPSHOT</omgservers.context.version>
-        <omgservers.handler.version>1.0.0-SNAPSHOT</omgservers.handler.version>
-        <omgservers.job.version>1.0.0-SNAPSHOT</omgservers.job.version>
-        <omgservers.developer.version>1.0.0-SNAPSHOT</omgservers.developer.version>
-        <omgservers.admin.version>1.0.0-SNAPSHOT</omgservers.admin.version>
-        <omgservers.documentation.version>1.0.0-SNAPSHOT</omgservers.documentation.version>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-exception</artifactId>
-                <version>${omgservers.exception.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-common</artifactId>
-                <version>${omgservers.common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-migration</artifactId>
-                <version>${omgservers.migration.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-model</artifactId>
-                <version>${omgservers.model.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-dto</artifactId>
-                <version>${omgservers.dto.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-base</artifactId>
-                <version>${omgservers.base.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-gateway</artifactId>
-                <version>${omgservers.gateway.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-user</artifactId>
-                <version>${omgservers.user.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-tenant</artifactId>
-                <version>${omgservers.tenant.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-lua</artifactId>
-                <version>${omgservers.lua.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-matchmaker</artifactId>
-                <version>${omgservers.matchmaker.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-runtime</artifactId>
-                <version>${omgservers.runtime.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-context</artifactId>
-                <version>${omgservers.context.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-handler</artifactId>
-                <version>${omgservers.handler.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-job</artifactId>
-                <version>${omgservers.job.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-developer</artifactId>
-                <version>${omgservers.developer.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-admin</artifactId>
-                <version>${omgservers.admin.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.omgservers</groupId>
                 <artifactId>omgservers-documentation</artifactId>
-                <version>${omgservers.documentation.version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
