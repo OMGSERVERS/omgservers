@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.operation.getIndex;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
@@ -50,7 +50,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
                             log.debug("Index was found, name={}", name);
                             return createIndex(iterator.next());
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("index can't be parsed, name=" + name, e);
+                            throw new ServerSideConflictException("index can't be parsed, name=" + name, e);
                         }
                     } else {
                         throw new ServerSideNotFoundException("index was not found, name=" + name);

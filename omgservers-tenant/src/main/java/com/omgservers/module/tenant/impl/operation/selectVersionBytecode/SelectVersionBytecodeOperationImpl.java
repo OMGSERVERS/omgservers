@@ -2,6 +2,7 @@ package com.omgservers.module.tenant.impl.operation.selectVersionBytecode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionBytecodeModel;
@@ -59,7 +60,7 @@ class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperati
                                     VersionBytecodeModel.class);
                             return bytecode;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("bytecode can't be parsed, versionId=" + versionId);
+                            throw new ServerSideConflictException("bytecode can't be parsed, versionId=" + versionId);
                         }
                     } else {
                         throw new ServerSideNotFoundException(String.format("version was not found, " +

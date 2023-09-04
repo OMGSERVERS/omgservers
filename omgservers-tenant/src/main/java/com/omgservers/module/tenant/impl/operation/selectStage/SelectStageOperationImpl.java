@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.selectStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stage.StageModel;
@@ -58,7 +58,7 @@ class SelectStageOperationImpl implements SelectStageOperation {
                             log.info("Stage was found, id={}", id);
                             return createStage(iterator.next());
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("stage config can't be parsed, id=" + id);
+                            throw new ServerSideConflictException("stage config can't be parsed, id=" + id);
                         }
                     } else {
                         throw new ServerSideNotFoundException("stage was not found, id=" + id);

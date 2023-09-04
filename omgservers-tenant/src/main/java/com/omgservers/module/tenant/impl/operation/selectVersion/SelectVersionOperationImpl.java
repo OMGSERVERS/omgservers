@@ -2,6 +2,7 @@ package com.omgservers.module.tenant.impl.operation.selectVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionBytecodeModel;
@@ -60,7 +61,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
                             log.info("Version was found, version={}", version);
                             return version;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("version can't be parsed, id=" + id);
+                            throw new ServerSideConflictException("version can't be parsed, id=" + id);
                         }
                     } else {
                         throw new ServerSideNotFoundException(String.format("version was not found, id=%s", id));

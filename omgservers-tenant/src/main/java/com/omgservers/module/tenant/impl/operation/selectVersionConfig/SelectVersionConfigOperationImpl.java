@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.operation.selectVersionConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
@@ -59,7 +59,7 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                                     VersionConfigModel.class);
                             return versionConfig;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("stage config can't be parsed, " +
+                            throw new ServerSideConflictException("stage config can't be parsed, " +
                                     "versionId=" + versionId);
                         }
                     } else {

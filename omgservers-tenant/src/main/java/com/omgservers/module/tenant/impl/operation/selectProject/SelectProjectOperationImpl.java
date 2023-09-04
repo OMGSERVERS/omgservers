@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.selectProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.project.ProjectModel;
@@ -59,7 +59,7 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
                             log.info("Project was found, project={}", project);
                             return project;
                         } catch (IOException e) {
-                            throw new ServerSideInternalException("project config can't be parsed, id=" + id);
+                            throw new ServerSideConflictException("project config can't be parsed, id=" + id);
                         }
                     } else {
                         throw new ServerSideNotFoundException("project was not found, id=" + id);
