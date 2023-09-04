@@ -61,19 +61,16 @@ class DeleteMatchOperationTest extends Assertions {
         final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
-        assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, match.getId()));
+        assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, matchmaker.getId(), match.getId()));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteMatch_thenSkip() {
+    void givenUnknownIds_whenDeleteMatch_thenFalse() {
         final var shard = 0;
+        final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, id));
-    }
-
-    Long runtimeId() {
-        return generateIdOperation.generateId();
+        assertFalse(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, matchmakerId, id));
     }
 
     Long tenantId() {

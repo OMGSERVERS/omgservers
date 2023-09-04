@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.operation.updateMatch;
+package com.omgservers.module.matchmaker.impl.operation.updateMatchConfig;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.match.MatchConfigModel;
@@ -18,11 +18,11 @@ import java.time.Instant;
 
 @Slf4j
 @QuarkusTest
-class UpdateMatchOperationTest extends Assertions {
+class UpdateMatchConfigOperationTest extends Assertions {
     static private final long TIMEOUT = 1L;
 
     @Inject
-    UpdateMatchOperation updateMatchOperation;
+    UpdateMatchConfigOperation updateMatchConfigOperation;
 
     @Inject
     UpsertMatchOperation upsertMatchOperation;
@@ -53,7 +53,7 @@ class UpdateMatchOperationTest extends Assertions {
         match.setModified(Instant.now());
         match.setConfig(new MatchConfigModel());
 
-        updateMatchOperation.updateMatch(TIMEOUT, pgPool, shard, match);
+        updateMatchConfigOperation.updateMatch(TIMEOUT, pgPool, shard, match.getMatchmakerId(), match.getId(), match.getConfig());
     }
 
     @Test
@@ -67,8 +67,8 @@ class UpdateMatchOperationTest extends Assertions {
         // Set unknown id
         match.setId(generateIdOperation.generateId());
 
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> updateMatchOperation
-                .updateMatch(TIMEOUT, pgPool, shard, match));
+        final var exception = assertThrows(ServerSideNotFoundException.class, () -> updateMatchConfigOperation
+                .updateMatch(TIMEOUT, pgPool, shard, match.getMatchmakerId(), match.getId(), match.getConfig()));
         log.info("Exception: {}", exception.getMessage());
     }
 

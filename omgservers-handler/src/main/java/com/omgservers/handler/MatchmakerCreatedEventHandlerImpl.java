@@ -36,8 +36,6 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
-        final var tenantId = body.getTenantId();
-        final var stageId = body.getStageId();
         final var id = body.getId();
         final var job = jobModelFactory.create(id, id, JobType.MATCHMAKER);
         final var request = new SyncJobShardedRequest(job);

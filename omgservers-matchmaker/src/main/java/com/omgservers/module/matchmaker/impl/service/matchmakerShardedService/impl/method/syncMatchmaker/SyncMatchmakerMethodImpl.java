@@ -8,6 +8,8 @@ import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,40 +21,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchmakerOperation upsertMatchmakerOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<SyncMatchmakerShardedResponse> syncMatchmaker(SyncMatchmakerShardedRequest request) {
         SyncMatchmakerShardedRequest.validate(request);
 
         final var matchmaker = request.getMatchmaker();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> upsertMatchmakerOperation.
-                                upsertMatchmaker(sqlConnection, shardModel.shard(), matchmaker),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Matchmaker was created, matchmaker=" + matchmaker);
-                            } else {
-                                return logModelFactory.create("Matchmaker was updated, matchmaker=" + matchmaker);
-                            }
-                        },
-                        inserted -> {
-                            final var id = matchmaker.getId();
-                            final var tenantId = matchmaker.getTenantId();
-                            final var stageId = matchmaker.getStageId();
-                            if (inserted) {
-                                return new MatchmakerCreatedEventBodyModel(id, tenantId, stageId);
-                            } else {
-                                return new MatchmakerCreatedEventBodyModel(id, tenantId, stageId);
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, matchmaker))
                 .map(SyncMatchmakerShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, MatchmakerModel matchmaker) {
+        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
+                upsertMatchmakerOperation.upsertMatchmaker(context, sqlConnection, shardModel.shard(), matchmaker));
     }
 }

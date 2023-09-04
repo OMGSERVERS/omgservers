@@ -1,14 +1,13 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncRequest;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
 import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,30 +17,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncRequestMethodImpl implements SyncRequestMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertRequestOperation upsertRequestOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<SyncRequestShardedResponse> syncRequest(SyncRequestShardedRequest request) {
         SyncRequestShardedRequest.validate(request);
 
         final var requestModel = request.getRequest();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        (sqlConnection, shardModel) -> upsertRequestOperation
-                                .upsertRequest(sqlConnection, shardModel.shard(), requestModel),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Request was created, request=" + requestModel);
-                            } else {
-                                return logModelFactory.create("Request was updated, request=" + requestModel);
-                            }
-                        }
-                ))
-                .map(ChangeWithLogResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, requestModel))
                 .map(SyncRequestShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, RequestModel request) {
+        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
+                upsertRequestOperation.upsertRequest(context, sqlConnection, shardModel.shard(), request));
     }
 }

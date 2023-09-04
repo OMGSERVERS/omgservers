@@ -25,7 +25,7 @@ import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteReque
 import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.module.matchmaker.impl.operation.selectMatchesByMatchmakerId.SelectMatchesByMatchmakerIdOperation;
 import com.omgservers.module.matchmaker.impl.operation.selectRequestsByMatchmakerId.SelectRequestsByMatchmakerIdOperation;
-import com.omgservers.module.matchmaker.impl.operation.updateMatch.UpdateMatchOperation;
+import com.omgservers.module.matchmaker.impl.operation.updateMatchConfig.UpdateMatchConfigOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.module.tenant.TenantModule;
@@ -59,7 +59,7 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteRequestOperation deleteRequestOperation;
     final UpsertMatchOperation upsertMatchOperation;
-    final UpdateMatchOperation updateMatchOperation;
+    final UpdateMatchConfigOperation updateMatchConfigOperation;
     final UpsertEventOperation upsertEventOperation;
     final CheckShardOperation checkShardOperation;
     final UpsertLogOperation upsertLogOperation;
@@ -202,11 +202,31 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
     Uni<Boolean> syncMatchmakingResults(final Long matchmakerId,
                                         final int shard,
                                         final MatchmakingResultsModel matchmakingResults) {
-        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
-                upsertCreatedMatches(context, sqlConnection, shard, matchmakerId, matchmakingResults.getCreatedMatches())
-                        .flatMap(voidItem -> updateUpdatedMatches(sqlConnection, shard, matchmakerId, matchmakingResults.getUpdatedMatches()))
-                        .flatMap(voidItem -> upsertMatchedClients(sqlConnection, shard, matchmakerId, matchmakingResults.getMatchedClients()))
-                        .flatMap(voidItem -> deleteCompletedRequests(sqlConnection, shard, matchmakerId, matchmakingResults.getCompletedRequests()))
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                upsertCreatedMatches(
+                        changeContext,
+                        sqlConnection,
+                        shard,
+                        matchmakerId,
+                        matchmakingResults.getCreatedMatches())
+                        .flatMap(voidItem -> updateUpdatedMatches(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                matchmakerId,
+                                matchmakingResults.getUpdatedMatches()))
+                        .flatMap(voidItem -> upsertMatchedClients(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                matchmakerId,
+                                matchmakingResults.getMatchedClients()))
+                        .flatMap(voidItem -> deleteCompletedRequests(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                matchmakerId,
+                                matchmakingResults.getCompletedRequests()))
                         .replaceWith(true));
     }
 
@@ -224,39 +244,52 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> updateUpdatedMatches(final SqlConnection sqlConnection,
+    Uni<Void> updateUpdatedMatches(final ChangeContext changeContext,
+                                   final SqlConnection sqlConnection,
                                    final int shard,
                                    final Long matchmakerId,
                                    final List<MatchModel> updatedMatches) {
         return Multi.createFrom().iterable(updatedMatches)
-                .onItem().transformToUniAndConcatenate(updatedMatch -> updateMatchOperation
-                        .updateMatch(sqlConnection, shard, updatedMatch))
+                .onItem().transformToUniAndConcatenate(updatedMatch -> updateMatchConfigOperation
+                        .updateMatch(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                updatedMatch.getMatchmakerId(),
+                                updatedMatch.getId(),
+                                updatedMatch.getConfig()))
                 .collect().asList()
                 .invoke(results -> log.info("Updated matches were synchronized, " +
                         "matchmakerId={}, count={}", matchmakerId, updatedMatches.size()))
                 .replaceWithVoid();
     }
 
-    Uni<Void> upsertMatchedClients(final SqlConnection sqlConnection,
+    Uni<Void> upsertMatchedClients(final ChangeContext changeContext,
+                                   final SqlConnection sqlConnection,
                                    final int shard,
                                    final Long matchmakerId,
                                    final List<MatchClientModel> matchedClients) {
         return Multi.createFrom().iterable(matchedClients)
                 .onItem().transformToUniAndConcatenate(matchedClient -> upsertMatchClientOperation
-                        .upsertMatchClient(sqlConnection, shard, matchedClient))
+                        .upsertMatchClient(changeContext, sqlConnection, shard, matchedClient))
                 .collect().asList()
                 .invoke(results -> log.info("Matched clients were synchronized, " +
                         "matchmakerId={}, count={}", matchmakerId, matchedClients.size()))
                 .replaceWithVoid();
     }
 
-    Uni<Void> deleteCompletedRequests(final SqlConnection sqlConnection,
+    Uni<Void> deleteCompletedRequests(final ChangeContext changeContext,
+                                      final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long matchmakerId,
                                       final List<RequestModel> completedRequests) {
         return Multi.createFrom().iterable(completedRequests)
-                .onItem().transformToUniAndMerge(completedRequest -> deleteRequestOperation
-                        .deleteRequest(sqlConnection, shard, completedRequest.getId()))
+                .onItem().transformToUniAndMerge(completedRequest -> deleteRequestOperation.deleteRequest(
+                        changeContext,
+                        sqlConnection,
+                        shard,
+                        completedRequest.getMatchmakerId(),
+                        completedRequest.getId()))
                 .collect().asList()
                 .invoke(results -> log.info("Completed requests were deleted, " +
                         "matchmakerId={}, count={}", matchmakerId, completedRequests.size()))

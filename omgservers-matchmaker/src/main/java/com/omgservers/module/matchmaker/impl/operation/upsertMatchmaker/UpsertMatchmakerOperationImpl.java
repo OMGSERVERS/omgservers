@@ -1,9 +1,14 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -31,12 +36,21 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertMatchmaker(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertMatchmaker(final ChangeContext changeContext,
+                                         final SqlConnection sqlConnection,
                                          final int shard,
                                          final MatchmakerModel matchmaker) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -44,21 +58,21 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
             throw new ServerSideBadRequestException("matchmaker is null");
         }
 
-        return upsertQuery(sqlConnection, shard, matchmaker)
-                .invoke(inserted -> {
-                    if (inserted) {
+        return upsertObject(sqlConnection, shard, matchmaker)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, matchmaker))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, matchmaker))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
                         log.info("Matchmaker was created, shard={}, matchmaker={}", shard, matchmaker);
-                    } else {
-                        log.info("Matchmaker was updated, shard={}, matchmaker={}", shard, matchmaker);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
-                             final int shard,
-                             final MatchmakerModel matchmaker) {
+    Uni<Boolean> upsertObject(final SqlConnection sqlConnection,
+                              final int shard,
+                              final MatchmakerModel matchmaker) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(new ArrayList<>() {{
@@ -69,5 +83,40 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                     add(matchmaker.getStageId());
                 }}))
                 .map(rowSet -> rowSet.rowCount() > 0);
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final MatchmakerModel matchmaker) {
+        if (objectWasInserted) {
+            final var body = new MatchmakerCreatedEventBodyModel(matchmaker.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(sqlConnection, event)
+                    .invoke(eventWasInserted -> {
+                        if (eventWasInserted) {
+                            changeContext.add(event);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final MatchmakerModel matchmaker) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Matchmaker was inserted, matchmaker=" + matchmaker);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
+        }
     }
 }

@@ -8,8 +8,9 @@ import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,31 +20,26 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncMatchClientMethodImpl implements SyncMatchClientMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchClientOperation upsertMatchClientOperation;
+    final CheckShardOperation checkShardOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
-    final PgPool pgPool;
 
     @Override
     public Uni<SyncMatchClientShardedResponse> syncMatchClient(SyncMatchClientShardedRequest request) {
         SyncMatchClientShardedRequest.validate(request);
 
         final var matchClient = request.getMatchClient();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        (sqlConnection, shardModel) -> upsertMatchClientOperation
-                                .upsertMatchClient(sqlConnection, shardModel.shard(), matchClient),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("Match client was created, matchClient=" + matchClient);
-                            } else {
-                                return null;
-                            }
-                        }
-                ))
-                .map(ChangeWithLogResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, matchClient))
                 .map(SyncMatchClientShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, MatchClientModel matchClient) {
+        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
+                upsertMatchClientOperation.upsertMatchClient(context, sqlConnection, shardModel.shard(), matchClient));
     }
 }

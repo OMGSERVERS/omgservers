@@ -1,10 +1,14 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.request.RequestModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -33,12 +37,21 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertRequest(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertRequest(final ChangeContext changeContext,
+                                      final SqlConnection sqlConnection,
                                       final int shard,
                                       final RequestModel request) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -46,21 +59,21 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
             throw new ServerSideBadRequestException("request is null");
         }
 
-        return upsertQuery(sqlConnection, shard, request)
-                .invoke(inserted -> {
-                    if (inserted) {
+        return upsertObject(sqlConnection, shard, request)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, request))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, request))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
                         log.info("Request was inserted, shard={}, request={}", shard, request);
-                    } else {
-                        log.info("Request was updated, shard={}, request={}", shard, request);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection,
-                             final int shard,
-                             final RequestModel request) {
+    Uni<Boolean> upsertObject(final SqlConnection sqlConnection,
+                              final int shard,
+                              final RequestModel request) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(request.getConfig());
@@ -78,6 +91,30 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext changeContext,
+                             final SqlConnection sqlConnection,
+                             final RequestModel request) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext changeContext,
+                           final SqlConnection sqlConnection,
+                           final RequestModel request) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Request was inserted, request=" + request);
+            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
+                    .invoke(logWasInserted -> {
+                        if (logWasInserted) {
+                            changeContext.add(changeLog);
+                        }
+                    });
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

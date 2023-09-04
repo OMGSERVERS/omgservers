@@ -1,15 +1,12 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteMatchmaker;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedRequest;
-import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerShardedResponse;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker.DeleteMatchmakerOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,37 +16,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteMatchmakerOperation deleteMatchmakerOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<DeleteMatchmakerShardedResponse> deleteMatchmaker(DeleteMatchmakerShardedRequest request) {
         DeleteMatchmakerShardedRequest.validate(request);
 
         final var id = request.getId();
-        return internalModule.getChangeService().changeWithEvent(new ChangeWithEventRequest(request,
-                        (sqlConnection, shardModel) -> deleteMatchmakerOperation
-                                .deleteMatchmaker(sqlConnection, shardModel.shard(), id),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create("Matchmaker was deleted, matchmakerId=" + id);
-                            } else {
-                                return null;
-                            }
-                        },
-                        deleted -> {
-                            if (deleted) {
-                                return new MatchmakerDeletedEventBodyModel(id);
-                            } else {
-                                return null;
-                            }
-                        }
-                ))
-                .map(ChangeWithEventResponse::getResult)
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, id))
                 .map(DeleteMatchmakerShardedResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long id) {
+        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+                deleteMatchmakerOperation.deleteMatchmaker(changeContext, sqlConnection, shardModel.shard(), id));
     }
 }

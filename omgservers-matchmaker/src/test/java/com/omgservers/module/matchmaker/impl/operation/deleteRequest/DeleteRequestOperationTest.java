@@ -1,8 +1,8 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
+import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
-import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -51,15 +51,16 @@ class DeleteRequestOperationTest extends Assertions {
         final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
-        assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, request.getId()));
+        assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, matchmaker.getId(), request.getId()));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteTenant_thenSkip() {
+    void givenUnknownIds_whenDeleteRequest_thenFalse() {
         final var shard = 0;
+        final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
     }
 
     Long userId() {

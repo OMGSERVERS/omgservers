@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 public class MatchmakerCreatedEventBodyModel extends EventBodyModel {
 
     Long id;
-    Long tenantId;
-    Long stageId;
 
     @Override
     public EventQualifierEnum getQualifier() {
