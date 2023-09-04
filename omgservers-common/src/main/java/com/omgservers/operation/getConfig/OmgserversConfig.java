@@ -5,7 +5,7 @@ import io.smallrye.config.ConfigMapping;
 import java.net.URI;
 
 @ConfigMapping(prefix = "omgservers")
-public interface ServiceApplicationConfig {
+public interface OmgserversConfig {
     long datacenterId();
 
     long nodeId();
