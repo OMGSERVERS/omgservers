@@ -3,6 +3,7 @@ package com.omgservers.model.event;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
@@ -24,6 +25,7 @@ public class EventModel {
     Instant modified;
     Long groupId;
     EventQualifierEnum qualifier;
+    @EqualsAndHashCode.Exclude
     EventBodyModel body;
     EventStatusEnum status;
 }
