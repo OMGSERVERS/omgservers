@@ -98,8 +98,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                             matchmakerId,
                             match.getId(),
                             request.getUserId(),
-                            request.getClientId(),
-                            request.getId());
+                            request.getClientId());
                     return matchClient;
                 })
                 .toList();

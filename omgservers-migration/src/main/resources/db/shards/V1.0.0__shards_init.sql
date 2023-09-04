@@ -168,9 +168,7 @@ create table if not exists tab_matchmaker_match_client (
     modified timestamp with time zone not null,
     user_id bigint not null,
     client_id bigint not null,
-    request_id bigint not null,
-    unique(match_id, user_id, client_id),
-    unique(match_id, request_id)
+    unique(match_id, user_id, client_id)
 );
 
 -- runtime module

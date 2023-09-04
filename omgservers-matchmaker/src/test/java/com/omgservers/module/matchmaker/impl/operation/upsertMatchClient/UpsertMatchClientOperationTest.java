@@ -51,7 +51,7 @@ class UpsertMatchClientOperationTest extends Assertions {
         final var match = matchModelFactory.create(matchmaker.getId(), new MatchConfigModel());
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
-        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId(), requestId());
+        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId());
         assertTrue(upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient));
     }
 
@@ -63,7 +63,7 @@ class UpsertMatchClientOperationTest extends Assertions {
         final var match = matchModelFactory.create(matchmaker.getId(), new MatchConfigModel());
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
-        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId(), requestId());
+        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId());
         upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient);
         assertFalse(upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient));
     }

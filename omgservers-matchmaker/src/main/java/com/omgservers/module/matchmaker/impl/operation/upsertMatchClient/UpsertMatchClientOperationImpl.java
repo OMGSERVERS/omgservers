@@ -81,7 +81,6 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
                     add(matchClient.getModified().atOffset(ZoneOffset.UTC));
                     add(matchClient.getUserId());
                     add(matchClient.getClientId());
-                    add(matchClient.getRequestId());
                 }}))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }

@@ -25,5 +25,4 @@ public class MatchClientModel {
     Instant modified;
     Long userId;
     Long clientId;
-    Long requestId;
 }

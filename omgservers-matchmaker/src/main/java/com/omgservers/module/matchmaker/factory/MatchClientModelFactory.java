@@ -18,18 +18,16 @@ public class MatchClientModelFactory {
     public MatchClientModel create(final Long matchmakerId,
                                    final Long matchId,
                                    final Long userId,
-                                   final Long clientId,
-                                   final Long requestId) {
+                                   final Long clientId) {
         final var id = generateIdOperation.generateId();
-        return create(id, matchmakerId, matchId, userId, clientId, requestId);
+        return create(id, matchmakerId, matchId, userId, clientId);
     }
 
     public MatchClientModel create(final Long id,
                                    final Long matchmakerId,
                                    final Long matchId,
                                    final Long userId,
-                                   final Long clientId,
-                                   final Long requestId) {
+                                   final Long clientId) {
         Instant now = Instant.now();
 
         final var matchClient = new MatchClientModel();
@@ -40,7 +38,6 @@ public class MatchClientModelFactory {
         matchClient.setModified(now);
         matchClient.setUserId(userId);
         matchClient.setClientId(clientId);
-        matchClient.setRequestId(requestId);
         return matchClient;
     }
 }

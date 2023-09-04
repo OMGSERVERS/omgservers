@@ -54,7 +54,7 @@ class DeleteMatchClientOperationTest extends Assertions {
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
         final var match = matchModelFactory.create(matchmaker.getId(), new MatchConfigModel());
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
-        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId(), requestId());
+        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId());
         upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient);
 
         assertTrue(deleteMatchClientOperation.deleteMatchClient(TIMEOUT, pgPool, shard, matchmaker.getId(), matchClient.getId()));
