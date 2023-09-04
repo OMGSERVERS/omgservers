@@ -1,12 +1,12 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.operation.getServers.GetServersOperation;
 import com.omgservers.dto.internal.DeleteJobShardedRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.operation.getServers.GetServersOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (RuntimeCreatedEventBodyModel) event.getBody();
+        final var body = (RuntimeDeletedEventBodyModel) event.getBody();
         final var id = body.getId();
         final var request = new DeleteJobShardedRequest(id, id);
         return internalModule.getJobShardedService().deleteJob(request)

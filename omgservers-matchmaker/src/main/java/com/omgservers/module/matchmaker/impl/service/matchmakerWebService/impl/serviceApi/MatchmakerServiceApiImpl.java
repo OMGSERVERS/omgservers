@@ -10,6 +10,8 @@ import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedRequest;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
@@ -86,6 +88,12 @@ public class MatchmakerServiceApiImpl implements MatchmakerServiceApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::deleteMatch);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetMatchClientShardedResponse> getMatchClient(GetMatchClientShardedRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, matchmakerWebService::getMatchClient);
     }
 
     @Override

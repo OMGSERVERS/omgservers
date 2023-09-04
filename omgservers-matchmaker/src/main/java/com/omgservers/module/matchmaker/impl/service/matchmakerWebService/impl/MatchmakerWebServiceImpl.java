@@ -10,6 +10,8 @@ import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedRequest;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
@@ -75,6 +77,11 @@ class MatchmakerWebServiceImpl implements MatchmakerWebService {
     @Override
     public Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request) {
         return matchmakerShardedService.deleteMatch(request);
+    }
+
+    @Override
+    public Uni<GetMatchClientShardedResponse> getMatchClient(GetMatchClientShardedRequest request) {
+        return matchmakerShardedService.getMatchClient(request);
     }
 
     @Override

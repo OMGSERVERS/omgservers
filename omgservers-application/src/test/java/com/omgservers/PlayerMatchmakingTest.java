@@ -1,8 +1,8 @@
 package com.omgservers;
 
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.utils.operation.BootstrapVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
@@ -38,9 +38,22 @@ public class PlayerMatchmakingTest extends Assertions {
                         function player_signed_in(event, player)
                             player.respond("signed_in")
                         end
+                                          
+                        function runtime_add_player(event, runtime)
+                            print("event.id=" .. event.id)
+                            print("event.user_id=" .. event.user_id)
+                            print("event.player_id=" .. event.player_id)
+                            print("event.client_id=" .. event.client_id)
+                            print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
+                            print("runtime.match_id=" .. runtime.match_id)
+                            print("runtime.runtime_id=" .. runtime.runtime_id)
+                        end
                                                 
                         function runtime_update(event, runtime)
                             print(event.step)
+                            print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
+                            print("runtime.match_id=" .. runtime.match_id)
+                            print("runtime.runtime_id=" .. runtime.runtime_id)
                         end
 
                         print("version was initialized")

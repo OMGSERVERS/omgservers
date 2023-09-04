@@ -6,6 +6,8 @@ import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
+import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
@@ -58,6 +60,8 @@ public enum EventQualifierEnum {
     MATCH_CREATED(MatchCreatedEventBodyModel.class),
     MATCH_UPDATED(MatchUpdatedEventBodyModel.class),
     MATCH_DELETED(MatchDeletedEventBodyModel.class),
+    MATCH_CLIENT_CREATED(MatchClientCreatedEventBodyModel.class),
+    MATCH_CLIENT_DELETED(MatchClientDeletedEventBodyModel.class),
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class),
     RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),

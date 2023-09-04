@@ -28,8 +28,9 @@ import java.util.ArrayList;
 class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
 
     static private final String sql = """
-            insert into $schema.tab_matchmaker_match_client(id, matchmaker_id, match_id, created, modified, user_id, client_id, request_id)
-            values($1, $2, $3, $4, $5, $6, $7, $8)
+            insert into $schema.tab_matchmaker_match_client(
+                id, matchmaker_id, match_id, created, modified, user_id, client_id)
+            values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
             nothing
             """;

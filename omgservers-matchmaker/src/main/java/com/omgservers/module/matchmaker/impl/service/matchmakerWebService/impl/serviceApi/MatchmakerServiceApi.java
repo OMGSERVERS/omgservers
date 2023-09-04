@@ -10,6 +10,8 @@ import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedRequest;
+import com.omgservers.dto.matchmaker.GetMatchClientShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchShardedRequest;
 import com.omgservers.dto.matchmaker.GetMatchShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
@@ -60,6 +62,10 @@ public interface MatchmakerServiceApi {
     @PUT
     @Path("/delete-match")
     Uni<DeleteMatchShardedResponse> deleteMatch(DeleteMatchShardedRequest request);
+
+    @PUT
+    @Path("/get-match-client")
+    Uni<GetMatchClientShardedResponse> getMatchClient(GetMatchClientShardedRequest request);
 
     @PUT
     @Path("/sync-match-client")
