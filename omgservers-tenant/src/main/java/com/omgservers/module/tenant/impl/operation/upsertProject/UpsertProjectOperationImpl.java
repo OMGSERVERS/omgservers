@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -77,13 +77,13 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(project.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(project.getId());
-                        add(project.getTenantId());
-                        add(project.getCreated().atOffset(ZoneOffset.UTC));
-                        add(project.getModified().atOffset(ZoneOffset.UTC));
-                        add(configString);
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            project.getId(),
+                            project.getTenantId(),
+                            project.getCreated().atOffset(ZoneOffset.UTC),
+                            project.getModified().atOffset(ZoneOffset.UTC),
+                            configString
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

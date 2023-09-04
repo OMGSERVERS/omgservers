@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -80,19 +80,19 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(runtime.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(runtime.getId());
-                        add(runtime.getCreated().atOffset(ZoneOffset.UTC));
-                        add(runtime.getModified().atOffset(ZoneOffset.UTC));
-                        add(runtime.getTenantId());
-                        add(runtime.getStageId());
-                        add(runtime.getVersionId());
-                        add(runtime.getMatchmakerId());
-                        add(runtime.getMatchId());
-                        add(runtime.getType());
-                        add(runtime.getCurrentStep());
-                        add(configString);
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            runtime.getId(),
+                            runtime.getCreated().atOffset(ZoneOffset.UTC),
+                            runtime.getModified().atOffset(ZoneOffset.UTC),
+                            runtime.getTenantId(),
+                            runtime.getStageId(),
+                            runtime.getVersionId(),
+                            runtime.getMatchmakerId(),
+                            runtime.getMatchId(),
+                            runtime.getType(),
+                            runtime.getCurrentStep(),
+                            configString
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

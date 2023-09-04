@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -62,14 +62,14 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(player.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(player.getId());
-                        add(player.getUserId());
-                        add(player.getCreated().atOffset(ZoneOffset.UTC));
-                        add(player.getModified().atOffset(ZoneOffset.UTC));
-                        add(player.getStageId());
-                        add(configString);
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            player.getId(),
+                            player.getUserId(),
+                            player.getCreated().atOffset(ZoneOffset.UTC),
+                            player.getModified().atOffset(ZoneOffset.UTC),
+                            player.getStageId(),
+                            configString
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

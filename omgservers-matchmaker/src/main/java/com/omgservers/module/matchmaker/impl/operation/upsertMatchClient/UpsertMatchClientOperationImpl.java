@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -74,15 +74,15 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, MatchClientModel matchClient) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.from(new ArrayList<>() {{
-                    add(matchClient.getId());
-                    add(matchClient.getMatchmakerId());
-                    add(matchClient.getMatchId());
-                    add(matchClient.getCreated().atOffset(ZoneOffset.UTC));
-                    add(matchClient.getModified().atOffset(ZoneOffset.UTC));
-                    add(matchClient.getUserId());
-                    add(matchClient.getClientId());
-                }}))
+                .execute(Tuple.from(Arrays.asList(
+                        matchClient.getId(),
+                        matchClient.getMatchmakerId(),
+                        matchClient.getMatchId(),
+                        matchClient.getCreated().atOffset(ZoneOffset.UTC),
+                        matchClient.getModified().atOffset(ZoneOffset.UTC),
+                        matchClient.getUserId(),
+                        matchClient.getClientId()
+                )))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 

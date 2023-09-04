@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -51,11 +51,11 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
 
     Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final LogModel logModel) {
         return sqlConnection.preparedQuery(sql)
-                .execute(Tuple.from(new ArrayList<>() {{
-                    add(logModel.getId());
-                    add(logModel.getCreated().atOffset(ZoneOffset.UTC));
-                    add(logModel.getMessage());
-                }}))
+                .execute(Tuple.from(Arrays.asList(
+                        logModel.getId(),
+                        logModel.getCreated().atOffset(ZoneOffset.UTC),
+                        logModel.getMessage()
+                )))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

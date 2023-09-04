@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -56,14 +56,14 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, AttributeModel attribute) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.from(new ArrayList<>() {{
-                    add(attribute.getId());
-                    add(attribute.getPlayerId());
-                    add(attribute.getCreated().atOffset(ZoneOffset.UTC));
-                    add(attribute.getModified().atOffset(ZoneOffset.UTC));
-                    add(attribute.getName());
-                    add(attribute.getValue());
-                }}))
+                .execute(Tuple.from(Arrays.asList(
+                        attribute.getId(),
+                        attribute.getPlayerId(),
+                        attribute.getCreated().atOffset(ZoneOffset.UTC),
+                        attribute.getModified().atOffset(ZoneOffset.UTC),
+                        attribute.getName(),
+                        attribute.getValue()
+                )))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

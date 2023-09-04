@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -79,16 +79,16 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
             var bodyString = objectMapper.writeValueAsString(runtimeCommand.getBody());
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(runtimeCommand.getId());
-                        add(runtimeCommand.getRuntimeId());
-                        add(runtimeCommand.getCreated().atOffset(ZoneOffset.UTC));
-                        add(runtimeCommand.getModified().atOffset(ZoneOffset.UTC));
-                        add(runtimeCommand.getQualifier());
-                        add(bodyString);
-                        add(runtimeCommand.getStatus());
-                        add(runtimeCommand.getStep());
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            runtimeCommand.getId(),
+                            runtimeCommand.getRuntimeId(),
+                            runtimeCommand.getCreated().atOffset(ZoneOffset.UTC),
+                            runtimeCommand.getModified().atOffset(ZoneOffset.UTC),
+                            runtimeCommand.getQualifier(),
+                            bodyString,
+                            runtimeCommand.getStatus(),
+                            runtimeCommand.getStep()
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

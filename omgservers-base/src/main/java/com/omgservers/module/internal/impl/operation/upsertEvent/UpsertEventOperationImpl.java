@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -58,15 +58,15 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
         try {
             var bodyString = objectMapper.writeValueAsString(event.getBody());
             return sqlConnection.preparedQuery(sql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(event.getId());
-                        add(event.getCreated().atOffset(ZoneOffset.UTC));
-                        add(event.getModified().atOffset(ZoneOffset.UTC));
-                        add(event.getGroupId());
-                        add(event.getQualifier());
-                        add(bodyString);
-                        add(event.getStatus());
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            event.getId(),
+                            event.getCreated().atOffset(ZoneOffset.UTC),
+                            event.getModified().atOffset(ZoneOffset.UTC),
+                            event.getGroupId(),
+                            event.getQualifier(),
+                            bodyString,
+                            event.getStatus()
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

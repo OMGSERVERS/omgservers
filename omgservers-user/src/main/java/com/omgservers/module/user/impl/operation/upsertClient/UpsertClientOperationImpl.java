@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -56,13 +56,13 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
     Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, ClientModel client) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.from(new ArrayList<>() {{
-                    add(client.getId());
-                    add(client.getPlayerId());
-                    add(client.getCreated().atOffset(ZoneOffset.UTC));
-                    add(client.getServer().toString());
-                    add(client.getConnectionId());
-                }}))
+                .execute(Tuple.from(Arrays.asList(
+                        client.getId(),
+                        client.getPlayerId(),
+                        client.getCreated().atOffset(ZoneOffset.UTC),
+                        client.getServer().toString(),
+                        client.getConnectionId()
+                )))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 }

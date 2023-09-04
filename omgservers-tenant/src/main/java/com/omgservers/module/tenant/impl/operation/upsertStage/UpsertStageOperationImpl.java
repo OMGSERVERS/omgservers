@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -81,15 +81,15 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(stage.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.from(new ArrayList<>() {{
-                        add(stage.getId());
-                        add(stage.getProjectId());
-                        add(stage.getCreated().atOffset(ZoneOffset.UTC));
-                        add(stage.getModified().atOffset(ZoneOffset.UTC));
-                        add(stage.getSecret());
-                        add(stage.getMatchmakerId());
-                        add(configString);
-                    }}))
+                    .execute(Tuple.from(Arrays.asList(
+                            stage.getId(),
+                            stage.getProjectId(),
+                            stage.getCreated().atOffset(ZoneOffset.UTC),
+                            stage.getModified().atOffset(ZoneOffset.UTC),
+                            stage.getSecret(),
+                            stage.getMatchmakerId(),
+                            configString
+                    )))
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);

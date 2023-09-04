@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -75,13 +75,13 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                               final MatchmakerModel matchmaker) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.from(new ArrayList<>() {{
-                    add(matchmaker.getId());
-                    add(matchmaker.getCreated().atOffset(ZoneOffset.UTC));
-                    add(matchmaker.getModified().atOffset(ZoneOffset.UTC));
-                    add(matchmaker.getTenantId());
-                    add(matchmaker.getStageId());
-                }}))
+                .execute(Tuple.from(Arrays.asList(
+                        matchmaker.getId(),
+                        matchmaker.getCreated().atOffset(ZoneOffset.UTC),
+                        matchmaker.getModified().atOffset(ZoneOffset.UTC),
+                        matchmaker.getTenantId(),
+                        matchmaker.getStageId()
+                )))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }
 
