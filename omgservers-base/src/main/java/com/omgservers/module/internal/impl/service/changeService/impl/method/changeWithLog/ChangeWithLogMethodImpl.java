@@ -1,7 +1,7 @@
 package com.omgservers.module.internal.impl.service.changeService.impl.method.changeWithLog;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeWithLogResponse;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;

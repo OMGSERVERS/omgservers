@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.playerShardedService.impl.method.deletePlayer;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeWithLogResponse;
 import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.module.internal.InternalModule;

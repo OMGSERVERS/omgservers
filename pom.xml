@@ -4,8 +4,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.omgservers.platform</groupId>
-    <artifactId>omgservers-parent</artifactId>
+    <parent>
+        <groupId>com.omgservers</groupId>
+        <artifactId>omgservers-bom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>omgservers-project</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -22,109 +27,57 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+    <modules>
+        <module>omgservers-admin</module>
+        <module>omgservers-application</module>
+        <module>omgservers-base</module>
+        <module>omgservers-bom</module>
+        <module>omgservers-common</module>
+        <module>omgservers-context</module>
+        <module>omgservers-developer</module>
+        <module>omgservers-documentation</module>
+        <module>omgservers-dto</module>
+        <module>omgservers-exception</module>
+        <module>omgservers-gateway</module>
+        <module>omgservers-handler</module>
+        <module>omgservers-job</module>
+        <module>omgservers-lua</module>
+        <module>omgservers-matchmaker</module>
+        <module>omgservers-migration</module>
+        <module>omgservers-model</module>
+        <module>omgservers-runtime</module>
+        <module>omgservers-tenant</module>
+        <module>omgservers-user</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-opentelemetry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-exception</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-common</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-migration</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-model</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-dto</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-base</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-gateway</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-user</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-tenant</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-lua</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-matchmaker</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-runtime</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-context</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-handler</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-job</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-developer</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-admin</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-application</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-test</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.omgservers</groupId>
-                <artifactId>omgservers-documentation</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <!-- external -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>

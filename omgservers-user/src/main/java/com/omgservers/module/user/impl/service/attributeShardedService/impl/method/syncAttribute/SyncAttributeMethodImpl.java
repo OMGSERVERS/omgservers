@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.syncAttribute;
 
-import com.omgservers.dto.internal.ChangeRequest;
-import com.omgservers.dto.internal.ChangeResponse;
+import com.omgservers.ChangeRequest;
+import com.omgservers.ChangeResponse;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
 import com.omgservers.module.internal.InternalModule;

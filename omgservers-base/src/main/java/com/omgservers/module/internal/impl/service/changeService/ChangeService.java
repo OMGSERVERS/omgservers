@@ -1,11 +1,11 @@
 package com.omgservers.module.internal.impl.service.changeService;
 
-import com.omgservers.dto.internal.ChangeRequest;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeResponse;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeRequest;
+import com.omgservers.ChangeWithEventRequest;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeResponse;
+import com.omgservers.ChangeWithEventResponse;
+import com.omgservers.ChangeWithLogResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ChangeService {

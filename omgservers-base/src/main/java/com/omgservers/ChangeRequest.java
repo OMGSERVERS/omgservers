@@ -1,4 +1,4 @@
-package com.omgservers.dto.internal;
+package com.omgservers;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.shard.ShardModel;

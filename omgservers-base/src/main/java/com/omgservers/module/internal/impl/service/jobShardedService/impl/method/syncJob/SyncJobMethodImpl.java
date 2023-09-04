@@ -3,8 +3,8 @@ package com.omgservers.module.internal.impl.service.jobShardedService.impl.metho
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperation;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.ChangeWithEventRequest;
+import com.omgservers.ChangeWithEventResponse;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
 import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;

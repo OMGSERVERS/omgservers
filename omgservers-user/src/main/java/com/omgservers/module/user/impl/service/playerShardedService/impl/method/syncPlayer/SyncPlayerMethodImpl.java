@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.playerShardedService.impl.method.syncPlayer;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.ChangeWithEventRequest;
+import com.omgservers.ChangeWithEventResponse;
 import com.omgservers.dto.user.SyncPlayerShardedResponse;
 import com.omgservers.dto.user.SyncPlayerShardedRequest;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;

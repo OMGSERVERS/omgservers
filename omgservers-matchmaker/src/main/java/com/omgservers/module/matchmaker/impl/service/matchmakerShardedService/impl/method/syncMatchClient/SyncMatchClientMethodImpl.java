@@ -1,10 +1,9 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncMatchClient;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.matchmaker.SyncMatchClientShardedRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientShardedResponse;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;

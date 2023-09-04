@@ -1,6 +1,7 @@
-package com.omgservers.dto.internal;
+package com.omgservers;
 
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.model.shard.ShardModel;
 import io.smallrye.mutiny.Uni;
@@ -15,9 +16,9 @@ import java.util.function.Function;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeWithLogRequest {
+public class ChangeWithEventRequest {
 
-    static public void validate(ChangeWithLogRequest request) {
+    static public void validate(ChangeWithEventRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
@@ -26,4 +27,5 @@ public class ChangeWithLogRequest {
     ShardedRequest request;
     BiFunction<SqlConnection, ShardModel, Uni<Boolean>> changeFunction;
     Function<Boolean, LogModel> logFunction;
+    Function<Boolean, EventBodyModel> eventBodyFunction;
 }

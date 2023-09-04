@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.objectShardedService.impl.method.deleteObject;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeWithLogResponse;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
 import com.omgservers.module.internal.InternalModule;

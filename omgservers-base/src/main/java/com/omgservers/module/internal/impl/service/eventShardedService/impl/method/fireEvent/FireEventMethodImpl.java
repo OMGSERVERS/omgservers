@@ -3,8 +3,8 @@ package com.omgservers.module.internal.impl.service.eventShardedService.impl.met
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.Dispatcher;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.dto.internal.ChangeRequest;
-import com.omgservers.dto.internal.ChangeResponse;
+import com.omgservers.ChangeRequest;
+import com.omgservers.ChangeResponse;
 import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.dto.internal.FireEventShardedResponse;
 import io.smallrye.mutiny.Uni;

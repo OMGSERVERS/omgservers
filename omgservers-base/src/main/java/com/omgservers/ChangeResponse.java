@@ -1,4 +1,4 @@
-package com.omgservers.dto.internal;
+package com.omgservers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

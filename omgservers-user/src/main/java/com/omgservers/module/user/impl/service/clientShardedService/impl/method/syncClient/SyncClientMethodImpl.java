@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl.method.syncClient;
 
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.ChangeWithEventRequest;
+import com.omgservers.ChangeWithEventResponse;
 import com.omgservers.dto.user.SyncClientShardedResponse;
 import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;

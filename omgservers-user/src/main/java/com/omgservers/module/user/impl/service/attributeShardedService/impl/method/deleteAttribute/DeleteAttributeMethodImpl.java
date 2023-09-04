@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.deleteAttribute;
 
-import com.omgservers.dto.internal.ChangeRequest;
-import com.omgservers.dto.internal.ChangeResponse;
+import com.omgservers.ChangeRequest;
+import com.omgservers.ChangeResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
 import com.omgservers.module.internal.InternalModule;

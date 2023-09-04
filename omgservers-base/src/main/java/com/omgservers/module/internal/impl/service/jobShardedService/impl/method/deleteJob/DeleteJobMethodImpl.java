@@ -3,8 +3,8 @@ package com.omgservers.module.internal.impl.service.jobShardedService.impl.metho
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.impl.operation.deleteJob.DeleteJobOperation;
-import com.omgservers.dto.internal.ChangeWithEventRequest;
-import com.omgservers.dto.internal.ChangeWithEventResponse;
+import com.omgservers.ChangeWithEventRequest;
+import com.omgservers.ChangeWithEventResponse;
 import com.omgservers.dto.internal.DeleteJobShardedRequest;
 import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;

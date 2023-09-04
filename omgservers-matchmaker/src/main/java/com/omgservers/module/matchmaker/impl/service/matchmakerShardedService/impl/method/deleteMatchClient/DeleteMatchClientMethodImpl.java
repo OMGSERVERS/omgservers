@@ -1,16 +1,12 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteMatchClient;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchClientShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientShardedResponse;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchClient.DeleteMatchClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

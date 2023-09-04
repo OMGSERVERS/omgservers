@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl.method.deleteClient;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeWithLogResponse;
 import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.module.internal.InternalModule;

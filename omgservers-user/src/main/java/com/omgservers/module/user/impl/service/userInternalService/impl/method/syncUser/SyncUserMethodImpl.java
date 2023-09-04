@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.userInternalService.impl.method.syncUser;
 
-import com.omgservers.dto.internal.ChangeWithLogRequest;
-import com.omgservers.dto.internal.ChangeWithLogResponse;
+import com.omgservers.ChangeWithLogRequest;
+import com.omgservers.ChangeWithLogResponse;
 import com.omgservers.dto.user.SyncUserShardedResponse;
 import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.module.internal.InternalModule;

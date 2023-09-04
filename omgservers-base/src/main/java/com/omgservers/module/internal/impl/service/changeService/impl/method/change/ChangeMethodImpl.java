@@ -2,8 +2,8 @@ package com.omgservers.module.internal.impl.service.changeService.impl.method.ch
 
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.dto.internal.ChangeRequest;
-import com.omgservers.dto.internal.ChangeResponse;
+import com.omgservers.ChangeRequest;
+import com.omgservers.ChangeResponse;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
