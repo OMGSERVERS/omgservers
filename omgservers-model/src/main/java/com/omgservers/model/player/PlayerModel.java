@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class PlayerModel {
 
-    static public void validate(PlayerModel player) {
+    public static void validate(PlayerModel player) {
         if (player == null) {
             throw new IllegalArgumentException("player is null");
         }

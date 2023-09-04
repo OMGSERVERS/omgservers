@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class RuntimeModel {
 
-    static public void validate(RuntimeModel runtime) {
+    public static void validate(RuntimeModel runtime) {
         if (runtime == null) {
             throw new ServerSideBadRequestException("runtime is null");
         }

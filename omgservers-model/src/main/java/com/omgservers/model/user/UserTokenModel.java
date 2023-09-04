@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class UserTokenModel {
 
-    static public void validate(UserTokenModel token) {
+    public static void validate(UserTokenModel token) {
         if (token == null) {
             throw new ServerSideBadRequestException("token is null");
         }

@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class MatchClientModel {
 
-    static public void validate(MatchClientModel matchClient) {
+    public static void validate(MatchClientModel matchClient) {
         if (matchClient == null) {
             throw new ServerSideBadRequestException("matchClient is null");
         }

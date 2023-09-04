@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateVersionDeveloperRequest {
 
-    static public void validate(CreateVersionDeveloperRequest request) {
+    public static void validate(CreateVersionDeveloperRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BuildVersionRequest {
 
-    static public void validate(BuildVersionRequest request) {
+    public static void validate(BuildVersionRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

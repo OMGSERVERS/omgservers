@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteProjectShardedRequest implements ShardedRequest {
 
-    static public void validate(DeleteProjectShardedRequest request) {
+    public static void validate(DeleteProjectShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

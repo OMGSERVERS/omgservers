@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HandleDeletePlayerRuntimeCommandRequest {
 
-    static public void validate(final HandleDeletePlayerRuntimeCommandRequest request) {
+    public static void validate(final HandleDeletePlayerRuntimeCommandRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

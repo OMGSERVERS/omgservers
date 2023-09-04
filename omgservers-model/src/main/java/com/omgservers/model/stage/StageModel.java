@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class StageModel {
 
-    static public void validate(StageModel stage) {
+    public static void validate(StageModel stage) {
         if (stage == null) {
             throw new ServerSideBadRequestException("stage is null");
         }

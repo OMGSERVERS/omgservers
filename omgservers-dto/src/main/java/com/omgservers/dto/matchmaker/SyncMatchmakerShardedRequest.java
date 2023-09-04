@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncMatchmakerShardedRequest implements ShardedRequest {
 
-    static public void validate(SyncMatchmakerShardedRequest request) {
+    public static void validate(SyncMatchmakerShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

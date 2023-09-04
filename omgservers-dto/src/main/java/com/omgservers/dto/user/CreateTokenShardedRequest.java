@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CreateTokenShardedRequest implements ShardedRequest {
 
-    static public void validate(CreateTokenShardedRequest request) {
+    public static void validate(CreateTokenShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

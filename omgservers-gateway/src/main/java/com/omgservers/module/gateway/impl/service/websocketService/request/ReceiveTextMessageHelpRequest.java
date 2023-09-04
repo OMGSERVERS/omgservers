@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReceiveTextMessageHelpRequest {
 
-    static public void validate(ReceiveTextMessageHelpRequest request) {
+    public static void validate(ReceiveTextMessageHelpRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

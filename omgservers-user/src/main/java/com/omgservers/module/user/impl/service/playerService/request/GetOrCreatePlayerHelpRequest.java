@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetOrCreatePlayerHelpRequest {
 
-    static public void validate(GetOrCreatePlayerHelpRequest request) {
+    public static void validate(GetOrCreatePlayerHelpRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

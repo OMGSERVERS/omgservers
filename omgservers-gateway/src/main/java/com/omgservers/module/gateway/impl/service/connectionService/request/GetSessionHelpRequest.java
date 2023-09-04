@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetSessionHelpRequest {
 
-    static public void validate(GetSessionHelpRequest request) {
+    public static void validate(GetSessionHelpRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

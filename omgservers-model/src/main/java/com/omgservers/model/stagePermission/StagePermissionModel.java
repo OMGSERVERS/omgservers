@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class StagePermissionModel {
 
-    static public void validate(StagePermissionModel permission) {
+    public static void validate(StagePermissionModel permission) {
         if (permission == null) {
             throw new ServerSideBadRequestException("permission is null");
         }

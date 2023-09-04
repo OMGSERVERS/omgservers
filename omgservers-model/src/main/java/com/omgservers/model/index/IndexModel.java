@@ -13,7 +13,7 @@ import java.time.*;
 @AllArgsConstructor
 public class IndexModel {
 
-    static public void validate(IndexModel indexModel) {
+    public static void validate(IndexModel indexModel) {
         if (indexModel == null) {
             throw new ServerSideBadRequestException("index is null");
         }
@@ -25,25 +25,25 @@ public class IndexModel {
         IndexConfigModel.validateConfig(indexModel.getConfig());
     }
 
-    static public void validateId(Long id) {
+    public static void validateId(Long id) {
         if (id == null) {
             throw new ServerSideBadRequestException("id field is null");
         }
     }
 
-    static public void validateCreated(Instant created) {
+    public static void validateCreated(Instant created) {
         if (created == null) {
             throw new ServerSideBadRequestException("created field is null");
         }
     }
 
-    static public void validateModified(Instant modified) {
+    public static void validateModified(Instant modified) {
         if (modified == null) {
             throw new ServerSideBadRequestException("modified field is null");
         }
     }
 
-    static public void validateName(String name) {
+    public static void validateName(String name) {
         if (name == null) {
             throw new ServerSideBadRequestException("fileName is null");
         }
@@ -58,7 +58,7 @@ public class IndexModel {
         }
     }
 
-    static public void validateVersion(Long version) {
+    public static void validateVersion(Long version) {
         if (version == null) {
             throw new ServerSideBadRequestException("version field is null");
         }

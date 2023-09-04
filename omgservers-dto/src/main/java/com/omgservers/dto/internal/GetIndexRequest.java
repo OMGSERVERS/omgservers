@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetIndexRequest {
 
-    static public void validate(GetIndexRequest request) {
+    public static void validate(GetIndexRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

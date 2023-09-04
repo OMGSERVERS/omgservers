@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class ValidateCredentialsRequest {
 
-    static public void validate(ValidateCredentialsRequest request) {
+    public static void validate(ValidateCredentialsRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -33,7 +33,7 @@ public class MatchGroupModel {
         return group;
     }
 
-    static public void validate(MatchGroupModel config) {
+    public static void validate(MatchGroupModel config) {
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
         }

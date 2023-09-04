@@ -14,7 +14,7 @@ import java.time.Instant;
 @JsonDeserialize(using = MatchmakerCommandDeserializer.class)
 public class MatchmakerCommandModel {
 
-    static public void validate(MatchmakerCommandModel command) {
+    public static void validate(MatchmakerCommandModel command) {
         if (command == null) {
             throw new ServerSideBadRequestException("command is null");
         }

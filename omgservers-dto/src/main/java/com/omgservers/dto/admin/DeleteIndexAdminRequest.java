@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteIndexAdminRequest {
 
-    static public void validate(DeleteIndexAdminRequest request) {
+    public static void validate(DeleteIndexAdminRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

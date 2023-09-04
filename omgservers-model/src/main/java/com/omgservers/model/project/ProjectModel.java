@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ProjectModel {
 
-    static public void validate(ProjectModel project) {
+    public static void validate(ProjectModel project) {
         if (project == null) {
             throw new ServerSideBadRequestException("project is null");
         }

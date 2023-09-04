@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateProjectDeveloperRequest {
 
-    static public void validate(CreateProjectDeveloperRequest request) {
+    public static void validate(CreateProjectDeveloperRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RespondClientRequest {
 
-    static public void validateRespondClientServiceRequest(RespondClientRequest request) {
+    public static void validateRespondClientServiceRequest(RespondClientRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

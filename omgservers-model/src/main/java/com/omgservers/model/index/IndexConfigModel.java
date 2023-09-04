@@ -43,7 +43,7 @@ public class IndexConfigModel {
         return config;
     }
 
-    static public void validateConfig(IndexConfigModel config) {
+    public static void validateConfig(IndexConfigModel config) {
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
         }
@@ -52,7 +52,7 @@ public class IndexConfigModel {
         validateLockedShards(config.getLockedShards());
     }
 
-    static public void validateTotalShardCount(Integer totalShardCount) {
+    public static void validateTotalShardCount(Integer totalShardCount) {
         if (totalShardCount == null) {
             throw new ServerSideBadRequestException("totalShardCount is null");
         }
@@ -61,7 +61,7 @@ public class IndexConfigModel {
         }
     }
 
-    static public void validateServers(List<IndexServerModel> indexServerModels) {
+    public static void validateServers(List<IndexServerModel> indexServerModels) {
         if (indexServerModels == null) {
             throw new ServerSideBadRequestException("servers field is null");
         }
@@ -71,7 +71,7 @@ public class IndexConfigModel {
         indexServerModels.stream().forEach(IndexServerModel::validateServerModel);
     }
 
-    static public void validateLockedShards(List<Integer> lockedShards) {
+    public static void validateLockedShards(List<Integer> lockedShards) {
         if (lockedShards == null) {
             throw new ServerSideBadRequestException("lockedShards field is null");
         }

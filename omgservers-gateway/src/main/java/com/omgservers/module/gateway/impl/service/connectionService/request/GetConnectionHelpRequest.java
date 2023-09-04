@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetConnectionHelpRequest {
 
-    static public void validate(GetConnectionHelpRequest request) {
+    public static void validate(GetConnectionHelpRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

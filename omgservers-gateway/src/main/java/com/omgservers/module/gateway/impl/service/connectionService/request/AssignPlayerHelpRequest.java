@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignPlayerHelpRequest {
 
-    static public void validate(AssignPlayerHelpRequest request) {
+    public static void validate(AssignPlayerHelpRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -19,7 +19,7 @@ public class RequestConfigModel {
         return config;
     }
 
-    static public void validate(RequestConfigModel config) {
+    public static void validate(RequestConfigModel config) {
         if (config == null) {
             throw new ServerSideBadRequestException("config is null");
         }

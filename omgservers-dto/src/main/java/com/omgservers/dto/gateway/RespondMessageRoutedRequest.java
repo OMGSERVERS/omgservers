@@ -13,7 +13,7 @@ import java.net.URI;
 @AllArgsConstructor
 public class RespondMessageRoutedRequest {
 
-    static public void validate(RespondMessageRoutedRequest request) {
+    public static void validate(RespondMessageRoutedRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

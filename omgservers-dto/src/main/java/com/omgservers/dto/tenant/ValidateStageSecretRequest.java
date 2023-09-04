@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ValidateStageSecretRequest {
 
-    static public void validateGetStageModuleRequest(ValidateStageSecretRequest request) {
+    public static void validateGetStageModuleRequest(ValidateStageSecretRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

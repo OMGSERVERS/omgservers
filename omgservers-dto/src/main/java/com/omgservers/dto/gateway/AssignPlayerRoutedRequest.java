@@ -12,7 +12,7 @@ import java.net.URI;
 @AllArgsConstructor
 public class AssignPlayerRoutedRequest {
 
-    static public void validate(AssignPlayerRoutedRequest request) {
+    public static void validate(AssignPlayerRoutedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

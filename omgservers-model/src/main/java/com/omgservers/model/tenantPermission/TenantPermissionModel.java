@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class TenantPermissionModel {
 
-    static public void validate(TenantPermissionModel permission) {
+    public static void validate(TenantPermissionModel permission) {
         if (permission == null) {
             throw new ServerSideBadRequestException("permission is null");
         }

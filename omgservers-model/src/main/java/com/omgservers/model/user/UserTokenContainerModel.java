@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class UserTokenContainerModel {
 
-    static public void validate(UserTokenContainerModel userTokenContainerModel) {
+    public static void validate(UserTokenContainerModel userTokenContainerModel) {
         if (userTokenContainerModel == null) {
             throw new ServerSideBadRequestException("tokenContainer is null");
         }
@@ -17,7 +17,7 @@ public class UserTokenContainerModel {
         validateRawToken(userTokenContainerModel.getRawToken());
     }
 
-    static public void validateRawToken(String rawToken) {
+    public static void validateRawToken(String rawToken) {
         if (rawToken == null) {
             throw new ServerSideBadRequestException("rawToken field is null");
         }

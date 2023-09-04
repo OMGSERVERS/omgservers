@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SyncIndexOverServersRequest {
 
-    static public void validateSyncIndexOverServersInternalRequest(SyncIndexOverServersRequest request) {
+    public static void validateSyncIndexOverServersInternalRequest(SyncIndexOverServersRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

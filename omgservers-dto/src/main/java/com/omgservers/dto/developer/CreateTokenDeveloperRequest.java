@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CreateTokenDeveloperRequest {
 
-    static public void validate(CreateTokenDeveloperRequest request) {
+    public static void validate(CreateTokenDeveloperRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

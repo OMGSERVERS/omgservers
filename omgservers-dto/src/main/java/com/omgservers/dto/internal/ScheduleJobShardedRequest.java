@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScheduleJobShardedRequest implements ShardedRequest {
 
-    static public void validate(ScheduleJobShardedRequest request) {
+    public static void validate(ScheduleJobShardedRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

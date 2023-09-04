@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetObjectShardedRequest implements ShardedRequest {
 
-    static public void validate(GetObjectShardedRequest request) {
+    public static void validate(GetObjectShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

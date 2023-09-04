@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class TokenModel {
 
-    static public void validate(TokenModel tokenModel) {
+    public static void validate(TokenModel tokenModel) {
         if (tokenModel == null) {
             throw new ServerSideBadRequestException("token is null");
         }
@@ -24,31 +24,31 @@ public class TokenModel {
         validateHash(tokenModel.getHash());
     }
 
-    static public void validateUserId(Long userId) {
+    public static void validateUserId(Long userId) {
         if (userId == null) {
             throw new ServerSideBadRequestException("userId field is null");
         }
     }
 
-    static public void validateCreated(Instant created) {
+    public static void validateCreated(Instant created) {
         if (created == null) {
             throw new ServerSideBadRequestException("created field is null");
         }
     }
 
-    static public void validateId(Long id) {
+    public static void validateId(Long id) {
         if (id == null) {
             throw new ServerSideBadRequestException("id field is null");
         }
     }
 
-    static public void validateExpire(Instant expire) {
+    public static void validateExpire(Instant expire) {
         if (expire == null) {
             throw new ServerSideBadRequestException("expire field is null");
         }
     }
 
-    static public void validateHash(String hash) {
+    public static void validateHash(String hash) {
         if (hash == null) {
             throw new ServerSideBadRequestException("hash field is null");
         }

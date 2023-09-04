@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class IntrospectTokenShardedRequest {
 
-    static public void validate(IntrospectTokenShardedRequest request) {
+    public static void validate(IntrospectTokenShardedRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

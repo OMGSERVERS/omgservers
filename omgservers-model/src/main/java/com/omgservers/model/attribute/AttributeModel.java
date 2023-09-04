@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class AttributeModel {
 
-    static public void validate(AttributeModel attribute) {
+    public static void validate(AttributeModel attribute) {
         if (attribute == null) {
             throw new ServerSideBadRequestException("attribute is null");
         }

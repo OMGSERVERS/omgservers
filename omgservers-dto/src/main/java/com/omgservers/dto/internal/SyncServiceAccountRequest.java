@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncServiceAccountRequest {
 
-    static public void validate(SyncServiceAccountRequest request) {
+    public static void validate(SyncServiceAccountRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

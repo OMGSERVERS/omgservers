@@ -11,7 +11,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class LogModel {
 
-    static public void validate(LogModel log) {
+    public static void validate(LogModel log) {
         if (log == null) {
             throw new IllegalArgumentException("log is null");
         }

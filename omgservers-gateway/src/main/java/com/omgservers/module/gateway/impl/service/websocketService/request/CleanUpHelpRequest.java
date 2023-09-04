@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CleanUpHelpRequest {
 
-    static public void validate(CleanUpHelpRequest request) {
+    public static void validate(CleanUpHelpRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

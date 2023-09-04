@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteServiceAccountRequest {
 
-    static public void validate(DeleteServiceAccountRequest request) {
+    public static void validate(DeleteServiceAccountRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

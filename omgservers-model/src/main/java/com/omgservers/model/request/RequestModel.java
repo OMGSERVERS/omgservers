@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class RequestModel {
 
-    static public void validate(RequestModel matchRequest) {
+    public static void validate(RequestModel matchRequest) {
         if (matchRequest == null) {
             throw new ServerSideBadRequestException("matchRequest is null");
         }

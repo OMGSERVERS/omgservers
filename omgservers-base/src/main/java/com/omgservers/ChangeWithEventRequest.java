@@ -18,7 +18,7 @@ import java.util.function.Function;
 @AllArgsConstructor
 public class ChangeWithEventRequest {
 
-    static public void validate(ChangeWithEventRequest request) {
+    public static void validate(ChangeWithEventRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

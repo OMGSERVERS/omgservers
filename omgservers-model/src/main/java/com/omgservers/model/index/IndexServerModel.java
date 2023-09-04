@@ -25,7 +25,7 @@ public class IndexServerModel {
         return indexServerModel;
     }
 
-    static public void validateServerModel(IndexServerModel server) {
+    public static void validateServerModel(IndexServerModel server) {
         if (server == null) {
             throw new ServerSideBadRequestException("server is null");
         }
@@ -33,13 +33,13 @@ public class IndexServerModel {
         validateShards(server.getShards());
     }
 
-    static public void validateUri(URI uri) {
+    public static void validateUri(URI uri) {
         if (uri == null) {
             throw new ServerSideBadRequestException("uri field is null");
         }
     }
 
-    static public void validateShards(List<Integer> shards) {
+    public static void validateShards(List<Integer> shards) {
         if (shards == null) {
             throw new ServerSideBadRequestException("shards field is null");
         }

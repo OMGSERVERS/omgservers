@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ClientModel {
 
-    static public void validate(ClientModel client) {
+    public static void validate(ClientModel client) {
         if (client == null) {
             throw new ServerSideBadRequestException("client is null");
         }

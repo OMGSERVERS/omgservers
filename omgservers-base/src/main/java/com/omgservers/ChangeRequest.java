@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 @AllArgsConstructor
 public class ChangeRequest {
 
-    static public void validate(ChangeRequest request) {
+    public static void validate(ChangeRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class JobModel {
 
-    static public void validate(JobModel job) {
+    public static void validate(JobModel job) {
         if (job == null) {
             throw new ServerSideBadRequestException("job is null");
         }

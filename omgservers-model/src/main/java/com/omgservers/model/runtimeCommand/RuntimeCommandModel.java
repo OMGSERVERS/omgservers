@@ -14,7 +14,7 @@ import java.time.Instant;
 @JsonDeserialize(using = RuntimeCommandDeserializer.class)
 public class RuntimeCommandModel {
 
-    static public void validate(RuntimeCommandModel command) {
+    public static void validate(RuntimeCommandModel command) {
         if (command == null) {
             throw new ServerSideBadRequestException("command is null");
         }

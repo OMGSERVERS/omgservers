@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CompileSourceCodeRequest {
 
-    static public void validate(CompileSourceCodeRequest request) {
+    public static void validate(CompileSourceCodeRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

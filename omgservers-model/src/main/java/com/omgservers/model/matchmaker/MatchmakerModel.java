@@ -12,7 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class MatchmakerModel {
 
-    static public void validate(MatchmakerModel matchmaker) {
+    public static void validate(MatchmakerModel matchmaker) {
         if (matchmaker == null) {
             throw new ServerSideBadRequestException("matchmaker is null");
         }

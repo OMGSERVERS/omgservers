@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ServiceAccountModel {
 
-    static public void validate(ServiceAccountModel serviceAccount) {
+    public static void validate(ServiceAccountModel serviceAccount) {
         if (serviceAccount == null) {
             throw new ServerSideBadRequestException("serviceAccount is null");
         }

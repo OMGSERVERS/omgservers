@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class TenantModel {
 
-    static public void validate(TenantModel tenant) {
+    public static void validate(TenantModel tenant) {
         if (tenant == null) {
             throw new ServerSideBadRequestException("tenant is null");
         }

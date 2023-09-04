@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HandlePlayerSignedUpEventRequest {
 
-    static public void validate(HandlePlayerSignedUpEventRequest request) {
+    public static void validate(HandlePlayerSignedUpEventRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

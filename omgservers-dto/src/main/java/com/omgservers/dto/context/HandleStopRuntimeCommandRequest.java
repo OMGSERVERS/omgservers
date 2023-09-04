@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HandleStopRuntimeCommandRequest {
 
-    static public void validate(final HandleStopRuntimeCommandRequest request) {
+    public static void validate(final HandleStopRuntimeCommandRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }
