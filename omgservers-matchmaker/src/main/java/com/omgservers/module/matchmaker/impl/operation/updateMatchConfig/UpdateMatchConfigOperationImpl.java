@@ -29,7 +29,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             update $schema.tab_matchmaker_match
             set modified = $3, config = $4
             where matchmaker_id = $1 and id = $2
@@ -89,7 +89,7 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
                               final Long matchId,
                               final MatchConfigModel config) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(config);
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.of(

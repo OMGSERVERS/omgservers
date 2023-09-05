@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_matchmaker
             where id = $1
             """;
@@ -49,7 +49,7 @@ class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)

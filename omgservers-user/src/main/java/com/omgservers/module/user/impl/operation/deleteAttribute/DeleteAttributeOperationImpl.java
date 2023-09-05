@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_user_attribute
             where player_id = $1 and attribute_name = $2
             """;
@@ -55,7 +55,7 @@ class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
             throw new IllegalArgumentException("name is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(playerId, name))

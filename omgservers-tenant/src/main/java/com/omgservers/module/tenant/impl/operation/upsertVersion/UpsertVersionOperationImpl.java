@@ -30,7 +30,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertVersionOperationImpl implements UpsertVersionOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_tenant_version(id, stage_id, created, modified, config, source_code, bytecode, errors)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
@@ -79,7 +79,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, VersionModel version) {
         try {
-            final var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            final var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             final var config = objectMapper.writeValueAsString(version.getConfig());
             final var sourceCode = objectMapper.writeValueAsString(version.getSourceCode());
             final var bytecode = objectMapper.writeValueAsString(version.getBytecode());

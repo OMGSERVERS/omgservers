@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectPlayerOperationImpl implements SelectPlayerOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, user_id, created, modified, stage_id, config
             from $schema.tab_user_player
             where user_id = $1 and stage_id = $2
@@ -51,7 +51,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
             throw new IllegalArgumentException("stageId is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(userId, stageId))

@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectAttributeOperationImpl implements SelectAttributeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_user_attribute a
             where player_id = $1 and attribute_name = $2
@@ -45,7 +45,7 @@ class SelectAttributeOperationImpl implements SelectAttributeOperation {
             throw new ServerSideBadRequestException("name is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(playerId, name))

@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectLogsOperationImpl implements SelectLogsOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, message
             from internal.tab_log
             """;
@@ -36,7 +36,7 @@ class SelectLogsOperationImpl implements SelectLogsOperation {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute()
                 .map(RowSet::iterator)
                 .map(iterator -> {

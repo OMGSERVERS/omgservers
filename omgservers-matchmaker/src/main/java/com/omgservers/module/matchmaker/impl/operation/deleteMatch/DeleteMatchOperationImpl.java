@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteMatchOperationImpl implements DeleteMatchOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_matchmaker_match
             where matchmaker_id = $1 and id = $2
             """;
@@ -53,7 +53,7 @@ class DeleteMatchOperationImpl implements DeleteMatchOperation {
             throw new IllegalArgumentException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(matchmakerId, id))

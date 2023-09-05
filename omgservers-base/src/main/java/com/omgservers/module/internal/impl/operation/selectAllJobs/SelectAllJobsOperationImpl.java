@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, shard_key, entity, type
             from internal.tab_job
             """;
@@ -37,7 +37,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute()
                 .map(RowSet::iterator)
                 .map(iterator -> {

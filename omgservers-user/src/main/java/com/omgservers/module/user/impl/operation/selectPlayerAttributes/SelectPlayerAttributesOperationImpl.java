@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_user_attribute
             where player_id = $1
@@ -41,7 +41,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
             throw new IllegalArgumentException("playerId is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(playerId))

@@ -25,7 +25,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, type, current_step, config
             from $schema.tab_runtime
             where id = $1
@@ -47,7 +47,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
             throw new IllegalArgumentException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(RowSet::iterator)

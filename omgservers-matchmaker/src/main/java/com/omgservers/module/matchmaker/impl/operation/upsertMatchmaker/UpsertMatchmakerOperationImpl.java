@@ -27,7 +27,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -73,7 +73,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
     Uni<Boolean> upsertObject(final SqlConnection sqlConnection,
                               final int shard,
                               final MatchmakerModel matchmaker) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
                         matchmaker.getId(),

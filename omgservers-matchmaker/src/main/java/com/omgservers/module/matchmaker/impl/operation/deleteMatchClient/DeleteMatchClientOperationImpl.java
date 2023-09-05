@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteMatchClientOperationImpl implements DeleteMatchClientOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_matchmaker_match_client
             where matchmaker_id = $1 and id = $2
             """;
@@ -52,7 +52,7 @@ class DeleteMatchClientOperationImpl implements DeleteMatchClientOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(matchmakerId, id))

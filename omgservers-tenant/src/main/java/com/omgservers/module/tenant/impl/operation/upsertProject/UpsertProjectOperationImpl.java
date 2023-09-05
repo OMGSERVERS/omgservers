@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_tenant_project(id, tenant_id, created, modified, config)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -74,7 +74,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, ProjectModel project) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(project.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(

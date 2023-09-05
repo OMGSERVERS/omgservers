@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectUserOperationImpl implements SelectUserOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, role, password_hash
             from $schema.tab_user
             where id = $1
@@ -44,7 +44,7 @@ class SelectUserOperationImpl implements SelectUserOperation {
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

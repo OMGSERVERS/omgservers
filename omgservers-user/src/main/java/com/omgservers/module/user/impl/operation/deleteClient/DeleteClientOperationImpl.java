@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_user_client where id = $1
             """;
 
@@ -52,7 +52,7 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)

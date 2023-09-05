@@ -24,7 +24,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_tenant_permission(id, tenant_id, created, user_id, permission)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -67,7 +67,7 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
     }
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, TenantPermissionModel permission) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
                         permission.getId(),

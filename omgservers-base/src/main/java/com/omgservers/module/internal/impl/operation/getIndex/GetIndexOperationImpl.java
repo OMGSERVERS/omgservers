@@ -23,7 +23,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class GetIndexOperationImpl implements GetIndexOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, name, version, config
             from internal.tab_index where name = $1 limit 1
             """;
@@ -41,7 +41,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
             throw new IllegalArgumentException("name is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(name))
                 .map(RowSet::iterator)
                 .map(iterator -> {

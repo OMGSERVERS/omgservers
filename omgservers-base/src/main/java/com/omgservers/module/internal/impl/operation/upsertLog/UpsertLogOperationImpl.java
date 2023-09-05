@@ -23,7 +23,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertLogOperationImpl implements UpsertLogOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into internal.tab_log(id, created, message)
             values($1, $2, $3)
             on conflict (id) do
@@ -62,7 +62,7 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
     }
 
     Uni<Boolean> upsertObject(final SqlConnection sqlConnection, final LogModel logModel) {
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.from(Arrays.asList(
                         logModel.getId(),
                         logModel.getCreated().atOffset(ZoneOffset.UTC),

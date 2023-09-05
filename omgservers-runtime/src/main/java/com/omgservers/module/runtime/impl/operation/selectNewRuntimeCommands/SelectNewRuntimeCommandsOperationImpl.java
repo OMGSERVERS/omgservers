@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, runtime_id, created, modified, qualifier, body, status, step
             from $schema.tab_runtime_command
             where runtime_id = $1 and status = $2
@@ -47,7 +47,7 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
             throw new IllegalArgumentException("runtimeId is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(runtimeId, RuntimeCommandStatusEnum.NEW))
                 .map(RowSet::iterator)

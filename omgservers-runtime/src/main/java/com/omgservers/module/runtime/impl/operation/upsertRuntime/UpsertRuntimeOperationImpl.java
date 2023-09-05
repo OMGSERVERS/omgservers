@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_runtime(id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, type, current_step, config)
             values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             on conflict (id) do
@@ -77,7 +77,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                               final int shard,
                               final RuntimeModel runtime) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(runtime.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(

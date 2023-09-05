@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteJobOperationImpl implements DeleteJobOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from internal.tab_job where shard_key = $1 and entity = $2
             """;
 
@@ -50,7 +50,7 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
             throw new ServerSideBadRequestException("entity is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(shardKey, entity))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .call(objectWasDeleted -> upsertEvent(objectWasDeleted, changeContext, sqlConnection, shardKey, entity))

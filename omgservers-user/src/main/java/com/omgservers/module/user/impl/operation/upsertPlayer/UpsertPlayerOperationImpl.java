@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_user_player(id, user_id, created, modified, stage_id, config)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do
@@ -75,7 +75,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, PlayerModel player) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(player.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(

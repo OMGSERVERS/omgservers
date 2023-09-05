@@ -28,7 +28,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_matchmaker_request(id, matchmaker_id, created, modified, user_id, client_id, mode, config)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do
@@ -75,7 +75,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                               final int shard,
                               final RequestModel request) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(request.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(

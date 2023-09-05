@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectRequestsByMatchmakerIdOperationImpl implements SelectRequestsByMatchmakerIdOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, matchmaker_id, created, modified, user_id, client_id, mode, config
             from $schema.tab_matchmaker_request
             where matchmaker_id = $1
@@ -46,7 +46,7 @@ class SelectRequestsByMatchmakerIdOperationImpl implements SelectRequestsByMatch
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(matchmakerId))
                 .map(RowSet::iterator)

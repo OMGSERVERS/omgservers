@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_runtime_command where id = $1
             """;
 
@@ -48,7 +48,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
             throw new IllegalArgumentException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)

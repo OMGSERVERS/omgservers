@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectTenantOperationImpl implements SelectTenantOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, config
             from $schema.tab_tenant
             where id = $1
@@ -47,7 +47,7 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
             throw new IllegalArgumentException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

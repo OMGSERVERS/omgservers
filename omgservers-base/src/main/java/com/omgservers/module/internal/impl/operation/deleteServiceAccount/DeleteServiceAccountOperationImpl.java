@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from internal.tab_service_account where id = $1
             """;
 
@@ -45,7 +45,7 @@ class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation
             throw new ServerSideBadRequestException("id is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .call(objectWasDeleted -> upsertEvent(objectWasDeleted, changeContext, sqlConnection, id))

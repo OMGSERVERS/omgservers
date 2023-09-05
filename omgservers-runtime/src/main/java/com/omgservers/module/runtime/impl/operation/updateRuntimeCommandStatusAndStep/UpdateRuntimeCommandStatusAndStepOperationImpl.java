@@ -26,7 +26,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCommandStatusAndStepOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             update $schema.tab_runtime_command
             set modified = $2, status = $3, step = $4
             where id = $1
@@ -65,7 +65,7 @@ class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCom
             throw new ServerSideBadRequestException("step is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
                         id,

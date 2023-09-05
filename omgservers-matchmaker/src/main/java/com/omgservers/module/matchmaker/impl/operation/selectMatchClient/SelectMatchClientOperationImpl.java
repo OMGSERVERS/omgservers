@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectMatchClientOperationImpl implements SelectMatchClientOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, matchmaker_id, match_id, created, modified, user_id, client_id
             from $schema.tab_matchmaker_match_client
             where id = $1
@@ -42,7 +42,7 @@ class SelectMatchClientOperationImpl implements SelectMatchClientOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(RowSet::iterator)

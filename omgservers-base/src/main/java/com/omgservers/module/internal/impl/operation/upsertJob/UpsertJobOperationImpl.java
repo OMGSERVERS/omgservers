@@ -25,7 +25,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertJobOperationImpl implements UpsertJobOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into internal.tab_job(id, created, shard_key, entity, type)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -68,7 +68,7 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
     }
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, JobModel job) {
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(
                         job.getId(),
                         job.getCreated().atOffset(ZoneOffset.UTC),

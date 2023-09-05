@@ -26,7 +26,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertClientOperationImpl implements UpsertClientOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_user_client(id, player_id, created, server, connection_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -74,7 +74,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
     }
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, ClientModel client) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
                         client.getId(),

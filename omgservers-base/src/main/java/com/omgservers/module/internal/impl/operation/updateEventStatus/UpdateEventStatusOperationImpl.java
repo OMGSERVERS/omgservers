@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             update internal.tab_event set status = $2
             where id = $1
             """;
@@ -66,7 +66,7 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
     }
 
     Uni<Boolean> updateObject(SqlConnection sqlConnection, Long id, EventStatusEnum status) {
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(id, status.toString()))
                 .map(rowSet -> rowSet.rowCount() > 0);
     }

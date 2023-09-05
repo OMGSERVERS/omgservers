@@ -22,7 +22,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectMatchOperationImpl implements SelectMatchOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, matchmaker_id, created, modified, runtime_id, config
             from $schema.tab_matchmaker_match
             where id = $1
@@ -45,7 +45,7 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(RowSet::iterator)

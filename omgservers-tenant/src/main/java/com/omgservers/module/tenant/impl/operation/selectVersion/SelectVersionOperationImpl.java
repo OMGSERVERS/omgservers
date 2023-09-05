@@ -28,7 +28,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectVersionOperationImpl implements SelectVersionOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, stage_id, created, modified, config, source_code, bytecode, errors
             from $schema.tab_tenant_version where id = $1
             limit 1
@@ -49,7 +49,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

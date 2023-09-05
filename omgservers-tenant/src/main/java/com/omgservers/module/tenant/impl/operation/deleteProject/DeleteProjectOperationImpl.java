@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteProjectOperationImpl implements DeleteProjectOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_tenant_project
             where tenant_id = $1 and id = $2
             """;
@@ -50,7 +50,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(tenantId, id))

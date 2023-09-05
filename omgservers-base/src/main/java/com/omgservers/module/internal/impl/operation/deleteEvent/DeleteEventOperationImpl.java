@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteEventOperationImpl implements DeleteEventOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from internal.tab_event where id = $1
             """;
 
@@ -45,7 +45,7 @@ class DeleteEventOperationImpl implements DeleteEventOperation {
             throw new ServerSideBadRequestException("id is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(eventWasDeleted -> {

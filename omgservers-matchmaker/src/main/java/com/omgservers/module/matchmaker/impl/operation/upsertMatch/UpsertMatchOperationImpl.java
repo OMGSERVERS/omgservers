@@ -28,7 +28,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertMatchOperationImpl implements UpsertMatchOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, config)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do
@@ -73,7 +73,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, MatchModel match) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(match.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.of(

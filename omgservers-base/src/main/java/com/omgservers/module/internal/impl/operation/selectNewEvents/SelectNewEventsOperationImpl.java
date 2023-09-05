@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
             where status = $1
@@ -44,7 +44,7 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
             throw new IllegalArgumentException("sqlConnection is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(EventStatusEnum.NEW, limit))
                 .map(RowSet::iterator)
                 .map(iterator -> {

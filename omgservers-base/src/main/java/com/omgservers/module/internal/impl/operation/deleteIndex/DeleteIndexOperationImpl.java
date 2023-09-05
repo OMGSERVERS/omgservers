@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteIndexOperationImpl implements DeleteIndexOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from internal.tab_index where id = $1
             """;
 
@@ -32,7 +32,7 @@ class DeleteIndexOperationImpl implements DeleteIndexOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(deleted -> {

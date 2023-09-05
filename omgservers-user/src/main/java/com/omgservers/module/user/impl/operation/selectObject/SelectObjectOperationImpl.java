@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectObjectOperationImpl implements SelectObjectOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, player_id, created, modified, name, body
             from $schema.tab_user_object
             where player_id = $1 and name = $2
@@ -44,7 +44,7 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
             throw new IllegalArgumentException("fileName is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(playerId, name))

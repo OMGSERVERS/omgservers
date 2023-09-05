@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertStageOperationImpl implements UpsertStageOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_tenant_stage(id, project_id, created, modified, secret, matchmaker_id, config)
             values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
@@ -78,7 +78,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, StageModel stage) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
             var configString = objectMapper.writeValueAsString(stage.getConfig());
             return sqlConnection.preparedQuery(preparedSql)
                     .execute(Tuple.from(Arrays.asList(

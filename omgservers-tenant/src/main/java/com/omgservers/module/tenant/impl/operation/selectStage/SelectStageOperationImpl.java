@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectStageOperationImpl implements SelectStageOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, project_id, created, modified, secret, matchmaker_id, config
             from $schema.tab_tenant_stage
             where id = $1
@@ -47,7 +47,7 @@ class SelectStageOperationImpl implements SelectStageOperation {
             throw new IllegalArgumentException("uuid is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

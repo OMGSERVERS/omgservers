@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id
             from $schema.tab_tenant_stage_permission
             where stage_id = $1 and user_id = $2 and permission = $3
@@ -45,7 +45,7 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
             throw new IllegalArgumentException("permission is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(stageId, userId, permission))
                 .map(rowSet -> rowSet.rowCount() > 0)

@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id
             from $schema.tab_tenant_version
             where stage_id = $1
@@ -42,7 +42,7 @@ class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdO
             throw new ServerSideBadRequestException("stageId is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(stageId))
                 .map(RowSet::iterator)

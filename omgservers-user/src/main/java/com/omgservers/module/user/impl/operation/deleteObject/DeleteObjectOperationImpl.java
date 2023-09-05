@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteObjectOperationImpl implements DeleteObjectOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             delete from $schema.tab_user_object where id = $1
             """;
 
@@ -54,7 +54,7 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
             throw new IllegalArgumentException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

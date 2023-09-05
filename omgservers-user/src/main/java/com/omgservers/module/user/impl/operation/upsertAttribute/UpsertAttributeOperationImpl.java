@@ -25,7 +25,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_user_attribute(id, player_id, created, modified, attribute_name, attribute_value)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do
@@ -68,7 +68,7 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
     }
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, AttributeModel attribute) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
                         attribute.getId(),

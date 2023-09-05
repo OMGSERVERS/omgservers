@@ -23,7 +23,7 @@ import java.net.URI;
 @AllArgsConstructor
 class SelectClientOperationImpl implements SelectClientOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, player_id, created, server, connection_id
             from $schema.tab_user_client
             where id = $1
@@ -46,7 +46,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))

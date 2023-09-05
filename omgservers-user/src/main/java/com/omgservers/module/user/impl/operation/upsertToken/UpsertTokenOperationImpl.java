@@ -28,7 +28,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertTokenOperationImpl implements UpsertTokenOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into $schema.tab_user_token(id, user_id, created, expire, hash)
             values($1, $2, $3, $4, $5)
             on conflict (id) do
@@ -75,7 +75,7 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
     }
 
     Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, TokenModel tokenModel) {
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(

@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectTokenOperationImpl implements SelectTokenOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, user_id, created, expire, hash
             from $schema.tab_user_token
             where id = $1
@@ -43,7 +43,7 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
             throw new ServerSideBadRequestException("tokenId is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(tokenId))

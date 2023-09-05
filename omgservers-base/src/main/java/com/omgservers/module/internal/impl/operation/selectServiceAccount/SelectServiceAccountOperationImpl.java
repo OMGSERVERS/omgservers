@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, username, password_hash
             from internal.tab_service_account where username = $1 limit 1
             """;
@@ -38,7 +38,7 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
             throw new ServerSideBadRequestException("username is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(username))
                 .map(RowSet::iterator)
                 .map(iterator -> {

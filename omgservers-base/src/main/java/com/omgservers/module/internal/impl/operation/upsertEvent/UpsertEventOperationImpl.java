@@ -26,7 +26,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertEventOperationImpl implements UpsertEventOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
             values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do
@@ -69,7 +69,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
     Uni<Boolean> upsertObject(final SqlConnection sqlConnection, final EventModel event) {
         try {
             var bodyString = objectMapper.writeValueAsString(event.getBody());
-            return sqlConnection.preparedQuery(sql)
+            return sqlConnection.preparedQuery(SQL)
                     .execute(Tuple.from(Arrays.asList(
                             event.getId(),
                             event.getCreated().atOffset(ZoneOffset.UTC),

@@ -25,7 +25,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectEventOperationImpl implements SelectEventOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
             where id = $1
@@ -46,7 +46,7 @@ class SelectEventOperationImpl implements SelectEventOperation {
             throw new IllegalArgumentException("id is null");
         }
 
-        return sqlConnection.preparedQuery(sql)
+        return sqlConnection.preparedQuery(SQL)
                 .execute(Tuple.of(id))
                 .map(RowSet::iterator)
                 .map(iterator -> {

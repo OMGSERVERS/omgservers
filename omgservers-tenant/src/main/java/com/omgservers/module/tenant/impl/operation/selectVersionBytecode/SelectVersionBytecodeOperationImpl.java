@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             select bytecode
             from $schema.tab_tenant_version
             where id = $1
@@ -46,7 +46,7 @@ class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperati
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(versionId))

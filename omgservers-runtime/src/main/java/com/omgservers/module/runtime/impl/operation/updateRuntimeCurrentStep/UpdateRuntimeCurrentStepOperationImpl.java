@@ -26,7 +26,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpdateRuntimeCurrentStepOperationImpl implements UpdateRuntimeCurrentStepOperation {
 
-    static private final String sql = """
+    static private final String SQL = """
             update $schema.tab_runtime
             set modified = $2, current_step = $3
             where id = $1
@@ -58,7 +58,7 @@ class UpdateRuntimeCurrentStepOperationImpl implements UpdateRuntimeCurrentStepO
             throw new ServerSideBadRequestException("id is null");
         }
 
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(
                         id,
