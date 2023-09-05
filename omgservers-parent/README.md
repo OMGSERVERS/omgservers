@@ -1,1 +1,1 @@
-# omgservers-bom
+# omgservers-parent
