@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpdateRuntimeCommandStatusAndStepOperation {
-    Uni<Boolean> updateRuntimeCommandStatusAndStep(ChangeContext changeContext,
+    Uni<Boolean> updateRuntimeCommandStatusAndStep(ChangeContext<?> changeContext,
                                                    SqlConnection sqlConnection,
                                                    int shard,
                                                    Long id,
@@ -23,7 +23,7 @@ public interface UpdateRuntimeCommandStatusAndStepOperation {
                                                       RuntimeCommandStatusEnum status,
                                                       Long step) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> updateRuntimeCommandStatusAndStep(
                             changeContext,
                             sqlConnection,

@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.deleteTenant;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
@@ -35,7 +36,8 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteTenantOperation.deleteTenant(changeContext, sqlConnection, shardModel.shard(), id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteTenantOperation.deleteTenant(changeContext, sqlConnection, shardModel.shard(), id))
+                .map(ChangeContext::getResult);
     }
 }

@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface DeleteRequestOperation {
-    Uni<Boolean> deleteRequest(ChangeContext changeContext,
+    Uni<Boolean> deleteRequest(ChangeContext<?> changeContext,
                                SqlConnection sqlConnection,
                                int shard,
                                Long matchmakerId,
@@ -20,7 +20,7 @@ public interface DeleteRequestOperation {
                                   Long matchmakerId,
                                   Long id) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             deleteRequest(changeContext, sqlConnection, shard, matchmakerId, id));
                 })

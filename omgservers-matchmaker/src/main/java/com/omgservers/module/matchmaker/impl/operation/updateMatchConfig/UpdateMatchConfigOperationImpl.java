@@ -45,7 +45,7 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> updateMatch(final ChangeContext changeContext,
+    public Uni<Boolean> updateMatch(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final Long matchmakerId,
@@ -104,7 +104,7 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long matchmakerId,
                              final Long matchId) {
@@ -112,7 +112,7 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasUpdated,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long matchmakerId,
                            final Long matchId) {

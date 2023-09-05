@@ -47,7 +47,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertRuntime(final ChangeContext changeContext,
+    public Uni<Boolean> upsertRuntime(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final RuntimeModel runtime) {
@@ -100,7 +100,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final RuntimeModel runtime) {
         if (objectWasDeleted) {
@@ -121,7 +121,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final RuntimeModel runtime) {
         if (objectWasDeleted) {

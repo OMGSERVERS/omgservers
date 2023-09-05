@@ -47,7 +47,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertVersion(final ChangeContext changeContext,
+    public Uni<Boolean> upsertVersion(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long tenantId,
@@ -101,7 +101,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final VersionModel version) {
@@ -120,7 +120,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final VersionModel version) {

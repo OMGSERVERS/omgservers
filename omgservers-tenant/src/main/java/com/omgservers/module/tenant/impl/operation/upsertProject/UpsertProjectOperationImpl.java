@@ -46,7 +46,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertProject(final ChangeContext changeContext,
+    public Uni<Boolean> upsertProject(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final ProjectModel project) {
@@ -91,7 +91,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final ProjectModel project) {
         if (objectWasInserted) {
@@ -109,7 +109,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final ProjectModel project) {
         if (objectWasInserted) {

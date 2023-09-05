@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.syncVersion;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.SyncVersionShardedRequest;
 import com.omgservers.dto.tenant.SyncVersionShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -37,7 +38,8 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, VersionModel version) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                upsertVersionOperation.upsertVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, version));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertVersionOperation.upsertVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, version))
+                .map(ChangeContext::getResult);
     }
 }

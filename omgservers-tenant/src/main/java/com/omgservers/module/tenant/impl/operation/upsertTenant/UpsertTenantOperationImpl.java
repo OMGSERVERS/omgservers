@@ -45,7 +45,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertTenant(final ChangeContext changeContext,
+    public Uni<Boolean> upsertTenant(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final TenantModel tenant) {
@@ -88,7 +88,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final TenantModel tenant) {
         if (objectWasInserted) {
@@ -106,7 +106,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final TenantModel tenant) {
         if (objectWasInserted) {

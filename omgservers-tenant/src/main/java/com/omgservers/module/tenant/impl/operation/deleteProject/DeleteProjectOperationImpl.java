@@ -35,7 +35,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteProject(final ChangeContext changeContext,
+    public Uni<Boolean> deleteProject(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long tenantId,
@@ -69,7 +69,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final Long id) {
@@ -88,7 +88,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final Long id) {

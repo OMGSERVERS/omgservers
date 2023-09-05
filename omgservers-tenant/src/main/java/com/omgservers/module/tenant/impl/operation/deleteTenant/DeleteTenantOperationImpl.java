@@ -34,7 +34,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteTenant(final ChangeContext changeContext,
+    public Uni<Boolean> deleteTenant(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
@@ -65,7 +65,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long id) {
         if (objectWasDeleted) {
@@ -83,7 +83,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long id) {
         if (objectWasDeleted) {

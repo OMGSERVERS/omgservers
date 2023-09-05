@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface DeleteVersionOperation {
-    Uni<Boolean> deleteVersion(ChangeContext changeContext,
+    Uni<Boolean> deleteVersion(ChangeContext<?> changeContext,
                                SqlConnection sqlConnection,
                                int shard,
                                Long tenantId,
@@ -20,7 +20,7 @@ public interface DeleteVersionOperation {
                                   Long tenantId,
                                   Long id) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             deleteVersion(changeContext, sqlConnection, shard, tenantId, id));
                 })

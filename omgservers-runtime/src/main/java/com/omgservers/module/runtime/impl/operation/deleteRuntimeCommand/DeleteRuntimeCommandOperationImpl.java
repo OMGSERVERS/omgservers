@@ -33,7 +33,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteRuntimeCommand(final ChangeContext changeContext,
+    public Uni<Boolean> deleteRuntimeCommand(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
                                              final int shard,
                                              final Long runtimeId,
@@ -64,7 +64,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long runtimeId,
                              final Long id) {
@@ -72,7 +72,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long runtimeId,
                            final Long id) {

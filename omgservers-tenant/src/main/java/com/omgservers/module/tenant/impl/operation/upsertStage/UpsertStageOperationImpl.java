@@ -46,7 +46,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertStage(final ChangeContext changeContext,
+    public Uni<Boolean> upsertStage(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final Long tenantId,
@@ -97,7 +97,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final StageModel stage) {
@@ -116,7 +116,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final StageModel stage) {

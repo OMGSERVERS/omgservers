@@ -9,9 +9,10 @@ import java.util.List;
 
 public class ChangeContext {
     final Context context;
-
     final List<EventModel> changeEvents;
     final List<LogModel> changeLogs;
+
+    T result;
 
     public ChangeContext(Context context) {
         this.context = context;
@@ -28,6 +29,14 @@ public class ChangeContext {
 
     public List<LogModel> getChangeLogs() {
         return changeLogs;
+    }
+
+    public T getResult() {
+        return result;
+    }
+
+    public void setResult(T result) {
+        this.result = result;
     }
 
     public void add(EventModel changeEvent) {

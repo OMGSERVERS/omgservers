@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpdateRuntimeCurrentStepOperation {
-    Uni<Boolean> updateRuntimeCurrentStep(ChangeContext changeContext,
+    Uni<Boolean> updateRuntimeCurrentStep(ChangeContext<?> changeContext,
                                           SqlConnection sqlConnection,
                                           int shard,
                                           Long id,
@@ -20,7 +20,7 @@ public interface UpdateRuntimeCurrentStepOperation {
                                              Long id,
                                              Long currentStep) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             updateRuntimeCurrentStep(changeContext, sqlConnection, shard, id, currentStep));
                 })

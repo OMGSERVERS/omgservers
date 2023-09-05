@@ -40,7 +40,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertStagePermission(final ChangeContext changeContext,
+    public Uni<Boolean> upsertStagePermission(final ChangeContext<?> changeContext,
                                               final SqlConnection sqlConnection,
                                               final int shard,
                                               final Long tenantId,
@@ -83,7 +83,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final StagePermissionModel permission) {
@@ -91,7 +91,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final StagePermissionModel permission) {

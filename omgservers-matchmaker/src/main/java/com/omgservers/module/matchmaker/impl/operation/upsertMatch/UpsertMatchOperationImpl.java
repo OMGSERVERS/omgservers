@@ -45,7 +45,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertMatch(final ChangeContext changeContext,
+    public Uni<Boolean> upsertMatch(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final MatchModel match) {
@@ -90,7 +90,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final MatchModel match) {
         if (objectWasInserted) {
@@ -108,7 +108,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final MatchModel match) {
         if (objectWasInserted) {

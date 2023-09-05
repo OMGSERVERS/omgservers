@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpsertVersionOperation {
-    Uni<Boolean> upsertVersion(ChangeContext changeContext,
+    Uni<Boolean> upsertVersion(ChangeContext<?> changeContext,
                                SqlConnection sqlConnection,
                                int shard,
                                Long tenantId,
@@ -21,7 +21,7 @@ public interface UpsertVersionOperation {
                                   Long tenantId,
                                   VersionModel version) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             upsertVersion(changeContext, sqlConnection, shard, tenantId, version));
                 })

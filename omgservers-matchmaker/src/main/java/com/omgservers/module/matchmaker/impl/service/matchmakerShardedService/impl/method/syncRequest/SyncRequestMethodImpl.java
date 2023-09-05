@@ -1,5 +1,6 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncRequest;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
 import com.omgservers.dto.matchmaker.SyncRequestShardedResponse;
 import com.omgservers.model.request.RequestModel;
@@ -33,7 +34,8 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, RequestModel request) {
-        return changeWithContextOperation.changeWithContext((context, sqlConnection) ->
-                upsertRequestOperation.upsertRequest(context, sqlConnection, shardModel.shard(), request));
+        return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
+                        upsertRequestOperation.upsertRequest(context, sqlConnection, shardModel.shard(), request))
+                .map(ChangeContext::getResult);
     }
 }

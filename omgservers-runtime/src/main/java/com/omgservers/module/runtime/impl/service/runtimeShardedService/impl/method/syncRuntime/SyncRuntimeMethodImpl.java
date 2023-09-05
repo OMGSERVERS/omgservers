@@ -1,5 +1,6 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import com.omgservers.model.runtime.RuntimeModel;
@@ -36,11 +37,12 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeModel runtime) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                upsertRuntimeOperation.upsertRuntime(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        runtime));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertRuntimeOperation.upsertRuntime(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                runtime))
+                .map(ChangeContext::getResult);
     }
 }

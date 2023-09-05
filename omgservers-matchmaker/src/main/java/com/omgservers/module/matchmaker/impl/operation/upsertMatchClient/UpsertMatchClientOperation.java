@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpsertMatchClientOperation {
-    Uni<Boolean> upsertMatchClient(ChangeContext changeContext,
+    Uni<Boolean> upsertMatchClient(ChangeContext<?> changeContext,
                                    SqlConnection sqlConnection,
                                    int shard,
                                    MatchClientModel matchClient);
@@ -19,7 +19,7 @@ public interface UpsertMatchClientOperation {
                                       int shard,
                                       MatchClientModel matchClient) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             upsertMatchClient(changeContext, sqlConnection, shard, matchClient));
                 })

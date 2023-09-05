@@ -17,7 +17,7 @@ public class TenantCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.TENANT_UPDATED;
+        return EventQualifierEnum.TENANT_CREATED;
     }
 
     @Override

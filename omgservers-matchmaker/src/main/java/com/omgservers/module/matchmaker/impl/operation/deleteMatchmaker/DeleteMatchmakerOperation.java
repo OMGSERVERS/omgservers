@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface DeleteMatchmakerOperation {
-    Uni<Boolean> deleteMatchmaker(ChangeContext changeContext,
+    Uni<Boolean> deleteMatchmaker(ChangeContext<?> changeContext,
                                   SqlConnection sqlConnection,
                                   int shard,
                                   Long id);
@@ -18,7 +18,7 @@ public interface DeleteMatchmakerOperation {
                                      int shard,
                                      Long id) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             deleteMatchmaker(changeContext, sqlConnection, shard, id));
                 })

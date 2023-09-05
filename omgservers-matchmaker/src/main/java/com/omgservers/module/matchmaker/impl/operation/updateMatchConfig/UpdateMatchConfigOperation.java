@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpdateMatchConfigOperation {
-    Uni<Boolean> updateMatch(ChangeContext changeContext,
+    Uni<Boolean> updateMatch(ChangeContext<?> changeContext,
                              SqlConnection sqlConnection,
                              int shard,
                              Long matchmakerId,
@@ -23,7 +23,7 @@ public interface UpdateMatchConfigOperation {
                                 Long matchId,
                                 MatchConfigModel config) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             updateMatch(changeContext, sqlConnection, shard, matchmakerId, matchId, config));
                 })

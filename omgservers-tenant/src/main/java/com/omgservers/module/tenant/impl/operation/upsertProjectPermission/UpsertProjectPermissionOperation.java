@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpsertProjectPermissionOperation {
-    Uni<Boolean> upsertProjectPermission(ChangeContext changeContext,
+    Uni<Boolean> upsertProjectPermission(ChangeContext<?> changeContext,
                                          SqlConnection sqlConnection,
                                          int shard,
                                          Long tenantId,
@@ -21,7 +21,7 @@ public interface UpsertProjectPermissionOperation {
                                             Long tenantId,
                                             ProjectPermissionModel permission) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             upsertProjectPermission(changeContext, sqlConnection, shard, tenantId, permission));
                 })

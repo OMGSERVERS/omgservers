@@ -1,5 +1,6 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteRequest;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -33,7 +34,8 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long matchmakerId, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteRequestOperation.deleteRequest(changeContext, sqlConnection, shardModel.shard(), matchmakerId, id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteRequestOperation.deleteRequest(changeContext, sqlConnection, shardModel.shard(), matchmakerId, id))
+                .map(ChangeContext::getResult);
     }
 }

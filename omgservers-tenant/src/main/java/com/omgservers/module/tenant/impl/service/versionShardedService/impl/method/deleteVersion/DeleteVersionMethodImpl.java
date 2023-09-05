@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.versionShardedService.impl.method.deleteVersion;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.DeleteVersionShardedRequest;
 import com.omgservers.dto.tenant.DeleteVersionShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -36,7 +37,8 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteVersionOperation.deleteVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteVersionOperation.deleteVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
+                .map(ChangeContext::getResult);
     }
 }

@@ -34,7 +34,7 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteRequest(final ChangeContext changeContext,
+    public Uni<Boolean> deleteRequest(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long matchmakerId,
@@ -69,7 +69,7 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long matchmakerId,
                              final Long id) {
@@ -77,7 +77,7 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long matchmakerId,
                            final Long id) {

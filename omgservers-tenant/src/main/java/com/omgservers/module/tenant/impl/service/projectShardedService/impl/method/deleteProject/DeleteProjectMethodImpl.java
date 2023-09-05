@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.deleteProject;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;
@@ -37,7 +38,8 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteProjectOperation.deleteProject(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteProjectOperation.deleteProject(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
+                .map(ChangeContext::getResult);
     }
 }

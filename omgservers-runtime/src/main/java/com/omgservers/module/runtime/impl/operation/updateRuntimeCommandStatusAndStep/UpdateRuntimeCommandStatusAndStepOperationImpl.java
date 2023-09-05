@@ -43,7 +43,7 @@ class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCom
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> updateRuntimeCommandStatusAndStep(final ChangeContext changeContext,
+    public Uni<Boolean> updateRuntimeCommandStatusAndStep(final ChangeContext<?> changeContext,
                                                           final SqlConnection sqlConnection,
                                                           final int shard,
                                                           final Long id,
@@ -86,14 +86,14 @@ class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCom
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasUpdated,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long id) {
         return Uni.createFrom().item(false);
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasUpdated,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long id) {
         return Uni.createFrom().item(false);

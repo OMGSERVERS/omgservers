@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenant;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -38,7 +39,8 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, TenantModel tenantModel) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                upsertTenantOperation.upsertTenant(changeContext, sqlConnection, shardModel.shard(), tenantModel));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertTenantOperation.upsertTenant(changeContext, sqlConnection, shardModel.shard(), tenantModel))
+                .map(ChangeContext::getResult);
     }
 }

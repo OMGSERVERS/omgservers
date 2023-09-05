@@ -40,7 +40,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertProjectPermission(final ChangeContext changeContext,
+    public Uni<Boolean> upsertProjectPermission(final ChangeContext<?> changeContext,
                                                 final SqlConnection sqlConnection,
                                                 final int shard,
                                                 final Long tenantId,
@@ -83,7 +83,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final ProjectPermissionModel permission) {
@@ -91,7 +91,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final ProjectPermissionModel permission) {

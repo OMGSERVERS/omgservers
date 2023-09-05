@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenantPermission;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -41,11 +42,12 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, TenantPermissionModel permission) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                upsertTenantPermissionOperation.upsertTenantPermission(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        permission));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertTenantPermissionOperation.upsertTenantPermission(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                permission))
+                .map(ChangeContext::getResult);
     }
 }

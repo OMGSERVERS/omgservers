@@ -46,7 +46,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertRuntimeCommand(final ChangeContext changeContext,
+    public Uni<Boolean> upsertRuntimeCommand(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
                                              final int shard,
                                              final RuntimeCommandModel runtimeCommand) {
@@ -96,14 +96,14 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final RuntimeCommandModel runtimeCommand) {
         return Uni.createFrom().item(false);
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final RuntimeCommandModel runtimeCommand) {
         if (objectWasDeleted) {

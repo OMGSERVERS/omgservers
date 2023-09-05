@@ -34,7 +34,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteVersion(final ChangeContext changeContext,
+    public Uni<Boolean> deleteVersion(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long tenantId,
@@ -69,7 +69,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final Long id) {
@@ -88,7 +88,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final Long id) {

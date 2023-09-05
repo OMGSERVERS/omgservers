@@ -45,7 +45,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertRequest(final ChangeContext changeContext,
+    public Uni<Boolean> upsertRequest(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final RequestModel request) {
@@ -95,14 +95,14 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final RequestModel request) {
         return Uni.createFrom().item(false);
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final RequestModel request) {
         if (objectWasInserted) {

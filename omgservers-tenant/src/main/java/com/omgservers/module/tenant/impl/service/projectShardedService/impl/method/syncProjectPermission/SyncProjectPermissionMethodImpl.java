@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProjectPermission;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionShardedResponse;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
@@ -37,12 +38,13 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, ProjectPermissionModel permission) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                 upsertProjectPermissionOperation.upsertProjectPermission(
                         changeContext,
                         sqlConnection,
                         shardModel.shard(),
                         tenantId,
-                        permission));
+                        permission))
+                .map(ChangeContext::getResult);
     }
 }

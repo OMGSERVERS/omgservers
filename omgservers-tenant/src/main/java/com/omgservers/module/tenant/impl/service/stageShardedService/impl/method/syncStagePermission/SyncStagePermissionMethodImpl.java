@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.syncStagePermission;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -37,12 +38,13 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, StagePermissionModel permission) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                upsertStagePermissionOperation.upsertStagePermission(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        tenantId,
-                        permission));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertStagePermissionOperation.upsertStagePermission(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                permission))
+                .map(ChangeContext::getResult);
     }
 }

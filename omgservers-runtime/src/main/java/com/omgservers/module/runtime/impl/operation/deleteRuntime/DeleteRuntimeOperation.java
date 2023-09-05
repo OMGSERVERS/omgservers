@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface DeleteRuntimeOperation {
-    Uni<Boolean> deleteRuntime(ChangeContext changeContext,
+    Uni<Boolean> deleteRuntime(ChangeContext<?> changeContext,
                                SqlConnection sqlConnection,
                                int shard,
                                Long id);
@@ -18,7 +18,7 @@ public interface DeleteRuntimeOperation {
                                   int shard,
                                   Long id) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             deleteRuntime(changeContext, sqlConnection, shard, id));
                 })

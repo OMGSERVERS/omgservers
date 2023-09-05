@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.deleteStage;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -40,7 +41,8 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteStageOperation.deleteStage(changeContext, sqlConnection, shardModel.shard(), tenantId, id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteStageOperation.deleteStage(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
+                .map(ChangeContext::getResult);
     }
 }

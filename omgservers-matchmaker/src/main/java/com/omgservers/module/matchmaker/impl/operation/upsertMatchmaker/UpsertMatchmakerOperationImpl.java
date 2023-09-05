@@ -44,7 +44,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertMatchmaker(final ChangeContext changeContext,
+    public Uni<Boolean> upsertMatchmaker(final ChangeContext<?> changeContext,
                                          final SqlConnection sqlConnection,
                                          final int shard,
                                          final MatchmakerModel matchmaker) {
@@ -86,7 +86,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final MatchmakerModel matchmaker) {
         if (objectWasInserted) {
@@ -104,7 +104,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final MatchmakerModel matchmaker) {
         if (objectWasInserted) {

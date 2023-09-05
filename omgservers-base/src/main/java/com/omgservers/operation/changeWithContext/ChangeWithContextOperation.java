@@ -8,5 +8,5 @@ import java.util.function.BiFunction;
 
 public interface ChangeWithContextOperation {
 
-    <T> Uni<T> changeWithContext(BiFunction<ChangeContext, SqlConnection, Uni<T>> changeFunction);
+    <T> Uni<ChangeContext<T>> changeWithContext(BiFunction<ChangeContext<T>, SqlConnection, Uni<T>> changeFunction);
 }

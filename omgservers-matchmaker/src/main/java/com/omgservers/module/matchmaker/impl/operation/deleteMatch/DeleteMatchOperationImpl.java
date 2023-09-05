@@ -35,7 +35,7 @@ class DeleteMatchOperationImpl implements DeleteMatchOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteMatch(final ChangeContext changeContext,
+    public Uni<Boolean> deleteMatch(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final Long matchmakerId,
@@ -70,7 +70,7 @@ class DeleteMatchOperationImpl implements DeleteMatchOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long matchmakerId,
                              final Long id) {
@@ -89,7 +89,7 @@ class DeleteMatchOperationImpl implements DeleteMatchOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long matchmakerId,
                            final Long id) {

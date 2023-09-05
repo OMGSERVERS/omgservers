@@ -43,7 +43,7 @@ class UpdateRuntimeCurrentStepOperationImpl implements UpdateRuntimeCurrentStepO
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> updateRuntimeCurrentStep(final ChangeContext changeContext,
+    public Uni<Boolean> updateRuntimeCurrentStep(final ChangeContext<?> changeContext,
                                                  final SqlConnection sqlConnection,
                                                  final int shard,
                                                  final Long id,
@@ -80,14 +80,14 @@ class UpdateRuntimeCurrentStepOperationImpl implements UpdateRuntimeCurrentStepO
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasUpdated,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long id) {
         return Uni.createFrom().item(false);
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasUpdated,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long id) {
         return Uni.createFrom().item(false);

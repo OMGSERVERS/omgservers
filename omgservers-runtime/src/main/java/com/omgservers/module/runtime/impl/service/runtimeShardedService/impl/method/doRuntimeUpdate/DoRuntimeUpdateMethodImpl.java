@@ -50,10 +50,11 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var runtimeId = request.getRuntimeId();
-                    return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                            selectRuntimeOperation.selectRuntime(sqlConnection, shard, runtimeId)
-                                    .flatMap(runtime -> updateRuntime(changeContext, sqlConnection, shard, runtime))
-                    );
+                    return changeWithContextOperation.<UpdateRuntimeResult>changeWithContext((changeContext, sqlConnection) ->
+                                    selectRuntimeOperation.selectRuntime(sqlConnection, shard, runtimeId)
+                                            .flatMap(runtime -> updateRuntime(changeContext, sqlConnection, shard, runtime))
+                            )
+                            .map(ChangeContext::getResult);
                 })
                 .map(updateRuntimeResult -> {
                     final var handledCommands = updateRuntimeResult.affectedCommands.size();
@@ -61,7 +62,7 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 });
     }
 
-    Uni<UpdateRuntimeResult> updateRuntime(final ChangeContext changeContext,
+    Uni<UpdateRuntimeResult> updateRuntime(final ChangeContext<?> changeContext,
                                            final SqlConnection sqlConnection,
                                            final int shard,
                                            final RuntimeModel runtime) {
@@ -89,7 +90,7 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 });
     }
 
-    Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final ChangeContext changeContext,
+    Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final ChangeContext<?> changeContext,
                                                          final SqlConnection sqlConnection,
                                                          final int shard,
                                                          final List<RuntimeCommandModel> runtimeCommands,
@@ -105,7 +106,7 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 .collect().asList();
     }
 
-    Uni<RuntimeCommandModel> handleRuntimeCommand(final ChangeContext changeContext,
+    Uni<RuntimeCommandModel> handleRuntimeCommand(final ChangeContext<?> changeContext,
                                                   final SqlConnection sqlConnection,
                                                   final int shard,
                                                   final RuntimeCommandModel runtimeCommand,

@@ -1,5 +1,6 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.deleteRuntimeCommand;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandShardedResponse;
 import com.omgservers.model.shard.ShardModel;
@@ -33,12 +34,13 @@ class DeleteRuntimeCommandMethodImpl implements DeleteRuntimeCommandMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long runtimeId, Long id) {
-        return changeWithContextOperation.changeWithContext((changeContext, sqlConnection) ->
-                deleteRuntimeCommandOperation.deleteRuntimeCommand(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        runtimeId,
-                        id));
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteRuntimeCommandOperation.deleteRuntimeCommand(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                runtimeId,
+                                id))
+                .map(ChangeContext::getResult);
     }
 }

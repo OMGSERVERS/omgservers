@@ -35,7 +35,7 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteStage(final ChangeContext changeContext,
+    public Uni<Boolean> deleteStage(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final Long tenantId,
@@ -70,7 +70,7 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final Long tenantId,
                              final Long id) {
@@ -89,7 +89,7 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final Long tenantId,
                            final Long id) {

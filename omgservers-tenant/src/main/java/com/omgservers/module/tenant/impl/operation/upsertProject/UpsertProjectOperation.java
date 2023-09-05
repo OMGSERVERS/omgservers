@@ -9,7 +9,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface UpsertProjectOperation {
-    Uni<Boolean> upsertProject(ChangeContext changeContext,
+    Uni<Boolean> upsertProject(ChangeContext<?> changeContext,
                                SqlConnection sqlConnection,
                                int shard,
                                ProjectModel project);
@@ -19,7 +19,7 @@ public interface UpsertProjectOperation {
                                   int shard,
                                   ProjectModel project) {
         return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext(context);
+                    final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
                             upsertProject(changeContext, sqlConnection, shard, project));
                 })

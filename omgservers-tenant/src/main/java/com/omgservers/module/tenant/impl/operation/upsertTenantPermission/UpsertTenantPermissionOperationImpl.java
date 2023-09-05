@@ -40,7 +40,7 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertTenantPermission(final ChangeContext changeContext,
+    public Uni<Boolean> upsertTenantPermission(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
                                                final int shard,
                                                final TenantPermissionModel permission) {
@@ -79,14 +79,14 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
     }
 
     Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext changeContext,
+                             final ChangeContext<?> changeContext,
                              final SqlConnection sqlConnection,
                              final TenantPermissionModel permission) {
         return Uni.createFrom().item(false);
     }
 
     Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext changeContext,
+                           final ChangeContext<?> changeContext,
                            final SqlConnection sqlConnection,
                            final TenantPermissionModel permission) {
         if (objectWasInserted) {
