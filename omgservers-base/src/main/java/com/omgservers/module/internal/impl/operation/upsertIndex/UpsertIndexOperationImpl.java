@@ -1,9 +1,14 @@
 package com.omgservers.module.internal.impl.operation.upsertIndex;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -29,11 +34,21 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
             """;
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> upsertIndex(final SqlConnection sqlConnection, final IndexModel index) {
+    public Uni<Boolean> upsertIndex(final ChangeContext<?> changeContext,
+                                    final SqlConnection sqlConnection,
+                                    final IndexModel index) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -41,14 +56,19 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
             throw new ServerSideBadRequestException("index is null");
         }
 
-        return upsertQuery(sqlConnection, index)
-                .invoke(voidItem -> log.info("Index was synchronized, name={}, version={}",
-                        index.getName(), index.getVersion()))
+        return upsertObject(sqlConnection, index)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, index))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, index))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Index was inserted, index={}", index);
+                    }
+                })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Void> upsertQuery(SqlConnection sqlConnection, IndexModel index) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, IndexModel index) {
         try {
             String configString = objectMapper.writeValueAsString(index.getConfig());
             return sqlConnection.preparedQuery(sql)
@@ -58,9 +78,28 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
                             index.getName(),
                             index.getVersion(),
                             configString))
-                    .replaceWithVoid();
+                    .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext<?> changeContext,
+                             final SqlConnection sqlConnection,
+                             final IndexModel index) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext<?> changeContext,
+                           final SqlConnection sqlConnection,
+                           final IndexModel index) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Index was inserted, index=" + index);
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.omgservers.module.internal.impl;
 
 import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.changeService.ChangeService;
 import com.omgservers.module.internal.impl.service.eventShardedService.EventShardedService;
 import com.omgservers.module.internal.impl.service.indexService.IndexService;
 import com.omgservers.module.internal.impl.service.jobShardedService.JobShardedService;
@@ -21,7 +20,6 @@ public class InternalModuleImpl implements InternalModule {
     final ServiceAccountService serviceAccountService;
     final EventShardedService eventShardedService;
     final JobShardedService jobShardedService;
-    final ChangeService changeService;
     final IndexService indexService;
     final SyncService syncService;
     final LogService logService;
@@ -36,10 +34,6 @@ public class InternalModuleImpl implements InternalModule {
 
     public JobShardedService getJobShardedService() {
         return jobShardedService;
-    }
-
-    public ChangeService getChangeService() {
-        return changeService;
     }
 
     public ServiceAccountService getServiceAccountService() {

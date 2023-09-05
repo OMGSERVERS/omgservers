@@ -1,7 +1,11 @@
 package com.omgservers.module.internal.impl.operation.upsertLog;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.log.LogModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -27,9 +31,19 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
             """;
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertLog(final SqlConnection sqlConnection, final LogModel logModel) {
+    public Uni<Boolean> upsertLog(final ChangeContext<?> changeContext,
+                                  final SqlConnection sqlConnection,
+                                  final LogModel logModel) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -37,19 +51,17 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
             throw new ServerSideBadRequestException("log is null");
         }
 
-        return upsertQuery(sqlConnection, logModel)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Log was inserted, log={}", logModel);
-                    } else {
-                        log.info("Log was updated, log={}", logModel);
+        return upsertObject(sqlConnection, logModel)
+                .invoke(logWasInserted -> {
+                    if (logWasInserted) {
+                        changeContext.add(logModel);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final LogModel logModel) {
+    Uni<Boolean> upsertObject(final SqlConnection sqlConnection, final LogModel logModel) {
         return sqlConnection.preparedQuery(sql)
                 .execute(Tuple.from(Arrays.asList(
                         logModel.getId(),

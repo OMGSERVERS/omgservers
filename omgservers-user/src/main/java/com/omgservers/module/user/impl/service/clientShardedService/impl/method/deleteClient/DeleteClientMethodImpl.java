@@ -1,14 +1,12 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl.method.deleteClient;
 
-import com.omgservers.ChangeWithLogRequest;
-import com.omgservers.ChangeWithLogResponse;
-import com.omgservers.dto.user.DeleteClientShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteClient.DeleteClientOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,30 +16,25 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteClientMethodImpl implements DeleteClientMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteClientOperation deleteClientOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<DeleteClientShardedResponse> deleteClient(final DeleteClientShardedRequest request) {
         DeleteClientShardedRequest.validate(request);
 
+        final var userId = request.getUserId();
         final var clientId = request.getClientId();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        ((sqlConnection, shardModel) -> deleteClientOperation
-                                .deleteClient(sqlConnection, shardModel.shard(), clientId)),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create("Client was deleted, " +
-                                        "clientId=" + clientId);
-                            } else {
-                                return null;
-                            }
-                        }))
-                .map(ChangeWithLogResponse::getResult)
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> deleteClientOperation.deleteClient(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                userId,
+                                clientId)))
+                .map(ChangeContext::getResult)
                 .map(DeleteClientShardedResponse::new);
     }
 }

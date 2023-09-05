@@ -1,13 +1,12 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.deleteAttribute;
 
-import com.omgservers.ChangeRequest;
-import com.omgservers.ChangeResponse;
-import com.omgservers.dto.user.DeleteAttributeShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteAttribute.DeleteAttributeOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,22 +16,28 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteAttributeOperation deleteAttributeOperation;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<DeleteAttributeShardedResponse> deleteAttribute(final DeleteAttributeShardedRequest request) {
         DeleteAttributeShardedRequest.validate(request);
 
-        final var player = request.getPlayerId();
+        final var userId = request.getUserId();
+        final var playerId = request.getPlayerId();
         final var name = request.getName();
-        final var changeRequest = new ChangeRequest(request,
-                (sqlConnection, shardModel) -> deleteAttributeOperation
-                        .deleteAttribute(sqlConnection, shardModel.shard(), player, name));
-        return internalModule.getChangeService().change(changeRequest)
-                .map(ChangeResponse::getResult)
+
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> deleteAttributeOperation.deleteAttribute(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                userId,
+                                playerId,
+                                name)))
+                .map(ChangeContext::getResult)
                 .map(DeleteAttributeShardedResponse::new);
     }
 }

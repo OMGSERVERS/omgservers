@@ -92,12 +92,7 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Tenant permission was inserted, " +
                     "permission=" + permission);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

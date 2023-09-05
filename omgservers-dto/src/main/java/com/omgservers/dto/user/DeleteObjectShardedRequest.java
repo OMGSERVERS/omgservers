@@ -17,6 +17,7 @@ public class DeleteObjectShardedRequest implements ShardedRequest {
     }
 
     Long userId;
+    Long playerId;
     Long id;
 
     @Override

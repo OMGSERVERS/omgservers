@@ -1,6 +1,11 @@
 package com.omgservers.module.internal.impl.operation.deleteEvent;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -20,9 +25,19 @@ class DeleteEventOperationImpl implements DeleteEventOperation {
             """;
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteEvent(SqlConnection sqlConnection, Long id) {
+    public Uni<Boolean> deleteEvent(final ChangeContext<?> changeContext,
+                                    final SqlConnection sqlConnection,
+                                    final Long id) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -33,11 +48,9 @@ class DeleteEventOperationImpl implements DeleteEventOperation {
         return sqlConnection.preparedQuery(sql)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
-                .invoke(deleted -> {
-                    if (deleted) {
+                .invoke(eventWasDeleted -> {
+                    if (eventWasDeleted) {
                         log.info("Event was deleted, id={}", id);
-                    } else {
-                        log.warn("Event was not found, skip operation, id={}", id);
                     }
                 })
                 .onFailure(PgException.class)

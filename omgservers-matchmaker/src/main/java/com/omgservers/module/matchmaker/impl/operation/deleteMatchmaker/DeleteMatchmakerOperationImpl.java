@@ -71,12 +71,7 @@ class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
         if (objectWasDeleted) {
             final var body = new MatchmakerDeletedEventBodyModel(id);
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -88,12 +83,7 @@ class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
                            final Long id) {
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create("Matchmaker was deleted, id=" + id);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

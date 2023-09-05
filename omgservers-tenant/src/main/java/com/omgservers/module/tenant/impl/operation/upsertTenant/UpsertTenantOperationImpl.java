@@ -94,12 +94,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
         if (objectWasInserted) {
             final var body = new TenantCreatedEventBodyModel(tenant.getId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -111,12 +106,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
                            final TenantModel tenant) {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Tenant was inserted, tenant=" + tenant);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

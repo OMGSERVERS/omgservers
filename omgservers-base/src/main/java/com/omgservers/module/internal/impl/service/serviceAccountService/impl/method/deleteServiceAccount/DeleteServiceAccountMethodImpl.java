@@ -1,9 +1,10 @@
 package com.omgservers.module.internal.impl.service.serviceAccountService.impl.method.deleteServiceAccount;
 
-import com.omgservers.module.internal.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.internal.DeleteServiceAccountRequest;
+import com.omgservers.module.internal.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,16 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 class DeleteServiceAccountMethodImpl implements DeleteServiceAccountMethod {
 
     final DeleteServiceAccountOperation deleteServiceAccountOperation;
-
-    final PgPool pgPool;
+    final ChangeWithContextOperation changeWithContextOperation;
 
     @Override
     public Uni<Void> deleteServiceAccount(DeleteServiceAccountRequest request) {
         DeleteServiceAccountRequest.validate(request);
 
         final var id = request.getId();
-        return pgPool.withTransaction(sqlConnection -> deleteServiceAccountOperation
-                .deleteServiceAccount(sqlConnection, id))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteServiceAccountOperation.deleteServiceAccount(changeContext, sqlConnection, id))
+                .map(ChangeContext::getResult)
+                //TODO: make response with deleted flag
                 .replaceWithVoid();
     }
 }

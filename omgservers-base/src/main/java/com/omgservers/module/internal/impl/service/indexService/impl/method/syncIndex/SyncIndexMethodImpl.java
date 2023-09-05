@@ -1,10 +1,11 @@
 package com.omgservers.module.internal.impl.service.indexService.impl.method.syncIndex;
 
+import com.omgservers.ChangeContext;
+import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.module.internal.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.module.internal.impl.operation.validateIndex.ValidateIndexOperation;
-import com.omgservers.dto.internal.SyncIndexRequest;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncIndexMethodImpl implements SyncIndexMethod {
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final ValidateIndexOperation validateIndexOperation;
     final UpsertIndexOperation syncIndexOperation;
-
-    final PgPool pgPool;
 
     @Override
     public Uni<Void> syncIndex(SyncIndexRequest request) {
         SyncIndexRequest.validate(request);
 
         final var index = request.getIndex();
-        return Uni.createFrom().item(index)
-                .invoke(validateIndexOperation::validateIndex)
-                .flatMap(validatedIndex -> pgPool.withTransaction(sqlConnection -> syncIndexOperation
-                        .upsertIndex(sqlConnection, validatedIndex)))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        syncIndexOperation.upsertIndex(changeContext, sqlConnection, index))
+                .map(ChangeContext::getResult)
                 .replaceWithVoid();
     }
 }

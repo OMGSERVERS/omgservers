@@ -49,15 +49,16 @@ class DeletePlayerOperationTest extends Assertions {
         final var id = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        assertTrue(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, id));
+        assertTrue(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, user.getId(), id));
     }
 
     @Test
-    void givenUnknownUuid_whenDeletePlayer_thenSkip() {
+    void givenUnknownIds_whenDeletePlayer_thenFalse() {
         final var shard = 0;
+        final var userId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, id));
+        assertFalse(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, userId, id));
     }
 
     long stageId() {

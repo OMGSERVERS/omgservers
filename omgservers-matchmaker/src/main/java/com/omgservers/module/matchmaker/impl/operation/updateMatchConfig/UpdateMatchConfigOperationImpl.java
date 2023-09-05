@@ -119,12 +119,7 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
         if (objectWasUpdated) {
             final var changeLog = logModelFactory.create(String.format("Match was updated, " +
                     "matchmakerId=%d, matchId=%d", matchmakerId, matchId));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

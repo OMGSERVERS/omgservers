@@ -60,8 +60,6 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
                 .invoke(objectWasDeleted -> {
                     if (objectWasDeleted) {
                         log.info("Project was deleted, shard={}, tenantId={}, id={}", shard, tenantId, id);
-                    } else {
-                        log.warn("Project was not found, skip operation, shard={}, tenantId={}, id={}", shard, tenantId, id);
                     }
                 })
                 .onFailure(PgException.class)
@@ -76,12 +74,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
         if (objectWasDeleted) {
             final var body = new ProjectDeletedEventBodyModel(tenantId, id);
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -95,12 +88,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create(String.format("Project was deleted, " +
                     "tenantId=%d, id=%d", tenantId, id));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

@@ -1,9 +1,12 @@
 package com.omgservers.module.internal.impl.operation.upsertServiceAccount;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface UpsertServiceAccountOperation {
-    Uni<Void> upsertServiceAccount(SqlConnection sqlConnection, ServiceAccountModel serviceAccount);
+    Uni<Boolean> upsertServiceAccount(ChangeContext<?> changeContext,
+                                      SqlConnection sqlConnection,
+                                      ServiceAccountModel serviceAccount);
 }

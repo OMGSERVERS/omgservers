@@ -1,14 +1,12 @@
 package com.omgservers.module.user.impl.service.userInternalService.impl.method.syncUser;
 
-import com.omgservers.ChangeWithLogRequest;
-import com.omgservers.ChangeWithLogResponse;
-import com.omgservers.dto.user.SyncUserShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.dto.user.SyncUserShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,30 +16,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncUserMethodImpl implements SyncUserMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertUserOperation upsertUserOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<SyncUserShardedResponse> syncUser(final SyncUserShardedRequest request) {
         SyncUserShardedRequest.validate(request);
 
         final var user = request.getUser();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        (sqlConnection, shardModel) -> upsertUserOperation
-                                .upsertUser(sqlConnection, shardModel.shard(), user),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create("User was created, user=" + user);
-                            } else {
-                                return logModelFactory.create("User was updated, user=" + user);
-                            }
-                        }
-                ))
-                .map(ChangeWithLogResponse::getResult)
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> upsertUserOperation.upsertUser(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                user)))
+                .map(ChangeContext::getResult)
                 .map(SyncUserShardedResponse::new);
     }
 }

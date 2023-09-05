@@ -98,12 +98,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create(String.format("Stage permission was inserted, " +
                     "tenantId=%d, permission=%s", tenantId, permission));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

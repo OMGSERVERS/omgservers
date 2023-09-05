@@ -98,12 +98,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create(String.format("Project permission was inserted, " +
                     "tenantId=%d, permission=%s", tenantId, permission));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

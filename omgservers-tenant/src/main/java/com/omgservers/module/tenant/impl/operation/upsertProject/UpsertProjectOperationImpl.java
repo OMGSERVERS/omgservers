@@ -97,12 +97,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
         if (objectWasInserted) {
             final var body = new ProjectCreatedEventBodyModel(project.getTenantId(), project.getId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -114,12 +109,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                            final ProjectModel project) {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Project was created, project=" + project);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

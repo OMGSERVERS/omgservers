@@ -76,12 +76,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
         if (objectWasDeleted) {
             final var body = new VersionDeletedEventBodyModel(tenantId, id);
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -95,12 +90,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create(String.format("Version was deleted, " +
                     "tenantId=%d, id=%d", tenantId, id));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

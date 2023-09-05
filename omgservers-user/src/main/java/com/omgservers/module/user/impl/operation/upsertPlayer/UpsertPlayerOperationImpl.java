@@ -1,9 +1,15 @@
 package com.omgservers.module.user.impl.operation.upsertPlayer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
+import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,12 +38,22 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
+
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertPlayer(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertPlayer(final ChangeContext<?> changeContext,
+                                     final SqlConnection sqlConnection,
                                      final int shard,
                                      final PlayerModel player) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -45,19 +61,19 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
             throw new ServerSideBadRequestException("player is null");
         }
 
-        return upsertQuery(sqlConnection, shard, player)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Player was inserted, player={}", player);
-                    } else {
-                        log.info("Player was updated, player={}", player);
+        return upsertObject(sqlConnection, shard, player)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, player))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, player))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Player was inserted, shard={}, player={}", shard, player);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, PlayerModel player) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, PlayerModel player) {
         try {
             var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
             var configString = objectMapper.writeValueAsString(player.getConfig());
@@ -73,6 +89,31 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                     .map(rowSet -> rowSet.rowCount() > 0);
         } catch (IOException e) {
             throw new ServerSideInternalException(e.getMessage(), e);
+        }
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext<?> changeContext,
+                             final SqlConnection sqlConnection,
+                             final PlayerModel player) {
+        if (objectWasInserted) {
+            final var body = new PlayerCreatedEventBodyModel(player.getUserId(), player.getStageId(), player.getId());
+            final var event = eventModelFactory.create(body);
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
+        } else {
+            return Uni.createFrom().item(false);
+        }
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext<?> changeContext,
+                           final SqlConnection sqlConnection,
+                           final PlayerModel player) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Player was created, player=" + player);
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
+        } else {
+            return Uni.createFrom().item(false);
         }
     }
 }

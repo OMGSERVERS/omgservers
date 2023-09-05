@@ -57,7 +57,7 @@ class UpsertClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
         final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client);
     }
 
     @Test
@@ -69,17 +69,18 @@ class UpsertClientOperationTest extends Assertions {
         final var playerUuid = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client);
 
-        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
+        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client));
     }
 
     @Test
-    void whenInsertClientWithUnknownPlayerUuid_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenUpsertClient_thenException() {
         final var shard = 0;
+        final var userId = generateIdOperation.generateId();
         final var client = clientModelFactory.create(playerId(), URI.create("http://localhost:8080"), connectionId());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
-                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
+                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, userId, client));
         log.info("Exception: {}", exception.getMessage());
     }
 

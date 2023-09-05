@@ -108,12 +108,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         if (objectWasInserted) {
             final var body = new VersionCreatedEventBodyModel(tenantId, version.getId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -127,12 +122,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create(String.format("Stage was created, " +
                     "tenantId=%d, version=%s", tenantId, version));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

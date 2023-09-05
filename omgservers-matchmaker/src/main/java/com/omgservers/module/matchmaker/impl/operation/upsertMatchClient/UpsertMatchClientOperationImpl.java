@@ -93,12 +93,7 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
         if (objectWasInserted) {
             final var body = new MatchClientCreatedEventBodyModel(matchClient.getMatchmakerId(), matchClient.getId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -110,12 +105,7 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
                            final MatchClientModel matchClient) {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Match client was inserted, matchClient=" + matchClient);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

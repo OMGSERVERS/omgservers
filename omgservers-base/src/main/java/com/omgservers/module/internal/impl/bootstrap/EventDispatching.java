@@ -10,6 +10,7 @@ import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.module.internal.impl.operation.selectEvent.SelectEventOperation;
 import com.omgservers.module.internal.impl.operation.updateEventStatus.UpdateEventStatusOperation;
 import com.omgservers.module.internal.impl.service.handlerService.HandlerService;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
@@ -36,6 +37,7 @@ public class EventDispatching {
 
     final HandlerService handlerService;
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpdateEventStatusOperation updateEventStatusOperation;
     final SelectEventOperation selectEventOperation;
     final GetConfigOperation getConfigOperation;
@@ -118,8 +120,8 @@ public class EventDispatching {
     }
 
     Uni<Void> updateStatus(final Long eventId, final Boolean processed) {
-        return pgPool.withConnection(sqlConnection -> updateEventStatusOperation
-                        .updateEventStatus(sqlConnection, eventId, processed ?
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        updateEventStatusOperation.updateEventStatus(changeContext, sqlConnection, eventId, processed ?
                                 EventStatusEnum.PROCESSED : EventStatusEnum.FAILED))
                 .replaceWithVoid();
     }

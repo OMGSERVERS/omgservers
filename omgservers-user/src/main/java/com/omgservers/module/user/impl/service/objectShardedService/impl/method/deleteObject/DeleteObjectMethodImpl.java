@@ -1,14 +1,12 @@
 package com.omgservers.module.user.impl.service.objectShardedService.impl.method.deleteObject;
 
-import com.omgservers.ChangeWithLogRequest;
-import com.omgservers.ChangeWithLogResponse;
-import com.omgservers.dto.user.DeleteObjectShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteObject.DeleteObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,31 +16,27 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteObjectMethodImpl implements DeleteObjectMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteObjectOperation deleteObjectOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<DeleteObjectShardedResponse> deleteObject(final DeleteObjectShardedRequest request) {
         DeleteObjectShardedRequest.validate(request);
 
         final var userId = request.getUserId();
+        final var playerId = request.getPlayerId();
         final var id = request.getId();
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        (sqlConnection, shardModel) -> deleteObjectOperation
-                                .deleteObject(sqlConnection, shardModel.shard(), id),
-                        deleted -> {
-                            if (deleted) {
-                                return logModelFactory.create(String.format("Object was deleted, " +
-                                        "userId=%d, id=%d", userId, id));
-                            } else {
-                                return null;
-                            }
-                        }))
-                .map(ChangeWithLogResponse::getResult)
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> deleteObjectOperation.deleteObject(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                userId,
+                                playerId,
+                                id)))
+                .map(ChangeContext::getResult)
                 .map(DeleteObjectShardedResponse::new);
     }
 }

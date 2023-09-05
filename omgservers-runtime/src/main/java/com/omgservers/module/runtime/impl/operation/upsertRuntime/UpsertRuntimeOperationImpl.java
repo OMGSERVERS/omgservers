@@ -109,12 +109,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                     runtime.getMatchmakerId(),
                     runtime.getMatchId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -126,12 +121,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                            final RuntimeModel runtime) {
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create("Runtime was inserted, runtime=" + runtime);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

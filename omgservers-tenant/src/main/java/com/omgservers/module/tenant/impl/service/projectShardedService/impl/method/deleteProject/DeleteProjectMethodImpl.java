@@ -7,7 +7,6 @@ import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOp
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +19,6 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteProjectOperation deleteProjectOperation;
     final CheckShardOperation checkShardOperation;
-
-    final PgPool pgPool;
 
     @Override
     public Uni<Void> deleteProject(final DeleteProjectShardedRequest request) {

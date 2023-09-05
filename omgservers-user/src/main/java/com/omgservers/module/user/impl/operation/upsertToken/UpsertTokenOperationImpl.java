@@ -1,7 +1,12 @@
 package com.omgservers.module.user.impl.operation.upsertToken;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.token.TokenModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.module.user.impl.operation.encodeToken.EncodeTokenOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
@@ -32,14 +37,24 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
     final EncodeTokenOperation encodeTokenOperation;
     final GenerateIdOperation generateIdOperation;
     final GetConfigOperation getConfigOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
+
 
     @Override
-    public Uni<Boolean> upsertToken(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertToken(final ChangeContext<?> changeContext,
+                                    final SqlConnection sqlConnection,
                                     final int shard,
                                     final TokenModel token) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -47,19 +62,19 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
             throw new ServerSideBadRequestException("token is null");
         }
 
-        return upsertQuery(sqlConnection, shard, token)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Token was inserted, token={}", token);
-                    } else {
-                        log.info("Token already exists, token={}", token);
+        return upsertObject(sqlConnection, shard, token)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, token))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, token))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Token was inserted, shard={}, token={}", shard, token);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, TokenModel tokenModel) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, TokenModel tokenModel) {
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
 
         return sqlConnection.preparedQuery(preparedSql)
@@ -70,5 +85,24 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
                         tokenModel.getExpire().atOffset(ZoneOffset.UTC),
                         tokenModel.getHash())))
                 .map(rowSet -> rowSet.rowCount() > 0);
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext<?> changeContext,
+                             final SqlConnection sqlConnection,
+                             final TokenModel token) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext<?> changeContext,
+                           final SqlConnection sqlConnection,
+                           final TokenModel token) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Token was created, token=" + token);
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
+        } else {
+            return Uni.createFrom().item(false);
+        }
     }
 }

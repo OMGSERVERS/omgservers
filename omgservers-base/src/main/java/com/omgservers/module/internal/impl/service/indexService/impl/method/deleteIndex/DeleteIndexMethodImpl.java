@@ -1,9 +1,10 @@
 package com.omgservers.module.internal.impl.service.indexService.impl.method.deleteIndex;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.internal.DeleteIndexRequest;
 import com.omgservers.module.internal.impl.operation.deleteIndex.DeleteIndexOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteIndexMethodImpl implements DeleteIndexMethod {
 
-    final PgPool pgPool;
+    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteIndexOperation deleteIndexOperation;
 
     @Override
@@ -21,8 +22,10 @@ class DeleteIndexMethodImpl implements DeleteIndexMethod {
         DeleteIndexRequest.validate(request);
 
         final var id = request.getId();
-        return pgPool.withTransaction(sqlConnection -> deleteIndexOperation
-                        .deleteIndex(sqlConnection, id))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteIndexOperation.deleteIndex(changeContext, sqlConnection, id))
+                .map(ChangeContext::getResult)
+                //TODO: make response with deleted flag
                 .replaceWithVoid();
     }
 }

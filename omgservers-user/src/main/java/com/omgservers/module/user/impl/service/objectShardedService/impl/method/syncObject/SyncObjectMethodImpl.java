@@ -1,15 +1,13 @@
 package com.omgservers.module.user.impl.service.objectShardedService.impl.method.syncObject;
 
-import com.omgservers.ChangeWithLogRequest;
-import com.omgservers.ChangeWithLogResponse;
-import com.omgservers.dto.user.SyncObjectShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.SyncObjectShardedRequest;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.dto.user.SyncObjectShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertObject.UpsertObjectOperation;
 import com.omgservers.module.user.impl.operation.validateObject.ValidateObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncObjectMethodImpl implements SyncObjectMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final ValidateObjectOperation validateObjectOperation;
     final UpsertObjectOperation upsertObjectOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request) {
@@ -34,19 +29,15 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
         final var userId = request.getUserId();
         final var object = request.getObject();
         validateObjectOperation.validateObject(object);
-        return internalModule.getChangeService().changeWithLog(new ChangeWithLogRequest(request,
-                        ((sqlConnection, shardModel) -> upsertObjectOperation
-                                .upsertObject(sqlConnection, shardModel.shard(), object)),
-                        inserted -> {
-                            if (inserted) {
-                                return logModelFactory.create(String.format("Object was inserted, " +
-                                        "userId=%d, object=%s", userId, object));
-                            } else {
-                                return logModelFactory.create(String.format("Object was updated, " +
-                                        "userId=%d, object=%s", userId, object));
-                            }
-                        }))
-                .map(ChangeWithLogResponse::getResult)
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> upsertObjectOperation.upsertObject(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                userId,
+                                object)))
+                .map(ChangeContext::getResult)
                 .map(SyncObjectShardedResponse::new);
     }
 }

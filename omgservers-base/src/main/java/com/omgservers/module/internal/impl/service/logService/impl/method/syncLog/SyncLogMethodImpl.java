@@ -1,8 +1,10 @@
 package com.omgservers.module.internal.impl.service.logService.impl.method.syncLog;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.dto.internal.SyncLogResponse;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncLogMethodImpl implements SyncLogMethod {
 
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertLogOperation upsertLogOperation;
 
     final PgPool pgPool;
@@ -21,9 +24,11 @@ class SyncLogMethodImpl implements SyncLogMethod {
     @Override
     public Uni<SyncLogResponse> syncLog(SyncLogRequest request) {
         SyncLogRequest.validate(request);
+
         final var logModel = request.getLog();
-        return pgPool.withTransaction(sqlConnection -> upsertLogOperation
-                        .upsertLog(sqlConnection, logModel))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertLogOperation.upsertLog(changeContext, sqlConnection, logModel))
+                .map(ChangeContext::getResult)
                 .map(SyncLogResponse::new);
     }
 }

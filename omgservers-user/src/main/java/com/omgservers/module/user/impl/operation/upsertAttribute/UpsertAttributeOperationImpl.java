@@ -1,7 +1,12 @@
 package com.omgservers.module.user.impl.operation.upsertAttribute;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.attribute.AttributeModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,11 +34,20 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertAttribute(final SqlConnection sqlConnection,
+    public Uni<Boolean> upsertAttribute(final ChangeContext<?> changeContext,
+                                        final SqlConnection sqlConnection,
                                         final int shard,
                                         final AttributeModel attribute) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -41,19 +55,19 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
             throw new ServerSideBadRequestException("attribute is null");
         }
 
-        return upsertQuery(sqlConnection, shard, attribute)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Attribute was inserted, object={}", attribute);
-                    } else {
-                        log.info("Attribute was updated, object={}", attribute);
+        return upsertObject(sqlConnection, shard, attribute)
+                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, attribute))
+                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, attribute))
+                .invoke(objectWasInserted -> {
+                    if (objectWasInserted) {
+                        log.info("Attribute was inserted, attribute={}", attribute);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(SqlConnection sqlConnection, int shard, AttributeModel attribute) {
+    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, AttributeModel attribute) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(Arrays.asList(
@@ -65,5 +79,24 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
                         attribute.getValue()
                 )))
                 .map(rowSet -> rowSet.rowCount() > 0);
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
+                             final ChangeContext<?> changeContext,
+                             final SqlConnection sqlConnection,
+                             final AttributeModel attribute) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasInserted,
+                           final ChangeContext<?> changeContext,
+                           final SqlConnection sqlConnection,
+                           final AttributeModel attribute) {
+        if (objectWasInserted) {
+            final var changeLog = logModelFactory.create("Attribute was inserted, attribute=" + attribute);
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
+        } else {
+            return Uni.createFrom().item(false);
+        }
     }
 }

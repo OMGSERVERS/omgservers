@@ -60,7 +60,7 @@ class SelectClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client1 = clientModelFactory.create(player.getId(), URI.create("http://localhost:8080"), connectionId());
         final var clientUuid = client1.getId();
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client1);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client1);
 
         final var client2 = selectClientOperation.selectClient(TIMEOUT, pgPool, shard, clientUuid);
         assertEquals(client1, client2);

@@ -61,7 +61,7 @@ class SelectObjectOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object1 = objectModelFactory.create(player.getId(), UUID.randomUUID().toString(), new byte[5]);
         final var objectName = object1.getName();
-        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, object1);
+        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object1);
 
         final var object2 = selectObjectOperation.selectObject(TIMEOUT, pgPool, shard, playerUuid, objectName);
         assertEquals(object1, object2);

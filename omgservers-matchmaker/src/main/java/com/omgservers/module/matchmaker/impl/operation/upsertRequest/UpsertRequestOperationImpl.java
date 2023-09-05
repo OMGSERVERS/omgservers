@@ -107,12 +107,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                            final RequestModel request) {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Request was inserted, request=" + request);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

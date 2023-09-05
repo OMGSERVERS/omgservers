@@ -1,6 +1,7 @@
 package com.omgservers.model.event;
 
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
@@ -16,6 +17,7 @@ import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
+import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.PlayerSignedUpEventBodyModel;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
@@ -31,6 +33,9 @@ import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
+import com.omgservers.model.event.body.UserCreatedEventBodyModel;
+import com.omgservers.model.event.body.UserDeletedEventBodyModel;
+import com.omgservers.model.event.body.UserUpdatedEventBodyModel;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 
@@ -49,10 +54,15 @@ public enum EventQualifierEnum {
     STAGE_DELETED(StageDeletedEventBodyModel.class),
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
     VERSION_DELETED(VersionDeletedEventBodyModel.class),
+    USER_CREATED(UserCreatedEventBodyModel.class),
+    USER_UPDATED(UserUpdatedEventBodyModel.class),
+    USER_DELETED(UserDeletedEventBodyModel.class),
     PLAYER_CREATED(PlayerCreatedEventBodyModel.class),
     PLAYER_UPDATED(PlayerCreatedEventBodyModel.class),
+    PLAYER_DELETED(PlayerDeletedEventBodyModel.class),
     CLIENT_CREATED(ClientCreatedEventBodyModel.class),
     CLIENT_UPDATED(ClientUpdatedEventBodyModel.class),
+    CLIENT_DELETED(ClientDeletedEventBodyModel.class),
     CLIENT_DISCONNECTED(ClientDisconnectedEventBodyModel.class),
     MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class),
     MATCHMAKER_UPDATED(MatchmakerUpdatedEventBodyModel.class),

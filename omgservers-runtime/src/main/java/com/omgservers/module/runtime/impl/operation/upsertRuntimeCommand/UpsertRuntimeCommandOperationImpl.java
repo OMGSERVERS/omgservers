@@ -109,12 +109,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create("Runtime command was inserted, " +
                     "runtimeCommand=" + runtimeCommand);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

@@ -79,12 +79,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
         if (objectWasDeleted) {
             final var changeLog = logModelFactory.create(String.format("Runtime command was deleted, " +
                     "runtimeId=%d, id=%d", runtimeId, id));
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

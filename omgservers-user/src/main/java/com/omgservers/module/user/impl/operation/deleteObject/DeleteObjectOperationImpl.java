@@ -1,5 +1,10 @@
 package com.omgservers.module.user.impl.operation.deleteObject;
 
+import com.omgservers.ChangeContext;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,16 +25,33 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> deleteObject(final SqlConnection sqlConnection,
+    public Uni<Boolean> deleteObject(final ChangeContext<?> changeContext,
+                                     final SqlConnection sqlConnection,
                                      final int shard,
+                                     final Long userId,
+                                     final Long playerId,
                                      final Long id) {
+        if (changeContext == null) {
+            throw new IllegalArgumentException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
+        }
+        if (playerId == null) {
+            throw new IllegalArgumentException("playerId is null");
+        }
         if (id == null) {
-            throw new IllegalArgumentException("uuid is null");
+            throw new IllegalArgumentException("id is null");
         }
 
         String preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
@@ -37,12 +59,37 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.of(id))
                 .map(rowSet -> rowSet.rowCount() > 0)
-                .invoke(deleted -> {
-                    if (deleted) {
-                        log.info("Object was deleted, shard={}, id={}", shard, id);
-                    } else {
-                        log.warn("Object was not found, skip operation, shard={}, id={}", shard, id);
+                .call(objectWasDeleted -> upsertEvent(objectWasDeleted, changeContext, sqlConnection, userId, playerId, id))
+                .call(objectWasDeleted -> upsertLog(objectWasDeleted, changeContext, sqlConnection, userId, playerId, id))
+                .invoke(objectWasDeleted -> {
+                    if (objectWasDeleted) {
+                        log.info("Object was deleted, " +
+                                "shard={}, userId={}, playerId={} id={}", shard, userId, playerId, id);
                     }
                 });
+    }
+
+    Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
+                             final ChangeContext<?> changeContext,
+                             final SqlConnection sqlConnection,
+                             final Long userId,
+                             final Long playerId,
+                             final Long id) {
+        return Uni.createFrom().item(false);
+    }
+
+    Uni<Boolean> upsertLog(final boolean objectWasDeleted,
+                           final ChangeContext<?> changeContext,
+                           final SqlConnection sqlConnection,
+                           final Long userId,
+                           final Long playerId,
+                           final Long id) {
+        if (objectWasDeleted) {
+            final var changeLog = logModelFactory.create(String.format("Object was deleted, " +
+                    "userId=%d, playerId=%d, id=%d", userId, playerId, id));
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
+        } else {
+            return Uni.createFrom().item(false);
+        }
     }
 }

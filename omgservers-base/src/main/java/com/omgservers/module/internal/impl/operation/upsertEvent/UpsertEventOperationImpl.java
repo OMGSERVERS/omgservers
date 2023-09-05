@@ -1,9 +1,13 @@
 package com.omgservers.module.internal.impl.operation.upsertEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.event.EventModel;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -30,11 +34,21 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
             """;
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final UpsertEventOperation upsertEventOperation;
+    final UpsertLogOperation upsertLogOperation;
+
+    final EventModelFactory eventModelFactory;
+    final LogModelFactory logModelFactory;
 
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertEvent(final SqlConnection sqlConnection, final EventModel event) {
+    public Uni<Boolean> upsertEvent(final ChangeContext<?> changeContext,
+                                    final SqlConnection sqlConnection,
+                                    final EventModel event) {
+        if (changeContext == null) {
+            throw new ServerSideBadRequestException("changeContext is null");
+        }
         if (sqlConnection == null) {
             throw new ServerSideBadRequestException("sqlConnection is null");
         }
@@ -42,19 +56,17 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
             throw new ServerSideBadRequestException("event is null");
         }
 
-        return upsertQuery(sqlConnection, event)
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("Event was inserted, event={}", event);
-                    } else {
-                        log.info("Event was updated, event={}", event);
+        return upsertObject(sqlConnection, event)
+                .invoke(eventWasInserted -> {
+                    if (eventWasInserted) {
+                        changeContext.add(event);
                     }
                 })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
     }
 
-    Uni<Boolean> upsertQuery(final SqlConnection sqlConnection, final EventModel event) {
+    Uni<Boolean> upsertObject(final SqlConnection sqlConnection, final EventModel event) {
         try {
             var bodyString = objectMapper.writeValueAsString(event.getBody());
             return sqlConnection.preparedQuery(sql)

@@ -1,13 +1,12 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.syncAttribute;
 
-import com.omgservers.ChangeRequest;
-import com.omgservers.ChangeResponse;
-import com.omgservers.dto.user.SyncAttributeShardedResponse;
+import com.omgservers.ChangeContext;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertAttribute.UpsertAttributeOperation;
+import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,22 +16,24 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncAttributeMethodImpl implements SyncAttributeMethod {
 
-    final InternalModule internalModule;
-
+    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertAttributeOperation upsertAttributeOperation;
-
-    final PgPool pgPool;
+    final CheckShardOperation checkShardOperation;
 
     @Override
     public Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request) {
         SyncAttributeShardedRequest.validate(request);
 
         final var attribute = request.getAttribute();
-        final var changeRequest = new ChangeRequest(request,
-                (sqlConnection, shardModel) -> upsertAttributeOperation
-                        .upsertAttribute(sqlConnection, shardModel.shard(), attribute));
-        return internalModule.getChangeService().change(changeRequest)
-                .map(ChangeResponse::getResult)
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> upsertAttributeOperation.upsertAttribute(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                attribute)
+                ))
+                .map(ChangeContext::getResult)
                 .map(SyncAttributeShardedResponse::new);
     }
 }

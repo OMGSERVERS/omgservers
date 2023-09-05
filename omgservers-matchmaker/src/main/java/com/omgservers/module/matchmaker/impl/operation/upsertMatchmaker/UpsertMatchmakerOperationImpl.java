@@ -92,12 +92,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
         if (objectWasInserted) {
             final var body = new MatchmakerCreatedEventBodyModel(matchmaker.getId());
             final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(sqlConnection, event)
-                    .invoke(eventWasInserted -> {
-                        if (eventWasInserted) {
-                            changeContext.add(event);
-                        }
-                    });
+            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
         } else {
             return Uni.createFrom().item(false);
         }
@@ -109,12 +104,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                            final MatchmakerModel matchmaker) {
         if (objectWasInserted) {
             final var changeLog = logModelFactory.create("Matchmaker was inserted, matchmaker=" + matchmaker);
-            return upsertLogOperation.upsertLog(sqlConnection, changeLog)
-                    .invoke(logWasInserted -> {
-                        if (logWasInserted) {
-                            changeContext.add(changeLog);
-                        }
-                    });
+            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
         } else {
             return Uni.createFrom().item(false);
         }

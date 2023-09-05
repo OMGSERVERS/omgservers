@@ -1,5 +1,6 @@
 package com.omgservers.module.internal.impl.operation.deleteIndex;
 
+import com.omgservers.ChangeContext;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -21,7 +22,9 @@ class DeleteIndexOperationImpl implements DeleteIndexOperation {
     final TransformPgExceptionOperation transformPgExceptionOperation;
 
     @Override
-    public Uni<Boolean> deleteIndex(final SqlConnection sqlConnection, final Long id) {
+    public Uni<Boolean> deleteIndex(final ChangeContext<?> changeContext,
+                                    final SqlConnection sqlConnection,
+                                    final Long id) {
         if (sqlConnection == null) {
             throw new IllegalArgumentException("sqlConnection is null");
         }

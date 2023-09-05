@@ -47,7 +47,7 @@ class UpsertObjectOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenUserPlayer_whenUpsertObject_thenInserted() {
+    void givenObject_whenUpsertObject_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
@@ -56,11 +56,11 @@ class UpsertObjectOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
         final var object = objectModelFactory.create(playerId, UUID.randomUUID().toString(), new byte[5]);
-        assertTrue(upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, object));
+        assertTrue(upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object));
     }
 
     @Test
-    void givenUserPlayerObject_whenUpsertPlayer_thenUpdated() {
+    void givenObject_whenUpsertObjectAgain_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
@@ -68,9 +68,9 @@ class UpsertObjectOperationTest extends Assertions {
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object = objectModelFactory.create(playerId, UUID.randomUUID().toString(), new byte[]{0, 1, 2, 3, 4, 5, 6, 7});
-        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, object);
+        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object);
 
-        assertFalse(upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, object));
+        assertFalse(upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object));
     }
 
     Long stageId() {

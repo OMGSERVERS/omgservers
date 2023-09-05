@@ -59,17 +59,19 @@ class DeleteObjectOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object = objectModelFactory.create(player.getId(), UUID.randomUUID().toString(), new byte[5]);
         final var id = object.getId();
-        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, object);
+        upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object);
 
-        assertTrue(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, id));
+        assertTrue(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, user.getId(), player.getId(), id));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteObject_thenSkip() {
+    void givenUnknownIds_whenDeleteObject_thenSkip() {
         final var shard = 0;
+        final var userId = generateIdOperation.generateId();
+        final var playerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, id));
+        assertFalse(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, userId, playerId, id));
     }
 
     long stageId() {
