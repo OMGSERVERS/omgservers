@@ -36,7 +36,7 @@ class CreateUserTokenOperationImpl implements CreateUserTokenOperation {
         tokenObject.setUserId(userId);
         tokenObject.setRole(user.getRole());
         // TODO improve secret generation
-        tokenObject.setSecret(Math.abs(new SecureRandom().nextLong()));
+        tokenObject.setSecret(new SecureRandom().nextLong());
 
         final var rawToken = encodeTokenOperation.encodeToken(tokenObject);
         final var result = new UserTokenContainerModel(tokenObject, rawToken, lifetime);

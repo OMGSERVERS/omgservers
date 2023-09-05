@@ -42,7 +42,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         CreateDeveloperAdminRequest.validate(request);
         final var tenantId = request.getTenantId();
         // TODO: improve it
-        final var password = String.valueOf(Math.abs(new SecureRandom().nextLong()));
+        final var password = String.valueOf(new SecureRandom().nextLong());
         return getTenant(tenantId)
                 .flatMap(tenant -> createUser(password))
                 .call(user -> syncCreateProjectPermission(tenantId, user.getId()))

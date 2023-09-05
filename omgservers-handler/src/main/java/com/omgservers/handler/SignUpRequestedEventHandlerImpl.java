@@ -4,7 +4,6 @@ import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -15,6 +14,7 @@ import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
@@ -67,7 +67,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         final var secret = body.getSecret();
 
         //TODO: improve it
-        final var password = String.valueOf(Math.abs(new SecureRandom().nextLong()));
+        final var password = String.valueOf(new SecureRandom().nextLong());
 
         return validateStageSecret(tenantId, stageId, secret)
                 .flatMap(voidItem -> createUser(password))
