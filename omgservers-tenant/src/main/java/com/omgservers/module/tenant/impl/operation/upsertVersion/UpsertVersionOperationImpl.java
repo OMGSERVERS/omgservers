@@ -30,7 +30,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertVersionOperationImpl implements UpsertVersionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_tenant_version(id, stage_id, created, modified, config, source_code, bytecode, errors)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do

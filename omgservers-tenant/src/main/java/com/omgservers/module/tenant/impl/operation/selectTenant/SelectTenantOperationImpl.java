@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectTenantOperationImpl implements SelectTenantOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, config
             from $schema.tab_tenant
             where id = $1

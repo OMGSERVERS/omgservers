@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, tenant_id, stage_id
             from $schema.tab_matchmaker
             where id = $1

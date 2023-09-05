@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select bytecode
             from $schema.tab_tenant_version
             where id = $1

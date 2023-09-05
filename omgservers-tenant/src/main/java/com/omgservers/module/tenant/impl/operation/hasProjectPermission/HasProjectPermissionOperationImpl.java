@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id
             from $schema.tab_tenant_project_permission
             where project_id = $1 and user_id = $2 and permission = $3

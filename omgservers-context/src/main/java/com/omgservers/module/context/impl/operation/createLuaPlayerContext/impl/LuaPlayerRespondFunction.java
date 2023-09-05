@@ -19,7 +19,7 @@ import java.util.UUID;
 @ToString
 @AllArgsConstructor
 public class LuaPlayerRespondFunction extends OneArgFunction {
-    static private final long TIMEOUT = 10L;
+    private static final long TIMEOUT = 10L;
 
     @ToString.Exclude
     final UserModule userModule;

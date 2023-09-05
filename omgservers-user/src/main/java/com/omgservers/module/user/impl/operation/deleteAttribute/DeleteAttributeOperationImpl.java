@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_user_attribute
             where player_id = $1 and attribute_name = $2
             """;

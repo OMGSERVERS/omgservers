@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_user_attribute
             where player_id = $1

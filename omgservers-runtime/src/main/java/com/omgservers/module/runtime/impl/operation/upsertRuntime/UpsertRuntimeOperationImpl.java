@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_runtime(id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, type, current_step, config)
             values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             on conflict (id) do

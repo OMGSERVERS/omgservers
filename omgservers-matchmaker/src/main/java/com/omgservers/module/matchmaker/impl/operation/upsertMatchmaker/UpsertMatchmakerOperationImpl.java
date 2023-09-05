@@ -27,7 +27,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

@@ -21,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 @QuarkusTest
 class DeleteObjectOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     DeleteObjectOperation deleteObjectOperation;

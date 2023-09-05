@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, runtime_id, created, modified, qualifier, body, status, step
             from $schema.tab_runtime_command
             where runtime_id = $1 and status = $2

@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id
             from $schema.tab_tenant_version
             where stage_id = $1

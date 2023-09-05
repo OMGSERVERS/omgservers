@@ -20,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 @QuarkusTest
 class UpsertObjectOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     UpsertObjectOperation upsertObjectOperation;

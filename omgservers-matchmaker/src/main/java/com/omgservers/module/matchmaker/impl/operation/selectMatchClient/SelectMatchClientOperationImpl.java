@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectMatchClientOperationImpl implements SelectMatchClientOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, matchmaker_id, match_id, created, modified, user_id, client_id
             from $schema.tab_matchmaker_match_client
             where id = $1

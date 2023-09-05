@@ -23,7 +23,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertLogOperationImpl implements UpsertLogOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into internal.tab_log(id, created, message)
             values($1, $2, $3)
             on conflict (id) do

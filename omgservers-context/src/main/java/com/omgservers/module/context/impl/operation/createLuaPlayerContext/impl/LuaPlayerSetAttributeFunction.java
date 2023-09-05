@@ -16,7 +16,7 @@ import org.luaj.vm2.lib.TwoArgFunction;
 @ToString
 @AllArgsConstructor
 public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
-    static private final long TIMEOUT = 10L;
+    private static final long TIMEOUT = 10L;
 
     @ToString.Exclude
     final UserModule userModule;

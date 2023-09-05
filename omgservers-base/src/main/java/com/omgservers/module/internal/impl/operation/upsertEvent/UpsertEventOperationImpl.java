@@ -26,7 +26,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertEventOperationImpl implements UpsertEventOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
             values($1, $2, $3, $4, $5, $6, $7)
             on conflict (id) do

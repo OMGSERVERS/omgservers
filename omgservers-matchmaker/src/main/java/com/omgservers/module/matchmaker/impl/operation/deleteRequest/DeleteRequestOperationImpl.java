@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteRequestOperationImpl implements DeleteRequestOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_matchmaker_request
             where matchmaker_id = $1 and id = $2
             """;

@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id
             from $schema.tab_tenant_permission
             where tenant_id = $1 and user_id = $2 and permission = $3

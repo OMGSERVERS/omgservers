@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectStageOperationImpl implements SelectStageOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, project_id, created, modified, secret, matchmaker_id, config
             from $schema.tab_tenant_stage
             where id = $1

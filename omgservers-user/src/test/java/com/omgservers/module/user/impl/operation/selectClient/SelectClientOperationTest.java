@@ -22,7 +22,7 @@ import java.net.URI;
 @Slf4j
 @QuarkusTest
 class SelectClientOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     SelectClientOperation selectClientOperation;

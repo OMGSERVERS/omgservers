@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchmakerIdOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, matchmaker_id, created, modified, runtime_id, config
             from $schema.tab_matchmaker_match
             where matchmaker_id = $1

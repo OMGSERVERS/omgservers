@@ -29,7 +29,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertProjectOperationImpl implements UpsertProjectOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_tenant_project(id, tenant_id, created, modified, config)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

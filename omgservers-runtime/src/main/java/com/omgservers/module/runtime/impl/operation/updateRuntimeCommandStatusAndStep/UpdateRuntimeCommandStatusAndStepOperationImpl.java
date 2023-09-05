@@ -26,7 +26,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCommandStatusAndStepOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             update $schema.tab_runtime_command
             set modified = $2, status = $3, step = $4
             where id = $1

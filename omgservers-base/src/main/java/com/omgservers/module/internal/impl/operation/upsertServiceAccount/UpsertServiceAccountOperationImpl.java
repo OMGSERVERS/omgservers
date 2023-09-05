@@ -24,7 +24,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into internal.tab_service_account(id, created, modified, username, password_hash)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

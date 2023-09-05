@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectTokenOperationImpl implements SelectTokenOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, user_id, created, expire, hash
             from $schema.tab_user_token
             where id = $1

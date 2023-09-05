@@ -25,7 +25,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectEventOperationImpl implements SelectEventOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
             where id = $1

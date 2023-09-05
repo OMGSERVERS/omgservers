@@ -24,7 +24,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_tenant_project_permission(id, project_id, created, user_id, permission)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

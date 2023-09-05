@@ -26,7 +26,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertClientOperationImpl implements UpsertClientOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_user_client(id, player_id, created, server, connection_id)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

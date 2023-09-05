@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteProjectOperationImpl implements DeleteProjectOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_tenant_project
             where tenant_id = $1 and id = $2
             """;

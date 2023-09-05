@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectObjectOperationImpl implements SelectObjectOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, player_id, created, modified, name, body
             from $schema.tab_user_object
             where player_id = $1 and name = $2

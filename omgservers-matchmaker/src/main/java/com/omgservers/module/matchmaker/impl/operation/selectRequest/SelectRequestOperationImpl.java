@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectRequestOperationImpl implements SelectRequestOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, matchmaker_id, created, modified, user_id, client_id, mode, config
             from $schema.tab_matchmaker_request
             where id = $1

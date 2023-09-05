@@ -21,7 +21,7 @@ import java.net.URI;
 @Slf4j
 @QuarkusTest
 class UpsertClientOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     UpsertClientOperation insertClientOperation;

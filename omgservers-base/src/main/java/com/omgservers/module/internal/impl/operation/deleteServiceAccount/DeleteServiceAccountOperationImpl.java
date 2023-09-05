@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from internal.tab_service_account where id = $1
             """;
 

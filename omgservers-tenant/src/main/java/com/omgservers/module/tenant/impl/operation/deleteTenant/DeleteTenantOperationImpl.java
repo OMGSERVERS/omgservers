@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteTenantOperationImpl implements DeleteTenantOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_tenant where id = $1
             """;
 

@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectAttributeOperationImpl implements SelectAttributeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, player_id, created, modified, attribute_name, attribute_value
             from $schema.tab_user_attribute a
             where player_id = $1 and attribute_name = $2

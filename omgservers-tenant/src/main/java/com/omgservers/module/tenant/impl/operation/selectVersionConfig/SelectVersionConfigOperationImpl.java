@@ -23,7 +23,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select config
             from $schema.tab_tenant_version
             where id = $1

@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_runtime where id = $1
             """;
 

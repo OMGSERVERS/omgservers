@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, group_id, qualifier, body, status
             from internal.tab_event
             where status = $1

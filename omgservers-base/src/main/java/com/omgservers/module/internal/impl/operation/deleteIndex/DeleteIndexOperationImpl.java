@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteIndexOperationImpl implements DeleteIndexOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from internal.tab_index where id = $1
             """;
 

@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectRequestsByMatchmakerIdOperationImpl implements SelectRequestsByMatchmakerIdOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, matchmaker_id, created, modified, user_id, client_id, mode, config
             from $schema.tab_matchmaker_request
             where matchmaker_id = $1

@@ -25,7 +25,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertObjectOperationImpl implements UpsertObjectOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_user_object(id, player_id, created, modified, name, body)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do

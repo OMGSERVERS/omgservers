@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, shard_key, entity, type
             from internal.tab_job
             """;

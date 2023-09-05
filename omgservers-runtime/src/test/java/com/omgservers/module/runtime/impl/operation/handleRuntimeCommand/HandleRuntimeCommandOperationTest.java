@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 @Slf4j
 @QuarkusTest
 class HandleRuntimeCommandOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     HandleRuntimeCommandOperation handleRuntimeCommandOperation;

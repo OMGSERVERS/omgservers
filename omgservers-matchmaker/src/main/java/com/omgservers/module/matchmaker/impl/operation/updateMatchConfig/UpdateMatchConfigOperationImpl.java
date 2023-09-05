@@ -29,7 +29,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             update $schema.tab_matchmaker_match
             set modified = $3, config = $4
             where matchmaker_id = $1 and id = $2

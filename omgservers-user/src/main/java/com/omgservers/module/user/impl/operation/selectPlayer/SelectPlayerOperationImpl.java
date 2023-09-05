@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectPlayerOperationImpl implements SelectPlayerOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, user_id, created, modified, stage_id, config
             from $schema.tab_user_player
             where user_id = $1 and stage_id = $2

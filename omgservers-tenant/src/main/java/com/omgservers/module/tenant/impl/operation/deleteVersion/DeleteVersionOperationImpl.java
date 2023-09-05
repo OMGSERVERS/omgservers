@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteVersionOperationImpl implements DeleteVersionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_tenant_version where id = $1
             """;
 

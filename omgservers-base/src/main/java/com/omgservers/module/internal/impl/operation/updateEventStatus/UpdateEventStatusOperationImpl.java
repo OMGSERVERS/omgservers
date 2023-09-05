@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             update internal.tab_event set status = $2
             where id = $1
             """;

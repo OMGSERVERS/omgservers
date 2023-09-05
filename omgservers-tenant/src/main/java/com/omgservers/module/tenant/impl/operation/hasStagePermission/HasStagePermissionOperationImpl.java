@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id
             from $schema.tab_tenant_stage_permission
             where stage_id = $1 and user_id = $2 and permission = $3

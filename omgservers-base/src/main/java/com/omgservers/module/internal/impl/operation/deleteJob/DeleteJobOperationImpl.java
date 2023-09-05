@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteJobOperationImpl implements DeleteJobOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from internal.tab_job where shard_key = $1 and entity = $2
             """;
 

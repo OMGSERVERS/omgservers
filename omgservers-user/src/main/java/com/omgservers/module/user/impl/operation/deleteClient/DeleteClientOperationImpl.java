@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_user_client where id = $1
             """;
 

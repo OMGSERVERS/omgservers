@@ -25,7 +25,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, type, current_step, config
             from $schema.tab_runtime
             where id = $1

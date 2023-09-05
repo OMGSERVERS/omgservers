@@ -28,7 +28,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_runtime_command(id, runtime_id, created, modified, qualifier, body, status, step)
             values($1, $2, $3, $4, $5, $6, $7, $8)
             on conflict (id) do

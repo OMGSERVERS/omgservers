@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectUserOperationImpl implements SelectUserOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, role, password_hash
             from $schema.tab_user
             where id = $1

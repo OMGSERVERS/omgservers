@@ -26,7 +26,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertIndexOperationImpl implements UpsertIndexOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into internal.tab_index(id, created, modified, name, version, config)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do

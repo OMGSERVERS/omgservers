@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class SelectTokenOperationTest extends Assertions {
-    static private final long TIMEOUT = 1L;
+    private static final long TIMEOUT = 1L;
 
     @Inject
     SelectTokenOperation selectTokenOperation;

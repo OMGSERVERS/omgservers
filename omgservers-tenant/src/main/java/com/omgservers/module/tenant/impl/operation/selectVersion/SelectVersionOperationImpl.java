@@ -28,7 +28,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectVersionOperationImpl implements SelectVersionOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, stage_id, created, modified, config, source_code, bytecode, errors
             from $schema.tab_tenant_version where id = $1
             limit 1

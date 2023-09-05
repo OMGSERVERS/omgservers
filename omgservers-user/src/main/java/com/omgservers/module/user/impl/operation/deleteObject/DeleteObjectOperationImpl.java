@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteObjectOperationImpl implements DeleteObjectOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_user_object where id = $1
             """;
 

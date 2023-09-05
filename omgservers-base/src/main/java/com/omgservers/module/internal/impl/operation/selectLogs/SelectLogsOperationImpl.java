@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectLogsOperationImpl implements SelectLogsOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, message
             from internal.tab_log
             """;

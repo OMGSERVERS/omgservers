@@ -27,7 +27,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertUserOperationImpl implements UpsertUserOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_user(id, created, modified, role, password_hash)
             values($1, $2, $3, $4, $5)
             on conflict (id) do

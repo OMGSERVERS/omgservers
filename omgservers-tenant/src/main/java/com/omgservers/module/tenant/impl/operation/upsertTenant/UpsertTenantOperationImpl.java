@@ -28,7 +28,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 class UpsertTenantOperationImpl implements UpsertTenantOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_tenant(id, created, modified, config)
             values($1, $2, $3, $4)
             on conflict (id) do

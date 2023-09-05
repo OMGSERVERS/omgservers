@@ -25,7 +25,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             insert into $schema.tab_user_attribute(id, player_id, created, modified, attribute_name, attribute_value)
             values($1, $2, $3, $4, $5, $6)
             on conflict (id) do

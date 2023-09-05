@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 public class AdminCli {
-    static private final String ADMIN_USERNAME = "admin";
-    static private final String ADMIN_PASSWORD = "admin";
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "admin";
 
     final ObjectMapper objectMapper;
 

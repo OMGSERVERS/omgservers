@@ -22,7 +22,7 @@ import java.io.IOException;
 @AllArgsConstructor
 class SelectMatchOperationImpl implements SelectMatchOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, matchmaker_id, created, modified, runtime_id, config
             from $schema.tab_matchmaker_match
             where id = $1

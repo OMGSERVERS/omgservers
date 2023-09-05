@@ -15,7 +15,7 @@ import org.luaj.vm2.lib.VarArgFunction;
 @ToString
 @AllArgsConstructor
 public class LuaPlayerGetAttributeFunction extends VarArgFunction {
-    static private final long TIMEOUT = 10L;
+    private static final long TIMEOUT = 10L;
 
     @ToString.Exclude
     final UserModule userModule;

@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteStageOperationImpl implements DeleteStageOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_tenant_stage
             where id = $1
             """;

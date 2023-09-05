@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, created, modified, username, password_hash
             from internal.tab_service_account where username = $1 limit 1
             """;

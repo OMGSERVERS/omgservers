@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             delete from $schema.tab_runtime_command where id = $1
             """;
 

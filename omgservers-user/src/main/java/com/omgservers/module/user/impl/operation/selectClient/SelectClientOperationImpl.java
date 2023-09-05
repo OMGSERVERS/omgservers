@@ -23,7 +23,7 @@ import java.net.URI;
 @AllArgsConstructor
 class SelectClientOperationImpl implements SelectClientOperation {
 
-    static private final String SQL = """
+    private static final String SQL = """
             select id, player_id, created, server, connection_id
             from $schema.tab_user_client
             where id = $1
