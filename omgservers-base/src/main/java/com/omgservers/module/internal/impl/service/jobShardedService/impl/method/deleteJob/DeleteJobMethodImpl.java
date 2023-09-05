@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.deleteJob;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.DeleteJobShardedRequest;
 import com.omgservers.dto.internal.DeleteJobShardedResponse;
 import com.omgservers.module.internal.impl.operation.deleteJob.DeleteJobOperation;

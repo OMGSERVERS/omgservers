@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.deleteRuntime;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeShardedResponse;
 import com.omgservers.model.shard.ShardModel;

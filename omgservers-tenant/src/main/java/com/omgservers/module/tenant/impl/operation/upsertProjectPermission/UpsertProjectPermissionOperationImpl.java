@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertProjectPermission;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.module.internal.factory.EventModelFactory;

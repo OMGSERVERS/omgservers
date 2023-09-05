@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.syncStage;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncStageShardedRequest;
 import com.omgservers.dto.tenant.SyncStageShardedResponse;
 import com.omgservers.model.shard.ShardModel;

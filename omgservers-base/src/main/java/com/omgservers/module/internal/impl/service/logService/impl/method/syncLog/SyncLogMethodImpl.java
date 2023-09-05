@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.logService.impl.method.syncLog;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.dto.internal.SyncLogResponse;
 import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;

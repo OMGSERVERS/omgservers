@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.syncAttribute;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.SyncAttributeShardedRequest;
 import com.omgservers.dto.user.SyncAttributeShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertAttribute.UpsertAttributeOperation;

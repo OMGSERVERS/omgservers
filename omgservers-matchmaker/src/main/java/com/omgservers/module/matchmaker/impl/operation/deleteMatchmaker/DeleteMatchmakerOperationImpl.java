@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;

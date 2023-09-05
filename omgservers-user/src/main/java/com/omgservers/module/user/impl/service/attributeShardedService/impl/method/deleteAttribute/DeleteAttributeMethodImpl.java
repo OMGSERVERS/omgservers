@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.attributeShardedService.impl.method.deleteAttribute;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.DeleteAttributeShardedRequest;
 import com.omgservers.dto.user.DeleteAttributeShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteAttribute.DeleteAttributeOperation;

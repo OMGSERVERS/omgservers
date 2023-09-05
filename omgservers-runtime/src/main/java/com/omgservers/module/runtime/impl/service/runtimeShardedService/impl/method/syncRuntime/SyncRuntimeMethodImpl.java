@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.service.runtimeShardedService.impl.method.syncRuntime;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.SyncRuntimeShardedRequest;
 import com.omgservers.dto.runtime.SyncRuntimeShardedResponse;
 import com.omgservers.model.runtime.RuntimeModel;

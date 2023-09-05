@@ -1,7 +1,5 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.executeMatchmaker;
 
-import com.omgservers.ChangeContext;
-import com.omgservers.Dispatcher;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerShardedRequest;
@@ -29,6 +27,7 @@ import com.omgservers.module.matchmaker.impl.operation.updateMatchConfig.UpdateM
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
@@ -66,8 +65,6 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
-
-    final Dispatcher dispatcher;
 
     final PgPool pgPool;
 

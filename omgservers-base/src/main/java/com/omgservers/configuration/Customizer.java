@@ -1,4 +1,4 @@
-package com.omgservers;
+package com.omgservers.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;

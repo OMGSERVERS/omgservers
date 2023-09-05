@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.deleteProject;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteProjectShardedRequest;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;

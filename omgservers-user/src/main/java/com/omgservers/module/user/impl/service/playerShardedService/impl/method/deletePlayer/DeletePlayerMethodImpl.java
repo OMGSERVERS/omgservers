@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.playerShardedService.impl.method.deletePlayer;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.DeletePlayerShardedRequest;
 import com.omgservers.dto.user.DeletePlayerShardedResponse;
 import com.omgservers.module.user.impl.operation.deletePlayer.DeletePlayerOperation;

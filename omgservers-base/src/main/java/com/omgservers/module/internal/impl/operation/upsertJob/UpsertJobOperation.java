@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.upsertJob;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.job.JobModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

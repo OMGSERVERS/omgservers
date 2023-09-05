@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl.method.syncClient;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.dto.user.SyncClientShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertClient.UpsertClientOperation;

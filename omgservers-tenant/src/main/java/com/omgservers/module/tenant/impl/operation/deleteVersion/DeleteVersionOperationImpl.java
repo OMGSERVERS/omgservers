@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.deleteVersion;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;

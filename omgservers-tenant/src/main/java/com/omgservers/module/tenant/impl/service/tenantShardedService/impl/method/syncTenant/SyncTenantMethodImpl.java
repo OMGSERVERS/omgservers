@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.syncTenant;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncTenantShardedRequest;
 import com.omgservers.dto.tenant.SyncTenantShardedResponse;
 import com.omgservers.model.shard.ShardModel;

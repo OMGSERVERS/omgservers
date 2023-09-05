@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.clientShardedService.impl.method.deleteClient;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.DeleteClientShardedRequest;
 import com.omgservers.dto.user.DeleteClientShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteClient.DeleteClientOperation;

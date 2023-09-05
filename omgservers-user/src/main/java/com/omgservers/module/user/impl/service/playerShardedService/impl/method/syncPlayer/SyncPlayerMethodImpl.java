@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.playerShardedService.impl.method.syncPlayer;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.SyncPlayerShardedRequest;
 import com.omgservers.dto.user.SyncPlayerShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;

@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertVersion;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.version.VersionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

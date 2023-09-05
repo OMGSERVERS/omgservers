@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.upsertIndex;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.index.IndexModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.bootstrap;
 
-import com.omgservers.Dispatcher;
+import com.omgservers.base.Dispatcher;
 import com.omgservers.dto.internal.HandleEventRequest;
 import com.omgservers.dto.internal.HandleEventResponse;
 import com.omgservers.exception.ServerSideClientErrorException;
@@ -42,7 +42,7 @@ public class EventDispatching {
     final SelectEventOperation selectEventOperation;
     final GetConfigOperation getConfigOperation;
 
-    final Dispatcher dispatcherInMemoryCache;
+    final Dispatcher dispatcher;
 
     final Scheduler scheduler;
     final PgPool pgPool;
@@ -82,7 +82,7 @@ public class EventDispatching {
 
     @WithSpan
     Uni<Void> dispatch(int index) {
-        return Uni.createFrom().item(dispatcherInMemoryCache::pollGroup)
+        return Uni.createFrom().item(dispatcher::pollGroup)
                 .flatMap(eventGroup -> {
                     if (eventGroup != null) {
                         final var eventId = eventGroup.getEventId();
@@ -94,16 +94,16 @@ public class EventDispatching {
                                 .map(HandleEventResponse::getResult)
                                 .invoke(result -> {
                                     if (result) {
-                                        dispatcherInMemoryCache.returnGroup(eventGroup);
+                                        dispatcher.returnGroup(eventGroup);
                                     } else {
-                                        dispatcherInMemoryCache.postponeGroup(eventGroup);
+                                        dispatcher.postponeGroup(eventGroup);
                                     }
                                 })
                                 .flatMap(result -> updateStatus(eventId, result))
                                 .onFailure(ServerSideClientErrorException.class)
-                                .invoke(t -> dispatcherInMemoryCache.returnGroup(eventGroup))
+                                .invoke(t -> dispatcher.returnGroup(eventGroup))
                                 .onFailure(ServerSideInternalException.class)
-                                .invoke(t -> dispatcherInMemoryCache.postponeGroup(eventGroup));
+                                .invoke(t -> dispatcher.postponeGroup(eventGroup));
                         //TODO: handle failures
                     } else {
                         return Uni.createFrom().voidItem()

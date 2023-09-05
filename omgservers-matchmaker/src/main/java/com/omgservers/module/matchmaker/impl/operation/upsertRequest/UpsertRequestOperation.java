@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.request.RequestModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

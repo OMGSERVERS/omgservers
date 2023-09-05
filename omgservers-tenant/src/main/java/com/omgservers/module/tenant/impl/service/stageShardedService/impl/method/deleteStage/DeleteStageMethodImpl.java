@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.deleteStage;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteStageShardedRequest;
 import com.omgservers.dto.tenant.DeleteStageShardedResponse;
 import com.omgservers.model.shard.ShardModel;

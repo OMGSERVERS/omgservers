@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.updateRuntimeCurrentStep;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

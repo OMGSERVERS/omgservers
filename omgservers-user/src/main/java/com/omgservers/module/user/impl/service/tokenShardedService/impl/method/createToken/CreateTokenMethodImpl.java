@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.tokenShardedService.impl.method.createToken;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.CreateTokenShardedRequest;
 import com.omgservers.dto.user.CreateTokenShardedResponse;
 import com.omgservers.model.user.UserTokenContainerModel;

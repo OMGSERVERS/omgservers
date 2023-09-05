@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntime;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;

@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.stageShardedService.impl.method.syncStagePermission;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionShardedResponse;
 import com.omgservers.model.shard.ShardModel;

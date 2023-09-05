@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.deleteServiceAccount;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

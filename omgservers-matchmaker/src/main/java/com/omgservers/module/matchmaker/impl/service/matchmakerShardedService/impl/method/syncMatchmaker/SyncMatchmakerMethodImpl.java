@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.syncMatchmaker;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerShardedResponse;
 import com.omgservers.model.matchmaker.MatchmakerModel;

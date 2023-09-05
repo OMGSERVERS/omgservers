@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertTenant;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.tenant.TenantModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

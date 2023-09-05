@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.operation.deleteAttribute;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;

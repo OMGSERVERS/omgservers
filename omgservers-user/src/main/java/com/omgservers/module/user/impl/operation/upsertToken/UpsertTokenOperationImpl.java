@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.operation.upsertToken;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.module.internal.factory.EventModelFactory;

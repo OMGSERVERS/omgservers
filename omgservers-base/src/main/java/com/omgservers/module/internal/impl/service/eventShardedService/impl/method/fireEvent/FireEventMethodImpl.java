@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.eventShardedService.impl.method.fireEvent;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.dto.internal.FireEventShardedResponse;
 import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;

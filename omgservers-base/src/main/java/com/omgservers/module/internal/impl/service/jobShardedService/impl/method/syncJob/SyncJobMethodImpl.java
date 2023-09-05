@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.service.jobShardedService.impl.method.syncJob;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncJobShardedRequest;
 import com.omgservers.dto.internal.SyncJobShardedResponse;
 import com.omgservers.module.internal.impl.operation.upsertJob.UpsertJobOperation;

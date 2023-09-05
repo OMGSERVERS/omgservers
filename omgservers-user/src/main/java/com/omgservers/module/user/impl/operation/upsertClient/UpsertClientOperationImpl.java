@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.operation.upsertClient;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;

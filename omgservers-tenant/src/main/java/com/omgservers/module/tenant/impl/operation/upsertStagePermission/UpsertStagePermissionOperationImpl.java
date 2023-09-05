@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertStagePermission;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.module.internal.factory.EventModelFactory;

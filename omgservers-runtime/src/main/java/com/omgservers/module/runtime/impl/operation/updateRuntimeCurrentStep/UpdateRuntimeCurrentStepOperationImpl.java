@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.operation.updateRuntimeCurrentStep;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.internal.factory.EventModelFactory;

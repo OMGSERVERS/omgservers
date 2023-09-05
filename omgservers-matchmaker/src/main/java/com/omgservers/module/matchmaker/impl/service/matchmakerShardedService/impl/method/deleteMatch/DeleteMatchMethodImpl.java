@@ -1,6 +1,6 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.impl.method.deleteMatch;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.matchmaker.DeleteMatchShardedRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchShardedResponse;
 import com.omgservers.model.shard.ShardModel;

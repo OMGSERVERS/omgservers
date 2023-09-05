@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.tenantShardedService.impl.method.deleteTenant;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteTenantShardedRequest;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;

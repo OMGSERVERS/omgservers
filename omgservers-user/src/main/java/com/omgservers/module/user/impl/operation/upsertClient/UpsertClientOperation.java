@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.operation.upsertClient;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.client.ClientModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

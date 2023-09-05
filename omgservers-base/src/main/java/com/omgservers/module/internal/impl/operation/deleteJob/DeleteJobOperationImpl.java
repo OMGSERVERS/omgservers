@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.deleteJob;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.module.internal.factory.EventModelFactory;

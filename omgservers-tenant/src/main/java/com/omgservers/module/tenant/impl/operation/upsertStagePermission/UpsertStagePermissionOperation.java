@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertStagePermission;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

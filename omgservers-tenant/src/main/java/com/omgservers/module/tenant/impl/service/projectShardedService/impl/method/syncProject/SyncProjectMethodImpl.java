@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.service.projectShardedService.impl.method.syncProject;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncProjectShardedRequest;
 import com.omgservers.dto.tenant.SyncProjectShardedResponse;
 import com.omgservers.model.project.ProjectModel;

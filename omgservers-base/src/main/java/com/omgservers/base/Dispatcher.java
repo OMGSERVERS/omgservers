@@ -1,4 +1,4 @@
-package com.omgservers;
+package com.omgservers.base;
 
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.quarkus.runtime.Startup;

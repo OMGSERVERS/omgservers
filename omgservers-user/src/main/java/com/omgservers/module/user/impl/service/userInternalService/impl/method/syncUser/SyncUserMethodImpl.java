@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.userInternalService.impl.method.syncUser;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;

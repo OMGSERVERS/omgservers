@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.objectShardedService.impl.method.deleteObject;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.DeleteObjectShardedRequest;
 import com.omgservers.dto.user.DeleteObjectShardedResponse;
 import com.omgservers.module.user.impl.operation.deleteObject.DeleteObjectOperation;

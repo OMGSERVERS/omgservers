@@ -1,6 +1,6 @@
 package com.omgservers.module.internal.impl.operation.deleteIndex;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

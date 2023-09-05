@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.updateRuntimeCommandStatusAndStep;
 
-import com.omgservers.ChangeContext;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
