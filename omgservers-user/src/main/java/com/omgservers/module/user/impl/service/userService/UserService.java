@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl.service.userService;
 
-import com.omgservers.module.user.impl.service.userService.request.RespondClientRequest;
+import com.omgservers.dto.user.RespondClientRequest;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

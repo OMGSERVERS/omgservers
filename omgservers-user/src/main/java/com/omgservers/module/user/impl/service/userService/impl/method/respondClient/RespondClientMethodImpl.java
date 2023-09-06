@@ -6,7 +6,7 @@ import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.user.UserModule;
-import com.omgservers.module.user.impl.service.userService.request.RespondClientRequest;
+import com.omgservers.dto.user.RespondClientRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

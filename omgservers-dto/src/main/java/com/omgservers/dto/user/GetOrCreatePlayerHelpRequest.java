@@ -1,4 +1,4 @@
-package com.omgservers.module.user.impl.service.playerService.request;
+package com.omgservers.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

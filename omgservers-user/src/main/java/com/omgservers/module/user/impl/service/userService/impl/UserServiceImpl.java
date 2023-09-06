@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.service.userService.impl;
 
 import com.omgservers.module.user.impl.service.userService.UserService;
 import com.omgservers.module.user.impl.service.userService.impl.method.respondClient.RespondClientMethod;
-import com.omgservers.module.user.impl.service.userService.request.RespondClientRequest;
+import com.omgservers.dto.user.RespondClientRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

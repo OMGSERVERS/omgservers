@@ -2,8 +2,8 @@ package com.omgservers.module.user.impl.service.playerService.impl;
 
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
 import com.omgservers.module.user.impl.service.playerService.impl.method.getOrCreatePlayer.GetOrCreatePlayerHelpMethod;
-import com.omgservers.module.user.impl.service.playerService.request.GetOrCreatePlayerHelpRequest;
-import com.omgservers.module.user.impl.service.playerService.response.GetOrCreatePlayerHelpResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

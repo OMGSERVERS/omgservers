@@ -1,4 +1,4 @@
-package com.omgservers.module.user.impl.service.userService.request;
+package com.omgservers.dto.user;
 
 import com.omgservers.model.message.MessageModel;
 import lombok.AllArgsConstructor;

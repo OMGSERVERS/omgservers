@@ -1,7 +1,7 @@
 package com.omgservers.module.context.impl.operation.createLuaPlayerContext.impl;
 
 import com.omgservers.module.user.UserModule;
-import com.omgservers.module.user.impl.service.userService.request.RespondClientRequest;
+import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.EventMessageBodyModel;

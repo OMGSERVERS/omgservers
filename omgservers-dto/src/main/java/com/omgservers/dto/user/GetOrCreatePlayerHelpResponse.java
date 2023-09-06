@@ -1,4 +1,4 @@
-package com.omgservers.module.user.impl.service.playerService.response;
+package com.omgservers.dto.user;
 
 import com.omgservers.model.player.PlayerModel;
 import lombok.AllArgsConstructor;

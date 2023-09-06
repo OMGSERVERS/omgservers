@@ -2,8 +2,8 @@ package com.omgservers.handler;
 
 import com.omgservers.module.user.factory.ClientModelFactory;
 import com.omgservers.module.user.UserModule;
-import com.omgservers.module.user.impl.service.playerService.request.GetOrCreatePlayerHelpRequest;
-import com.omgservers.module.user.impl.service.playerService.response.GetOrCreatePlayerHelpResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
