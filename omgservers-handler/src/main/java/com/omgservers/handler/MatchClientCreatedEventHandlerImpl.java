@@ -89,7 +89,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
         final var getClientShardedRequest = new GetClientShardedRequest(userId, clientId);
-        return userModule.getClientShardedService().getClient(getClientShardedRequest)
+        return userModule.getClientService().getClient(getClientShardedRequest)
                 .map(GetClientShardedResponse::getClient);
     }
 }

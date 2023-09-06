@@ -39,7 +39,7 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
         final var syncAttributeServiceRequest = new SyncAttributeShardedRequest(userId, attribute);
 
         try {
-            userModule.getAttributeShardedService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);
+            userModule.getAttributeService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);
             return LuaValue.NIL;
         } catch (TimeoutException e) {
             log.error("Lua call failed due to timeout, function={}", this);

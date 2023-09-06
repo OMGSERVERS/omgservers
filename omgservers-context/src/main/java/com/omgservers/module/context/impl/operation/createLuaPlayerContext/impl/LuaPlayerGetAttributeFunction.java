@@ -29,7 +29,7 @@ public class LuaPlayerGetAttributeFunction extends VarArgFunction {
         final var request = new GetAttributeShardedRequest(userId, playerId, name);
 
         try {
-            final var response = userModule.getAttributeShardedService().getAttribute(TIMEOUT, request);
+            final var response = userModule.getAttributeService().getAttribute(TIMEOUT, request);
             final var attribute = response.getAttribute();
             final var value = LuaValue.valueOf(attribute.getValue());
             return value;

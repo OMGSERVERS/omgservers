@@ -34,12 +34,12 @@ import com.omgservers.dto.user.SyncUserShardedResponse;
 import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
 import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
-import com.omgservers.module.user.impl.service.attributeShardedService.AttributeShardedService;
-import com.omgservers.module.user.impl.service.clientShardedService.ClientShardedService;
-import com.omgservers.module.user.impl.service.objectShardedService.ObjectShardedService;
-import com.omgservers.module.user.impl.service.playerShardedService.PlayerShardedService;
+import com.omgservers.module.user.impl.service.attributeService.AttributeService;
+import com.omgservers.module.user.impl.service.clientService.ClientService;
+import com.omgservers.module.user.impl.service.objectService.ObjectService;
+import com.omgservers.module.user.impl.service.playerService.PlayerService;
 import com.omgservers.module.user.impl.service.tokenShardedService.TokenShardedService;
-import com.omgservers.module.user.impl.service.userInternalService.UserShardedService;
+import com.omgservers.module.user.impl.service.userService.UserService;
 import com.omgservers.module.user.impl.service.userWebService.UserWebService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -52,21 +52,21 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UserWebServiceImpl implements UserWebService {
 
-    final AttributeShardedService attributeShardedService;
-    final PlayerShardedService playerShardedService;
-    final ObjectShardedService objectShardedService;
+    final AttributeService attributeService;
+    final PlayerService playerService;
+    final ObjectService objectService;
     final TokenShardedService tokenShardedService;
-    final UserShardedService userShardedService;
-    final ClientShardedService internalService;
+    final UserService userService;
+    final ClientService internalService;
 
     @Override
     public Uni<SyncUserShardedResponse> syncUser(SyncUserShardedRequest request) {
-        return userShardedService.syncUser(request);
+        return userService.syncUser(request);
     }
 
     @Override
     public Uni<ValidateCredentialsShardedResponse> validateCredentials(ValidateCredentialsShardedRequest request) {
-        return userShardedService.validateCredentials(request);
+        return userService.validateCredentials(request);
     }
 
     @Override
@@ -81,17 +81,17 @@ class UserWebServiceImpl implements UserWebService {
 
     @Override
     public Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request) {
-        return playerShardedService.getPlayer(request);
+        return playerService.getPlayer(request);
     }
 
     @Override
     public Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request) {
-        return playerShardedService.syncPlayer(request);
+        return playerService.syncPlayer(request);
     }
 
     @Override
     public Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request) {
-        return playerShardedService.deletePlayer(request);
+        return playerService.deletePlayer(request);
     }
 
     @Override
@@ -111,36 +111,36 @@ class UserWebServiceImpl implements UserWebService {
 
     @Override
     public Uni<GetAttributeShardedResponse> getAttribute(GetAttributeShardedRequest request) {
-        return attributeShardedService.getAttribute(request);
+        return attributeService.getAttribute(request);
     }
 
     @Override
     public Uni<GetPlayerAttributesShardedResponse> getPlayerAttributes(GetPlayerAttributesShardedRequest request) {
-        return attributeShardedService.getPlayerAttributes(request);
+        return attributeService.getPlayerAttributes(request);
     }
 
     @Override
     public Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request) {
-        return attributeShardedService.syncAttribute(request);
+        return attributeService.syncAttribute(request);
     }
 
     @Override
     public Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
-        return attributeShardedService.deleteAttribute(request);
+        return attributeService.deleteAttribute(request);
     }
 
     @Override
     public Uni<GetObjectShardedResponse> getObject(GetObjectShardedRequest request) {
-        return objectShardedService.getObject(request);
+        return objectService.getObject(request);
     }
 
     @Override
     public Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request) {
-        return objectShardedService.syncObject(request);
+        return objectService.syncObject(request);
     }
 
     @Override
     public Uni<DeleteObjectShardedResponse> deleteObject(DeleteObjectShardedRequest request) {
-        return objectShardedService.deleteObject(request);
+        return objectService.deleteObject(request);
     }
 }

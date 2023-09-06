@@ -9,7 +9,7 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
 import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.module.user.impl.service.playerShardedService.PlayerShardedService;
+import com.omgservers.module.user.impl.service.playerService.PlayerService;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMethod {
 
-    final PlayerShardedService playerShardedService;
+    final PlayerService playerService;
 
     final PlayerModelFactory playerModelFactory;
     final GenerateIdOperation generateIdOperation;
@@ -41,7 +41,7 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
 
     Uni<PlayerModel> getPlayer(Long userId, Long stageId) {
         final var request = new GetPlayerShardedRequest(userId, stageId);
-        return playerShardedService.getPlayer(request)
+        return playerService.getPlayer(request)
                 .map(GetPlayerShardedResponse::getPlayer);
     }
 
@@ -49,7 +49,7 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
         final var player = playerModelFactory
                 .create(userId, stageId, PlayerConfigModel.create());
         final var request = new SyncPlayerShardedRequest(player);
-        return playerShardedService.syncPlayer(request)
+        return playerService.syncPlayer(request)
                 .replaceWith(player);
     }
 }

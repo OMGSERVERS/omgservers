@@ -1,10 +1,10 @@
 package com.omgservers.module.context.impl.operation.createLuaPlayerContext.impl;
 
-import com.omgservers.module.user.UserModule;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;

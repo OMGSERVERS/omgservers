@@ -1,16 +1,12 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.user.factory.ClientModelFactory;
-import com.omgservers.module.user.UserModule;
+import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
 import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.dto.user.SyncClientShardedRequest;
-import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
 import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
+import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -18,8 +14,12 @@ import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
+import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.dto.tenant.ValidateStageSecretRequest;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.module.user.factory.ClientModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -78,7 +78,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
 
     Uni<UserModel> validateCredentials(final Long tenantId, final Long userId, final String password) {
         final var validateCredentialsServiceRequest = new ValidateCredentialsShardedRequest(tenantId, userId, password);
-        return userModule.getUserShardedService().validateCredentials(validateCredentialsServiceRequest)
+        return userModule.getUserService().validateCredentials(validateCredentialsServiceRequest)
                 .map(ValidateCredentialsShardedResponse::getUser);
     }
 
@@ -94,7 +94,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                   final Long connectionId) {
         final var client = clientModelFactory.create(playerId, server, connectionId);
         final var request = new SyncClientShardedRequest(userId, client);
-        return userModule.getClientShardedService().syncClient(request)
+        return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
     }
 

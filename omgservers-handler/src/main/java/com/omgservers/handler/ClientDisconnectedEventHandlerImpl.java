@@ -30,7 +30,7 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
         final var request = new DeleteClientShardedRequest(userId, clientId);
-        return userModule.getClientShardedService().deleteClient(request)
+        return userModule.getClientService().deleteClient(request)
                 .replaceWith(true);
     }
 }

@@ -2,6 +2,9 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
+import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedRequest;
 import com.omgservers.model.client.ClientModel;
@@ -22,9 +25,6 @@ import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.ClientModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -97,7 +97,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
         final var syncUserInternalRequest = new SyncUserShardedRequest(user);
-        return userModule.getUserShardedService().syncUser(syncUserInternalRequest)
+        return userModule.getUserService().syncUser(syncUserInternalRequest)
                 .replaceWith(user);
     }
 
@@ -113,7 +113,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final Long connectionId) {
         final var client = clientModelFactory.create(playerId, server, connectionId);
         final var request = new SyncClientShardedRequest(userId, client);
-        return userModule.getClientShardedService().syncClient(request)
+        return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
     }
 

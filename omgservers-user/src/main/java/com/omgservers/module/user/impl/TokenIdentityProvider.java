@@ -47,7 +47,7 @@ class TokenIdentityProvider implements IdentityProvider<TokenAuthenticationReque
         }
 
         IntrospectTokenShardedRequest introspectTokenRequest = new IntrospectTokenShardedRequest(rawToken);
-        return userModule.getTokenShardedService().introspectToken(introspectTokenRequest)
+        return userModule.getTokenService().introspectToken(introspectTokenRequest)
                 .map(response -> {
                     final var tokenObject = response.getTokenObject();
                     final var userId = tokenObject.getUserId();

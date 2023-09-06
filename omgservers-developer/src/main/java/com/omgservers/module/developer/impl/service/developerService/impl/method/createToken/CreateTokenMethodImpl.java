@@ -24,7 +24,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
         final var userId = request.getUserId();
         final var password = request.getPassword();
         final var createTokenRequest = new CreateTokenShardedRequest(userId, password);
-        return userModule.getTokenShardedService().createToken(createTokenRequest)
+        return userModule.getTokenService().createToken(createTokenRequest)
                 .map(response -> {
                     // TODO: does role have to be "Developer" only, block others?
                     final var rawToken = response.getRawToken();

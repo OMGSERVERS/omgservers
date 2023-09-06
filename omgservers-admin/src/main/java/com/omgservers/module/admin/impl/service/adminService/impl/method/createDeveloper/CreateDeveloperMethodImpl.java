@@ -6,13 +6,13 @@ import com.omgservers.dto.tenant.GetTenantShardedRequest;
 import com.omgservers.dto.tenant.GetTenantShardedResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
 import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.UserModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -58,8 +58,8 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     Uni<UserModel> createUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
-        final var syncUserInternalRequest = new SyncUserShardedRequest(user);
-        return userModule.getUserShardedService().syncUser(syncUserInternalRequest)
+        final var syncUserShardedRequest = new SyncUserShardedRequest(user);
+        return userModule.getUserService().syncUser(syncUserShardedRequest)
                 .replaceWith(user);
     }
 

@@ -40,7 +40,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
         final var getClientServiceRequest = new GetClientShardedRequest(userId, clientId);
-        return userModule.getClientShardedService().getClient(getClientServiceRequest)
+        return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientShardedResponse::getClient);
     }
 }

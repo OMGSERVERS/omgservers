@@ -79,7 +79,7 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
 
     Uni<Map<String, String>> getPlayerAttributes(Long userId, Long playerId) {
         final var request = new GetPlayerAttributesShardedRequest(userId, playerId);
-        return userModule.getAttributeShardedService().getPlayerAttributes(request)
+        return userModule.getAttributeService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesShardedResponse::getAttributes)
                 .map(entities -> {
                     final var attributes = new HashMap<String, String>();
