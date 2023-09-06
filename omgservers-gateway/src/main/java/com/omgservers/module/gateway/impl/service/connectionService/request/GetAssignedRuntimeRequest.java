@@ -1,6 +1,5 @@
-package com.omgservers.module.gateway.impl.service.messageService.request;
+package com.omgservers.module.gateway.impl.service.connectionService.request;
 
-import com.omgservers.model.message.MessageModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleMessageHelpRequest {
+public class GetAssignedRuntimeRequest {
 
-    public static void validate(HandleMessageHelpRequest request) {
+    public static void validate(GetAssignedRuntimeRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
@@ -18,5 +17,4 @@ public class HandleMessageHelpRequest {
     }
 
     Long connectionId;
-    MessageModel message;
 }

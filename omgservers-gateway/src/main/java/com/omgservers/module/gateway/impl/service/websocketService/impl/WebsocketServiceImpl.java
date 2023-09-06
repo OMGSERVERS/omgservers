@@ -4,14 +4,14 @@ import com.omgservers.dto.internal.FireEventShardedRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
-import com.omgservers.module.gateway.impl.service.connectionService.ConnectionHelpService;
-import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionHelpRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionHelpRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.GetConnectionHelpRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
+import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.GetConnectionRequest;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.respondMessage.RespondMessageMethod;
-import com.omgservers.module.gateway.impl.service.websocketService.WebsocketEndpointService;
-import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpHelpRequest;
-import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageHelpRequest;
+import com.omgservers.module.gateway.impl.service.websocketService.WebsocketService;
+import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpRequest;
+import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
 import com.omgservers.module.internal.InternalModule;
 import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
@@ -27,12 +27,12 @@ import java.time.Duration;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
+class WebsocketServiceImpl implements WebsocketService {
     static final int TIMEOUT = 5;
 
     final InternalModule internalModule;
 
-    final ConnectionHelpService connectionHelpService;
+    final ConnectionService connectionService;
 
     final RespondMessageMethod respondMessageMethod;
 
@@ -43,12 +43,12 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
     final EventModelFactory eventModelFactory;
 
     @Override
-    public void cleanUp(final CleanUpHelpRequest request) {
-        CleanUpHelpRequest.validate(request);
+    public void cleanUp(final CleanUpRequest request) {
+        CleanUpRequest.validate(request);
 
         final var session = request.getSession();
-        final var deleteConnectionHelpRequest = new DeleteConnectionHelpRequest(session);
-        final var response = connectionHelpService.deleteConnection(deleteConnectionHelpRequest);
+        final var deleteConnectionHelpRequest = new DeleteConnectionRequest(session);
+        final var response = connectionService.deleteConnection(deleteConnectionHelpRequest);
 
         if (response.getConnectionId().isPresent()) {
             final var connection = response.getConnectionId().get();
@@ -71,16 +71,16 @@ class WebsocketEndpointServiceImpl implements WebsocketEndpointService {
     }
 
     @Override
-    public void receiveTextMessage(final ReceiveTextMessageHelpRequest request) {
-        ReceiveTextMessageHelpRequest.validate(request);
+    public void receiveTextMessage(final ReceiveTextMessageRequest request) {
+        ReceiveTextMessageRequest.validate(request);
         final var session = request.getSession();
 
-        final var createConnectionHelpRequest = new CreateConnectionHelpRequest(session);
-        connectionHelpService.createConnection(createConnectionHelpRequest);
+        final var createConnectionHelpRequest = new CreateConnectionRequest(session);
+        connectionService.createConnection(createConnectionHelpRequest);
 
-        final var getConnectionHelpRequest = new GetConnectionHelpRequest(session);
+        final var getConnectionHelpRequest = new GetConnectionRequest(session);
         try {
-            final var connectionId = connectionHelpService.getConnection(getConnectionHelpRequest).getConnectionId();
+            final var connectionId = connectionService.getConnection(getConnectionHelpRequest).getConnectionId();
             final var messageString = request.getMessage();
             processMessageOperation.processMessage(connectionId, messageString)
                     .await().atMost(Duration.ofSeconds(TIMEOUT));

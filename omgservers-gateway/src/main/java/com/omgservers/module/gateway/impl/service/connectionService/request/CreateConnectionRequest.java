@@ -1,5 +1,6 @@
 package com.omgservers.module.gateway.impl.service.connectionService.request;
 
+import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAssignedPlayerHelpRequest {
+public class CreateConnectionRequest {
 
-    public static void validate(GetAssignedPlayerHelpRequest request) {
+    public static void validate(CreateConnectionRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
         // TODO: validate fields
     }
 
-    Long connectionId;
+    Session session;
 }

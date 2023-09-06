@@ -1,8 +1,8 @@
 package com.omgservers.module.gateway.impl.service.websocketService.impl.endpoint;
 
-import com.omgservers.module.gateway.impl.service.websocketService.WebsocketEndpointService;
-import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpHelpRequest;
-import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageHelpRequest;
+import com.omgservers.module.gateway.impl.service.websocketService.WebsocketService;
+import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpRequest;
+import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -18,26 +18,26 @@ import lombok.extern.slf4j.Slf4j;
 @ServerEndpoint("/omgservers/gateway")
 public class WebsocketEndpoint {
 
-    final WebsocketEndpointService websocketEndpointService;
+    final WebsocketService websocketService;
 
     @OnClose
     public void onClose(Session session) {
         log.info("Session was closed, sessionId={}", session.getId());
-        final var request = new CleanUpHelpRequest(session);
-        websocketEndpointService.cleanUp(request);
+        final var request = new CleanUpRequest(session);
+        websocketService.cleanUp(request);
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
         log.info("Session failed, sessionId={}, {}", session.getId(), throwable.getMessage());
-        final var request = new CleanUpHelpRequest(session);
-        websocketEndpointService.cleanUp(request);
+        final var request = new CleanUpRequest(session);
+        websocketService.cleanUp(request);
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("Incoming message, sessionId={}, message={}", session.getId(), message);
-        final var request = new ReceiveTextMessageHelpRequest(session, message);
-        websocketEndpointService.receiveTextMessage(request);
+        final var request = new ReceiveTextMessageRequest(session, message);
+        websocketService.receiveTextMessage(request);
     }
 }

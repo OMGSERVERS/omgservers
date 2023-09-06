@@ -1,6 +1,6 @@
-package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer;
+package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignRuntime;
 
-import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
 import com.omgservers.module.internal.InternalModule;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class AssignPlayerMethodImpl implements AssignPlayerMethod {
+class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
 
     final InternalModule internalModule;
 
@@ -22,18 +22,18 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
-        AssignPlayerRequest.validate(request);
+    public Uni<Void> assignRuntime(AssignRuntimeRequest request) {
+        AssignRuntimeRequest.validate(request);
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var connectionId = request.getConnectionId();
-                    final var assignedPlayer = request.getAssignedPlayer();
-                    final var assignPlayerInternalRequest = new com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest(connectionId, assignedPlayer);
-                    connectionService.assignPlayer(assignPlayerInternalRequest);
+                    final var assignedRuntime = request.getAssignedRuntime();
+                    final var assignRuntimeRequest = new com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest(connectionId, assignedRuntime);
+                    connectionService.assignRuntime(assignRuntimeRequest);
                 })
                 .call(voidItem -> {
-                    final var syncLog = logModelFactory.create("Player was assigned, request=" + request);
+                    final var syncLog = logModelFactory.create("Runtime was assigned, request=" + request);
                     final var syncLogRequest = new SyncLogRequest(syncLog);
                     return internalModule.getLogService().syncLog(syncLogRequest);
                 });

@@ -1,25 +1,22 @@
-package com.omgservers.dto.gateway;
+package com.omgservers.module.gateway.impl.service.websocketService.request;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.model.message.MessageModel;
+import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RespondMessageRoutedRequest {
+public class CleanUpRequest {
 
-    public static void validate(RespondMessageRoutedRequest request) {
+    public static void validate(CleanUpRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }
+        //TODO: validate fields
     }
 
-    URI server;
-    Long connectionId;
-    MessageModel message;
+    Session session;
 }

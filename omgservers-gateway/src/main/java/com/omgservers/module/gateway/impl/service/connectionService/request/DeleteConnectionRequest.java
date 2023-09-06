@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetConnectionHelpRequest {
+public class DeleteConnectionRequest {
 
-    public static void validate(GetConnectionHelpRequest request) {
+    public static void validate(DeleteConnectionRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

@@ -1,10 +1,12 @@
 package com.omgservers.module.gateway.impl.service.gatewayService.impl;
 
-import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
-import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
+import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer.AssignPlayerMethod;
+import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignRuntime.AssignRuntimeMethod;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.respondMessage.RespondMessageMethod;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -19,13 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 class GatewayServiceImpl implements GatewayService {
 
     final RespondMessageMethod respondMessageMethod;
+    final AssignRuntimeMethod assignRuntimeMethod;
     final AssignPlayerMethod assignPlayerMethod;
 
     final GetGatewayModuleClientOperation getGatewayModuleClientOperation;
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRoutedRequest request) {
+    public Uni<Void> respondMessage(RespondMessageRequest request) {
         final var currentServer = getConfigOperation.getConfig().serverUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -38,7 +41,7 @@ class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRoutedRequest request) {
+    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
         final var currentServer = getConfigOperation.getConfig().serverUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -47,6 +50,19 @@ class GatewayServiceImpl implements GatewayService {
             log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .assignPlayer(request);
+        }
+    }
+
+    @Override
+    public Uni<Void> assignRuntime(AssignRuntimeRequest request) {
+        final var currentServer = getConfigOperation.getConfig().serverUri();
+        final var targetServer = request.getServer();
+        if (currentServer.equals(targetServer)) {
+            return assignRuntimeMethod.assignRuntime(request);
+        } else {
+            log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
+            return getGatewayModuleClientOperation.getClient(targetServer)
+                    .assignRuntime(request);
         }
     }
 }

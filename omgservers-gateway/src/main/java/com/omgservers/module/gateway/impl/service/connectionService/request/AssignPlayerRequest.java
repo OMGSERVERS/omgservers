@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.connectionService.request;
 
-import jakarta.websocket.Session;
+import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +8,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteConnectionHelpRequest {
+public class AssignPlayerRequest {
 
-    public static void validate(DeleteConnectionHelpRequest request) {
+    public static void validate(AssignPlayerRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }
         // TODO: validate fields
     }
 
-    Session session;
+    Long connectionId;
+    AssignedPlayerModel assignedPlayer;
 }

@@ -1,12 +1,15 @@
 package com.omgservers.module.gateway.impl.service.gatewayWebService;
 
-import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
-import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
+import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.RespondMessageRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface GatewayWebService {
 
-    Uni<Void> respondMessage(RespondMessageRoutedRequest request);
+    Uni<Void> respondMessage(RespondMessageRequest request);
 
-    Uni<Void> assignPlayer(AssignPlayerRoutedRequest request);
+    Uni<Void> assignPlayer(AssignPlayerRequest request);
+
+    Uni<Void> assignRuntime(AssignRuntimeRequest request);
 }

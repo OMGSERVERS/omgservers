@@ -1,7 +1,7 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl;
 
 import com.omgservers.module.gateway.impl.service.messageService.MessageService;
-import com.omgservers.module.gateway.impl.service.messageService.request.HandleMessageHelpRequest;
+import com.omgservers.module.gateway.impl.service.messageService.request.HandleMessageRequest;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.message.MessageQualifierEnum;
 import io.smallrye.mutiny.Uni;
@@ -32,8 +32,8 @@ class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Uni<Void> handleMessage(final HandleMessageHelpRequest request) {
-        HandleMessageHelpRequest.validate(request);
+    public Uni<Void> handleMessage(final HandleMessageRequest request) {
+        HandleMessageRequest.validate(request);
 
         final var connectionId = request.getConnectionId();
         final var message = request.getMessage();

@@ -10,9 +10,9 @@ import java.net.URI;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssignPlayerRoutedRequest {
+public class AssignPlayerRequest {
 
-    public static void validate(AssignPlayerRoutedRequest request) {
+    public static void validate(AssignPlayerRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request is null");
         }

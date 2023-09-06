@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiveTextMessageHelpRequest {
+public class ReceiveTextMessageRequest {
 
-    public static void validate(ReceiveTextMessageHelpRequest request) {
+    public static void validate(ReceiveTextMessageRequest request) {
         if (request == null) {
             throw new ServerSideBadRequestException("request is null");
         }

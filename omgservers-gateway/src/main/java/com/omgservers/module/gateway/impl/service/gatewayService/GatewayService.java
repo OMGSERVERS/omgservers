@@ -1,22 +1,29 @@
 package com.omgservers.module.gateway.impl.service.gatewayService;
 
-import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
-import com.omgservers.dto.gateway.RespondMessageRoutedRequest;
+import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.RespondMessageRequest;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;
 
 public interface GatewayService {
 
-    Uni<Void> respondMessage(RespondMessageRoutedRequest request);
+    Uni<Void> respondMessage(RespondMessageRequest request);
 
-    default void respondMessage(long timeout, RespondMessageRoutedRequest request) {
+    default void respondMessage(long timeout, RespondMessageRequest request) {
         respondMessage(request).await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<Void> assignPlayer(AssignPlayerRoutedRequest request);
+    Uni<Void> assignPlayer(AssignPlayerRequest request);
 
-    default void assignPlayer(long timeout, AssignPlayerRoutedRequest request) {
+    default void assignPlayer(long timeout, AssignPlayerRequest request) {
         assignPlayer(request).await().atMost(Duration.ofSeconds(timeout));
+    }
+
+    Uni<Void> assignRuntime(AssignRuntimeRequest request);
+
+    default void assignRuntime(long timeout, AssignRuntimeRequest request) {
+        assignRuntime(request).await().atMost(Duration.ofSeconds(timeout));
     }
 }

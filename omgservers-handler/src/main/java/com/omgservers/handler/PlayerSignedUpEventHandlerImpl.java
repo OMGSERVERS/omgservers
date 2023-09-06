@@ -2,7 +2,7 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
-import com.omgservers.dto.gateway.AssignPlayerRoutedRequest;
+import com.omgservers.dto.gateway.AssignPlayerRequest;
 import com.omgservers.dto.user.GetClientShardedRequest;
 import com.omgservers.dto.user.GetClientShardedResponse;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
@@ -58,7 +58,7 @@ class PlayerSignedUpEventHandlerImpl implements EventHandler {
         final var server = client.getServer();
         final var connectionId = client.getConnectionId();
         final var assignedPlayer = new AssignedPlayerModel(tenantId, stageId, userId, playerId, client.getId());
-        final var request = new AssignPlayerRoutedRequest(server, connectionId, assignedPlayer);
+        final var request = new AssignPlayerRequest(server, connectionId, assignedPlayer);
         return gatewayModule.getGatewayService().assignPlayer(request);
     }
 
