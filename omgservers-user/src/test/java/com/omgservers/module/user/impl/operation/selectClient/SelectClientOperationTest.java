@@ -58,21 +58,22 @@ class SelectClientOperationTest extends Assertions {
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client1 = clientModelFactory.create(player.getId(), URI.create("http://localhost:8080"), connectionId());
-        final var clientUuid = client1.getId();
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client1);
+        final var client1 = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"), connectionId());
+        final var clientId = client1.getId();
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client1);
 
-        final var client2 = selectClientOperation.selectClient(TIMEOUT, pgPool, shard, clientUuid);
+        final var client2 = selectClientOperation.selectClient(TIMEOUT, pgPool, shard, user.getId(), clientId);
         assertEquals(client1, client2);
     }
 
     @Test
-    void givenUnknown_whenSelectClient_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenSelectClient_thenServerSideNotFoundException() {
         final var shard = 0;
+        final var userId = generateIdOperation.generateId();
         final var clientId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectClientOperation
-                .selectClient(TIMEOUT, pgPool, shard, clientId));
+                .selectClient(TIMEOUT, pgPool, shard, userId, clientId));
     }
 
     long stageId() {

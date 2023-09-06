@@ -17,11 +17,10 @@ public class SyncClientShardedRequest implements ShardedRequest {
         }
     }
 
-    Long userId;
     ClientModel client;
 
     @Override
     public String getRequestShardKey() {
-        return userId.toString();
+        return client.getUserId().toString();
     }
 }

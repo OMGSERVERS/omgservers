@@ -48,7 +48,8 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
                     luaGlobals.getGlobals().get("dofile").call(LuaValue.valueOf("main.lua"));
                     return luaGlobals;
                 })
-                .invoke(luaGlobals -> log.info("Lua globals was created, {}", luaGlobals));
+                .invoke(luaGlobals -> log.info("Lua globals was created, " +
+                        "tenantId={}, versionId={}, {}", tenantId, versionId, luaGlobals));
     }
 
     Uni<VersionBytecodeModel> getVersionBytecode(final Long tenantId, final Long versionId) {

@@ -28,6 +28,7 @@ create table if not exists tab_user_player (
 
 create table if not exists tab_user_client (
     id bigint primary key,
+    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     server text not null,
@@ -58,8 +59,8 @@ create table if not exists tab_user_object (
 -- tenant module
 
 create table if not exists tab_tenant (
-    created timestamp with time zone not null,
     id bigint primary key,
+    created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null
 );

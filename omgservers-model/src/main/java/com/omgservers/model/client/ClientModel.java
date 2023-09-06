@@ -20,6 +20,7 @@ public class ClientModel {
     }
 
     Long id;
+    Long userId;
     Long playerId;
     Instant created;
     URI server;

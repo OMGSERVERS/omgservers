@@ -17,14 +17,16 @@ public class ClientModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public ClientModel create(final Long playerId,
+    public ClientModel create(final Long userId,
+                              final Long playerId,
                               final URI server,
                               final Long connectionId) {
         final var id = generateIdOperation.generateId();
-        return create(id, playerId, server, connectionId);
+        return create(id, userId, playerId, server, connectionId);
     }
 
     public ClientModel create(final Long id,
+                              final Long userId,
                               final Long playerId,
                               final URI server,
                               final Long connectionId) {
@@ -32,6 +34,7 @@ public class ClientModelFactory {
 
         ClientModel client = new ClientModel();
         client.setId(id);
+        client.setUserId(userId);
         client.setPlayerId(playerId);
         client.setCreated(now);
         client.setServer(server);

@@ -1,7 +1,6 @@
 package com.omgservers.module.user.impl.operation.selectClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
@@ -24,9 +23,9 @@ import java.net.URI;
 class SelectClientOperationImpl implements SelectClientOperation {
 
     private static final String SQL = """
-            select id, player_id, created, server, connection_id
+            select id, user_id, player_id, created, server, connection_id
             from $schema.tab_user_client
-            where id = $1
+            where user_id = $1 and id = $2
             limit 1
             """;
 
@@ -38,18 +37,11 @@ class SelectClientOperationImpl implements SelectClientOperation {
     @Override
     public Uni<ClientModel> selectClient(final SqlConnection sqlConnection,
                                          final int shard,
+                                         final Long userId,
                                          final Long id) {
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-
         String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-
         return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(id))
+                .execute(Tuple.of(userId, id))
                 .map(RowSet::iterator)
                 .map(iterator -> {
                     if (iterator.hasNext()) {
@@ -68,6 +60,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
     ClientModel createClient(Row row) {
         ClientModel client = new ClientModel();
         client.setId(row.getLong("id"));
+        client.setUserId(row.getLong("user_id"));
         client.setPlayerId(row.getLong("player_id"));
         client.setCreated(row.getOffsetDateTime("created").toInstant());
         client.setServer(URI.create(row.getString("server")));

@@ -10,10 +10,11 @@ import java.time.Duration;
 public interface SelectClientOperation {
     Uni<ClientModel> selectClient(SqlConnection sqlConnection,
                                   int shard,
+                                  Long userId,
                                   Long id);
 
-    default ClientModel selectClient(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectClient(sqlConnection, shard, id))
+    default ClientModel selectClient(long timeout, PgPool pgPool, int shard, Long userId, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectClient(sqlConnection, shard, userId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

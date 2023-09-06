@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.syncClient;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.SyncClientShardedRequest;
 import com.omgservers.dto.user.SyncClientShardedResponse;
 import com.omgservers.module.user.impl.operation.upsertClient.UpsertClientOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +24,6 @@ class SyncClientMethodImpl implements SyncClientMethod {
     public Uni<SyncClientShardedResponse> syncClient(final SyncClientShardedRequest request) {
         SyncClientShardedRequest.validate(request);
 
-        final var userId = request.getUserId();
         final var client = request.getClient();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
@@ -32,7 +31,6 @@ class SyncClientMethodImpl implements SyncClientMethod {
                                 changeContext,
                                 sqlConnection,
                                 shardModel.shard(),
-                                userId,
                                 client)
                 ))
                 .map(ChangeContext::getResult)

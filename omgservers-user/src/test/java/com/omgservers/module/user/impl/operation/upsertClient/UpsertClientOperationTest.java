@@ -53,11 +53,11 @@ class UpsertClientOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client);
+        final var client = clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId());
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
     }
 
     @Test
@@ -66,21 +66,21 @@ class UpsertClientOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client = clientModelFactory.create(playerUuid, URI.create("http://localhost:8080"), connectionId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client);
+        final var client = clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId());
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
-        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client));
+        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
     }
 
     @Test
     void givenUnknownIds_whenUpsertClient_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
-        final var client = clientModelFactory.create(playerId(), URI.create("http://localhost:8080"), connectionId());
+        final var client = clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
-                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, userId, client));
+                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
         log.info("Exception: {}", exception.getMessage());
     }
 

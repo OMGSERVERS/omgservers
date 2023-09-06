@@ -92,8 +92,8 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                   final Long playerId,
                                   final URI server,
                                   final Long connectionId) {
-        final var client = clientModelFactory.create(playerId, server, connectionId);
-        final var request = new SyncClientShardedRequest(userId, client);
+        final var client = clientModelFactory.create(userId, playerId, server, connectionId);
+        final var request = new SyncClientShardedRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
     }

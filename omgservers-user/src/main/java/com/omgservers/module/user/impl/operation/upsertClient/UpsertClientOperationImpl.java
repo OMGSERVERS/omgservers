@@ -26,26 +26,26 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
     public Uni<Boolean> upsertClient(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
                                      final int shard,
-                                     final Long userId,
                                      final ClientModel client) {
         return executeChangeOperation.executeChange(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_client(id, player_id, created, server, connection_id)
-                        values($1, $2, $3, $4, $5)
+                        insert into $schema.tab_user_client(id, user_id, player_id, created, server, connection_id)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         client.getId(),
+                        client.getUserId(),
                         client.getPlayerId(),
                         client.getCreated().atOffset(ZoneOffset.UTC),
                         client.getServer().toString(),
                         client.getConnectionId()
                 ),
-                () -> new ClientCreatedEventBodyModel(userId, client.getId()),
+                () -> new ClientCreatedEventBodyModel(client.getUserId(), client.getId()),
                 () -> logModelFactory.create(String.format("Client was inserted, " +
-                        "shard=%d, userId=%d, client=%s", shard, userId, client))
+                        "client=%s", client))
         );
     }
 }

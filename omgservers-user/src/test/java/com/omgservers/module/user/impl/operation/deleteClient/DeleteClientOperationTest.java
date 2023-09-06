@@ -57,9 +57,9 @@ class DeleteClientOperationTest extends Assertions {
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client = clientModelFactory.create(player.getId(), URI.create("http://localhost:8080"), connectionId());
+        final var client = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"), connectionId());
         final var clientId = client.getId();
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, user.getId(), client);
+        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
         assertTrue(deleteClientOperation.deleteClient(TIMEOUT, pgPool, shard, user.getId(), clientId));
     }

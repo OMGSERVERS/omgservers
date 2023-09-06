@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -30,9 +30,9 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_user_client
-                        where id = $1
+                        where user_id = $1 and id = $2
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(userId, id),
                 () -> new ClientDeletedEventBodyModel(userId, id),
                 () -> logModelFactory.create(String.format("Client was deleted, " +
                         "userId=%d, id=%d", userId, id))
