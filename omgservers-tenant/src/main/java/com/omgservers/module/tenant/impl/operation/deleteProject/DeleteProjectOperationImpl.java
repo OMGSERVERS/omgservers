@@ -1,37 +1,23 @@
 package com.omgservers.module.tenant.impl.operation.deleteProject;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
-import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import com.omgservers.operation.executeChange.ExecuteChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DeleteProjectOperationImpl implements DeleteProjectOperation {
 
-    private static final String SQL = """
-            delete from $schema.tab_tenant_project
-            where tenant_id = $1 and id = $2
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
-
-    final EventModelFactory eventModelFactory;
+    final ExecuteChangeOperation executeChangeOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -40,57 +26,16 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
                                       final int shard,
                                       final Long tenantId,
                                       final Long id) {
-        if (changeContext == null) {
-            throw new IllegalArgumentException("changeContext is null");
-        }
-        if (sqlConnection == null) {
-            throw new IllegalArgumentException("sqlConnection is null");
-        }
-        if (id == null) {
-            throw new IllegalArgumentException("uuid is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(tenantId, id))
-                .map(rowSet -> rowSet.rowCount() > 0)
-                .call(objectWasDeleted -> upsertEvent(objectWasDeleted, changeContext, sqlConnection, tenantId, id))
-                .call(objectWasDeleted -> upsertLog(objectWasDeleted, changeContext, sqlConnection, tenantId, id))
-                .invoke(objectWasDeleted -> {
-                    if (objectWasDeleted) {
-                        log.info("Project was deleted, shard={}, tenantId={}, id={}", shard, tenantId, id);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
-    }
-
-    Uni<Boolean> upsertEvent(final boolean objectWasDeleted,
-                             final ChangeContext<?> changeContext,
-                             final SqlConnection sqlConnection,
-                             final Long tenantId,
-                             final Long id) {
-        if (objectWasDeleted) {
-            final var body = new ProjectDeletedEventBodyModel(tenantId, id);
-            final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
-        } else {
-            return Uni.createFrom().item(false);
-        }
-    }
-
-    Uni<Boolean> upsertLog(final boolean objectWasDeleted,
-                           final ChangeContext<?> changeContext,
-                           final SqlConnection sqlConnection,
-                           final Long tenantId,
-                           final Long id) {
-        if (objectWasDeleted) {
-            final var changeLog = logModelFactory.create(String.format("Project was deleted, " +
-                    "tenantId=%d, id=%d", tenantId, id));
-            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
-        } else {
-            return Uni.createFrom().item(false);
-        }
+        return executeChangeOperation.executeChange(
+                changeContext, sqlConnection, shard,
+                """
+                        delete from $schema.tab_tenant_project
+                        where tenant_id = $1 and id = $2
+                        """,
+                Arrays.asList(tenantId, id),
+                () -> new ProjectDeletedEventBodyModel(tenantId, id),
+                () -> logModelFactory.create(String.format("Project was deleted, " +
+                        "tenantId=%d, id=%d", tenantId, id))
+        );
     }
 }

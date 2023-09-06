@@ -1,19 +1,12 @@
 package com.omgservers.module.user.impl.operation.upsertUser;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.user.UserModel;
-import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import com.omgservers.operation.executeChange.ExecuteChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,19 +20,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertUserOperationImpl implements UpsertUserOperation {
 
-    private static final String SQL = """
-            insert into $schema.tab_user(id, created, modified, role, password_hash)
-            values($1, $2, $3, $4, $5)
-            on conflict (id) do
-            nothing
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
-
-    final EventModelFactory eventModelFactory;
+    final ExecuteChangeOperation executeChangeOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -47,63 +28,22 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                                    final SqlConnection sqlConnection,
                                    final int shard,
                                    final UserModel user) {
-        if (changeContext == null) {
-            throw new IllegalArgumentException("changeContext is null");
-        }
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (user == null) {
-            throw new ServerSideBadRequestException("user is null");
-        }
-
-        return upsertObject(sqlConnection, shard, user)
-                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, user))
-                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, user))
-                .invoke(inserted -> {
-                    if (inserted) {
-                        log.info("User was inserted, shard={}, user={}", shard, user);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
-    }
-
-    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, UserModel userModel) {
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.from(Arrays.asList(
-                        userModel.getId(),
-                        userModel.getCreated().atOffset(ZoneOffset.UTC),
-                        userModel.getModified().atOffset(ZoneOffset.UTC),
-                        userModel.getRole(),
-                        userModel.getPasswordHash())))
-                .map(rowSet -> rowSet.rowCount() > 0);
-    }
-
-    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext<?> changeContext,
-                             final SqlConnection sqlConnection,
-                             final UserModel user) {
-        if (objectWasInserted) {
-            final var body = new UserCreatedEventBodyModel(user.getId());
-            final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
-        } else {
-            return Uni.createFrom().item(false);
-        }
-    }
-
-    Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext<?> changeContext,
-                           final SqlConnection sqlConnection,
-                           final UserModel user) {
-        if (objectWasInserted) {
-            final var changeLog = logModelFactory.create("User was created, user=" + user);
-            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
-        } else {
-            return Uni.createFrom().item(false);
-        }
+        return executeChangeOperation.executeChange(
+                changeContext, sqlConnection, shard,
+                """
+                        insert into $schema.tab_user(id, created, modified, role, password_hash)
+                        values($1, $2, $3, $4, $5)
+                        on conflict (id) do
+                        nothing
+                        """,
+                Arrays.asList(
+                        user.getId(),
+                        user.getCreated().atOffset(ZoneOffset.UTC),
+                        user.getModified().atOffset(ZoneOffset.UTC),
+                        user.getRole(),
+                        user.getPasswordHash()),
+                () -> new UserCreatedEventBodyModel(user.getId()),
+                () -> logModelFactory.create("User was created, user=" + user)
+        );
     }
 }

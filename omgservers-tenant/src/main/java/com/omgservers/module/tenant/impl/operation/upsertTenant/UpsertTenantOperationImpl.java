@@ -1,46 +1,28 @@
 package com.omgservers.module.tenant.impl.operation.upsertTenant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideInternalException;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import com.omgservers.operation.executeChange.ExecuteChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class UpsertTenantOperationImpl implements UpsertTenantOperation {
 
-    private static final String SQL = """
-            insert into $schema.tab_tenant(id, created, modified, config)
-            values($1, $2, $3, $4)
-            on conflict (id) do
-            nothing
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
-
-    final EventModelFactory eventModelFactory;
+    final ExecuteChangeOperation executeChangeOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -49,66 +31,30 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final TenantModel tenant) {
-        if (changeContext == null) {
-            throw new ServerSideBadRequestException("changeContext is null");
-        }
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (tenant == null) {
-            throw new ServerSideBadRequestException("tenant is null");
-        }
-
-        return upsertObject(sqlConnection, shard, tenant)
-                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, tenant))
-                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, tenant))
-                .invoke(objectWasInserted -> {
-                    if (objectWasInserted) {
-                        log.info("Tenant was inserted, shard={}, tenant={}", shard, tenant);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeChangeOperation.executeChange(
+                changeContext, sqlConnection, shard,
+                """
+                        insert into $schema.tab_tenant(id, created, modified, config)
+                        values($1, $2, $3, $4)
+                        on conflict (id) do
+                        nothing
+                        """,
+                Arrays.asList(
+                        tenant.getId(),
+                        tenant.getCreated().atOffset(ZoneOffset.UTC),
+                        tenant.getModified().atOffset(ZoneOffset.UTC),
+                        getConfigString(tenant)
+                ),
+                () -> new TenantCreatedEventBodyModel(tenant.getId()),
+                () -> logModelFactory.create("Tenant was inserted, tenant=" + tenant)
+        );
     }
 
-    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, TenantModel tenant) {
+    String getConfigString(TenantModel tenant) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-            var configString = objectMapper.writeValueAsString(tenant.getConfig());
-            return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.of(
-                            tenant.getId(),
-                            tenant.getCreated().atOffset(ZoneOffset.UTC),
-                            tenant.getModified().atOffset(ZoneOffset.UTC),
-                            configString))
-                    .map(rowSet -> rowSet.rowCount() > 0);
+            return objectMapper.writeValueAsString(tenant.getConfig());
         } catch (IOException e) {
-            throw new ServerSideInternalException(e.getMessage(), e);
-        }
-    }
-
-    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext<?> changeContext,
-                             final SqlConnection sqlConnection,
-                             final TenantModel tenant) {
-        if (objectWasInserted) {
-            final var body = new TenantCreatedEventBodyModel(tenant.getId());
-            final var event = eventModelFactory.create(body);
-            return upsertEventOperation.upsertEvent(changeContext, sqlConnection, event);
-        } else {
-            return Uni.createFrom().item(false);
-        }
-    }
-
-    Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext<?> changeContext,
-                           final SqlConnection sqlConnection,
-                           final TenantModel tenant) {
-        if (objectWasInserted) {
-            final var changeLog = logModelFactory.create("Tenant was inserted, tenant=" + tenant);
-            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
-        } else {
-            return Uni.createFrom().item(false);
+            throw new ServerSideBadRequestException(e.getMessage(), e);
         }
     }
 }

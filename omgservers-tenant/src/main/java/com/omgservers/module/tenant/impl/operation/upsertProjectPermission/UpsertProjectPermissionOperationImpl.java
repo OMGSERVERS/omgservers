@@ -1,42 +1,24 @@
 package com.omgservers.module.tenant.impl.operation.upsertProjectPermission;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.module.internal.factory.EventModelFactory;
 import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import com.omgservers.operation.executeChange.ExecuteChangeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOperation {
 
-    private static final String SQL = """
-            insert into $schema.tab_tenant_project_permission(id, project_id, created, user_id, permission)
-            values($1, $2, $3, $4, $5)
-            on conflict (id) do
-            nothing
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
-
-    final EventModelFactory eventModelFactory;
+    final ExecuteChangeOperation executeChangeOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -45,62 +27,24 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                                                 final int shard,
                                                 final Long tenantId,
                                                 final ProjectPermissionModel permission) {
-        if (changeContext == null) {
-            throw new ServerSideBadRequestException("changeContext is null");
-        }
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (tenantId == null) {
-            throw new ServerSideBadRequestException("tenantId is null");
-        }
-        if (permission == null) {
-            throw new ServerSideBadRequestException("permission is null");
-        }
-
-        return upsertObject(sqlConnection, shard, permission)
-                .call(objectWasInserted -> upsertEvent(objectWasInserted, changeContext, sqlConnection, tenantId, permission))
-                .call(objectWasInserted -> upsertLog(objectWasInserted, changeContext, sqlConnection, tenantId, permission))
-                .invoke(objectWasInserted -> {
-                    if (objectWasInserted) {
-                        log.info("Project permission was inserted, permission={}", permission);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
-    }
-
-    Uni<Boolean> upsertObject(SqlConnection sqlConnection, int shard, ProjectPermissionModel permission) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(
+        return executeChangeOperation.executeChange(
+                changeContext, sqlConnection, shard,
+                """
+                        insert into $schema.tab_tenant_project_permission(id, project_id, created, user_id, permission)
+                        values($1, $2, $3, $4, $5)
+                        on conflict (id) do
+                        nothing
+                        """,
+                Arrays.asList(
                         permission.getId(),
                         permission.getProjectId(),
                         permission.getCreated().atOffset(ZoneOffset.UTC),
                         permission.getUserId(),
-                        permission.getPermission()))
-                .map(rowSet -> rowSet.rowCount() > 0);
-    }
-
-    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext<?> changeContext,
-                             final SqlConnection sqlConnection,
-                             final Long tenantId,
-                             final ProjectPermissionModel permission) {
-        return Uni.createFrom().item(false);
-    }
-
-    Uni<Boolean> upsertLog(final boolean objectWasInserted,
-                           final ChangeContext<?> changeContext,
-                           final SqlConnection sqlConnection,
-                           final Long tenantId,
-                           final ProjectPermissionModel permission) {
-        if (objectWasInserted) {
-            final var changeLog = logModelFactory.create(String.format("Project permission was inserted, " +
-                    "tenantId=%d, permission=%s", tenantId, permission));
-            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
-        } else {
-            return Uni.createFrom().item(false);
-        }
+                        permission.getPermission()
+                ),
+                () -> null,
+                () -> logModelFactory.create(String.format("Project permission was inserted, " +
+                        "tenantId=%d, permission=%s", tenantId, permission))
+        );
     }
 }
