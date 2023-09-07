@@ -49,12 +49,20 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("runtime.runtime_id=" .. runtime.runtime_id)
                         end
                                                 
+                        function runtime_handle_event(event, runtime)
+                            print("event.id=" .. event.id)
+                            print("event.user_id=" .. event.user_id)
+                            print("event.player_id=" .. event.player_id)
+                            print("event.client_id=" .. event.client_id)
+                            print("event.data=" .. event.data)
+                        end
+                                                
                         function runtime_update(event, runtime)
                             print(event.step)
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)
                             print("runtime.runtime_id=" .. runtime.runtime_id)
-                        end
+                        end                      
 
                         print("version was initialized")
                         """,
@@ -79,6 +87,11 @@ public class PlayerMatchmakingTest extends Assertions {
 
         client1.requestMatchmaking("death-match");
         client2.requestMatchmaking("death-match");
+
+        Thread.sleep(5000);
+
+        client1.sendMatchMessage("welcome1");
+        client2.sendMatchMessage("welcome2");
 
         Thread.sleep(5000);
 

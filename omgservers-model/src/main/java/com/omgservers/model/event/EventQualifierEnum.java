@@ -14,6 +14,7 @@ import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
@@ -88,10 +89,11 @@ public enum EventQualifierEnum {
     RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class),
-    SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
-    MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
     PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
-    PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class);
+    SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
+    PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class),
+    MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
+    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class);
 
     Class<? extends EventBodyModel> bodyClass;
 

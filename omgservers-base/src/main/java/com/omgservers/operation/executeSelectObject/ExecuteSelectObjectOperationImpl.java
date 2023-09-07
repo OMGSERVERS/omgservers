@@ -47,7 +47,7 @@ class ExecuteSelectObjectOperationImpl implements ExecuteSelectObjectOperation {
                 .map(iterator -> {
                     if (iterator.hasNext()) {
                         final var object = objectMapper.apply(iterator.next());
-                        log.info("{} was found, {}", objectName, object);
+                        log.info("{} was selected, {}", objectName, object);
                         return object;
                     } else {
                         throw new ServerSideNotFoundException(String.format("%s was not found, parameters=%s",

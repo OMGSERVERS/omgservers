@@ -41,7 +41,7 @@ class ExecuteHasObjectOperationImpl implements ExecuteHasObjectOperation {
                 .map(rowSet -> rowSet.rowCount() > 0)
                 .invoke(selected -> {
                     if (selected) {
-                        log.info("{} was found, parameters={}", objectName, parameters);
+                        log.info("{} was selected, parameters={}", objectName, parameters);
                     } else {
                         log.info("{} was not found, parameters={}", objectName, parameters);
                     }

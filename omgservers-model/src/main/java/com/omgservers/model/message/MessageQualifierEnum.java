@@ -1,9 +1,8 @@
 package com.omgservers.model.message;
 
-import com.omgservers.model.message.body.ChangeMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.model.message.body.ErrorMessageBodyModel;
 import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
@@ -14,8 +13,7 @@ public enum MessageQualifierEnum {
     MATCHMAKER_MESSAGE(MatchmakerMessageBodyModel.class),
     CREDENTIALS_MESSAGE(CredentialsMessageBodyModel.class),
     EVENT_MESSAGE(EventMessageBodyModel.class),
-    CHANGE_MESSAGE(ChangeMessageBodyModel.class),
-    ERROR_MESSAGE(ErrorMessageBodyModel.class);
+    MATCH_MESSAGE(MatchMessageBodyModel.class);
 
     final Class<? extends MessageBodyModel> bodyClass;
 

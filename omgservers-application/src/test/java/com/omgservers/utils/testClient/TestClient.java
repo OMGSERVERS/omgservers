@@ -5,6 +5,7 @@ import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
@@ -85,6 +86,12 @@ public class TestClient {
 
     public synchronized void requestMatchmaking(String mode) throws IOException {
         final var messageModel = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.MATCHMAKER_MESSAGE, new MatchmakerMessageBodyModel(mode));
+        final var messageString = objectMapper.writeValueAsString(messageModel);
+        send(messageString);
+    }
+
+    public synchronized void sendMatchMessage(String text) throws IOException {
+        final var messageModel = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.MATCH_MESSAGE, new MatchMessageBodyModel(text));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }

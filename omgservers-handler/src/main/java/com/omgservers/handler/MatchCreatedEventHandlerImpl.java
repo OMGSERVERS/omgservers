@@ -14,11 +14,11 @@ import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -54,10 +54,9 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             final var tenantId = matchmaker.getTenantId();
                             final var stageId = matchmaker.getStageId();
-                            final var getCurrentVersionIdShardedRequest = new
-                                    GetStageVersionIdRequest(tenantId, stageId);
+                            final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
                             return tenantModule.getVersionService()
-                                    .getStageVersionId(getCurrentVersionIdShardedRequest)
+                                    .getStageVersionId(getStageVersionIdRequest)
                                     .map(GetStageVersionIdResponse::getVersionId)
                                     .flatMap(versionId -> {
                                         final var runtimeId = match.getRuntimeId();

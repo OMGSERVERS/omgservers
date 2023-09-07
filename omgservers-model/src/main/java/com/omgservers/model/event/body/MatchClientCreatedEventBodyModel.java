@@ -23,6 +23,6 @@ public class MatchClientCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return matchmakerId;
+        return id;
     }
 }
