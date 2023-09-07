@@ -1,6 +1,5 @@
 package com.omgservers.module.tenant.impl.operation.selectProject;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
@@ -8,6 +7,7 @@ import com.omgservers.module.tenant.factory.ProjectModelFactory;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -55,11 +55,12 @@ class SelectProjectOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownUuid_whenSelectProject_thenServerSideNotFoundException() {
+    void givenUnknownId_whenSelectProject_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
+        final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
                 .selectProject(TIMEOUT, pgPool, shard, id));
+        log.info("Exception: {}", exception.getMessage());
     }
 }

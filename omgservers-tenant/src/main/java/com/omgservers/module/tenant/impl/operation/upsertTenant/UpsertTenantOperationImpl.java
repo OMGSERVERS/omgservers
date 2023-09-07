@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertTenantOperationImpl implements UpsertTenantOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -31,7 +31,7 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final TenantModel tenant) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant(id, created, modified, config)

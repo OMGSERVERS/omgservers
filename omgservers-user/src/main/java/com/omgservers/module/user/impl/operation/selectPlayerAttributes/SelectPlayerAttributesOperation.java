@@ -11,10 +11,11 @@ import java.util.List;
 public interface SelectPlayerAttributesOperation {
     Uni<List<AttributeModel>> selectPlayerAttributes(SqlConnection sqlConnection,
                                                      int shard,
+                                                     Long userId,
                                                      Long playerId);
 
-    default List<AttributeModel> selectPlayerAttributes(long timeout, PgPool pgPool, int shard, Long playerId) {
-        return pgPool.withTransaction(sqlConnection -> selectPlayerAttributes(sqlConnection, shard, playerId))
+    default List<AttributeModel> selectPlayerAttributes(long timeout, PgPool pgPool, int shard, Long userId, Long playerId) {
+        return pgPool.withTransaction(sqlConnection -> selectPlayerAttributes(sqlConnection, shard, userId, playerId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

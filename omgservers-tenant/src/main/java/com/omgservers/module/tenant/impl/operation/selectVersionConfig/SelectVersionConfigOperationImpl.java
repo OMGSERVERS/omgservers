@@ -1,37 +1,24 @@
 package com.omgservers.module.tenant.impl.operation.selectVersionConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
 
-    private static final String SQL = """
-            select config
-            from $schema.tab_tenant_version
-            where id = $1
-            limit 1
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -39,35 +26,23 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
     public Uni<VersionConfigModel> selectVersionConfig(final SqlConnection sqlConnection,
                                                        final int shard,
                                                        final Long versionId) {
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (versionId == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(versionId))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    if (iterator.hasNext()) {
-                        try {
-                            log.info("Version was found, versionId={}", versionId);
-                            final var row = iterator.next();
-                            final var versionConfig = objectMapper.readValue(row.getString("config"),
-                                    VersionConfigModel.class);
-                            return versionConfig;
-                        } catch (IOException e) {
-                            throw new ServerSideConflictException("stage config can't be parsed, " +
-                                    "versionId=" + versionId);
-                        }
-                    } else {
-                        throw new ServerSideNotFoundException(String.format("version was not found, " +
-                                "versionId=%s", versionId));
+        return executeSelectObjectOperation.executeSelectObject(
+                sqlConnection,
+                shard,
+                """
+                        select config
+                        from $schema.tab_tenant_version
+                        where id = $1
+                        limit 1
+                        """,
+                Collections.singletonList(versionId),
+                "Version",
+                row -> {
+                    try {
+                        return objectMapper.readValue(row.getString("config"), VersionConfigModel.class);
+                    } catch (IOException e) {
+                        throw new ServerSideConflictException("config can't be parsed, versionId=" + versionId, e);
                     }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+                });
     }
 }

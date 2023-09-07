@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.userService.impl.method.validateCredentials;
 
-import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
-import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
+import com.omgservers.dto.user.ValidateCredentialsResponse;
+import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.module.user.impl.operation.selectUser.SelectUserOperation;
 import com.omgservers.module.user.impl.operation.validateCredentials.ValidateCredentialsOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -23,8 +23,8 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<ValidateCredentialsShardedResponse> validateCredentials(ValidateCredentialsShardedRequest request) {
-        ValidateCredentialsShardedRequest.validate(request);
+    public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
+        ValidateCredentialsRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
@@ -34,7 +34,7 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
                                     .selectUser(sqlConnection, shard.shard(), userId)
                                     .flatMap(userModel -> validateCredentialsOperation
                                             .validateCredentials(userModel, password)))
-                            .map(ValidateCredentialsShardedResponse::new);
+                            .map(ValidateCredentialsResponse::new);
                 });
     }
 }

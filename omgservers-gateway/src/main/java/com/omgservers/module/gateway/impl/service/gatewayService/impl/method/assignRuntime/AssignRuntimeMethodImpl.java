@@ -3,8 +3,8 @@ package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.as
 import com.omgservers.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.LogModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final ConnectionService connectionService;
 
@@ -35,7 +35,7 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
                 .call(voidItem -> {
                     final var syncLog = logModelFactory.create("Runtime was assigned, request=" + request);
                     final var syncLogRequest = new SyncLogRequest(syncLog);
-                    return internalModule.getLogService().syncLog(syncLogRequest);
+                    return systemModule.getLogService().syncLog(syncLogRequest);
                 });
     }
 }

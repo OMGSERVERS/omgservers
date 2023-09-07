@@ -34,7 +34,7 @@ import jakarta.ws.rs.Path;
 
 import java.time.Duration;
 
-@Path("/omgservers/service-api/tenant-api/v1/request")
+@Path("/omgservers/tenant-api/v1/request")
 public interface TenantServiceApi {
 
     @PUT

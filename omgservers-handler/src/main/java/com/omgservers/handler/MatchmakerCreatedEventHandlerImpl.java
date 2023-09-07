@@ -1,13 +1,13 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.internal.SyncJobShardedRequest;
+import com.omgservers.dto.internal.SyncJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.job.JobType;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.JobModelFactory;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.JobModelFactory;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final GenerateIdOperation generateIdOperation;
 
@@ -38,8 +38,8 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
         final var job = jobModelFactory.create(id, id, JobType.MATCHMAKER);
-        final var request = new SyncJobShardedRequest(job);
-        return internalModule.getJobShardedService().syncJob(request)
+        final var request = new SyncJobRequest(job);
+        return systemModule.getJobService().syncJob(request)
                 .replaceWith(true);
     }
 }

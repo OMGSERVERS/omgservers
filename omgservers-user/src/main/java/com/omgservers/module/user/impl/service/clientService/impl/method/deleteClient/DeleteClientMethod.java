@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.deleteClient;
 
-import com.omgservers.dto.user.DeleteClientShardedResponse;
-import com.omgservers.dto.user.DeleteClientShardedRequest;
+import com.omgservers.dto.user.DeleteClientResponse;
+import com.omgservers.dto.user.DeleteClientRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteClientMethod {
-    Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request);
+    Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
 }

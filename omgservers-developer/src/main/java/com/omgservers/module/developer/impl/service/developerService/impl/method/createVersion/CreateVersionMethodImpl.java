@@ -4,9 +4,9 @@ import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.dto.tenant.BuildVersionRequest;
 import com.omgservers.dto.tenant.BuildVersionResponse;
-import com.omgservers.dto.tenant.HasStagePermissionShardedRequest;
-import com.omgservers.dto.tenant.HasStagePermissionShardedResponse;
-import com.omgservers.dto.tenant.SyncVersionShardedRequest;
+import com.omgservers.dto.tenant.HasStagePermissionRequest;
+import com.omgservers.dto.tenant.HasStagePermissionResponse;
+import com.omgservers.dto.tenant.SyncVersionRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionConfigModel;
@@ -53,9 +53,9 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                            final Long userId) {
         final var permission = StagePermissionEnum.CREATE_VERSION;
         final var hasStagePermissionServiceRequest =
-                new HasStagePermissionShardedRequest(tenantId, stageId, userId, permission);
-        return tenantModule.getStageShardedService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionShardedResponse::getResult)
+                new HasStagePermissionRequest(tenantId, stageId, userId, permission);
+        return tenantModule.getStageService().hasStagePermission(hasStagePermissionServiceRequest)
+                .map(HasStagePermissionResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(String.format("lack of permission, " +
@@ -74,8 +74,8 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
         return tenantModule.getVersionService().buildVersion(buildVersionRequest)
                 .map(BuildVersionResponse::getVersion)
                 .flatMap(version -> {
-                    final var syncVersionInternalRequest = new SyncVersionShardedRequest(tenantId, version);
-                    return tenantModule.getVersionShardedService().syncVersion(syncVersionInternalRequest)
+                    final var syncVersionInternalRequest = new SyncVersionRequest(tenantId, version);
+                    return tenantModule.getVersionService().syncVersion(syncVersionInternalRequest)
                             .replaceWith(version);
                 });
     }

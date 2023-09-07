@@ -1,7 +1,7 @@
 package com.omgservers.module.context.impl.operation.createLuaGlobals.impl;
 
-import com.omgservers.dto.tenant.GetVersionBytecodeShardedRequest;
-import com.omgservers.dto.tenant.GetVersionBytecodeShardedResponse;
+import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
+import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
 import com.omgservers.module.context.impl.operation.decodeLuaBytecode.DecodeLuaBytecodeOperation;
@@ -53,8 +53,8 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
     }
 
     Uni<VersionBytecodeModel> getVersionBytecode(final Long tenantId, final Long versionId) {
-        final var request = new GetVersionBytecodeShardedRequest(tenantId, versionId);
-        return tenantModule.getVersionShardedService().getVersionBytecode(request)
-                .map(GetVersionBytecodeShardedResponse::getBytecode);
+        final var request = new GetVersionBytecodeRequest(tenantId, versionId);
+        return tenantModule.getVersionService().getVersionBytecode(request)
+                .map(GetVersionBytecodeResponse::getBytecode);
     }
 }

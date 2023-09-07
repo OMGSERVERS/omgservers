@@ -1,43 +1,43 @@
 package com.omgservers.module.user.impl.service.attributeService;
 
-import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardedResponse;
-import com.omgservers.dto.user.GetAttributeShardedRequest;
-import com.omgservers.dto.user.GetAttributeShardedResponse;
-import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
-import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
-import com.omgservers.dto.user.SyncAttributeShardedRequest;
-import com.omgservers.dto.user.SyncAttributeShardedResponse;
+import com.omgservers.dto.user.DeleteAttributeRequest;
+import com.omgservers.dto.user.DeleteAttributeResponse;
+import com.omgservers.dto.user.GetAttributeRequest;
+import com.omgservers.dto.user.GetAttributeResponse;
+import com.omgservers.dto.user.GetPlayerAttributesRequest;
+import com.omgservers.dto.user.GetPlayerAttributesResponse;
+import com.omgservers.dto.user.SyncAttributeRequest;
+import com.omgservers.dto.user.SyncAttributeResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;
 
 public interface AttributeService {
 
-    Uni<GetAttributeShardedResponse> getAttribute(GetAttributeShardedRequest request);
+    Uni<GetAttributeResponse> getAttribute(GetAttributeRequest request);
 
-    default GetAttributeShardedResponse getAttribute(long timeout, GetAttributeShardedRequest request) {
+    default GetAttributeResponse getAttribute(long timeout, GetAttributeRequest request) {
         return getAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<GetPlayerAttributesShardedResponse> getPlayerAttributes(GetPlayerAttributesShardedRequest request);
+    Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request);
 
-    default GetPlayerAttributesShardedResponse getPlayerAttributes(long timeout, GetPlayerAttributesShardedRequest request) {
+    default GetPlayerAttributesResponse getPlayerAttributes(long timeout, GetPlayerAttributesRequest request) {
         return getPlayerAttributes(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request);
+    Uni<SyncAttributeResponse> syncAttribute(SyncAttributeRequest request);
 
-    default SyncAttributeShardedResponse syncAttribute(long timeout, SyncAttributeShardedRequest request) {
+    default SyncAttributeResponse syncAttribute(long timeout, SyncAttributeRequest request) {
         return syncAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request);
+    Uni<DeleteAttributeResponse> deleteAttribute(DeleteAttributeRequest request);
 
-    default DeleteAttributeShardedResponse deleteAttribute(long timeout, DeleteAttributeShardedRequest request) {
+    default DeleteAttributeResponse deleteAttribute(long timeout, DeleteAttributeRequest request) {
         return deleteAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }

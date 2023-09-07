@@ -2,7 +2,7 @@ package com.omgservers.module.developer.impl.service.developerService.impl.metho
 
 import com.omgservers.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.dto.developer.CreateTokenDeveloperResponse;
-import com.omgservers.dto.user.CreateTokenShardedRequest;
+import com.omgservers.dto.user.CreateTokenRequest;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
         final var userId = request.getUserId();
         final var password = request.getPassword();
-        final var createTokenRequest = new CreateTokenShardedRequest(userId, password);
+        final var createTokenRequest = new CreateTokenRequest(userId, password);
         return userModule.getTokenService().createToken(createTokenRequest)
                 .map(response -> {
                     // TODO: does role have to be "Developer" only, block others?

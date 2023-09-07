@@ -1,6 +1,6 @@
 package com.omgservers.module.user.impl;
 
-import com.omgservers.dto.user.IntrospectTokenShardedRequest;
+import com.omgservers.dto.user.IntrospectTokenRequest;
 import com.omgservers.module.user.UserModule;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
@@ -46,7 +46,7 @@ class TokenIdentityProvider implements IdentityProvider<TokenAuthenticationReque
             return Uni.createFrom().nullItem();
         }
 
-        IntrospectTokenShardedRequest introspectTokenRequest = new IntrospectTokenShardedRequest(rawToken);
+        IntrospectTokenRequest introspectTokenRequest = new IntrospectTokenRequest(rawToken);
         return userModule.getTokenService().introspectToken(introspectTokenRequest)
                 .map(response -> {
                     final var tokenObject = response.getTokenObject();

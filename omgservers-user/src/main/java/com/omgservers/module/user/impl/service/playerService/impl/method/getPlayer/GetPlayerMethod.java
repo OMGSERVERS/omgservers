@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.service.playerService.impl.method.getPlayer;
 
-import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.GetPlayerShardedRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface GetPlayerMethod {
-    Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request);
+    Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
 }

@@ -12,6 +12,7 @@ public interface GenerateIdOperation {
 
     int NODE_ID_OFFSET = SEQUENCE_BITS;
     int DATACENTER_ID_OFFSET = SEQUENCE_BITS + NODE_ID_BITS;
+    int TIMESTAMP_BITS = 41;
     int TIMESTAMP_OFFSET = DATACENTER_ID_OFFSET + DATACENTER_ID_BITS;
 
     long generateId();

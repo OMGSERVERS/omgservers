@@ -1,6 +1,5 @@
 package com.omgservers.module.matchmaker.impl.operation.updateMatchConfig;
 
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
@@ -57,7 +56,7 @@ class UpdateMatchConfigOperationTest extends Assertions {
     }
 
     @Test
-    void givenMatchWithUnknownId_whenUpdateMatch_thenException() {
+    void givenMatchWithUnknownId_whenUpdateMatch_thenFalse() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
@@ -67,9 +66,8 @@ class UpdateMatchConfigOperationTest extends Assertions {
         // Set unknown id
         match.setId(generateIdOperation.generateId());
 
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> updateMatchConfigOperation
+        assertFalse(updateMatchConfigOperation
                 .updateMatch(TIMEOUT, pgPool, shard, match.getMatchmakerId(), match.getId(), match.getConfig()));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

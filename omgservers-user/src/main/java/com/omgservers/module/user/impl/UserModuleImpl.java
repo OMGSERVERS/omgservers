@@ -5,7 +5,7 @@ import com.omgservers.module.user.impl.service.attributeService.AttributeService
 import com.omgservers.module.user.impl.service.clientService.ClientService;
 import com.omgservers.module.user.impl.service.objectService.ObjectService;
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
-import com.omgservers.module.user.impl.service.tokenShardedService.TokenShardedService;
+import com.omgservers.module.user.impl.service.tokenService.TokenService;
 import com.omgservers.module.user.impl.service.userService.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UserModuleImpl implements UserModule {
 
-    final TokenShardedService tokenShardedService;
     final AttributeService attributeService;
     final ClientService clientService;
     final ObjectService objectService;
     final PlayerService playerService;
+    final TokenService tokenService;
     final UserService userService;
 
     public AttributeService getAttributeService() {
@@ -40,8 +40,8 @@ class UserModuleImpl implements UserModule {
         return playerService;
     }
 
-    public TokenShardedService getTokenService() {
-        return tokenShardedService;
+    public TokenService getTokenService() {
+        return tokenService;
     }
 
     public UserService getUserService() {

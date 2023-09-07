@@ -1,12 +1,12 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerResponse;
 import com.omgservers.dto.user.RespondClientRequest;
-import com.omgservers.dto.user.SyncClientShardedRequest;
-import com.omgservers.dto.user.SyncUserShardedRequest;
+import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -18,9 +18,9 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.ClientModelFactory;
@@ -41,7 +41,7 @@ import java.security.SecureRandom;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SignUpRequestedEventHandlerImpl implements EventHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
     final TenantModule tenantModule;
     final UserModule userModule;
 
@@ -96,15 +96,15 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
     Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
-        final var syncUserInternalRequest = new SyncUserShardedRequest(user);
+        final var syncUserInternalRequest = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(syncUserInternalRequest)
                 .replaceWith(user);
     }
 
     Uni<PlayerModel> createPlayer(Long userId, Long stageId) {
-        final var createPlayerHelpRequest = new GetOrCreatePlayerHelpRequest(userId, stageId);
+        final var createPlayerHelpRequest = new GetOrCreatePlayerRequest(userId, stageId);
         return userModule.getPlayerService().getOrCreatePlayer(createPlayerHelpRequest)
-                .map(GetOrCreatePlayerHelpResponse::getPlayer);
+                .map(GetOrCreatePlayerResponse::getPlayer);
     }
 
     Uni<ClientModel> createClient(final Long userId,
@@ -112,7 +112,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId) {
         final var client = clientModelFactory.create(userId, playerId, server, connectionId);
-        final var request = new SyncClientShardedRequest(client);
+        final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
     }
@@ -132,8 +132,8 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                         final Long clientId) {
         final var eventBody = new PlayerSignedUpEventBodyModel(tenantId, stageId, userId, playerId, clientId);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventShardedRequest(event);
-        return internalModule.getEventShardedService().fireEvent(request)
+        final var request = new FireEventRequest(event);
+        return systemModule.getEventService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

@@ -13,6 +13,7 @@ import java.time.Instant;
 public class ObjectModel {
 
     Long id;
+    Long userId;
     Long playerId;
     Instant created;
     Instant modified;

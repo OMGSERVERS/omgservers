@@ -1,9 +1,9 @@
 package com.omgservers.module.runtime.impl.operation.updateRuntimeCommandStatusAndStep;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCommandStatusAndStepOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -29,7 +29,7 @@ class UpdateRuntimeCommandStatusAndStepOperationImpl implements UpdateRuntimeCom
                                                           final Long id,
                                                           final RuntimeCommandStatusEnum status,
                                                           final Long step) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_runtime_command

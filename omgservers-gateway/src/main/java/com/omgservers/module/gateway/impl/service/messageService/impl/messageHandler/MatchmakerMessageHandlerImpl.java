@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
-import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
@@ -9,8 +9,8 @@ import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedPlayerRequest;
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MatchmakerMessageHandlerImpl implements MessageHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final ConnectionService connectionInternalService;
 
@@ -49,8 +49,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new MatchmakerRequestedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventShardedRequest(event);
-        return internalModule.getEventShardedService().fireEvent(request)
+        final var request = new FireEventRequest(event);
+        return systemModule.getEventService().fireEvent(request)
                 .replaceWithVoid();
     }
 

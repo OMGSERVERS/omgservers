@@ -3,9 +3,9 @@ package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.request.RequestModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertRequestOperationImpl implements UpsertRequestOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -30,7 +30,7 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final RequestModel request) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_request(

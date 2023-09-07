@@ -2,10 +2,10 @@ package com.omgservers.module.admin.impl.service.adminService.impl.method.create
 
 import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.dto.admin.CreateDeveloperAdminResponse;
-import com.omgservers.dto.tenant.GetTenantShardedRequest;
-import com.omgservers.dto.tenant.GetTenantShardedResponse;
-import com.omgservers.dto.tenant.SyncTenantPermissionShardedRequest;
-import com.omgservers.dto.user.SyncUserShardedRequest;
+import com.omgservers.dto.tenant.GetTenantRequest;
+import com.omgservers.dto.tenant.GetTenantResponse;
+import com.omgservers.dto.tenant.SyncTenantPermissionRequest;
+import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
@@ -50,15 +50,15 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
-        final var getTenantServiceRequest = new GetTenantShardedRequest(tenantId);
-        return tenantModule.getTenantShardedService().getTenant(getTenantServiceRequest)
-                .map(GetTenantShardedResponse::getTenant);
+        final var getTenantServiceRequest = new GetTenantRequest(tenantId);
+        return tenantModule.getTenantService().getTenant(getTenantServiceRequest)
+                .map(GetTenantResponse::getTenant);
     }
 
     Uni<UserModel> createUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
-        final var syncUserShardedRequest = new SyncUserShardedRequest(user);
+        final var syncUserShardedRequest = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(syncUserShardedRequest)
                 .replaceWith(user);
     }
@@ -66,8 +66,8 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     Uni<TenantPermissionModel> syncCreateProjectPermission(Long tenantId, Long userId) {
         final var tenantPermission = tenantPermissionModelFactory
                 .create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
-        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionShardedRequest(tenantPermission);
-        return tenantModule.getTenantShardedService().syncTenantPermission(syncTenantPermissionServiceRequest)
+        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
+        return tenantModule.getTenantService().syncTenantPermission(syncTenantPermissionServiceRequest)
                 .replaceWith(tenantPermission);
     }
 }

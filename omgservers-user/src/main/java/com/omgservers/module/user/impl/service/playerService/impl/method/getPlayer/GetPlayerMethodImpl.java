@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.playerService.impl.method.getPlayer;
 
-import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.GetPlayerShardedRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
 import com.omgservers.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,8 +20,8 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetPlayerShardedResponse> getPlayer(final GetPlayerShardedRequest request) {
-        GetPlayerShardedRequest.validate(request);
+    public Uni<GetPlayerResponse> getPlayer(final GetPlayerRequest request) {
+        GetPlayerRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
@@ -30,6 +30,6 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
                     return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
                             .selectPlayer(sqlConnection, shard.shard(), user, stage));
                 })
-                .map(GetPlayerShardedResponse::new);
+                .map(GetPlayerResponse::new);
     }
 }

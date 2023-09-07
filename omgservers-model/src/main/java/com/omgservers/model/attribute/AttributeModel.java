@@ -19,6 +19,7 @@ public class AttributeModel {
     }
 
     Long id;
+    Long userId;
     Long playerId;
     Instant created;
     Instant modified;

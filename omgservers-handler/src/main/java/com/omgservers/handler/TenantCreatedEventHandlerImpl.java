@@ -1,7 +1,7 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.getServers.GetServersOperation;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantCreatedEventHandlerImpl implements EventHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final GetServersOperation getServersOperation;
 

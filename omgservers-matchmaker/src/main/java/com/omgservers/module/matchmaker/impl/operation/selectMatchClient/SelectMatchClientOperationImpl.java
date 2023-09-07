@@ -1,62 +1,43 @@
 package com.omgservers.module.matchmaker.impl.operation.selectMatchClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectMatchClientOperationImpl implements SelectMatchClientOperation {
 
-    private static final String SQL = """
-            select id, matchmaker_id, match_id, created, modified, user_id, client_id
-            from $schema.tab_matchmaker_match_client
-            where id = $1
-            limit 1
-            """;
+    final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
     @Override
     public Uni<MatchClientModel> selectMatchClient(final SqlConnection sqlConnection,
                                                    final int shard,
+                                                   final Long matchmakerId,
                                                    final Long id) {
-        if (sqlConnection == null) {
-            throw new IllegalArgumentException("sqlConnection is null");
-        }
-        if (id == null) {
-            throw new IllegalArgumentException("uuid is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(id))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    if (iterator.hasNext()) {
-                        final var matchClient = createMatchClient(iterator.next());
-                        log.info("Match client was found, matchClient={}", matchClient);
-                        return matchClient;
-                    } else {
-                        throw new ServerSideNotFoundException("match client was not found, id=" + id);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeSelectObjectOperation.executeSelectObject(
+                sqlConnection,
+                shard,
+                """
+                        select id, matchmaker_id, match_id, created, modified, user_id, client_id
+                        from $schema.tab_matchmaker_match_client
+                        where matchmaker_id = $1 and id = $2
+                        limit 1
+                        """,
+                Arrays.asList(matchmakerId, id),
+                "Match client",
+                this::createMatchClient);
     }
 
     MatchClientModel createMatchClient(Row row) {

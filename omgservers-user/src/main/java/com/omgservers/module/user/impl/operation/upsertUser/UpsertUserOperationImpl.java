@@ -2,9 +2,9 @@ package com.omgservers.module.user.impl.operation.upsertUser;
 
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.user.UserModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertUserOperationImpl implements UpsertUserOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -28,7 +28,7 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                                    final SqlConnection sqlConnection,
                                    final int shard,
                                    final UserModel user) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user(id, created, modified, role, password_hash)

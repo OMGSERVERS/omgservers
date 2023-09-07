@@ -8,10 +8,17 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface SelectRequestOperation {
-    Uni<RequestModel> selectRequest(SqlConnection sqlConnection, int shard, Long id);
+    Uni<RequestModel> selectRequest(SqlConnection sqlConnection,
+                                    int shard,
+                                    Long matchmakerId,
+                                    Long id);
 
-    default RequestModel selectRequest(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectRequest(sqlConnection, shard, id))
+    default RequestModel selectRequest(long timeout,
+                                       PgPool pgPool,
+                                       int shard,
+                                       Long matchmakerId,
+                                       Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectRequest(sqlConnection, shard, matchmakerId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

@@ -1,22 +1,22 @@
 package com.omgservers.module.user.impl.operation.deleteObject;
 
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DeleteObjectOperationImpl implements DeleteObjectOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,13 +26,13 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
                                      final Long userId,
                                      final Long playerId,
                                      final Long id) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_user_object
-                        where id = $1
+                        where user_id = $1 and player_id = $2 and id = $3
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(userId, playerId, id),
                 () -> null,
                 () -> logModelFactory.create(String.format("Object was deleted, " +
                         "userId=%d, playerId=%d, id=%d", userId, playerId, id))

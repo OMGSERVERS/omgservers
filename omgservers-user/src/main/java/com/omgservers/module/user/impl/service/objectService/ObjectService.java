@@ -1,18 +1,18 @@
 package com.omgservers.module.user.impl.service.objectService;
 
-import com.omgservers.dto.user.DeleteObjectShardedResponse;
-import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.dto.user.GetObjectShardedResponse;
-import com.omgservers.dto.user.GetObjectShardedRequest;
-import com.omgservers.dto.user.SyncObjectShardedResponse;
-import com.omgservers.dto.user.SyncObjectShardedRequest;
+import com.omgservers.dto.user.DeleteObjectResponse;
+import com.omgservers.dto.user.DeleteObjectRequest;
+import com.omgservers.dto.user.GetObjectResponse;
+import com.omgservers.dto.user.GetObjectRequest;
+import com.omgservers.dto.user.SyncObjectResponse;
+import com.omgservers.dto.user.SyncObjectRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface ObjectService {
 
-    Uni<GetObjectShardedResponse> getObject(GetObjectShardedRequest request);
+    Uni<GetObjectResponse> getObject(GetObjectRequest request);
 
-    Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request);
+    Uni<SyncObjectResponse> syncObject(SyncObjectRequest request);
 
-    Uni<DeleteObjectShardedResponse> deleteObject(DeleteObjectShardedRequest request);
+    Uni<DeleteObjectResponse> deleteObject(DeleteObjectRequest request);
 }

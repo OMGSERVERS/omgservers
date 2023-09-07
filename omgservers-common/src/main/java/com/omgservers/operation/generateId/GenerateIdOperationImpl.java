@@ -27,7 +27,11 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
             throw new ServerSideConflictException("wrong nodeId, value=" + nodeId);
         }
 
-        log.info("Generator was initialized, datacenterId={}, nodeId={}", datacenterId, nodeId);
+        log.info("Generator was initialized, " +
+                        "(timestampBits={}, datacenterIdBits={}, nodeIdBits={}, sequenceBits={}) " +
+                        "datacenterId={}, nodeId={}",
+                TIMESTAMP_BITS, DATACENTER_ID_BITS, NODE_ID_BITS, SEQUENCE_BITS,
+                datacenterId, nodeId);
 
         lastTimestamp = 0;
         sequence = 0;
@@ -41,7 +45,8 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
             sequence += 1;
 
             if (sequence >= (1 << SEQUENCE_BITS)) {
-                throw new ServerSideInternalException("sequence was overflowed, timestamp=" + timestamp);
+                throw new ServerSideInternalException(String.format("sequence was overflowed, " +
+                        "sequence=%d, timestamp=%d", sequence, timestamp));
             }
         } else if (timestamp > lastTimestamp) {
             sequence = 0;

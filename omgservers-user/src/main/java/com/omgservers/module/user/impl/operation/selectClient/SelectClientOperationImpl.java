@@ -1,60 +1,41 @@
 package com.omgservers.module.user.impl.operation.selectClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.client.ClientModel;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectClientOperationImpl implements SelectClientOperation {
 
-    private static final String SQL = """
-            select id, user_id, player_id, created, server, connection_id
-            from $schema.tab_user_client
-            where user_id = $1 and id = $2
-            limit 1
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-
-    final ObjectMapper objectMapper;
+    final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
     @Override
     public Uni<ClientModel> selectClient(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long userId,
                                          final Long id) {
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(userId, id))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    if (iterator.hasNext()) {
-                        final var client = createClient(iterator.next());
-                        log.info("Client was found, client={}", client);
-                        return client;
-                    } else {
-                        log.info("Client was not found, id={}", id);
-                        throw new ServerSideNotFoundException(String.format("client was not found, id=%s", id));
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeSelectObjectOperation.executeSelectObject(
+                sqlConnection,
+                shard,
+                """
+                        select id, user_id, player_id, created, server, connection_id
+                        from $schema.tab_user_client
+                        where user_id = $1 and id = $2
+                        limit 1
+                        """,
+                Arrays.asList(userId, id),
+                "Client",
+                this::createClient);
     }
 
     ClientModel createClient(Row row) {

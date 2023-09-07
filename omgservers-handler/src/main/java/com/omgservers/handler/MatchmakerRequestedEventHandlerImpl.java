@@ -1,17 +1,17 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.matchmaker.SyncRequestShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
-import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
-import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
+import com.omgservers.dto.matchmaker.SyncRequestRequest;
+import com.omgservers.dto.tenant.GetStageRequest;
+import com.omgservers.dto.tenant.GetStageResponse;
+import com.omgservers.dto.user.GetPlayerAttributesRequest;
+import com.omgservers.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.stage.StageModel;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
@@ -64,23 +64,23 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
                                         clientId,
                                         mode,
                                         requestConfig);
-                                final var request = new SyncRequestShardedRequest(requestModel);
-                                return matchmakerModule.getMatchmakerShardedService().syncRequest(request);
+                                final var request = new SyncRequestRequest(requestModel);
+                                return matchmakerModule.getMatchmakerService().syncRequest(request);
                             });
                 })
                 .replaceWith(true);
     }
 
     Uni<StageModel> getStage(Long tenantId, Long stageId) {
-        final var request = new GetStageShardedRequest(tenantId, stageId);
-        return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageShardedResponse::getStage);
+        final var request = new GetStageRequest(tenantId, stageId);
+        return tenantModule.getStageService().getStage(request)
+                .map(GetStageResponse::getStage);
     }
 
     Uni<Map<String, String>> getPlayerAttributes(Long userId, Long playerId) {
-        final var request = new GetPlayerAttributesShardedRequest(userId, playerId);
+        final var request = new GetPlayerAttributesRequest(userId, playerId);
         return userModule.getAttributeService().getPlayerAttributes(request)
-                .map(GetPlayerAttributesShardedResponse::getAttributes)
+                .map(GetPlayerAttributesResponse::getAttributes)
                 .map(entities -> {
                     final var attributes = new HashMap<String, String>();
                     entities.forEach(entity -> attributes.put(entity.getName(), entity.getValue()));

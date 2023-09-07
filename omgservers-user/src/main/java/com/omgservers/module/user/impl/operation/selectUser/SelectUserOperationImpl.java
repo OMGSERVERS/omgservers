@@ -1,65 +1,40 @@
 package com.omgservers.module.user.impl.operation.selectUser;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectUserOperationImpl implements SelectUserOperation {
 
-    private static final String SQL = """
-            select id, created, modified, role, password_hash
-            from $schema.tab_user
-            where id = $1
-            limit 1
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final ObjectMapper objectMapper;
+    final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
     @Override
     public Uni<UserModel> selectUser(final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (id == null) {
-            throw new ServerSideBadRequestException("id is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(id))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    if (iterator.hasNext()) {
-                        final var user = createUser(iterator.next());
-                        log.info("User was found, user={}", user);
-                        return user;
-                    } else {
-                        throw new ServerSideNotFoundException("user was not found, id=" + id);
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeSelectObjectOperation.executeSelectObject(
+                sqlConnection,
+                shard,
+                """
+                        select id, created, modified, role, password_hash
+                        from $schema.tab_user
+                        where id = $1
+                        limit 1
+                        """,
+                Collections.singletonList(id),
+                "User",
+                this::createUser);
     }
 
     UserModel createUser(Row row) {

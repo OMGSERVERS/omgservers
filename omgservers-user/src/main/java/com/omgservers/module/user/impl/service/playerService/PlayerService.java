@@ -1,22 +1,22 @@
 package com.omgservers.module.user.impl.service.playerService;
 
-import com.omgservers.dto.user.DeletePlayerShardedResponse;
-import com.omgservers.dto.user.DeletePlayerShardedRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.SyncPlayerShardedResponse;
-import com.omgservers.dto.user.SyncPlayerShardedRequest;
+import com.omgservers.dto.user.DeletePlayerResponse;
+import com.omgservers.dto.user.DeletePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerResponse;
+import com.omgservers.dto.user.GetPlayerResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
+import com.omgservers.dto.user.SyncPlayerResponse;
+import com.omgservers.dto.user.SyncPlayerRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface PlayerService {
 
-    Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request);
+    Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
 
-    Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request);
+    Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
 
-    Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request);
+    Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
 
-    Uni<GetOrCreatePlayerHelpResponse> getOrCreatePlayer(GetOrCreatePlayerHelpRequest request);
+    Uni<GetOrCreatePlayerResponse> getOrCreatePlayer(GetOrCreatePlayerRequest request);
 }

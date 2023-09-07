@@ -1,9 +1,9 @@
 package com.omgservers.module.matchmaker.impl.operation.selectRequest;
 
 import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
-import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -52,17 +52,18 @@ class SelectMatchesByMatchmakerIdOperationTest extends Assertions {
         final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
-        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmakerRequest1.getId());
+        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmaker.getId(), matchmakerRequest1.getId());
         assertEquals(matchmakerRequest1, matchmakerRequest2);
     }
 
     @Test
-    void givenUnknownUuid_whenSelectMatchmakerRequest_then() {
+    void givenUnknownUuid_whenSelectMatchmakerRequest_thenException() {
         final var shard = 0;
+        final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
-                .selectRequest(TIMEOUT, pgPool, shard, id));
+                .selectRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
         log.info("Exception: {}", exception.getMessage());
     }
 

@@ -1,10 +1,10 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.syncClient;
 
-import com.omgservers.dto.user.SyncClientShardedResponse;
-import com.omgservers.dto.user.SyncClientShardedRequest;
+import com.omgservers.dto.user.SyncClientResponse;
+import com.omgservers.dto.user.SyncClientRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncClientMethod {
 
-    Uni<SyncClientShardedResponse> syncClient(SyncClientShardedRequest request);
+    Uni<SyncClientResponse> syncClient(SyncClientRequest request);
 }

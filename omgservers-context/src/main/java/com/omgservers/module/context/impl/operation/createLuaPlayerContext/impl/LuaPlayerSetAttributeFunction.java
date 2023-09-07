@@ -1,6 +1,6 @@
 package com.omgservers.module.context.impl.operation.createLuaPlayerContext.impl;
 
-import com.omgservers.dto.user.SyncAttributeShardedRequest;
+import com.omgservers.dto.user.SyncAttributeRequest;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.AttributeModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -35,8 +35,8 @@ public class LuaPlayerSetAttributeFunction extends TwoArgFunction {
         String name = arg1.tojstring();
         String value = arg2.tojstring();
 
-        final var attribute = attributeModelFactory.create(playerId, name, value);
-        final var syncAttributeServiceRequest = new SyncAttributeShardedRequest(userId, attribute);
+        final var attribute = attributeModelFactory.create(userId, playerId, name, value);
+        final var syncAttributeServiceRequest = new SyncAttributeRequest(userId, attribute);
 
         try {
             userModule.getAttributeService().syncAttribute(TIMEOUT, syncAttributeServiceRequest);

@@ -1,10 +1,10 @@
 package com.omgservers.module.user.impl.service.userService.impl;
 
 import com.omgservers.dto.user.RespondClientRequest;
-import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.dto.user.SyncUserShardedResponse;
-import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
-import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
+import com.omgservers.dto.user.SyncUserRequest;
+import com.omgservers.dto.user.SyncUserResponse;
+import com.omgservers.dto.user.ValidateCredentialsRequest;
+import com.omgservers.dto.user.ValidateCredentialsResponse;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.userService.UserService;
@@ -33,18 +33,18 @@ class UserServiceImpl implements UserService {
     final SyncUserMethod syncUserMethod;
 
     @Override
-    public Uni<SyncUserShardedResponse> syncUser(final SyncUserShardedRequest request) {
+    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncUserShardedRequest::validate,
+                SyncUserRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncUser,
                 syncUserMethod::syncUser);
     }
 
     @Override
-    public Uni<ValidateCredentialsShardedResponse> validateCredentials(ValidateCredentialsShardedRequest request) {
+    public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                ValidateCredentialsShardedRequest::validate,
+                ValidateCredentialsRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::validateCredentials,
                 validateCredentialsMethod::validateCredentials);

@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.playerService.impl.method.syncPlayer;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.SyncPlayerShardedRequest;
-import com.omgservers.dto.user.SyncPlayerShardedResponse;
+import com.omgservers.dto.user.SyncPlayerRequest;
+import com.omgservers.dto.user.SyncPlayerResponse;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.validatePlayer.ValidatePlayerOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -23,8 +23,8 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request) {
-        SyncPlayerShardedRequest.validate(request);
+    public Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request) {
+        SyncPlayerRequest.validate(request);
 
         final var player = request.getPlayer();
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -35,6 +35,6 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                                 shardModel.shard(),
                                 player)))
                 .map(ChangeContext::getResult)
-                .map(SyncPlayerShardedResponse::new);
+                .map(SyncPlayerResponse::new);
     }
 }

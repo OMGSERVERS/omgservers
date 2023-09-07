@@ -3,8 +3,8 @@ package com.omgservers.handler;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedUpEventResponse;
 import com.omgservers.dto.gateway.AssignPlayerRequest;
-import com.omgservers.dto.user.GetClientShardedRequest;
-import com.omgservers.dto.user.GetClientShardedResponse;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
@@ -12,7 +12,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.PlayerSignedUpEventBodyModel;
 import com.omgservers.module.context.ContextModule;
 import com.omgservers.module.gateway.GatewayModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,9 +49,9 @@ class PlayerSignedUpEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientShardedRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientShardedResponse::getClient);
+                .map(GetClientResponse::getClient);
     }
 
     Uni<Void> assignPlayer(Long tenantId, Long stageId, Long userId, Long playerId, ClientModel client) {

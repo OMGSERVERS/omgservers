@@ -2,7 +2,7 @@ package com.omgservers.module.admin.impl.service.adminService.impl.method.create
 
 import com.omgservers.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.dto.admin.CreateTenantAdminResponse;
-import com.omgservers.dto.tenant.SyncTenantShardedRequest;
+import com.omgservers.dto.tenant.SyncTenantRequest;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.TenantModule;
@@ -28,8 +28,8 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
         CreateTenantAdminRequest.validate(request);
 
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        final var syncTenantInternalRequest = new SyncTenantShardedRequest(tenant);
-        return tenantModule.getTenantShardedService().syncTenant(syncTenantInternalRequest)
+        final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
+        return tenantModule.getTenantService().syncTenant(syncTenantInternalRequest)
                 .replaceWith(new CreateTenantAdminResponse(tenant.getId()));
     }
 }

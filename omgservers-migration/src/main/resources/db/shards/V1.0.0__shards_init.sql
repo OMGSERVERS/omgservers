@@ -38,6 +38,7 @@ create table if not exists tab_user_client (
 
 create table if not exists tab_user_attribute (
     id bigint primary key,
+    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -48,6 +49,7 @@ create table if not exists tab_user_attribute (
 
 create table if not exists tab_user_object (
     id bigint primary key,
+    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

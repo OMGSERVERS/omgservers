@@ -2,9 +2,9 @@ package com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker;
 
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -27,7 +27,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                                          final SqlConnection sqlConnection,
                                          final int shard,
                                          final MatchmakerModel matchmaker) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)

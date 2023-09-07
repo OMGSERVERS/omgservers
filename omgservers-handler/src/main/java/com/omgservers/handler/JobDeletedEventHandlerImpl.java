@@ -1,8 +1,8 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.dto.internal.UnscheduleJobShardedRequest;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.dto.internal.UnscheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class JobDeletedEventHandlerImpl implements EventHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -29,8 +29,8 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();
         final var entity = body.getEntity();
-        final var request = new UnscheduleJobShardedRequest(shardKey, entity);
-        return internalModule.getJobShardedService().unscheduleJob(request)
+        final var request = new UnscheduleJobRequest(shardKey, entity);
+        return systemModule.getJobService().unscheduleJob(request)
                 .replaceWith(true);
     }
 }

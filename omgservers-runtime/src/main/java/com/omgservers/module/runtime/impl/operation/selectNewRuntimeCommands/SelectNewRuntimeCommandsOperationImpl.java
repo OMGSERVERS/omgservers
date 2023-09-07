@@ -1,23 +1,20 @@
 package com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -25,48 +22,26 @@ import java.util.List;
 @AllArgsConstructor
 class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsOperation {
 
-    private static final String SQL = """
-            select id, runtime_id, created, modified, qualifier, body, status, step
-            from $schema.tab_runtime_command
-            where runtime_id = $1 and status = $2
-            order by id asc
-            """;
+    final ExecuteSelectListOperation executeSelectListOperation;
 
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
     final ObjectMapper objectMapper;
 
     @Override
     public Uni<List<RuntimeCommandModel>> selectNewRuntimeCommands(final SqlConnection sqlConnection,
                                                                    final int shard,
                                                                    final Long runtimeId) {
-        if (sqlConnection == null) {
-            throw new IllegalArgumentException("sqlConnection is null");
-        }
-        if (runtimeId == null) {
-            throw new IllegalArgumentException("runtimeId is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(runtimeId, RuntimeCommandStatusEnum.NEW))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    final List<RuntimeCommandModel> runtimeCommands = new ArrayList<RuntimeCommandModel>();
-                    while (iterator.hasNext()) {
-                        final var command = createRuntimeCommand(iterator.next());
-                        runtimeCommands.add(command);
-                    }
-                    if (runtimeCommands.size() > 0) {
-                        log.info("New runtime commands were selected, " +
-                                "count={}, runtimeId={}", runtimeCommands.size(), runtimeId);
-                    } else {
-                        log.info("New runtime commands were not found, runtimeId={}", runtimeId);
-                    }
-                    return runtimeCommands;
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeSelectListOperation.executeSelectList(
+                sqlConnection,
+                shard,
+                """
+                        select id, runtime_id, created, modified, qualifier, body, status, step
+                        from $schema.tab_runtime_command
+                        where runtime_id = $1 and status = $2
+                        order by id asc
+                        """,
+                Arrays.asList(runtimeId, RuntimeCommandStatusEnum.NEW),
+                "Runtime command",
+                this::createRuntimeCommand);
     }
 
     RuntimeCommandModel createRuntimeCommand(Row row) {
@@ -81,7 +56,7 @@ class SelectNewRuntimeCommandsOperationImpl implements SelectNewRuntimeCommandsO
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             runtimeCommand.setBody(body);
         } catch (IOException e) {
-            log.error("runtime command can't be parsed, id=" + runtimeCommand.getId(), e);
+            throw new ServerSideConflictException("runtime command can't be parsed, runtimeCommand=" + runtimeCommand, e);
         }
         runtimeCommand.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
         runtimeCommand.setStep(row.getLong("step"));

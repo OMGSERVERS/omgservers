@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.objectService.impl.method.getObject;
 
-import com.omgservers.dto.user.GetObjectShardedResponse;
-import com.omgservers.dto.user.GetObjectShardedRequest;
+import com.omgservers.dto.user.GetObjectRequest;
+import com.omgservers.dto.user.GetObjectResponse;
 import com.omgservers.module.user.impl.operation.selectObject.SelectObjectOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,16 +20,17 @@ class GetObjectMethodImpl implements GetObjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetObjectShardedResponse> getObject(final GetObjectShardedRequest request) {
-        GetObjectShardedRequest.validate(request);
+    public Uni<GetObjectResponse> getObject(final GetObjectRequest request) {
+        GetObjectRequest.validate(request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var player = request.getPlayerId();
+                    final var userId = request.getUserId();
+                    final var playerId = request.getPlayerId();
                     final var name = request.getName();
                     return pgPool.withTransaction(sqlConnection -> selectObjectOperation
-                            .selectObject(sqlConnection, shard.shard(), player, name));
+                            .selectObject(sqlConnection, shard.shard(), userId, playerId, name));
                 })
-                .map(GetObjectShardedResponse::new);
+                .map(GetObjectResponse::new);
     }
 }

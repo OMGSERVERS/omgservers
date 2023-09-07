@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.operation.deleteClient;
 
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,7 +26,7 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
                                      final int shard,
                                      final Long userId,
                                      final Long id) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_user_client

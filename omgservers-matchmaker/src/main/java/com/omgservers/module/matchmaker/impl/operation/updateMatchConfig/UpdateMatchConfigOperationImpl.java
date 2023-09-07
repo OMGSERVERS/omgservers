@@ -1,21 +1,14 @@
 package com.omgservers.module.matchmaker.impl.operation.updateMatchConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.exception.ServerSideInternalException;
-import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.match.MatchConfigModel;
-import com.omgservers.module.internal.factory.EventModelFactory;
-import com.omgservers.module.internal.factory.LogModelFactory;
-import com.omgservers.module.internal.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.internal.impl.operation.upsertLog.UpsertLogOperation;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,24 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
 
-    private static final String SQL = """
-            update $schema.tab_matchmaker_match
-            set modified = $3, config = $4
-            where matchmaker_id = $1 and id = $2
-            """;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
 
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
-    final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
-
-    final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -51,77 +35,30 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
                                     final Long matchmakerId,
                                     final Long matchId,
                                     final MatchConfigModel config) {
-        if (changeContext == null) {
-            throw new ServerSideBadRequestException("changeContext is null");
-        }
-        if (sqlConnection == null) {
-            throw new ServerSideBadRequestException("sqlConnection is null");
-        }
-        if (matchmakerId == null) {
-            throw new ServerSideBadRequestException("matchmakerId is null");
-        }
-        if (matchId == null) {
-            throw new ServerSideBadRequestException("matchId is null");
-        }
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-
-        return updateObject(sqlConnection, shard, matchmakerId, matchId, config)
-                .call(objectWasUpdated -> upsertEvent(objectWasUpdated, changeContext, sqlConnection, matchmakerId, matchId))
-                .call(objectWasUpdated -> upsertLog(objectWasUpdated, changeContext, sqlConnection, matchmakerId, matchId))
-                .invoke(objectWasUpdated -> {
-                    if (objectWasUpdated) {
-                        log.info("Match was updated, shard={}, matchmakerId={}, matchId={}",
-                                shard, matchmakerId, matchId);
-                    } else {
-                        throw new ServerSideNotFoundException(String.format("match was not found, " +
-                                "matchmakerId=%d, matchId=%d", matchmakerId, matchId));
-                    }
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeChangeObjectOperation.executeChangeObject(
+                changeContext, sqlConnection, shard,
+                """
+                        update $schema.tab_matchmaker_match
+                        set modified = $3, config = $4
+                        where matchmaker_id = $1 and id = $2
+                        """,
+                Arrays.asList(
+                        matchmakerId,
+                        matchId,
+                        Instant.now().atOffset(ZoneOffset.UTC),
+                        getConfigString(config)
+                ),
+                () -> new MatchUpdatedEventBodyModel(matchmakerId, matchId),
+                () -> logModelFactory.create(String.format("Match was updated, " +
+                        "matchmakerId=%d, matchId=%d", matchmakerId, matchId))
+        );
     }
 
-    Uni<Boolean> updateObject(final SqlConnection sqlConnection,
-                              final int shard,
-                              final Long matchmakerId,
-                              final Long matchId,
-                              final MatchConfigModel config) {
+    String getConfigString(MatchConfigModel config) {
         try {
-            var preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-            var configString = objectMapper.writeValueAsString(config);
-            return sqlConnection.preparedQuery(preparedSql)
-                    .execute(Tuple.of(
-                            matchmakerId,
-                            matchId,
-                            Instant.now().atOffset(ZoneOffset.UTC),
-                            configString))
-                    .map(rowSet -> rowSet.rowCount() > 0);
+            return objectMapper.writeValueAsString(config);
         } catch (IOException e) {
-            throw new ServerSideInternalException(e.getMessage(), e);
-        }
-    }
-
-    Uni<Boolean> upsertEvent(final boolean objectWasInserted,
-                             final ChangeContext<?> changeContext,
-                             final SqlConnection sqlConnection,
-                             final Long matchmakerId,
-                             final Long matchId) {
-        return Uni.createFrom().item(false);
-    }
-
-    Uni<Boolean> upsertLog(final boolean objectWasUpdated,
-                           final ChangeContext<?> changeContext,
-                           final SqlConnection sqlConnection,
-                           final Long matchmakerId,
-                           final Long matchId) {
-        if (objectWasUpdated) {
-            final var changeLog = logModelFactory.create(String.format("Match was updated, " +
-                    "matchmakerId=%d, matchId=%d", matchmakerId, matchId));
-            return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog);
-        } else {
-            return Uni.createFrom().item(false);
+            throw new ServerSideBadRequestException(e.getMessage(), e);
         }
     }
 }

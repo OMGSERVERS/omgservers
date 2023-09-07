@@ -1,6 +1,5 @@
 package com.omgservers.module.user.factory;
 
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.object.ObjectModel;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,14 +16,16 @@ public class ObjectModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public ObjectModel create(final Long playerId,
+    public ObjectModel create(final Long userId,
+                              final Long playerId,
                               final String name,
                               final byte[] body) {
         final var id = generateIdOperation.generateId();
-        return create(id, playerId, name, body);
+        return create(id, userId, playerId, name, body);
     }
 
     public ObjectModel create(final Long id,
+                              final Long userId,
                               final Long playerId,
                               final String name,
                               final byte[] body) {
@@ -32,6 +33,7 @@ public class ObjectModelFactory {
 
         ObjectModel object = new ObjectModel();
         object.setId(id);
+        object.setUserId(userId);
         object.setPlayerId(playerId);
         object.setCreated(now);
         object.setModified(now);

@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.userService.impl.method.syncUser;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.SyncUserShardedRequest;
-import com.omgservers.dto.user.SyncUserShardedResponse;
+import com.omgservers.dto.user.SyncUserRequest;
+import com.omgservers.dto.user.SyncUserResponse;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -21,8 +21,8 @@ class SyncUserMethodImpl implements SyncUserMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncUserShardedResponse> syncUser(final SyncUserShardedRequest request) {
-        SyncUserShardedRequest.validate(request);
+    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
+        SyncUserRequest.validate(request);
 
         final var user = request.getUser();
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -33,6 +33,6 @@ class SyncUserMethodImpl implements SyncUserMethod {
                                 shardModel.shard(),
                                 user)))
                 .map(ChangeContext::getResult)
-                .map(SyncUserShardedResponse::new);
+                .map(SyncUserResponse::new);
     }
 }

@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.service.attributeService.impl.method.deleteAttribute;
 
-import com.omgservers.dto.user.DeleteAttributeShardedResponse;
-import com.omgservers.dto.user.DeleteAttributeShardedRequest;
+import com.omgservers.dto.user.DeleteAttributeResponse;
+import com.omgservers.dto.user.DeleteAttributeRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteAttributeMethod {
-    Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request);
+    Uni<DeleteAttributeResponse> deleteAttribute(DeleteAttributeRequest request);
 }

@@ -54,23 +54,23 @@ class DeleteAttributeOperationTest extends Assertions {
     void givenAttributes_whenDeleteAttribute_thenDeleted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
-        final var userUuid = user.getId();
+        final var userId = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(userUuid, stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(userId, stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var attribute1 = attributeModelFactory
-                .create(playerId, attributeName(), stringValue());
+                .create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute1);
         final var attribute2 = attributeModelFactory
-                .create(playerId, attributeName(), stringValue());
+                .create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute2);
 
         assertTrue(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, user.getId(), playerId, attribute2.getName()));
     }
 
     @Test
-    void givenUnknownIds_whenDeleteAttribute_thenNotDeleted() {
+    void givenUnknownIds_whenDeleteAttribute_thenFalse() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         assertFalse(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, userId, playerId(), attributeName()));

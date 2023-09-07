@@ -16,14 +16,16 @@ public class AttributeModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public AttributeModel create(final Long playerId,
+    public AttributeModel create(final Long userId,
+                                 final Long playerId,
                                  final String name,
                                  final String value) {
         final var id = generateIdOperation.generateId();
-        return create(id, playerId, name, value);
+        return create(id, userId, playerId, name, value);
     }
 
     public AttributeModel create(final Long id,
+                                 final Long userId,
                                  final Long playerId,
                                  final String name,
                                  final String value) {
@@ -31,6 +33,7 @@ public class AttributeModelFactory {
 
         AttributeModel attribute = new AttributeModel();
         attribute.setId(id);
+        attribute.setUserId(userId);
         attribute.setPlayerId(playerId);
         attribute.setCreated(now);
         attribute.setModified(now);

@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.deleteClient;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.DeleteClientShardedRequest;
-import com.omgservers.dto.user.DeleteClientShardedResponse;
+import com.omgservers.dto.user.DeleteClientRequest;
+import com.omgservers.dto.user.DeleteClientResponse;
 import com.omgservers.module.user.impl.operation.deleteClient.DeleteClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -21,8 +21,8 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteClientShardedResponse> deleteClient(final DeleteClientShardedRequest request) {
-        DeleteClientShardedRequest.validate(request);
+    public Uni<DeleteClientResponse> deleteClient(final DeleteClientRequest request) {
+        DeleteClientRequest.validate(request);
 
         final var userId = request.getUserId();
         final var clientId = request.getClientId();
@@ -35,6 +35,6 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
                                 userId,
                                 clientId)))
                 .map(ChangeContext::getResult)
-                .map(DeleteClientShardedResponse::new);
+                .map(DeleteClientResponse::new);
     }
 }

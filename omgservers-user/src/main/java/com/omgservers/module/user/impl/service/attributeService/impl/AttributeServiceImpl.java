@@ -1,20 +1,20 @@
 package com.omgservers.module.user.impl.service.attributeService.impl;
 
-import com.omgservers.dto.user.DeleteAttributeShardedResponse;
-import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.GetAttributeShardedResponse;
-import com.omgservers.dto.user.GetAttributeShardedRequest;
-import com.omgservers.dto.user.GetPlayerAttributesShardedResponse;
-import com.omgservers.dto.user.GetPlayerAttributesShardedRequest;
-import com.omgservers.dto.user.SyncAttributeShardedResponse;
-import com.omgservers.dto.user.SyncAttributeShardedRequest;
+import com.omgservers.dto.user.DeleteAttributeResponse;
+import com.omgservers.dto.user.DeleteAttributeRequest;
+import com.omgservers.dto.user.GetAttributeResponse;
+import com.omgservers.dto.user.GetAttributeRequest;
+import com.omgservers.dto.user.GetPlayerAttributesResponse;
+import com.omgservers.dto.user.GetPlayerAttributesRequest;
+import com.omgservers.dto.user.SyncAttributeResponse;
+import com.omgservers.dto.user.SyncAttributeRequest;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.service.attributeService.AttributeService;
 import com.omgservers.module.user.impl.service.attributeService.impl.method.deleteAttribute.DeleteAttributeMethod;
 import com.omgservers.module.user.impl.service.attributeService.impl.method.getAttribute.GetAttributeMethod;
 import com.omgservers.module.user.impl.service.attributeService.impl.method.getPlayerAttributes.GetPlayerAttributesMethod;
 import com.omgservers.module.user.impl.service.attributeService.impl.method.syncAttribute.SyncAttributeMethod;
-import com.omgservers.module.user.impl.service.userWebService.impl.serviceApi.UserServiceApi;
+import com.omgservers.module.user.impl.service.webService.impl.serviceApi.UserApi;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,38 +36,38 @@ class AttributeServiceImpl implements AttributeService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     @Override
-    public Uni<GetAttributeShardedResponse> getAttribute(GetAttributeShardedRequest request) {
+    public Uni<GetAttributeResponse> getAttribute(GetAttributeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetAttributeShardedRequest::validate,
+                GetAttributeRequest::validate,
                 getUserModuleClientOperation::getClient,
-                UserServiceApi::getAttribute,
+                UserApi::getAttribute,
                 getAttributeMethod::getAttribute);
     }
 
     @Override
-    public Uni<GetPlayerAttributesShardedResponse> getPlayerAttributes(GetPlayerAttributesShardedRequest request) {
+    public Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetPlayerAttributesShardedRequest::validate,
+                GetPlayerAttributesRequest::validate,
                 getUserModuleClientOperation::getClient,
-                UserServiceApi::getPlayerAttributes,
+                UserApi::getPlayerAttributes,
                 getPlayerAttributesMethod::getPlayerAttributes);
     }
 
     @Override
-    public Uni<SyncAttributeShardedResponse> syncAttribute(SyncAttributeShardedRequest request) {
+    public Uni<SyncAttributeResponse> syncAttribute(SyncAttributeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncAttributeShardedRequest::validate,
+                SyncAttributeRequest::validate,
                 getUserModuleClientOperation::getClient,
-                UserServiceApi::syncAttribute,
+                UserApi::syncAttribute,
                 syncAttributeMethod::syncAttribute);
     }
 
     @Override
-    public Uni<DeleteAttributeShardedResponse> deleteAttribute(DeleteAttributeShardedRequest request) {
+    public Uni<DeleteAttributeResponse> deleteAttribute(DeleteAttributeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteAttributeShardedRequest::validate,
+                DeleteAttributeRequest::validate,
                 getUserModuleClientOperation::getClient,
-                UserServiceApi::deleteAttribute,
+                UserApi::deleteAttribute,
                 deleteAttributeMethod::deleteAttribute);
     }
 }

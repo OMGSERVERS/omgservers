@@ -1,18 +1,18 @@
 package com.omgservers.module.user.impl.service.clientService;
 
-import com.omgservers.dto.user.DeleteClientShardedResponse;
-import com.omgservers.dto.user.DeleteClientShardedRequest;
-import com.omgservers.dto.user.GetClientShardedResponse;
-import com.omgservers.dto.user.GetClientShardedRequest;
-import com.omgservers.dto.user.SyncClientShardedResponse;
-import com.omgservers.dto.user.SyncClientShardedRequest;
+import com.omgservers.dto.user.DeleteClientResponse;
+import com.omgservers.dto.user.DeleteClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.SyncClientResponse;
+import com.omgservers.dto.user.SyncClientRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface ClientService {
 
-    Uni<SyncClientShardedResponse> syncClient(SyncClientShardedRequest request);
+    Uni<SyncClientResponse> syncClient(SyncClientRequest request);
 
-    Uni<GetClientShardedResponse> getClient(GetClientShardedRequest request);
+    Uni<GetClientResponse> getClient(GetClientRequest request);
 
-    Uni<DeleteClientShardedResponse> deleteClient(DeleteClientShardedRequest request);
+    Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
 }

@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.operation.deleteTenant;
 
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteTenantOperationImpl implements DeleteTenantOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,7 +25,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_tenant

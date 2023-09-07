@@ -54,20 +54,20 @@ class SelectPlayerAttributesOperationTest extends Assertions {
     void givenAttributes_whenSelectPlayerAttributes_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
-        final var userUuid = user.getId();
+        final var userId = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(userUuid, stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var player = playerModelFactory.create(userId, stageId(), PlayerConfigModel.create());
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var attribute1 = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
+        final var attribute1 = attributeModelFactory.create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute1);
-        final var attribute2 = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
+        final var attribute2 = attributeModelFactory.create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute2);
-        final var attribute3 = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
+        final var attribute3 = attributeModelFactory.create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute3);
 
         final var selectedAttributes = selectAllAttributesOperation
-                .selectPlayerAttributes(TIMEOUT, pgPool, shard, playerUuid);
+                .selectPlayerAttributes(TIMEOUT, pgPool, shard, userId, playerId);
         assertEquals(3, selectedAttributes.size());
         assertTrue(selectedAttributes.contains(attribute1));
         assertTrue(selectedAttributes.contains(attribute2));
@@ -79,7 +79,7 @@ class SelectPlayerAttributesOperationTest extends Assertions {
         final var shard = 0;
 
         final var selectedAttributes = selectAllAttributesOperation
-                .selectPlayerAttributes(TIMEOUT, pgPool, shard, playerId());
+                .selectPlayerAttributes(TIMEOUT, pgPool, shard, userId(), playerId());
         assertTrue(selectedAttributes.isEmpty());
     }
 
@@ -88,6 +88,10 @@ class SelectPlayerAttributesOperationTest extends Assertions {
     }
 
     Long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long userId() {
         return generateIdOperation.generateId();
     }
 

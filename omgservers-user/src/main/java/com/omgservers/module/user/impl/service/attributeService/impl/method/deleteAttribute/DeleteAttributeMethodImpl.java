@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.attributeService.impl.method.deleteAttribute;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.DeleteAttributeShardedRequest;
-import com.omgservers.dto.user.DeleteAttributeShardedResponse;
+import com.omgservers.dto.user.DeleteAttributeRequest;
+import com.omgservers.dto.user.DeleteAttributeResponse;
 import com.omgservers.module.user.impl.operation.deleteAttribute.DeleteAttributeOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -21,8 +21,8 @@ class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteAttributeShardedResponse> deleteAttribute(final DeleteAttributeShardedRequest request) {
-        DeleteAttributeShardedRequest.validate(request);
+    public Uni<DeleteAttributeResponse> deleteAttribute(final DeleteAttributeRequest request) {
+        DeleteAttributeRequest.validate(request);
 
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
@@ -38,6 +38,6 @@ class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
                                 playerId,
                                 name)))
                 .map(ChangeContext::getResult)
-                .map(DeleteAttributeShardedResponse::new);
+                .map(DeleteAttributeResponse::new);
     }
 }

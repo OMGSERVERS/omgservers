@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.userService.impl.method.respondClient;
 
 import com.omgservers.dto.gateway.RespondMessageRequest;
-import com.omgservers.dto.user.GetClientShardedRequest;
-import com.omgservers.dto.user.GetClientShardedResponse;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.module.gateway.GatewayModule;
@@ -22,7 +22,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
 
     @Override
     public Uni<Void> respondClient(RespondClientRequest request) {
-        RespondClientRequest.validateRespondClientServiceRequest(request);
+        RespondClientRequest.validate(request);
 
         final var userId = request.getUserId();
         final var clientId = request.getClientId();
@@ -39,8 +39,8 @@ class RespondClientMethodImpl implements RespondClientMethod {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientShardedRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientShardedResponse::getClient);
+                .map(GetClientResponse::getClient);
     }
 }

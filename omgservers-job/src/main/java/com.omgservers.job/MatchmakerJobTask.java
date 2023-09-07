@@ -1,8 +1,8 @@
 package com.omgservers.job;
 
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerShardedRequest;
+import com.omgservers.dto.matchmaker.ExecuteMatchmakerRequest;
 import com.omgservers.model.job.JobType;
-import com.omgservers.module.internal.impl.service.jobShardedService.impl.JobTask;
+import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,9 +24,9 @@ public class MatchmakerJobTask implements JobTask {
 
     @Override
     public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new ExecuteMatchmakerShardedRequest(entity);
+        final var request = new ExecuteMatchmakerRequest(entity);
         //TODO: handle response (proceed or not)
-        return matchmakerModule.getMatchmakerShardedService().executeMatchmaker(request)
+        return matchmakerModule.getMatchmakerService().executeMatchmaker(request)
                 .replaceWith(true);
     }
 }

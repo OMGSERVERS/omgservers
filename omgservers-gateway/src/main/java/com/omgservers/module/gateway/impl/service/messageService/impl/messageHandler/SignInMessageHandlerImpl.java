@@ -1,10 +1,10 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
-import com.omgservers.module.internal.factory.EventModelFactory;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SignInMessageHandlerImpl implements MessageHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final GetConfigOperation getConfigOperation;
 
@@ -43,8 +43,8 @@ class SignInMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventShardedRequest(event);
-        return internalModule.getEventShardedService().fireEvent(request)
+        final var request = new FireEventRequest(event);
+        return systemModule.getEventService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

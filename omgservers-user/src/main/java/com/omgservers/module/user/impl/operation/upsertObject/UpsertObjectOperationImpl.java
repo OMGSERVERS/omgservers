@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.operation.upsertObject;
 
 import com.omgservers.model.object.ObjectModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertObjectOperationImpl implements UpsertObjectOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -27,16 +27,17 @@ class UpsertObjectOperationImpl implements UpsertObjectOperation {
                                      final int shard,
                                      final Long userId,
                                      final ObjectModel object) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_object(id, player_id, created, modified, name, body)
-                        values($1, $2, $3, $4, $5, $6)
+                        insert into $schema.tab_user_object(id, user_id, player_id, created, modified, name, body)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         object.getId(),
+                        object.getUserId(),
                         object.getPlayerId(),
                         object.getCreated().atOffset(ZoneOffset.UTC),
                         object.getModified().atOffset(ZoneOffset.UTC),

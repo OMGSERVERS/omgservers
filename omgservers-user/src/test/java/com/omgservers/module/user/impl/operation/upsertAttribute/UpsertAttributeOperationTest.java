@@ -52,10 +52,10 @@ class UpsertAttributeOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var attribute = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
+        final var attribute = attributeModelFactory.create(user.getId(), playerId, attributeName(), stringValue());
         assertTrue(upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute));
     }
 
@@ -65,9 +65,9 @@ class UpsertAttributeOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var attribute = attributeModelFactory.create(playerUuid, attributeName(), stringValue());
+        final var attribute = attributeModelFactory.create(user.getId(), playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute);
 
         assertFalse(upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute));

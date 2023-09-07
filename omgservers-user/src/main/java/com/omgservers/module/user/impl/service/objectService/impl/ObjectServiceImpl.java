@@ -1,11 +1,11 @@
 package com.omgservers.module.user.impl.service.objectService.impl;
 
-import com.omgservers.dto.user.DeleteObjectShardedResponse;
-import com.omgservers.dto.user.DeleteObjectShardedRequest;
-import com.omgservers.dto.user.GetObjectShardedResponse;
-import com.omgservers.dto.user.GetObjectShardedRequest;
-import com.omgservers.dto.user.SyncObjectShardedResponse;
-import com.omgservers.dto.user.SyncObjectShardedRequest;
+import com.omgservers.dto.user.DeleteObjectResponse;
+import com.omgservers.dto.user.DeleteObjectRequest;
+import com.omgservers.dto.user.GetObjectResponse;
+import com.omgservers.dto.user.GetObjectRequest;
+import com.omgservers.dto.user.SyncObjectResponse;
+import com.omgservers.dto.user.SyncObjectRequest;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.objectService.ObjectService;
@@ -34,27 +34,27 @@ class ObjectServiceImpl implements ObjectService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetObjectShardedResponse> getObject(GetObjectShardedRequest request) {
+    public Uni<GetObjectResponse> getObject(GetObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetObjectShardedRequest::validate,
+                GetObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getObject,
                 getObjectMethod::getObject);
     }
 
     @Override
-    public Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request) {
+    public Uni<SyncObjectResponse> syncObject(SyncObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncObjectShardedRequest::validate,
+                SyncObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncObject,
                 syncObjectMethod::syncObject);
     }
 
     @Override
-    public Uni<DeleteObjectShardedResponse> deleteObject(DeleteObjectShardedRequest request) {
+    public Uni<DeleteObjectResponse> deleteObject(DeleteObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteObjectShardedRequest::validate,
+                DeleteObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deleteObject,
                 deleteObjectMethod::deleteObject);

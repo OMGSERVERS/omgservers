@@ -40,7 +40,7 @@ import jakarta.ws.rs.Path;
 
 import java.time.Duration;
 
-@Path("/omgservers/service-api/user-api/v1/request")
+@Path("/omgservers/user-api/v1/request")
 public interface UserServiceApi {
 
     @PUT

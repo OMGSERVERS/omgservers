@@ -1,15 +1,15 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.matchmaker.SyncMatchmakerShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedRequest;
-import com.omgservers.dto.tenant.GetStageShardedResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.dto.tenant.GetStageRequest;
+import com.omgservers.dto.tenant.GetStageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.stage.StageModel;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.tenant.TenantModule;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StageCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final InternalModule internalModule;
+    final SystemModule systemModule;
     final TenantModule tenantModule;
     final UserModule userModule;
 
@@ -56,15 +56,15 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StageModel> getStage(Long tenantId, Long id) {
-        final var request = new GetStageShardedRequest(tenantId, id);
-        return tenantModule.getStageShardedService().getStage(request)
-                .map(GetStageShardedResponse::getStage);
+        final var request = new GetStageRequest(tenantId, id);
+        return tenantModule.getStageService().getStage(request)
+                .map(GetStageResponse::getStage);
     }
 
     Uni<MatchmakerModel> syncMatchmaker(final Long matchmakerId, final Long tenantId, final Long stageId) {
         final var matchmaker = matchmakerModelFactory.create(matchmakerId, tenantId, stageId);
-        final var request = new SyncMatchmakerShardedRequest(matchmaker);
-        return matchmakerModule.getMatchmakerShardedService().syncMatchmaker(request)
+        final var request = new SyncMatchmakerRequest(matchmaker);
+        return matchmakerModule.getMatchmakerService().syncMatchmaker(request)
                 .replaceWith(matchmaker);
     }
 }

@@ -10,11 +10,17 @@ import java.time.Duration;
 public interface SelectObjectOperation {
     Uni<ObjectModel> selectObject(SqlConnection sqlConnection,
                                   int shard,
+                                  Long userId,
                                   Long playerId,
                                   String name);
 
-    default ObjectModel selectObject(long timeout, PgPool pgPool, int shard, Long playerId, String name) {
-        return pgPool.withTransaction(sqlConnection -> selectObject(sqlConnection, shard, playerId, name))
+    default ObjectModel selectObject(long timeout,
+                                     PgPool pgPool,
+                                     int shard,
+                                     Long userId,
+                                     Long playerId,
+                                     String name) {
+        return pgPool.withTransaction(sqlConnection -> selectObject(sqlConnection, shard, userId, playerId, name))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

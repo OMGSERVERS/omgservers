@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.objectService.impl.method.syncObject;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.SyncObjectShardedRequest;
-import com.omgservers.dto.user.SyncObjectShardedResponse;
+import com.omgservers.dto.user.SyncObjectRequest;
+import com.omgservers.dto.user.SyncObjectResponse;
 import com.omgservers.module.user.impl.operation.upsertObject.UpsertObjectOperation;
 import com.omgservers.module.user.impl.operation.validateObject.ValidateObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -23,8 +23,8 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncObjectShardedResponse> syncObject(SyncObjectShardedRequest request) {
-        SyncObjectShardedRequest.validate(request);
+    public Uni<SyncObjectResponse> syncObject(SyncObjectRequest request) {
+        SyncObjectRequest.validate(request);
 
         final var userId = request.getUserId();
         final var object = request.getObject();
@@ -38,6 +38,6 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
                                 userId,
                                 object)))
                 .map(ChangeContext::getResult)
-                .map(SyncObjectShardedResponse::new);
+                .map(SyncObjectResponse::new);
     }
 }

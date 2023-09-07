@@ -1,6 +1,6 @@
 package com.omgservers.operation.calculateShard;
 
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.dto.internal.GetIndexResponse;
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 class CalculateShardOperationImpl implements CalculateShardOperation {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final CalculateCrc16Operation calculateCrc16Operation;
     final GetConfigOperation getConfigOperation;
@@ -39,7 +39,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
     @Override
     public Uni<ShardModel> calculateShard(String indexName, List<String> keys) {
         final var getIndexInternalRequest = new GetIndexRequest(indexName);
-        return internalModule.getIndexService().getIndex(getIndexInternalRequest)
+        return systemModule.getIndexService().getIndex(getIndexInternalRequest)
                 .map(GetIndexResponse::getIndex)
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);

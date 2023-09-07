@@ -1,8 +1,8 @@
 package com.omgservers.module.matchmaker;
 
-import com.omgservers.module.matchmaker.impl.service.matchmakerShardedService.MatchmakerShardedService;
+import com.omgservers.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
 
 public interface MatchmakerModule {
 
-    MatchmakerShardedService getMatchmakerShardedService();
+    MatchmakerService getMatchmakerService();
 }

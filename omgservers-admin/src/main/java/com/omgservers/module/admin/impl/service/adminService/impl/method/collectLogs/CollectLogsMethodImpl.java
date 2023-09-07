@@ -2,7 +2,7 @@ package com.omgservers.module.admin.impl.service.adminService.impl.method.collec
 
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
-import com.omgservers.module.internal.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
+import com.omgservers.module.system.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import com.omgservers.dto.internal.ViewLogRequest;
 import com.omgservers.operation.getServers.GetServersOperation;
 import com.omgservers.model.serverLog.ServerLogModel;

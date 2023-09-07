@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.getClient;
 
-import com.omgservers.dto.user.GetClientShardedRequest;
-import com.omgservers.dto.user.GetClientShardedResponse;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.exception.ServerSideGoneException;
 import com.omgservers.module.user.impl.operation.selectClient.SelectClientOperation;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
@@ -21,8 +21,8 @@ class GetClientMethodImpl implements GetClientMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetClientShardedResponse> getClient(final GetClientShardedRequest request) {
-        GetClientShardedRequest.validate(request);
+    public Uni<GetClientResponse> getClient(final GetClientRequest request) {
+        GetClientRequest.validate(request);
 
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
@@ -36,6 +36,6 @@ class GetClientMethodImpl implements GetClientMethod {
                     return pgPool.withTransaction(sqlConnection -> selectClientOperation
                             .selectClient(sqlConnection, shard, userId, clientId));
                 })
-                .map(GetClientShardedResponse::new);
+                .map(GetClientResponse::new);
     }
 }

@@ -2,19 +2,14 @@ package com.omgservers.module.matchmaker.impl.operation.selectMatchesByMatchmake
 
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.matchmaker.impl.mappers.MatchModelMapper;
-import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
-import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.Tuple;
-import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -22,14 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchmakerIdOperation {
 
-    private static final String SQL = """
-            select id, matchmaker_id, created, modified, runtime_id, config
-            from $schema.tab_matchmaker_match
-            where matchmaker_id = $1
-            """;
-
-    final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final ExecuteSelectListOperation executeSelectListOperation;
 
     final MatchModelMapper matchModelMapper;
 
@@ -37,37 +25,16 @@ class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchma
     public Uni<List<MatchModel>> selectMatchesByMatchmakerId(final SqlConnection sqlConnection,
                                                              final int shard,
                                                              final Long matchmakerId) {
-        if (sqlConnection == null) {
-            throw new IllegalArgumentException("sqlConnection is null");
-        }
-        if (matchmakerId == null) {
-            throw new IllegalArgumentException("uuid is null");
-        }
-
-        String preparedSql = prepareShardSqlOperation.prepareShardSql(SQL, shard);
-        return sqlConnection.preparedQuery(preparedSql)
-                .execute(Tuple.of(matchmakerId))
-                .map(RowSet::iterator)
-                .map(iterator -> {
-                    final List<MatchModel> matches = new ArrayList<MatchModel>();
-                    while (iterator.hasNext()) {
-                        try {
-                            final var match = matchModelMapper.fromRow(iterator.next());
-                            matches.add(match);
-                        } catch (IOException e) {
-                            log.error("Match's config can't be parsed, " +
-                                    "matchmakerId={}, {}", matchmakerId, e.getMessage());
-                        }
-                    }
-                    if (matches.size() > 0) {
-                        log.info("Matches were selected, " +
-                                "count={}, matchmakerId={}", matches.size(), matchmakerId);
-                    } else {
-                        log.info("Matches were not found, matchmakerId={}", matchmakerId);
-                    }
-                    return matches;
-                })
-                .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+        return executeSelectListOperation.executeSelectList(
+                sqlConnection,
+                shard,
+                """
+                        select id, matchmaker_id, created, modified, runtime_id, config
+                        from $schema.tab_matchmaker_match
+                        where matchmaker_id = $1
+                        """,
+                Collections.singletonList(matchmakerId),
+                "Match",
+                matchModelMapper::fromRow);
     }
 }

@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.operation.upsertProjectPermission;
 
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -27,7 +27,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                                                 final int shard,
                                                 final Long tenantId,
                                                 final ProjectPermissionModel permission) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_project_permission(id, project_id, created, user_id, permission)

@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.service.clientService.impl.method.syncClient;
 
-import com.omgservers.dto.user.SyncClientShardedRequest;
-import com.omgservers.dto.user.SyncClientShardedResponse;
+import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.SyncClientResponse;
 import com.omgservers.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -21,8 +21,8 @@ class SyncClientMethodImpl implements SyncClientMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncClientShardedResponse> syncClient(final SyncClientShardedRequest request) {
-        SyncClientShardedRequest.validate(request);
+    public Uni<SyncClientResponse> syncClient(final SyncClientRequest request) {
+        SyncClientRequest.validate(request);
 
         final var client = request.getClient();
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -34,6 +34,6 @@ class SyncClientMethodImpl implements SyncClientMethod {
                                 client)
                 ))
                 .map(ChangeContext::getResult)
-                .map(SyncClientShardedResponse::new);
+                .map(SyncClientResponse::new);
     }
 }

@@ -1,14 +1,14 @@
 package com.omgservers.module.user.impl.service.playerService.impl.method.getOrCreatePlayer;
 
-import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.SyncPlayerShardedRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
+import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.module.user.factory.PlayerModelFactory;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerResponse;
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -27,28 +27,28 @@ public class GetOrCreatePlayerHelpMethodImpl implements GetOrCreatePlayerHelpMet
     final GenerateIdOperation generateIdOperation;
 
     @Override
-    public Uni<GetOrCreatePlayerHelpResponse> getOrCreatePlayer(GetOrCreatePlayerHelpRequest request) {
-        GetOrCreatePlayerHelpRequest.validate(request);
+    public Uni<GetOrCreatePlayerResponse> getOrCreatePlayer(GetOrCreatePlayerRequest request) {
+        GetOrCreatePlayerRequest.validate(request);
 
         final var userId = request.getUserId();
         final var stageId = request.getStageId();
         return getPlayer(userId, stageId)
-                .map(player -> new GetOrCreatePlayerHelpResponse(false, player))
+                .map(player -> new GetOrCreatePlayerResponse(false, player))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> syncPlayer(userId, stageId)
-                        .map(player -> new GetOrCreatePlayerHelpResponse(true, player)));
+                        .map(player -> new GetOrCreatePlayerResponse(true, player)));
     }
 
     Uni<PlayerModel> getPlayer(Long userId, Long stageId) {
-        final var request = new GetPlayerShardedRequest(userId, stageId);
+        final var request = new GetPlayerRequest(userId, stageId);
         return playerService.getPlayer(request)
-                .map(GetPlayerShardedResponse::getPlayer);
+                .map(GetPlayerResponse::getPlayer);
     }
 
     Uni<PlayerModel> syncPlayer(Long userId, Long stageId) {
         final var player = playerModelFactory
                 .create(userId, stageId, PlayerConfigModel.create());
-        final var request = new SyncPlayerShardedRequest(player);
+        final var request = new SyncPlayerRequest(player);
         return playerService.syncPlayer(request)
                 .replaceWith(player);
     }

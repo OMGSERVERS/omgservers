@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
 
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
@@ -32,7 +32,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final PlayerModel player) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_player(id, user_id, created, modified, stage_id, config)

@@ -8,10 +8,10 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface SelectMatchOperation {
-    Uni<MatchModel> selectMatch(SqlConnection sqlConnection, int shard, Long id);
+    Uni<MatchModel> selectMatch(SqlConnection sqlConnection, int shard, Long matchmakerId, Long id);
 
-    default MatchModel selectMatch(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectMatch(sqlConnection, shard, id))
+    default MatchModel selectMatch(long timeout, PgPool pgPool, int shard, Long matchmakerId, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectMatch(sqlConnection, shard, matchmakerId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

@@ -2,7 +2,7 @@ package com.omgservers.module.admin.impl.service.adminWebService.impl;
 
 import com.omgservers.module.admin.impl.service.adminService.AdminService;
 import com.omgservers.module.admin.impl.service.adminWebService.AdminWebService;
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.system.SystemModule;
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class AdminWebServiceImpl implements AdminWebService {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
     final AdminService adminService;
 
     @Override
@@ -53,7 +53,7 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request) {
         final var name = request.getName();
-        return internalModule.getIndexService().getIndex(new GetIndexRequest(name))
+        return systemModule.getIndexService().getIndex(new GetIndexRequest(name))
                 .map(GetIndexResponse::getIndex)
                 .map(GetIndexAdminResponse::new);
     }
@@ -61,19 +61,19 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<Void> syncIndex(SyncIndexAdminRequest request) {
         final var index = request.getIndex();
-        return internalModule.getIndexService().syncIndex(new SyncIndexRequest(index));
+        return systemModule.getIndexService().syncIndex(new SyncIndexRequest(index));
     }
 
     @Override
     public Uni<Void> deleteIndex(DeleteIndexAdminRequest request) {
         final var id = request.getId();
-        return internalModule.getIndexService().deleteIndex(new DeleteIndexRequest(id));
+        return systemModule.getIndexService().deleteIndex(new DeleteIndexRequest(id));
     }
 
     @Override
     public Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request) {
         final var username = request.getUsername();
-        return internalModule.getServiceAccountService()
+        return systemModule.getServiceAccountService()
                 .getServiceAccount(new GetServiceAccountRequest(username))
                 .map(GetServiceAccountResponse::getServiceAccount)
                 .map(GetServiceAccountAdminResponse::new);
@@ -82,14 +82,14 @@ class AdminWebServiceImpl implements AdminWebService {
     @Override
     public Uni<Void> syncServiceAccount(SyncServiceAccountAdminRequest request) {
         final var serviceAccount = request.getServiceAccount();
-        return internalModule.getServiceAccountService()
+        return systemModule.getServiceAccountService()
                 .syncServiceAccount(new SyncServiceAccountRequest(serviceAccount));
     }
 
     @Override
     public Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request) {
         final var id = request.getId();
-        return internalModule.getServiceAccountService()
+        return systemModule.getServiceAccountService()
                 .deleteServiceAccount(new DeleteServiceAccountRequest(id));
     }
 

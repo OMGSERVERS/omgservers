@@ -1,6 +1,6 @@
 package com.omgservers.operation.getServers;
 
-import com.omgservers.module.internal.InternalModule;
+import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.dto.internal.GetIndexRequest;
@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 class GetServersOperationImpl implements GetServersOperation {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final CalculateCrc16Operation calculateCrc16Operation;
     final GetConfigOperation getConfigOperation;
@@ -28,7 +28,7 @@ class GetServersOperationImpl implements GetServersOperation {
     public Uni<List<URI>> getServers() {
         final var indexName = getConfigOperation.getConfig().indexName();
         final var getIndexInternalRequest = new GetIndexRequest(indexName);
-        return internalModule.getIndexService().getIndex(getIndexInternalRequest)
+        return systemModule.getIndexService().getIndex(getIndexInternalRequest)
                 .map(GetIndexResponse::getIndex)
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerModel::getUri)

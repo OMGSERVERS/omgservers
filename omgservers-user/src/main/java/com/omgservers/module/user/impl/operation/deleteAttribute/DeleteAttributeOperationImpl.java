@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.operation.deleteAttribute;
 
-import com.omgservers.module.internal.factory.LogModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChange.ExecuteChangeOperation;
+import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
 
-    final ExecuteChangeOperation executeChangeOperation;
+    final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,13 +26,14 @@ class DeleteAttributeOperationImpl implements DeleteAttributeOperation {
                                         final Long userId,
                                         final Long playerId,
                                         final String name) {
-        return executeChangeOperation.executeChange(
+        return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_user_attribute
-                        where player_id = $1 and attribute_name = $2
+                        where user_id = $1 and player_id = $2 and attribute_name = $3
                         """,
                 Arrays.asList(
+                        userId,
                         playerId,
                         name
                 ),

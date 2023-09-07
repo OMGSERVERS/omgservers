@@ -1,8 +1,8 @@
 package com.omgservers.module.user.impl.service.playerService.impl.method.deletePlayer;
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.dto.user.DeletePlayerShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardedResponse;
+import com.omgservers.dto.user.DeletePlayerRequest;
+import com.omgservers.dto.user.DeletePlayerResponse;
 import com.omgservers.module.user.impl.operation.deletePlayer.DeletePlayerOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -21,8 +21,8 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeletePlayerShardedResponse> deletePlayer(final DeletePlayerShardedRequest request) {
-        DeletePlayerShardedRequest.validate(request);
+    public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
+        DeletePlayerRequest.validate(request);
 
         final var userId = request.getUserId();
         final var id = request.getId();
@@ -35,6 +35,6 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
                                 userId,
                                 id)))
                 .map(ChangeContext::getResult)
-                .map(DeletePlayerShardedResponse::new);
+                .map(DeletePlayerResponse::new);
     }
 }

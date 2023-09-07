@@ -1,13 +1,13 @@
 package com.omgservers.module.user.impl.service.playerService.impl;
 
-import com.omgservers.dto.user.DeletePlayerShardedRequest;
-import com.omgservers.dto.user.DeletePlayerShardedResponse;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.dto.user.GetPlayerShardedRequest;
-import com.omgservers.dto.user.GetPlayerShardedResponse;
-import com.omgservers.dto.user.SyncPlayerShardedRequest;
-import com.omgservers.dto.user.SyncPlayerShardedResponse;
+import com.omgservers.dto.user.DeletePlayerRequest;
+import com.omgservers.dto.user.DeletePlayerResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
+import com.omgservers.dto.user.SyncPlayerRequest;
+import com.omgservers.dto.user.SyncPlayerResponse;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
@@ -36,34 +36,34 @@ public class PlayerServiceImpl implements PlayerService {
     final GetOrCreatePlayerHelpMethod getOrCreatePlayerHelpMethod;
 
     @Override
-    public Uni<GetPlayerShardedResponse> getPlayer(GetPlayerShardedRequest request) {
+    public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetPlayerShardedRequest::validate,
+                GetPlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayer,
                 getPlayerMethod::getPlayer);
     }
 
     @Override
-    public Uni<SyncPlayerShardedResponse> syncPlayer(SyncPlayerShardedRequest request) {
+    public Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncPlayerShardedRequest::validate,
+                SyncPlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncPlayer,
                 syncPlayerMethod::syncPlayer);
     }
 
     @Override
-    public Uni<DeletePlayerShardedResponse> deletePlayer(DeletePlayerShardedRequest request) {
+    public Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeletePlayerShardedRequest::validate,
+                DeletePlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deletePlayer,
                 deletePlayerMethod::deletePlayer);
     }
 
     @Override
-    public Uni<GetOrCreatePlayerHelpResponse> getOrCreatePlayer(GetOrCreatePlayerHelpRequest request) {
+    public Uni<GetOrCreatePlayerResponse> getOrCreatePlayer(GetOrCreatePlayerRequest request) {
         return getOrCreatePlayerHelpMethod.getOrCreatePlayer(request);
     }
 }

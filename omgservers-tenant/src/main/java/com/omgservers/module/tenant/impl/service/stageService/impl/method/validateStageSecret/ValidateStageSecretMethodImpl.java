@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.validateStageSecret;
 
-import com.omgservers.dto.tenant.GetStageShardedRequest;
+import com.omgservers.dto.tenant.GetStageRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretResponse;
-import com.omgservers.module.tenant.impl.service.stageShardedService.StageShardedService;
+import com.omgservers.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
 
-    final StageShardedService stageShardedService;
+    final StageService stageService;
 
     @Override
     public Uni<ValidateStageSecretResponse> validateStageSecret(final ValidateStageSecretRequest request) {
@@ -24,8 +24,8 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageShardedRequest(tenantId, stageId);
-        return stageShardedService.getStage(getStageServiceRequest)
+        final var getStageServiceRequest = new GetStageRequest(tenantId, stageId);
+        return stageService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();
                     if (!stage.getSecret().equals(secret)) {

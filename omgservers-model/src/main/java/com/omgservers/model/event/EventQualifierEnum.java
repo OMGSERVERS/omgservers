@@ -4,6 +4,9 @@ import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
+import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
+import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
+import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
@@ -26,6 +29,9 @@ import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
+import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
+import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
+import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
@@ -40,6 +46,12 @@ import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 
 public enum EventQualifierEnum {
+    INDEX_CREATED(IndexCreatedEventBodyModel.class),
+    INDEX_UPDATED(IndexUpdatedEventBodyModel.class),
+    INDEX_DELETED(IndexDeletedEventBodyModel.class),
+    SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class),
+    SERVICE_ACCOUNT_UPDATED(ServiceAccountUpdatedEventBodyModel.class),
+    SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class),
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_UPDATED(JobUpdatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),

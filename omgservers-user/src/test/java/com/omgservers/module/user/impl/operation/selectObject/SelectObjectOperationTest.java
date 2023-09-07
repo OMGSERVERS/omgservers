@@ -57,24 +57,25 @@ class SelectObjectOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var object1 = objectModelFactory.create(player.getId(), UUID.randomUUID().toString(), new byte[5]);
+        final var object1 = objectModelFactory.create(user.getId(), playerId, UUID.randomUUID().toString(), new byte[5]);
         final var objectName = object1.getName();
         upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object1);
 
-        final var object2 = selectObjectOperation.selectObject(TIMEOUT, pgPool, shard, playerUuid, objectName);
+        final var object2 = selectObjectOperation.selectObject(TIMEOUT, pgPool, shard, user.getId(), playerId, objectName);
         assertEquals(object1, object2);
     }
 
     @Test
     void givenUnknownUuids_whenSelectObject_thenServerSideNotFoundException() {
         final var shard = 0;
+        final var userId = generateIdOperation.generateId();
         final var playerId = generateIdOperation.generateId();
         final var objectName = UUID.randomUUID().toString();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectObjectOperation
-                .selectObject(TIMEOUT, pgPool, shard, playerId, objectName));
+                .selectObject(TIMEOUT, pgPool, shard, userId, playerId, objectName));
     }
 
     long stageId() {

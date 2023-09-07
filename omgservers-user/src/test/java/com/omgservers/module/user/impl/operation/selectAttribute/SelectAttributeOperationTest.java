@@ -55,26 +55,26 @@ class SelectAttributeOperationTest extends Assertions {
     void givenAttribute_whenSelectAttribute_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
-        final var userUuid = user.getId();
+        final var userId = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(userUuid, stageId(), PlayerConfigModel.create());
-        final var playerUuid = player.getId();
+        final var player = playerModelFactory.create(userId, stageId(), PlayerConfigModel.create());
+        final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var attribute1 = attributeModelFactory
-                .create(playerUuid, attributeName(), stringValue());
+                .create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute1);
 
         final var attribute2 = selectAttributeOperation
-                .selectAttribute(TIMEOUT, pgPool, shard, playerUuid, attribute1.getName());
+                .selectAttribute(TIMEOUT, pgPool, shard, userId, playerId, attribute1.getName());
         assertEquals(attribute1, attribute2);
     }
 
     @Test
-    void givenUnknownPlayerUuid_whenSelectAttribute_thenServerSideNotFoundException() {
+    void givenIds_whenSelectAttribute_thenException() {
         final var shard = 0;
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectAttributeOperation
-                .selectAttribute(TIMEOUT, pgPool, shard, playerId(), attributeName()));
+                .selectAttribute(TIMEOUT, pgPool, shard, userId(), playerId(), attributeName()));
         log.info("Exception: {}", exception.getMessage());
     }
 
@@ -83,6 +83,10 @@ class SelectAttributeOperationTest extends Assertions {
     }
 
     Long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long userId() {
         return generateIdOperation.generateId();
     }
 

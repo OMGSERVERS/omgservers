@@ -10,11 +10,17 @@ import java.time.Duration;
 public interface SelectAttributeOperation {
     Uni<AttributeModel> selectAttribute(SqlConnection sqlConnection,
                                         int shard,
+                                        final Long userId,
                                         Long playerId,
                                         String name);
 
-    default AttributeModel selectAttribute(long timeout, PgPool pgPool, int shard, Long playerId, String name) {
-        return pgPool.withTransaction(sqlConnection -> selectAttribute(sqlConnection, shard, playerId, name))
+    default AttributeModel selectAttribute(long timeout,
+                                           PgPool pgPool,
+                                           int shard,
+                                           Long userId,
+                                           Long playerId,
+                                           String name) {
+        return pgPool.withTransaction(sqlConnection -> selectAttribute(sqlConnection, shard, userId, playerId, name))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

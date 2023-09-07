@@ -57,7 +57,7 @@ class DeleteObjectOperationTest extends Assertions {
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var object = objectModelFactory.create(player.getId(), UUID.randomUUID().toString(), new byte[5]);
+        final var object = objectModelFactory.create(user.getId(), player.getId(), UUID.randomUUID().toString(), new byte[5]);
         final var id = object.getId();
         upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object);
 

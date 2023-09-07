@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.websocketService.impl;
 
-import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
@@ -12,8 +12,8 @@ import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.res
 import com.omgservers.module.gateway.impl.service.websocketService.WebsocketService;
 import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpRequest;
 import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.CloseReason;
@@ -30,7 +30,7 @@ import java.time.Duration;
 class WebsocketServiceImpl implements WebsocketService {
     static final int TIMEOUT = 5;
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
 
     final ConnectionService connectionService;
 
@@ -60,8 +60,8 @@ class WebsocketServiceImpl implements WebsocketService {
                 final var clientId = assignedPlayer.getClientId();
                 final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
                 final var event = eventModelFactory.create(eventBody);
-                final var fireEventRoutedRequest = new FireEventShardedRequest(event);
-                internalModule.getEventShardedService().fireEvent(fireEventRoutedRequest)
+                final var fireEventRoutedRequest = new FireEventRequest(event);
+                systemModule.getEventService().fireEvent(fireEventRoutedRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
             } else {
                 log.info("There wasn't assigned player, connection was deleted without notification, " +

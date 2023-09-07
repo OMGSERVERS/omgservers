@@ -1,12 +1,12 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.internal.FireEventShardedRequest;
+import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerHelpResponse;
-import com.omgservers.dto.user.SyncClientShardedRequest;
-import com.omgservers.dto.user.ValidateCredentialsShardedRequest;
-import com.omgservers.dto.user.ValidateCredentialsShardedResponse;
+import com.omgservers.dto.user.GetOrCreatePlayerRequest;
+import com.omgservers.dto.user.GetOrCreatePlayerResponse;
+import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.ValidateCredentialsRequest;
+import com.omgservers.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -14,9 +14,9 @@ import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
-import com.omgservers.module.internal.InternalModule;
-import com.omgservers.module.internal.factory.EventModelFactory;
-import com.omgservers.module.internal.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.ClientModelFactory;
@@ -33,7 +33,7 @@ import java.net.URI;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SignInRequestedEventHandlerImpl implements EventHandler {
 
-    final InternalModule internalModule;
+    final SystemModule systemModule;
     final TenantModule tenantModule;
     final UserModule userModule;
 
@@ -77,15 +77,15 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
     }
 
     Uni<UserModel> validateCredentials(final Long tenantId, final Long userId, final String password) {
-        final var validateCredentialsServiceRequest = new ValidateCredentialsShardedRequest(tenantId, userId, password);
+        final var validateCredentialsServiceRequest = new ValidateCredentialsRequest(tenantId, userId, password);
         return userModule.getUserService().validateCredentials(validateCredentialsServiceRequest)
-                .map(ValidateCredentialsShardedResponse::getUser);
+                .map(ValidateCredentialsResponse::getUser);
     }
 
     Uni<PlayerModel> getOrCreatePlayer(Long userId, Long stageId) {
-        final var createPlayerHelpRequest = new GetOrCreatePlayerHelpRequest(userId, stageId);
+        final var createPlayerHelpRequest = new GetOrCreatePlayerRequest(userId, stageId);
         return userModule.getPlayerService().getOrCreatePlayer(createPlayerHelpRequest)
-                .map(GetOrCreatePlayerHelpResponse::getPlayer);
+                .map(GetOrCreatePlayerResponse::getPlayer);
     }
 
     Uni<ClientModel> createClient(final Long userId,
@@ -93,7 +93,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId) {
         final var client = clientModelFactory.create(userId, playerId, server, connectionId);
-        final var request = new SyncClientShardedRequest(client);
+        final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
     }
@@ -105,8 +105,8 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                         final Long clientId) {
         final var eventBody = new PlayerSignedInEventBodyModel(tenantId, stageId, userId, playerId, clientId);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventShardedRequest(event);
-        return internalModule.getEventShardedService().fireEvent(request)
+        final var request = new FireEventRequest(event);
+        return systemModule.getEventService().fireEvent(request)
                 .replaceWithVoid();
     }
 }

@@ -2,8 +2,8 @@ package com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.impl.r
 
 import com.omgservers.dto.context.HandleHandleEventRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleHandleEventRuntimeCommandResponse;
-import com.omgservers.dto.runtime.GetRuntimeShardedRequest;
-import com.omgservers.dto.runtime.GetRuntimeShardedResponse;
+import com.omgservers.dto.runtime.GetRuntimeRequest;
+import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
@@ -56,8 +56,8 @@ class HandleEventRuntimeCommandHandlerImpl implements RuntimeCommandHandler {
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeShardedRequest(id);
-        return runtimeModule.getRuntimeShardedService().getRuntime(request)
-                .map(GetRuntimeShardedResponse::getRuntime);
+        final var request = new GetRuntimeRequest(id);
+        return runtimeModule.getRuntimeService().getRuntime(request)
+                .map(GetRuntimeResponse::getRuntime);
     }
 }
