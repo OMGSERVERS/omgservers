@@ -9,8 +9,8 @@ import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 
 public enum RuntimeCommandQualifierEnum {
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
-    STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
     UPDATE_RUNTIME(UpdateRuntimeCommandBodyModel.class),
+    STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
     ADD_PLAYER(AddPlayerRuntimeCommandBodyModel.class),
     DELETE_PLAYER(DeletePlayerRuntimeCommandBodyModel.class),
     HANDLE_EVENT(HandleEventRuntimeCommandBodyModel.class);

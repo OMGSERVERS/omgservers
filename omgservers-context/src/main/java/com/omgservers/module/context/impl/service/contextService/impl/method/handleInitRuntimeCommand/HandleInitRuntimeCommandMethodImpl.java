@@ -3,7 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleInitRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleInitRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaInitRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeLuaEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -28,13 +28,7 @@ class HandleInitRuntimeCommandMethodImpl implements HandleInitRuntimeCommandMeth
         final var runtimeId = request.getRuntimeId();
 
         final var luaEvent = new LuaInitRuntimeCommandReceivedEvent(runtimeId);
-        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
-                        tenantId,
-                        versionId,
-                        matchmakerId,
-                        matchId,
-                        runtimeId,
-                        luaEvent)
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(runtimeId, luaEvent)
                 .replaceWith(new HandleInitRuntimeCommandResponse(true));
     }
 }

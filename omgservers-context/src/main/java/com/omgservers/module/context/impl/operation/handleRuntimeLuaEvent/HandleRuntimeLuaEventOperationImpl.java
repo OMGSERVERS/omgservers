@@ -1,4 +1,4 @@
-package com.omgservers.module.context.impl.operation.handlePlayerLuaEvent;
+package com.omgservers.module.context.impl.operation.handleRuntimeLuaEvent;
 
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.module.context.impl.luaEvent.LuaEvent;
@@ -12,16 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class HandlePlayerLuaEventOperationImpl implements HandlePlayerLuaEventOperation {
+class HandleRuntimeLuaEventOperationImpl implements HandleRuntimeLuaEventOperation {
 
     final LuaInstanceCache cache;
 
     @Override
-    public Uni<Boolean> handlePlayerLuaEvent(final Long clientId, final LuaEvent luaEvent) {
-        final var cacheKey = clientId;
+    public Uni<Boolean> handleRuntimeLuaEvent(final Long runtimeId, final LuaEvent luaEvent) {
+        final var cacheKey = runtimeId;
         return Uni.createFrom().item(cache.getValue(cacheKey))
-                .onItem().ifNull().failWith(new ServerSideConflictException("player lua instance was not created for, " +
-                        "clientId=" + clientId))
+                .onItem().ifNull().failWith(new ServerSideConflictException("runtime lua instance was not created for, " +
+                        "runtimeId=" + runtimeId))
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(luaInstance -> luaInstance.handleEvent(luaEvent));
     }

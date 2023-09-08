@@ -1,5 +1,9 @@
 package com.omgservers.module.context.impl.service.contextService.impl;
 
+import com.omgservers.dto.context.CreateLuaInstanceForPlayerEventsRequest;
+import com.omgservers.dto.context.CreateLuaInstanceForPlayerEventsResponse;
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsRequest;
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsResponse;
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandResponse;
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandRequest;
@@ -17,6 +21,8 @@ import com.omgservers.dto.context.HandleStopRuntimeCommandResponse;
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import com.omgservers.module.context.impl.service.contextService.ContextService;
+import com.omgservers.module.context.impl.service.contextService.impl.method.createLuaInstanceForPlayerEvents.CreateLuaInstanceForPlayerEventsMethod;
+import com.omgservers.module.context.impl.service.contextService.impl.method.createLuaInstanceForRuntimeEvents.CreateLuaInstanceForRuntimeEventsMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleAddPlayerRuntimeCommand.HandleAddPlayerRuntimeCommandMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleDeletePlayerRuntimeCommand.HandleDeletePlayerRuntimeCommandMethod;
 import com.omgservers.module.context.impl.service.contextService.impl.method.handleHandleEventRuntimeCommand.HandleHandleEventRuntimeCommandMethod;
@@ -35,15 +41,22 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ContextServiceImpl implements ContextService {
 
+    final CreateLuaInstanceForPlayerEventsMethod createLuaInstanceForPlayerEventsMethod;
     final HandlePlayerSignedUpEventMethod handlePlayerSignedUpEventHelpMethod;
     final HandlePlayerSignedInEventMethod handlePlayerSignedInEventHelpMethod;
 
-    final HandleHandleEventRuntimeCommandMethod handleHandleEventRuntimeCommandMethod;
+    final CreateLuaInstanceForRuntimeEventsMethod createLuaInstanceForRuntimeEventsMethod;
     final HandleDeletePlayerRuntimeCommandMethod handleDeletePlayerRuntimeCommandMethod;
+    final HandleHandleEventRuntimeCommandMethod handleHandleEventRuntimeCommandMethod;
     final HandleAddPlayerRuntimeCommandMethod handleAddPlayerRuntimeCommandMethod;
     final HandleUpdateRuntimeCommandMethod handleUpdateRuntimeCommandMethod;
     final HandleInitRuntimeCommandMethod handleInitRuntimeCommandMethod;
     final HandleStopRuntimeCommandMethod handleStopRuntimeCommandMethod;
+
+    @Override
+    public Uni<CreateLuaInstanceForPlayerEventsResponse> createLuaInstanceForPlayerEvents(final CreateLuaInstanceForPlayerEventsRequest request) {
+        return createLuaInstanceForPlayerEventsMethod.createLuaInstanceForPlayerEvents(request);
+    }
 
     @Override
     public Uni<HandlePlayerSignedUpEventResponse> handlePlayerSignedUpEvent(final HandlePlayerSignedUpEventRequest request) {
@@ -53,6 +66,11 @@ class ContextServiceImpl implements ContextService {
     @Override
     public Uni<HandlePlayerSignedInEventResponse> handlePlayerSignedInEvent(final HandlePlayerSignedInEventRequest request) {
         return handlePlayerSignedInEventHelpMethod.handleLuaPlayerSignedInEvent(request);
+    }
+
+    @Override
+    public Uni<CreateLuaInstanceForRuntimeEventsResponse> createLuaInstanceForRuntimeEvents(final CreateLuaInstanceForRuntimeEventsRequest request) {
+        return createLuaInstanceForRuntimeEventsMethod.createLuaInstanceForRuntimeEvents(request);
     }
 
     @Override

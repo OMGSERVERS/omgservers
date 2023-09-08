@@ -3,7 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaUpdateRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeLuaEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -29,13 +29,7 @@ class HandleUpdateRuntimeCommandMethodImpl implements HandleUpdateRuntimeCommand
         final var step = request.getStep();
 
         final var luaEvent = new LuaUpdateRuntimeCommandReceivedEvent(step);
-        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
-                        tenantId,
-                        versionId,
-                        matchmakerId,
-                        matchId,
-                        runtimeId,
-                        luaEvent)
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(runtimeId, luaEvent)
                 .replaceWith(new HandleUpdateRuntimeCommandResponse(true));
     }
 }

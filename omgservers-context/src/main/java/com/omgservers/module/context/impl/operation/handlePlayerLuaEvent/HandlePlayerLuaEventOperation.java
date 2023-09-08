@@ -4,10 +4,5 @@ import com.omgservers.module.context.impl.luaEvent.LuaEvent;
 import io.smallrye.mutiny.Uni;
 
 public interface HandlePlayerLuaEventOperation {
-    Uni<Boolean> handlePlayerLuaEvent(Long tenantId,
-                                      Long versionId,
-                                      Long userId,
-                                      Long playerId,
-                                      Long clientId,
-                                      LuaEvent luaEvent);
+    Uni<Boolean> handlePlayerLuaEvent(Long clientId, LuaEvent luaEvent);
 }

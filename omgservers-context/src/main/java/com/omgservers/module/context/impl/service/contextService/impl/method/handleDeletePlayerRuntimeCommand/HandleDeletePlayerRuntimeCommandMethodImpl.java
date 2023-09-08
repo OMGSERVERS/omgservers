@@ -3,7 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaDeletePlayerRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeLuaEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -32,13 +32,7 @@ class HandleDeletePlayerRuntimeCommandMethodImpl implements HandleDeletePlayerRu
         final var clientId = request.getClientId();
 
         final var luaEvent = new LuaDeletePlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
-        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
-                        tenantId,
-                        versionId,
-                        matchmakerId,
-                        matchId,
-                        runtimeId,
-                        luaEvent)
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(runtimeId, luaEvent)
                 .replaceWith(new HandleDeletePlayerRuntimeCommandResponse(true));
     }
 }

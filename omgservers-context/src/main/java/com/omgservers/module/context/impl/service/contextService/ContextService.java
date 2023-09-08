@@ -1,5 +1,9 @@
 package com.omgservers.module.context.impl.service.contextService;
 
+import com.omgservers.dto.context.CreateLuaInstanceForPlayerEventsRequest;
+import com.omgservers.dto.context.CreateLuaInstanceForPlayerEventsResponse;
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsRequest;
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsResponse;
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandResponse;
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandRequest;
@@ -19,9 +23,13 @@ import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ContextService {
+    Uni<CreateLuaInstanceForPlayerEventsResponse> createLuaInstanceForPlayerEvents(CreateLuaInstanceForPlayerEventsRequest request);
+
     Uni<HandlePlayerSignedUpEventResponse> handlePlayerSignedUpEvent(HandlePlayerSignedUpEventRequest request);
 
     Uni<HandlePlayerSignedInEventResponse> handlePlayerSignedInEvent(HandlePlayerSignedInEventRequest request);
+
+    Uni<CreateLuaInstanceForRuntimeEventsResponse> createLuaInstanceForRuntimeEvents(CreateLuaInstanceForRuntimeEventsRequest request);
 
     Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request);
 

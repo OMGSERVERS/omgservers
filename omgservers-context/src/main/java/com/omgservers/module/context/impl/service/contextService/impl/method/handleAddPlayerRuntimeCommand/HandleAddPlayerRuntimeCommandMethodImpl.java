@@ -3,7 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleAddPlayerRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaAddPlayerRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeLuaEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -32,13 +32,7 @@ class HandleAddPlayerRuntimeCommandMethodImpl implements HandleAddPlayerRuntimeC
 
         final var luaEvent = new LuaAddPlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
 
-        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
-                        tenantId,
-                        versionId,
-                        matchmakerId,
-                        matchId,
-                        runtimeId,
-                        luaEvent)
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(runtimeId, luaEvent)
                 .replaceWith(new HandleAddPlayerRuntimeCommandResponse(true));
     }
 }

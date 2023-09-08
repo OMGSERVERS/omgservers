@@ -17,12 +17,12 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public synchronized V cacheIfAbsent(K key, V value) {
+    public synchronized boolean cacheIfAbsent(K key, V value) {
         if (cache.containsKey(key)) {
-            return cache.get(key);
+            return false;
         } else {
             cache.put(key, value);
-            return value;
+            return true;
         }
     }
 

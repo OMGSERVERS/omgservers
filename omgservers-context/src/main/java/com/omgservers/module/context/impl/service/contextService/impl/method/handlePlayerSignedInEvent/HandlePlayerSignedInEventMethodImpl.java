@@ -1,9 +1,11 @@
 package com.omgservers.module.context.impl.service.contextService.impl.method.handlePlayerSignedInEvent;
 
+import com.omgservers.dto.context.CreateLuaInstanceForPlayerEventsRequest;
 import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
 import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdResponse;
+import com.omgservers.module.context.ContextModule;
 import com.omgservers.module.context.impl.luaEvent.player.LuaPlayerSignedInEvent;
 import com.omgservers.module.context.impl.operation.handlePlayerLuaEvent.HandlePlayerLuaEventOperation;
 import com.omgservers.module.tenant.TenantModule;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMethod {
 
+    final ContextModule contextModule;
     final TenantModule tenantModule;
 
     final HandlePlayerLuaEventOperation handlePlayerLuaEventOperation;
@@ -33,14 +36,14 @@ class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMe
 
         return getVersionId(tenantId, stageId)
                 .flatMap(versionId -> {
+                    final var createLuaInstanceForPlayerEventsRequest =
+                            new CreateLuaInstanceForPlayerEventsRequest(tenantId, versionId, userId, playerId, clientId);
+                    return contextModule.getContextService()
+                            .createLuaInstanceForPlayerEvents(createLuaInstanceForPlayerEventsRequest);
+                })
+                .flatMap(ignored -> {
                     final var luaEvent = new LuaPlayerSignedInEvent(userId, playerId, clientId);
-                    return handlePlayerLuaEventOperation.handlePlayerLuaEvent(
-                            tenantId,
-                            versionId,
-                            userId,
-                            playerId,
-                            clientId,
-                            luaEvent);
+                    return handlePlayerLuaEventOperation.handlePlayerLuaEvent(clientId, luaEvent);
                 })
                 .replaceWith(new HandlePlayerSignedInEventResponse(true));
     }

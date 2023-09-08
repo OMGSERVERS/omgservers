@@ -1,11 +1,14 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.doRuntimeUpdate;
 
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsRequest;
+import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsResponse;
 import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
+import com.omgservers.module.context.ContextModule;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleRuntimeCommandOperation;
 import com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands.SelectNewRuntimeCommandsOperation;
@@ -29,6 +32,8 @@ import java.util.List;
 @ApplicationScoped
 @AllArgsConstructor
 class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
+
+    final ContextModule contextModule;
 
     final UpdateRuntimeCommandStatusAndStepOperation updateRuntimeCommandStatusAndStepOperation;
     final SelectNewRuntimeCommandsOperation selectNewRuntimeCommandsOperation;
@@ -66,26 +71,35 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                                            final SqlConnection sqlConnection,
                                            final int shard,
                                            final RuntimeModel runtime) {
-        final var runtimeId = runtime.getId();
-        final var step = runtime.getStep() + 1;
-        return selectNewRuntimeCommandsOperation.selectNewRuntimeCommands(sqlConnection, shard, runtimeId)
-                .flatMap(runtimeCommands -> {
-                    final var updateRuntimeCommand = runtimeCommandModelFactory
-                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(step));
-                    // Enrich list by update command every step automatically
-                    runtimeCommands.add(updateRuntimeCommand);
+        return createLuaInstance(runtime)
+                .flatMap(luaInstanceWasCreated -> {
+                    final var runtimeId = runtime.getId();
+                    final var step = runtime.getStep() + 1;
+                    return selectNewRuntimeCommandsOperation.selectNewRuntimeCommands(sqlConnection, shard, runtimeId)
+                            .flatMap(runtimeCommands -> {
+                                final var updateRuntimeCommand = runtimeCommandModelFactory
+                                        .create(runtimeId, new UpdateRuntimeCommandBodyModel(step));
+                                // Enrich list by update command every step automatically
+                                runtimeCommands.add(updateRuntimeCommand);
 
-                    return handleRuntimeCommands(changeContext, sqlConnection, shard, runtimeCommands, step)
-                            .call(affectedCommands -> updateRuntimeStepAndStateOperation
-                                    .updateRuntimeStepAndState(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            runtimeId,
-                                            step,
-                                            runtime.getState()))
-                            .map(UpdateRuntimeResult::new);
+                                return handleRuntimeCommands(changeContext, sqlConnection, shard, runtimeCommands, step)
+                                        .call(affectedCommands -> updateRuntimeStepAndStateOperation
+                                                .updateRuntimeStepAndState(
+                                                        changeContext,
+                                                        sqlConnection,
+                                                        shard,
+                                                        runtimeId,
+                                                        step,
+                                                        runtime.getState()))
+                                        .map(UpdateRuntimeResult::new);
+                            });
                 });
+    }
+
+    Uni<Boolean> createLuaInstance(RuntimeModel runtime) {
+        final var request = new CreateLuaInstanceForRuntimeEventsRequest(runtime);
+        return contextModule.getContextService().createLuaInstanceForRuntimeEvents(request)
+                .map(CreateLuaInstanceForRuntimeEventsResponse::getCreated);
     }
 
     Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final ChangeContext<?> changeContext,
