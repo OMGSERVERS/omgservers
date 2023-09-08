@@ -3,8 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleHandleEventRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleHandleEventRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaHandleEventRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
-import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,8 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandleHandleEventRuntimeCommandMethodImpl implements HandleHandleEventRuntimeCommandMethod {
 
-    final HandleLuaEventOperation handleLuaEventOperation;
-    final CreateLuaRuntimeContextOperation createLuaRuntimeContextOperation;
+    final HandleRuntimeLuaEventOperation handleRuntimeLuaEventOperation;
 
     @Override
     public Uni<HandleHandleEventRuntimeCommandResponse> handleHandleEventRuntimeCommand(HandleHandleEventRuntimeCommandRequest request) {
@@ -32,11 +30,15 @@ class HandleHandleEventRuntimeCommandMethodImpl implements HandleHandleEventRunt
         final var playerId = request.getPlayerId();
         final var clientId = request.getClientId();
         final var data = request.getData();
-        return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
-                .flatMap(luaRuntimeContext -> {
-                    final var luaEvent = new LuaHandleEventRuntimeCommandReceivedEvent(userId, playerId, clientId, data);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
-                })
+
+        final var luaEvent = new LuaHandleEventRuntimeCommandReceivedEvent(userId, playerId, clientId, data);
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
+                        tenantId,
+                        versionId,
+                        matchmakerId,
+                        matchId,
+                        runtimeId,
+                        luaEvent)
                 .replaceWith(new HandleHandleEventRuntimeCommandResponse(true));
     }
 }

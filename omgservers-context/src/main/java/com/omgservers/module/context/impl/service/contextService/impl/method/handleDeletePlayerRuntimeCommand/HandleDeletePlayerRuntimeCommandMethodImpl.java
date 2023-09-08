@@ -3,8 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleDeletePlayerRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaDeletePlayerRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
-import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandleDeletePlayerRuntimeCommandMethodImpl implements HandleDeletePlayerRuntimeCommandMethod {
 
-    final HandleLuaEventOperation handleLuaEventOperation;
-    final CreateLuaRuntimeContextOperation createLuaRuntimeContextOperation;
+    final HandleRuntimeLuaEventOperation handleRuntimeLuaEventOperation;
 
     @Override
-    public Uni<HandleDeletePlayerRuntimeCommandResponse> handleDeletePlayerRuntimeCommand(HandleDeletePlayerRuntimeCommandRequest request) {
+    public Uni<HandleDeletePlayerRuntimeCommandResponse> handleDeletePlayerRuntimeCommand(
+            HandleDeletePlayerRuntimeCommandRequest request) {
         HandleDeletePlayerRuntimeCommandRequest.validate(request);
 
         final var tenantId = request.getTenantId();
@@ -31,11 +30,15 @@ class HandleDeletePlayerRuntimeCommandMethodImpl implements HandleDeletePlayerRu
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
         final var clientId = request.getClientId();
-        return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
-                .flatMap(luaRuntimeContext -> {
-                    final var luaEvent = new LuaDeletePlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
-                })
+
+        final var luaEvent = new LuaDeletePlayerRuntimeCommandReceivedEvent(userId, playerId, clientId);
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
+                        tenantId,
+                        versionId,
+                        matchmakerId,
+                        matchId,
+                        runtimeId,
+                        luaEvent)
                 .replaceWith(new HandleDeletePlayerRuntimeCommandResponse(true));
     }
 }

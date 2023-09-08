@@ -3,8 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleInitRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleInitRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaInitRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
-import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,8 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandleInitRuntimeCommandMethodImpl implements HandleInitRuntimeCommandMethod {
 
-    final HandleLuaEventOperation handleLuaEventOperation;
-    final CreateLuaRuntimeContextOperation createLuaRuntimeContextOperation;
+    final HandleRuntimeLuaEventOperation handleRuntimeLuaEventOperation;
 
     @Override
     public Uni<HandleInitRuntimeCommandResponse> handleInitRuntimeCommand(HandleInitRuntimeCommandRequest request) {
@@ -28,11 +26,15 @@ class HandleInitRuntimeCommandMethodImpl implements HandleInitRuntimeCommandMeth
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();
         final var runtimeId = request.getRuntimeId();
-        return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
-                .flatMap(luaRuntimeContext -> {
-                    final var luaEvent = new LuaInitRuntimeCommandReceivedEvent(runtimeId);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
-                })
+
+        final var luaEvent = new LuaInitRuntimeCommandReceivedEvent(runtimeId);
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
+                        tenantId,
+                        versionId,
+                        matchmakerId,
+                        matchId,
+                        runtimeId,
+                        luaEvent)
                 .replaceWith(new HandleInitRuntimeCommandResponse(true));
     }
 }

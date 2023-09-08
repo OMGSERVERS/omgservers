@@ -1,6 +1,5 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.doRuntimeUpdate;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateResponse;
 import com.omgservers.model.runtime.RuntimeModel;
@@ -12,7 +11,8 @@ import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleR
 import com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands.SelectNewRuntimeCommandsOperation;
 import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.updateRuntimeCommandStatusAndStep.UpdateRuntimeCommandStatusAndStepOperation;
-import com.omgservers.module.runtime.impl.operation.updateRuntimeCurrentStep.UpdateRuntimeCurrentStepOperation;
+import com.omgservers.module.runtime.impl.operation.updateRuntimeStepAndState.UpdateRuntimeStepAndStateOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
@@ -32,7 +32,7 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
     final UpdateRuntimeCommandStatusAndStepOperation updateRuntimeCommandStatusAndStepOperation;
     final SelectNewRuntimeCommandsOperation selectNewRuntimeCommandsOperation;
-    final UpdateRuntimeCurrentStepOperation updateRuntimeCurrentStepOperation;
+    final UpdateRuntimeStepAndStateOperation updateRuntimeStepAndStateOperation;
     final HandleRuntimeCommandOperation handleRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final SelectRuntimeOperation selectRuntimeOperation;
@@ -67,26 +67,24 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                                            final int shard,
                                            final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
-        final var currentStep = runtime.getCurrentStep() + 1;
+        final var step = runtime.getStep() + 1;
         return selectNewRuntimeCommandsOperation.selectNewRuntimeCommands(sqlConnection, shard, runtimeId)
                 .flatMap(runtimeCommands -> {
                     final var updateRuntimeCommand = runtimeCommandModelFactory
-                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(currentStep));
+                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(step));
                     // Enrich list by update command every step automatically
                     runtimeCommands.add(updateRuntimeCommand);
 
-                    return updateRuntimeCurrentStepOperation.updateRuntimeCurrentStep(
-                                    changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    runtimeId,
-                                    currentStep)
-                            .flatMap(runtimeWasUpdated -> handleRuntimeCommands(
-                                    changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    runtimeCommands,
-                                    currentStep).map(UpdateRuntimeResult::new));
+                    return handleRuntimeCommands(changeContext, sqlConnection, shard, runtimeCommands, step)
+                            .call(affectedCommands -> updateRuntimeStepAndStateOperation
+                                    .updateRuntimeStepAndState(
+                                            changeContext,
+                                            sqlConnection,
+                                            shard,
+                                            runtimeId,
+                                            step,
+                                            runtime.getState()))
+                            .map(UpdateRuntimeResult::new);
                 });
     }
 

@@ -25,7 +25,7 @@ public class TestLuaGlobals {
     public LuaGlobals createTestGlobalsForScript(String script, Map<String, LibFunction> libFunctions) {
         final var globals = createServerGlobalsOperation.createServerGlobals();
         globals.finder = filename -> new ByteArrayInputStream(script.getBytes(StandardCharsets.UTF_8));
-        final var luaGlobals = new LuaGlobals(globals);
+        final var luaGlobals = new LuaGlobals(0L, 0L, globals);
         libFunctions.entrySet().stream()
                 .forEach(entry -> {
                     final var id = entry.getKey();

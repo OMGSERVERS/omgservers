@@ -13,8 +13,8 @@ public interface CreateLuaRuntimeContextOperation {
     default LuaRuntimeContext createLuaRuntimeContext(long timeout,
                                                       Long matchmakerId,
                                                       Long matchId,
-                                                      Long runtimeI) {
-        return createLuaRuntimeContext(matchmakerId, matchId, runtimeI)
+                                                      Long runtimeId) {
+        return createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

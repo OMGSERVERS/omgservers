@@ -9,7 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class LuaRuntimeContextFactory {
 
-    public LuaRuntimeContext build(Long matchmakerId, Long matchId, Long runtimeId) {
+    final LuaRuntimeGetStateFunctionFactory getStateFunctionFactory;
+
+    public LuaRuntimeContext build(final Long matchmakerId,
+                                   final Long matchId,
+                                   final Long runtimeId) {
         final var context = LuaRuntimeContext.builder()
                 .matchmakerId(matchmakerId)
                 .matchId(matchId)

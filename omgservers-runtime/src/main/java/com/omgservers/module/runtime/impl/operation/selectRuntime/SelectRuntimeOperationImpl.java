@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtime.RuntimeStateModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -34,7 +35,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                 shard,
                 """
                         select id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id, 
-                            type, current_step, config
+                            type, step, state, config
                         from $schema.tab_runtime
                         where id = $1
                         limit 1
@@ -55,11 +56,12 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
         runtime.setMatchmakerId(row.getLong("matchmaker_id"));
         runtime.setMatchId(row.getLong("match_id"));
         runtime.setType(RuntimeTypeEnum.valueOf(row.getString("type")));
-        runtime.setCurrentStep(row.getLong("current_step"));
+        runtime.setStep(row.getLong("step"));
         try {
+            runtime.setState(objectMapper.readValue(row.getString("state"), RuntimeStateModel.class));
             runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("runtime config can't be parsed, runtime=" + runtime, e);
+            throw new ServerSideConflictException("runtime can't be parsed, runtime=" + runtime, e);
         }
         return runtime;
     }

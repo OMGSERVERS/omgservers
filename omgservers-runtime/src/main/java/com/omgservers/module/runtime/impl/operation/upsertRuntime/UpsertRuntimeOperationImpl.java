@@ -37,8 +37,8 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                 """
                         insert into $schema.tab_runtime(
                             id, created, modified, tenant_id, stage_id, version_id, matchmaker_id, match_id,
-                            type, current_step, config)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                            type, step, state, config)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
                         on conflict (id) do
                         nothing
                         """,
@@ -52,12 +52,21 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getMatchmakerId(),
                         runtime.getMatchId(),
                         runtime.getType(),
-                        runtime.getCurrentStep(),
+                        runtime.getStep(),
+                        getStateString(runtime),
                         getConfigString(runtime)
                 ),
                 () -> new RuntimeCreatedEventBodyModel(runtime.getId(), runtime.getMatchmakerId(), runtime.getMatchId()),
                 () -> logModelFactory.create("Runtime was inserted, runtime=" + runtime)
         );
+    }
+
+    String getStateString(RuntimeModel runtime) {
+        try {
+            return objectMapper.writeValueAsString(runtime.getState());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(e.getMessage(), e);
+        }
     }
 
     String getConfigString(RuntimeModel runtime) {

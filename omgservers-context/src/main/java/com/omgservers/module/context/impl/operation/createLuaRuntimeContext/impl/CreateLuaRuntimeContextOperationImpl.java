@@ -1,5 +1,6 @@
 package com.omgservers.module.context.impl.operation.createLuaRuntimeContext.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.module.context.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,20 +14,12 @@ class CreateLuaRuntimeContextOperationImpl implements CreateLuaRuntimeContextOpe
 
     final LuaRuntimeContextFactory luaRuntimeContextFactory;
 
+    final ObjectMapper objectMapper;
+
     @Override
     public Uni<LuaRuntimeContext> createLuaRuntimeContext(final Long matchmakerId,
                                                           final Long matchId,
                                                           final Long runtimeId) {
-        if (matchmakerId == null) {
-            throw new IllegalArgumentException("matchmakerId is null");
-        }
-        if (matchId == null) {
-            throw new IllegalArgumentException("matchId is null");
-        }
-        if (runtimeId == null) {
-            throw new IllegalArgumentException("runtimeId is null");
-        }
-
         return Uni.createFrom().voidItem()
                 .map(voidItem -> luaRuntimeContextFactory.build(matchmakerId, matchId, runtimeId))
                 .invoke(luaRuntimeContext -> log.info("Lua runtime context was created, {}", luaRuntimeContext));

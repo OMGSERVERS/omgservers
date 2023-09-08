@@ -5,10 +5,7 @@ import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.module.context.impl.luaEvent.player.LuaPlayerSignedInEvent;
-import com.omgservers.module.context.impl.operation.createLuaGlobals.CreateLuaGlobalsOperation;
-import com.omgservers.module.context.impl.operation.createLuaPlayerContext.CreateLuaPlayerContextOperation;
-import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
-import com.omgservers.module.lua.impl.service.luaService.LuaService;
+import com.omgservers.module.context.impl.operation.handlePlayerLuaEvent.HandlePlayerLuaEventOperation;
 import com.omgservers.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,13 +19,7 @@ class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMe
 
     final TenantModule tenantModule;
 
-    final LuaService luaService;
-
-    final CreateLuaPlayerContextOperation createLuaPlayerContextOperation;
-    final HandleLuaEventOperation handleLuaEventOperation;
-
-    final CreateLuaGlobalsOperation createLuaGlobalsOperation;
-
+    final HandlePlayerLuaEventOperation handlePlayerLuaEventOperation;
 
     @Override
     public Uni<HandlePlayerSignedInEventResponse> handleLuaPlayerSignedInEvent(final HandlePlayerSignedInEventRequest request) {
@@ -40,15 +31,23 @@ class HandlePlayerSignedInEventMethodImpl implements HandlePlayerSignedInEventMe
         final var playerId = request.getPlayerId();
         final var clientId = request.getClientId();
 
-        final var luaEvent = new LuaPlayerSignedInEvent(userId, playerId, clientId);
+        return getVersionId(tenantId, stageId)
+                .flatMap(versionId -> {
+                    final var luaEvent = new LuaPlayerSignedInEvent(userId, playerId, clientId);
+                    return handlePlayerLuaEventOperation.handlePlayerLuaEvent(
+                            tenantId,
+                            versionId,
+                            userId,
+                            playerId,
+                            clientId,
+                            luaEvent);
+                })
+                .replaceWith(new HandlePlayerSignedInEventResponse(true));
+    }
 
+    Uni<Long> getVersionId(final Long tenantId, final Long stageId) {
         final var getCurrentVersionIdShardedRequest = new GetStageVersionIdRequest(tenantId, stageId);
         return tenantModule.getVersionService().getStageVersionId(getCurrentVersionIdShardedRequest)
-                .map(GetStageVersionIdResponse::getVersionId)
-                .flatMap(versionId -> createLuaPlayerContextOperation
-                        .createLuaPlayerContext(userId, playerId, clientId)
-                        .flatMap(luaPlayerContext -> handleLuaEventOperation
-                                .handleLuaEvent(tenantId, versionId, luaEvent, luaPlayerContext)))
-                .replaceWith(new HandlePlayerSignedInEventResponse(true));
+                .map(GetStageVersionIdResponse::getVersionId);
     }
 }

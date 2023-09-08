@@ -186,7 +186,8 @@ create table if not exists tab_runtime (
     matchmaker_id bigint not null,
     match_id bigint not null,
     type text not null,
-    current_step bigint not null,
+    step bigint not null,
+    state json not null,
     config json not null
 );
 

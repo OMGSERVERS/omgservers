@@ -3,8 +3,7 @@ package com.omgservers.module.context.impl.service.contextService.impl.method.ha
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandRequest;
 import com.omgservers.dto.context.HandleUpdateRuntimeCommandResponse;
 import com.omgservers.module.context.impl.luaEvent.runtime.LuaUpdateRuntimeCommandReceivedEvent;
-import com.omgservers.module.context.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
-import com.omgservers.module.context.impl.operation.handleLuaEvent.HandleLuaEventOperation;
+import com.omgservers.module.context.impl.operation.handleRuntimeEvent.HandleRuntimeLuaEventOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,8 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandleUpdateRuntimeCommandMethodImpl implements HandleUpdateRuntimeCommandMethod {
 
-    final HandleLuaEventOperation handleLuaEventOperation;
-    final CreateLuaRuntimeContextOperation createLuaRuntimeContextOperation;
+    final HandleRuntimeLuaEventOperation handleRuntimeLuaEventOperation;
 
     @Override
     public Uni<HandleUpdateRuntimeCommandResponse> handleUpdateRuntimeCommand(HandleUpdateRuntimeCommandRequest request) {
@@ -29,11 +27,15 @@ class HandleUpdateRuntimeCommandMethodImpl implements HandleUpdateRuntimeCommand
         final var matchId = request.getMatchId();
         final var runtimeId = request.getRuntimeId();
         final var step = request.getStep();
-        return createLuaRuntimeContextOperation.createLuaRuntimeContext(matchmakerId, matchId, runtimeId)
-                .flatMap(luaRuntimeContext -> {
-                    final var luaEvent = new LuaUpdateRuntimeCommandReceivedEvent(step);
-                    return handleLuaEventOperation.handleLuaEvent(tenantId, versionId, luaEvent, luaRuntimeContext);
-                })
+
+        final var luaEvent = new LuaUpdateRuntimeCommandReceivedEvent(step);
+        return handleRuntimeLuaEventOperation.handleRuntimeLuaEvent(
+                        tenantId,
+                        versionId,
+                        matchmakerId,
+                        matchId,
+                        runtimeId,
+                        luaEvent)
                 .replaceWith(new HandleUpdateRuntimeCommandResponse(true));
     }
 }

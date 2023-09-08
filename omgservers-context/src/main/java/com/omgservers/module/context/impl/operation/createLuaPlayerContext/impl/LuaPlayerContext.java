@@ -1,12 +1,15 @@
 package com.omgservers.module.context.impl.operation.createLuaPlayerContext.impl;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaTable;
 
 @Slf4j
+@Getter
 @Builder
+@ToString
 public class LuaPlayerContext extends LuaTable {
 
     final Long userId;
