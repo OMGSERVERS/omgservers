@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
 
 @Data
 @Slf4j
@@ -17,7 +18,7 @@ public class LuaInstance {
     final LuaGlobals luaGlobals;
     final LuaTable luaContext;
 
-    public synchronized boolean handle(final LuaEvent luaEvent) {
+    public synchronized boolean handle(final LuaValue luaSelf, final LuaEvent luaEvent) {
         final var eventId = luaEvent.getId();
         final var closure = luaGlobals.getGlobals().get(eventId);
         if (closure.isnil()) {
@@ -25,7 +26,7 @@ public class LuaInstance {
             return false;
         } else {
             try {
-                closure.call(luaEvent, luaContext);
+                closure.call(luaSelf, luaEvent, luaContext);
                 return true;
             } catch (LuaError luaError) {
                 log.warn("Closure call failed, id={}, reason={}", eventId, luaError.getMessage());

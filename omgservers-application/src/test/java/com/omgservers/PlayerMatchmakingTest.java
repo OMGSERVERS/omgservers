@@ -31,15 +31,15 @@ public class PlayerMatchmakingTest extends Assertions {
     @Test
     void playerMatchmakingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                        function signed_up(event, player)
+                        function signed_up(self, event, player)
                             player.respond("signed_up")
                         end
 
-                        function signed_in(event, player)
+                        function signed_in(self, event, player)
                             player.respond("signed_in")
                         end
                                           
-                        function add_player(event, runtime)
+                        function add_player(self, event, runtime)
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
@@ -47,9 +47,13 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)
                             print("runtime.runtime_id=" .. runtime.runtime_id)
+                            
+                            self.actions = {}
+                            table.insert(self.actions, event)
                         end
                                                 
-                        function handle_message(event, runtime)
+                        function handle_message(self, event, runtime)
+                            table.insert(self.actions, event)
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
@@ -57,7 +61,8 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("event.data=" .. event.data)
                         end
                                                 
-                        function update(event, runtime)
+                        function update(self, event, runtime)
+                            table.insert(self.actions, event)
                             print(event.step)
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)
