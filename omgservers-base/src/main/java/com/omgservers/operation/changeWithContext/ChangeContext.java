@@ -3,12 +3,14 @@ package com.omgservers.operation.changeWithContext;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.log.LogModel;
 import io.smallrye.mutiny.Context;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@ToString
 public class ChangeContext<T> {
 
     final Context context;
@@ -44,11 +46,11 @@ public class ChangeContext<T> {
 
     public void add(EventModel changeEvent) {
         changeEvents.add(changeEvent);
-        log.info("Event was added, event={}", changeEvent);
+        log.info("Event was added to context, event={}", changeEvent);
     }
 
     public void add(LogModel changeLog) {
         changeLogs.add(changeLog);
-        log.info("Log was inserted, log={}", changeLog);
+        log.info("Log was inserted to context, log={}", changeLog);
     }
 }

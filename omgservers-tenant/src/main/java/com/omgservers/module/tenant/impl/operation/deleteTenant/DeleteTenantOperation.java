@@ -13,11 +13,13 @@ public interface DeleteTenantOperation {
                               int shard,
                               Long id);
 
-    default Boolean deleteTenant(long timeout, PgPool pgPool, int shard, Long id) {
+    default ChangeContext<Boolean> deleteTenant(long timeout, PgPool pgPool, int shard, Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
-                            deleteTenant(changeContext, sqlConnection, shard, id));
+                                    deleteTenant(changeContext, sqlConnection, shard, id))
+                            .invoke(changeContext::setResult)
+                            .replaceWith(changeContext);
                 })
                 .await().atMost(Duration.ofSeconds(timeout));
     }

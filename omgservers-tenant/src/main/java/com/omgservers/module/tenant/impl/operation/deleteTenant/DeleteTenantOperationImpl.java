@@ -1,7 +1,9 @@
 package com.omgservers.module.tenant.impl.operation.deleteTenant;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.tenant.impl.operation.selectTenant.SelectTenantOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -18,6 +20,7 @@ import java.util.Collections;
 class DeleteTenantOperationImpl implements DeleteTenantOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectTenantOperation selectTenantOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,15 +28,18 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_tenant
-                        where id = $1
-                        """,
-                Collections.singletonList(id),
-                () -> new TenantDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Tenant was deleted, id=" + id)
-        );
+        return selectTenantOperation.selectTenant(sqlConnection, shard, id)
+                .flatMap(tenant -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_tenant
+                                where id = $1
+                                """,
+                        Collections.singletonList(id),
+                        () -> new TenantDeletedEventBodyModel(tenant),
+                        () -> logModelFactory.create("Tenant was deleted, id=" + id)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

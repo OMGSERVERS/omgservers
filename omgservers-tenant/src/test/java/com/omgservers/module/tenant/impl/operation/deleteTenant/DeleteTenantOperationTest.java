@@ -1,9 +1,10 @@
 package com.omgservers.module.tenant.impl.operation.deleteTenant;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -37,14 +38,19 @@ class DeleteTenantOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        assertTrue(deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, tenant.getId()));
+        final var changeContext = deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, tenant.getId());
+        log.info("Change context, {}", changeContext);
+        assertTrue(changeContext.getResult());
+        assertEquals(EventQualifierEnum.TENANT_DELETED, changeContext.getChangeEvents().get(0).getQualifier());
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteTenant_thenSkip() {
+    void givenUnknownIds_whenDeleteTenant_thenFalse() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, id));
+        final var changeContext = deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, id);
+        log.info("Change context, {}", changeContext);
+        assertFalse(changeContext.getResult());
     }
 }
