@@ -68,22 +68,22 @@ class SelectVersionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
-        final var version1 = versionModelFactory.create(stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
+        final var version1 = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(), VersionSourceCodeModel.create(), VersionBytecodeModel.create());
         upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version1);
 
-        final var version2 = selectVersionOperation.selectVersion(TIMEOUT, pgPool, shard, version1.getId());
+        final var version2 = selectVersionOperation.selectVersion(TIMEOUT, pgPool, shard, tenant.getId(), version1.getId());
         assertEquals(version1, version2);
     }
 
     @Test
-    void givenUnknownUuid_whenSelectVersion_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenSelectVersion_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectVersionOperation
-                .selectVersion(TIMEOUT, pgPool, shard, id));
+                .selectVersion(TIMEOUT, pgPool, shard, tenantId(), id));
     }
 
     Long tenantId() {

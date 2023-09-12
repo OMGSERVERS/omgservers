@@ -66,22 +66,26 @@ class HasStagePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
-        final var permission = stagePermissionModelFactory.create(stage.getId(), userId, StagePermissionEnum.CREATE_VERSION);
-        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, tenant.getId(), permission);
+        final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId, StagePermissionEnum.CREATE_VERSION);
+        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
 
-        assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, stage.getId(), permission.getUserId(), permission.getPermission()));
+        assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId(), permission.getUserId(), permission.getPermission()));
     }
 
     @Test
     void givenUnknownIds_whenHasStagePermission_thenFalse() {
         final var shard = 0;
 
-        assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, projectId(), userId(), StagePermissionEnum.CREATE_VERSION));
+        assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenantId(), projectId(), userId(), StagePermissionEnum.CREATE_VERSION));
     }
 
     Long userId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long tenantId() {
         return generateIdOperation.generateId();
     }
 

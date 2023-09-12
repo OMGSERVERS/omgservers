@@ -19,6 +19,7 @@ public class ProjectPermissionModel {
     }
 
     Long id;
+    Long tenantId;
     Long projectId;
     Instant created;
     Long userId;

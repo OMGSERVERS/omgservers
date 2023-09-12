@@ -58,7 +58,7 @@ class DeleteStageOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
 
         assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId()));

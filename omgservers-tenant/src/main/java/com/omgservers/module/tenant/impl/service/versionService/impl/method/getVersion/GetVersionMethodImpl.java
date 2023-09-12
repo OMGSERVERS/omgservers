@@ -27,9 +27,10 @@ class GetVersionMethodImpl implements GetVersionMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
+                    final var tenantId = request.getTenantId();
                     final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectVersionOperation
-                            .selectVersion(sqlConnection, shard, id));
+                            .selectVersion(sqlConnection, shard, tenantId, id));
                 })
                 .map(GetVersionResponse::new);
     }

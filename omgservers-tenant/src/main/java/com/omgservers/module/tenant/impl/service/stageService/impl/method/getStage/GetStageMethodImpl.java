@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.getStage;
 
-import com.omgservers.module.tenant.impl.operation.selectStage.SelectStageOperation;
-import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.tenant.GetStageRequest;
 import com.omgservers.dto.tenant.GetStageResponse;
+import com.omgservers.module.tenant.impl.operation.selectStage.SelectStageOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,9 +25,10 @@ class GetStageMethodImpl implements GetStageMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
+                    final var tenantId = request.getTenantId();
                     final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectStageOperation
-                            .selectStage(sqlConnection, shardModel.shard(), id));
+                            .selectStage(sqlConnection, shardModel.shard(), tenantId, id));
                 })
                 .map(GetStageResponse::new);
     }

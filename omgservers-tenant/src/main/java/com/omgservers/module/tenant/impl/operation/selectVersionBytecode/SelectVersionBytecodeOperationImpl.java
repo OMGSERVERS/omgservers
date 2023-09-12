@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j
@@ -25,6 +26,7 @@ class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperati
     @Override
     public Uni<VersionBytecodeModel> selectVersionBytecode(final SqlConnection sqlConnection,
                                                            final int shard,
+                                                           final Long tenantId,
                                                            final Long versionId) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
@@ -32,16 +34,17 @@ class SelectVersionBytecodeOperationImpl implements SelectVersionBytecodeOperati
                 """
                         select bytecode
                         from $schema.tab_tenant_version
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Collections.singletonList(versionId),
+                Arrays.asList(tenantId, versionId),
                 "Version",
                 row -> {
                     try {
                         return objectMapper.readValue(row.getString("bytecode"), VersionBytecodeModel.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException("bytecode can't be parsed, versionId=" + versionId, e);
+                        throw new ServerSideConflictException(String.format("bytecode can't be parsed, " +
+                                "tenantId=%d, versionId=%d", tenantId, versionId), e);
                     }
                 });
     }

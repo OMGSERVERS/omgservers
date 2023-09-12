@@ -19,6 +19,7 @@ public class BuildVersionRequest {
         // TODO: validate fields
     }
 
+    Long tenantId;
     Long stageId;
     VersionConfigModel versionConfig;
     VersionSourceCodeModel sourceCode;

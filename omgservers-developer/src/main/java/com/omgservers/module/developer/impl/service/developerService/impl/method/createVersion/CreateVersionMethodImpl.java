@@ -70,7 +70,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                     final VersionConfigModel versionConfig,
                                     final VersionSourceCodeModel sourceCode) {
         //TODO: redesign in more async way
-        final var buildVersionRequest = new BuildVersionRequest(stageId, versionConfig, sourceCode);
+        final var buildVersionRequest = new BuildVersionRequest(tenantId, stageId, versionConfig, sourceCode);
         return tenantModule.getVersionService().buildVersion(buildVersionRequest)
                 .map(BuildVersionResponse::getVersion)
                 .flatMap(version -> {

@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.hasStagePermission;
 
 import com.omgservers.dto.tenant.HasStagePermissionRequest;
+import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.module.tenant.impl.operation.hasStagePermission.HasStagePermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,11 +26,12 @@ class HasStagePermissionMethodImpl implements HasStagePermissionMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
+                    final var tenantId = request.getTenantId();
                     final var stageId = request.getStageId();
                     final var userId = request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasStagePermissionOperation
-                            .hasStagePermission(sqlConnection, shard, stageId, userId, permission));
+                            .hasStagePermission(sqlConnection, shard, tenantId, stageId, userId, permission));
                 })
                 .map(HasStagePermissionResponse::new);
     }

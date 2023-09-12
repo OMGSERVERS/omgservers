@@ -14,6 +14,7 @@ import java.time.Instant;
 public class VersionModel {
 
     Long id;
+    Long tenantId;
     Long stageId;
     Instant created;
     Instant modified;

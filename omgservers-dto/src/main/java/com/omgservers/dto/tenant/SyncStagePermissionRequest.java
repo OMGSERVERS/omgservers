@@ -17,11 +17,10 @@ public class SyncStagePermissionRequest implements ShardedRequest {
         }
     }
 
-    Long tenantId;
     StagePermissionModel permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenantId.toString();
+        return permission.getTenantId().toString();
     }
 }

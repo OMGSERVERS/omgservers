@@ -54,8 +54,8 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        final var permission = projectPermissionModelFactory.create(project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
-        assertTrue(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission));
+        final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
+        assertTrue(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
     }
 
     @Test
@@ -65,19 +65,19 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var permission = projectPermissionModelFactory.create(project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
-        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission);
+        final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
+        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
 
-        assertFalse(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission));
+        assertFalse(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
     }
 
     @Test
-    void givenUnknownIds_whenUpsertProjectPermission_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenUpsertProjectPermission_thenException() {
         final var shard = 0;
 
-        final var permission = projectPermissionModelFactory.create(projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
+        final var permission = projectPermissionModelFactory.create(tenantId(), projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertProjectPermissionOperation
-                .upsertProjectPermission(TIMEOUT, pgPool, shard, tenantId(), permission));
+                .upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
         log.info("Exception: {}", exception.getMessage());
     }
 

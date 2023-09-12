@@ -10,10 +10,11 @@ import java.time.Duration;
 public interface SelectStageOperation {
     Uni<StageModel> selectStage(SqlConnection sqlConnection,
                                 int shard,
+                                Long tenantId,
                                 Long id);
 
-    default StageModel selectStage(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectStage(sqlConnection, shard, id))
+    default StageModel selectStage(long timeout, PgPool pgPool, int shard, Long tenantId, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectStage(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

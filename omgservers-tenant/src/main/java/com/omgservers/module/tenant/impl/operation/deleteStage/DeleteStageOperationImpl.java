@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j
@@ -30,9 +31,9 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_tenant_stage
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(tenantId, id),
                 () -> new StageDeletedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Stage was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))

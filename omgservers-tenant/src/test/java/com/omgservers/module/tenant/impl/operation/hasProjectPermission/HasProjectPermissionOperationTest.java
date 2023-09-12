@@ -57,20 +57,24 @@ class HasProjectPermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var permission = projectPermissionModelFactory.create(project.getId(), userId, ProjectPermissionEnum.CREATE_STAGE);
-        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission);
+        final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId, ProjectPermissionEnum.CREATE_STAGE);
+        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
 
-        assertTrue(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, project.getId(), permission.getUserId(), permission.getPermission()));
+        assertTrue(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(), project.getId(), permission.getUserId(), permission.getPermission()));
     }
 
     @Test
-    void givenUnknownUuids_whenHasProjectPermission_thenNo() {
+    void givenUnknownIds_whenHasProjectPermission_thenFalse() {
         final var shard = 0;
 
-        assertFalse(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE));
+        assertFalse(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, tenantId(), projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE));
     }
 
     Long userId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long tenantId() {
         return generateIdOperation.generateId();
     }
 

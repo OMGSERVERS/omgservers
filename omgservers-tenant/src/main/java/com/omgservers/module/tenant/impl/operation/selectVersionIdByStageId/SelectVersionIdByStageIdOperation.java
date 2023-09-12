@@ -9,10 +9,11 @@ import java.time.Duration;
 public interface SelectVersionIdByStageIdOperation {
     Uni<Long> selectVersionIdByStageId(SqlConnection sqlConnection,
                                        int shard,
+                                       Long tenantId,
                                        Long stageId);
 
-    default Long selectVersionIdByStageId(long timeout, PgPool pgPool, int shard, Long stageId) {
-        return pgPool.withTransaction(sqlConnection -> selectVersionIdByStageId(sqlConnection, shard, stageId))
+    default Long selectVersionIdByStageId(long timeout, PgPool pgPool, int shard, Long tenantId, Long stageId) {
+        return pgPool.withTransaction(sqlConnection -> selectVersionIdByStageId(sqlConnection, shard, tenantId, stageId))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

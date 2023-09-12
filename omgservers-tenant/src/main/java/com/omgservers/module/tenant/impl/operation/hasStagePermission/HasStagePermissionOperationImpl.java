@@ -15,18 +15,12 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
-    private static final String SQL = """
-            select id
-            from $schema.tab_tenant_stage_permission
-            where stage_id = $1 and user_id = $2 and permission = $3
-            limit 1
-            """;
-
     final ExecuteHasObjectOperation executeHasObjectOperation;
 
     @Override
     public Uni<Boolean> hasStagePermission(final SqlConnection sqlConnection,
                                            final int shard,
+                                           final Long tenantId,
                                            final Long stageId,
                                            final Long userId,
                                            final StagePermissionEnum permission) {
@@ -36,10 +30,10 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
                 """
                         select id
                         from $schema.tab_tenant_stage_permission
-                        where stage_id = $1 and user_id = $2 and permission = $3
+                        where tenant_id = $1 and stage_id = $2 and user_id = $3 and permission = $4
                         limit 1
                         """,
-                Arrays.asList(stageId, userId, permission),
+                Arrays.asList(tenantId, stageId, userId, permission),
                 "Stage permission");
     }
 }

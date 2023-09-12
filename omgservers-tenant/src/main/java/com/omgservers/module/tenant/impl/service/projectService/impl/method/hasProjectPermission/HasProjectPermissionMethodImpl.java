@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectService.impl.method.hasProjectPermission;
 
 import com.omgservers.dto.tenant.HasProjectPermissionRequest;
+import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.module.tenant.impl.operation.hasProjectPermission.HasProjectPermissionOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,11 +25,12 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
+                    final var tenantId = request.getTenantId();
                     final var projectId = request.getProjectId();
                     final var userId = request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> hasProjectPermissionOperation
-                            .hasProjectPermission(sqlConnection, shard.shard(), projectId, userId, permission));
+                            .hasProjectPermission(sqlConnection, shard.shard(), tenantId, projectId, userId, permission));
                 })
                 .map(HasProjectPermissionResponse::new);
     }

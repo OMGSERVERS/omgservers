@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j
@@ -23,6 +24,7 @@ class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdO
     @Override
     public Uni<Long> selectVersionIdByStageId(final SqlConnection sqlConnection,
                                               final int shard,
+                                              final Long tenantId,
                                               final Long stageId) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
@@ -30,11 +32,11 @@ class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdO
                 """
                         select id
                         from $schema.tab_tenant_version
-                        where stage_id = $1
+                        where tenant_id = $1 and stage_id = $2
                         order by id desc
                         limit 1
                         """,
-                Collections.singletonList(stageId),
+                Arrays.asList(tenantId, stageId),
                 "Version",
                 row -> row.getLong("id"));
     }

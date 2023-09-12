@@ -20,6 +20,7 @@ public class StageModel {
     }
 
     Long id;
+    Long tenantId;
     Long projectId;
     Instant created;
     Instant modified;

@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j
@@ -29,16 +31,18 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
     @Override
     public Uni<VersionModel> selectVersion(final SqlConnection sqlConnection,
                                            final int shard,
+                                           final Long tenantId,
                                            final Long id) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, stage_id, created, modified, config, source_code, bytecode, errors
-                        from $schema.tab_tenant_version where id = $1
+                        select id, tenant_id, stage_id, created, modified, config, source_code, bytecode, errors
+                        from $schema.tab_tenant_version
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(tenantId, id),
                 "Version",
                 this::createVersion);
     }
@@ -46,6 +50,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
     VersionModel createVersion(Row row) {
         VersionModel version = new VersionModel();
         version.setId(row.getLong("id"));
+        version.setTenantId(row.getLong("tenant_id"));
         version.setStageId(row.getLong("stage_id"));
         version.setCreated(row.getOffsetDateTime("created").toInstant());
         version.setModified(row.getOffsetDateTime("modified").toInstant());

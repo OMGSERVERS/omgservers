@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -27,17 +27,18 @@ class SelectStageOperationImpl implements SelectStageOperation {
     @Override
     public Uni<StageModel> selectStage(final SqlConnection sqlConnection,
                                        final int shard,
+                                       final Long tenantId,
                                        final Long id) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, project_id, created, modified, secret, matchmaker_id, config
+                        select id, tenant_id, project_id, created, modified, secret, matchmaker_id, config
                         from $schema.tab_tenant_stage
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(tenantId, id),
                 "Stage",
                 this::createStage);
     }
@@ -45,6 +46,7 @@ class SelectStageOperationImpl implements SelectStageOperation {
     StageModel createStage(Row row) {
         StageModel stage = new StageModel();
         stage.setId(row.getLong("id"));
+        stage.setTenantId(row.getLong("tenant_id"));
         stage.setProjectId(row.getLong("project_id"));
         stage.setCreated(row.getOffsetDateTime("created").toInstant());
         stage.setModified(row.getOffsetDateTime("modified").toInstant());

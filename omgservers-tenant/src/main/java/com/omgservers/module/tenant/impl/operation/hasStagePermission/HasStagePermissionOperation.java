@@ -10,6 +10,7 @@ import java.time.Duration;
 public interface HasStagePermissionOperation {
     Uni<Boolean> hasStagePermission(SqlConnection sqlConnection,
                                     int shard,
+                                    Long tenantId,
                                     Long stageId,
                                     Long userId,
                                     StagePermissionEnum permission);
@@ -17,11 +18,12 @@ public interface HasStagePermissionOperation {
     default Boolean hasStagePermission(long timeout,
                                        PgPool pgPool,
                                        int shard,
+                                       Long tenantId,
                                        Long stageId,
                                        Long userId,
                                        StagePermissionEnum permission) {
         return pgPool.withTransaction(sqlConnection ->
-                        hasStagePermission(sqlConnection, shard, stageId, userId, permission))
+                        hasStagePermission(sqlConnection, shard, tenantId, stageId, userId, permission))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

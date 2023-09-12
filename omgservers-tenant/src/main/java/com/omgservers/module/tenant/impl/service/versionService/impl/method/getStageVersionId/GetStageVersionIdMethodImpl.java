@@ -29,7 +29,7 @@ class GetStageVersionIdMethodImpl implements GetStageVersionIdMethod {
                     final var tenantId = request.getTenantId();
                     final var stageId = request.getStageId();
                     return pgPool.withTransaction(sqlConnection -> selectVersionIdByStageIdOperation
-                            .selectVersionIdByStageId(sqlConnection, shardModel.shard(), stageId));
+                            .selectVersionIdByStageId(sqlConnection, shardModel.shard(), tenantId, stageId));
                 })
                 .map(GetStageVersionIdResponse::new);
     }

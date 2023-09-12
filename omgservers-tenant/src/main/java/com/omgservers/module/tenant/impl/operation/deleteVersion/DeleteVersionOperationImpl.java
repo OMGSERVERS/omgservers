@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -30,9 +30,9 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_tenant_version
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(tenantId, id),
                 () -> new VersionDeletedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))

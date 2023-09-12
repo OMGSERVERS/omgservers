@@ -9,10 +9,6 @@ import com.omgservers.dto.tenant.SyncProjectRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.dto.tenant.SyncStageRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.ProjectPermissionModelFactory;
-import com.omgservers.module.tenant.factory.StageModelFactory;
-import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
@@ -23,6 +19,10 @@ import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.factory.ProjectModelFactory;
+import com.omgservers.module.tenant.factory.ProjectPermissionModelFactory;
+import com.omgservers.module.tenant.factory.StageModelFactory;
+import com.omgservers.module.tenant.factory.StagePermissionModelFactory;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -91,8 +91,8 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     Uni<ProjectPermissionModel> syncProjectPermission(final Long tenantId, final Long projectId, final Long userId) {
         final var permission = ProjectPermissionEnum.CREATE_STAGE;
-        final var projectPermission = projectPermissionModelFactory.create(projectId, userId, permission);
-        final var request = new SyncProjectPermissionRequest(tenantId, projectPermission);
+        final var projectPermission = projectPermissionModelFactory.create(tenantId, projectId, userId, permission);
+        final var request = new SyncProjectPermissionRequest(projectPermission);
         return tenantModule.getProjectService().syncProjectPermission(request)
                 .replaceWith(projectPermission);
     }
@@ -100,7 +100,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     Uni<StageModel> syncStage(final Long tenantId,
                               final Long projectId,
                               final Long userId) {
-        final var stage = stageModelFactory.create(projectId, new StageConfigModel());
+        final var stage = stageModelFactory.create(tenantId, projectId, new StageConfigModel());
         final var syncStageInternalRequest = new SyncStageRequest(tenantId, stage);
         return tenantModule.getStageService().syncStage(syncStageInternalRequest)
                 .flatMap(response -> syncStagePermission(tenantId, stage.getId(), userId))
@@ -111,8 +111,8 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                                                   final Long stageId,
                                                   final Long userId) {
         final var permission = StagePermissionEnum.CREATE_VERSION;
-        final var stagePermission = stagePermissionModelFactory.create(stageId, userId, permission);
-        final var request = new SyncStagePermissionRequest(tenantId, stagePermission);
+        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
+        final var request = new SyncStagePermissionRequest(stagePermission);
         return tenantModule.getStageService().syncStagePermission(request)
                 .replaceWith(stagePermission);
     }

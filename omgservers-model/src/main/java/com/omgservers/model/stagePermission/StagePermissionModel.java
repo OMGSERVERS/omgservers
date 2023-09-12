@@ -19,6 +19,7 @@ public class StagePermissionModel {
     }
 
     Long id;
+    Long tenantId;
     Long stageId;
     Instant created;
     Long userId;

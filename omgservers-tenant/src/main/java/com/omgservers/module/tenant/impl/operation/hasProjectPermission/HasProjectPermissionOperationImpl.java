@@ -20,6 +20,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
     @Override
     public Uni<Boolean> hasProjectPermission(final SqlConnection sqlConnection,
                                              final int shard,
+                                             final Long tenantId,
                                              final Long projectId,
                                              final Long userId,
                                              final ProjectPermissionEnum permission) {
@@ -29,10 +30,10 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
                 """
                         select id
                         from $schema.tab_tenant_project_permission
-                        where project_id = $1 and user_id = $2 and permission = $3
+                        where tenant_id = $1 and project_id = $2 and user_id = $3 and permission = $4
                         limit 1
                         """,
-                Arrays.asList(projectId, userId, permission),
+                Arrays.asList(tenantId, projectId, userId, permission),
                 "Project permission");
     }
 }

@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -25,6 +25,7 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
     @Override
     public Uni<VersionConfigModel> selectVersionConfig(final SqlConnection sqlConnection,
                                                        final int shard,
+                                                       final Long tenantId,
                                                        final Long versionId) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
@@ -32,16 +33,17 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                 """
                         select config
                         from $schema.tab_tenant_version
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Collections.singletonList(versionId),
+                Arrays.asList(tenantId, versionId),
                 "Version",
                 row -> {
                     try {
                         return objectMapper.readValue(row.getString("config"), VersionConfigModel.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException("config can't be parsed, versionId=" + versionId, e);
+                        throw new ServerSideConflictException(String.format("config can't be parsed, " +
+                                "tenantId=%d, versionId=%d", tenantId, versionId), e);
                     }
                 });
     }

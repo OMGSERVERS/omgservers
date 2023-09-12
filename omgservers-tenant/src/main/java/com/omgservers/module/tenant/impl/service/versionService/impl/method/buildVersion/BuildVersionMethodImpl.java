@@ -27,12 +27,14 @@ public class BuildVersionMethodImpl implements BuildVersionMethod {
     public Uni<BuildVersionResponse> buildVersion(BuildVersionRequest request) {
         BuildVersionRequest.validate(request);
 
+        final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var stageConfig = request.getVersionConfig();
         final var sourceCode = request.getSourceCode();
         return compileVersionCodeOperation.compileVersionSourceCode(sourceCode)
                 .map(bytecode -> {
                     final var version = versionModelFactory.create(
+                            tenantId,
                             stageId,
                             stageConfig,
                             sourceCode,

@@ -1,7 +1,7 @@
 package com.omgservers.dto.tenant;
 
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +17,10 @@ public class SyncProjectPermissionRequest implements ShardedRequest {
         }
     }
 
-    Long tenantId;
     ProjectPermissionModel permission;
 
     @Override
     public String getRequestShardKey() {
-        return tenantId.toString();
+        return permission.getTenantId().toString();
     }
 }

@@ -36,13 +36,14 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_stage(
-                            id, project_id, created, modified, secret, matchmaker_id, config)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, tenant_id, project_id, created, modified, secret, matchmaker_id, config)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         stage.getId(),
+                        stage.getTenantId(),
                         stage.getProjectId(),
                         stage.getCreated().atOffset(ZoneOffset.UTC),
                         stage.getModified().atOffset(ZoneOffset.UTC),

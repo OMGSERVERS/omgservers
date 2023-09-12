@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.service.projectService.impl.method.syncProjectPermission;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,22 +29,20 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request) {
         SyncProjectPermissionRequest.validate(request);
 
-        final var tenantId = request.getTenantId();
         final var permission = request.getPermission();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, tenantId, permission))
+                .flatMap(shardModel -> changeFunction(shardModel, permission))
                 .map(SyncProjectPermissionResponse::new);
     }
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, ProjectPermissionModel permission) {
+    Uni<Boolean> changeFunction(ShardModel shardModel, ProjectPermissionModel permission) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                upsertProjectPermissionOperation.upsertProjectPermission(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        tenantId,
-                        permission))
+                        upsertProjectPermissionOperation.upsertProjectPermission(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                permission))
                 .map(ChangeContext::getResult);
     }
 }

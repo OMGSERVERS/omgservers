@@ -20,15 +20,17 @@ public class VersionModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public VersionModel create(
+            final Long tenantId,
             final Long stageId,
             final VersionConfigModel versionConfig,
             final VersionSourceCodeModel sourceCode,
             final VersionBytecodeModel bytecode) {
         final var id = generateIdOperation.generateId();
-        return create(id, stageId, versionConfig, sourceCode, bytecode);
+        return create(id, tenantId, stageId, versionConfig, sourceCode, bytecode);
     }
 
     public VersionModel create(final Long id,
+                               final Long tenantId,
                                final Long stageId,
                                final VersionConfigModel versionConfig,
                                final VersionSourceCodeModel sourceCode,
@@ -37,6 +39,7 @@ public class VersionModelFactory {
 
         VersionModel version = new VersionModel();
         version.setId(id);
+        version.setTenantId(tenantId);
         version.setStageId(stageId);
         version.setCreated(now);
         version.setModified(now);

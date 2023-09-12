@@ -88,6 +88,7 @@ create table if not exists tab_tenant_project (
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
@@ -97,6 +98,7 @@ create table if not exists tab_tenant_project_permission (
 
 create table if not exists tab_tenant_stage (
     id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -107,6 +109,7 @@ create table if not exists tab_tenant_stage (
 
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
     stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
@@ -116,6 +119,7 @@ create table if not exists tab_tenant_stage_permission (
 
 create table if not exists tab_tenant_version (
     id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
     stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

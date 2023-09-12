@@ -53,7 +53,7 @@ class UpsertStageOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         assertTrue(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage));
     }
 
@@ -64,7 +64,7 @@ class UpsertStageOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
-        final var stage = stageModelFactory.create(project.getId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
 
         assertFalse(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage));
@@ -73,7 +73,7 @@ class UpsertStageOperationTest extends Assertions {
     @Test
     void givenUnknownIds_whenUpsertStage_thenException() {
         final var shard = 0;
-        final var stage = stageModelFactory.create(projectId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenantId(), projectId(), StageConfigModel.create());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenantId(), stage));
         log.info("Exception: {}", exception.getMessage());

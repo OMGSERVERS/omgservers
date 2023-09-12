@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.syncStagePermission;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,21 +29,19 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
         SyncStagePermissionRequest.validate(request);
 
-        final var tenantId = request.getTenantId();
         final var permission = request.getPermission();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, tenantId, permission))
+                .flatMap(shardModel -> changeFunction(shardModel, permission))
                 .map(SyncStagePermissionResponse::new);
     }
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, StagePermissionModel permission) {
+    Uni<Boolean> changeFunction(ShardModel shardModel, StagePermissionModel permission) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertStagePermissionOperation.upsertStagePermission(
                                 changeContext,
                                 sqlConnection,
                                 shardModel.shard(),
-                                tenantId,
                                 permission))
                 .map(ChangeContext::getResult);
     }

@@ -10,10 +10,11 @@ import java.time.Duration;
 public interface SelectVersionOperation {
     Uni<VersionModel> selectVersion(SqlConnection sqlConnection,
                                     int shard,
+                                    Long tenantId,
                                     Long id);
 
-    default VersionModel selectVersion(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectVersion(sqlConnection, shard, id))
+    default VersionModel selectVersion(long timeout, PgPool pgPool, int shard, Long tenantId, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectVersion(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

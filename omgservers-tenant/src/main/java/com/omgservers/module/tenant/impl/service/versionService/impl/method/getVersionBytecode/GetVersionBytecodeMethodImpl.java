@@ -27,9 +27,10 @@ class GetVersionBytecodeMethodImpl implements GetVersionBytecodeMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    final var version = request.getVersionId();
+                    final var tenantId = request.getTenantId();
+                    final var versionId = request.getVersionId();
                     return pgPool.withTransaction(sqlConnection -> selectVersionBytecodeOperation
-                            .selectVersionBytecode(sqlConnection, shard, version));
+                            .selectVersionBytecode(sqlConnection, shard, tenantId, versionId));
                 })
                 .map(GetVersionBytecodeResponse::new);
     }

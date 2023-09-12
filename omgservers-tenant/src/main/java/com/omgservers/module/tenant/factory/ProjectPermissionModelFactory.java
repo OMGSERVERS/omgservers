@@ -1,8 +1,8 @@
 package com.omgservers.module.tenant.factory;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +17,16 @@ public class ProjectPermissionModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public ProjectPermissionModel create(
-            final Long projectId,
-            final Long userId,
-            final ProjectPermissionEnum permission) {
+    public ProjectPermissionModel create(final Long tenantId,
+                                         final Long projectId,
+                                         final Long userId,
+                                         final ProjectPermissionEnum permission) {
         final var id = generateIdOperation.generateId();
-        return create(id, projectId, userId, permission);
+        return create(id, tenantId, projectId, userId, permission);
     }
 
     public ProjectPermissionModel create(final Long id,
+                                         final Long tenantId,
                                          final Long projectId,
                                          final Long userId,
                                          final ProjectPermissionEnum permission) {
@@ -33,6 +34,7 @@ public class ProjectPermissionModelFactory {
 
         ProjectPermissionModel model = new ProjectPermissionModel();
         model.setId(id);
+        model.setTenantId(tenantId);
         model.setProjectId(projectId);
         model.setCreated(now);
         model.setUserId(userId);
