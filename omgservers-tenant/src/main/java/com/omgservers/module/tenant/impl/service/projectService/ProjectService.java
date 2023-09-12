@@ -6,7 +6,7 @@ import com.omgservers.dto.tenant.GetProjectResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.dto.tenant.SyncProjectRequest;
-import com.omgservers.dto.tenant.SyncProjectShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
@@ -15,7 +15,7 @@ public interface ProjectService {
 
     Uni<GetProjectResponse> getProject(GetProjectRequest request);
 
-    Uni<SyncProjectShardedResponse> syncProject(SyncProjectRequest request);
+    Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
 
     Uni<Void> deleteProject(DeleteProjectRequest request);
 

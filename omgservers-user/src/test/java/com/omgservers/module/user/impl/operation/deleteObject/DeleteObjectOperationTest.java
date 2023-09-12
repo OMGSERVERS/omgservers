@@ -55,7 +55,7 @@ class DeleteObjectOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object = objectModelFactory.create(user.getId(), player.getId(), UUID.randomUUID().toString(), new byte[5]);
         final var id = object.getId();
@@ -72,6 +72,10 @@ class DeleteObjectOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
 
         assertFalse(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, userId, playerId, id));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     long stageId() {

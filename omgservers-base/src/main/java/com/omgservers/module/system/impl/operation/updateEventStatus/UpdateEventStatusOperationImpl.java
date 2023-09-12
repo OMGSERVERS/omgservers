@@ -29,7 +29,7 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
     public Uni<Boolean> updateEventStatus(final ChangeContext<?> changeContext,
                                           final SqlConnection sqlConnection,
                                           final Long id,
-                                          final EventStatusEnum newStatus) {
+                                          final EventStatusEnum status) {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
@@ -37,9 +37,9 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
                         set status = $2
                         where id = $1
                         """,
-                Arrays.asList(id, newStatus),
+                Arrays.asList(id, status),
                 () -> null,
-                () -> logModelFactory.create("Index was deleted, id=" + id)
+                () -> logModelFactory.create(String.format("Event status was updated, id=%s, status=%s", id, status))
         );
     }
 }

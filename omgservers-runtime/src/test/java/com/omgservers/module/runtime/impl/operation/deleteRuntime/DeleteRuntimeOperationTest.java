@@ -35,7 +35,7 @@ class DeleteRuntimeOperationTest extends Assertions {
     @Test
     void givenRuntime_whenRuntimeTenant_thenDeleted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.EMBEDDED_LUA, RuntimeConfigModel.create());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         assertTrue(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, runtime1.getId()));

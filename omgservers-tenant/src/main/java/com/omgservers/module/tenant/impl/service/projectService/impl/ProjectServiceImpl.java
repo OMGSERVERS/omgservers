@@ -17,7 +17,7 @@ import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOpera
 import com.omgservers.dto.tenant.GetProjectRequest;
 import com.omgservers.dto.tenant.GetProjectResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionResponse;
-import com.omgservers.dto.tenant.SyncProjectShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -50,7 +50,7 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Uni<SyncProjectShardedResponse> syncProject(final SyncProjectRequest request) {
+    public Uni<SyncProjectResponse> syncProject(final SyncProjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 SyncProjectRequest::validate,
                 getTenantModuleClientOperation::getClient,

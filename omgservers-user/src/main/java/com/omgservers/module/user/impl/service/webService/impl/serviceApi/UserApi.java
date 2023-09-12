@@ -10,6 +10,8 @@ import com.omgservers.dto.user.DeleteObjectRequest;
 import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.dto.user.DeletePlayerRequest;
 import com.omgservers.dto.user.DeletePlayerResponse;
+import com.omgservers.dto.user.FindPlayerRequest;
+import com.omgservers.dto.user.FindPlayerResponse;
 import com.omgservers.dto.user.GetAttributeRequest;
 import com.omgservers.dto.user.GetAttributeResponse;
 import com.omgservers.dto.user.GetClientRequest;
@@ -66,6 +68,10 @@ public interface UserApi {
     @PUT
     @Path("/get-player")
     Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
+
+    @PUT
+    @Path("/find-player")
+    Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request);
 
     @PUT
     @Path("/sync-player")

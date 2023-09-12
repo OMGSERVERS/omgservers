@@ -10,6 +10,8 @@ import com.omgservers.dto.user.DeleteObjectRequest;
 import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.dto.user.DeletePlayerRequest;
 import com.omgservers.dto.user.DeletePlayerResponse;
+import com.omgservers.dto.user.FindPlayerRequest;
+import com.omgservers.dto.user.FindPlayerResponse;
 import com.omgservers.dto.user.GetAttributeRequest;
 import com.omgservers.dto.user.GetAttributeResponse;
 import com.omgservers.dto.user.GetClientRequest;
@@ -82,6 +84,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
         return playerService.getPlayer(request);
+    }
+
+    @Override
+    public Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request) {
+        return playerService.findPlayer(request);
     }
 
     @Override

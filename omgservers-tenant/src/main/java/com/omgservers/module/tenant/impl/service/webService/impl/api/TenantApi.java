@@ -29,7 +29,7 @@ import com.omgservers.dto.tenant.HasTenantPermissionResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.dto.tenant.SyncProjectRequest;
-import com.omgservers.dto.tenant.SyncProjectShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectResponse;
 import com.omgservers.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.dto.tenant.SyncStagePermissionResponse;
 import com.omgservers.dto.tenant.SyncStageRequest;
@@ -105,9 +105,9 @@ public interface TenantApi {
 
     @PUT
     @Path("/sync-project")
-    Uni<SyncProjectShardedResponse> syncProject(SyncProjectRequest request);
+    Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
 
-    default SyncProjectShardedResponse syncProject(long timeout, SyncProjectRequest request) {
+    default SyncProjectResponse syncProject(long timeout, SyncProjectRequest request) {
         return syncProject(request).await().atMost(Duration.ofSeconds(timeout));
     }
 

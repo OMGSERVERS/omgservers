@@ -31,15 +31,15 @@ public class PlayerMatchmakingTest extends Assertions {
     @Test
     void playerMatchmakingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                        function player_signed_up(event, player)
+                        function signed_up(event, player)
                             player.respond("signed_up")
                         end
 
-                        function player_signed_in(event, player)
+                        function signed_in(event, player)
                             player.respond("signed_in")
                         end
                                           
-                        function runtime_add_player(event, runtime)
+                        function add_player(event, runtime)
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
@@ -49,7 +49,7 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("runtime.runtime_id=" .. runtime.runtime_id)
                         end
                                                 
-                        function runtime_handle_event(event, runtime)
+                        function handle_message(event, runtime)
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
@@ -57,7 +57,7 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("event.data=" .. event.data)
                         end
                                                 
-                        function runtime_update(event, runtime)
+                        function update(event, runtime)
                             print(event.step)
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)

@@ -25,4 +25,5 @@ public class ClientModel {
     Instant created;
     URI server;
     Long connectionId;
+    Long scriptId;
 }

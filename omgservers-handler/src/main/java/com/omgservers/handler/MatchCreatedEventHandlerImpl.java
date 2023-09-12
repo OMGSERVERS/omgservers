@@ -60,7 +60,6 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                                     .map(GetStageVersionIdResponse::getVersionId)
                                     .flatMap(versionId -> {
                                         final var runtimeId = match.getRuntimeId();
-                                        // TODO: Detect runtime type
                                         final var runtime = runtimeModelFactory.create(
                                                 runtimeId,
                                                 tenantId,
@@ -68,7 +67,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                                                 versionId,
                                                 matchmakerId,
                                                 matchId,
-                                                RuntimeTypeEnum.EMBEDDED_LUA,
+                                                // TODO: Detect runtime type
+                                                RuntimeTypeEnum.SCRIPT,
                                                 RuntimeConfigModel.create());
                                         final var syncRuntimeInternalRequest = new SyncRuntimeRequest(runtime);
                                         return runtimeModule.getRuntimeService()

@@ -45,13 +45,13 @@ class SelectPermissionOperationTest extends Assertions {
     void givenPlayer_whenSelectPlayer_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        final var userUuid = user.getId();
+        final var userId = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player1 = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
-        final var stageUuid = player1.getStageId();
+        final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        final var playerId = player1.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player1);
 
-        final var player2 = selectPlayerOperation.selectPlayer(TIMEOUT, pgPool, shard, userUuid, stageUuid);
+        final var player2 = selectPlayerOperation.selectPlayer(TIMEOUT, pgPool, shard, userId, playerId);
         assertEquals(player1, player2);
     }
 
@@ -59,10 +59,14 @@ class SelectPermissionOperationTest extends Assertions {
     void givenUnknownUuids_whenSelectPlayer_thenServerSideNotFoundException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
-        final var stageId = generateIdOperation.generateId();
+        final var playerId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectPlayerOperation
-                .selectPlayer(TIMEOUT, pgPool, shard, userId, stageId));
+                .selectPlayer(TIMEOUT, pgPool, shard, userId, playerId));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     Long stageId() {

@@ -27,11 +27,11 @@ public class PlayerSignInSignUpTest extends Assertions {
     @Test
     void playerSignInSignUpTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                function player_signed_up(event, player)
+                function signed_up(event, player)
                     player.respond("player_signed_up")
                 end
                                 
-                function player_signed_in(event, player)
+                function signed_in(event, player)
                     player.respond("player_signed_in")
                 end
                                 

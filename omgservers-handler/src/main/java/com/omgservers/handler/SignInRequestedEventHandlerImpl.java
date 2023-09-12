@@ -2,16 +2,19 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerResponse;
+import com.omgservers.dto.user.FindPlayerRequest;
+import com.omgservers.dto.user.FindPlayerResponse;
 import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
+import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.module.system.SystemModule;
@@ -20,6 +23,7 @@ import com.omgservers.module.system.impl.service.handlerService.impl.EventHandle
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.ClientModelFactory;
+import com.omgservers.module.user.factory.PlayerModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -38,6 +42,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
 
     final ClientModelFactory clientModelFactory;
+    final PlayerModelFactory playerModelFactory;
     final EventModelFactory eventModelFactory;
 
     @Override
@@ -58,13 +63,13 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
 
         return validateStageSecret(tenantId, stageId, secret)
                 .flatMap(voidItem -> validateCredentials(tenantId, userId, password))
-                .flatMap(user -> getOrCreatePlayer(userId, stageId)
+                .flatMap(user -> getPlayer(userId, tenantId, stageId)
                         .flatMap(player -> {
-                            final var playerUuid = player.getId();
-                            return createClient(userId, playerUuid, server, connectionId)
+                            final var playerId = player.getId();
+                            return createClient(userId, playerId, server, connectionId)
                                     .flatMap(client -> {
                                         final var clientUuid = client.getId();
-                                        return fireEvent(tenantId, stageId, userId, playerUuid, clientUuid);
+                                        return fireEvent(tenantId, stageId, userId, playerId, clientUuid);
                                     });
                         }))
                 .replaceWith(true);
@@ -82,10 +87,23 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .map(ValidateCredentialsResponse::getUser);
     }
 
-    Uni<PlayerModel> getOrCreatePlayer(Long userId, Long stageId) {
-        final var createPlayerHelpRequest = new GetOrCreatePlayerRequest(userId, stageId);
-        return userModule.getPlayerService().getOrCreatePlayer(createPlayerHelpRequest)
-                .map(GetOrCreatePlayerResponse::getPlayer);
+    Uni<PlayerModel> getPlayer(Long userId, Long tenantId, Long stageId) {
+        return findPlayer(userId, stageId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithUni(t -> syncPlayer(userId, tenantId, stageId));
+    }
+
+    Uni<PlayerModel> findPlayer(Long userId, Long stageId) {
+        final var findPlayerRequest = new FindPlayerRequest(userId, stageId);
+        return userModule.getPlayerService().findPlayer(findPlayerRequest)
+                .map(FindPlayerResponse::getPlayer);
+    }
+
+    Uni<PlayerModel> syncPlayer(Long userId, Long tenantId, Long stageId) {
+        final var player = playerModelFactory.create(userId, tenantId, stageId, new PlayerConfigModel());
+        final var syncPlayerRequest = new SyncPlayerRequest(player);
+        return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
+                .replaceWith(player);
     }
 
     Uni<ClientModel> createClient(final Long userId,

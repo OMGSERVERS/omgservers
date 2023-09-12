@@ -2,7 +2,6 @@ package com.omgservers.module.runtime.factory;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeStateModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,7 +50,7 @@ public class RuntimeModelFactory {
         runtime.setMatchId(matchId);
         runtime.setType(type);
         runtime.setStep(0L);
-        runtime.setState(RuntimeStateModel.create());
+        runtime.setScriptId(generateIdOperation.generateId());
         runtime.setConfig(config);
         return runtime;
     }

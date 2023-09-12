@@ -56,7 +56,7 @@ class DeleteAttributeOperationTest extends Assertions {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
         final var userId = user.getId();
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(userId, stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(userId, tenantId(), stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var attribute1 = attributeModelFactory
@@ -78,6 +78,10 @@ class DeleteAttributeOperationTest extends Assertions {
 
     String passwordHash() {
         return "passwordhash";
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     Long stageId() {

@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-context</artifactId>
+            <artifactId>omgservers-script</artifactId>
         </dependency>
     </dependencies>
 </project>

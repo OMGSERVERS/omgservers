@@ -1,24 +1,22 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.doRuntimeUpdate;
 
-import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsRequest;
-import com.omgservers.dto.context.CreateLuaInstanceForRuntimeEventsResponse;
 import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
 import com.omgservers.dto.runtime.DoRuntimeUpdateResponse;
+import com.omgservers.dto.script.CallScriptRequest;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
-import com.omgservers.module.context.ContextModule;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
-import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleRuntimeCommandOperation;
-import com.omgservers.module.runtime.impl.operation.selectNewRuntimeCommands.SelectNewRuntimeCommandsOperation;
+import com.omgservers.module.runtime.impl.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
 import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
-import com.omgservers.module.runtime.impl.operation.updateRuntimeCommandStatusAndStep.UpdateRuntimeCommandStatusAndStepOperation;
-import com.omgservers.module.runtime.impl.operation.updateRuntimeStepAndState.UpdateRuntimeStepAndStateOperation;
+import com.omgservers.module.runtime.impl.operation.selectRuntimeCommandsByRuntimeIdAndStatus.SelectRuntimeCommandsByRuntimeIdAndStatusOperation;
+import com.omgservers.module.runtime.impl.operation.updateRuntimeCommandsStatusAndStepByIds.UpdateRuntimeCommandStatusAndStepByIdsOperation;
+import com.omgservers.module.runtime.impl.operation.updateRuntimeStep.UpdateRuntimeStepOperation;
+import com.omgservers.module.script.ScriptModule;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -33,13 +31,14 @@ import java.util.List;
 @AllArgsConstructor
 class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
-    final ContextModule contextModule;
+    final ScriptModule scriptModule;
 
-    final UpdateRuntimeCommandStatusAndStepOperation updateRuntimeCommandStatusAndStepOperation;
-    final SelectNewRuntimeCommandsOperation selectNewRuntimeCommandsOperation;
-    final UpdateRuntimeStepAndStateOperation updateRuntimeStepAndStateOperation;
-    final HandleRuntimeCommandOperation handleRuntimeCommandOperation;
+
+    final SelectRuntimeCommandsByRuntimeIdAndStatusOperation selectRuntimeCommandsByRuntimeIdAndStatusOperation;
+    final UpdateRuntimeCommandStatusAndStepByIdsOperation updateRuntimeCommandStatusAndStepByIdsOperation;
+    final UpdateRuntimeStepOperation updateRuntimeStepOperation;
     final ChangeWithContextOperation changeWithContextOperation;
+    final MapRuntimeCommandOperation mapRuntimeCommandOperation;
     final SelectRuntimeOperation selectRuntimeOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -55,89 +54,60 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var runtimeId = request.getRuntimeId();
-                    return changeWithContextOperation.<UpdateRuntimeResult>changeWithContext((changeContext, sqlConnection) ->
-                                    selectRuntimeOperation.selectRuntime(sqlConnection, shard, runtimeId)
-                                            .flatMap(runtime -> updateRuntime(changeContext, sqlConnection, shard, runtime))
-                            )
+                    return changeWithContextOperation.<Void>changeWithContext(
+                                    (changeContext, sqlConnection) -> selectRuntimeOperation
+                                            .selectRuntime(sqlConnection, shard, runtimeId)
+                                            .flatMap(runtime -> updateRuntime(
+                                                    changeContext,
+                                                    sqlConnection,
+                                                    shard,
+                                                    runtime)))
                             .map(ChangeContext::getResult);
                 })
-                .map(updateRuntimeResult -> {
-                    final var handledCommands = updateRuntimeResult.affectedCommands.size();
-                    return new DoRuntimeUpdateResponse(handledCommands);
-                });
+                .replaceWith(new DoRuntimeUpdateResponse());
     }
 
-    Uni<UpdateRuntimeResult> updateRuntime(final ChangeContext<?> changeContext,
-                                           final SqlConnection sqlConnection,
-                                           final int shard,
-                                           final RuntimeModel runtime) {
-        return createLuaInstance(runtime)
-                .flatMap(luaInstanceWasCreated -> {
-                    final var runtimeId = runtime.getId();
-                    final var step = runtime.getStep() + 1;
-                    return selectNewRuntimeCommandsOperation.selectNewRuntimeCommands(sqlConnection, shard, runtimeId)
-                            .flatMap(runtimeCommands -> {
-                                final var updateRuntimeCommand = runtimeCommandModelFactory
-                                        .create(runtimeId, new UpdateRuntimeCommandBodyModel(step));
-                                // Enrich list by update command every step automatically
-                                runtimeCommands.add(updateRuntimeCommand);
+    Uni<Void> updateRuntime(final ChangeContext<?> changeContext,
+                            final SqlConnection sqlConnection,
+                            final int shard,
+                            final RuntimeModel runtime) {
+        final var runtimeId = runtime.getId();
+        final var step = runtime.getStep() + 1;
+        return selectRuntimeCommandsByRuntimeIdAndStatusOperation
+                .selectRuntimeCommandsByRuntimeIdAndStatus(sqlConnection, shard, runtimeId,
+                        RuntimeCommandStatusEnum.NEW)
+                .flatMap(runtimeCommands -> {
+                    final var updateRuntimeCommand = runtimeCommandModelFactory
+                            .create(runtimeId, new UpdateRuntimeCommandBodyModel(step));
+                    // Enrich list by update command every step automatically
+                    runtimeCommands.add(updateRuntimeCommand);
 
-                                return handleRuntimeCommands(changeContext, sqlConnection, shard, runtimeCommands, step)
-                                        .call(affectedCommands -> updateRuntimeStepAndStateOperation
-                                                .updateRuntimeStepAndState(
-                                                        changeContext,
-                                                        sqlConnection,
-                                                        shard,
-                                                        runtimeId,
-                                                        step,
-                                                        runtime.getState()))
-                                        .map(UpdateRuntimeResult::new);
+                    return handleRuntimeCommands(runtime, runtimeCommands)
+                            .flatMap(voidItem -> {
+                                final var ids = runtimeCommands.stream().map(RuntimeCommandModel::getId).toList();
+                                return updateRuntimeCommandStatusAndStepByIdsOperation
+                                        .updateRuntimeCommandStatusAndStepByIds(changeContext, sqlConnection, shard,
+                                                ids, RuntimeCommandStatusEnum.PROCESSED, step);
                             });
-                });
+                })
+                .call(voidItem -> updateRuntimeStepOperation
+                        .updateRuntimeStep(changeContext, sqlConnection, shard, runtimeId, step))
+                .replaceWithVoid();
     }
 
-    Uni<Boolean> createLuaInstance(RuntimeModel runtime) {
-        final var request = new CreateLuaInstanceForRuntimeEventsRequest(runtime);
-        return contextModule.getContextService().createLuaInstanceForRuntimeEvents(request)
-                .map(CreateLuaInstanceForRuntimeEventsResponse::getCreated);
+    Uni<Void> handleRuntimeCommands(final RuntimeModel runtime, final List<RuntimeCommandModel> runtimeCommands) {
+        return switch (runtime.getType()) {
+            case SCRIPT -> callScript(runtime, runtimeCommands);
+        };
     }
 
-    Uni<List<RuntimeCommandModel>> handleRuntimeCommands(final ChangeContext<?> changeContext,
-                                                         final SqlConnection sqlConnection,
-                                                         final int shard,
-                                                         final List<RuntimeCommandModel> runtimeCommands,
-                                                         final Long currentStep) {
-        return Multi.createFrom().iterable(runtimeCommands)
-                .onItem().transformToUniAndConcatenate(runtimeCommand ->
-                        handleRuntimeCommand(
-                                changeContext,
-                                sqlConnection,
-                                shard,
-                                runtimeCommand,
-                                currentStep))
-                .collect().asList();
-    }
+    Uni<Void> callScript(final RuntimeModel runtime, final List<RuntimeCommandModel> runtimeCommands) {
+        final var scriptEvents = runtimeCommands.stream()
+                .map(mapRuntimeCommandOperation::mapRuntimeCommand)
+                .toList();
 
-    Uni<RuntimeCommandModel> handleRuntimeCommand(final ChangeContext<?> changeContext,
-                                                  final SqlConnection sqlConnection,
-                                                  final int shard,
-                                                  final RuntimeCommandModel runtimeCommand,
-                                                  final Long currentStep) {
-        return handleRuntimeCommandOperation.handleRuntimeCommand(runtimeCommand)
-                .flatMap(result -> {
-                    final var runtimeCommandId = runtimeCommand.getId();
-                    final var status = result ? RuntimeCommandStatusEnum.PROCESSED : RuntimeCommandStatusEnum.FAILED;
-                    return updateRuntimeCommandStatusAndStepOperation.updateRuntimeCommandStatusAndStep(
-                                    changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    runtimeCommandId,
-                                    status,
-                                    currentStep)
-                            .replaceWith(runtimeCommand);
-                });
-    }
-
-    private record UpdateRuntimeResult(List<RuntimeCommandModel> affectedCommands) {
+        final var callScriptRequest = new CallScriptRequest(runtime.getScriptId(), scriptEvents);
+        return scriptModule.getScriptService().callScript(callScriptRequest)
+                .replaceWithVoid();
     }
 }

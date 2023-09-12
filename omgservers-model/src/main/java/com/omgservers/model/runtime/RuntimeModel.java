@@ -28,6 +28,6 @@ public class RuntimeModel {
     Long matchId;
     RuntimeTypeEnum type;
     Long step;
-    RuntimeStateModel state;
+    Long scriptId;
     RuntimeConfigModel config;
 }

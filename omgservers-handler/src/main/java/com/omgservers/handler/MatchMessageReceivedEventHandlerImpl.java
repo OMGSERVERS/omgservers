@@ -4,7 +4,7 @@ import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
-import com.omgservers.model.runtimeCommand.body.HandleEventRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
@@ -39,7 +39,7 @@ public class MatchMessageReceivedEventHandlerImpl implements EventHandler {
 
         final var text = body.getText();
 
-        final var runtimeCommandBody = new HandleEventRuntimeCommandBodyModel(userId, playerId, clientId, text);
+        final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(userId, playerId, clientId, text);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandRequest)

@@ -30,8 +30,8 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_client(id, user_id, player_id, created, server, connection_id)
-                        values($1, $2, $3, $4, $5, $6)
+                        insert into $schema.tab_user_client(id, user_id, player_id, created, server, connection_id, script_id)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -41,7 +41,8 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                         client.getPlayerId(),
                         client.getCreated().atOffset(ZoneOffset.UTC),
                         client.getServer().toString(),
-                        client.getConnectionId()
+                        client.getConnectionId(),
+                        client.getScriptId()
                 ),
                 () -> new ClientCreatedEventBodyModel(client.getUserId(), client.getId()),
                 () -> logModelFactory.create(String.format("Client was inserted, " +

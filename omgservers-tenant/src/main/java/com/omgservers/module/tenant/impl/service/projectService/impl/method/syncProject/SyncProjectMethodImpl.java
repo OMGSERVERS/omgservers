@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.service.projectService.impl.method.syn
 
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncProjectRequest;
-import com.omgservers.dto.tenant.SyncProjectShardedResponse;
+import com.omgservers.dto.tenant.SyncProjectResponse;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
@@ -28,7 +28,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncProjectShardedResponse> syncProject(SyncProjectRequest request) {
+    public Uni<SyncProjectResponse> syncProject(SyncProjectRequest request) {
         SyncProjectRequest.validate(request);
 
         final var project = request.getProject();
@@ -37,7 +37,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeFunction(shardModel, project))
-                .map(SyncProjectShardedResponse::new);
+                .map(SyncProjectResponse::new);
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, ProjectModel project) {

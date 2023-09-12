@@ -25,10 +25,10 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
-                    final var user = request.getUserId();
-                    final var stage = request.getStageId();
+                    final var userId = request.getUserId();
+                    final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                            .selectPlayer(sqlConnection, shard.shard(), user, stage));
+                            .selectPlayer(sqlConnection, shard.shard(), userId, id));
                 })
                 .map(GetPlayerResponse::new);
     }

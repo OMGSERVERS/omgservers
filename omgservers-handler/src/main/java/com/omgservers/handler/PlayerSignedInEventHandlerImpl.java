@@ -1,8 +1,8 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.context.HandlePlayerSignedInEventRequest;
-import com.omgservers.dto.context.HandlePlayerSignedInEventResponse;
 import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.script.CallScriptRequest;
+import com.omgservers.dto.script.CallScriptResponse;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
@@ -10,8 +10,10 @@ import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
-import com.omgservers.module.context.ContextModule;
+import com.omgservers.model.scriptEvent.ScriptEventModel;
+import com.omgservers.model.scriptEvent.body.SignedInScriptEventBodyModel;
 import com.omgservers.module.gateway.GatewayModule;
+import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -20,6 +22,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -27,7 +31,7 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
 
     final GatewayModule gatewayModule;
     final UserModule userModule;
-    final ContextModule contextModule;
+    final ScriptModule scriptModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -44,8 +48,8 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
 
         return getClient(userId, clientId)
-                .flatMap(client -> assignPlayer(tenantId, stageId, userId, playerId, client))
-                .flatMap(voidItem -> handleEvent(tenantId, stageId, userId, playerId, clientId));
+                .flatMap(client -> assignPlayer(tenantId, stageId, userId, playerId, client)
+                        .flatMap(voidItem -> callScript(client.getScriptId(), userId, playerId, client.getId())));
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
@@ -62,9 +66,15 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
         return gatewayModule.getGatewayService().assignPlayer(request);
     }
 
-    Uni<Boolean> handleEvent(Long tenantId, Long stageId, Long userId, Long playerId, Long clientId) {
-        final var request = new HandlePlayerSignedInEventRequest(tenantId, stageId, userId, playerId, clientId);
-        return contextModule.getContextService().handlePlayerSignedInEvent(request)
-                .map(HandlePlayerSignedInEventResponse::getResult);
+    Uni<Boolean> callScript(Long scriptId, Long userId, Long playerId, Long clientId) {
+        final var scriptEventBody = SignedInScriptEventBodyModel.builder()
+                .userId(userId)
+                .playerId(playerId)
+                .clientId(clientId)
+                .build();
+
+        final var request = new CallScriptRequest(scriptId, Collections.singletonList(new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody)));
+        return scriptModule.getScriptService().callScript(request)
+                .map(CallScriptResponse::getResult);
     }
 }

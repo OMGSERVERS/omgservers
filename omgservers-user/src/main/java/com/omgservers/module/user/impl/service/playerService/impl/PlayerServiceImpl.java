@@ -2,8 +2,8 @@ package com.omgservers.module.user.impl.service.playerService.impl;
 
 import com.omgservers.dto.user.DeletePlayerRequest;
 import com.omgservers.dto.user.DeletePlayerResponse;
-import com.omgservers.dto.user.GetOrCreatePlayerRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerResponse;
+import com.omgservers.dto.user.FindPlayerRequest;
+import com.omgservers.dto.user.FindPlayerResponse;
 import com.omgservers.dto.user.GetPlayerRequest;
 import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.dto.user.SyncPlayerRequest;
@@ -12,7 +12,7 @@ import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModu
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
 import com.omgservers.module.user.impl.service.playerService.impl.method.deletePlayer.DeletePlayerMethod;
-import com.omgservers.module.user.impl.service.playerService.impl.method.getOrCreatePlayer.GetOrCreatePlayerHelpMethod;
+import com.omgservers.module.user.impl.service.playerService.impl.method.findPlayer.FindPlayerMethod;
 import com.omgservers.module.user.impl.service.playerService.impl.method.getPlayer.GetPlayerMethod;
 import com.omgservers.module.user.impl.service.playerService.impl.method.syncPlayer.SyncPlayerMethod;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -29,11 +29,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     final DeletePlayerMethod deletePlayerMethod;
     final SyncPlayerMethod syncPlayerMethod;
+    final FindPlayerMethod findPlayerMethod;
     final GetPlayerMethod getPlayerMethod;
 
     final GetUserModuleClientOperation getUserModuleClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
-    final GetOrCreatePlayerHelpMethod getOrCreatePlayerHelpMethod;
 
     @Override
     public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
@@ -42,6 +42,15 @@ public class PlayerServiceImpl implements PlayerService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayer,
                 getPlayerMethod::getPlayer);
+    }
+
+    @Override
+    public Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                FindPlayerRequest::validate,
+                getUserModuleClientOperation::getClient,
+                UserModuleClient::findPlayer,
+                findPlayerMethod::findPlayer);
     }
 
     @Override
@@ -60,10 +69,5 @@ public class PlayerServiceImpl implements PlayerService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deletePlayer,
                 deletePlayerMethod::deletePlayer);
-    }
-
-    @Override
-    public Uni<GetOrCreatePlayerResponse> getOrCreatePlayer(GetOrCreatePlayerRequest request) {
-        return getOrCreatePlayerHelpMethod.getOrCreatePlayer(request);
     }
 }

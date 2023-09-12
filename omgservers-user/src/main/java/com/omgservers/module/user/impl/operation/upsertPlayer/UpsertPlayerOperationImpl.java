@@ -35,8 +35,8 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_player(id, user_id, created, modified, stage_id, config)
-                        values($1, $2, $3, $4, $5, $6)
+                        insert into $schema.tab_user_player(id, user_id, created, modified, tenant_id, stage_id, config)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,6 +45,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                         player.getUserId(),
                         player.getCreated().atOffset(ZoneOffset.UTC),
                         player.getModified().atOffset(ZoneOffset.UTC),
+                        player.getTenantId(),
                         player.getStageId(),
                         getConfigString(player)
                 ),

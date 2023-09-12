@@ -2,10 +2,9 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerRequest;
-import com.omgservers.dto.user.GetOrCreatePlayerResponse;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
@@ -14,6 +13,7 @@ import com.omgservers.model.event.body.PlayerSignedUpEventBodyModel;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
+import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
@@ -24,6 +24,7 @@ import com.omgservers.module.system.impl.service.handlerService.impl.EventHandle
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.ClientModelFactory;
+import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -49,6 +50,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
 
     final MessageModelFactory messageModelFactory;
     final ClientModelFactory clientModelFactory;
+    final PlayerModelFactory playerModelFactory;
     final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
 
@@ -70,17 +72,17 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         final var password = String.valueOf(new SecureRandom().nextLong());
 
         return validateStageSecret(tenantId, stageId, secret)
-                .flatMap(voidItem -> createUser(password))
+                .flatMap(voidItem -> syncUser(password))
                 .flatMap(user -> {
-                    final var userUuid = user.getId();
-                    return createPlayer(userUuid, stageId)
+                    final var userid = user.getId();
+                    return syncPlayer(userid, tenantId, stageId)
                             .flatMap(player -> {
-                                final var playerUuid = player.getId();
-                                return createClient(userUuid, playerUuid, server, connectionId)
+                                final var playerId = player.getId();
+                                return syncClient(userid, playerId, server, connectionId)
                                         .call(client -> {
                                             final var clientId = client.getId();
-                                            return respondCredentials(userUuid, clientId, password)
-                                                    .flatMap(voidItem -> fireEvent(tenantId, stageId, userUuid, playerUuid, clientId));
+                                            return respondCredentials(userid, clientId, password)
+                                                    .flatMap(voidItem -> fireEvent(tenantId, stageId, userid, playerId, clientId));
                                         });
                             });
                 })
@@ -93,7 +95,7 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<UserModel> createUser(final String password) {
+    Uni<UserModel> syncUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
         final var syncUserInternalRequest = new SyncUserRequest(user);
@@ -101,16 +103,17 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                 .replaceWith(user);
     }
 
-    Uni<PlayerModel> createPlayer(Long userId, Long stageId) {
-        final var createPlayerHelpRequest = new GetOrCreatePlayerRequest(userId, stageId);
-        return userModule.getPlayerService().getOrCreatePlayer(createPlayerHelpRequest)
-                .map(GetOrCreatePlayerResponse::getPlayer);
+    Uni<PlayerModel> syncPlayer(Long userId, Long tenantId, Long stageId) {
+        final var player = playerModelFactory.create(userId, tenantId, stageId, new PlayerConfigModel());
+        final var syncPlayerRequest = new SyncPlayerRequest(player);
+        return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
+                .replaceWith(player);
     }
 
-    Uni<ClientModel> createClient(final Long userId,
-                                  final Long playerId,
-                                  final URI server,
-                                  final Long connectionId) {
+    Uni<ClientModel> syncClient(final Long userId,
+                                final Long playerId,
+                                final URI server,
+                                final Long connectionId) {
         final var client = clientModelFactory.create(userId, playerId, server, connectionId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)

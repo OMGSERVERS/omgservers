@@ -21,13 +21,13 @@ public class PlayerSetGetAttributesTest extends Assertions {
     @Test
     void givenVersion_whenSetGetAttributes() throws Exception {
         final var version = bootstrapVersionOperation.bootstrap("""
-                function player_signed_up(event, player)
+                function signed_up(event, player)
                     player.set_attribute("a1", "1")
                     player.set_attribute("a2", "2")
                     player.set_attribute("a3", "3")
                 end
 
-                function player_signed_in(event, player)
+                function signed_in(event, player)
                     local a1 = player.get_attribute("a1")
                     print("a1:", a1)
                     player.respond(a1)

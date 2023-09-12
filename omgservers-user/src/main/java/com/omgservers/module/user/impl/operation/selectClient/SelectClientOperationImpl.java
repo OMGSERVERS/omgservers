@@ -28,7 +28,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, player_id, created, server, connection_id
+                        select id, user_id, player_id, created, server, connection_id, script_id
                         from $schema.tab_user_client
                         where user_id = $1 and id = $2
                         limit 1
@@ -46,6 +46,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
         client.setCreated(row.getOffsetDateTime("created").toInstant());
         client.setServer(URI.create(row.getString("server")));
         client.setConnectionId(row.getLong("connection_id"));
+        client.setScriptId(row.getLong("script_id"));
         return client;
     }
 }

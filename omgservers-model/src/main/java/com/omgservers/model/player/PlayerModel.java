@@ -2,6 +2,7 @@ package com.omgservers.model.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -22,7 +23,9 @@ public class PlayerModel {
     Long userId;
     Instant created;
     Instant modified;
+    Long tenantId;
     Long stageId;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     PlayerConfigModel config;
 }

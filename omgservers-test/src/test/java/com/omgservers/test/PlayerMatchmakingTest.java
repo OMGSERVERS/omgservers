@@ -26,10 +26,10 @@ public class PlayerMatchmakingTest extends Assertions {
     @Test
     void matchmakingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrap("""
-                        function player_signed_up(event, player)
+                        function signed_up(event, player)
                         end
 
-                        function player_signed_in(event, player)
+                        function signed_in(event, player)
                             player.respond("signed_in")
                         end
 

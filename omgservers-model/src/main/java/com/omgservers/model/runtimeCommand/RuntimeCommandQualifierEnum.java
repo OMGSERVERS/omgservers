@@ -2,7 +2,7 @@ package com.omgservers.model.runtimeCommand;
 
 import com.omgservers.model.runtimeCommand.body.AddPlayerRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.DeletePlayerRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.HandleEventRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
@@ -13,7 +13,7 @@ public enum RuntimeCommandQualifierEnum {
     STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
     ADD_PLAYER(AddPlayerRuntimeCommandBodyModel.class),
     DELETE_PLAYER(DeletePlayerRuntimeCommandBodyModel.class),
-    HANDLE_EVENT(HandleEventRuntimeCommandBodyModel.class);
+    HANDLE_MESSAGE(HandleMessageRuntimeCommandBodyModel.class);
 
     Class<? extends RuntimeCommandBodyModel> bodyClass;
 

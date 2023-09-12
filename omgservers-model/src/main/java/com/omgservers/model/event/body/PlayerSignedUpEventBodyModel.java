@@ -26,6 +26,6 @@ public class PlayerSignedUpEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return clientId;
+        return userId;
     }
 }

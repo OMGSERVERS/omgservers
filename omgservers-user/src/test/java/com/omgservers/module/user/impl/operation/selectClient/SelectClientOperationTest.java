@@ -56,7 +56,7 @@ class SelectClientOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client1 = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"), connectionId());
         final var clientId = client1.getId();
@@ -74,6 +74,10 @@ class SelectClientOperationTest extends Assertions {
 
         assertThrows(ServerSideNotFoundException.class, () -> selectClientOperation
                 .selectClient(TIMEOUT, pgPool, shard, userId, clientId));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     long stageId() {

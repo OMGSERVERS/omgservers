@@ -21,6 +21,7 @@ create table if not exists tab_user_player (
     user_id bigint not null references tab_user(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    tenant_id bigint not null,
     stage_id bigint not null,
     config json not null,
     unique(user_id, stage_id)
@@ -33,6 +34,7 @@ create table if not exists tab_user_client (
     created timestamp with time zone not null,
     server text not null,
     connection_id bigint not null,
+    script_id bigint not null,
     unique(player_id, connection_id)
 );
 
@@ -187,7 +189,7 @@ create table if not exists tab_runtime (
     match_id bigint not null,
     type text not null,
     step bigint not null,
-    state json not null,
+    script_id bigint not null,
     config json not null
 );
 
@@ -200,4 +202,17 @@ create table if not exists tab_runtime_command (
     body json not null,
     status text not null,
     step bigint
+);
+
+-- script module
+
+create table if not exists tab_script (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    tenant_id bigint not null,
+    version_id bigint not null,
+    self json not null,
+    type text not null,
+    config json not null
 );

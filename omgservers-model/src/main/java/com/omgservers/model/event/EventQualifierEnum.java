@@ -30,6 +30,9 @@ import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
+import com.omgservers.model.event.body.ScriptCreatedEventBodyModel;
+import com.omgservers.model.event.body.ScriptDeletedEventBodyModel;
+import com.omgservers.model.event.body.ScriptUpdatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
@@ -88,6 +91,10 @@ public enum EventQualifierEnum {
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class),
     RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
+    SCRIPT_CREATED(ScriptCreatedEventBodyModel.class),
+    SCRIPT_UPDATED(ScriptUpdatedEventBodyModel.class),
+    SCRIPT_DELETED(ScriptDeletedEventBodyModel.class),
+
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class),
     PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),

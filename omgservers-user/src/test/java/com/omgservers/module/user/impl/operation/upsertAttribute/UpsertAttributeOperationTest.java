@@ -51,7 +51,7 @@ class UpsertAttributeOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash());
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
@@ -64,7 +64,7 @@ class UpsertAttributeOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var attribute = attributeModelFactory.create(user.getId(), playerId, attributeName(), stringValue());
@@ -83,6 +83,10 @@ class UpsertAttributeOperationTest extends Assertions {
 
     String stringValue() {
         return UUID.randomUUID().toString();
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     Long stageId() {

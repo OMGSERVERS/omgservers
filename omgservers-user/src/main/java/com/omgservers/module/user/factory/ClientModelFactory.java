@@ -30,6 +30,8 @@ public class ClientModelFactory {
                               final Long playerId,
                               final URI server,
                               final Long connectionId) {
+        final var scriptId = generateIdOperation.generateId();
+
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         ClientModel client = new ClientModel();
@@ -39,6 +41,7 @@ public class ClientModelFactory {
         client.setCreated(now);
         client.setServer(server);
         client.setConnectionId(connectionId);
+        client.setScriptId(scriptId);
 
         return client;
     }

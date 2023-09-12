@@ -56,7 +56,7 @@ class SelectObjectOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object1 = objectModelFactory.create(user.getId(), playerId, UUID.randomUUID().toString(), new byte[5]);
@@ -76,6 +76,10 @@ class SelectObjectOperationTest extends Assertions {
 
         assertThrows(ServerSideNotFoundException.class, () -> selectObjectOperation
                 .selectObject(TIMEOUT, pgPool, shard, userId, playerId, objectName));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 
     long stageId() {

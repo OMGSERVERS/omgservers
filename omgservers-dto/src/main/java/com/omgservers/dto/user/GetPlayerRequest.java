@@ -17,7 +17,7 @@ public class GetPlayerRequest implements ShardedRequest {
     }
 
     Long userId;
-    Long stageId;
+    Long id;
 
     @Override
     public String getRequestShardKey() {

@@ -2,11 +2,9 @@ package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.do
 
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
-import com.omgservers.module.runtime.impl.operation.handleRuntimeCommand.HandleRuntimeCommandOperation;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
 import com.omgservers.operation.generateId.GenerateIdOperation;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +33,6 @@ class DoRuntimeUpdateMethodTest extends Assertions {
 
     @Inject
     RuntimeCommandModelFactory runtimeCommandModelFactory;
-
-    @InjectMock
-    HandleRuntimeCommandOperation handleRuntimeCommandOperation;
 
     @Test
     void doRuntimeUpdateTest() {

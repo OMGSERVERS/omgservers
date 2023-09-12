@@ -28,7 +28,7 @@
         <module>omgservers-base</module>
         <module>omgservers-bom</module>
         <module>omgservers-common</module>
-        <module>omgservers-context</module>
+        <module>omgservers-script</module>
         <module>omgservers-developer</module>
         <module>omgservers-documentation</module>
         <module>omgservers-dto</module>

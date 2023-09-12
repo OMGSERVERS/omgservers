@@ -2,6 +2,7 @@ package com.omgservers.base.cache;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryCache<K, V> implements Cache<K, V> {
 
@@ -12,17 +13,17 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public synchronized V getValue(K key) {
-        return cache.get(key);
+    public synchronized Optional<V> getValue(K key) {
+        return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public synchronized boolean cacheIfAbsent(K key, V value) {
+    public synchronized V cacheIfAbsent(K key, V value) {
         if (cache.containsKey(key)) {
-            return false;
+            return cache.get(key);
         } else {
             cache.put(key, value);
-            return true;
+            return value;
         }
     }
 
