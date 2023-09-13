@@ -1,9 +1,9 @@
 package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
 
 import com.omgservers.dto.user.RespondClientRequest;
-import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,6 @@ import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
 
-import java.util.UUID;
-
 @Slf4j
 @ToString
 @AllArgsConstructor
@@ -23,6 +21,7 @@ public class LuaPlayerRespondFunction extends OneArgFunction {
 
     @ToString.Exclude
     final UserModule userModule;
+    final MessageModelFactory messageModelFactory;
     final Long userId;
     final Long clientId;
 
@@ -30,7 +29,7 @@ public class LuaPlayerRespondFunction extends OneArgFunction {
     public LuaValue call(LuaValue arg) {
         final var event = arg.tojstring();
         final var body = new EventMessageBodyModel(event);
-        final var message = new MessageModel(UUID.randomUUID().toString(), MessageQualifierEnum.EVENT_MESSAGE, body);
+        final var message = messageModelFactory.create(MessageQualifierEnum.EVENT_MESSAGE, body);
         final var request = new RespondClientRequest(userId, clientId, message);
 
         try {

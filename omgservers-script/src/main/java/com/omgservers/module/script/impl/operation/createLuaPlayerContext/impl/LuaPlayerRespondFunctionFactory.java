@@ -1,5 +1,6 @@
 package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
 
+import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.user.UserModule;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -12,8 +13,10 @@ class LuaPlayerRespondFunctionFactory {
 
     final UserModule userModule;
 
+    final MessageModelFactory messageModelFactory;
+
     public LuaPlayerRespondFunction build(Long userId, Long clientId) {
-        final var function = new LuaPlayerRespondFunction(userModule, userId, clientId);
+        final var function = new LuaPlayerRespondFunction(userModule, messageModelFactory, userId, clientId);
         return function;
     }
 }

@@ -37,7 +37,7 @@ public class MessageDeserializer extends StdDeserializer<MessageModel> {
 
         final var idNode = root.get("id");
         if (idNode != null) {
-            messageModel.setId(idNode.asText());
+            messageModel.setId(idNode.asLong());
         }
 
         final var qualifierNode = root.get("qualifier");

@@ -12,7 +12,7 @@ import lombok.ToString;
 @JsonDeserialize(using = MessageDeserializer.class)
 public class MessageModel {
 
-    String id;
+    Long id;
     MessageQualifierEnum qualifier;
     @ToString.Exclude
     MessageBodyModel body;

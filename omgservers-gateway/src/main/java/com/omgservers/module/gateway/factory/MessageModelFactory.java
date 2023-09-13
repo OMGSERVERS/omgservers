@@ -3,23 +3,24 @@ package com.omgservers.module.gateway.factory;
 import com.omgservers.model.message.MessageBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 public class MessageModelFactory {
 
+    final GenerateIdOperation generateIdOperation;
+
     public MessageModel create(final MessageQualifierEnum qualifier, final MessageBodyModel body) {
-        final var id = UUID.randomUUID().toString();
+        final var id = generateIdOperation.generateId();
         return create(id, qualifier, body);
     }
 
-    public MessageModel create(final String id,
+    public MessageModel create(final Long id,
                                final MessageQualifierEnum qualifier,
                                final MessageBodyModel body) {
         MessageModel message = new MessageModel();
