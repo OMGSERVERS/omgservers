@@ -27,7 +27,7 @@ class SyncRuntimeMethodTest extends Assertions {
 
     @Test
     void givenRuntime_whenSyncRuntime_thenCreated() {
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
         final var syncRuntimeShardedRequest = new SyncRuntimeRequest(runtime);
         final var response = syncRuntimeMethod.syncRuntime(TIMEOUT, syncRuntimeShardedRequest);
         log.info("Method response, response={}", response);
@@ -39,7 +39,7 @@ class SyncRuntimeMethodTest extends Assertions {
 
     @Test
     void givenRuntime_whenSyncRuntimeAgain_thenUpdated() {
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
         final var syncRuntimeShardedRequest = new SyncRuntimeRequest(runtime);
         syncRuntimeMethod.syncRuntime(TIMEOUT, syncRuntimeShardedRequest);
         final var response = syncRuntimeMethod.syncRuntime(TIMEOUT, syncRuntimeShardedRequest);

@@ -33,7 +33,6 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
 
     final ScriptModule scriptModule;
 
-
     final SelectRuntimeCommandsByRuntimeIdAndStatusOperation selectRuntimeCommandsByRuntimeIdAndStatusOperation;
     final UpdateRuntimeCommandStatusAndStepByIdsOperation updateRuntimeCommandStatusAndStepByIdsOperation;
     final UpdateRuntimeStepOperation updateRuntimeStepOperation;
@@ -43,8 +42,6 @@ class DoRuntimeUpdateMethodImpl implements DoRuntimeUpdateMethod {
     final CheckShardOperation checkShardOperation;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
-
-    final PgPool pgPool;
 
     @Override
     public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(final DoRuntimeUpdateRequest request) {

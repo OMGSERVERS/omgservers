@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.luaj.vm2.LuaValue;
 
 @Slf4j
 @QuarkusTest
@@ -34,14 +35,14 @@ class InitLuaEventTest extends Assertions {
                     print("runtime.match_id=" .. runtime.match_id)
                     print("runtime.runtime_id=" .. runtime.runtime_id)
                     -- assert
-                    assert(event.id == "init", "event.id is wrong")                                        
+                    assert(event.id == "init", "event.id is wrong")
                     assert(runtime.matchmaker_id == "27535430859688964", "runtime.matchmaker_id is wrong")
                     assert(runtime.match_id == "27535430859688965", "runtime.match_id is wrong")
                     assert(runtime.runtime_id == "27535430859688966", "runtime.runtime_id is wrong")
                 end
                 """);
 
-        final var luaEvent = new InitLuaEvent();
+        final var luaEvent = new InitLuaEvent(LuaValue.valueOf("config"));
         final var luaContext = createLuaRuntimeContextOperation.createLuaRuntimeContext(TIMEOUT,
                 27535430859688964L,
                 27535430859688965L,

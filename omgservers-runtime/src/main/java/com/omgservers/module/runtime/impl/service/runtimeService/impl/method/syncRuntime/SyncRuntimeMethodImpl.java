@@ -1,15 +1,17 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntime;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.shard.ShardModel;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
+import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
+    final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertRuntimeOperation upsertRuntimeOperation;
     final CheckShardOperation checkShardOperation;
 
-    final PgPool pgPool;
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request) {
@@ -37,12 +40,31 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     }
 
     Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeModel runtime) {
+        final int shard = shardModel.shard();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertRuntimeOperation.upsertRuntime(
-                                changeContext,
-                                sqlConnection,
-                                shardModel.shard(),
-                                runtime))
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        runtime)
+                                .call(runtimeWasInserted -> {
+                                    if (runtimeWasInserted) {
+                                        // InitRuntime is always first command of runtime
+                                        final var commandBody = InitRuntimeCommandBodyModel.builder()
+                                                .config(runtime.getConfig())
+                                                .build();
+                                        final var initCommand = runtimeCommandModelFactory
+                                                .create(runtime.getId(), commandBody);
+                                        return upsertRuntimeCommandOperation.upsertRuntimeCommand(
+                                                changeContext,
+                                                sqlConnection,
+                                                shard,
+                                                initCommand);
+                                    } else {
+                                        return Uni.createFrom().voidItem();
+                                    }
+                                })
+                )
                 .map(ChangeContext::getResult);
     }
 }

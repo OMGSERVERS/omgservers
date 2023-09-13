@@ -69,7 +69,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                                                 matchId,
                                                 // TODO: Detect runtime type
                                                 RuntimeTypeEnum.SCRIPT,
-                                                RuntimeConfigModel.create());
+                                                RuntimeConfigModel.create(match.getConfig().getModeConfig()));
                                         final var syncRuntimeInternalRequest = new SyncRuntimeRequest(runtime);
                                         return runtimeModule.getRuntimeService()
                                                 .syncRuntime(syncRuntimeInternalRequest)

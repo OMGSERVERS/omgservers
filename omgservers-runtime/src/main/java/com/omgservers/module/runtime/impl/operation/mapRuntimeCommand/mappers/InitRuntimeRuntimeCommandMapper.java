@@ -25,6 +25,7 @@ public class InitRuntimeRuntimeCommandMapper implements RuntimeCommandMapper {
     public ScriptEventModel map(RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (InitRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var scriptEventBody = InitScriptEventBodyModel.builder()
+                .config(runtimeCommandBody.getConfig())
                 .build();
         return new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody);
     }

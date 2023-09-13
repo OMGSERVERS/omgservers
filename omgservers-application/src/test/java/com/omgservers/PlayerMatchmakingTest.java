@@ -38,6 +38,11 @@ public class PlayerMatchmakingTest extends Assertions {
                         function signed_in(self, event, player)
                             player.respond("signed_in")
                         end
+
+                        function init(self, event, runtime)
+                            print("event.id=" .. event.id)
+                            self.config = event.config
+                        end
                                           
                         function add_player(self, event, runtime)
                             print("event.id=" .. event.id)
