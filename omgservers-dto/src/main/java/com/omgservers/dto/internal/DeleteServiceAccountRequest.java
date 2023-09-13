@@ -15,5 +15,5 @@ public class DeleteServiceAccountRequest {
         }
     }
 
-    Long id;
+    String username;
 }

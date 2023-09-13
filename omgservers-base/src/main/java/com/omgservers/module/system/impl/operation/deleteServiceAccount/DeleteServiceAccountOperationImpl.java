@@ -1,7 +1,9 @@
 package com.omgservers.module.system.impl.operation.deleteServiceAccount;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.system.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,22 +19,26 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
+    final SelectServiceAccountOperation selectServiceAccountOperation;
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> deleteServiceAccount(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
-                                             final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, 0,
-                """
-                        delete from internal.tab_service_account
-                        where id = $1
-                        """,
-                Collections.singletonList(id),
-                () -> new ServiceAccountDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Service account was deleted, id=" + id)
-        );
+                                             final String username) {
+        return selectServiceAccountOperation.selectServiceAccount(sqlConnection, username)
+                .flatMap(serviceAccount -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, 0,
+                        """
+                                delete from internal.tab_service_account
+                                where username = $1
+                                """,
+                        Collections.singletonList(username),
+                        () -> new ServiceAccountDeletedEventBodyModel(serviceAccount),
+                        () -> logModelFactory.create("Service account was deleted, serviceAccount=" + serviceAccount)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

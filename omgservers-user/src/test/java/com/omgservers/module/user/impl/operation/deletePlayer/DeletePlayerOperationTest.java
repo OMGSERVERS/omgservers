@@ -1,9 +1,11 @@
 package com.omgservers.module.user.impl.operation.deletePlayer;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.impl.operation.DeletePlayerOperationTestInterface;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -20,7 +22,7 @@ class DeletePlayerOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeletePlayerOperation deletePlayerOperation;
+    DeletePlayerOperationTestInterface deletePlayerOperation;
 
     @Inject
     UpsertPlayerOperation upsertPlayerOperation;
@@ -49,7 +51,9 @@ class DeletePlayerOperationTest extends Assertions {
         final var id = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        assertTrue(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, user.getId(), id));
+        final var changeContext = deletePlayerOperation.deletePlayer(shard, user.getId(), id);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.PLAYER_DELETED));
     }
 
     @Test
@@ -58,7 +62,9 @@ class DeletePlayerOperationTest extends Assertions {
         final var userId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deletePlayerOperation.deletePlayer(TIMEOUT, pgPool, shard, userId, id));
+        final var changeContext = deletePlayerOperation.deletePlayer(shard, userId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.PLAYER_DELETED));
     }
 
     Long tenantId() {

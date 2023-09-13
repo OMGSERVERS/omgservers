@@ -8,10 +8,10 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.time.Duration;
 
 public interface SelectProjectOperation {
-    Uni<ProjectModel> selectProject(SqlConnection sqlConnection, int shard, Long id);
+    Uni<ProjectModel> selectProject(SqlConnection sqlConnection, int shard, Long tenantId, Long id);
 
-    default ProjectModel selectProject(long timeout, PgPool pgPool, int shard, Long id) {
-        return pgPool.withTransaction(sqlConnection -> selectProject(sqlConnection, shard, id))
+    default ProjectModel selectProject(long timeout, PgPool pgPool, int shard, Long tenantId, Long id) {
+        return pgPool.withTransaction(sqlConnection -> selectProject(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 }

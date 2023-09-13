@@ -1,9 +1,11 @@
 package com.omgservers.module.tenant.impl.operation.deleteProject;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.factory.ProjectModelFactory;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.module.tenant.impl.operation.DeleteProjectOperationTestInterface;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -20,7 +22,7 @@ class DeleteProjectOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteProjectOperation deleteProjectOperation;
+    DeleteProjectOperationTestInterface deleteProjectOperation;
 
     @Inject
     UpsertTenantOperation upsertTenantOperation;
@@ -49,15 +51,19 @@ class DeleteProjectOperationTest extends Assertions {
         final var id = project.getId();
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
-        assertTrue(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, tenant.getId(), id));
+        final var changeContext = deleteProjectOperation.deleteProject(shard, tenant.getId(), id);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteProject_thenSkip() {
+    void givenUnknownIds_whenDeleteProject_thenFalse() {
         final var shard = 0;
         final var tenantId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteProjectOperation.deleteProject(TIMEOUT, pgPool, shard, tenantId, id));
+        final var changeContext = deleteProjectOperation.deleteProject(shard, tenantId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
     }
 }

@@ -1,9 +1,11 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatchClient;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.module.matchmaker.impl.operation.DeleteMatchClientOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
@@ -21,7 +23,7 @@ class DeleteMatchClientOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteMatchClientOperation deleteMatchClientOperation;
+    DeleteMatchClientOperationTestInterface deleteMatchClientOperation;
 
     @Inject
     UpsertMatchClientOperation upsertMatchClientOperation;
@@ -57,7 +59,9 @@ class DeleteMatchClientOperationTest extends Assertions {
         final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId());
         upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient);
 
-        assertTrue(deleteMatchClientOperation.deleteMatchClient(TIMEOUT, pgPool, shard, matchmaker.getId(), matchClient.getId()));
+        final var changeContext = deleteMatchClientOperation.deleteMatchClient(shard, matchmaker.getId(), matchClient.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCH_CLIENT_DELETED));
     }
 
     @Test
@@ -66,7 +70,9 @@ class DeleteMatchClientOperationTest extends Assertions {
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchClientOperation.deleteMatchClient(TIMEOUT, pgPool, shard, matchmakerId, id));
+        final var changeContext = deleteMatchClientOperation.deleteMatchClient(shard, matchmakerId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCH_CLIENT_DELETED));
     }
 
     Long userId() {

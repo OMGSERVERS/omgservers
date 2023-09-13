@@ -1,7 +1,9 @@
 package com.omgservers.module.user.impl.operation.deletePlayer;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 class DeletePlayerOperationImpl implements DeletePlayerOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectPlayerOperation selectPlayerOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,19 +29,21 @@ class DeletePlayerOperationImpl implements DeletePlayerOperation {
                                      final int shard,
                                      final Long userId,
                                      final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_user_player
-                        where user_id = $1 and id = $2
-                        """,
-                Arrays.asList(
-                        userId,
-                        id
-                ),
-                () -> new PlayerDeletedEventBodyModel(userId, id),
-                () -> logModelFactory.create(String.format("Player was deleted, " +
-                        "userId=%d, id=%d", userId, id))
-        );
+        return selectPlayerOperation.selectPlayer(sqlConnection, shard, userId, id)
+                .flatMap(player -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_user_player
+                                where user_id = $1 and id = $2
+                                """,
+                        Arrays.asList(
+                                userId,
+                                id
+                        ),
+                        () -> new PlayerDeletedEventBodyModel(player),
+                        () -> logModelFactory.create("Player was deleted, player=" + player)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

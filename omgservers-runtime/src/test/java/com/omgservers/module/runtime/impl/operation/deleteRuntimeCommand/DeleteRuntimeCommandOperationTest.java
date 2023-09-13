@@ -5,6 +5,7 @@ import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.impl.DeleteRuntimeCommandOperationTestInterface;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -21,7 +22,7 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteRuntimeCommandOperation deleteRuntimeCommandOperation;
+    DeleteRuntimeCommandOperationTestInterface deleteRuntimeCommandOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
@@ -50,16 +51,18 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
 
-        assertTrue(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtime.getId(), runtimeCommand.getId()));
+        final var changeContext = deleteRuntimeCommandOperation.deleteRuntimeCommand(shard, runtime.getId(), runtimeCommand.getId());
+        assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenUnknownIds_whenDeleteRuntimeCommand_thenSkip() {
+    void givenUnknownIds_whenDeleteRuntimeCommand_thenFalse() {
         final var shard = 0;
         final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRuntimeCommandOperation.deleteRuntimeCommand(TIMEOUT, pgPool, shard, runtimeId, id));
+        final var changeContext = deleteRuntimeCommandOperation.deleteRuntimeCommand(shard, runtimeId, id);
+        assertFalse(changeContext.getResult());
     }
 
     Long tenantId() {

@@ -30,7 +30,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, player_id, created, modified, attribute_name, attribute_value
+                        select id, user_id, player_id, created, modified, name, attribute_value
                         from $schema.tab_user_attribute
                         where user_id = $1 and player_id = $2
                         """,

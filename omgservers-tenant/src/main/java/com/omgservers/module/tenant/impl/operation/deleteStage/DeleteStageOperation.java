@@ -14,11 +14,13 @@ public interface DeleteStageOperation {
                              Long tenantId,
                              Long id);
 
-    default Boolean deleteStage(long timeout, PgPool pgPool, int shard, Long tenantId, Long id) {
+    default ChangeContext<Boolean> deleteStage(long timeout, PgPool pgPool, int shard, Long tenantId, Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
-                            deleteStage(changeContext, sqlConnection, shard, tenantId, id));
+                                    deleteStage(changeContext, sqlConnection, shard, tenantId, id))
+                            .invoke(changeContext::setResult)
+                            .replaceWith(changeContext);
                 })
                 .await().atMost(Duration.ofSeconds(timeout));
     }

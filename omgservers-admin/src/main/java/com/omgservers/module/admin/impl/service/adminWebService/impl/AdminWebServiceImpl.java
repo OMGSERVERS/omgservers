@@ -1,8 +1,5 @@
 package com.omgservers.module.admin.impl.service.adminWebService.impl;
 
-import com.omgservers.module.admin.impl.service.adminService.AdminService;
-import com.omgservers.module.admin.impl.service.adminWebService.AdminWebService;
-import com.omgservers.module.system.SystemModule;
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.dto.admin.CreateDeveloperAdminRequest;
@@ -27,6 +24,9 @@ import com.omgservers.dto.internal.GetServiceAccountRequest;
 import com.omgservers.dto.internal.GetServiceAccountResponse;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.module.admin.impl.service.adminService.AdminService;
+import com.omgservers.module.admin.impl.service.adminWebService.AdminWebService;
+import com.omgservers.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -88,9 +88,9 @@ class AdminWebServiceImpl implements AdminWebService {
 
     @Override
     public Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request) {
-        final var id = request.getId();
+        final var username = request.getUsername();
         return systemModule.getServiceAccountService()
-                .deleteServiceAccount(new DeleteServiceAccountRequest(id));
+                .deleteServiceAccount(new DeleteServiceAccountRequest(username));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.user.factory.AttributeModelFactory;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.impl.operation.DeleteAttributeOperationTestInterface;
 import com.omgservers.module.user.impl.operation.upsertAttribute.UpsertAttributeOperation;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
@@ -24,7 +25,7 @@ class DeleteAttributeOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteAttributeOperation deleteAttributeOperation;
+    DeleteAttributeOperationTestInterface deleteAttributeOperation;
 
     @Inject
     UpsertAttributeOperation upsertAttributeOperation;
@@ -66,14 +67,16 @@ class DeleteAttributeOperationTest extends Assertions {
                 .create(userId, playerId, attributeName(), stringValue());
         upsertAttributeOperation.upsertAttribute(TIMEOUT, pgPool, shard, attribute2);
 
-        assertTrue(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, user.getId(), playerId, attribute2.getName()));
+        final var changeContext = deleteAttributeOperation.deleteAttribute(shard, user.getId(), playerId, attribute2.getName());
+        assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenUnknownIds_whenDeleteAttribute_thenFalse() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
-        assertFalse(deleteAttributeOperation.deleteAttribute(TIMEOUT, pgPool, shard, userId, playerId(), attributeName()));
+        final var changeContext = deleteAttributeOperation.deleteAttribute(shard, userId, playerId(), attributeName());
+        assertFalse(changeContext.getResult());
     }
 
     String passwordHash() {

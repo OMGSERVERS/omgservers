@@ -1,7 +1,9 @@
 package com.omgservers.module.user.impl.operation.deleteClient;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.user.impl.operation.selectClient.SelectClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 class DeleteClientOperationImpl implements DeleteClientOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectClientOperation selectClientOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,16 +29,18 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
                                      final int shard,
                                      final Long userId,
                                      final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_user_client
-                        where user_id = $1 and id = $2
-                        """,
-                Arrays.asList(userId, id),
-                () -> new ClientDeletedEventBodyModel(userId, id),
-                () -> logModelFactory.create(String.format("Client was deleted, " +
-                        "userId=%d, id=%d", userId, id))
-        );
+        return selectClientOperation.selectClient(sqlConnection, shard, userId, id)
+                .flatMap(client -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_user_client
+                                where user_id = $1 and id = $2
+                                """,
+                        Arrays.asList(userId, id),
+                        () -> new ClientDeletedEventBodyModel(client),
+                        () -> logModelFactory.create("Client was deleted, client=" + client)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

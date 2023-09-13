@@ -1,7 +1,9 @@
 package com.omgservers.module.tenant.impl.operation.deleteProject;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 class DeleteProjectOperationImpl implements DeleteProjectOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectProjectOperation selectProjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,16 +29,18 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
                                       final int shard,
                                       final Long tenantId,
                                       final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_tenant_project
-                        where tenant_id = $1 and id = $2
-                        """,
-                Arrays.asList(tenantId, id),
-                () -> new ProjectDeletedEventBodyModel(tenantId, id),
-                () -> logModelFactory.create(String.format("Project was deleted, " +
-                        "tenantId=%d, id=%d", tenantId, id))
-        );
+        return selectProjectOperation.selectProject(sqlConnection, shard, tenantId, id)
+                .flatMap(project -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_tenant_project
+                                where tenant_id = $1 and id = $2
+                                """,
+                        Arrays.asList(tenantId, id),
+                        () -> new ProjectDeletedEventBodyModel(project),
+                        () -> logModelFactory.create("Project was deleted, project=" + project)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectService.impl.method.getProject;
 
 import com.omgservers.dto.tenant.GetProjectRequest;
+import com.omgservers.dto.tenant.GetProjectResponse;
 import com.omgservers.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import com.omgservers.dto.tenant.GetProjectResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,9 +26,10 @@ GetProjectMethodImpl implements GetProjectMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
+                    final var tenantId = request.getTenantId();
                     final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectProjectOperation
-                            .selectProject(sqlConnection, shard.shard(), id));
+                            .selectProject(sqlConnection, shard.shard(), tenantId, id));
                 })
                 .map(GetProjectResponse::new);
     }

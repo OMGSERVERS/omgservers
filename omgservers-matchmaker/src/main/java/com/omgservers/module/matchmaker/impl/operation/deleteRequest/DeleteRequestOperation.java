@@ -13,17 +13,4 @@ public interface DeleteRequestOperation {
                                int shard,
                                Long matchmakerId,
                                Long id);
-
-    default Boolean deleteRequest(long timeout,
-                                  PgPool pgPool,
-                                  int shard,
-                                  Long matchmakerId,
-                                  Long id) {
-        return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection ->
-                            deleteRequest(changeContext, sqlConnection, shard, matchmakerId, id));
-                })
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

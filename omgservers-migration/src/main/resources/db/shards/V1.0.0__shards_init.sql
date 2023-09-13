@@ -44,9 +44,9 @@ create table if not exists tab_user_attribute (
     player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    attribute_name varchar(64) not null,
+    name varchar(64) not null,
     attribute_value varchar(64) not null,
-    unique(player_id, attribute_name)
+    unique(player_id, name)
 );
 
 create table if not exists tab_user_object (

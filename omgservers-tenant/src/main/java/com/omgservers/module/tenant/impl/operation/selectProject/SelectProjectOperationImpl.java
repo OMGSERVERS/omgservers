@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -27,6 +27,7 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
     @Override
     public Uni<ProjectModel> selectProject(final SqlConnection sqlConnection,
                                            final int shard,
+                                           final Long tenantId,
                                            final Long id) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
@@ -34,10 +35,10 @@ class SelectProjectOperationImpl implements SelectProjectOperation {
                 """
                         select id, tenant_id, created, modified, config
                         from $schema.tab_tenant_project
-                        where id = $1
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(tenantId, id),
                 "Project",
                 this::createProject);
     }

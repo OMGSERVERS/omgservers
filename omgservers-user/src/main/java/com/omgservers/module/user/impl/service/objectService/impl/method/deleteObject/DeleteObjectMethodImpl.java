@@ -1,9 +1,9 @@
 package com.omgservers.module.user.impl.service.objectService.impl.method.deleteObject;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.user.DeleteObjectRequest;
 import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.module.user.impl.operation.deleteObject.DeleteObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,7 +26,7 @@ class DeleteObjectMethodImpl implements DeleteObjectMethod {
 
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
-        final var id = request.getId();
+        final var name = request.getName();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteObjectOperation.deleteObject(
@@ -35,7 +35,7 @@ class DeleteObjectMethodImpl implements DeleteObjectMethod {
                                 shardModel.shard(),
                                 userId,
                                 playerId,
-                                id)))
+                                name)))
                 .map(ChangeContext::getResult)
                 .map(DeleteObjectResponse::new);
     }

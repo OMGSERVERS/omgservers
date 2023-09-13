@@ -29,7 +29,7 @@ class UpsertAttributeOperationImpl implements UpsertAttributeOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_attribute(id, user_id, player_id, created, modified, attribute_name, attribute_value)
+                        insert into $schema.tab_user_attribute(id, user_id, player_id, created, modified, name, attribute_value)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing

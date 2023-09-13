@@ -14,15 +14,17 @@ public interface DeleteVersionOperation {
                                Long tenantId,
                                Long id);
 
-    default Boolean deleteVersion(long timeout,
-                                  PgPool pgPool,
-                                  int shard,
-                                  Long tenantId,
-                                  Long id) {
+    default ChangeContext<Boolean> deleteVersion(long timeout,
+                                                 PgPool pgPool,
+                                                 int shard,
+                                                 Long tenantId,
+                                                 Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
-                            deleteVersion(changeContext, sqlConnection, shard, tenantId, id));
+                                    deleteVersion(changeContext, sqlConnection, shard, tenantId, id))
+                            .invoke(changeContext::setResult)
+                            .replaceWith(changeContext);
                 })
                 .await().atMost(Duration.ofSeconds(timeout));
     }

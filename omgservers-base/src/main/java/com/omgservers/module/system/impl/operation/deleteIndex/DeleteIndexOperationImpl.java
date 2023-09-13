@@ -18,7 +18,6 @@ import java.util.Collections;
 class DeleteIndexOperationImpl implements DeleteIndexOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
-
     final LogModelFactory logModelFactory;
 
     @Override

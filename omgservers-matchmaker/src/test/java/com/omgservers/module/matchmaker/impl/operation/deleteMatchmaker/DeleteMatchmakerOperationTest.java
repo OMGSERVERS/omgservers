@@ -1,6 +1,8 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.module.matchmaker.impl.operation.DeleteMatchmakerOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -16,7 +18,7 @@ class DeleteMatchmakerOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteMatchmakerOperation deleteMatchmakerOperation;
+    DeleteMatchmakerOperationTestInterface deleteMatchmakerOperation;
 
     @Inject
     UpsertMatchmakerOperation insertMatchmakerOperation;
@@ -36,7 +38,9 @@ class DeleteMatchmakerOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        assertTrue(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, matchmaker.getId()));
+        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, matchmaker.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_DELETED));
     }
 
     @Test
@@ -44,7 +48,9 @@ class DeleteMatchmakerOperationTest extends Assertions {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchmakerOperation.deleteMatchmaker(TIMEOUT, pgPool, shard, id));
+        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_DELETED));
     }
 
     Long tenantId() {

@@ -1,6 +1,8 @@
 package com.omgservers.module.script.impl.operation.deleteScript;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ScriptDeletedEventBodyModel;
+import com.omgservers.module.script.impl.operation.selectScript.SelectScriptOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
@@ -18,6 +20,7 @@ import java.util.Collections;
 class DeleteScriptOperationImpl implements DeleteScriptOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectScriptOperation selectScriptOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,15 +28,18 @@ class DeleteScriptOperationImpl implements DeleteScriptOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_script
-                        where id = $1
-                        """,
-                Collections.singletonList(id),
-                () -> new ScriptDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Script was deleted, id=" + id)
-        );
+        return selectScriptOperation.selectScript(sqlConnection, shard, id)
+                .flatMap(script -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_script
+                                where id = $1
+                                """,
+                        Collections.singletonList(id),
+                        () -> new ScriptDeletedEventBodyModel(script),
+                        () -> logModelFactory.create("Script was deleted, script=" + script)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

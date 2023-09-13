@@ -3,6 +3,7 @@ package com.omgservers.module.tenant.impl.operation.deleteTenant;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.module.tenant.impl.operation.DeleteTenantOperationTestInterface;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,7 +19,7 @@ class DeleteTenantOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteTenantOperation deleteTenantOperation;
+    DeleteTenantOperationTestInterface deleteTenantOperation;
 
     @Inject
     UpsertTenantOperation upsertTenantOperation;
@@ -38,10 +39,9 @@ class DeleteTenantOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create(TenantConfigModel.create());
         upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
 
-        final var changeContext = deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, tenant.getId());
-        log.info("Change context, {}", changeContext);
+        final var changeContext = deleteTenantOperation.deleteTenant(shard, tenant.getId());
         assertTrue(changeContext.getResult());
-        assertEquals(EventQualifierEnum.TENANT_DELETED, changeContext.getChangeEvents().get(0).getQualifier());
+        assertTrue(changeContext.contains(EventQualifierEnum.TENANT_DELETED));
     }
 
     @Test
@@ -49,8 +49,8 @@ class DeleteTenantOperationTest extends Assertions {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteTenantOperation.deleteTenant(TIMEOUT, pgPool, shard, id);
-        log.info("Change context, {}", changeContext);
+        final var changeContext = deleteTenantOperation.deleteTenant(shard, id);
         assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.TENANT_DELETED));
     }
 }

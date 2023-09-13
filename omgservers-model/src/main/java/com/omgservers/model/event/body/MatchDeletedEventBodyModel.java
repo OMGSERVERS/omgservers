@@ -2,6 +2,7 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.model.match.MatchModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,8 +14,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class MatchDeletedEventBodyModel extends EventBodyModel {
 
-    Long matchmakerId;
-    Long id;
+    MatchModel match;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -23,6 +23,6 @@ public class MatchDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return matchmakerId;
+        return match.getMatchmakerId();
     }
 }

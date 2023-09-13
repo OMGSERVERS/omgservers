@@ -21,7 +21,7 @@ public class AttributeModelMapper {
         attribute.setPlayerId(row.getLong("player_id"));
         attribute.setCreated(row.getOffsetDateTime("created").toInstant());
         attribute.setModified(row.getOffsetDateTime("modified").toInstant());
-        attribute.setName(row.getString("attribute_name"));
+        attribute.setName(row.getString("name"));
         attribute.setValue(row.getString("attribute_value"));
         return attribute;
     }

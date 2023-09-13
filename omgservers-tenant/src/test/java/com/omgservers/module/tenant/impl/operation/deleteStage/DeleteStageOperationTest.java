@@ -1,11 +1,13 @@
 package com.omgservers.module.tenant.impl.operation.deleteStage;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.factory.ProjectModelFactory;
 import com.omgservers.module.tenant.factory.StageModelFactory;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.module.tenant.impl.operation.DeleteStageOperationTestInterface;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
@@ -23,7 +25,7 @@ class DeleteStageOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteStageOperation deleteStageOperation;
+    DeleteStageOperationTestInterface deleteStageOperation;
 
     @Inject
     UpsertTenantOperation upsertTenantOperation;
@@ -61,7 +63,9 @@ class DeleteStageOperationTest extends Assertions {
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
 
-        assertTrue(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId()));
+        final var changeContext = deleteStageOperation.deleteStage(shard, tenant.getId(), stage.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.STAGE_DELETED));
     }
 
     @Test
@@ -70,6 +74,8 @@ class DeleteStageOperationTest extends Assertions {
         final var tenantId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteStageOperation.deleteStage(TIMEOUT, pgPool, shard, tenantId, id));
+        final var changeContext = deleteStageOperation.deleteStage(shard, tenantId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.STAGE_DELETED));
     }
 }

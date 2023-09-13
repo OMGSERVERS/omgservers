@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.deleteVersion;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
@@ -10,6 +11,7 @@ import com.omgservers.module.tenant.factory.ProjectModelFactory;
 import com.omgservers.module.tenant.factory.StageModelFactory;
 import com.omgservers.module.tenant.factory.TenantModelFactory;
 import com.omgservers.module.tenant.factory.VersionModelFactory;
+import com.omgservers.module.tenant.impl.operation.DeleteVersionOperationTestInterface;
 import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
@@ -28,7 +30,7 @@ class DeleteVersionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteVersionOperation deleteVersionOperation;
+    DeleteVersionOperationTestInterface deleteVersionOperation;
 
     @Inject
     UpsertTenantOperation upsertTenantOperation;
@@ -73,7 +75,9 @@ class DeleteVersionOperationTest extends Assertions {
         final var id = version.getId();
         upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version);
 
-        assertTrue(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, tenant.getId(), id));
+        final var changeContext = deleteVersionOperation.deleteVersion(shard, tenant.getId(), id);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.VERSION_DELETED));
     }
 
     @Test
@@ -81,7 +85,9 @@ class DeleteVersionOperationTest extends Assertions {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteVersionOperation.deleteVersion(TIMEOUT, pgPool, shard, tenantId(), id));
+        final var changeContext = deleteVersionOperation.deleteVersion(shard, tenantId(), id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.VERSION_DELETED));
     }
 
     Long tenantId() {

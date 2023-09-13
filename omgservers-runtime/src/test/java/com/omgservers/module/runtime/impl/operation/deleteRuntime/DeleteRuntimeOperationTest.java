@@ -1,8 +1,10 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntime;
 
-import com.omgservers.module.runtime.factory.RuntimeModelFactory;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
+import com.omgservers.module.runtime.impl.DeleteRuntimeOperationTestInterface;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,7 +20,7 @@ class DeleteRuntimeOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteRuntimeOperation deleteRuntimeOperation;
+    DeleteRuntimeOperationTestInterface deleteRuntimeOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
@@ -38,7 +40,9 @@ class DeleteRuntimeOperationTest extends Assertions {
         final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
-        assertTrue(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, runtime1.getId()));
+        final var changeContext = deleteRuntimeOperation.deleteRuntime(shard, runtime1.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_DELETED));
     }
 
     @Test
@@ -46,7 +50,9 @@ class DeleteRuntimeOperationTest extends Assertions {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRuntimeOperation.deleteRuntime(TIMEOUT, pgPool, shard, id));
+        final var changeContext = deleteRuntimeOperation.deleteRuntime(shard, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_DELETED));
     }
 
     Long tenantId() {

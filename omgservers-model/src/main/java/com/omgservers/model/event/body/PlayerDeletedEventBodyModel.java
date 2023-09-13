@@ -2,6 +2,7 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.model.player.PlayerModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,8 +14,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class PlayerDeletedEventBodyModel extends EventBodyModel {
 
-    Long userId;
-    Long id;
+    PlayerModel player;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -23,6 +23,6 @@ public class PlayerDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return userId;
+        return player.getUserId();
     }
 }

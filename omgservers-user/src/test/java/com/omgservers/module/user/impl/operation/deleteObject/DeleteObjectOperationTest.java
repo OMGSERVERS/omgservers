@@ -5,6 +5,7 @@ import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.user.factory.ObjectModelFactory;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.impl.operation.DeleteObjectOperationTestInterface;
 import com.omgservers.module.user.impl.operation.upsertObject.UpsertObjectOperation;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
@@ -24,7 +25,7 @@ class DeleteObjectOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteObjectOperation deleteObjectOperation;
+    DeleteObjectOperationTestInterface deleteObjectOperation;
 
     @Inject
     UpsertObjectOperation upsertObjectOperation;
@@ -58,20 +59,22 @@ class DeleteObjectOperationTest extends Assertions {
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var object = objectModelFactory.create(user.getId(), player.getId(), UUID.randomUUID().toString(), new byte[5]);
-        final var id = object.getId();
+        final var name = object.getName();
         upsertObjectOperation.upsertObject(TIMEOUT, pgPool, shard, user.getId(), object);
 
-        assertTrue(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, user.getId(), player.getId(), id));
+        final var changeContext = deleteObjectOperation.deleteObject(shard, user.getId(), player.getId(), name);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenUnknownIds_whenDeleteObject_thenSkip() {
+    void givenUnknownIds_whenDeleteObject_thenFalse() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var playerId = generateIdOperation.generateId();
-        final var id = generateIdOperation.generateId();
+        final var name = "object-" + UUID.randomUUID().toString();
 
-        assertFalse(deleteObjectOperation.deleteObject(TIMEOUT, pgPool, shard, userId, playerId, id));
+        final var changeContext = deleteObjectOperation.deleteObject(shard, userId, playerId, name);
+        assertFalse(changeContext.getResult());
     }
 
     Long tenantId() {

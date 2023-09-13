@@ -1,6 +1,8 @@
 package com.omgservers.module.user.impl.operation.deleteObject;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.user.impl.operation.selectObject.SelectObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,6 +19,7 @@ import java.util.Arrays;
 class DeleteObjectOperationImpl implements DeleteObjectOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,17 +28,19 @@ class DeleteObjectOperationImpl implements DeleteObjectOperation {
                                      final int shard,
                                      final Long userId,
                                      final Long playerId,
-                                     final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_user_object
-                        where user_id = $1 and player_id = $2 and id = $3
-                        """,
-                Arrays.asList(userId, playerId, id),
-                () -> null,
-                () -> logModelFactory.create(String.format("Object was deleted, " +
-                        "userId=%d, playerId=%d, id=%d", userId, playerId, id))
-        );
+                                     final String name) {
+        return selectObjectOperation.selectObject(sqlConnection, shard, userId, playerId, name)
+                .flatMap(object -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_user_object
+                                where user_id = $1 and player_id = $2 and name = $3
+                                """,
+                        Arrays.asList(userId, playerId, name),
+                        () -> null,
+                        () -> logModelFactory.create("Object was deleted, object=" + object)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

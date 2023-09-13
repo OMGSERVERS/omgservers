@@ -29,8 +29,9 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (RuntimeDeletedEventBodyModel) event.getBody();
-        final var id = body.getId();
-        final var request = new DeleteJobRequest(id, id);
+        final var runtime = body.getRuntime();
+        final var runtimeId = runtime.getId();
+        final var request = new DeleteJobRequest(runtimeId, runtimeId);
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);
     }

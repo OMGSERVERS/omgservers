@@ -50,7 +50,7 @@ class SelectProjectOperationTest extends Assertions {
         final var project1 = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project1);
 
-        final var project2 = selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, project1.getId());
+        final var project2 = selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, tenant.getId(), project1.getId());
         assertEquals(project1, project2);
     }
 
@@ -58,9 +58,10 @@ class SelectProjectOperationTest extends Assertions {
     void givenUnknownId_whenSelectProject_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
+        final var tenantId = generateIdOperation.generateId();
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
-                .selectProject(TIMEOUT, pgPool, shard, id));
+                .selectProject(TIMEOUT, pgPool, shard, id, tenantId));
         log.info("Exception: {}", exception.getMessage());
     }
 }

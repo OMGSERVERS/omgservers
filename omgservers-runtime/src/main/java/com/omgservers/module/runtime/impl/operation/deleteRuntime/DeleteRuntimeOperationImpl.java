@@ -1,6 +1,8 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntime;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
@@ -18,6 +20,7 @@ import java.util.Collections;
 class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectRuntimeOperation selectRuntimeOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,15 +28,18 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
                                       final SqlConnection sqlConnection,
                                       final int shard,
                                       final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_runtime
-                        where id = $1
-                        """,
-                Collections.singletonList(id),
-                () -> new RuntimeDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Runtime was deleted, id=" + id)
-        );
+        return selectRuntimeOperation.selectRuntime(sqlConnection, shard, id)
+                .flatMap(runtime -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_runtime
+                                where id = $1
+                                """,
+                        Collections.singletonList(id),
+                        () -> new RuntimeDeletedEventBodyModel(runtime),
+                        () -> logModelFactory.create("Runtime was deleted, runtime=" + runtime)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

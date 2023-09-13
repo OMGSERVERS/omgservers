@@ -1,5 +1,6 @@
 package com.omgservers.model.event.body;
 
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class ClientDeletedEventBodyModel extends EventBodyModel {
 
-    Long userId;
-    Long id;
+    ClientModel client;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -23,6 +23,6 @@ public class ClientDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return userId;
+        return client.getUserId();
     }
 }

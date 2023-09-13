@@ -27,8 +27,9 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchmakerDeletedEventBodyModel) event.getBody();
-        final var id = body.getId();
-        final var request = new DeleteJobRequest(id, id);
+        final var matchmaker = body.getMatchmaker();
+        final var matchmakerId = matchmaker.getId();
+        final var request = new DeleteJobRequest(matchmakerId, matchmakerId);
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);
     }

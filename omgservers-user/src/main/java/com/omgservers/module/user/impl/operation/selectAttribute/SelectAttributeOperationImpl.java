@@ -30,9 +30,9 @@ class SelectAttributeOperationImpl implements SelectAttributeOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, player_id, created, modified, attribute_name, attribute_value
+                        select id, user_id, player_id, created, modified, name, attribute_value
                         from $schema.tab_user_attribute
-                        where user_id = $1 and player_id = $2 and attribute_name = $3
+                        where user_id = $1 and player_id = $2 and name = $3
                         limit 1
                         """,
                 Arrays.asList(userId, playerId, name),

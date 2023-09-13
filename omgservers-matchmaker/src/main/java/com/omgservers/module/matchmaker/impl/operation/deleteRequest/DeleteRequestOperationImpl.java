@@ -1,6 +1,8 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
-import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.event.body.RequestDeletedEventBodyModel;
+import com.omgservers.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 class DeleteRequestOperationImpl implements DeleteRequestOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final SelectRequestOperation selectRequestOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,16 +29,18 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
                                       final int shard,
                                       final Long matchmakerId,
                                       final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_matchmaker_request
-                        where matchmaker_id = $1 and id = $2
-                        """,
-                Arrays.asList(matchmakerId, id),
-                () -> new MatchmakerDeletedEventBodyModel(id),
-                () -> logModelFactory.create(String.format("Request was deleted, " +
-                        "matchmakerId=%d, id=%d", matchmakerId, id))
-        );
+        return selectRequestOperation.selectRequest(sqlConnection, shard, matchmakerId, id)
+                .flatMap(request -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, shard,
+                        """
+                                delete from $schema.tab_matchmaker_request
+                                where matchmaker_id = $1 and id = $2
+                                """,
+                        Arrays.asList(matchmakerId, id),
+                        () -> new RequestDeletedEventBodyModel(request),
+                        () -> logModelFactory.create("Request was deleted, request=" + request)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

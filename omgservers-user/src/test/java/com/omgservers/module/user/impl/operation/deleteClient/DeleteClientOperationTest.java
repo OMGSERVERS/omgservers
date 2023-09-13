@@ -1,10 +1,12 @@
 package com.omgservers.module.user.impl.operation.deleteClient;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.user.factory.ClientModelFactory;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.module.user.impl.operation.DeleteClientOperationTestInterface;
 import com.omgservers.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
@@ -24,7 +26,7 @@ class DeleteClientOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteClientOperation deleteClientOperation;
+    DeleteClientOperationTestInterface deleteClientOperation;
 
     @Inject
     UpsertClientOperation insertClientOperation;
@@ -61,7 +63,9 @@ class DeleteClientOperationTest extends Assertions {
         final var clientId = client.getId();
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
-        assertTrue(deleteClientOperation.deleteClient(TIMEOUT, pgPool, shard, user.getId(), clientId));
+        final var changeContext = deleteClientOperation.deleteClient(shard, user.getId(), clientId);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.CLIENT_DELETED));
     }
 
     @Test
@@ -70,7 +74,9 @@ class DeleteClientOperationTest extends Assertions {
         final var userId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteClientOperation.deleteClient(TIMEOUT, pgPool, shard, userId, id));
+        final var changeContext = deleteClientOperation.deleteClient(shard, userId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.CLIENT_DELETED));
     }
 
     Long tenantId() {

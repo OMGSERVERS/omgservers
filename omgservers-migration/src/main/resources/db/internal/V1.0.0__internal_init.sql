@@ -11,8 +11,9 @@ create table if not exists tab_service_account (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    username varchar(64) not null unique,
-    password_hash varchar(64) not null
+    username varchar(64) not null,
+    password_hash varchar(64) not null,
+    unique(username)
 );
 
 create table if not exists tab_event (

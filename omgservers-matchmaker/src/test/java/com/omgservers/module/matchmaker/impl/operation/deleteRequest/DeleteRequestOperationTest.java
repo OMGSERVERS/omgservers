@@ -1,8 +1,10 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
+import com.omgservers.module.matchmaker.impl.operation.DeleteRequestOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -21,7 +23,7 @@ class DeleteRequestOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteRequestOperation deleteRequestOperation;
+    DeleteRequestOperationTestInterface deleteRequestOperation;
 
     @Inject
     UpsertMatchmakerOperation insertMatchmakerOperation;
@@ -51,7 +53,9 @@ class DeleteRequestOperationTest extends Assertions {
         final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
-        assertTrue(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, matchmaker.getId(), request.getId()));
+        final var changeContext = deleteRequestOperation.deleteRequest(shard, matchmaker.getId(), request.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.REQUEST_DELETED));
     }
 
     @Test
@@ -60,7 +64,9 @@ class DeleteRequestOperationTest extends Assertions {
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteRequestOperation.deleteRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
+        final var changeContext = deleteRequestOperation.deleteRequest(shard, matchmakerId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.REQUEST_DELETED));
     }
 
     Long userId() {

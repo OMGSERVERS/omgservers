@@ -1,10 +1,12 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatch;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.module.matchmaker.factory.MatchModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.module.matchmaker.impl.operation.DeleteMatchOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -24,7 +26,7 @@ class DeleteMatchOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteMatchOperation deleteMatchOperation;
+    DeleteMatchOperationTestInterface deleteMatchOperation;
 
     @Inject
     UpsertMatchmakerOperation insertMatchmakerOperation;
@@ -61,7 +63,9 @@ class DeleteMatchOperationTest extends Assertions {
         final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 
-        assertTrue(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, matchmaker.getId(), match.getId()));
+        final var changeContext = deleteMatchOperation.deleteMatch(shard, matchmaker.getId(), match.getId());
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
     }
 
     @Test
@@ -70,7 +74,9 @@ class DeleteMatchOperationTest extends Assertions {
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        assertFalse(deleteMatchOperation.deleteMatch(TIMEOUT, pgPool, shard, matchmakerId, id));
+        final var changeContext = deleteMatchOperation.deleteMatch(shard, matchmakerId, id);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
     }
 
     Long tenantId() {
