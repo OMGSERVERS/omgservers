@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
+@Slf4j
 public class LuaValueDeserializer extends StdDeserializer<LuaValue> {
 
     LuaValueDeserializer(Class<?> clazz) {
@@ -50,7 +52,7 @@ public class LuaValueDeserializer extends StdDeserializer<LuaValue> {
             }
             return parent;
         } else {
-            throw new IllegalArgumentException("Not container json node, type=" + node.getNodeType().toString());
+            return new LuaTable();
         }
     }
 

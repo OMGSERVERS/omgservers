@@ -92,8 +92,8 @@ public class TestClient {
         send(messageString);
     }
 
-    public synchronized void sendMatchMessage(String text) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE, new MatchMessageBodyModel(text));
+    public synchronized void sendMatchMessage(Object data) throws IOException {
+        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE, new MatchMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }

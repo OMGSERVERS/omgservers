@@ -22,7 +22,7 @@ public class MatchMessageReceivedEventBodyModel extends EventBodyModel {
     Long clientId;
     Long runtimeId;
 
-    String text;
+    Object data;
 
     @Override
     public EventQualifierEnum getQualifier() {

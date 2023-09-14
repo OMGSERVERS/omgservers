@@ -19,7 +19,7 @@ public class HandleMessageScriptEventBodyModel extends ScriptEventBodyModel {
     Long playerId;
     Long clientId;
 
-    String message;
+    Object data;
 
     @Override
     public ScriptEventQualifierEnum getQualifier() {

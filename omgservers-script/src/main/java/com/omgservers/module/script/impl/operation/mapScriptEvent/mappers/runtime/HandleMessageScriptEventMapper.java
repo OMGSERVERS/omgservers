@@ -5,6 +5,7 @@ import com.omgservers.model.scriptEvent.ScriptEventQualifierEnum;
 import com.omgservers.model.scriptEvent.body.HandleMessageScriptEventBodyModel;
 import com.omgservers.module.script.impl.luaEvent.LuaEvent;
 import com.omgservers.module.script.impl.luaEvent.runtime.HandleMessageLuaEvent;
+import com.omgservers.module.script.impl.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import com.omgservers.module.script.impl.operation.mapScriptEvent.ScriptEventMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class HandleMessageScriptEventMapper implements ScriptEventMapper {
 
+    final CoerceJavaObjectOperation coerceJavaObjectOperation;
+
     @Override
     public ScriptEventQualifierEnum getQualifier() {
         return ScriptEventQualifierEnum.HANDLE_MESSAGE;
@@ -24,11 +27,12 @@ public class HandleMessageScriptEventMapper implements ScriptEventMapper {
     @Override
     public LuaEvent map(ScriptEventModel scriptEvent) {
         final var body = (HandleMessageScriptEventBodyModel) scriptEvent.getBody();
+        final var luaData = coerceJavaObjectOperation.coerceJavaObject(body.getData());
         return HandleMessageLuaEvent.builder()
                 .userId(body.getUserId())
                 .playerId(body.getPlayerId())
                 .clientId(body.getClientId())
-                .message(body.getMessage())
+                .data(luaData)
                 .build();
     }
 }

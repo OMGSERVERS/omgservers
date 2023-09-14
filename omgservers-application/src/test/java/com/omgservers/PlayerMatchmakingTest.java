@@ -8,6 +8,8 @@ import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,8 @@ public class PlayerMatchmakingTest extends Assertions {
                         function init(self, event, runtime)
                             print("event.id=" .. event.id)
                             self.config = event.config
+                            self.actions = {}
+                            table.insert(self.actions, event)
                         end
                                           
                         function add_player(self, event, runtime)
@@ -52,26 +56,27 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)
                             print("runtime.runtime_id=" .. runtime.runtime_id)
-                            
-                            self.actions = {}
+                                                        
                             table.insert(self.actions, event)
                         end
                                                 
-                        function handle_message(self, event, runtime)
-                            table.insert(self.actions, event)
+                        function handle_message(self, event, runtime)                           
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
                             print("event.client_id=" .. event.client_id)
-                            print("event.data=" .. event.data)
+                            print("event.data.text=" .. event.data.text)
+                            
+                            table.insert(self.actions, event)
                         end
                                                 
                         function update(self, event, runtime)
-                            table.insert(self.actions, event)
                             print(event.step)
                             print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                             print("runtime.match_id=" .. runtime.match_id)
                             print("runtime.runtime_id=" .. runtime.runtime_id)
+                            
+                            table.insert(self.actions, event)
                         end                      
 
                         print("version was initialized")
@@ -100,12 +105,18 @@ public class PlayerMatchmakingTest extends Assertions {
 
         Thread.sleep(5000);
 
-        client1.sendMatchMessage("welcome1");
-        client2.sendMatchMessage("welcome2");
+        client1.sendMatchMessage(new TestMessage("Hello, "));
+        client2.sendMatchMessage(new TestMessage("world!"));
 
         Thread.sleep(5000);
 
         client1.close();
         client2.close();
+    }
+
+    @Data
+    @AllArgsConstructor
+    class TestMessage {
+        String text;
     }
 }

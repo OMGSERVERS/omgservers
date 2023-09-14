@@ -28,7 +28,7 @@ public class HandleMessageRuntimeRuntimeCommandMapper implements RuntimeCommandM
                 .userId(runtimeCommandBody.getUserId())
                 .playerId(runtimeCommandBody.getPlayerId())
                 .clientId(runtimeCommandBody.getClientId())
-                .message(runtimeCommandBody.getMessage())
+                .data(runtimeCommandBody.getData())
                 .build();
         return new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody);
     }

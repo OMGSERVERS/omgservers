@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.luaj.vm2.LuaString;
 
 @Slf4j
 @QuarkusTest
@@ -53,7 +54,7 @@ class HandleMessageLuaEventTest extends Assertions {
                 27535430859688960L,
                 27535430859688961L,
                 27535430859688962L,
-                "arbitrary");
+                LuaString.valueOf("arbitrary"));
         final var luaContext = createLuaRuntimeContextOperation.createLuaRuntimeContext(TIMEOUT,
                 27535430859688964L,
                 27535430859688965L,

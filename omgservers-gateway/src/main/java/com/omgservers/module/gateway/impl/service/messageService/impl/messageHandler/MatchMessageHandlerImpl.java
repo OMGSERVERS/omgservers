@@ -57,9 +57,9 @@ class MatchMessageHandlerImpl implements MessageHandler {
                 .runtimeId(runtimeId);
 
         final var messageBody = (MatchMessageBodyModel) message.getBody();
-        final var messageText = messageBody.getText();
-        if (Objects.nonNull(messageText)) {
-            final var eventBody = eventBodyBuilder.text(messageText).build();
+        final var messageData = messageBody.getData();
+        if (Objects.nonNull(messageData)) {
+            final var eventBody = eventBodyBuilder.data(messageData).build();
             final var event = eventModelFactory.create(eventBody);
             final var fireEventRequest = new FireEventRequest(event);
             return systemModule.getEventService().fireEvent(fireEventRequest)

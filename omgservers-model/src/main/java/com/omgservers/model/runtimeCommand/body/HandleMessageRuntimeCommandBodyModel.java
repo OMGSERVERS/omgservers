@@ -16,7 +16,7 @@ public class HandleMessageRuntimeCommandBodyModel extends RuntimeCommandBodyMode
     Long userId;
     Long playerId;
     Long clientId;
-    String message;
+    Object data;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {

@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class MatchMessageBodyModel extends MessageBodyModel {
 
-    String text;
+    Object data;
 }

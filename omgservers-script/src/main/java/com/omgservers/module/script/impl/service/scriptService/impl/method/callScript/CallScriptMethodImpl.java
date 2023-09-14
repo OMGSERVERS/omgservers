@@ -75,6 +75,8 @@ class CallScriptMethodImpl implements CallScriptMethod {
                             final var luaEvents = scriptEvents.stream()
                                     .map(mapScriptEventOperation::mapScriptEvent)
                                     .toList();
+                            log.info("Call script, events={}, luaInstance={}, script={}",
+                                    luaEvents, luaInstance, script);
                             return handleEvents(script, luaInstance, luaEvents);
                         }))
                 .flatMap(luaSelf -> {
