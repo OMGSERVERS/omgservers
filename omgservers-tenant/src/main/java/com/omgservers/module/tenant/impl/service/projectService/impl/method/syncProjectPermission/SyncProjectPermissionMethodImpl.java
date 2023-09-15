@@ -27,8 +27,6 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
 
     @Override
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request) {
-        SyncProjectPermissionRequest.validate(request);
-
         final var permission = request.getPermission();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

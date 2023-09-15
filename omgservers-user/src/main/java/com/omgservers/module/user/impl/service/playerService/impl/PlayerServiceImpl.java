@@ -18,6 +18,7 @@ import com.omgservers.module.user.impl.service.playerService.impl.method.syncPla
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,40 +33,36 @@ public class PlayerServiceImpl implements PlayerService {
     final FindPlayerMethod findPlayerMethod;
     final GetPlayerMethod getPlayerMethod;
 
-    final GetUserModuleClientOperation getUserModuleClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
+    final GetUserModuleClientOperation getUserModuleClientOperation;
 
     @Override
-    public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
+    public Uni<GetPlayerResponse> getPlayer(@Valid final GetPlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetPlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayer,
                 getPlayerMethod::getPlayer);
     }
 
     @Override
-    public Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request) {
+    public Uni<FindPlayerResponse> findPlayer(@Valid final FindPlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                FindPlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::findPlayer,
                 findPlayerMethod::findPlayer);
     }
 
     @Override
-    public Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request) {
+    public Uni<SyncPlayerResponse> syncPlayer(@Valid final SyncPlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncPlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncPlayer,
                 syncPlayerMethod::syncPlayer);
     }
 
     @Override
-    public Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request) {
+    public Uni<DeletePlayerResponse> deletePlayer(@Valid final DeletePlayerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeletePlayerRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deletePlayer,
                 deletePlayerMethod::deletePlayer);

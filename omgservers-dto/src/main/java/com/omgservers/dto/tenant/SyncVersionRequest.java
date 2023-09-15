@@ -2,6 +2,7 @@ package com.omgservers.dto.tenant;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.version.VersionModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncVersionRequest implements ShardedRequest {
 
-    public static void validate(SyncVersionRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     Long tenantId;
+
+    @NotNull
     VersionModel version;
 
     @Override

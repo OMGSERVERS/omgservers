@@ -1,11 +1,11 @@
 package com.omgservers.module.user.impl.service.clientService.impl;
 
-import com.omgservers.dto.user.DeleteClientResponse;
 import com.omgservers.dto.user.DeleteClientRequest;
-import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.DeleteClientResponse;
 import com.omgservers.dto.user.GetClientRequest;
-import com.omgservers.dto.user.SyncClientResponse;
+import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.dto.user.SyncClientRequest;
+import com.omgservers.dto.user.SyncClientResponse;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.clientService.ClientService;
@@ -16,6 +16,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,27 +35,24 @@ class ClientServiceImpl implements ClientService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<SyncClientResponse> syncClient(SyncClientRequest request) {
+    public Uni<SyncClientResponse> syncClient(@Valid final SyncClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncClientRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncClient,
                 syncClientMethod::syncClient);
     }
 
     @Override
-    public Uni<GetClientResponse> getClient(GetClientRequest request) {
+    public Uni<GetClientResponse> getClient(@Valid final GetClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetClientRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getClient,
                 getClientMethod::getClient);
     }
 
     @Override
-    public Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request) {
+    public Uni<DeleteClientResponse> deleteClient(@Valid final DeleteClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteClientRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deleteClient,
                 deleteClientMethod::deleteClient);

@@ -1,7 +1,8 @@
 package com.omgservers.dto.matchmaker;
 
-import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.matchmaker.MatchmakerModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncMatchmakerRequest implements ShardedRequest {
 
-    public static void validate(SyncMatchmakerRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     MatchmakerModel matchmaker;
 
     @Override

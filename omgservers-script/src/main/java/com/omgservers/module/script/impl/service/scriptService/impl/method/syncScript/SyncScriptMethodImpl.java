@@ -25,8 +25,6 @@ class SyncScriptMethodImpl implements SyncScriptMethod {
 
     @Override
     public Uni<SyncScriptResponse> syncScript(SyncScriptRequest request) {
-        SyncScriptRequest.validate(request);
-
         final var script = request.getScript();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

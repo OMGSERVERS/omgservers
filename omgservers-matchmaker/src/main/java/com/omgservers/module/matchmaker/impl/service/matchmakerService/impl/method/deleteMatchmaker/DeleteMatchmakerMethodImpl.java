@@ -1,10 +1,10 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.deleteMatchmaker;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchmaker.DeleteMatchmakerOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -23,8 +23,6 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     @Override
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request) {
-        DeleteMatchmakerRequest.validate(request);
-
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

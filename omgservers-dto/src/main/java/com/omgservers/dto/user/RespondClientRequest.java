@@ -1,6 +1,7 @@
 package com.omgservers.dto.user;
 
 import com.omgservers.model.message.MessageModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RespondClientRequest {
 
-    public static void validate(RespondClientRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     Long userId;
+
+    @NotNull
     Long clientId;
+
+    @NotNull
     MessageModel message;
 }

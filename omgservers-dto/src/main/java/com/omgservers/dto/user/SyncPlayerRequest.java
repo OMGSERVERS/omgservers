@@ -1,7 +1,8 @@
 package com.omgservers.dto.user;
 
-import com.omgservers.model.player.PlayerModel;
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.player.PlayerModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncPlayerRequest implements ShardedRequest {
 
-    public static void validate(SyncPlayerRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     PlayerModel player;
 
     @Override

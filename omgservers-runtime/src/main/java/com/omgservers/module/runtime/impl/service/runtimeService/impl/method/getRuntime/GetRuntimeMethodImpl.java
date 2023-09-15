@@ -1,9 +1,9 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.getRuntime;
 
-import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
-import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
+import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +22,6 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
 
     @Override
     public Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request) {
-        GetRuntimeRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var id = request.getId();

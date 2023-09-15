@@ -6,16 +6,17 @@ import com.omgservers.dto.user.SyncUserResponse;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 import java.time.Duration;
 
 public interface UserService {
 
-    Uni<SyncUserResponse> syncUser(SyncUserRequest request);
+    Uni<SyncUserResponse> syncUser(@Valid SyncUserRequest request);
 
-    Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request);
+    Uni<ValidateCredentialsResponse> validateCredentials(@Valid ValidateCredentialsRequest request);
 
-    Uni<Void> respondClient(RespondClientRequest request);
+    Uni<Void> respondClient(@Valid RespondClientRequest request);
 
     default void respondClient(long timeout, RespondClientRequest request) {
         respondClient(request)

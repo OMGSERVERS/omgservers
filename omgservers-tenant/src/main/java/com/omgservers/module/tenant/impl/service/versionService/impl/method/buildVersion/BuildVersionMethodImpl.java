@@ -25,8 +25,6 @@ public class BuildVersionMethodImpl implements BuildVersionMethod {
 
     @Override
     public Uni<BuildVersionResponse> buildVersion(BuildVersionRequest request) {
-        BuildVersionRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var stageConfig = request.getVersionConfig();

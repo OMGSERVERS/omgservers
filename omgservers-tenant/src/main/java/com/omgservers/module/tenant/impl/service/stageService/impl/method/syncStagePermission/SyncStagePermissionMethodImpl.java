@@ -27,8 +27,6 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
 
     @Override
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
-        SyncStagePermissionRequest.validate(request);
-
         final var permission = request.getPermission();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

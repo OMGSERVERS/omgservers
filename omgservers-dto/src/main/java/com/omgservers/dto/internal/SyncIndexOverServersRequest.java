@@ -1,6 +1,7 @@
 package com.omgservers.dto.internal;
 
 import com.omgservers.model.index.IndexModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class SyncIndexOverServersRequest {
 
-    public static void validateSyncIndexOverServersInternalRequest(SyncIndexOverServersRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     IndexModel index;
+
+    @NotNull
     List<URI> servers;
 }

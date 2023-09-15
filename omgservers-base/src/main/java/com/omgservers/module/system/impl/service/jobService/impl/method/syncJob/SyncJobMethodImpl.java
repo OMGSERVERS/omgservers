@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.syncJob;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncJobRequest;
 import com.omgservers.dto.internal.SyncJobResponse;
 import com.omgservers.module.system.impl.operation.upsertJob.UpsertJobOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,6 @@ class SyncJobMethodImpl implements SyncJobMethod {
 
     @Override
     public Uni<SyncJobResponse> syncJob(SyncJobRequest request) {
-        SyncJobRequest.validate(request);
-
         final var job = request.getJob();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertJobOperation.upsertJob(changeContext, sqlConnection, job))

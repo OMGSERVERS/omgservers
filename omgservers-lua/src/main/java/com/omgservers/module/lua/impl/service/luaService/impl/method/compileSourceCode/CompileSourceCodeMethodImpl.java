@@ -1,9 +1,9 @@
 package com.omgservers.module.lua.impl.service.luaService.impl.method.compileSourceCode;
 
-import com.omgservers.module.lua.impl.operation.compileSourceCode.CompileSourceCodeOperation;
-import com.omgservers.operation.createServerGlobals.CreateServerGlobalsOperation;
 import com.omgservers.dto.lua.CompileSourceCodeRequest;
 import com.omgservers.dto.lua.CompileSourceCodeResponse;
+import com.omgservers.module.lua.impl.operation.compileSourceCode.CompileSourceCodeOperation;
+import com.omgservers.operation.createServerGlobals.CreateServerGlobalsOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,6 @@ public class CompileSourceCodeMethodImpl implements CompileSourceCodeMethod {
 
     @Override
     public Uni<CompileSourceCodeResponse> compile(final CompileSourceCodeRequest request) {
-        CompileSourceCodeRequest.validate(request);
-
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(voidItem -> {
@@ -31,7 +29,8 @@ public class CompileSourceCodeMethodImpl implements CompileSourceCodeMethod {
                             .map(file -> {
                                 final var fileName = file.getFileName();
                                 final var sourceCode = file.getSourceCode();
-                                final var bytecode = compileSourceCodeOperation.compileSourceCode(globals, fileName, sourceCode);
+                                final var bytecode =
+                                        compileSourceCodeOperation.compileSourceCode(globals, fileName, sourceCode);
                                 return bytecode;
                             })
                             .toList();

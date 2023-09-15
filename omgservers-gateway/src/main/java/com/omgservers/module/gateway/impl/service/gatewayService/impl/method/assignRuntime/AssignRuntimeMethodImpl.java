@@ -23,13 +23,13 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
 
     @Override
     public Uni<Void> assignRuntime(AssignRuntimeRequest request) {
-        AssignRuntimeRequest.validate(request);
-
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var connectionId = request.getConnectionId();
                     final var assignedRuntime = request.getAssignedRuntime();
-                    final var assignRuntimeRequest = new com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest(connectionId, assignedRuntime);
+                    final var assignRuntimeRequest =
+                            new com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest(
+                                    connectionId, assignedRuntime);
                     connectionService.assignRuntime(assignRuntimeRequest);
                 })
                 .call(voidItem -> {

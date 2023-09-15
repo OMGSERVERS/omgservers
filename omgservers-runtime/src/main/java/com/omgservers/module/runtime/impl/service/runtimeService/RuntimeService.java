@@ -13,18 +13,19 @@ import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface RuntimeService {
 
-    Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request);
+    Uni<GetRuntimeResponse> getRuntime(@Valid GetRuntimeRequest request);
 
-    Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request);
+    Uni<SyncRuntimeResponse> syncRuntime(@Valid SyncRuntimeRequest request);
 
-    Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request);
+    Uni<DeleteRuntimeResponse> deleteRuntime(@Valid DeleteRuntimeRequest request);
 
-    Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
+    Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid SyncRuntimeCommandRequest request);
 
-    Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
+    Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid DeleteRuntimeCommandRequest request);
 
-    Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(DoRuntimeUpdateRequest request);
+    Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(@Valid DoRuntimeUpdateRequest request);
 }

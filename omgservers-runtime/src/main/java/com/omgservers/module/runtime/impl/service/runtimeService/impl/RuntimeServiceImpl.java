@@ -24,6 +24,7 @@ import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syn
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,54 +45,48 @@ public class RuntimeServiceImpl implements RuntimeService {
     final GetRuntimeMethod getRuntimeMethod;
 
     @Override
-    public Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request) {
+    public Uni<SyncRuntimeResponse> syncRuntime(@Valid final SyncRuntimeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncRuntimeRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntime,
                 syncRuntimeMethod::syncRuntime);
     }
 
     @Override
-    public Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request) {
+    public Uni<GetRuntimeResponse> getRuntime(@Valid final GetRuntimeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetRuntimeRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::getRuntime,
                 getRuntimeMethod::getRuntime);
     }
 
     @Override
-    public Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request) {
+    public Uni<DeleteRuntimeResponse> deleteRuntime(@Valid final DeleteRuntimeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteRuntimeRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntime,
                 deleteRuntimeMethod::deleteRuntime);
     }
 
     @Override
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request) {
+    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid final SyncRuntimeCommandRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncRuntimeCommandRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimeCommand,
                 syncRuntimeCommandMethod::syncRuntimeCommand);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request) {
+    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid final DeleteRuntimeCommandRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteRuntimeCommandRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimeCommand,
                 deleteRuntimeCommandMethod::deleteRuntimeCommand);
     }
 
     @Override
-    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(DoRuntimeUpdateRequest request) {
+    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(@Valid final DoRuntimeUpdateRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DoRuntimeUpdateRequest::validate,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::doRuntimeUpdate,
                 doRuntimeUpdateMethod::doRuntimeUpdate);

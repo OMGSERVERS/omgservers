@@ -1,7 +1,7 @@
 package com.omgservers.dto.gateway;
 
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.message.MessageModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +13,12 @@ import java.net.URI;
 @AllArgsConstructor
 public class RespondMessageRequest {
 
-    public static void validate(RespondMessageRequest request) {
-        if (request == null) {
-            throw new ServerSideBadRequestException("request is null");
-        }
-    }
-
+    @NotNull
     URI server;
+
+    @NotNull
     Long connectionId;
+
+    @NotNull
     MessageModel message;
 }

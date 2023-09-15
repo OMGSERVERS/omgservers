@@ -1,11 +1,11 @@
 package com.omgservers.module.user.impl.service.objectService.impl;
 
-import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.dto.user.DeleteObjectRequest;
-import com.omgservers.dto.user.GetObjectResponse;
+import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.dto.user.GetObjectRequest;
-import com.omgservers.dto.user.SyncObjectResponse;
+import com.omgservers.dto.user.GetObjectResponse;
 import com.omgservers.dto.user.SyncObjectRequest;
+import com.omgservers.dto.user.SyncObjectResponse;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.objectService.ObjectService;
@@ -16,6 +16,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,27 +35,24 @@ class ObjectServiceImpl implements ObjectService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetObjectResponse> getObject(GetObjectRequest request) {
+    public Uni<GetObjectResponse> getObject(@Valid final GetObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getObject,
                 getObjectMethod::getObject);
     }
 
     @Override
-    public Uni<SyncObjectResponse> syncObject(SyncObjectRequest request) {
+    public Uni<SyncObjectResponse> syncObject(@Valid final SyncObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncObject,
                 syncObjectMethod::syncObject);
     }
 
     @Override
-    public Uni<DeleteObjectResponse> deleteObject(DeleteObjectRequest request) {
+    public Uni<DeleteObjectResponse> deleteObject(@Valid final DeleteObjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteObjectRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deleteObject,
                 deleteObjectMethod::deleteObject);

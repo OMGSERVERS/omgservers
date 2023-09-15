@@ -1,10 +1,10 @@
 package com.omgservers.module.tenant.impl.service.versionService.impl.method.deleteVersion;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteVersionRequest;
 import com.omgservers.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteVersion.DeleteVersionOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,8 +26,6 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
     @Override
     public Uni<DeleteVersionResponse> deleteVersion(final DeleteVersionRequest request) {
-        DeleteVersionRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return Uni.createFrom().voidItem()

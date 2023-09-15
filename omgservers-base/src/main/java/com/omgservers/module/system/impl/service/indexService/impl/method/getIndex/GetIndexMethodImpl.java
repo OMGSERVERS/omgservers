@@ -1,8 +1,8 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.getIndex;
 
-import com.omgservers.module.system.impl.operation.getIndex.GetIndexOperation;
 import com.omgservers.dto.internal.GetIndexRequest;
 import com.omgservers.dto.internal.GetIndexResponse;
+import com.omgservers.module.system.impl.operation.getIndex.GetIndexOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,8 +19,6 @@ class GetIndexMethodImpl implements GetIndexMethod {
 
     @Override
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
-        GetIndexRequest.validate(request);
-
         final var name = request.getName();
         return pgPool.withTransaction(sqlConnection -> getIndexOperation
                         .getIndex(sqlConnection, name))

@@ -10,16 +10,17 @@ import com.omgservers.dto.tenant.SyncProjectResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface ProjectService {
 
-    Uni<GetProjectResponse> getProject(GetProjectRequest request);
+    Uni<GetProjectResponse> getProject(@Valid GetProjectRequest request);
 
-    Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
+    Uni<SyncProjectResponse> syncProject(@Valid SyncProjectRequest request);
 
-    Uni<Void> deleteProject(DeleteProjectRequest request);
+    Uni<Void> deleteProject(@Valid DeleteProjectRequest request);
 
-    Uni<HasProjectPermissionResponse> hasProjectPermission(HasProjectPermissionRequest request);
+    Uni<HasProjectPermissionResponse> hasProjectPermission(@Valid HasProjectPermissionRequest request);
 
-    Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request);
+    Uni<SyncProjectPermissionResponse> syncProjectPermission(@Valid SyncProjectPermissionRequest request);
 }

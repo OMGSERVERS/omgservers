@@ -1,6 +1,7 @@
 package com.omgservers.dto.gateway;
 
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +13,12 @@ import java.net.URI;
 @AllArgsConstructor
 public class AssignRuntimeRequest {
 
-    public static void validate(AssignRuntimeRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     URI server;
+
+    @NotNull
     Long connectionId;
+
+    @NotNull
     AssignedRuntimeModel assignedRuntime;
 }

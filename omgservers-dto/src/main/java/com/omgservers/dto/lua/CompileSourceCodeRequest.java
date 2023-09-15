@@ -1,6 +1,7 @@
 package com.omgservers.dto.lua;
 
 import com.omgservers.model.luaSourceCode.LuaSourceCodeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,12 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CompileSourceCodeRequest {
 
-    public static void validate(CompileSourceCodeRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     List<LuaSourceCodeModel> files;
 }

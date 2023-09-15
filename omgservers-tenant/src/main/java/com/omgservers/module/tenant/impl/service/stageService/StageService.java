@@ -13,18 +13,19 @@ import com.omgservers.dto.tenant.SyncStagePermissionResponse;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface StageService {
 
-    Uni<GetStageResponse> getStage(GetStageRequest request);
+    Uni<GetStageResponse> getStage(@Valid GetStageRequest request);
 
-    Uni<SyncStageResponse> syncStage(SyncStageRequest request);
+    Uni<SyncStageResponse> syncStage(@Valid SyncStageRequest request);
 
-    Uni<DeleteStageResponse> deleteStage(DeleteStageRequest request);
+    Uni<DeleteStageResponse> deleteStage(@Valid DeleteStageRequest request);
 
-    Uni<HasStagePermissionResponse> hasStagePermission(HasStagePermissionRequest request);
+    Uni<HasStagePermissionResponse> hasStagePermission(@Valid HasStagePermissionRequest request);
 
-    Uni<SyncStagePermissionResponse> syncStagePermission(SyncStagePermissionRequest request);
+    Uni<SyncStagePermissionResponse> syncStagePermission(@Valid SyncStagePermissionRequest request);
 
-    Uni<ValidateStageSecretResponse> validateStageSecret(ValidateStageSecretRequest request);
+    Uni<ValidateStageSecretResponse> validateStageSecret(@Valid ValidateStageSecretRequest request);
 }

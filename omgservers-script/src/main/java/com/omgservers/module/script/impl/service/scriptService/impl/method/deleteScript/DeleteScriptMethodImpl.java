@@ -22,8 +22,6 @@ class DeleteScriptMethodImpl implements DeleteScriptMethod {
 
     @Override
     public Uni<DeleteScriptResponse> deleteScript(final DeleteScriptRequest request) {
-        DeleteScriptRequest.validate(request);
-
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

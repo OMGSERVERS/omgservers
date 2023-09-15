@@ -1,6 +1,7 @@
 package com.omgservers.dto.script;
 
 import com.omgservers.dto.ShardedRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteScriptRequest implements ShardedRequest {
 
-    public static void validate(DeleteScriptRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long id;
 
     @Override

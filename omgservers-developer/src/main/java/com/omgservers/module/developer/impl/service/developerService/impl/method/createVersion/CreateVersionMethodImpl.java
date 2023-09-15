@@ -34,8 +34,6 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
 
     @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
-        CreateVersionDeveloperRequest.validate(request);
-
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();

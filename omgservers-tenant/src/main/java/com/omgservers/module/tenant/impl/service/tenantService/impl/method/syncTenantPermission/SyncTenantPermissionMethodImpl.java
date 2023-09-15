@@ -32,8 +32,6 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
 
     @Override
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRequest request) {
-        SyncTenantPermissionRequest.validate(request);
-
         final var permission = request.getPermission();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

@@ -1,7 +1,7 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.getMatchmaker;
 
-import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
+import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.module.matchmaker.impl.operation.selectMatchmaker.SelectMatchmakerOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,8 +22,6 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
 
     @Override
     public Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request) {
-        GetMatchmakerRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var id = request.getId();

@@ -1,5 +1,8 @@
 package com.omgservers.dto.developer;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +13,11 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CreateTokenDeveloperRequest {
 
-    public static void validate(CreateTokenDeveloperRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long userId;
+
+    @NotBlank
+    @Size(max = 64)
     @ToString.Exclude
     String password;
 }

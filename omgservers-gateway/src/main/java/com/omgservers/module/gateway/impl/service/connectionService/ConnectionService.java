@@ -13,22 +13,23 @@ import com.omgservers.module.gateway.impl.service.connectionService.response.Get
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedRuntimeResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetConnectionResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetSessionResponse;
+import jakarta.validation.Valid;
 
 public interface ConnectionService {
 
-    void createConnection(CreateConnectionRequest request);
+    void createConnection(@Valid CreateConnectionRequest request);
 
-    DeleteConnectionResponse deleteConnection(DeleteConnectionRequest request);
+    DeleteConnectionResponse deleteConnection(@Valid DeleteConnectionRequest request);
 
-    void assignPlayer(AssignPlayerRequest request);
+    void assignPlayer(@Valid AssignPlayerRequest request);
 
-    void assignRuntime(AssignRuntimeRequest request);
+    void assignRuntime(@Valid AssignRuntimeRequest request);
 
-    GetConnectionResponse getConnection(GetConnectionRequest request);
+    GetConnectionResponse getConnection(@Valid GetConnectionRequest request);
 
-    GetSessionResponse getSession(GetSessionRequest request);
+    GetSessionResponse getSession(@Valid GetSessionRequest request);
 
-    GetAssignedPlayerResponse getAssignedPlayer(GetAssignedPlayerRequest request);
+    GetAssignedPlayerResponse getAssignedPlayer(@Valid GetAssignedPlayerRequest request);
 
-    GetAssignedRuntimeResponse getAssignedRuntime(GetAssignedRuntimeRequest request);
+    GetAssignedRuntimeResponse getAssignedRuntime(@Valid GetAssignedRuntimeRequest request);
 }

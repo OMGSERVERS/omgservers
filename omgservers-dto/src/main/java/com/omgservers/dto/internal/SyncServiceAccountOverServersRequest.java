@@ -1,6 +1,7 @@
 package com.omgservers.dto.internal;
 
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class SyncServiceAccountOverServersRequest {
 
-    public static void validateSyncServiceAccountOverServersInternalRequest(SyncServiceAccountOverServersRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     ServiceAccountModel serviceAccount;
+
+    @NotNull
     List<URI> servers;
 }

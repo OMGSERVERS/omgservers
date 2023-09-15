@@ -2,6 +2,7 @@ package com.omgservers.dto.runtime;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncRuntimeCommandRequest implements ShardedRequest {
 
-    public static void validate(SyncRuntimeCommandRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     RuntimeCommandModel runtimeCommand;
 
     @Override

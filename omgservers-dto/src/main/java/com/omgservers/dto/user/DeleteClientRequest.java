@@ -1,6 +1,7 @@
 package com.omgservers.dto.user;
 
 import com.omgservers.dto.ShardedRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,10 @@ public class DeleteClientRequest implements ShardedRequest {
         // TODO: validate fields
     }
 
+    @NotNull
     Long userId;
+
+    @NotNull
     Long clientId;
 
     @Override

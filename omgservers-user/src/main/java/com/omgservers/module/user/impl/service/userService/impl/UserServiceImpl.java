@@ -15,6 +15,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,25 +34,23 @@ class UserServiceImpl implements UserService {
     final SyncUserMethod syncUserMethod;
 
     @Override
-    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
+    public Uni<SyncUserResponse> syncUser(@Valid final SyncUserRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncUserRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncUser,
                 syncUserMethod::syncUser);
     }
 
     @Override
-    public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
+    public Uni<ValidateCredentialsResponse> validateCredentials(@Valid final ValidateCredentialsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                ValidateCredentialsRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::validateCredentials,
                 validateCredentialsMethod::validateCredentials);
     }
 
     @Override
-    public Uni<Void> respondClient(RespondClientRequest request) {
+    public Uni<Void> respondClient(@Valid final RespondClientRequest request) {
         return respondClientMethod.respondClient(request);
     }
 }

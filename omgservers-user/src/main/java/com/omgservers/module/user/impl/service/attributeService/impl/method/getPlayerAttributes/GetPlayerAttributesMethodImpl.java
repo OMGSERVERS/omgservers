@@ -21,8 +21,6 @@ class GetPlayerAttributesMethodImpl implements GetPlayerAttributesMethod {
 
     @Override
     public Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request) {
-        GetPlayerAttributesRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var userId = request.getUserId();

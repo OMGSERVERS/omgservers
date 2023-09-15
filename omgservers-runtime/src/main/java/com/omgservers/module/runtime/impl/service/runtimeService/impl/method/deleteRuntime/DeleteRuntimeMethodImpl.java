@@ -1,11 +1,11 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.deleteRuntime;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.shard.ShardModel;
-import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.runtime.impl.operation.deleteRuntime.DeleteRuntimeOperation;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,8 +26,6 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
 
     @Override
     public Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request) {
-        DeleteRuntimeRequest.validate(request);
-
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

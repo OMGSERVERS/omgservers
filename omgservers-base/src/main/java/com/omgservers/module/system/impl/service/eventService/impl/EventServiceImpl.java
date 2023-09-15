@@ -9,6 +9,7 @@ import com.omgservers.module.system.impl.service.eventService.impl.method.fireEv
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,8 @@ class EventServiceImpl implements EventService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     @Override
-    public Uni<FireEventResponse> fireEvent(FireEventRequest request) {
+    public Uni<FireEventResponse> fireEvent(@Valid final FireEventRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                FireEventRequest::validate,
                 getInternalModuleClientOperation::getClient,
                 SystemModuleClient::fireEvent,
                 fireEventMethod::fireEvent);

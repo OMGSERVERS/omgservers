@@ -39,7 +39,6 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
     @Override
     public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
-        CreateDeveloperAdminRequest.validate(request);
         final var tenantId = request.getTenantId();
         // TODO: improve it
         final var password = String.valueOf(new SecureRandom().nextLong());

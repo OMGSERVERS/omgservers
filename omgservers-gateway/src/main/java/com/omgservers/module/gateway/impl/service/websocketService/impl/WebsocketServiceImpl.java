@@ -16,6 +16,7 @@ import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
@@ -43,9 +44,7 @@ class WebsocketServiceImpl implements WebsocketService {
     final EventModelFactory eventModelFactory;
 
     @Override
-    public void cleanUp(final CleanUpRequest request) {
-        CleanUpRequest.validate(request);
-
+    public void cleanUp(@Valid final CleanUpRequest request) {
         final var session = request.getSession();
         final var deleteConnectionHelpRequest = new DeleteConnectionRequest(session);
         final var response = connectionService.deleteConnection(deleteConnectionHelpRequest);
@@ -71,8 +70,7 @@ class WebsocketServiceImpl implements WebsocketService {
     }
 
     @Override
-    public void receiveTextMessage(final ReceiveTextMessageRequest request) {
-        ReceiveTextMessageRequest.validate(request);
+    public void receiveTextMessage(@Valid final ReceiveTextMessageRequest request) {
         final var session = request.getSession();
 
         final var createConnectionHelpRequest = new CreateConnectionRequest(session);

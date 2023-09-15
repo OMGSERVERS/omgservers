@@ -1,5 +1,6 @@
 package com.omgservers.dto.admin;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateDeveloperAdminRequest {
 
-    public static void validate(CreateDeveloperAdminRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     Long tenantId;
 }

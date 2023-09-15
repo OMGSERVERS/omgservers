@@ -7,12 +7,13 @@ import com.omgservers.dto.user.GetObjectRequest;
 import com.omgservers.dto.user.SyncObjectResponse;
 import com.omgservers.dto.user.SyncObjectRequest;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface ObjectService {
 
-    Uni<GetObjectResponse> getObject(GetObjectRequest request);
+    Uni<GetObjectResponse> getObject(@Valid GetObjectRequest request);
 
-    Uni<SyncObjectResponse> syncObject(SyncObjectRequest request);
+    Uni<SyncObjectResponse> syncObject(@Valid SyncObjectRequest request);
 
-    Uni<DeleteObjectResponse> deleteObject(DeleteObjectRequest request);
+    Uni<DeleteObjectResponse> deleteObject(@Valid DeleteObjectRequest request);
 }

@@ -1,12 +1,12 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.syncStage;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.SyncStageRequest;
 import com.omgservers.dto.tenant.SyncStageResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.module.tenant.impl.operation.validateStage.ValidateStageOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,8 +29,6 @@ class SyncStageMethodImpl implements SyncStageMethod {
 
     @Override
     public Uni<SyncStageResponse> syncStage(SyncStageRequest request) {
-        SyncStageRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var stage = request.getStage();
         validateStageOperation.validateStage(stage);

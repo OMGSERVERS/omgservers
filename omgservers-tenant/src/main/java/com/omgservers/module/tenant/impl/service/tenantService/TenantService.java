@@ -10,16 +10,17 @@ import com.omgservers.dto.tenant.SyncTenantRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.dto.tenant.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface TenantService {
 
-    Uni<GetTenantResponse> getTenant(GetTenantRequest request);
+    Uni<GetTenantResponse> getTenant(@Valid GetTenantRequest request);
 
-    Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request);
+    Uni<SyncTenantResponse> syncTenant(@Valid SyncTenantRequest request);
 
-    Uni<Void> deleteTenant(DeleteTenantRequest request);
+    Uni<Void> deleteTenant(@Valid DeleteTenantRequest request);
 
-    Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request);
+    Uni<HasTenantPermissionResponse> hasTenantPermission(@Valid HasTenantPermissionRequest request);
 
-    Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request);
+    Uni<SyncTenantPermissionResponse> syncTenantPermission(@Valid SyncTenantPermissionRequest request);
 }

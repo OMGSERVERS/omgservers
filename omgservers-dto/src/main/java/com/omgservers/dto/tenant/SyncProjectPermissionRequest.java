@@ -2,6 +2,7 @@ package com.omgservers.dto.tenant;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncProjectPermissionRequest implements ShardedRequest {
 
-    public static void validate(SyncProjectPermissionRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     ProjectPermissionModel permission;
 
     @Override

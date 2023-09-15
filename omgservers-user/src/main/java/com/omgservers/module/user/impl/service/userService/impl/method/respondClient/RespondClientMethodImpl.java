@@ -22,8 +22,6 @@ class RespondClientMethodImpl implements RespondClientMethod {
 
     @Override
     public Uni<Void> respondClient(RespondClientRequest request) {
-        RespondClientRequest.validate(request);
-
         final var userId = request.getUserId();
         final var clientId = request.getClientId();
 

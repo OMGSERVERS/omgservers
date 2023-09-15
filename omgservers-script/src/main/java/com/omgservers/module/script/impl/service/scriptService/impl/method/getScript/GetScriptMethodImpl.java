@@ -22,8 +22,6 @@ GetScriptMethodImpl implements GetScriptMethod {
 
     @Override
     public Uni<GetScriptResponse> getScript(GetScriptRequest request) {
-        GetScriptRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var id = request.getId();

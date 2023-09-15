@@ -1,8 +1,8 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.deleteIndex;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.DeleteIndexRequest;
 import com.omgservers.module.system.impl.operation.deleteIndex.DeleteIndexOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,8 +19,6 @@ class DeleteIndexMethodImpl implements DeleteIndexMethod {
 
     @Override
     public Uni<Void> deleteIndex(final DeleteIndexRequest request) {
-        DeleteIndexRequest.validate(request);
-
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteIndexOperation.deleteIndex(changeContext, sqlConnection, id))

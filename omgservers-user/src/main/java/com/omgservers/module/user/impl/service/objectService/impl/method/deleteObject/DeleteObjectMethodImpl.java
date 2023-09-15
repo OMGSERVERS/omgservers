@@ -22,8 +22,6 @@ class DeleteObjectMethodImpl implements DeleteObjectMethod {
 
     @Override
     public Uni<DeleteObjectResponse> deleteObject(final DeleteObjectRequest request) {
-        DeleteObjectRequest.validate(request);
-
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
         final var name = request.getName();

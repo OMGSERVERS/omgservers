@@ -27,8 +27,6 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
 
     @Override
     public Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request) {
-        SyncVersionRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var version = request.getVersion();
         return Uni.createFrom().voidItem()

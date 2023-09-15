@@ -46,8 +46,6 @@ class CallScriptMethodImpl implements CallScriptMethod {
 
     @Override
     public Uni<CallScriptResponse> callScript(CallScriptRequest request) {
-        CallScriptRequest.validate(request);
-
         final var scriptId = request.getScriptId();
         final var events = request.getEvents();
         return Uni.createFrom().voidItem()
@@ -85,7 +83,8 @@ class CallScriptMethodImpl implements CallScriptMethod {
                         selfString = objectMapper.writeValueAsString(luaSelf);
                         log.info("Final lua self, self={}", selfString);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException("final lua self can't be parsed, luaSelf={}" + luaSelf, e);
+                        throw new ServerSideConflictException("final lua self can't be parsed, luaSelf={}" + luaSelf,
+                                e);
                     }
 
                     return updateScriptSelfOperation.updateScriptSelf(

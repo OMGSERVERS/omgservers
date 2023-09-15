@@ -1,23 +1,29 @@
 package com.omgservers.dto.user;
 
 import com.omgservers.dto.ShardedRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValidateCredentialsRequest implements ShardedRequest {
 
-    public static void validate(ValidateCredentialsRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
 
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long userId;
+
+    @NotBlank
+    @Size(max = 64)
+    @ToString.Exclude
     String password;
 
     @Override

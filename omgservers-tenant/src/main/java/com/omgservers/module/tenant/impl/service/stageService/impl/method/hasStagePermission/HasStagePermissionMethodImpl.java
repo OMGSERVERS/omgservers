@@ -21,8 +21,6 @@ class HasStagePermissionMethodImpl implements HasStagePermissionMethod {
 
     @Override
     public Uni<HasStagePermissionResponse> hasStagePermission(HasStagePermissionRequest request) {
-        HasStagePermissionRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

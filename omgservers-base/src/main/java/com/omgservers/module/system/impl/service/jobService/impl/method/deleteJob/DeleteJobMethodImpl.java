@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.deleteJob;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.dto.internal.DeleteJobResponse;
 import com.omgservers.module.system.impl.operation.deleteJob.DeleteJobOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,6 @@ class DeleteJobMethodImpl implements DeleteJobMethod {
 
     @Override
     public Uni<DeleteJobResponse> deleteJob(DeleteJobRequest request) {
-        DeleteJobRequest.validate(request);
-
         final var shardKey = request.getShardKey();
         final var entity = request.getEntity();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

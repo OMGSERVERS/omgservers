@@ -1,11 +1,11 @@
 package com.omgservers.module.tenant.impl.service.stageService.impl.method.deleteStage;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteStageRequest;
 import com.omgservers.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.tenant.impl.operation.deleteStage.DeleteStageOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,8 +29,6 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
 
     @Override
     public Uni<DeleteStageResponse> deleteStage(final DeleteStageRequest request) {
-        DeleteStageRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

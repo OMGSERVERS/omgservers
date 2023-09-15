@@ -1,6 +1,7 @@
 package com.omgservers.dto.user;
 
 import com.omgservers.dto.ShardedRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetClientRequest implements ShardedRequest {
 
-    public static void validate(GetClientRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     Long userId;
+
+    @NotNull
     Long clientId;
 
     @Override

@@ -2,6 +2,7 @@ package com.omgservers.dto.tenant;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.stagePermission.StagePermissionModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncStagePermissionRequest implements ShardedRequest {
 
-    public static void validate(SyncStagePermissionRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     StagePermissionModel permission;
 
     @Override

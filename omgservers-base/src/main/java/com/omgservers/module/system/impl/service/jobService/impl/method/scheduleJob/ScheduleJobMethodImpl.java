@@ -1,14 +1,14 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.scheduleJob;
 
-import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
-import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
-import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
-import com.omgservers.module.system.impl.service.logService.LogService;
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
-import com.omgservers.operation.checkShard.CheckShardOperation;
 import com.omgservers.model.job.JobType;
+import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
+import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
+import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
+import com.omgservers.module.system.impl.service.logService.LogService;
+import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.ScheduledExecution;
@@ -59,8 +59,6 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     @Override
     public Uni<Void> scheduleJob(ScheduleJobRequest request) {
-        ScheduleJobRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var shardKey = request.getShardKey();

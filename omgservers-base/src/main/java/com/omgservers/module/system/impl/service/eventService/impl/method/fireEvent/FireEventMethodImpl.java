@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.fireEvent;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.FireEventRequest;
 import com.omgservers.dto.internal.FireEventResponse;
 import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,6 @@ class FireEventMethodImpl implements FireEventMethod {
 
     @Override
     public Uni<FireEventResponse> fireEvent(final FireEventRequest request) {
-        FireEventRequest.validate(request);
-
         final var event = request.getEvent();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertEventOperation.upsertEvent(changeContext, sqlConnection, event))

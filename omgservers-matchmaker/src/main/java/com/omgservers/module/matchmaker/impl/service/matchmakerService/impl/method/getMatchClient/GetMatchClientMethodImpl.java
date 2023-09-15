@@ -22,8 +22,6 @@ class GetMatchClientMethodImpl implements GetMatchClientMethod {
 
     @Override
     public Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request) {
-        GetMatchClientRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();

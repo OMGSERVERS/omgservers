@@ -1,7 +1,6 @@
 package com.omgservers.module.user.impl.operation.createUserToken;
 
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.user.UserTokenContainerModel;
 import com.omgservers.module.user.factory.UserModelFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -25,7 +24,6 @@ class CreateUserTokenOperationTest extends Assertions {
         final var tokenContainer = createUserTokenOperation.createUserToken(user);
 
         assertNotNull(tokenContainer);
-        UserTokenContainerModel.validate(tokenContainer);
         assertEquals(user.getId(), tokenContainer.getTokenObject().getUserId());
         assertEquals(user.getRole(), tokenContainer.getTokenObject().getRole());
         assertTrue(tokenContainer.getLifetime() > 0);

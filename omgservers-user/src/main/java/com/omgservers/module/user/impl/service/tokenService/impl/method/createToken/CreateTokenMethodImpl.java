@@ -35,8 +35,6 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
-        CreateTokenRequest.validate(request);
-
         final var userId = request.getUserId();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

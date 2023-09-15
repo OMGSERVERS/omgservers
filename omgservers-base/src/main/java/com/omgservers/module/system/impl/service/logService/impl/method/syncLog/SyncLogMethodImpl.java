@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.logService.impl.method.syncLog;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.dto.internal.SyncLogResponse;
 import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,8 +23,6 @@ class SyncLogMethodImpl implements SyncLogMethod {
 
     @Override
     public Uni<SyncLogResponse> syncLog(SyncLogRequest request) {
-        SyncLogRequest.validate(request);
-
         final var logModel = request.getLog();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertLogOperation.upsertLog(changeContext, sqlConnection, logModel))

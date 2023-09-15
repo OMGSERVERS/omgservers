@@ -2,25 +2,26 @@ package com.omgservers.module.tenant.impl.service.tenantService.impl;
 
 import com.omgservers.dto.tenant.DeleteTenantRequest;
 import com.omgservers.dto.tenant.GetTenantRequest;
+import com.omgservers.dto.tenant.GetTenantResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionRequest;
+import com.omgservers.dto.tenant.HasTenantPermissionResponse;
 import com.omgservers.dto.tenant.SyncTenantPermissionRequest;
+import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.dto.tenant.SyncTenantRequest;
+import com.omgservers.dto.tenant.SyncTenantResponse;
 import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
+import com.omgservers.module.tenant.impl.service.tenantService.TenantService;
 import com.omgservers.module.tenant.impl.service.tenantService.impl.method.deleteTenant.DeleteTenantMethod;
 import com.omgservers.module.tenant.impl.service.tenantService.impl.method.getTenant.GetTenantMethod;
 import com.omgservers.module.tenant.impl.service.tenantService.impl.method.hasTenantPermission.HasTenantPermissionMethod;
 import com.omgservers.module.tenant.impl.service.tenantService.impl.method.syncTenant.SyncTenantMethod;
 import com.omgservers.module.tenant.impl.service.tenantService.impl.method.syncTenantPermission.SyncTenantPermissionMethod;
-import com.omgservers.module.tenant.impl.service.tenantService.TenantService;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
-import com.omgservers.dto.tenant.GetTenantResponse;
-import com.omgservers.dto.tenant.HasTenantPermissionResponse;
-import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.dto.tenant.SyncTenantResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,45 +42,40 @@ public class TenantServiceImpl implements TenantService {
     final SyncTenantMethod syncTenantMethod;
 
     @Override
-    public Uni<GetTenantResponse> getTenant(GetTenantRequest request) {
+    public Uni<GetTenantResponse> getTenant(@Valid final GetTenantRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetTenantRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenant,
                 getTenantMethod::getTenant);
     }
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request) {
+    public Uni<SyncTenantResponse> syncTenant(@Valid final SyncTenantRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncTenantRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenant,
                 syncTenantMethod::syncTenant);
     }
 
     @Override
-    public Uni<Void> deleteTenant(DeleteTenantRequest request) {
+    public Uni<Void> deleteTenant(@Valid final DeleteTenantRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteTenantRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenant,
                 deleteTenantMethod::deleteTenant);
     }
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request) {
+    public Uni<HasTenantPermissionResponse> hasTenantPermission(@Valid final HasTenantPermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                HasTenantPermissionRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::hasTenantPermission,
                 hasTenantPermissionMethod::hasTenantPermission);
     }
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request) {
+    public Uni<SyncTenantPermissionResponse> syncTenantPermission(@Valid final SyncTenantPermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncTenantPermissionRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantPermission,
                 syncTenantPermissionMethod::syncTenantPermission);

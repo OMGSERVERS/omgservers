@@ -24,8 +24,6 @@ class SyncObjectMethodImpl implements SyncObjectMethod {
 
     @Override
     public Uni<SyncObjectResponse> syncObject(SyncObjectRequest request) {
-        SyncObjectRequest.validate(request);
-
         final var userId = request.getUserId();
         final var object = request.getObject();
         validateObjectOperation.validateObject(object);

@@ -21,8 +21,6 @@ class GetObjectMethodImpl implements GetObjectMethod {
 
     @Override
     public Uni<GetObjectResponse> getObject(final GetObjectRequest request) {
-        GetObjectRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var userId = request.getUserId();

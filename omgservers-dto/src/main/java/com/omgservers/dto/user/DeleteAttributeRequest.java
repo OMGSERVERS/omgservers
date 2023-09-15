@@ -1,6 +1,9 @@
 package com.omgservers.dto.user;
 
 import com.omgservers.dto.ShardedRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteAttributeRequest implements ShardedRequest {
 
-    public static void validate(DeleteAttributeRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
 
+    @NotNull
     Long userId;
+
+    @NotNull
     Long playerId;
+
+    @NotBlank
+    @Size(max = 64)
     String name;
 
     @Override

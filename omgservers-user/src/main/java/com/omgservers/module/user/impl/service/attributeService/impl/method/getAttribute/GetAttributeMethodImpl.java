@@ -21,8 +21,6 @@ class GetAttributeMethodImpl implements GetAttributeMethod {
 
     @Override
     public Uni<GetAttributeResponse> getAttribute(final GetAttributeRequest request) {
-        GetAttributeRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var userId = request.getUserId();

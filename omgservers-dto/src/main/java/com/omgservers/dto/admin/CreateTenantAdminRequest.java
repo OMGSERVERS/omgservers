@@ -7,9 +7,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateTenantAdminRequest {
 
-    public static void validate(CreateTenantAdminRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
 }

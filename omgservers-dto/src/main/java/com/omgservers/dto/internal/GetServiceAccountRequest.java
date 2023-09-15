@@ -1,5 +1,7 @@
 package com.omgservers.dto.internal;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetServiceAccountRequest {
 
-    public static void validate(GetServiceAccountRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotBlank
+    @Size(max = 64)
     String username;
 }

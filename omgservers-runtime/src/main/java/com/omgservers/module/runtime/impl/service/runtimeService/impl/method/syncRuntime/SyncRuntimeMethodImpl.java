@@ -30,8 +30,6 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request) {
-        SyncRuntimeRequest.validate(request);
-
         final var runtime = request.getRuntime();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

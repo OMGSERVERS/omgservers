@@ -9,14 +9,15 @@ import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncPlayerResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface PlayerService {
 
-    Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
+    Uni<GetPlayerResponse> getPlayer(@Valid GetPlayerRequest request);
 
-    Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request);
+    Uni<FindPlayerResponse> findPlayer(@Valid FindPlayerRequest request);
 
-    Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
+    Uni<SyncPlayerResponse> syncPlayer(@Valid SyncPlayerRequest request);
 
-    Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
+    Uni<DeletePlayerResponse> deletePlayer(@Valid DeletePlayerRequest request);
 }

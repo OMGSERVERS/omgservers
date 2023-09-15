@@ -1,5 +1,7 @@
 package com.omgservers.dto.tenant;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,14 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ValidateStageSecretRequest {
 
-    public static void validateGetStageModuleRequest(ValidateStageSecretRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotBlank
     String secret;
 }

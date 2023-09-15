@@ -22,8 +22,6 @@ class SyncUserMethodImpl implements SyncUserMethod {
 
     @Override
     public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
-        SyncUserRequest.validate(request);
-
         final var user = request.getUser();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

@@ -22,8 +22,6 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
 
     @Override
     public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
-        DeletePlayerRequest.validate(request);
-
         final var userId = request.getUserId();
         final var id = request.getId();
         return checkShardOperation.checkShard(request.getRequestShardKey())

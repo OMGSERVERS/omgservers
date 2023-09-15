@@ -7,12 +7,13 @@ import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.SyncClientResponse;
 import com.omgservers.dto.user.SyncClientRequest;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface ClientService {
 
-    Uni<SyncClientResponse> syncClient(SyncClientRequest request);
+    Uni<SyncClientResponse> syncClient(@Valid SyncClientRequest request);
 
-    Uni<GetClientResponse> getClient(GetClientRequest request);
+    Uni<GetClientResponse> getClient(@Valid GetClientRequest request);
 
-    Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
+    Uni<DeleteClientResponse> deleteClient(@Valid DeleteClientRequest request);
 }

@@ -1,8 +1,8 @@
 package com.omgservers.dto.tenant;
 
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BuildVersionRequest {
 
-    public static void validate(BuildVersionRequest request) {
-        if (request == null) {
-            throw new ServerSideBadRequestException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     VersionConfigModel versionConfig;
+
+    @NotNull
     VersionSourceCodeModel sourceCode;
 }

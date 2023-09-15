@@ -43,6 +43,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,108 +71,96 @@ class MatchmakerServiceImpl implements MatchmakerService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request) {
+    public Uni<SyncMatchmakerResponse> syncMatchmaker(@Valid final SyncMatchmakerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncMatchmakerRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncMatchmaker,
                 syncMatchmakerMethod::syncMatchmaker);
     }
 
     @Override
-    public Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request) {
+    public Uni<GetMatchmakerResponse> getMatchmaker(@Valid final GetMatchmakerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetMatchmakerRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::getMatchmaker,
                 getMatchmakerMethod::getMatchmaker);
     }
 
     @Override
-    public Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request) {
+    public Uni<DeleteMatchmakerResponse> deleteMatchmaker(@Valid final DeleteMatchmakerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteMatchmakerRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::deleteMatchmaker,
                 deleteMatchmakerMethod::deleteMatchmaker);
     }
 
     @Override
-    public Uni<SyncRequestResponse> syncRequest(SyncRequestRequest request) {
+    public Uni<SyncRequestResponse> syncRequest(@Valid final SyncRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncRequestRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncRequest,
                 syncRequestMethod::syncRequest);
     }
 
     @Override
-    public Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request) {
+    public Uni<DeleteRequestResponse> deleteRequest(@Valid final DeleteRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteRequestRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::deleteRequest,
                 deleteRequestMethod::deleteRequest);
     }
 
     @Override
-    public Uni<GetMatchResponse> getMatch(GetMatchRequest request) {
+    public Uni<GetMatchResponse> getMatch(@Valid final GetMatchRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetMatchRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::getMatch,
                 getMatchMethod::getMatch);
     }
 
     @Override
-    public Uni<SyncMatchResponse> syncMatch(SyncMatchRequest request) {
+    public Uni<SyncMatchResponse> syncMatch(@Valid final SyncMatchRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncMatchRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncMatch,
                 syncMatchMethod::syncMatch);
     }
 
     @Override
-    public Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request) {
+    public Uni<DeleteMatchResponse> deleteMatch(@Valid final DeleteMatchRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteMatchRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::deleteMatch,
                 deleteMatchMethod::deleteMatch);
     }
 
     @Override
-    public Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request) {
+    public Uni<GetMatchClientResponse> getMatchClient(@Valid final GetMatchClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetMatchClientRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::getMatchClient,
                 getMatchClientMethod::getMatchClient);
     }
 
     @Override
-    public Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request) {
+    public Uni<SyncMatchClientResponse> syncMatchClient(@Valid final SyncMatchClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncMatchClientRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncMatchClient,
                 syncMatchClientMethod::syncMatchClient);
     }
 
     @Override
-    public Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request) {
+    public Uni<DeleteMatchClientResponse> deleteMatchClient(@Valid final DeleteMatchClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteMatchClientRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::deleteMatchClient,
                 deleteMatchClientMethod::deleteMatchClient);
     }
 
     @Override
-    public Uni<ExecuteMatchmakerResponse> executeMatchmaker(ExecuteMatchmakerRequest request) {
+    public Uni<ExecuteMatchmakerResponse> executeMatchmaker(@Valid final ExecuteMatchmakerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                ExecuteMatchmakerRequest::validate,
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::executeMatchmaker,
                 executeMatchmakerMethod::executeMatchmaker);

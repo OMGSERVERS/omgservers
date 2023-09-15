@@ -22,8 +22,6 @@ class DeleteAttributeMethodImpl implements DeleteAttributeMethod {
 
     @Override
     public Uni<DeleteAttributeResponse> deleteAttribute(final DeleteAttributeRequest request) {
-        DeleteAttributeRequest.validate(request);
-
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
         final var name = request.getName();

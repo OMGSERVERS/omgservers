@@ -1,6 +1,7 @@
 package com.omgservers.module.gateway.impl.service.connectionService.request;
 
 import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignPlayerRequest {
 
-    public static void validate(AssignPlayerRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long connectionId;
+
+    @NotNull
     AssignedPlayerModel assignedPlayer;
 }

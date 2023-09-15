@@ -14,10 +14,6 @@ import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakingResults.MatchmakingResultsModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.module.system.factory.EventModelFactory;
-import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
 import com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
@@ -26,6 +22,10 @@ import com.omgservers.module.matchmaker.impl.operation.selectRequestsByMatchmake
 import com.omgservers.module.matchmaker.impl.operation.updateMatchConfig.UpdateMatchConfigOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
+import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -70,8 +70,6 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
 
     @Override
     public Uni<ExecuteMatchmakerResponse> executeMatchmaker(ExecuteMatchmakerRequest request) {
-        ExecuteMatchmakerRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var matchmakerId = request.getMatchmakerId();
@@ -185,7 +183,8 @@ class ExecuteMatchmakerMethodImpl implements ExecuteMatchmakerMethod {
                             matchmakingResults.getCreatedMatches().addAll(greedyMatchmakingResult.createdMatches());
                             matchmakingResults.getUpdatedMatches().addAll(greedyMatchmakingResult.updatedMatches());
                             matchmakingResults.getMatchedClients().addAll(greedyMatchmakingResult.matchedClients());
-                            matchmakingResults.getCompletedRequests().addAll(greedyMatchmakingResult.completedRequests());
+                            matchmakingResults.getCompletedRequests()
+                                    .addAll(greedyMatchmakingResult.completedRequests());
                         } else {
                             log.info("Unknown mode for matchmaking within requests, mode={}", modeName);
                             matchmakingResults.getCompletedRequests().addAll(modeRequests);

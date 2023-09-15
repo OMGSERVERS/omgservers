@@ -25,29 +25,30 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface MatchmakerService {
-    Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request);
+    Uni<SyncMatchmakerResponse> syncMatchmaker(@Valid SyncMatchmakerRequest request);
 
-    Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request);
+    Uni<GetMatchmakerResponse> getMatchmaker(@Valid GetMatchmakerRequest request);
 
-    Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request);
+    Uni<DeleteMatchmakerResponse> deleteMatchmaker(@Valid DeleteMatchmakerRequest request);
 
-    Uni<SyncRequestResponse> syncRequest(SyncRequestRequest request);
+    Uni<SyncRequestResponse> syncRequest(@Valid SyncRequestRequest request);
 
-    Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request);
+    Uni<DeleteRequestResponse> deleteRequest(@Valid DeleteRequestRequest request);
 
-    Uni<GetMatchResponse> getMatch(GetMatchRequest request);
+    Uni<GetMatchResponse> getMatch(@Valid GetMatchRequest request);
 
-    Uni<SyncMatchResponse> syncMatch(SyncMatchRequest request);
+    Uni<SyncMatchResponse> syncMatch(@Valid SyncMatchRequest request);
 
-    Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request);
+    Uni<DeleteMatchResponse> deleteMatch(@Valid DeleteMatchRequest request);
 
-    Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
+    Uni<GetMatchClientResponse> getMatchClient(@Valid GetMatchClientRequest request);
 
-    Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request);
+    Uni<SyncMatchClientResponse> syncMatchClient(@Valid SyncMatchClientRequest request);
 
-    Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
+    Uni<DeleteMatchClientResponse> deleteMatchClient(@Valid DeleteMatchClientRequest request);
 
-    Uni<ExecuteMatchmakerResponse> executeMatchmaker(ExecuteMatchmakerRequest request);
+    Uni<ExecuteMatchmakerResponse> executeMatchmaker(@Valid ExecuteMatchmakerRequest request);
 }

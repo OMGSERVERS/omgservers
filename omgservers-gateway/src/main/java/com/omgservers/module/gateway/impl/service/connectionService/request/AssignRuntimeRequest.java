@@ -1,6 +1,7 @@
 package com.omgservers.module.gateway.impl.service.connectionService.request;
 
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignRuntimeRequest {
 
-    public static void validate(AssignRuntimeRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long connectionId;
+
+    @NotNull
     AssignedRuntimeModel assignedRuntime;
 }

@@ -1,7 +1,7 @@
 package com.omgservers.dto.internal;
 
 import com.omgservers.dto.ShardedRequest;
-import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UnscheduleJobRequest implements ShardedRequest {
 
-    public static void validate(UnscheduleJobRequest request) {
-        if (request == null) {
-            throw new ServerSideBadRequestException("request is null");
-        }
-    }
 
+    @NotNull
     Long shardKey;
+
+    @NotNull
     Long entity;
 
     @Override

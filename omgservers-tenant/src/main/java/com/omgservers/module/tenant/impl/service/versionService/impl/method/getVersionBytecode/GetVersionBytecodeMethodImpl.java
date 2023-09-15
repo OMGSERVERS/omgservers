@@ -22,8 +22,6 @@ class GetVersionBytecodeMethodImpl implements GetVersionBytecodeMethod {
 
     @Override
     public Uni<GetVersionBytecodeResponse> getVersionBytecode(GetVersionBytecodeRequest request) {
-        GetVersionBytecodeRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

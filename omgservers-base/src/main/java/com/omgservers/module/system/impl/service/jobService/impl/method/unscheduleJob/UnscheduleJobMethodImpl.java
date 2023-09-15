@@ -27,8 +27,6 @@ class UnscheduleJobMethodImpl implements UnscheduleJobMethod {
 
     @Override
     public Uni<Void> unscheduleJob(final UnscheduleJobRequest request) {
-        UnscheduleJobRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var shardKey = request.getShardKey();

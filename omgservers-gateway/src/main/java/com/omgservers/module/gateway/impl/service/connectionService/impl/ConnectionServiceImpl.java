@@ -19,6 +19,7 @@ import com.omgservers.module.gateway.impl.service.connectionService.response.Get
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetSessionResponse;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,9 +47,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized void createConnection(CreateConnectionRequest request) {
-        CreateConnectionRequest.validate(request);
-
+    public synchronized void createConnection(@Valid final CreateConnectionRequest request) {
         final var session = request.getSession();
         final var sessionId = session.getId();
 
@@ -56,14 +55,13 @@ class ConnectionServiceImpl implements ConnectionService {
             final var connectionId = generateIdOperation.generateId();
             connectionBySession.put(sessionId, connectionId);
             sessionByConnection.put(connectionId, session);
-            log.info("Session was associated with connectionId, sessionId={}, connectionId={}", sessionId, connectionId);
+            log.info("Session was associated with connectionId, sessionId={}, connectionId={}", sessionId,
+                    connectionId);
         }
     }
 
     @Override
-    public synchronized DeleteConnectionResponse deleteConnection(DeleteConnectionRequest request) {
-        DeleteConnectionRequest.validate(request);
-
+    public synchronized DeleteConnectionResponse deleteConnection(@Valid final DeleteConnectionRequest request) {
         final var session = request.getSession();
         final var sessionId = session.getId();
         final var connection = connectionBySession.remove(sessionId);
@@ -80,9 +78,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized void assignPlayer(AssignPlayerRequest request) {
-        AssignPlayerRequest.validate(request);
-
+    public synchronized void assignPlayer(@Valid final AssignPlayerRequest request) {
         final var connectionId = request.getConnectionId();
         if (sessionByConnection.containsKey(connectionId)) {
             final var assignedPlayer = request.getAssignedPlayer();
@@ -93,9 +89,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized void assignRuntime(AssignRuntimeRequest request) {
-        AssignRuntimeRequest.validate(request);
-
+    public synchronized void assignRuntime(@Valid final AssignRuntimeRequest request) {
         final var connectionId = request.getConnectionId();
         if (sessionByConnection.containsKey(connectionId)) {
             final var assignedRuntime = request.getAssignedRuntime();
@@ -106,9 +100,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized GetConnectionResponse getConnection(GetConnectionRequest request) {
-        GetConnectionRequest.validate(request);
-
+    public synchronized GetConnectionResponse getConnection(@Valid final GetConnectionRequest request) {
         final var session = request.getSession();
         final var sessionId = session.getId();
         final var connection = connectionBySession.get(sessionId);
@@ -120,9 +112,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized GetSessionResponse getSession(GetSessionRequest request) {
-        GetSessionRequest.validate(request);
-
+    public synchronized GetSessionResponse getSession(@Valid final GetSessionRequest request) {
         final var connectionId = request.getConnectionId();
         final var session = sessionByConnection.get(connectionId);
         if (session != null) {
@@ -133,9 +123,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized GetAssignedPlayerResponse getAssignedPlayer(GetAssignedPlayerRequest request) {
-        GetAssignedPlayerRequest.validate(request);
-
+    public synchronized GetAssignedPlayerResponse getAssignedPlayer(@Valid final GetAssignedPlayerRequest request) {
         final var connectionId = request.getConnectionId();
         final var assignedPlayer = assignedPlayerByConnection.get(connectionId);
         if (assignedPlayer != null) {
@@ -146,9 +134,7 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized GetAssignedRuntimeResponse getAssignedRuntime(final GetAssignedRuntimeRequest request) {
-        GetAssignedRuntimeRequest.validate(request);
-
+    public synchronized GetAssignedRuntimeResponse getAssignedRuntime(@Valid final GetAssignedRuntimeRequest request) {
         final var connectionId = request.getConnectionId();
         final var assignedRuntime = assignedRuntimeByConnection.get(connectionId);
         if (assignedRuntime != null) {

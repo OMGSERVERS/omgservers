@@ -19,6 +19,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,36 +38,32 @@ class ScriptServiceImpl implements ScriptService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetScriptResponse> getScript(GetScriptRequest request) {
+    public Uni<GetScriptResponse> getScript(@Valid final GetScriptRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetScriptRequest::validate,
                 getScriptModuleClientOperation::getClient,
                 ScriptModuleClient::getScript,
                 getScriptMethod::getScript);
     }
 
     @Override
-    public Uni<SyncScriptResponse> syncScript(SyncScriptRequest request) {
+    public Uni<SyncScriptResponse> syncScript(@Valid final SyncScriptRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncScriptRequest::validate,
                 getScriptModuleClientOperation::getClient,
                 ScriptModuleClient::syncScript,
                 syncScriptMethod::syncScript);
     }
 
     @Override
-    public Uni<DeleteScriptResponse> deleteScript(DeleteScriptRequest request) {
+    public Uni<DeleteScriptResponse> deleteScript(@Valid final DeleteScriptRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteScriptRequest::validate,
                 getScriptModuleClientOperation::getClient,
                 ScriptModuleClient::deleteScript,
                 deleteScriptMethod::deleteScript);
     }
 
     @Override
-    public Uni<CallScriptResponse> callScript(CallScriptRequest request) {
+    public Uni<CallScriptResponse> callScript(@Valid final CallScriptRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CallScriptRequest::validate,
                 getScriptModuleClientOperation::getClient,
                 ScriptModuleClient::callScript,
                 callScriptMethod::callScript);

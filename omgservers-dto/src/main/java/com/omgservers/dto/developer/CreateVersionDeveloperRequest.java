@@ -1,7 +1,8 @@
 package com.omgservers.dto.developer;
 
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.model.version.VersionSourceCodeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateVersionDeveloperRequest {
 
-    public static void validate(CreateVersionDeveloperRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     VersionConfigModel versionConfig;
+
+    @NotNull
     VersionSourceCodeModel sourceCode;
 }

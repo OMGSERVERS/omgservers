@@ -1,10 +1,10 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.validateCredentials;
 
-import com.omgservers.module.system.impl.service.serviceAccountService.ServiceAccountService;
-import com.omgservers.dto.internal.ValidateCredentialsRequest;
-import com.omgservers.dto.internal.ValidateCredentialsResponse;
 import com.omgservers.dto.internal.GetServiceAccountRequest;
 import com.omgservers.dto.internal.GetServiceAccountResponse;
+import com.omgservers.dto.internal.ValidateCredentialsRequest;
+import com.omgservers.dto.internal.ValidateCredentialsResponse;
+import com.omgservers.module.system.impl.service.serviceAccountService.ServiceAccountService;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,8 +21,6 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
 
     @Override
     public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
-        ValidateCredentialsRequest.validate(request);
-
         final var username = request.getUsername();
         final var getServiceAccountHelpRequest = new GetServiceAccountRequest(username);
         return serviceAccountService.getServiceAccount(getServiceAccountHelpRequest)

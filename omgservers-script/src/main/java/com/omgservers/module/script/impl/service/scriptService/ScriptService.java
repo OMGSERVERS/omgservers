@@ -9,14 +9,15 @@ import com.omgservers.dto.script.GetScriptResponse;
 import com.omgservers.dto.script.SyncScriptRequest;
 import com.omgservers.dto.script.SyncScriptResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface ScriptService {
 
-    Uni<GetScriptResponse> getScript(GetScriptRequest request);
+    Uni<GetScriptResponse> getScript(@Valid GetScriptRequest request);
 
-    Uni<SyncScriptResponse> syncScript(SyncScriptRequest request);
+    Uni<SyncScriptResponse> syncScript(@Valid SyncScriptRequest request);
 
-    Uni<DeleteScriptResponse> deleteScript(DeleteScriptRequest request);
+    Uni<DeleteScriptResponse> deleteScript(@Valid DeleteScriptRequest request);
 
-    Uni<CallScriptResponse> callScript(CallScriptRequest request);
+    Uni<CallScriptResponse> callScript(@Valid CallScriptRequest request);
 }

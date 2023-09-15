@@ -1,13 +1,13 @@
 package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatch;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.shard.ShardModel;
+import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -29,8 +29,6 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
 
     @Override
     public Uni<SyncMatchResponse> syncMatch(SyncMatchRequest request) {
-        SyncMatchRequest.validate(request);
-
         final var match = request.getMatch();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

@@ -28,6 +28,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,59 +51,53 @@ public class VersionServiceImpl implements VersionService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<BuildVersionResponse> buildVersion(BuildVersionRequest request) {
+    public Uni<BuildVersionResponse> buildVersion(@Valid final BuildVersionRequest request) {
         return buildVersionMethod.buildVersion(request);
     }
 
     @Override
-    public Uni<GetVersionResponse> getVersion(GetVersionRequest request) {
+    public Uni<GetVersionResponse> getVersion(@Valid final GetVersionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetVersionRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getVersion,
                 getVersionMethod::getVersion);
     }
 
     @Override
-    public Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request) {
+    public Uni<SyncVersionResponse> syncVersion(@Valid final SyncVersionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                SyncVersionRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncVersion,
                 syncVersionMethod::syncVersion);
     }
 
     @Override
-    public Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request) {
+    public Uni<DeleteVersionResponse> deleteVersion(@Valid final DeleteVersionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                DeleteVersionRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteVersion,
                 deleteVersionMethod::deleteVersion);
     }
 
     @Override
-    public Uni<GetVersionBytecodeResponse> getVersionBytecode(GetVersionBytecodeRequest request) {
+    public Uni<GetVersionBytecodeResponse> getVersionBytecode(@Valid final GetVersionBytecodeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetVersionBytecodeRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getVersionBytecode,
                 getVersionBytecodeMethod::getVersionBytecode);
     }
 
     @Override
-    public Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request) {
+    public Uni<GetVersionConfigResponse> getVersionConfig(@Valid final GetVersionConfigRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetVersionConfigRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getVersionConfig,
                 getVersionConfigMethod::getVersionConfig);
     }
 
     @Override
-    public Uni<GetStageVersionIdResponse> getStageVersionId(GetStageVersionIdRequest request) {
+    public Uni<GetStageVersionIdResponse> getStageVersionId(@Valid final GetStageVersionIdRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                GetStageVersionIdRequest::validate,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getStageVersionId,
                 getStageVersionIdMethod::getStageVersionId);

@@ -1,8 +1,8 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.syncServiceAccount;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.module.system.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +20,6 @@ class SyncServiceAccountMethodImpl implements SyncServiceAccountMethod {
 
     @Override
     public Uni<Void> syncServiceAccount(SyncServiceAccountRequest request) {
-        SyncServiceAccountRequest.validate(request);
-
         final var serviceAccount = request.getServiceAccount();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         syncServiceAccountOperation.upsertServiceAccount(changeContext, sqlConnection, serviceAccount))

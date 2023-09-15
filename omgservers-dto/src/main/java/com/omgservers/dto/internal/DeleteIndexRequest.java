@@ -1,5 +1,6 @@
 package com.omgservers.dto.internal;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteIndexRequest {
 
-    public static void validate(DeleteIndexRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     Long id;
 }

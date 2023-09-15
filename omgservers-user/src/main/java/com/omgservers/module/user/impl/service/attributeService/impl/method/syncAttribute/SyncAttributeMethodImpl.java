@@ -22,8 +22,6 @@ class SyncAttributeMethodImpl implements SyncAttributeMethod {
 
     @Override
     public Uni<SyncAttributeResponse> syncAttribute(SyncAttributeRequest request) {
-        SyncAttributeRequest.validate(request);
-
         final var attribute = request.getAttribute();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

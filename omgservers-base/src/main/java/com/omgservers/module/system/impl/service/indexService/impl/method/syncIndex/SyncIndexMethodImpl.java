@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.syncIndex;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.module.system.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.module.system.impl.operation.validateIndex.ValidateIndexOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,8 +21,6 @@ class SyncIndexMethodImpl implements SyncIndexMethod {
 
     @Override
     public Uni<Void> syncIndex(SyncIndexRequest request) {
-        SyncIndexRequest.validate(request);
-
         final var index = request.getIndex();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         syncIndexOperation.upsertIndex(changeContext, sqlConnection, index))

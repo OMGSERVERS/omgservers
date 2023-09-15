@@ -14,6 +14,7 @@ import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,18 +33,15 @@ class TokenServiceImpl implements TokenService {
     final DecodeTokenOperation decodeTokenOperation;
 
     @Override
-    public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
+    public Uni<CreateTokenResponse> createToken(@Valid final CreateTokenRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                CreateTokenRequest::validate,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::createToken,
                 createTokenMethod::createToken);
     }
 
     @Override
-    public Uni<IntrospectTokenResponse> introspectToken(final IntrospectTokenRequest request) {
-        IntrospectTokenRequest.validate(request);
-
+    public Uni<IntrospectTokenResponse> introspectToken(@Valid final IntrospectTokenRequest request) {
         final var rawToken = request.getRawToken();
         return Uni.createFrom().item(rawToken)
                 .map(decodeTokenOperation::decodeToken)

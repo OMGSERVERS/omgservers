@@ -2,6 +2,7 @@ package com.omgservers.dto.script;
 
 import com.omgservers.dto.ShardedRequest;
 import com.omgservers.model.scriptEvent.ScriptEventModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CallScriptRequest implements ShardedRequest {
 
-    public static void validate(CallScriptRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-        // TODO: validate fields
-    }
-
+    @NotNull
     Long scriptId;
+
+    @NotNull
     List<ScriptEventModel> events;
 
     @Override

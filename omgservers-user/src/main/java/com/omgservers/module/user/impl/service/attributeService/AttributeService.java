@@ -9,33 +9,34 @@ import com.omgservers.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.dto.user.SyncAttributeRequest;
 import com.omgservers.dto.user.SyncAttributeResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 import java.time.Duration;
 
 public interface AttributeService {
 
-    Uni<GetAttributeResponse> getAttribute(GetAttributeRequest request);
+    Uni<GetAttributeResponse> getAttribute(@Valid GetAttributeRequest request);
 
     default GetAttributeResponse getAttribute(long timeout, GetAttributeRequest request) {
         return getAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request);
+    Uni<GetPlayerAttributesResponse> getPlayerAttributes(@Valid GetPlayerAttributesRequest request);
 
     default GetPlayerAttributesResponse getPlayerAttributes(long timeout, GetPlayerAttributesRequest request) {
         return getPlayerAttributes(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<SyncAttributeResponse> syncAttribute(SyncAttributeRequest request);
+    Uni<SyncAttributeResponse> syncAttribute(@Valid SyncAttributeRequest request);
 
     default SyncAttributeResponse syncAttribute(long timeout, SyncAttributeRequest request) {
         return syncAttribute(request)
                 .await().atMost(Duration.ofSeconds(timeout));
     }
 
-    Uni<DeleteAttributeResponse> deleteAttribute(DeleteAttributeRequest request);
+    Uni<DeleteAttributeResponse> deleteAttribute(@Valid DeleteAttributeRequest request);
 
     default DeleteAttributeResponse deleteAttribute(long timeout, DeleteAttributeRequest request) {
         return deleteAttribute(request)

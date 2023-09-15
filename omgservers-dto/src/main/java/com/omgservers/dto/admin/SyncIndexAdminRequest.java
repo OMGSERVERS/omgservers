@@ -1,6 +1,7 @@
 package com.omgservers.dto.admin;
 
 import com.omgservers.model.index.IndexModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncIndexAdminRequest {
 
-    public static void validate(SyncIndexAdminRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
+    @NotNull
     IndexModel index;
 }

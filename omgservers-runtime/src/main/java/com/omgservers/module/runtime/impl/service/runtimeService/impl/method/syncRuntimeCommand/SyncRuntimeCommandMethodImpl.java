@@ -1,11 +1,11 @@
 package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +27,6 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
 
     @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request) {
-        SyncRuntimeCommandRequest.validate(request);
-
         final var runtimeCommand = request.getRuntimeCommand();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
@@ -38,11 +36,11 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
 
     Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeCommandModel runtimeCommand) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                upsertRuntimeCommandOperation.upsertRuntimeCommand(
-                        changeContext,
-                        sqlConnection,
-                        shardModel.shard(),
-                        runtimeCommand))
+                        upsertRuntimeCommandOperation.upsertRuntimeCommand(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                runtimeCommand))
                 .map(ChangeContext::getResult);
     }
 }

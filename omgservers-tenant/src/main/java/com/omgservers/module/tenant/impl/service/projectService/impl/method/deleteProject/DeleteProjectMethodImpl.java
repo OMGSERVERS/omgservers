@@ -1,9 +1,9 @@
 package com.omgservers.module.tenant.impl.service.projectService.impl.method.deleteProject;
 
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.tenant.impl.operation.deleteProject.DeleteProjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,8 +22,6 @@ class DeleteProjectMethodImpl implements DeleteProjectMethod {
 
     @Override
     public Uni<Void> deleteProject(final DeleteProjectRequest request) {
-        DeleteProjectRequest.validate(request);
-
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

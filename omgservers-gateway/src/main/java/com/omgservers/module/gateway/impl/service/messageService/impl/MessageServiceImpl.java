@@ -1,12 +1,13 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl;
 
-import com.omgservers.module.gateway.impl.service.messageService.MessageService;
-import com.omgservers.module.gateway.impl.service.messageService.request.HandleMessageRequest;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.module.gateway.impl.service.messageService.MessageService;
+import com.omgservers.module.gateway.impl.service.messageService.request.HandleMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -32,9 +33,7 @@ class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Uni<Void> handleMessage(final HandleMessageRequest request) {
-        HandleMessageRequest.validate(request);
-
+    public Uni<Void> handleMessage(@Valid final HandleMessageRequest request) {
         final var connectionId = request.getConnectionId();
         final var message = request.getMessage();
         final var qualifier = message.getQualifier();

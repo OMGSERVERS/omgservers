@@ -22,8 +22,6 @@ class GetStageVersionIdMethodImpl implements GetStageVersionIdMethod {
 
     @Override
     public Uni<GetStageVersionIdResponse> getStageVersionId(GetStageVersionIdRequest request) {
-        GetStageVersionIdRequest.validate(request);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();

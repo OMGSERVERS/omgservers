@@ -16,6 +16,7 @@ import com.omgservers.module.admin.impl.service.adminService.impl.method.generat
 import com.omgservers.module.admin.impl.service.adminService.impl.method.pingServer.PingServerMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,17 +43,17 @@ class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request) {
+    public Uni<CreateTenantAdminResponse> createTenant(@Valid final CreateTenantAdminRequest request) {
         return createTenantAdminMethod.createTenant(request);
     }
 
     @Override
-    public Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request) {
+    public Uni<CreateDeveloperAdminResponse> createDeveloper(@Valid final CreateDeveloperAdminRequest request) {
         return createDeveloperAdminMethod.createDeveloper(request);
     }
 
     @Override
-    public Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request) {
+    public Uni<CollectLogsAdminResponse> collectLogs(@Valid final CollectLogsAdminRequest request) {
         return collectLogsMethod.collectLogs(request);
     }
 }

@@ -15,20 +15,21 @@ import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.SyncVersionRequest;
 import com.omgservers.dto.tenant.SyncVersionResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface VersionService {
 
-    Uni<BuildVersionResponse> buildVersion(BuildVersionRequest request);
+    Uni<BuildVersionResponse> buildVersion(@Valid BuildVersionRequest request);
 
-    Uni<GetVersionResponse> getVersion(GetVersionRequest request);
+    Uni<GetVersionResponse> getVersion(@Valid GetVersionRequest request);
 
-    Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
+    Uni<SyncVersionResponse> syncVersion(@Valid SyncVersionRequest request);
 
-    Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
+    Uni<DeleteVersionResponse> deleteVersion(@Valid DeleteVersionRequest request);
 
-    Uni<GetVersionBytecodeResponse> getVersionBytecode(GetVersionBytecodeRequest request);
+    Uni<GetVersionBytecodeResponse> getVersionBytecode(@Valid GetVersionBytecodeRequest request);
 
-    Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
+    Uni<GetVersionConfigResponse> getVersionConfig(@Valid GetVersionConfigRequest request);
 
-    Uni<GetStageVersionIdResponse> getStageVersionId(GetStageVersionIdRequest request);
+    Uni<GetStageVersionIdResponse> getStageVersionId(@Valid GetStageVersionIdRequest request);
 }

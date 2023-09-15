@@ -22,8 +22,6 @@ class GetClientMethodImpl implements GetClientMethod {
 
     @Override
     public Uni<GetClientResponse> getClient(final GetClientRequest request) {
-        GetClientRequest.validate(request);
-
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     if (shardModel.foreign()) {

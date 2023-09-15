@@ -23,13 +23,13 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
 
     @Override
     public Uni<Void> assignPlayer(AssignPlayerRequest request) {
-        AssignPlayerRequest.validate(request);
-
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var connectionId = request.getConnectionId();
                     final var assignedPlayer = request.getAssignedPlayer();
-                    final var assignPlayerInternalRequest = new com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest(connectionId, assignedPlayer);
+                    final var assignPlayerInternalRequest =
+                            new com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest(
+                                    connectionId, assignedPlayer);
                     connectionService.assignPlayer(assignPlayerInternalRequest);
                 })
                 .call(voidItem -> {

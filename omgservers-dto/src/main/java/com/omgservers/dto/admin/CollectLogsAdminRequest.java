@@ -7,11 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CollectLogsAdminRequest {
 
-    public static void validate(CollectLogsAdminRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
-
     // TODO: add filters, sort
 }

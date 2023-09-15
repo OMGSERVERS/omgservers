@@ -1,6 +1,7 @@
 package com.omgservers.dto.internal;
 
 import com.omgservers.model.log.LogModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SyncLogRequest {
 
-    public static void validate(SyncLogRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("request is null");
-        }
-    }
 
+    @NotNull
     LogModel log;
 }
