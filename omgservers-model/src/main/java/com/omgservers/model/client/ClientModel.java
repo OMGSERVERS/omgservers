@@ -1,6 +1,7 @@
 package com.omgservers.model.client;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,24 @@ public class ClientModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     Long playerId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     URI server;
+
+    @NotNull
     Long connectionId;
+
+    @NotNull
     Long scriptId;
 }

@@ -1,6 +1,7 @@
 package com.omgservers.model.request;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,6 @@ public class RequestConfigModel {
         }
     }
 
+    @NotNull
     Map<String, String> attributes;
 }

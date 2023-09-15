@@ -1,6 +1,9 @@
 package com.omgservers.model.token;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,10 +63,20 @@ public class TokenModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant expire;
+
+    @NotBlank
+    @Size(max = 1024)
     @ToString.Exclude
     String hash;
 }

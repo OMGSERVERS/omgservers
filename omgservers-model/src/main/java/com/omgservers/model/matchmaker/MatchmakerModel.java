@@ -1,6 +1,7 @@
 package com.omgservers.model.matchmaker;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,18 @@ public class MatchmakerModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
 }

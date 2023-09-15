@@ -1,7 +1,11 @@
 package com.omgservers.model.index;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,50 +47,18 @@ public class IndexConfigModel {
         return config;
     }
 
-    public static void validateConfig(IndexConfigModel config) {
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-        validateTotalShardCount(config.getTotalShardCount());
-        validateServers(config.getServers());
-        validateLockedShards(config.getLockedShards());
-    }
-
-    public static void validateTotalShardCount(Integer totalShardCount) {
-        if (totalShardCount == null) {
-            throw new ServerSideBadRequestException("totalShardCount is null");
-        }
-        if (totalShardCount < 0 || totalShardCount > 32768) {
-            throw new ServerSideBadRequestException("totalShardCount is wrong, value=" + totalShardCount);
-        }
-    }
-
-    public static void validateServers(List<IndexServerModel> indexServerModels) {
-        if (indexServerModels == null) {
-            throw new ServerSideBadRequestException("servers field is null");
-        }
-        if (indexServerModels.size() > 1024) {
-            throw new ServerSideBadRequestException("servers array is too long");
-        }
-        indexServerModels.stream().forEach(IndexServerModel::validateServerModel);
-    }
-
-    public static void validateLockedShards(List<Integer> lockedShards) {
-        if (lockedShards == null) {
-            throw new ServerSideBadRequestException("lockedShards field is null");
-        }
-        if (lockedShards.size() > 1024) {
-            throw new ServerSideBadRequestException("lockedShards array is too long");
-        }
-        lockedShards.stream().forEach(shard -> {
-            if (shard < 0 || shard > 32768) {
-                throw new ServerSideBadRequestException("shard is wrong, value=" + shard);
-            }
-        });
-    }
-
+    @NotNull
+    @Min(1)
+    @Max(32767)
     Integer totalShardCount;
+
+    @NotNull
+    @NotEmpty
+    @Size(max = 1024)
     List<IndexServerModel> servers;
+
+    @NotNull
+    @Size(max = 32767)
     List<Integer> lockedShards;
 
     @JsonIgnore

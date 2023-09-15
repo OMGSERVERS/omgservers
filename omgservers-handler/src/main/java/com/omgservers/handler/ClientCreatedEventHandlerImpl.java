@@ -14,7 +14,7 @@ import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptType;
+import com.omgservers.model.script.ScriptTypeEnum;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.script.factory.ScriptModelFactory;
 import com.omgservers.module.system.SystemModule;
@@ -81,7 +81,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ScriptModel> syncScript(final Long tenantId, final Long versionId, final ClientModel client) {
-        final var type = ScriptType.CLIENT;
+        final var type = ScriptTypeEnum.CLIENT;
         final var config = ScriptConfigModel.builder()
                 .userId(client.getUserId())
                 .playerId(client.getPlayerId())

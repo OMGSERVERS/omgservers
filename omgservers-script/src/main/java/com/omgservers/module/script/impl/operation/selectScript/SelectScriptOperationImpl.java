@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptType;
+import com.omgservers.model.script.ScriptTypeEnum;
 import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -51,7 +51,7 @@ class SelectScriptOperationImpl implements SelectScriptOperation {
         script.setTenantId(row.getLong("tenant_id"));
         script.setVersionId(row.getLong("version_id"));
         script.setSelf(row.getString("self"));
-        script.setType(ScriptType.valueOf(row.getString("type")));
+        script.setType(ScriptTypeEnum.valueOf(row.getString("type")));
         try {
             script.setConfig(objectMapper.readValue(row.getString("config"), ScriptConfigModel.class));
         } catch (IOException e) {

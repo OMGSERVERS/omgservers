@@ -2,7 +2,7 @@ package com.omgservers.module.script.factory;
 
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptType;
+import com.omgservers.model.script.ScriptTypeEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class ScriptModelFactory {
 
     public ScriptModel create(final Long tenantId,
                               final Long versionId,
-                              final ScriptType type,
+                              final ScriptTypeEnum type,
                               final ScriptConfigModel config) {
         final var id = generateIdOperation.generateId();
         return create(id, tenantId, versionId, type, config);
@@ -29,7 +29,7 @@ public class ScriptModelFactory {
     public ScriptModel create(final Long id,
                               final Long tenantId,
                               final Long versionId,
-                              final ScriptType type,
+                              final ScriptTypeEnum type,
                               final ScriptConfigModel config) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

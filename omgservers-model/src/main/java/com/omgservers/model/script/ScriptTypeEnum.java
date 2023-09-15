@@ -1,6 +1,6 @@
 package com.omgservers.model.script;
 
-public enum ScriptType {
+public enum ScriptTypeEnum {
     CLIENT,
     RUNTIME;
 }

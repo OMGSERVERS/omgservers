@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.service.jobService.impl.method.schedul
 
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
@@ -33,7 +33,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     final LogModelFactory logModelFactory;
 
-    final Map<JobType, JobTask> jobTasks;
+    final Map<JobTypeEnum, JobTask> jobTasks;
     final Scheduler scheduler;
 
     public ScheduleJobMethodImpl(LogService logService,
@@ -50,7 +50,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         this.logModelFactory = logModelFactory;
         this.jobTasks = new ConcurrentHashMap<>();
         jobTaskBeans.stream().forEach(jobTask -> {
-            JobType type = jobTask.getJobType();
+            JobTypeEnum type = jobTask.getJobType();
             jobTasks.put(type, jobTask);
             log.info("Job task added, type={}, jobTask={}", type, jobTask.getClass().getSimpleName());
         });
@@ -75,7 +75,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                 });
     }
 
-    void scheduleJob(Long shardKey, Long entity, JobType type) {
+    void scheduleJob(Long shardKey, Long entity, JobTypeEnum type) {
         final var jobName = getJobNameOperation.getJobName(shardKey, entity);
         if (scheduler.getScheduledJob(jobName) != null) {
             log.warn("Job task was already scheduled, job={}", jobName);
@@ -99,7 +99,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
     Uni<Void> asyncTask(final ScheduledExecution scheduledExecution,
                         final Long shardKey,
                         final Long entity,
-                        final JobType type) {
+                        final JobTypeEnum type) {
         // TODO: calculate and log delay between launch and planning timestamp
         log.info("Job was launched, shardKey={}, entity={}, type={}", shardKey, entity, type);
         final var job = jobTasks.get(type);

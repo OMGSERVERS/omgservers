@@ -2,7 +2,7 @@ package com.omgservers.module.system.factory;
 
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class JobModelFactory {
 
     public JobModel create(final Long shardKey,
                            final Long entity,
-                           final JobType type) {
+                           final JobTypeEnum type) {
         final var id = generateIdOperation.generateId();
         return create(id, shardKey, entity, type);
     }
@@ -27,7 +27,7 @@ public class JobModelFactory {
     public JobModel create(final Long id,
                            final Long shardKey,
                            final Long entity,
-                           final JobType type) {
+                           final JobTypeEnum type) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         JobModel job = new JobModel();

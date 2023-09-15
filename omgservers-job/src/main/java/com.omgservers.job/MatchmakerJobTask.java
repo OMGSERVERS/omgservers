@@ -1,7 +1,7 @@
 package com.omgservers.job;
 
 import com.omgservers.dto.matchmaker.ExecuteMatchmakerRequest;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Uni;
@@ -18,8 +18,8 @@ public class MatchmakerJobTask implements JobTask {
     final MatchmakerModule matchmakerModule;
 
     @Override
-    public JobType getJobType() {
-        return JobType.MATCHMAKER;
+    public JobTypeEnum getJobType() {
+        return JobTypeEnum.MATCHMAKER;
     }
 
     @Override

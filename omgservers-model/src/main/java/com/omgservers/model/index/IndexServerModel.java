@@ -1,6 +1,8 @@
 package com.omgservers.model.index;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +55,10 @@ public class IndexServerModel {
         });
     }
 
+    @NotNull
     URI uri;
+
+    @NotNull
+    @Size(max = 32767)
     List<Integer> shards;
 }

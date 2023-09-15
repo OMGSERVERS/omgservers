@@ -1,6 +1,7 @@
 package com.omgservers.model.runtime;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +19,39 @@ public class RuntimeModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     Long versionId;
+
+    @NotNull
     Long matchmakerId;
+
+    @NotNull
     Long matchId;
+
+    @NotNull
     RuntimeTypeEnum type;
+
+    @NotNull
     Long step;
+
+    @NotNull
     Long scriptId;
+
+    @NotNull
     RuntimeConfigModel config;
 }

@@ -1,6 +1,7 @@
 package com.omgservers.model.job;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,18 @@ public class JobModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Long shardKey;
+
+    @NotNull
     Long entity;
-    JobType type;
+
+    @NotNull
+    JobTypeEnum type;
 }

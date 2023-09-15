@@ -1,5 +1,7 @@
 package com.omgservers.model.version;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,7 @@ public class VersionSourceCodeModel {
         return sourceCodeFiles;
     }
 
+    @NotNull
+    @NotEmpty
     List<VersionFileModel> files;
 }

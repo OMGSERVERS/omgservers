@@ -1,6 +1,7 @@
 package com.omgservers.model.tenantPermission;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,18 @@ public class TenantPermissionModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     TenantPermissionEnum permission;
 }

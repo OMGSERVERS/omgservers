@@ -1,5 +1,6 @@
 package com.omgservers.model.serverLog;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,15 @@ public class ServerLogModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     URI server;
+
+    @NotNull
     String message;
 }

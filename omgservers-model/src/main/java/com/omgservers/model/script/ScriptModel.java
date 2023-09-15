@@ -1,6 +1,6 @@
 package com.omgservers.model.script;
 
-import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,18 +12,27 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ScriptModel {
 
-    public static void validate(ScriptModel matchClient) {
-        if (matchClient == null) {
-            throw new ServerSideBadRequestException("matchClient is null");
-        }
-    }
-
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long versionId;
-    ScriptType type;
+
+    @NotNull
+    ScriptTypeEnum type;
+
+    @NotNull
     String self;
+
+    @NotNull
     ScriptConfigModel config;
 }

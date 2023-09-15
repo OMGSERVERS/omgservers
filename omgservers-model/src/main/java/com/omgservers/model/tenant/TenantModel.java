@@ -1,6 +1,7 @@
 package com.omgservers.model.tenant;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,16 @@ public class TenantModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     @ToString.Exclude
     TenantConfigModel config;
 }

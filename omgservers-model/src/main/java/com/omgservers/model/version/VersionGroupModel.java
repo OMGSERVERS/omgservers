@@ -1,5 +1,9 @@
 package com.omgservers.model.version;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +23,15 @@ public class VersionGroupModel {
         return group;
     }
 
+    @NotEmpty
+    @Size(max = 64)
     String name;
+
+    @NotBlank
+    @Positive
     Integer minPlayers;
+
+    @NotBlank
+    @Positive
     Integer maxPlayers;
 }

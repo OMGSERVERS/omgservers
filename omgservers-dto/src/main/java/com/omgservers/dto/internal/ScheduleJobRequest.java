@@ -1,7 +1,7 @@
 package com.omgservers.dto.internal;
 
 import com.omgservers.dto.ShardedRequest;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class ScheduleJobRequest implements ShardedRequest {
     Long entity;
 
     @NotNull
-    JobType type;
+    JobTypeEnum type;
 
     @Override
     public String getRequestShardKey() {

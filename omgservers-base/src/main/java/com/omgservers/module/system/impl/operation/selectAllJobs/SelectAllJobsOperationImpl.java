@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.selectAllJobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -42,7 +42,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
         job.setCreated(row.getOffsetDateTime("created").toInstant());
         job.setShardKey(row.getLong("shard_key"));
         job.setEntity(row.getLong("entity"));
-        job.setType(JobType.valueOf(row.getString("type")));
+        job.setType(JobTypeEnum.valueOf(row.getString("type")));
         return job;
     }
 }

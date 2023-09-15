@@ -1,6 +1,6 @@
 package com.omgservers.model.match;
 
-import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,17 +13,22 @@ import java.time.Instant;
 @AllArgsConstructor
 public class MatchModel {
 
-    public static void validate(MatchModel match) {
-        if (match == null) {
-            throw new ServerSideBadRequestException("match is null");
-        }
-    }
-
+    @NotNull
     Long id;
+
+    @NotNull
     Long matchmakerId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long runtimeId;
+
+    @NotNull
     @EqualsAndHashCode.Exclude
     MatchConfigModel config;
 }

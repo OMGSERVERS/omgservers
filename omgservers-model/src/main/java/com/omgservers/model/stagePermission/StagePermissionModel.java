@@ -1,6 +1,7 @@
 package com.omgservers.model.stagePermission;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,21 @@ public class StagePermissionModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     StagePermissionEnum permission;
 }

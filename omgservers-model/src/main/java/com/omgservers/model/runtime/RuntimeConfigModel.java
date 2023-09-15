@@ -1,6 +1,7 @@
 package com.omgservers.model.runtime;
 
 import com.omgservers.model.version.VersionModeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,5 +15,6 @@ public class RuntimeConfigModel {
         return runtimeConfig;
     }
 
+    @NotNull
     VersionModeModel modeConfig;
 }

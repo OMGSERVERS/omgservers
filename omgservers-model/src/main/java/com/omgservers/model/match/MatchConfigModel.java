@@ -2,6 +2,7 @@ package com.omgservers.model.match;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.version.VersionModeModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,15 +45,18 @@ public class MatchConfigModel {
         return matchConfig;
     }
 
-    public static void validate(MatchConfigModel config) {
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-    }
-
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     Long versionId;
+
+    @NotNull
     VersionModeModel modeConfig;
+
+    @NotNull
     List<MatchGroupModel> groups;
 }

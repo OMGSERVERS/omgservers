@@ -3,6 +3,7 @@ package com.omgservers.model.match;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,12 +34,9 @@ public class MatchGroupModel {
         return group;
     }
 
-    public static void validate(MatchGroupModel config) {
-        if (config == null) {
-            throw new ServerSideBadRequestException("config is null");
-        }
-    }
-
+    @NotNull
     VersionGroupModel config;
+
+    @NotNull
     List<RequestModel> requests;
 }

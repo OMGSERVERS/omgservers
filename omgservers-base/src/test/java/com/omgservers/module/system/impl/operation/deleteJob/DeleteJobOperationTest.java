@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.deleteJob;
 
 import com.omgservers.module.system.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.module.system.factory.JobModelFactory;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -33,7 +33,7 @@ class DeleteJobOperationTest extends Assertions {
 
     @Test
     void givenJob_whenDeleteJob_thenDeleted() {
-        final var job = jobModelFactory.create(shardKey(), entity(), JobType.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entity(), JobTypeEnum.RUNTIME);
         upsertJobOperation.upsertJob(TIMEOUT, pgPool, job);
 
         assertTrue(deleteJobOperation.deleteJob(TIMEOUT, pgPool, job.getShardKey(), job.getEntity()));

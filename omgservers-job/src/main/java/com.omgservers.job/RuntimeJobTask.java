@@ -1,7 +1,7 @@
 package com.omgservers.job;
 
 import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
 import com.omgservers.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;
@@ -18,8 +18,8 @@ public class RuntimeJobTask implements JobTask {
     final RuntimeModule runtimeModule;
 
     @Override
-    public JobType getJobType() {
-        return JobType.RUNTIME;
+    public JobTypeEnum getJobType() {
+        return JobTypeEnum.RUNTIME;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.omgservers.model.player;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,12 +20,25 @@ public class PlayerModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long tenantId;
+
+    @NotNull
     Long stageId;
+
+    @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     PlayerConfigModel config;

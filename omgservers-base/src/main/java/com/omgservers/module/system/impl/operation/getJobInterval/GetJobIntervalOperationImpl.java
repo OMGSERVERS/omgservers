@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.operation.getJobInterval;
 
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 class GetJobIntervalOperationImpl implements GetJobIntervalOperation {
 
     @Override
-    public Integer getJobIntervalInSeconds(JobType type) {
+    public Integer getJobIntervalInSeconds(JobTypeEnum type) {
         // TODO: move to settings/properties?
         return switch (type) {
             case TENANT -> 60 * 60; // 1h

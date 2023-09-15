@@ -1,6 +1,7 @@
 package com.omgservers.model.scriptEvent;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,10 @@ public class ScriptEventModel {
         }
     }
 
+    @NotNull
     ScriptEventQualifierEnum qualifier;
+
+    @NotNull
     @EqualsAndHashCode.Exclude
     ScriptEventBodyModel body;
 }

@@ -1,6 +1,8 @@
 package com.omgservers.model.request;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,14 +21,29 @@ public class RequestModel {
         }
     }
 
+    @NotNull
     Long id;
 
+    @NotNull
     Long matchmakerId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     Long userId;
+
+    @NotNull
     Long clientId;
+
+    @NotNull
+    @Size(max = 64)
     String mode;
+
+    @NotNull
     @EqualsAndHashCode.Exclude
     RequestConfigModel config;
 }

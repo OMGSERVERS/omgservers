@@ -2,6 +2,7 @@ package com.omgservers.model.matchmakerCommand;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.omgservers.exception.ServerSideBadRequestException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,24 @@ public class MatchmakerCommandModel {
         }
     }
 
+    @NotNull
     Long id;
+
+    @NotNull
     Long runtimeId;
+
+    @NotNull
     Instant created;
+
+    @NotNull
     Instant modified;
+
+    @NotNull
     MatchmakerCommandQualifierEnum qualifier;
+
+    @NotNull
     MatchmakerCommandBodyModel body;
+
+    @NotNull
     MatchmakerCommandStatusEnum status;
 }

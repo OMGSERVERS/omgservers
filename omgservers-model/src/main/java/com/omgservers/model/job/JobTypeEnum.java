@@ -1,6 +1,6 @@
 package com.omgservers.model.job;
 
-public enum JobType {
+public enum JobTypeEnum {
     TENANT,
     PROJECT,
     STAGE,

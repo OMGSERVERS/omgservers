@@ -8,11 +8,11 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobType;
+import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptType;
+import com.omgservers.model.script.ScriptTypeEnum;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.script.factory.ScriptModelFactory;
@@ -61,7 +61,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     Uni<ScriptModel> syncScript(RuntimeModel runtime) {
         final var tenantId = runtime.getTenantId();
         final var versionId = runtime.getVersionId();
-        final var type = ScriptType.RUNTIME;
+        final var type = ScriptTypeEnum.RUNTIME;
         final var config = ScriptConfigModel.builder()
                 .matchmakerId(runtime.getMatchmakerId())
                 .matchId(runtime.getMatchId())
@@ -76,7 +76,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     Uni<JobModel> syncJob(RuntimeModel runtime) {
         final var shardKey = runtime.getId();
         final var entityId = runtime.getId();
-        final var job = jobModelFactory.create(shardKey, entityId, JobType.RUNTIME);
+        final var job = jobModelFactory.create(shardKey, entityId, JobTypeEnum.RUNTIME);
         final var request = new SyncJobRequest(job);
         return systemModule.getJobService().syncJob(request)
                 .replaceWith(job);
