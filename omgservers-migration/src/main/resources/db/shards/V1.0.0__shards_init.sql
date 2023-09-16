@@ -216,7 +216,6 @@ create table if not exists tab_script (
     modified timestamp with time zone not null,
     tenant_id bigint not null,
     version_id bigint not null,
-    self json not null,
     type text not null,
     config json not null
 );

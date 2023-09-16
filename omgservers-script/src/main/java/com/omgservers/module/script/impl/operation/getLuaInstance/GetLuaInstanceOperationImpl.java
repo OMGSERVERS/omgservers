@@ -40,7 +40,7 @@ class GetLuaInstanceOperationImpl implements GetLuaInstanceOperation {
         final var versionId = script.getVersionId();
         return createLuaGlobalsOperation.createLuaGlobals(tenantId, versionId)
                 .flatMap(luaGlobals -> createLuaContext(script)
-                        .map(luaContext -> new LuaInstance(luaGlobals, luaContext)));
+                        .map(luaContext -> new LuaInstance(luaGlobals, luaContext, new LuaTable())));
     }
 
     Uni<LuaTable> createLuaContext(final ScriptModel script) {

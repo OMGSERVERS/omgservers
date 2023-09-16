@@ -17,19 +17,20 @@ public class LuaInstance {
 
     final LuaGlobals luaGlobals;
     final LuaTable luaContext;
+    final LuaValue luaSelf;
 
-    public synchronized boolean handle(final LuaValue luaSelf, final LuaEvent luaEvent) {
+    public synchronized boolean handle(final LuaEvent luaEvent) {
         final var eventId = luaEvent.getId();
         final var closure = luaGlobals.getGlobals().get(eventId);
         if (closure.isnil()) {
-            log.warn("Closure was not found, id={}", eventId);
+            log.warn("Lua closure was not found, id={}", eventId);
             return false;
         } else {
             try {
                 closure.call(luaSelf, luaEvent, luaContext);
                 return true;
             } catch (LuaError luaError) {
-                log.warn("Closure call failed, id={}, reason={}", eventId, luaError.getMessage());
+                log.warn("Lua closure call failed, reason={}, luaEvent={}", luaError.getMessage(), luaEvent);
                 throw new ServerSideBadRequestException("Lua error, id=" + eventId + ", " + luaError.getMessage());
             }
         }

@@ -34,8 +34,8 @@ class UpsertScriptOperationImpl implements UpsertScriptOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_script(id, created, modified, tenant_id, version_id, self, type, config)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                        insert into $schema.tab_script(id, created, modified, tenant_id, version_id, type, config)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,7 +45,6 @@ class UpsertScriptOperationImpl implements UpsertScriptOperation {
                         script.getModified().atOffset(ZoneOffset.UTC),
                         script.getTenantId(),
                         script.getVersionId(),
-                        script.getSelf(),
                         script.getType(),
                         getConfigString(script)
                 ),

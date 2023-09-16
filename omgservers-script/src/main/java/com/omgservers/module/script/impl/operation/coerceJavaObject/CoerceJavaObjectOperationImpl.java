@@ -24,7 +24,7 @@ class CoerceJavaObjectOperationImpl implements CoerceJavaObjectOperation {
             final var luaValue = objectMapper.readValue(jsonString, LuaValue.class);
             return luaValue;
         } catch (IOException e) {
-            throw new ServerSideBadRequestException("Coerce from java to lua failed, " + e.getMessage(), e);
+            throw new ServerSideBadRequestException("coerce from java to lua failed, " + e.getMessage(), e);
         }
     }
 }
