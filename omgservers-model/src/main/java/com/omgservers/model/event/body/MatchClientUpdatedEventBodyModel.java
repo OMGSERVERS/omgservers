@@ -18,6 +18,9 @@ public class MatchClientUpdatedEventBodyModel extends EventBodyModel {
     Long matchmakerId;
 
     @NotNull
+    Long matchId;
+
+    @NotNull
     Long id;
 
     @Override
@@ -27,6 +30,6 @@ public class MatchClientUpdatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return id;
+        return matchId;
     }
 }

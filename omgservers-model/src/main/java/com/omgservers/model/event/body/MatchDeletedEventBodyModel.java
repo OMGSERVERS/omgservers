@@ -25,6 +25,6 @@ public class MatchDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return match.getMatchmakerId();
+        return match.getId();
     }
 }

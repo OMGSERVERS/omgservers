@@ -45,7 +45,10 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
                         matchClient.getUserId(),
                         matchClient.getClientId()
                 ),
-                () -> new MatchClientCreatedEventBodyModel(matchClient.getMatchmakerId(), matchClient.getId()),
+                () -> new MatchClientCreatedEventBodyModel(
+                        matchClient.getMatchmakerId(),
+                        matchClient.getMatchId(),
+                        matchClient.getId()),
                 () -> logModelFactory.create("Match client was inserted, matchClient=" + matchClient)
         );
     }
