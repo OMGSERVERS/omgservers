@@ -15,7 +15,7 @@ public class DeleteJobRequest implements ShardedRequest {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @Override
     public String getRequestShardKey() {

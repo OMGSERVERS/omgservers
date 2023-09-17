@@ -29,7 +29,7 @@ public class JobModel {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @NotNull
     JobTypeEnum type;

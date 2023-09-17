@@ -29,13 +29,13 @@ class UpsertJobOperationTest extends Assertions {
 
     @Test
     void givenJob_whenUpsertJob_thenInserted() {
-        final var job = jobModelFactory.create(shardKey(), entity(), JobTypeEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobTypeEnum.RUNTIME);
         assertTrue(upsertJobOperation.upsertJob(TIMEOUT, pgPool, job));
     }
 
     @Test
     void givenJob_whenUpsertJob_thenUpdated() {
-        final var job = jobModelFactory.create(shardKey(), entity(), JobTypeEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobTypeEnum.RUNTIME);
         upsertJobOperation.upsertJob(TIMEOUT, pgPool, job);
 
         assertFalse(upsertJobOperation.upsertJob(TIMEOUT, pgPool, job));
@@ -45,7 +45,7 @@ class UpsertJobOperationTest extends Assertions {
         return generateIdOperation.generateId();
     }
 
-    Long entity() {
+    Long entityId() {
         return generateIdOperation.generateId();
     }
 }

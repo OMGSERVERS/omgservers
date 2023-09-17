@@ -18,15 +18,15 @@ public class JobModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public JobModel create(final Long shardKey,
-                           final Long entity,
+                           final Long entityId,
                            final JobTypeEnum type) {
         final var id = generateIdOperation.generateId();
-        return create(id, shardKey, entity, type);
+        return create(id, shardKey, entityId, type);
     }
 
     public JobModel create(final Long id,
                            final Long shardKey,
-                           final Long entity,
+                           final Long entityId,
                            final JobTypeEnum type) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -34,7 +34,7 @@ public class JobModelFactory {
         job.setId(id);
         job.setCreated(now);
         job.setShardKey(shardKey);
-        job.setEntity(entity);
+        job.setEntityId(entityId);
         job.setType(type);
         return job;
     }

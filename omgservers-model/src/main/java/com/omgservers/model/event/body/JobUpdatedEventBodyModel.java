@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class JobUpdatedEventBodyModel extends EventBodyModel {
 
     Long shardKey;
-    Long entity;
+    Long entityId;
     JobTypeEnum type;
 
     @Override
@@ -25,6 +25,6 @@ public class JobUpdatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return entity;
+        return shardKey;
     }
 }

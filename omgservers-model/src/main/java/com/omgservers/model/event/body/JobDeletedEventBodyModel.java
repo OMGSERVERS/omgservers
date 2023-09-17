@@ -18,7 +18,7 @@ public class JobDeletedEventBodyModel extends EventBodyModel {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -27,6 +27,6 @@ public class JobDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return entity;
+        return shardKey;
     }
 }

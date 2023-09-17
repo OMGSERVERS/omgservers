@@ -16,7 +16,7 @@ public class ScheduleJobRequest implements ShardedRequest {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @NotNull
     JobTypeEnum type;

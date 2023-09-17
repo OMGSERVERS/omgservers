@@ -28,8 +28,8 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
     public Uni<Boolean> handle(EventModel event) {
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();
-        final var entity = body.getEntity();
-        final var request = new UnscheduleJobRequest(shardKey, entity);
+        final var entityId = body.getEntityId();
+        final var request = new UnscheduleJobRequest(shardKey, entityId);
         return systemModule.getJobService().unscheduleJob(request)
                 .replaceWith(true);
     }

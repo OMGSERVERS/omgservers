@@ -28,7 +28,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
                 sqlConnection,
                 0,
                 """
-                        select id, created, shard_key, entity, type
+                        select id, created, shard_key, entity_id, type
                         from internal.tab_job
                         """,
                 List.of(),
@@ -41,7 +41,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
         job.setId(row.getLong("id"));
         job.setCreated(row.getOffsetDateTime("created").toInstant());
         job.setShardKey(row.getLong("shard_key"));
-        job.setEntity(row.getLong("entity"));
+        job.setEntityId(row.getLong("entity"));
         job.setType(JobTypeEnum.valueOf(row.getString("type")));
         return job;
     }

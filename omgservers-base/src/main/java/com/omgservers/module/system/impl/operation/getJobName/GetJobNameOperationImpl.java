@@ -11,7 +11,7 @@ class GetJobNameOperationImpl implements GetJobNameOperation {
 
     @Override
     public String getJobName(final Long shardKey,
-                             final Long entity) {
-        return shardKey + "/" + entity;
+                             final Long entityId) {
+        return shardKey + "/" + entityId;
     }
 }

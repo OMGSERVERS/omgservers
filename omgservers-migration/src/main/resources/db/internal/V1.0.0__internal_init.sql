@@ -30,9 +30,9 @@ create table if not exists tab_job (
     id bigint primary key,
     created timestamp with time zone not null,
     shard_key bigint not null,
-    entity bigint not null,
+    entity_id bigint not null,
     type text not null,
-    unique(shard_key, entity)
+    unique(shard_key, entity_id)
 );
 
 create table if not exists tab_log (

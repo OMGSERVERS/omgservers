@@ -23,8 +23,8 @@ public class RuntimeJobTask implements JobTask {
     }
 
     @Override
-    public Uni<Boolean> executeTask(Long shardKey, Long entity) {
-        final var request = new DoRuntimeUpdateRequest(entity);
+    public Uni<Boolean> executeTask(Long shardKey, Long entityId) {
+        final var request = new DoRuntimeUpdateRequest(entityId);
         return runtimeModule.getRuntimeService().doRuntimeUpdate(request)
                 .replaceWith(true);
     }

@@ -21,9 +21,9 @@ class DeleteJobMethodImpl implements DeleteJobMethod {
     @Override
     public Uni<DeleteJobResponse> deleteJob(DeleteJobRequest request) {
         final var shardKey = request.getShardKey();
-        final var entity = request.getEntity();
+        final var entityId = request.getEntityId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteJobOperation.deleteJob(changeContext, sqlConnection, shardKey, entity))
+                        deleteJobOperation.deleteJob(changeContext, sqlConnection, shardKey, entityId))
                 .map(ChangeContext::getResult)
                 .map(DeleteJobResponse::new);
     }

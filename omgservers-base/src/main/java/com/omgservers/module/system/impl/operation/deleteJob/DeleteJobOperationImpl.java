@@ -24,17 +24,17 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
     public Uni<Boolean> deleteJob(final ChangeContext<?> changeContext,
                                   final SqlConnection sqlConnection,
                                   final Long shardKey,
-                                  final Long entity) {
+                                  final Long entityId) {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
                         delete from internal.tab_job
-                        where shard_key = $1 and entity = $2
+                        where shard_key = $1 and entity_id = $2
                         """,
-                Arrays.asList(shardKey, entity),
-                () -> new JobDeletedEventBodyModel(shardKey, entity),
+                Arrays.asList(shardKey, entityId),
+                () -> new JobDeletedEventBodyModel(shardKey, entityId),
                 () -> logModelFactory.create(String.format("Job was deleted, " +
-                        "shardKey=%s, entity=%s", shardKey, entity))
+                        "shardKey=%s, entityId=%s", shardKey, entityId))
         );
     }
 }

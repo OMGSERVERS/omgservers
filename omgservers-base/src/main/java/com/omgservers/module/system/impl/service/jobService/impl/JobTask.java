@@ -6,5 +6,5 @@ import io.smallrye.mutiny.Uni;
 public interface JobTask {
     JobTypeEnum getJobType();
 
-    Uni<Boolean> executeTask(Long shardKey, Long entity);
+    Uni<Boolean> executeTask(Long shardKey, Long entityId);
 }

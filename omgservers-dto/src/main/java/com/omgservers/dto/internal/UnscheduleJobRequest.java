@@ -16,7 +16,7 @@ public class UnscheduleJobRequest implements ShardedRequest {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @Override
     public String getRequestShardKey() {

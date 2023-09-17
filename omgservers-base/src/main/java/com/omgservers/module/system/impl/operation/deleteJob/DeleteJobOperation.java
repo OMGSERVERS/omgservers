@@ -11,13 +11,13 @@ public interface DeleteJobOperation {
     Uni<Boolean> deleteJob(ChangeContext<?> changeContext,
                            SqlConnection sqlConnection,
                            Long shardKey,
-                           Long entity);
+                           Long entityId);
 
-    default Boolean deleteJob(long timeout, PgPool pgPool, Long shardKey, Long entity) {
+    default Boolean deleteJob(long timeout, PgPool pgPool, Long shardKey, Long entityId) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection ->
-                            deleteJob(changeContext, sqlConnection, shardKey, entity));
+                            deleteJob(changeContext, sqlConnection, shardKey, entityId));
                 })
                 .await().atMost(Duration.ofSeconds(timeout));
     }

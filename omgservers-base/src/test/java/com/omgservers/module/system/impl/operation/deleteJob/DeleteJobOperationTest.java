@@ -33,25 +33,25 @@ class DeleteJobOperationTest extends Assertions {
 
     @Test
     void givenJob_whenDeleteJob_thenDeleted() {
-        final var job = jobModelFactory.create(shardKey(), entity(), JobTypeEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobTypeEnum.RUNTIME);
         upsertJobOperation.upsertJob(TIMEOUT, pgPool, job);
 
-        assertTrue(deleteJobOperation.deleteJob(TIMEOUT, pgPool, job.getShardKey(), job.getEntity()));
+        assertTrue(deleteJobOperation.deleteJob(TIMEOUT, pgPool, job.getShardKey(), job.getEntityId()));
     }
 
     @Test
     void givenUnknownUuids_whenDeleteJob_thenSkip() {
         final var shardKey = generateIdOperation.generateId();
-        final var entity = generateIdOperation.generateId();
+        final var entityId = generateIdOperation.generateId();
 
-        assertFalse(deleteJobOperation.deleteJob(TIMEOUT, pgPool, shardKey, entity));
+        assertFalse(deleteJobOperation.deleteJob(TIMEOUT, pgPool, shardKey, entityId));
     }
 
     Long shardKey() {
         return generateIdOperation.generateId();
     }
 
-    Long entity() {
+    Long entityId() {
         return generateIdOperation.generateId();
     }
 }

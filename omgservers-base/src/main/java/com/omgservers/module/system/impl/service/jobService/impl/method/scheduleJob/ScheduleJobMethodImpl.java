@@ -62,21 +62,21 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var shardKey = request.getShardKey();
-                    final var entity = request.getEntity();
+                    final var entityId = request.getEntityId();
                     final var type = request.getType();
                     return Uni.createFrom().voidItem()
-                            .invoke(voidItem -> scheduleJob(shardKey, entity, type))
+                            .invoke(voidItem -> scheduleJob(shardKey, entityId, type))
                             .call(voidItem -> {
                                 final var syncLog = logModelFactory
-                                        .create(String.format("Job was scheduled, type=%s, entity=%d", type, entity));
+                                        .create(String.format("Job was scheduled, type=%s, entityId=%d", type, entityId));
                                 final var syncLogHelpRequest = new SyncLogRequest(syncLog);
                                 return logService.syncLog(syncLogHelpRequest);
                             });
                 });
     }
 
-    void scheduleJob(Long shardKey, Long entity, JobTypeEnum type) {
-        final var jobName = getJobNameOperation.getJobName(shardKey, entity);
+    void scheduleJob(Long shardKey, Long entityId, JobTypeEnum type) {
+        final var jobName = getJobNameOperation.getJobName(shardKey, entityId);
         if (scheduler.getScheduledJob(jobName) != null) {
             log.warn("Job task was already scheduled, job={}", jobName);
         } else {
@@ -87,7 +87,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .setInterval(jobIntervalInSeconds + "s")
                     .setDelayed(jobDelayInSeconds + "s")
                     .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
-                    .setAsyncTask(scheduledExecution -> asyncTask(scheduledExecution, shardKey, entity, type))
+                    .setAsyncTask(scheduledExecution -> asyncTask(scheduledExecution, shardKey, entityId, type))
                     .schedule();
 
             log.info("Job task scheduled, interval={}, delay={}, job={}",
@@ -98,17 +98,17 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
     @WithSpan
     Uni<Void> asyncTask(final ScheduledExecution scheduledExecution,
                         final Long shardKey,
-                        final Long entity,
+                        final Long entityId,
                         final JobTypeEnum type) {
         // TODO: calculate and log delay between launch and planning timestamp
-        log.info("Job was launched, shardKey={}, entity={}, type={}", shardKey, entity, type);
+        log.info("Job was launched, shardKey={}, entityId={}, type={}", shardKey, entityId, type);
         final var job = jobTasks.get(type);
         if (job != null) {
             // TODO: check shard and reschedule in case of any rebalance
-            return job.executeTask(shardKey, entity)
+            return job.executeTask(shardKey, entityId)
                     .invoke(result -> {
                         if (!result) {
-                            final var jobName = getJobNameOperation.getJobName(shardKey, entity);
+                            final var jobName = getJobNameOperation.getJobName(shardKey, entityId);
                             final var trigger = scheduler.unscheduleJob(jobName);
                             if (trigger == null) {
                                 log.warn("Job task return false, but job was not found to unschedule, job={}", jobName);
@@ -120,8 +120,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .replaceWithVoid()
                     .onFailure()
                     .recoverWithUni(t -> {
-                        log.error("Job task failed, shardKey={}, entity={}, type={}, {}",
-                                shardKey, entity, type, t.getMessage());
+                        log.error("Job task failed, shardKey={}, entityId={}, type={}, {}",
+                                shardKey, entityId, type, t.getMessage());
                         return Uni.createFrom().voidItem();
                     });
         } else {

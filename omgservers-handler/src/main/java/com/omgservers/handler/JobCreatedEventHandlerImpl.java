@@ -28,9 +28,9 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
     public Uni<Boolean> handle(EventModel event) {
         final var body = (JobCreatedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();
-        final var entity = body.getEntity();
+        final var entityId = body.getEntityId();
         final var type = body.getType();
-        final var request = new ScheduleJobRequest(shardKey, entity, type);
+        final var request = new ScheduleJobRequest(shardKey, entityId, type);
         return systemModule.getJobService().scheduleJob(request)
                 .replaceWith(true);
     }

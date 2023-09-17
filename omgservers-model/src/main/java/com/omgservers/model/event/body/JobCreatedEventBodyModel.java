@@ -19,7 +19,7 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
     Long shardKey;
 
     @NotNull
-    Long entity;
+    Long entityId;
 
     @NotNull
     JobTypeEnum type;
@@ -31,6 +31,6 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return entity;
+        return shardKey;
     }
 }
