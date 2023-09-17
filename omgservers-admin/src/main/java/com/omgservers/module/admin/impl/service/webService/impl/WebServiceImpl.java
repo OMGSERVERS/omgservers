@@ -1,4 +1,4 @@
-package com.omgservers.module.admin.impl.service.adminWebService.impl;
+package com.omgservers.module.admin.impl.service.webService.impl;
 
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
@@ -25,7 +25,7 @@ import com.omgservers.dto.internal.GetServiceAccountResponse;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.module.admin.impl.service.adminService.AdminService;
-import com.omgservers.module.admin.impl.service.adminWebService.AdminWebService;
+import com.omgservers.module.admin.impl.service.webService.WebService;
 import com.omgservers.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class AdminWebServiceImpl implements AdminWebService {
+class WebServiceImpl implements WebService {
 
     final SystemModule systemModule;
     final AdminService adminService;

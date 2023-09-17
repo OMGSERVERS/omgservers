@@ -1,4 +1,4 @@
-package com.omgservers.module.developer.impl.service.developerWebService.impl;
+package com.omgservers.module.developer.impl.service.webService.impl;
 
 import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
@@ -7,7 +7,7 @@ import com.omgservers.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.module.developer.impl.service.developerService.DeveloperService;
-import com.omgservers.module.developer.impl.service.developerWebService.DeveloperWebService;
+import com.omgservers.module.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeveloperWebServiceImpl implements DeveloperWebService {
+class WebServiceImpl implements WebService {
 
     final DeveloperService developerService;
 

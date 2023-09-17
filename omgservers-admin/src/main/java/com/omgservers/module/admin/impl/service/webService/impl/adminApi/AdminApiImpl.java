@@ -1,6 +1,6 @@
-package com.omgservers.module.admin.impl.service.adminWebService.impl.adminApi;
+package com.omgservers.module.admin.impl.service.webService.impl.adminApi;
 
-import com.omgservers.module.admin.impl.service.adminWebService.AdminWebService;
+import com.omgservers.module.admin.impl.service.webService.WebService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
@@ -30,72 +30,73 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class AdminApiImpl implements AdminApi {
 
+    final WebService webService;
+
     final HandleApiRequestOperation handleApiRequestOperation;
-    final AdminWebService adminWebService;
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<PingServerAdminResponse> pingServer() {
-        return adminWebService.pingServer();
+        return webService.pingServer();
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<GenerateIdAdminResponse> generateId() {
-        return adminWebService.generateId();
+        return webService.generateId();
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<GetIndexAdminResponse> getIndex(final GetIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::getIndex);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getIndex);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<Void> syncIndex(final SyncIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::syncIndex);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncIndex);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<Void> deleteIndex(final DeleteIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::deleteIndex);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteIndex);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<GetServiceAccountAdminResponse> getServiceAccount(final GetServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::getServiceAccount);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getServiceAccount);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<Void> syncServiceAccount(final SyncServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::syncServiceAccount);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncServiceAccount);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<Void> deleteServiceAccount(final DeleteServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::deleteServiceAccount);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteServiceAccount);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::createTenant);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenant);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::createDeveloper);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, adminWebService::collectLogs);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::collectLogs);
     }
 }

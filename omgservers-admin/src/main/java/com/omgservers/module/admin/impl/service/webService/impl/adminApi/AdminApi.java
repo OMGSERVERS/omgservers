@@ -1,4 +1,4 @@
-package com.omgservers.module.admin.impl.service.adminWebService.impl.adminApi;
+package com.omgservers.module.admin.impl.service.webService.impl.adminApi;
 
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;

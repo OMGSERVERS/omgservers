@@ -1,4 +1,4 @@
-package com.omgservers.module.developer.impl.service.developerWebService;
+package com.omgservers.module.developer.impl.service.webService;
 
 import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;
@@ -8,7 +8,7 @@ import com.omgservers.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.dto.developer.CreateVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
-public interface DeveloperWebService {
+public interface WebService {
 
     Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
 

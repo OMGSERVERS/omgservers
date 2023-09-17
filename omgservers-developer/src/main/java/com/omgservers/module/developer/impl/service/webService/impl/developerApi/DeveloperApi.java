@@ -1,4 +1,4 @@
-package com.omgservers.module.developer.impl.service.developerWebService.impl.developerApi;
+package com.omgservers.module.developer.impl.service.webService.impl.developerApi;
 
 import com.omgservers.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.dto.developer.CreateProjectDeveloperResponse;

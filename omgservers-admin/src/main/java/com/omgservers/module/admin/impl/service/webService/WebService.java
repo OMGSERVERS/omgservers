@@ -1,4 +1,4 @@
-package com.omgservers.module.admin.impl.service.adminWebService;
+package com.omgservers.module.admin.impl.service.webService;
 
 import com.omgservers.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.dto.admin.CollectLogsAdminResponse;
@@ -18,7 +18,7 @@ import com.omgservers.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.dto.admin.SyncServiceAccountAdminRequest;
 import io.smallrye.mutiny.Uni;
 
-public interface AdminWebService {
+public interface WebService {
 
     Uni<PingServerAdminResponse> pingServer();
 

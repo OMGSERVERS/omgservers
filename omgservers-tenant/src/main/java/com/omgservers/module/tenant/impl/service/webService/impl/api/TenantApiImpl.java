@@ -54,8 +54,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class TenantApiImpl implements TenantApi {
 
-    final HandleApiRequestOperation handleApiRequestOperation;
     final WebService webService;
+
+    final HandleApiRequestOperation handleApiRequestOperation;
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
