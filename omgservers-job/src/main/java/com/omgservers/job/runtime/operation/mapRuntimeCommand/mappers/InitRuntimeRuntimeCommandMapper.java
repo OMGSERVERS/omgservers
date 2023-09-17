@@ -1,11 +1,11 @@
-package com.omgservers.module.runtime.impl.operation.mapRuntimeCommand.mappers;
+package com.omgservers.job.runtime.operation.mapRuntimeCommand.mappers;
 
+import com.omgservers.job.runtime.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.scriptEvent.ScriptEventModel;
 import com.omgservers.model.scriptEvent.body.InitScriptEventBodyModel;
-import com.omgservers.module.runtime.impl.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class InitRuntimeRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public ScriptEventModel map(RuntimeCommandModel runtimeCommand) {
+    public ScriptEventModel map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (InitRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var scriptEventBody = InitScriptEventBodyModel.builder()
                 .config(runtimeCommandBody.getConfig())

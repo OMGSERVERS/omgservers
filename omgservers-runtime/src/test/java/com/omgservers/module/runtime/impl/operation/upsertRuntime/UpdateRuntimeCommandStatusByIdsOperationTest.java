@@ -1,9 +1,8 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntime;
 
-import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
+import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -14,14 +13,11 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpdateRuntimeCommandStatusAndStepByIdsOperationTest extends Assertions {
+class UpdateRuntimeCommandStatusByIdsOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
-
-    @Inject
-    SyncRuntimeMethod syncRuntimeMethod;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -35,14 +31,16 @@ class UpdateRuntimeCommandStatusAndStepByIdsOperationTest extends Assertions {
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
+                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
         assertTrue(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1));
     }
 
     @Test
     void givenRuntime_whenInsertRuntimeAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
+                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         assertFalse(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime));

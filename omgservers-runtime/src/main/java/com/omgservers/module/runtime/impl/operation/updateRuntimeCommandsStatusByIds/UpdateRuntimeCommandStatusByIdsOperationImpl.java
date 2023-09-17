@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.impl.operation.updateRuntimeCommandsStatusAndStepByIds;
+package com.omgservers.module.runtime.impl.operation.updateRuntimeCommandsStatusByIds;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
@@ -18,34 +18,34 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpdateRuntimeCommandStatusAndStepByIdsOperationImpl implements UpdateRuntimeCommandStatusAndStepByIdsOperation {
+class UpdateRuntimeCommandStatusByIdsOperationImpl implements UpdateRuntimeCommandStatusByIdsOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> updateRuntimeCommandStatusAndStepByIds(final ChangeContext<?> changeContext,
-                                                               final SqlConnection sqlConnection,
-                                                               final int shard,
-                                                               final List<Long> ids,
-                                                               final RuntimeCommandStatusEnum status,
-                                                               final Long step) {
+    public Uni<Boolean> updateRuntimeCommandStatusByIds(final ChangeContext<?> changeContext,
+                                                        final SqlConnection sqlConnection,
+                                                        final int shard,
+                                                        final Long runtimeId,
+                                                        final List<Long> ids,
+                                                        final RuntimeCommandStatusEnum status) {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_runtime_command
-                        set modified = $2, status = $3, step = $4
-                        where id = any($1)
+                        set modified = $3, status = $4
+                        where runtime_id = $1 and id = any($2)
                         """,
                 Arrays.asList(
+                        runtimeId,
                         ids.toArray(),
                         Instant.now().atOffset(ZoneOffset.UTC),
-                        status,
-                        step
+                        status
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Status and step of runtime commands were updated, " +
-                        "status=%s, step=%d, ids=%s,", status, step, ids))
+                () -> logModelFactory.create(String.format("Status for runtime commands were updated, " +
+                        "status=%s, ids=%s,", status, ids))
         );
     }
 }

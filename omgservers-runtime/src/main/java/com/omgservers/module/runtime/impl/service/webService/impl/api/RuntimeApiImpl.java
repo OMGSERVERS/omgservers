@@ -6,16 +6,18 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
-import com.omgservers.dto.runtime.DoRuntimeUpdateResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
+import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.module.runtime.impl.service.webService.WebService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
@@ -65,6 +67,16 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
+    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeCommands);
+    }
+
+    @Override
+    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(final MarkRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::markRuntimeCommands);
+    }
+
+    @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeGrant);
@@ -72,13 +84,7 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request) {
+    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeGrant);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(final DoRuntimeUpdateRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::doRuntimeUpdate);
     }
 }

@@ -6,16 +6,18 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
-import com.omgservers.dto.runtime.DoRuntimeUpdateResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
+import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.module.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -57,17 +59,22 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
+        return runtimeService.viewRuntimeCommands(request);
+    }
+
+    @Override
+    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(final MarkRuntimeCommandsRequest request) {
+        return runtimeService.markRuntimeCommands(request);
+    }
+
+    @Override
     public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
         return runtimeService.syncRuntimeGrant(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request) {
+    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return runtimeService.deleteRuntimeGrant(request);
-    }
-
-    @Override
-    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(final DoRuntimeUpdateRequest request) {
-        return runtimeService.doRuntimeUpdate(request);
     }
 }

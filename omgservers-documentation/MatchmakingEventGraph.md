@@ -30,9 +30,10 @@ syncRuntimeGrant("syncRuntimeGrant(MANAGE_CLIENT)") --> syncRuntimeCommand("sync
 
 RuntimeJob(Job<br/>type: RUNTIME) --> getRuntime("getRuntime()")
 getRuntime("getRuntime()") --> checkRuntimeType{"type == Script"}
-checkRuntimeType{"type == Script"} -- Yes --> getRuntimeCommands("getRuntimeCommands()")
-getRuntimeCommands("getRuntimeCommands()") --> callScript("callScript(events)")
+checkRuntimeType{"type == Script"} -- Yes --> viewRuntimeCommands("viewRuntimeCommands()")
+viewRuntimeCommands("viewRuntimeCommands()") --> callScript("callScript(events)")
 callScript("callScript(events)") --> executeAction("executeAction()")
+callScript("callScript(events)") --> markRuntimeCommands("markRuntimeCommands(PROCESSED)")
 
 ```
 

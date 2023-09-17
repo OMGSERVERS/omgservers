@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.impl.operation.mapRuntimeCommand;
+package com.omgservers.job.runtime.operation.mapRuntimeCommand;
 
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
@@ -17,7 +17,7 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
 
     final Map<RuntimeCommandQualifierEnum, RuntimeCommandMapper> runtimeCommandMappers;
 
-    MapRuntimeCommandOperationImpl(Instance<RuntimeCommandMapper> runtimeCommandMappersBeans) {
+    MapRuntimeCommandOperationImpl(final Instance<RuntimeCommandMapper> runtimeCommandMappersBeans) {
         this.runtimeCommandMappers = new ConcurrentHashMap<>();
         runtimeCommandMappersBeans.stream().forEach(runtimeCommandMapper -> {
             final var qualifier = runtimeCommandMapper.getQualifier();
@@ -31,7 +31,7 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
     }
 
     @Override
-    public ScriptEventModel mapRuntimeCommand(RuntimeCommandModel runtimeCommand) {
+    public ScriptEventModel mapRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var qualifier = runtimeCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
 

@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.impl.operation.mapRuntimeCommand;
+package com.omgservers.job.runtime.operation.mapRuntimeCommand;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
