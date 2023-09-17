@@ -5,5 +5,5 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DoRuntimeUpdateResponse {
+public class DoUnicastMessageResponse {
 }

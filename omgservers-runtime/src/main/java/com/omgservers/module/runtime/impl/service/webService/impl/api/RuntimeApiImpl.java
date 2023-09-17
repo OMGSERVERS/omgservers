@@ -6,6 +6,16 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
+import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
+import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.dto.runtime.DoKickClientRequest;
+import com.omgservers.dto.runtime.DoKickClientResponse;
+import com.omgservers.dto.runtime.DoMulticastMessageRequest;
+import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.dto.runtime.DoUnicastMessageRequest;
+import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
@@ -86,5 +96,35 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeGrant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doKickClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doStopRuntime);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doUnicastMessage);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doMulticastMessage);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doBroadcastMessage);
     }
 }

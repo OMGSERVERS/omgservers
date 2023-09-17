@@ -45,7 +45,7 @@ class UpdateRuntimeCommandStatusByIdsOperationImpl implements UpdateRuntimeComma
                 ),
                 () -> null,
                 () -> logModelFactory.create(String.format("Status for runtime commands were updated, " +
-                        "status=%s, ids=%s,", status, ids))
+                        "status=%s, ids=%s", status, ids))
         );
     }
 }

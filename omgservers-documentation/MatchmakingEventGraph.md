@@ -22,7 +22,7 @@ syncJob("syncJob()") --> JobRuntimeCreated(JOB_CREATED<br/>GroupId: runtimeId)
 JobRuntimeCreated(JOB_CREATED<br/>GroupId: runtimeId) --> scheduleJob("scheduleJob()")
 syncScript("syncScript()") --> syncJob("syncJob()")
 
-upsertMatch("upsertMatch()") --> upsertMatchClient("upsertMatchClient()") 
+upsertMatch("upsertMatch()") --> upsertMatchClient("upsertMatchClient()")
 upsertMatchClient("upsertMatchClient()") --> MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId)
 MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId) --> assignRuntime("assignRuntime()")
 assignRuntime("assignRuntime()") --> syncRuntimeGrant("syncRuntimeGrant(MANAGE_CLIENT)")
@@ -30,9 +30,8 @@ syncRuntimeGrant("syncRuntimeGrant(MANAGE_CLIENT)") --> syncRuntimeCommand("sync
 
 RuntimeJob(Job<br/>type: RUNTIME) --> getRuntime("getRuntime()")
 getRuntime("getRuntime()") --> checkRuntimeType{"type == Script"}
-checkRuntimeType{"type == Script"} -- Yes --> viewRuntimeCommands("viewRuntimeCommands()")
-viewRuntimeCommands("viewRuntimeCommands()") --> callScript("callScript(events)")
-callScript("callScript(events)") --> executeAction("executeAction()")
+checkRuntimeType{"type == Script"} -- Yes --> viewRuntimeCommands("viewRuntimeCommands(NEW)")
+viewRuntimeCommands("viewRuntimeCommands(NEW)") --> callScript("callScript(events)")
 callScript("callScript(events)") --> markRuntimeCommands("markRuntimeCommands(PROCESSED)")
 
 ```

@@ -6,6 +6,16 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
+import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
+import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.dto.runtime.DoKickClientRequest;
+import com.omgservers.dto.runtime.DoKickClientResponse;
+import com.omgservers.dto.runtime.DoMulticastMessageRequest;
+import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.dto.runtime.DoUnicastMessageRequest;
+import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
@@ -38,4 +48,14 @@ public interface WebService {
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
 
     Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request);
+
+    Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request);
+
+    Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request);
+
+    Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request);
+
+    Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request);
+
+    Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request);
 }

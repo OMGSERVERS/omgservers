@@ -6,6 +6,16 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
+import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
+import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.dto.runtime.DoKickClientRequest;
+import com.omgservers.dto.runtime.DoKickClientResponse;
+import com.omgservers.dto.runtime.DoMulticastMessageRequest;
+import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.dto.runtime.DoUnicastMessageRequest;
+import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
@@ -60,4 +70,24 @@ public interface RuntimeApi {
     @PUT
     @Path("/delete-runtime-grant")
     Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request);
+
+    @PUT
+    @Path("/do-kick-client")
+    Uni<DoKickClientResponse> doKickClient(DoKickClientRequest request);
+
+    @PUT
+    @Path("/do-stop-runtime")
+    Uni<DoStopRuntimeResponse> doStopRuntime(DoStopRuntimeRequest request);
+
+    @PUT
+    @Path("/do-unicast-message")
+    Uni<DoUnicastMessageResponse> doUnicastMessage(DoUnicastMessageRequest request);
+
+    @PUT
+    @Path("/do-multicast-message")
+    Uni<DoMulticastMessageResponse> doMulticastMessage(DoMulticastMessageRequest request);
+
+    @PUT
+    @Path("/do-broadcast-message")
+    Uni<DoBroadcastMessageResponse> doBroadcastMessage(DoBroadcastMessageRequest request);
 }

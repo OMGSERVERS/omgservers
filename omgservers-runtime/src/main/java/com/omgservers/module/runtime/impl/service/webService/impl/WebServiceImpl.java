@@ -6,6 +6,16 @@ import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
+import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
+import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.dto.runtime.DoKickClientRequest;
+import com.omgservers.dto.runtime.DoKickClientResponse;
+import com.omgservers.dto.runtime.DoMulticastMessageRequest;
+import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.dto.runtime.DoUnicastMessageRequest;
+import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
@@ -18,6 +28,7 @@ import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
+import com.omgservers.module.runtime.impl.service.doService.DoService;
 import com.omgservers.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.module.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -32,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final RuntimeService runtimeService;
+    final DoService doService;
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(final SyncRuntimeRequest request) {
@@ -76,5 +88,30 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return runtimeService.deleteRuntimeGrant(request);
+    }
+
+    @Override
+    public Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request) {
+        return doService.doKickClient(request);
+    }
+
+    @Override
+    public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
+        return doService.doStopRuntime(request);
+    }
+
+    @Override
+    public Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request) {
+        return doService.doUnicastMessage(request);
+    }
+
+    @Override
+    public Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request) {
+        return doService.doMulticastMessage(request);
+    }
+
+    @Override
+    public Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request) {
+        return doService.doBroadcastMessage(request);
     }
 }
