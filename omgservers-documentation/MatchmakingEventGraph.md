@@ -12,24 +12,25 @@ JobMatchmakerCreated(JOB_CREATED<br/>GroupId: matchmakerId) --> scheduleJob("sch
 MatchmakerRequested(MATCHMAKER_REQUESTED<br/>GroupId: clientId) --> syncRequest("syncRequest()")
 
 MatchmakerJob(Job<br/>type: MATCHMAKER) --> executeMatchmaker("executeMatchmaker()")
-executeMatchmaker("executeMatchmaker()") -- step 1--> upsertMatch("upsertMatch()")
-executeMatchmaker("executeMatchmaker()") -- step 2--> upsertMatchClient("upsertMatchClient()")
+executeMatchmaker("executeMatchmaker()") -- step 1 --> upsertMatch("upsertMatch()")
+executeMatchmaker("executeMatchmaker()") -- step 2 --> upsertMatchClient("upsertMatchClient()")
 
 upsertMatch("upsertMatch()") --> MatchCreated(MATCH_CREATED<br/>GroupId: matchId)
 MatchCreated(MATCH_CREATED<br/>GroupId: matchId) --> syncRuntime("syncRuntime()")
 syncRuntime("syncRuntime()") --> RuntimeCreated(RUNTIME_CREATED<br/>GroupId: runtimeId)
-RuntimeCreated(RUNTIME_CREATED<br/>GroupId: runtimeId) -- step 1 --> syncScript("syncScript()")
-RuntimeCreated(RUNTIME_CREATED<br/>GroupId: runtimeId) -- step 2--> syncJob("syncJob()")
+RuntimeCreated(RUNTIME_CREATED<br/>GroupId: runtimeId) --> syncScript("syncScript()")
 syncJob("syncJob()") --> JobRuntimeCreated(JOB_CREATED<br/>GroupId: runtimeId)
 JobRuntimeCreated(JOB_CREATED<br/>GroupId: runtimeId) --> scheduleJob("scheduleJob()")
-syncScript("syncScript()") --> ScriptCreated(SCRIPT_CREATED<br/>GroupId: scriptId)
+syncScript("syncScript()") --> syncJob("syncJob()")
 
 upsertMatchClient("upsertMatchClient()") --> MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId)
-MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId) -- step 1 --> assignRuntime("assignRuntime()")
-MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId) -- step 2 --> syncRuntimeCommand("syncRuntimeCommand(addPlayer)")
+MatchClientCreated(MATCH_CLIENT_CREATED<br/>GroupId: matchId) --> assignRuntime("assignRuntime()")
+assignRuntime("assignRuntime()") --> syncRuntimeGrant("syncRuntimeGrant(MANAGE_CLIENT)")
+syncRuntimeGrant("syncRuntimeGrant(MANAGE_CLIENT)") --> syncRuntimeCommand("syncRuntimeCommand(ADD_PLAYER)")
 
-RuntimeJob(Job<br/>type: RUNTIME) --> doRuntimeUpdate("doRuntimeUpdate()")
-doRuntimeUpdate("doRuntimeUpdate()") --> callScript("callScript(events, permissions)")
+RuntimeJob(Job<br/>type: RUNTIME) --> getRuntimeCommands("getRuntimeCommands()")
+getRuntimeCommands("getRuntimeCommands()") --> callScript("callScript(events)")
+callScript("callScript(events)") --> executeAction("executeAction()")
 
 ```
 

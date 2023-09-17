@@ -2,6 +2,8 @@ package com.omgservers.module.runtime.impl.service.webService.impl.api;
 
 import com.omgservers.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.dto.runtime.DoRuntimeUpdateRequest;
@@ -10,6 +12,8 @@ import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
+import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -32,37 +36,49 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request) {
+    public Uni<SyncRuntimeResponse> syncRuntime(final SyncRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request) {
+    public Uni<GetRuntimeResponse> getRuntime(final GetRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request) {
+    public Uni<DeleteRuntimeResponse> deleteRuntime(final DeleteRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntime);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request) {
+    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request) {
+    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(final DeleteRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(DoRuntimeUpdateRequest request) {
+    public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeGrant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeGrant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoRuntimeUpdateResponse> doRuntimeUpdate(final DoRuntimeUpdateRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::doRuntimeUpdate);
     }
 }

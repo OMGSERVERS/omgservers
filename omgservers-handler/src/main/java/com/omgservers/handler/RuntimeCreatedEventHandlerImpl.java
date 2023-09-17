@@ -47,18 +47,24 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
         return getRuntime(id)
-                .call(this::syncScript)
+                .call(this::syncGame)
                 .call(this::syncJob)
                 .replaceWith(true);
     }
 
-    Uni<RuntimeModel> getRuntime(Long id) {
+    Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<ScriptModel> syncScript(RuntimeModel runtime) {
+    Uni<ScriptModel> syncGame(final RuntimeModel runtime) {
+        return switch (runtime.getType()) {
+            case SCRIPT -> syncScript(runtime);
+        };
+    }
+
+    Uni<ScriptModel> syncScript(final RuntimeModel runtime) {
         final var tenantId = runtime.getTenantId();
         final var versionId = runtime.getVersionId();
         final var type = ScriptTypeEnum.RUNTIME;
@@ -73,7 +79,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .replaceWith(script);
     }
 
-    Uni<JobModel> syncJob(RuntimeModel runtime) {
+    Uni<JobModel> syncJob(final RuntimeModel runtime) {
         final var shardKey = runtime.getId();
         final var entityId = runtime.getId();
         final var job = jobModelFactory.create(shardKey, entityId, JobTypeEnum.RUNTIME);

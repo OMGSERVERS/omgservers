@@ -208,6 +208,16 @@ create table if not exists tab_runtime_command (
     step bigint
 );
 
+create table if not exists tab_runtime_grant (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    entity_id bigint not null,
+    permission text not null,
+    unique(runtime_id, entity_id, permission)
+);
+
 -- script module
 
 create table if not exists tab_script (

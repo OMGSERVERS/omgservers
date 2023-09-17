@@ -37,7 +37,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
                                 """,
                         Collections.singletonList(id),
                         () -> new TenantDeletedEventBodyModel(tenant),
-                        () -> logModelFactory.create("Tenant was deleted, id=" + id)
+                        () -> logModelFactory.create("Tenant was deleted, tenant=" + tenant)
                 ))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithItem(false);
