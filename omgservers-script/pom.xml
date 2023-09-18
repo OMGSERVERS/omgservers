@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.omgservers</groupId>
             <artifactId>omgservers-user</artifactId>
         </dependency>
         <dependency>

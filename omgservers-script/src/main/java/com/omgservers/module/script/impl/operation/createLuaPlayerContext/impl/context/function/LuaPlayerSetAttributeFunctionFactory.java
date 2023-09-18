@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
+package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function;
 
 import com.omgservers.module.user.UserModule;
 import com.omgservers.module.user.factory.AttributeModelFactory;

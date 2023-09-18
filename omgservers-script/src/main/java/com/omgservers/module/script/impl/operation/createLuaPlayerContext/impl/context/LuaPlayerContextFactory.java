@@ -1,5 +1,8 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
+package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context;
 
+import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerGetAttributeFunctionFactory;
+import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerRespondFunctionFactory;
+import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerSetAttributeFunctionFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

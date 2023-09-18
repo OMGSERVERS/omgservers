@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
+package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function;
 
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;

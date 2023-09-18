@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
+package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function;
 
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.user.UserModule;
@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class LuaPlayerRespondFunctionFactory {
+public class LuaPlayerRespondFunctionFactory {
 
     final UserModule userModule;
 

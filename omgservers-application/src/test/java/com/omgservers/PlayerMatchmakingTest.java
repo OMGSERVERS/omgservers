@@ -60,7 +60,7 @@ public class PlayerMatchmakingTest extends Assertions {
                             table.insert(self.actions, event)
                         end
                                                 
-                        function handle_message(self, event, runtime)                           
+                        function handle_message(self, event, runtime)
                             print("event.id=" .. event.id)
                             print("event.user_id=" .. event.user_id)
                             print("event.player_id=" .. event.player_id)
@@ -68,6 +68,8 @@ public class PlayerMatchmakingTest extends Assertions {
                             print("event.data.text=" .. event.data.text)
                             
                             table.insert(self.actions, event)
+                            
+                            runtime.unicast_message(event.client_id, event.data.text)
                         end
                                                 
                         function update(self, event, runtime)

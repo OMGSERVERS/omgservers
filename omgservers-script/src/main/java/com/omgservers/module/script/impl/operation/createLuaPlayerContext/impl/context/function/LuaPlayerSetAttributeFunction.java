@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
+package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function;
 
 import com.omgservers.dto.user.SyncAttributeRequest;
 import com.omgservers.module.user.UserModule;
