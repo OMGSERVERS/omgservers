@@ -17,10 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 class SelectAllLogsOperationImpl implements SelectAllLogsOperation {
 
-    private static final String SQL = """
-                        
-            """;
-
     final ExecuteSelectListOperation executeSelectListOperation;
     final ObjectMapper objectMapper;
 

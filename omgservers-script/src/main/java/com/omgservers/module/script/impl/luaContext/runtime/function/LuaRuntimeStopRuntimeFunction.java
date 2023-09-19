@@ -1,6 +1,6 @@
-package com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function;
+package com.omgservers.module.script.impl.luaContext.runtime.function;
 
-import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.script.impl.operation.handleLuaCallOperation.HandleLuaCallOperation;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.luaj.vm2.lib.VarArgFunction;
 
 @Slf4j
 @AllArgsConstructor
-public class LuaRuntimeBroadcastMessageFunction extends VarArgFunction {
+public class LuaRuntimeStopRuntimeFunction extends VarArgFunction {
     final RuntimeModule runtimeModule;
 
     final HandleLuaCallOperation handleLuaCallOperation;
@@ -21,10 +21,10 @@ public class LuaRuntimeBroadcastMessageFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs args) {
         return handleLuaCallOperation.handleLuaCall(() -> {
-            final var message = args.arg(1).tojstring();
+            final var reason = args.arg(1).checkjstring();
 
-            final var doBroadcastMessageRequest = new DoBroadcastMessageRequest(runtimeId, message);
-            return runtimeModule.getDoService().doBroadcastMessage(doBroadcastMessageRequest)
+            final var doStopRuntimeRequest = new DoStopRuntimeRequest(runtimeId, reason);
+            return runtimeModule.getDoService().doStopRuntime(doStopRuntimeRequest)
                     .replaceWith(LuaValue.NIL);
         });
     }

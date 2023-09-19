@@ -1,8 +1,8 @@
-package com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context;
+package com.omgservers.module.script.impl.luaContext.runtime;
 
-import com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function.LuaRuntimeBroadcastMessageFunction;
-import com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function.LuaRuntimeMulticastMessageFunction;
-import com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function.LuaRuntimeUnicastMessageFunction;
+import com.omgservers.module.script.impl.luaContext.runtime.function.LuaRuntimeBroadcastMessageFunction;
+import com.omgservers.module.script.impl.luaContext.runtime.function.LuaRuntimeMulticastMessageFunction;
+import com.omgservers.module.script.impl.luaContext.runtime.function.LuaRuntimeUnicastMessageFunction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -19,9 +19,7 @@ syncPlayer("syncPlayer()") --> PlayerCreated(PLAYER_CREATED<br/>GroupId: userId)
 ClientCreated(CLIENT_CREATED<br/>GroupId: userId) --> syncScript("syncScript()") 
 
 PlayerSignedUp(PLAYER_SIGNED_UP<br/>GroupId: userId) --> assignPlayer("assignPlayer()")
-assignPlayer("assignPlayer()") --> callScriptSignedUp("script:signed_up()")
-
 PlayerSignedIn(PLAYER_SIGNED_IN<br/>GroupId: userId) --> assignPlayer("assignPlayer()")
-assignPlayer("assignPlayer()") --> callScriptSignedIn("script:signed_in()")
+assignPlayer("assignPlayer()") --> callScript("callScript()")
 ```
 

@@ -2,7 +2,7 @@ package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl;
 
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerSetAttributeFunctionFactory;
+import com.omgservers.module.script.impl.luaContext.player.function.LuaPlayerSetAttributeFunctionFactory;
 import com.omgservers.module.user.factory.PlayerModelFactory;
 import com.omgservers.module.user.factory.UserModelFactory;
 import com.omgservers.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;

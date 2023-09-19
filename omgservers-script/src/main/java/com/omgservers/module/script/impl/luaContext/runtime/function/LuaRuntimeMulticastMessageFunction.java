@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function;
+package com.omgservers.module.script.impl.luaContext.runtime.function;
 
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.module.runtime.RuntimeModule;

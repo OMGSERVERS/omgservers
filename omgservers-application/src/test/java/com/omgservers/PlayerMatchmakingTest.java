@@ -58,13 +58,13 @@ public class PlayerMatchmakingTest extends Assertions {
                         if event.id == "handle_message" then
                             table.insert(state.actions, event)
                             
-                            context.unicast_message(event.client_id, event.data.text)
+                            context.unicast_message(event.user_id, event.client_id, event.data.text)
                         end
                            
                         if event.id == "update" then
                             table.insert(state.actions, event)
                             
-                            context.unicast_message(event.client_id, event.data.text)
+                            context.unicast_message(event.user_id, event.client_id, event.data.text)
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -92,7 +92,12 @@ public class PlayerMatchmakingTest extends Assertions {
         Thread.sleep(5000);
 
         client1.sendMatchMessage(new TestMessage("Hello, "));
+        final var event3 = client1.consumeEventMessage();
+        assertEquals("Hello, ", event3.getEvent().toString());
+
         client2.sendMatchMessage(new TestMessage("world!"));
+        final var event4 = client2.consumeEventMessage();
+        assertEquals("world!", event4.getEvent().toString());
 
         Thread.sleep(5000);
 

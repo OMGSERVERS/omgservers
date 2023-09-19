@@ -15,10 +15,6 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectVersionIdByStageIdOperationImpl implements SelectVersionIdByStageIdOperation {
 
-    private static final String SQL = """
-                        
-            """;
-
     final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
     @Override

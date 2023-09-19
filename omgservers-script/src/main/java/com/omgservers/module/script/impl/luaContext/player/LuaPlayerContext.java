@@ -1,8 +1,8 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context;
+package com.omgservers.module.script.impl.luaContext.player;
 
-import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerGetAttributeFunction;
-import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerRespondFunction;
-import com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function.LuaPlayerSetAttributeFunction;
+import com.omgservers.module.script.impl.luaContext.player.function.LuaPlayerGetAttributeFunction;
+import com.omgservers.module.script.impl.luaContext.player.function.LuaPlayerRespondFunction;
+import com.omgservers.module.script.impl.luaContext.player.function.LuaPlayerSetAttributeFunction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.createLuaRuntimeContext.impl.context.function;
+package com.omgservers.module.script.impl.luaContext.runtime.function;
 
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.script.impl.operation.handleLuaCallOperation.HandleLuaCallOperation;
@@ -9,14 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class LuaRuntimeUnicastMessageFunctionFactory {
+public class LuaRuntimeBroadcastMessageFunctionFactory {
 
     final RuntimeModule runtimeModule;
 
     final HandleLuaCallOperation handleLuaCallOperation;
 
-    public LuaRuntimeUnicastMessageFunction build(final Long runtimeId) {
-        final var function = new LuaRuntimeUnicastMessageFunction(
+    public LuaRuntimeBroadcastMessageFunction build(final Long runtimeId) {
+        final var function = new LuaRuntimeBroadcastMessageFunction(
                 runtimeModule,
                 handleLuaCallOperation,
                 runtimeId);

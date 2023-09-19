@@ -17,10 +17,6 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
 
-    private static final String SQL = """
-                        
-            """;
-
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
 
     final LogModelFactory logModelFactory;

@@ -24,10 +24,10 @@ class HandleLuaCallOperationImpl implements HandleLuaCallOperation {
             return supplier.get()
                     .await().atMost(Duration.ofSeconds(TIMEOUT));
         } catch (TimeoutException e) {
-            log.error("Lua call failed due to timeout, {}", e.getMessage());
+            log.error("Lua call failed due to timeout, {}", e.getMessage(), e);
             return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf("timeout"));
         } catch (Exception e) {
-            log.warn("Lua call failed due to exception, {}", e.getMessage());
+            log.warn("Lua call failed due to exception, {}", e.getMessage(), e);
             return LuaValue.varargsOf(LuaValue.NIL, LuaString.valueOf("failed"));
         }
     }

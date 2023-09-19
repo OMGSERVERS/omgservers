@@ -1,4 +1,4 @@
-# Module relations schema for the project
+# Module relations schema
 
 ```mermaid
 graph TD;
@@ -12,15 +12,15 @@ gateway --> base;
 user --> gateway;
 tenant --> lua;
 lua --> base;
-runtime --> context;
-matchmaker --> tenant;
+runtime --> user;
 developer --> user;
 developer --> tenant;
 admin --> user;
 admin --> tenant;
-application --> all;
-context --> all;
+matchmaker --> tenant;
+script --> all;
 handler --> all;
 job --> all;
-all --> parent;
+parent --> bom;
+bom --> all
 ```

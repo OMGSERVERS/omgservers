@@ -15,13 +15,6 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
 
-    private static final String SQL = """
-            select id
-            from $schema.tab_tenant_permission
-            where tenant_id = $1 and user_id = $2 and permission = $3
-            limit 1
-            """;
-
     final ExecuteHasObjectOperation executeHasObjectOperation;
 
     @Override

@@ -1,7 +1,7 @@
-package com.omgservers.module.script.impl.operation.createLuaPlayerContext.impl.context.function;
+package com.omgservers.module.script.impl.luaContext.player.function;
 
-import com.omgservers.module.user.UserModule;
 import com.omgservers.dto.user.GetAttributeRequest;
+import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
