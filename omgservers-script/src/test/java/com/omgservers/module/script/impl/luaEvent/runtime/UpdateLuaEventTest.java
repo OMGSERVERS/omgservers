@@ -30,20 +30,20 @@ class UpdateLuaEventTest extends Assertions {
                    
                 function update(event, runtime)
                     print("event.id=" .. event.id)
-                    print("event.step=" .. event.step)
+                    print("event.time=" .. event.time)
                     print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
                     print("runtime.match_id=" .. runtime.match_id)
                     print("runtime.runtime_id=" .. runtime.runtime_id)
                     -- assert
                     assert(event.id == "update", "event.id is wrong")
-                    assert(event.step == 123, "event.step is wrong")
+                    assert(event.time == 1695156707, "event.time is wrong")
                     assert(runtime.matchmaker_id == "27535430859688964", "runtime.matchmaker_id is wrong")
                     assert(runtime.match_id == "27535430859688965", "runtime.match_id is wrong")
                     assert(runtime.runtime_id == "27535430859688966", "runtime.runtime_id is wrong")
                 end
                 """);
 
-        final var luaEvent = new UpdateLuaEvent(123L);
+        final var luaEvent = new UpdateLuaEvent(1695156707L);
         final var luaContext = createLuaRuntimeContextOperation.createLuaRuntimeContext(TIMEOUT,
                 27535430859688964L,
                 27535430859688965L,

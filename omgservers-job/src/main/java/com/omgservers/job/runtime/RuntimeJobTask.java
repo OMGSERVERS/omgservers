@@ -11,7 +11,9 @@ import com.omgservers.model.job.JobTypeEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
+import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
 import io.smallrye.mutiny.Uni;
@@ -20,6 +22,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +34,7 @@ public class RuntimeJobTask implements JobTask {
     final ScriptModule scriptModule;
 
     final MapRuntimeCommandOperation mapRuntimeCommandOperation;
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
     public JobTypeEnum getJobType() {
@@ -44,12 +48,16 @@ public class RuntimeJobTask implements JobTask {
                         switch (runtime.getType()) {
                             case SCRIPT -> viewRuntimeCommands(runtime.getId())
                                     .flatMap(runtimeCommands -> {
-                                        if (runtimeCommands.isEmpty()) {
-                                            return Uni.createFrom().voidItem();
-                                        } else {
-                                            return callScript(runtime, runtimeCommands)
-                                                    .call(voidItem -> markRuntimeCommands(runtime, runtimeCommands));
-                                        }
+                                        // Add updateRuntime command automatically for every iteration
+                                        final var commandBody = UpdateRuntimeCommandBodyModel.builder()
+                                                .time(Instant.now().toEpochMilli())
+                                                .build();
+                                        final var updateRuntime = runtimeCommandModelFactory
+                                                .create(runtime.getId(), commandBody);
+                                        runtimeCommands.add(updateRuntime);
+
+                                        return callScript(runtime, runtimeCommands)
+                                                .call(voidItem -> markRuntimeCommands(runtime, runtimeCommands));
                                     });
                         })
                 .replaceWith(true);

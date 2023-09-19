@@ -25,7 +25,7 @@ public class UpdateScriptEventMapper implements ScriptEventMapper {
     public LuaEvent map(ScriptEventModel scriptEvent) {
         final var body = (UpdateScriptEventBodyModel) scriptEvent.getBody();
         return UpdateLuaEvent.builder()
-                .step(body.getStep())
+                .time(body.getTime())
                 .build();
     }
 }

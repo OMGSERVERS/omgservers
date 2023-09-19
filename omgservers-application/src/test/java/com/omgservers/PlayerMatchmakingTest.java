@@ -64,7 +64,7 @@ public class PlayerMatchmakingTest extends Assertions {
                         if event.id == "update" then
                             table.insert(state.actions, event)
                             
-                            context.unicast_message(event.user_id, event.client_id, event.data.text)
+                            -- context.unicast_message(event.user_id, event.client_id, event.data.text)
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

@@ -10,12 +10,12 @@ import lombok.ToString;
 @ToString
 public class UpdateLuaEvent extends LuaEvent {
 
-    final Long step;
+    final Long time;
 
-    public UpdateLuaEvent(final Long step) {
+    public UpdateLuaEvent(final Long time) {
         super("update");
-        this.step = step;
+        this.time = time;
 
-        set("step", step);
+        set("time", time);
     }
 }

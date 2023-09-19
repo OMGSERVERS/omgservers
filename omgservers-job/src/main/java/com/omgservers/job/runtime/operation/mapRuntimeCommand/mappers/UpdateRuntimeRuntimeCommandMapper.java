@@ -25,7 +25,7 @@ public class UpdateRuntimeRuntimeCommandMapper implements RuntimeCommandMapper {
     public ScriptEventModel map(RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (UpdateRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var scriptEventBody = UpdateScriptEventBodyModel.builder()
-                .step(runtimeCommandBody.getStep())
+                .time(runtimeCommandBody.getTime())
                 .build();
         return new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody);
     }

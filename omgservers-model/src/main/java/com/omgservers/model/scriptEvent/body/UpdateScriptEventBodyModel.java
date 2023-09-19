@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class UpdateScriptEventBodyModel extends ScriptEventBodyModel {
 
     @NotNull
-    Long step;
+    Long time;
 
     @Override
     public ScriptEventQualifierEnum getQualifier() {
