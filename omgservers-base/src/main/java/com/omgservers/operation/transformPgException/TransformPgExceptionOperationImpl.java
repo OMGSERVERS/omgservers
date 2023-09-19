@@ -18,14 +18,15 @@ class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation
         return switch (code) {
             // foreign_key_violation
             case "23503" -> new ServerSideNotFoundException("foreign key violation, " +
-                    "constraint=" + pgException.getConstraint());
+                    "constraint=" + pgException.getConstraint(), pgException);
             // unique_violation
             case "23505" -> new ServerSideConflictException("unique violation, " +
-                    "constraint=" + pgException.getConstraint());
+                    "constraint=" + pgException.getConstraint(), pgException);
             // not_null_violation
             case "23502" -> new ServerSideBadRequestException("not null violation, " +
-                    "constraint=" + pgException.getConstraint());
-            default -> new ServerSideInternalException("unhandled PgException, " + pgException.getMessage());
+                    "constraint=" + pgException.getConstraint(), pgException);
+            default -> new ServerSideInternalException("unhandled PgException, " + pgException.getMessage(),
+                    pgException);
         };
     }
 }

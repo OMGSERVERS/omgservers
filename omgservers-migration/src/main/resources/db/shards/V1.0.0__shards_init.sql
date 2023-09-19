@@ -227,5 +227,6 @@ create table if not exists tab_script (
     tenant_id bigint not null,
     version_id bigint not null,
     type text not null,
+    state json not null,
     config json not null
 );

@@ -2,7 +2,6 @@ package com.omgservers;
 
 import com.omgservers.utils.operation.BootstrapVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +16,8 @@ public class BootstrapVersionTest extends Assertions {
 
     @Test
     void bootstrapVersionTest() throws Exception {
-        bootstrapVersionOperation.bootstrapVersion("print(\"version was initialized\")");
+        bootstrapVersionOperation.bootstrapVersion("""
+                print("test")
+                """);
     }
 }

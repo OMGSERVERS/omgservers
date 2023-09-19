@@ -32,56 +32,40 @@ public class PlayerMatchmakingTest extends Assertions {
 
     @Test
     void playerMatchmakingTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""
-                        function signed_up(self, event, player)
-                            player.respond("signed_up")
-                        end
+        final var version = bootstrapVersionOperation.bootstrapVersion("""                        
+                        local var state = context.state
+                        local var event = context.event
+                                                                        
+                        print("event: " .. event.id)
 
-                        function signed_in(self, event, player)
-                            player.respond("signed_in")
-                        end
-
-                        function init(self, event, runtime)
-                            print("event.id=" .. event.id)
-                            self.config = event.config
-                            self.actions = {}
-                            table.insert(self.actions, event)
-                        end
-                                          
-                        function add_player(self, event, runtime)
-                            print("event.id=" .. event.id)
-                            print("event.user_id=" .. event.user_id)
-                            print("event.player_id=" .. event.player_id)
-                            print("event.client_id=" .. event.client_id)
-                            print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
-                            print("runtime.match_id=" .. runtime.match_id)
-                            print("runtime.runtime_id=" .. runtime.runtime_id)
-                                                        
-                            table.insert(self.actions, event)
+                        if event.id == "signed_up" then
+                            context.respond("signed_up")
                         end
                                                 
-                        function handle_message(self, event, runtime)
-                            print("event.id=" .. event.id)
-                            print("event.user_id=" .. event.user_id)
-                            print("event.player_id=" .. event.player_id)
-                            print("event.client_id=" .. event.client_id)
-                            print("event.data.text=" .. event.data.text)
-                            
-                            table.insert(self.actions, event)
-                            
-                            runtime.unicast_message(event.client_id, event.data.text)
+                        if event.id == "signed_in" then
+                            context.respond("signed_in")
                         end
                                                 
-                        function update(self, event, runtime)
-                            print(event.step)
-                            print("runtime.matchmaker_id=" .. runtime.matchmaker_id)
-                            print("runtime.match_id=" .. runtime.match_id)
-                            print("runtime.runtime_id=" .. runtime.runtime_id)
+                        if event.id == "init" then
+                            state.actions = {}
+                            table.insert(state.actions, event)
+                        end
+                                                
+                        if event.id == "add_player" then
+                            table.insert(state.actions, event)
+                        end
+                                                
+                        if event.id == "handle_message" then
+                            table.insert(state.actions, event)
                             
-                            table.insert(self.actions, event)
-                        end                      
-
-                        print("version was initialized")
+                            context.unicast_message(event.client_id, event.data.text)
+                        end
+                           
+                        if event.id == "update" then
+                            table.insert(state.actions, event)
+                            
+                            context.unicast_message(event.client_id, event.data.text)
+                        end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("death-match", 2, 16, new ArrayList<>() {{

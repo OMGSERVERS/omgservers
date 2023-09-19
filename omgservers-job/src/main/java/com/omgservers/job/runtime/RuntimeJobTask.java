@@ -43,8 +43,14 @@ public class RuntimeJobTask implements JobTask {
                 .flatMap(runtime ->
                         switch (runtime.getType()) {
                             case SCRIPT -> viewRuntimeCommands(runtime.getId())
-                                    .call(runtimeCommands -> callScript(runtime, runtimeCommands))
-                                    .call(runtimeCommands -> markRuntimeCommands(runtime, runtimeCommands));
+                                    .flatMap(runtimeCommands -> {
+                                        if (runtimeCommands.isEmpty()) {
+                                            return Uni.createFrom().voidItem();
+                                        } else {
+                                            return callScript(runtime, runtimeCommands)
+                                                    .call(voidItem -> markRuntimeCommands(runtime, runtimeCommands));
+                                        }
+                                    });
                         })
                 .replaceWith(true);
     }

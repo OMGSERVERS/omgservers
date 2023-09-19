@@ -68,6 +68,9 @@ public class LuaValueSerializer extends StdSerializer<LuaValue> {
                     jsonGenerator.writeEndObject();
                 }
                 break;
+            case LuaValue.TNIL:
+                jsonGenerator.writeNull();
+                break;
             default:
                 throw new IllegalArgumentException("Unknown lua type, type=" + luaValue.type());
         }

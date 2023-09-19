@@ -7,6 +7,7 @@ import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 public class SignedUpLuaEvent extends LuaEvent {
 
     final Long userId;

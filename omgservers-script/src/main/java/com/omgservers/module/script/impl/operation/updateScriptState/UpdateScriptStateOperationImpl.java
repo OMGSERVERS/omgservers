@@ -1,4 +1,4 @@
-package com.omgservers.module.script.impl.operation.updateScriptSelf;
+package com.omgservers.module.script.impl.operation.updateScriptState;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.ScriptUpdatedEventBodyModel;
@@ -18,33 +18,33 @@ import java.util.Arrays;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpdateScriptSelfOperationImpl implements UpdateScriptSelfOperation {
+class UpdateScriptStateOperationImpl implements UpdateScriptStateOperation {
 
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> updateScriptSelf(final ChangeContext<?> changeContext,
-                                         final SqlConnection sqlConnection,
-                                         final int shard,
-                                         final Long id,
-                                         final String self) {
+    public Uni<Boolean> updateScriptState(final ChangeContext<?> changeContext,
+                                          final SqlConnection sqlConnection,
+                                          final int shard,
+                                          final Long id,
+                                          final String state) {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_script
-                        set modified = $2, self = $3
+                        set modified = $2, state = $3
                         where id = $1
                         """,
                 Arrays.asList(
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC),
-                        self
+                        state
                 ),
                 () -> new ScriptUpdatedEventBodyModel(id),
-                () -> logModelFactory.create(String.format("Self of script was updated, " +
-                        "id=%d, self=%s", id, self))
+                () -> logModelFactory.create(String.format("Script's state was updated, " +
+                        "id=%d, state=%s", id, state))
         );
     }
 }

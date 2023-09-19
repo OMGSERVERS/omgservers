@@ -27,25 +27,20 @@ public class PlayerSetGetAttributeTest extends Assertions {
     @Test
     void playerSetGetAttributeTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                function signed_up(self, event, player)
-                    player.set_attribute("a1", "1")
-                    player.set_attribute("a2", "2")
-                    player.set_attribute("a3", "3")
+                local var state = context.state
+                local var event = context.event
+                                
+                if event.id == "signed_up" then
+                    context.set_attribute("a1", "1")
+                    context.set_attribute("a2", "2")
+                    context.set_attribute("a3", "3")
                 end
-                               
-                function signed_in(self, event, player)
-                    local a1 = player.get_attribute("a1")
-                    print("a1:", a1)
-                    player.respond(a1)
-                    local a2 = player.get_attribute("a2")
-                    print("a2:", a2)
-                    player.respond(a2)
-                    local a3 = player.get_attribute("a3")
-                    print("a3:", a3)
-                    player.respond(a3)                   
+                                        
+                if event.id == "signed_in" then
+                    context.respond(context.get_attribute("a1"))
+                    context.respond(context.get_attribute("a2"))
+                    context.respond(context.get_attribute("a3"))
                 end
-
-                print("version was initialized")
                 """);
 
         final var client = testClientFactory.create(uri);

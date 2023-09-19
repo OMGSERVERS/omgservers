@@ -11,7 +11,6 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.luaj.vm2.LuaValue;
 
 @Slf4j
 @ApplicationScoped
@@ -35,8 +34,6 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
                     final var globals = createServerGlobalsOperation.createServerGlobals();
                     globals.finder = new LuaResourceFinder(luaBytecode);
                     final var luaGlobals = new LuaGlobals(tenantId, versionId, globals);
-                    // TODO: use param for main file
-                    luaGlobals.getGlobals().get("dofile").call(LuaValue.valueOf("main.lua"));
                     return luaGlobals;
                 })
                 .invoke(luaGlobals -> log.info("Lua globals was created, " +

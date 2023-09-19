@@ -31,5 +31,8 @@ public class ScriptModel {
     ScriptTypeEnum type;
 
     @NotNull
+    String state;
+
+    @NotNull
     ScriptConfigModel config;
 }

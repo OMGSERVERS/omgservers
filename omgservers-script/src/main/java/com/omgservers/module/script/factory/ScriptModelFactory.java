@@ -40,6 +40,7 @@ public class ScriptModelFactory {
         script.setTenantId(tenantId);
         script.setVersionId(versionId);
         script.setType(type);
+        script.setState("{}");
         script.setConfig(config);
         return script;
     }
