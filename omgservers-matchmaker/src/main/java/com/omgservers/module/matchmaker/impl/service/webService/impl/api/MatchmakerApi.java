@@ -8,8 +8,6 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestResponse;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerRequest;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.GetMatchClientRequest;
 import com.omgservers.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
@@ -22,8 +20,14 @@ import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.matchmaker.ViewMatchesRequest;
+import com.omgservers.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.dto.matchmaker.ViewRequestsRequest;
+import com.omgservers.dto.matchmaker.ViewRequestsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -52,6 +56,10 @@ public interface MatchmakerApi {
     Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request);
 
     @PUT
+    @Path("/view-requests")
+    Uni<ViewRequestsResponse> viewRequests(ViewRequestsRequest request);
+
+    @PUT
     @Path("/get-match")
     Uni<GetMatchResponse> getMatch(GetMatchRequest request);
 
@@ -62,6 +70,10 @@ public interface MatchmakerApi {
     @PUT
     @Path("/delete-match")
     Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request);
+
+    @PUT
+    @Path("/view-matches")
+    Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
 
     @PUT
     @Path("/get-match-client")
@@ -76,6 +88,6 @@ public interface MatchmakerApi {
     Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
 
     @PUT
-    @Path("/execute-matchmaker")
-    Uni<ExecuteMatchmakerResponse> executeMatchmaker(ExecuteMatchmakerRequest request);
+    @Path("/sync-matchmaking-results")
+    Uni<SyncMatchmakingResultsResponse> syncMatchmakingResults(SyncMatchmakingResultsRequest request);
 }

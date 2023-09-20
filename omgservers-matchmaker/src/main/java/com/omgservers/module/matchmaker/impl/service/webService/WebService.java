@@ -8,8 +8,6 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestResponse;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerRequest;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.GetMatchClientRequest;
 import com.omgservers.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
@@ -22,8 +20,14 @@ import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.matchmaker.ViewMatchesRequest;
+import com.omgservers.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.dto.matchmaker.ViewRequestsRequest;
+import com.omgservers.dto.matchmaker.ViewRequestsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -38,11 +42,15 @@ public interface WebService {
 
     Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request);
 
+    Uni<ViewRequestsResponse> viewRequests(ViewRequestsRequest request);
+
     Uni<GetMatchResponse> getMatch(GetMatchRequest request);
 
     Uni<SyncMatchResponse> syncMatch(SyncMatchRequest request);
 
     Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request);
+
+    Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
 
     Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
 
@@ -50,5 +58,5 @@ public interface WebService {
 
     Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
 
-    Uni<ExecuteMatchmakerResponse> executeMatchmaker(ExecuteMatchmakerRequest request);
+    Uni<SyncMatchmakingResultsResponse> syncMatchmakingResults(SyncMatchmakingResultsRequest request);
 }

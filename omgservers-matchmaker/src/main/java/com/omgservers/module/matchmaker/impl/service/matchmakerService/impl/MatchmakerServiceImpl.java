@@ -8,8 +8,6 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestResponse;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerRequest;
-import com.omgservers.dto.matchmaker.ExecuteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.GetMatchClientRequest;
 import com.omgservers.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
@@ -22,22 +20,30 @@ import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.matchmaker.ViewMatchesRequest;
+import com.omgservers.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.dto.matchmaker.ViewRequestsRequest;
+import com.omgservers.dto.matchmaker.ViewRequestsResponse;
 import com.omgservers.module.matchmaker.impl.operation.getMatchmakerModuleClient.GetMatchmakerModuleClientOperation;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.deleteMatch.DeleteMatchMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.deleteMatchClient.DeleteMatchClientMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.deleteMatchmaker.DeleteMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.deleteRequest.DeleteRequestMethod;
-import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.executeMatchmaker.ExecuteMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.getMatch.GetMatchMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.getMatchClient.GetMatchClientMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.getMatchmaker.GetMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatch.SyncMatchMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchClient.SyncMatchClientMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmaker.SyncMatchmakerMethod;
+import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmakingResults.SyncMatchmakingResultsMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncRequest.SyncRequestMethod;
+import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.viewMatches.ViewMatchesMethod;
+import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.viewRequests.ViewRequestsMethod;
 import com.omgservers.module.matchmaker.impl.service.webService.impl.api.MatchmakerApi;
 import com.omgservers.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -53,14 +59,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MatchmakerServiceImpl implements MatchmakerService {
 
+    final SyncMatchmakingResultsMethod syncMatchmakingResultsMethod;
     final DeleteMatchClientMethod deleteMatchClientMethod;
-    final ExecuteMatchmakerMethod executeMatchmakerMethod;
     final DeleteMatchmakerMethod deleteMatchmakerMethod;
     final SyncMatchClientMethod syncMatchClientMethod;
     final SyncMatchmakerMethod syncMatchmakerMethod;
     final GetMatchClientMethod getMatchClientMethod;
     final GetMatchmakerMethod getMatchmakerMethod;
     final DeleteRequestMethod deleteRequestMethod;
+    final ViewRequestsMethod viewRequestsMethod;
+    final ViewMatchesMethod viewMatchesMethod;
     final SyncRequestMethod syncRequestMethod;
     final DeleteMatchMethod deleteMatchMethod;
     final SyncMatchMethod syncMatchMethod;
@@ -111,6 +119,14 @@ class MatchmakerServiceImpl implements MatchmakerService {
     }
 
     @Override
+    public Uni<ViewRequestsResponse> viewRequests(@Valid final ViewRequestsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getMatchServiceApiClientOperation::getClient,
+                MatchmakerApi::viewRequests,
+                viewRequestsMethod::viewRequests);
+    }
+
+    @Override
     public Uni<GetMatchResponse> getMatch(@Valid final GetMatchRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
@@ -132,6 +148,14 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::deleteMatch,
                 deleteMatchMethod::deleteMatch);
+    }
+
+    @Override
+    public Uni<ViewMatchesResponse> viewMatches(@Valid final ViewMatchesRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getMatchServiceApiClientOperation::getClient,
+                MatchmakerApi::viewMatches,
+                viewMatchesMethod::viewMatches);
     }
 
     @Override
@@ -159,10 +183,11 @@ class MatchmakerServiceImpl implements MatchmakerService {
     }
 
     @Override
-    public Uni<ExecuteMatchmakerResponse> executeMatchmaker(@Valid final ExecuteMatchmakerRequest request) {
+    public Uni<SyncMatchmakingResultsResponse> syncMatchmakingResults(
+            @Valid final SyncMatchmakingResultsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
-                MatchmakerApi::executeMatchmaker,
-                executeMatchmakerMethod::executeMatchmaker);
+                MatchmakerApi::syncMatchmakingResults,
+                syncMatchmakingResultsMethod::syncMatchmakingResults);
     }
 }

@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking;
+package com.omgservers.job.matchmaker.operation.doGreedyMatchmaking;
 
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-class SyncMatchmakingResultsOperationTest extends Assertions {
+class DoGreedyMatchmakingOperationTest extends Assertions {
 
     @Inject
     DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
@@ -126,4 +126,5 @@ class SyncMatchmakingResultsOperationTest extends Assertions {
     Long clientId() {
         return generateIdOperation.generateId();
     }
+
 }

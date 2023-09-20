@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.operation.doGreedyMatchmaking;
+package com.omgservers.job.matchmaker.operation.doGreedyMatchmaking;
 
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;

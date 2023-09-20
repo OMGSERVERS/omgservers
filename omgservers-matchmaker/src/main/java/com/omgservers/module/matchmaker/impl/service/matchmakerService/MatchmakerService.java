@@ -22,8 +22,14 @@ import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.matchmaker.ViewMatchesRequest;
+import com.omgservers.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.dto.matchmaker.ViewRequestsRequest;
+import com.omgservers.dto.matchmaker.ViewRequestsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -38,11 +44,15 @@ public interface MatchmakerService {
 
     Uni<DeleteRequestResponse> deleteRequest(@Valid DeleteRequestRequest request);
 
+    Uni<ViewRequestsResponse> viewRequests(@Valid ViewRequestsRequest request);
+
     Uni<GetMatchResponse> getMatch(@Valid GetMatchRequest request);
 
     Uni<SyncMatchResponse> syncMatch(@Valid SyncMatchRequest request);
 
     Uni<DeleteMatchResponse> deleteMatch(@Valid DeleteMatchRequest request);
+
+    Uni<ViewMatchesResponse> viewMatches(@Valid ViewMatchesRequest request);
 
     Uni<GetMatchClientResponse> getMatchClient(@Valid GetMatchClientRequest request);
 
@@ -50,5 +60,5 @@ public interface MatchmakerService {
 
     Uni<DeleteMatchClientResponse> deleteMatchClient(@Valid DeleteMatchClientRequest request);
 
-    Uni<ExecuteMatchmakerResponse> executeMatchmaker(@Valid ExecuteMatchmakerRequest request);
+    Uni<SyncMatchmakingResultsResponse> syncMatchmakingResults(@Valid SyncMatchmakingResultsRequest request);
 }
