@@ -3,8 +3,8 @@ package com.omgservers.module.script.impl.operation.mapScriptEvent.mappers.runti
 import com.omgservers.model.scriptEvent.ScriptEventModel;
 import com.omgservers.model.scriptEvent.ScriptEventQualifierEnum;
 import com.omgservers.model.scriptEvent.body.HandleMessageScriptEventBodyModel;
-import com.omgservers.module.script.impl.luaEvent.LuaEvent;
-import com.omgservers.module.script.impl.luaEvent.runtime.HandleMessageLuaEvent;
+import com.omgservers.module.script.impl.event.LuaEvent;
+import com.omgservers.module.script.impl.event.runtime.HandleMessageLuaEvent;
 import com.omgservers.module.script.impl.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import com.omgservers.module.script.impl.operation.mapScriptEvent.ScriptEventMapper;
 import jakarta.enterprise.context.ApplicationScoped;

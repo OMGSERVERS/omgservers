@@ -1,7 +1,7 @@
 package com.omgservers.module.script.impl.operation.getLuaInstance;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.module.script.impl.luaEvent.LuaEvent;
+import com.omgservers.module.script.impl.event.LuaEvent;
 import com.omgservers.module.script.impl.operation.createLuaGlobals.impl.LuaGlobals;
 import lombok.AllArgsConstructor;
 import lombok.Data;

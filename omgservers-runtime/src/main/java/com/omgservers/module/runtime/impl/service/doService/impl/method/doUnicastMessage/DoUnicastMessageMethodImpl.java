@@ -6,7 +6,7 @@ import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.EventMessageBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.module.user.UserModule;
@@ -33,22 +33,27 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
 
     @Override
     public Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request) {
+        final var runtimeId = request.getRuntimeId();
+        final var userId = request.getUserId();
+        final var clientId = request.getClientId();
+        final var event = request.getMessage();
+
+        log.info("Do unicast for message, runtimeId={}, userId={}, clientId={}", runtimeId, userId, clientId);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var runtimeId = request.getRuntimeId();
-                    final var userId = request.getUserId();
-                    final var clientId = request.getClientId();
-                    final var event = request.getMessage();
 
-                    final var permission = RuntimeGrantPermissionEnum.MANAGE_CLIENT;
+
+                    final var permission = RuntimeGrantTypeEnum.CLIENT;
                     return pgPool.withTransaction(sqlConnection -> hasRuntimeGrantOperation.hasRuntimeGrant(
                                     sqlConnection,
                                     shardModel.shard(),
                                     runtimeId,
+                                    userId,
                                     clientId,
                                     permission)
-                            .flatMap(result -> {
-                                if (result) {
+                            .flatMap(has -> {
+                                if (has) {
                                     return respondClient(userId, clientId, event);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of permission, " +

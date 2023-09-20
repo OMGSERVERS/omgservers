@@ -55,10 +55,10 @@ class ExecuteSelectListOperationImpl implements ExecuteSelectListOperation {
                         }
                     }
                     if (objects.size() > 0) {
-                        log.info("List of {}/s were selected, parameters={}",
+                        log.debug("List of {}/s were selected, parameters={}",
                                 objectName.toLowerCase(), parameters);
                     } else {
-                        log.info("{}/s were not found, parameters={}", objectName, parameters);
+                        log.debug("{}/s were not found, parameters={}", objectName, parameters);
                     }
                     return objects;
                 })

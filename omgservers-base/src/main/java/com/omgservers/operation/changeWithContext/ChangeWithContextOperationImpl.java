@@ -1,8 +1,6 @@
 package com.omgservers.operation.changeWithContext;
 
 import com.omgservers.base.Dispatcher;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.log.LogModel;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -32,10 +30,9 @@ class ChangeWithContextOperationImpl implements ChangeWithContextOperation {
             return pgPool.withTransaction(sqlConnection -> changeFunction.apply(changeContext, sqlConnection))
                     .invoke(result -> {
                         final var changeEvents = changeContext.getChangeEvents();
-                        final var logEvents = changeContext.getChangeLogs();
-                        log.info("Changed with context, events={}, result={}, logs={}",
-                                changeEvents.stream().map(EventModel::getQualifier).toList(),
-                                result, logEvents.stream().map(LogModel::getMessage).toList());
+                        final var changeLogs = changeContext.getChangeLogs();
+                        log.debug("Changed with context, result={}, events={}, logs={}",
+                                result, changeEvents, changeLogs);
                         changeContext.setResult(result);
                         // cache events
                         changeEvents.forEach(event ->

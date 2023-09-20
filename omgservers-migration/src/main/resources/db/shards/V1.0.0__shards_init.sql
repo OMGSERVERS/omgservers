@@ -213,9 +213,10 @@ create table if not exists tab_runtime_grant (
     runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    shard_key bigint not null,
     entity_id bigint not null,
-    permission text not null,
-    unique(runtime_id, entity_id, permission)
+    type text not null,
+    unique(runtime_id, entity_id, type)
 );
 
 -- script module

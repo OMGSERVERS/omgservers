@@ -2,7 +2,7 @@ package com.omgservers.module.runtime.impl.operation.deleteRuntimeGrant;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.runtime.factory.RuntimeGrantModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.DeleteRuntimeGrantOperationTestInterface;
@@ -50,7 +50,7 @@ class DeleteRuntimeGrantOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), entityId(), RuntimeGrantPermissionEnum.MANAGE_CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
         upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant);
 
         final var changeContext = deleteRuntimeGrant.deleteRuntimeGrant(shard, runtime.getId(), runtimeGrant.getId());
@@ -84,6 +84,10 @@ class DeleteRuntimeGrantOperationTest extends Assertions {
     }
 
     Long matchId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long shardKey() {
         return generateIdOperation.generateId();
     }
 

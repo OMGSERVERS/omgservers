@@ -16,8 +16,8 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.runtimeCommand.body.AddPlayerRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -61,8 +61,8 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                     final var client = metadata.client;
                     final var runtimeId = metadata.match.getRuntimeId();
                     return assignRuntime(client, runtimeId)
-                            .flatMap(voidItem -> syncRuntimeGrant(runtimeId, client.getId()))
-                            .flatMap(voidItem -> syncAddPlayerCommand(runtimeId, client));
+                            .flatMap(voidItem -> syncRuntimeGrant(runtimeId, client.getUserId(), client.getId()))
+                            .flatMap(voidItem -> syncAddClientCommand(runtimeId, client));
                 })
                 .replaceWith(true);
     }
@@ -105,21 +105,22 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         return gatewayModule.getGatewayService().assignRuntime(assignRuntimeRequest);
     }
 
-    Uni<Void> syncRuntimeGrant(Long runtimeId, Long clientId) {
+    Uni<Void> syncRuntimeGrant(Long runtimeId, Long userId, Long clientId) {
         final var runtimeGrant = runtimeGrantModelFactory.create(
                 runtimeId,
+                userId,
                 clientId,
-                RuntimeGrantPermissionEnum.MANAGE_CLIENT);
+                RuntimeGrantTypeEnum.CLIENT);
         final var request = new SyncRuntimeGrantRequest(runtimeGrant);
         return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
                 .replaceWithVoid();
     }
 
-    Uni<Void> syncAddPlayerCommand(Long runtimeId, ClientModel client) {
+    Uni<Void> syncAddClientCommand(Long runtimeId, ClientModel client) {
         final var clientId = client.getId();
         final var userId = client.getUserId();
         final var playerId = client.getPlayerId();
-        final var runtimeCommandBody = new AddPlayerRuntimeCommandBodyModel(userId, playerId, clientId);
+        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, playerId, clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

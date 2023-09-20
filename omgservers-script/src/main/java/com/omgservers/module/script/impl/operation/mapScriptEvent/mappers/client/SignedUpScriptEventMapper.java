@@ -3,8 +3,8 @@ package com.omgservers.module.script.impl.operation.mapScriptEvent.mappers.clien
 import com.omgservers.model.scriptEvent.ScriptEventModel;
 import com.omgservers.model.scriptEvent.ScriptEventQualifierEnum;
 import com.omgservers.model.scriptEvent.body.SignedUpScriptEventBodyModel;
-import com.omgservers.module.script.impl.luaEvent.LuaEvent;
-import com.omgservers.module.script.impl.luaEvent.player.SignedUpLuaEvent;
+import com.omgservers.module.script.impl.event.LuaEvent;
+import com.omgservers.module.script.impl.event.player.SignedUpLuaEvent;
 import com.omgservers.module.script.impl.operation.mapScriptEvent.ScriptEventMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

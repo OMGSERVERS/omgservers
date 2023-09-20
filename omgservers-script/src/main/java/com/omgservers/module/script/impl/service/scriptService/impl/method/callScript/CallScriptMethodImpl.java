@@ -75,7 +75,7 @@ class CallScriptMethodImpl implements CallScriptMethod {
                             .map(mapScriptEventOperation::mapScriptEvent)
                             .toList();
 
-                    log.info("Call script, script={}, events={}", script, luaEvents);
+                    log.info("Call script, scriptId={}, events={}", script.getId(), luaEvents);
                     luaEvents.forEach(luaEvent -> luaInstance.callScript(luaState, luaEvent));
 
                     final String finalState;
@@ -86,7 +86,7 @@ class CallScriptMethodImpl implements CallScriptMethod {
                                 "script=" + script, e);
                     }
 
-                    log.info("Script finished, script={}, finalState={}", script, finalState);
+                    log.info("Script finished, scriptId={}, finalState={}", script.getId(), finalState);
 
                     return finalState;
                 });

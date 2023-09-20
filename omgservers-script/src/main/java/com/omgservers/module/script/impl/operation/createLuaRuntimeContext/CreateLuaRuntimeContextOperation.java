@@ -1,6 +1,6 @@
 package com.omgservers.module.script.impl.operation.createLuaRuntimeContext;
 
-import com.omgservers.module.script.impl.luaContext.runtime.LuaRuntimeContext;
+import com.omgservers.module.script.impl.сontext.runtime.LuaRuntimeContext;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

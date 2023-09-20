@@ -3,7 +3,7 @@ package com.omgservers.module.runtime.impl.operation.upsertRuntimeGrant;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.runtime.factory.RuntimeGrantModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
@@ -46,7 +46,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), entityId(), RuntimeGrantPermissionEnum.MANAGE_CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
         assertTrue(upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
     }
 
@@ -58,7 +58,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), entityId(), RuntimeGrantPermissionEnum.MANAGE_CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
         upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant);
 
         assertFalse(upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
@@ -68,7 +68,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertRuntimeGrant_thenException() {
         final var shard = 0;
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtimeId(), entityId(), RuntimeGrantPermissionEnum.MANAGE_CLIENT);
+                .create(runtimeId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeGrantOperation
                 .upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
         log.info("Exception: {}", exception.getMessage());
@@ -95,6 +95,10 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     }
 
     Long runtimeId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long shardKey() {
         return generateIdOperation.generateId();
     }
 

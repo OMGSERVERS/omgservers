@@ -32,8 +32,11 @@ public class RuntimeGrantModel {
     Instant modified;
 
     @NotNull
+    Long shardKey;
+
+    @NotNull
     Long entityId;
 
     @NotNull
-    RuntimeGrantPermissionEnum permission;
+    RuntimeGrantTypeEnum type;
 }

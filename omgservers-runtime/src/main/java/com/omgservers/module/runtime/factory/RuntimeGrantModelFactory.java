@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.factory;
 
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,16 +18,18 @@ public class RuntimeGrantModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public RuntimeGrantModel create(final Long runtimeId,
+                                    final Long shardKey,
                                     final Long entityId,
-                                    final RuntimeGrantPermissionEnum permission) {
+                                    final RuntimeGrantTypeEnum type) {
         final var id = generateIdOperation.generateId();
-        return create(id, runtimeId, entityId, permission);
+        return create(id, runtimeId, shardKey, entityId, type);
     }
 
     public RuntimeGrantModel create(final Long id,
                                     final Long runtimeId,
+                                    final Long shardKey,
                                     final Long entityId,
-                                    final RuntimeGrantPermissionEnum permission) {
+                                    final RuntimeGrantTypeEnum type) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var runtimeGrant = new RuntimeGrantModel();
@@ -35,8 +37,9 @@ public class RuntimeGrantModelFactory {
         runtimeGrant.setRuntimeId(runtimeId);
         runtimeGrant.setCreated(now);
         runtimeGrant.setModified(now);
+        runtimeGrant.setShardKey(shardKey);
         runtimeGrant.setEntityId(entityId);
-        runtimeGrant.setPermission(permission);
+        runtimeGrant.setType(type);
         return runtimeGrant;
     }
 }

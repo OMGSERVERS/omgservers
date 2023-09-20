@@ -1,9 +1,8 @@
 package com.omgservers.module.script.impl.operation.createLuaRuntimeContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.module.script.impl.operation.createLuaRuntimeContext.CreateLuaRuntimeContextOperation;
-import com.omgservers.module.script.impl.luaContext.runtime.LuaRuntimeContext;
-import com.omgservers.module.script.impl.luaContext.runtime.LuaRuntimeContextFactory;
+import com.omgservers.module.script.impl.сontext.runtime.LuaRuntimeContext;
+import com.omgservers.module.script.impl.сontext.runtime.LuaRuntimeContextFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

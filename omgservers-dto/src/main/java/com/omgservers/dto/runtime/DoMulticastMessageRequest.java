@@ -1,7 +1,9 @@
 package com.omgservers.dto.runtime;
 
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.recipient.Recipient;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +19,8 @@ public class DoMulticastMessageRequest implements ShardedRequest {
     @NotNull
     Long runtimeId;
 
-    @NotNull
-    List<Long> clientIds;
+    @NotEmpty
+    List<Recipient> recipients;
 
     @NotBlank
     String message;

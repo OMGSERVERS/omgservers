@@ -68,7 +68,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                             .invoke(voidItem -> scheduleJob(shardKey, entityId, type))
                             .call(voidItem -> {
                                 final var syncLog = logModelFactory
-                                        .create(String.format("Job was scheduled, type=%s, entityId=%d", type, entityId));
+                                        .create(String.format("Job was scheduled, type=%s, entityId=%d", type,
+                                                entityId));
                                 final var syncLogHelpRequest = new SyncLogRequest(syncLog);
                                 return logService.syncLog(syncLogHelpRequest);
                             });
@@ -101,7 +102,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                         final Long entityId,
                         final JobTypeEnum type) {
         // TODO: calculate and log delay between launch and planning timestamp
-        log.info("Job was launched, shardKey={}, entityId={}, type={}", shardKey, entityId, type);
+        log.info("Job was launched, type={}, shardKey={}, entityId={}", type, shardKey, entityId);
         final var job = jobTasks.get(type);
         if (job != null) {
             // TODO: check shard and reschedule in case of any rebalance

@@ -1,6 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.hasRuntimeGrant;
 
-import com.omgservers.model.runtimeGrant.RuntimeGrantPermissionEnum;
+import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.operation.executeHasObject.ExecuteHasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -21,18 +21,19 @@ class HasRuntimeGrantOperationImpl implements HasRuntimeGrantOperation {
     public Uni<Boolean> hasRuntimeGrant(final SqlConnection sqlConnection,
                                         final int shard,
                                         final Long runtimeId,
+                                        final Long shardKey,
                                         final Long entityId,
-                                        final RuntimeGrantPermissionEnum permission) {
+                                        final RuntimeGrantTypeEnum type) {
         return executeHasObjectOperation.executeHasObject(
                 sqlConnection,
                 shard,
                 """
                         select id
                         from $schema.tab_runtime_grant
-                        where runtime_id = $1 and entity_id = $2 and permission = $3
+                        where runtime_id = $1 and shard_key = $2 and entity_id = $3 and type = $4
                         limit 1
                         """,
-                Arrays.asList(runtimeId, entityId, permission),
+                Arrays.asList(runtimeId, shardKey, entityId, type),
                 "Runtime grant");
     }
 }

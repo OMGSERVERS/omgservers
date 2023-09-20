@@ -1,7 +1,7 @@
 package com.omgservers.module.script.impl.operation.createLuaPlayerContext;
 
-import com.omgservers.module.script.impl.luaContext.player.LuaPlayerContext;
-import com.omgservers.module.script.impl.luaContext.player.LuaPlayerContextFactory;
+import com.omgservers.module.script.impl.сontext.player.LuaPlayerContext;
+import com.omgservers.module.script.impl.сontext.player.LuaPlayerContextFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

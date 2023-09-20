@@ -39,11 +39,11 @@ class ExecuteHasObjectOperationImpl implements ExecuteHasObjectOperation {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(rowSet -> rowSet.rowCount() > 0)
-                .invoke(selected -> {
-                    if (selected) {
-                        log.info("{} was selected, parameters={}", objectName, parameters);
+                .invoke(exists -> {
+                    if (exists) {
+                        log.debug("{} was found, parameters={}", objectName, parameters);
                     } else {
-                        log.info("{} was not found, parameters={}", objectName, parameters);
+                        log.debug("{} was not found, parameters={}", objectName, parameters);
                     }
                 })
                 .onFailure(PgException.class)

@@ -32,8 +32,9 @@ class UpsertRuntimeGrantOperationImpl implements UpsertRuntimeGrantOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_runtime_grant(id, runtime_id, created, modified, entity_id, permission)
-                        values($1, $2, $3, $4, $5, $6)
+                        insert into $schema.tab_runtime_grant(
+                            id, runtime_id, created, modified, shard_key, entity_id, type)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -42,8 +43,9 @@ class UpsertRuntimeGrantOperationImpl implements UpsertRuntimeGrantOperation {
                         runtimeGrant.getRuntimeId(),
                         runtimeGrant.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeGrant.getModified().atOffset(ZoneOffset.UTC),
+                        runtimeGrant.getShardKey(),
                         runtimeGrant.getEntityId(),
-                        runtimeGrant.getPermission()
+                        runtimeGrant.getType()
                 ),
                 () -> null,
                 () -> logModelFactory.create("Runtime grant was inserted, runtimeGrant=" + runtimeGrant)

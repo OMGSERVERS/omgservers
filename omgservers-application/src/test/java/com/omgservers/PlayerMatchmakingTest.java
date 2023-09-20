@@ -37,34 +37,9 @@ public class PlayerMatchmakingTest extends Assertions {
                         local var event = context.event
                                                                         
                         print("event: " .. event.id)
-
-                        if event.id == "signed_up" then
-                            context.respond("signed_up")
-                        end
                                                 
-                        if event.id == "signed_in" then
-                            context.respond("signed_in")
-                        end
-                                                
-                        if event.id == "init" then
-                            state.actions = {}
-                            table.insert(state.actions, event)
-                        end
-                                                
-                        if event.id == "add_player" then
-                            table.insert(state.actions, event)
-                        end
-                                                
-                        if event.id == "handle_message" then
-                            table.insert(state.actions, event)
-                            
-                            context.unicast_message(event.user_id, event.client_id, event.data.text)
-                        end
-                           
-                        if event.id == "update" then
-                            table.insert(state.actions, event)
-                            
-                            -- context.unicast_message(event.user_id, event.client_id, event.data.text)
+                        if event.id == "add_client" then
+                            context.unicast_message(event.user_id, event.client_id, "hello, client")
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -79,10 +54,7 @@ public class PlayerMatchmakingTest extends Assertions {
         final var client2 = testClientFactory.create(uri);
         client2.signUp(version);
 
-        final var event1 = client1.consumeEventMessage();
-        assertEquals("signed_up", event1.getEvent().toString());
-        final var event2 = client2.consumeEventMessage();
-        assertEquals("signed_up", event2.getEvent().toString());
+        Thread.sleep(5000);
 
         log.info("Request matchmaking");
 
@@ -91,13 +63,11 @@ public class PlayerMatchmakingTest extends Assertions {
 
         Thread.sleep(5000);
 
-        client1.sendMatchMessage(new TestMessage("Hello, "));
-        final var event3 = client1.consumeEventMessage();
-        assertEquals("Hello, ", event3.getEvent().toString());
+        final var event12 = client1.consumeEventMessage();
+        assertEquals("hello, client", event12.getEvent().toString());
 
-        client2.sendMatchMessage(new TestMessage("world!"));
-        final var event4 = client2.consumeEventMessage();
-        assertEquals("world!", event4.getEvent().toString());
+        final var event21 = client2.consumeEventMessage();
+        assertEquals("hello, client", event21.getEvent().toString());
 
         Thread.sleep(5000);
 
