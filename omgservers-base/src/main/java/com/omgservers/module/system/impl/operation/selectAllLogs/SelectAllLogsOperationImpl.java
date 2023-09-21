@@ -27,7 +27,7 @@ class SelectAllLogsOperationImpl implements SelectAllLogsOperation {
                 0,
                 """
                         select id, created, message
-                        from internal.tab_log
+                        from system.tab_log
                         """,
                 List.of(),
                 "Log",

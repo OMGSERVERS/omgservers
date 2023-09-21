@@ -31,7 +31,7 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
         return executeChangeObjectOperation.executeChangeObject(
                         changeContext, sqlConnection, 0,
                         """
-                                insert into internal.tab_log(id, created, message)
+                                insert into system.tab_log(id, created, message)
                                 values($1, $2, $3)
                                 on conflict (id) do
                                 nothing

@@ -28,7 +28,7 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
                 0,
                 """
                         select id, created, modified, username, password_hash
-                        from internal.tab_service_account
+                        from system.tab_service_account
                         where username = $1
                         limit 1
                         """,

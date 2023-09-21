@@ -26,7 +26,8 @@ public class SchemaMigration {
         if (getConfigOperation.getConfig().disableMigration()) {
             log.warn("Schema migration was disabled, skip");
         } else {
-            migrateOperation.migrateInternalSchema("db/internal");
+            migrateOperation.migrateSystemSchema("db/system");
+            migrateOperation.migrateQuartzSchema("db/quartz");
             migrateOperation.migrateShardsSchema("db/shards");
         }
     }

@@ -33,7 +33,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
         return executeChangeObjectOperation.executeChangeObject(
                         changeContext, sqlConnection, 0,
                         """
-                                insert into internal.tab_event(id, created, modified, group_id, qualifier, body, status)
+                                insert into system.tab_event(id, created, modified, group_id, qualifier, body, status)
                                 values($1, $2, $3, $4, $5, $6, $7)
                                 on conflict (id) do
                                 nothing

@@ -28,7 +28,7 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        delete from internal.tab_job
+                        delete from system.tab_job
                         where shard_key = $1 and entity_id = $2
                         """,
                 Arrays.asList(shardKey, entityId),

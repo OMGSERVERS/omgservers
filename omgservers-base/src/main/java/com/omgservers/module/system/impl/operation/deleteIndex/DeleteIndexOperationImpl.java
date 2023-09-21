@@ -27,7 +27,7 @@ class DeleteIndexOperationImpl implements DeleteIndexOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        delete from internal.tab_index
+                        delete from system.tab_index
                         where id = $1
                         """,
                 Collections.singletonList(id),

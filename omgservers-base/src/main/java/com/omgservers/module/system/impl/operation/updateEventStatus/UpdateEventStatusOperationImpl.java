@@ -29,7 +29,7 @@ class UpdateEventStatusOperationImpl implements UpdateEventStatusOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        update internal.tab_event
+                        update system.tab_event
                         set status = $2
                         where id = $1
                         """,

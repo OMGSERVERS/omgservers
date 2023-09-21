@@ -31,7 +31,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
                 0,
                 """
                         select id, created, modified, name, version, config
-                        from internal.tab_index
+                        from system.tab_index
                         where name = $1
                         limit 1
                         """,

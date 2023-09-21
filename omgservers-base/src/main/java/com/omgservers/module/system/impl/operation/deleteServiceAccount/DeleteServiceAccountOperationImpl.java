@@ -31,7 +31,7 @@ class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation
                 .flatMap(serviceAccount -> executeChangeObjectOperation.executeChangeObject(
                         changeContext, sqlConnection, 0,
                         """
-                                delete from internal.tab_service_account
+                                delete from system.tab_service_account
                                 where username = $1
                                 """,
                         Collections.singletonList(username),

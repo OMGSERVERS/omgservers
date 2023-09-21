@@ -31,7 +31,7 @@ public class RuntimeMessagingTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void playerRuntimeMessagingTest() throws Exception {
+    void runtimeMessagingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""                        
                         local var state = context.state
                         local var event = context.event

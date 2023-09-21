@@ -29,7 +29,7 @@ class SelectAllJobsOperationImpl implements SelectAllJobsOperation {
                 0,
                 """
                         select id, created, shard_key, entity_id, type
-                        from internal.tab_job
+                        from system.tab_job
                         """,
                 List.of(),
                 "Job",

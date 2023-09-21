@@ -27,7 +27,7 @@ class DeleteEventOperationImpl implements DeleteEventOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        delete from internal.tab_event where
+                        delete from system.tab_event where
                         id = $1
                         """,
                 Collections.singletonList(id),

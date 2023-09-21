@@ -29,7 +29,7 @@ class SelectNewEventsOperationImpl implements SelectNewEventsOperation {
                 0,
                 """
                         select id, created, modified, group_id, qualifier, body, status
-                        from internal.tab_event
+                        from system.tab_event
                         where status = $1
                         order by id asc
                         limit $2

@@ -34,7 +34,7 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into internal.tab_index(id, created, modified, name, version, config)
+                        insert into system.tab_index(id, created, modified, name, version, config)
                         values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing

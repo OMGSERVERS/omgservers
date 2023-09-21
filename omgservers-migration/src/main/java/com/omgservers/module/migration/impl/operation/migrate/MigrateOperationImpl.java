@@ -20,15 +20,15 @@ class MigrateOperationImpl implements MigrateOperation {
     final DataSource dataSource;
 
     @Override
-    public void migrateInternalSchema(String location) {
+    public void migrateSystemSchema(String location) {
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations(location)
                 .createSchemas(true)
-                .defaultSchema("internal")
+                .defaultSchema("system")
                 .load();
         flyway.migrate();
-        log.info("Internal schema migration was finished, location={}", location);
+        log.info("System schema migration was finished, location={}", location);
     }
 
     @Override

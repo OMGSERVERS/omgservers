@@ -29,7 +29,7 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into internal.tab_service_account(id, created, modified, username, password_hash)
+                        insert into system.tab_service_account(id, created, modified, username, password_hash)
                         values($1, $2, $3, $4, $5)
                         on conflict (id) do
                         nothing

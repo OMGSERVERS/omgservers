@@ -27,7 +27,7 @@ class SelectEventOperationImpl implements SelectEventOperation {
                 0,
                 """
                         select id, created, modified, group_id, qualifier, body, status
-                        from internal.tab_event
+                        from system.tab_event
                         where id = $1
                         limit 1
                         """,
