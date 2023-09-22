@@ -27,7 +27,6 @@ public class SchemaMigration {
             log.warn("Schema migration was disabled, skip");
         } else {
             migrateOperation.migrateSystemSchema("db/system");
-            migrateOperation.migrateQuartzSchema("db/quartz");
             migrateOperation.migrateShardsSchema("db/shards");
         }
     }
