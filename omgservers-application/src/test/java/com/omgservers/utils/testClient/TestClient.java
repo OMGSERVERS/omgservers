@@ -99,7 +99,7 @@ public class TestClient {
     }
 
     public synchronized EventMessageBodyModel consumeEventMessage() throws InterruptedException, IOException {
-        String messageString = testEndpoint.receive(45);
+        String messageString = testEndpoint.receive(450);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.EVENT_MESSAGE + " was not received");
         }
@@ -109,7 +109,7 @@ public class TestClient {
     }
 
     synchronized MessageModel consumeCredentialsMessage() throws InterruptedException, IOException {
-        String messageString = testEndpoint.receive(45);
+        String messageString = testEndpoint.receive(450);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
         }

@@ -4,6 +4,7 @@ import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -29,7 +30,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
         final var body = (MatchmakerDeletedEventBodyModel) event.getBody();
         final var matchmaker = body.getMatchmaker();
         final var matchmakerId = matchmaker.getId();
-        final var request = new DeleteJobRequest(matchmakerId, matchmakerId);
+        final var request = new DeleteJobRequest(matchmakerId, matchmakerId, JobQualifierEnum.MATCHMAKER);
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);
     }

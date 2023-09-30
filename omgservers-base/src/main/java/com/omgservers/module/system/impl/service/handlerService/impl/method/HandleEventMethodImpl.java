@@ -56,7 +56,8 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             final var eventHandler = eventHandlers.get(qualifier);
             final var eventBody = event.getBody();
             if (qualifier.getBodyClass().isInstance(eventBody)) {
-                log.info("Handle event, {}", event);
+                log.info("Handle event, qualifier={}, id={}, groupId={}, body={}",
+                        event.getQualifier(), event.getId(), event.getGroupId(), event.getBody());
                 return eventHandler.handle(event)
                         .replaceWith(true);
             } else {
@@ -64,7 +65,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return Uni.createFrom().item(true);
             }
         } else {
-            log.info("Event handler wasn't found, event={}", event);
+            log.info("Event handler wasn't found, qualifier={}", event.getQualifier());
             return Uni.createFrom().item(true);
         }
     }

@@ -1,7 +1,10 @@
 package com.omgservers.module.system.impl.operation.deleteJob;
 
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.module.system.impl.operation.selectJobByShardKeyAndEntityIdAndQualifierOperation.SelectJobByShardKeyAndEntityIdAndQualifierOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,6 +20,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteJobOperationImpl implements DeleteJobOperation {
 
+    final SelectJobByShardKeyAndEntityIdAndQualifierOperation selectJobByShardKeyAndEntityIdAndQualifierOperation;
     final ExecuteChangeObjectOperation executeChangeObjectOperation;
     final LogModelFactory logModelFactory;
 
@@ -24,17 +28,24 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
     public Uni<Boolean> deleteJob(final ChangeContext<?> changeContext,
                                   final SqlConnection sqlConnection,
                                   final Long shardKey,
-                                  final Long entityId) {
-        return executeChangeObjectOperation.executeChangeObject(
-                changeContext, sqlConnection, 0,
-                """
-                        delete from system.tab_job
-                        where shard_key = $1 and entity_id = $2
-                        """,
-                Arrays.asList(shardKey, entityId),
-                () -> new JobDeletedEventBodyModel(shardKey, entityId),
-                () -> logModelFactory.create(String.format("Job was deleted, " +
-                        "shardKey=%s, entityId=%s", shardKey, entityId))
-        );
+                                  final Long entityId,
+                                  final JobQualifierEnum qualifier) {
+        return selectJobByShardKeyAndEntityIdAndQualifierOperation.selectJobByShardKeyAndEntityIdAndQualifier(
+                        sqlConnection,
+                        shardKey,
+                        entityId,
+                        qualifier)
+                .flatMap(job -> executeChangeObjectOperation.executeChangeObject(
+                        changeContext, sqlConnection, 0,
+                        """
+                                delete from system.tab_job
+                                where shard_key = $1 and entity_id = $2 and qualifier = $3
+                                """,
+                        Arrays.asList(shardKey, entityId, qualifier),
+                        () -> new JobDeletedEventBodyModel(job),
+                        () -> logModelFactory.create("Job was deleted, job=" + job)
+                ))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(false);
     }
 }

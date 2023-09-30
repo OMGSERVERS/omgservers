@@ -1,10 +1,10 @@
 package com.omgservers.module.system.impl.service.jobService.impl;
 
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import io.smallrye.mutiny.Uni;
 
 public interface JobTask {
-    JobTypeEnum getJobType();
+    JobQualifierEnum getJobType();
 
     Uni<Boolean> executeTask(Long shardKey, Long entityId);
 }

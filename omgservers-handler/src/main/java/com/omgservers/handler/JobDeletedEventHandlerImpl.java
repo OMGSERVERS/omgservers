@@ -1,11 +1,11 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.dto.internal.UnscheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,9 +27,11 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (JobDeletedEventBodyModel) event.getBody();
-        final var shardKey = body.getShardKey();
-        final var entityId = body.getEntityId();
-        final var request = new UnscheduleJobRequest(shardKey, entityId);
+        final var job = body.getJob();
+        final var shardKey = job.getShardKey();
+        final var entityId = job.getEntityId();
+        final var qualifier = job.getQualifier();
+        final var request = new UnscheduleJobRequest(shardKey, entityId, qualifier);
         return systemModule.getJobService().unscheduleJob(request)
                 .replaceWith(true);
     }

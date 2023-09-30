@@ -1,6 +1,6 @@
 package com.omgservers.exception;
 
-public class ServerSideConflictException extends ServerSideClientErrorException {
+public class ServerSideConflictException extends ServerSideClientExceptionException {
     public ServerSideConflictException() {
         super();
     }

@@ -1,6 +1,6 @@
 package com.omgservers.exception;
 
-public class ServerSideNotFoundException extends ServerSideClientErrorException {
+public class ServerSideNotFoundException extends ServerSideClientExceptionException {
     public ServerSideNotFoundException() {
         super();
     }

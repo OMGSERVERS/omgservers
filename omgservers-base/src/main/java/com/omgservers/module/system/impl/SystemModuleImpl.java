@@ -2,6 +2,7 @@ package com.omgservers.module.system.impl;
 
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.eventService.EventService;
+import com.omgservers.module.system.impl.service.handlerService.HandlerService;
 import com.omgservers.module.system.impl.service.indexService.IndexService;
 import com.omgservers.module.system.impl.service.jobService.JobService;
 import com.omgservers.module.system.impl.service.logService.LogService;
@@ -18,14 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 public class SystemModuleImpl implements SystemModule {
 
     final ServiceAccountService serviceAccountService;
+    final HandlerService handlerService;
     final EventService eventService;
-    final JobService jobService;
     final IndexService indexService;
     final SyncService syncService;
+    final JobService jobService;
     final LogService logService;
 
     public EventService getEventService() {
         return eventService;
+    }
+
+    @Override
+    public HandlerService getHandlerService() {
+        return handlerService;
     }
 
     public IndexService getIndexService() {

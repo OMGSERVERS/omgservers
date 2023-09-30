@@ -2,7 +2,7 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
     Long entityId;
 
     @NotNull
-    JobTypeEnum type;
+    JobQualifierEnum type;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -31,6 +31,6 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return shardKey;
+        return 0L;
     }
 }

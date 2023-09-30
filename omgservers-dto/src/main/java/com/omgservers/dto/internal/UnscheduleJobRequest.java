@@ -1,6 +1,6 @@
 package com.omgservers.dto.internal;
 
-import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.job.JobQualifierEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnscheduleJobRequest implements ShardedRequest {
-
+public class UnscheduleJobRequest {
 
     @NotNull
     Long shardKey;
@@ -18,8 +17,6 @@ public class UnscheduleJobRequest implements ShardedRequest {
     @NotNull
     Long entityId;
 
-    @Override
-    public String getRequestShardKey() {
-        return shardKey.toString();
-    }
+    @NotNull
+    JobQualifierEnum qualifier;
 }

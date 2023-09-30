@@ -26,7 +26,7 @@ class SelectEventOperationImpl implements SelectEventOperation {
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, group_id, qualifier, body, status
+                        select id, created, modified, group_id, qualifier, relayed, body, status
                         from system.tab_event
                         where id = $1
                         limit 1

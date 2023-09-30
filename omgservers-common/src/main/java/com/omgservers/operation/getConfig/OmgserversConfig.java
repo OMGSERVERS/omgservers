@@ -30,9 +30,11 @@ public interface OmgserversConfig {
 
     long tokenLifetime();
 
-    boolean disableDispatcher();
+    boolean disableRelay();
 
-    int dispatcherCount();
+    boolean disableEventHandler();
+
+    Integer eventHandlerConcurrency();
 
     int postponeInterval();
 

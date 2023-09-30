@@ -32,5 +32,5 @@ public class JobModel {
     Long entityId;
 
     @NotNull
-    JobTypeEnum type;
+    JobQualifierEnum qualifier;
 }

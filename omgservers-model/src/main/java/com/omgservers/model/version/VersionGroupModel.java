@@ -2,6 +2,7 @@ package com.omgservers.model.version;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,11 +28,11 @@ public class VersionGroupModel {
     @Size(max = 64)
     String name;
 
-    @NotBlank
+    @NotNull
     @Positive
     Integer minPlayers;
 
-    @NotBlank
+    @NotNull
     @Positive
     Integer maxPlayers;
 }

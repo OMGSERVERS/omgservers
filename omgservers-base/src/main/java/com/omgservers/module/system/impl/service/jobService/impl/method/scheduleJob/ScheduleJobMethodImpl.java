@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.service.jobService.impl.method.schedul
 
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
@@ -33,7 +33,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     final LogModelFactory logModelFactory;
 
-    final Map<JobTypeEnum, JobTask> jobTasks;
+    final Map<JobQualifierEnum, JobTask> jobTasks;
     final Scheduler scheduler;
 
     public ScheduleJobMethodImpl(LogService logService,
@@ -50,7 +50,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         this.logModelFactory = logModelFactory;
         this.jobTasks = new ConcurrentHashMap<>();
         jobTaskBeans.stream().forEach(jobTask -> {
-            JobTypeEnum type = jobTask.getJobType();
+            JobQualifierEnum type = jobTask.getJobType();
             jobTasks.put(type, jobTask);
             log.info("Job task added, type={}, jobTask={}", type, jobTask.getClass().getSimpleName());
         });
@@ -59,24 +59,21 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     @Override
     public Uni<Void> scheduleJob(ScheduleJobRequest request) {
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var shardKey = request.getShardKey();
-                    final var entityId = request.getEntityId();
-                    final var type = request.getType();
-                    return Uni.createFrom().voidItem()
-                            .invoke(voidItem -> scheduleJob(shardKey, entityId, type))
-                            .call(voidItem -> {
-                                final var syncLog = logModelFactory
-                                        .create(String.format("Job was scheduled, type=%s, entityId=%d", type,
-                                                entityId));
-                                final var syncLogHelpRequest = new SyncLogRequest(syncLog);
-                                return logService.syncLog(syncLogHelpRequest);
-                            });
+        final var shardKey = request.getShardKey();
+        final var entityId = request.getEntityId();
+        final var type = request.getType();
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> scheduleJob(shardKey, entityId, type))
+                .call(voidItem -> {
+                    final var syncLog = logModelFactory
+                            .create(String.format("Job was scheduled, type=%s, entityId=%d", type,
+                                    entityId));
+                    final var syncLogHelpRequest = new SyncLogRequest(syncLog);
+                    return logService.syncLog(syncLogHelpRequest);
                 });
     }
 
-    void scheduleJob(Long shardKey, Long entityId, JobTypeEnum type) {
+    void scheduleJob(Long shardKey, Long entityId, JobQualifierEnum type) {
         final var jobName = getJobNameOperation.getJobName(shardKey, entityId);
         if (scheduler.getScheduledJob(jobName) != null) {
             log.warn("Job task was already scheduled, job={}", jobName);
@@ -100,10 +97,10 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
     Uni<Void> asyncTask(final ScheduledExecution scheduledExecution,
                         final Long shardKey,
                         final Long entityId,
-                        final JobTypeEnum type) {
+                        final JobQualifierEnum qualifier) {
         // TODO: calculate and log delay between launch and planning timestamp
-        log.info("Job was launched, type={}, shardKey={}, entityId={}", type, shardKey, entityId);
-        final var job = jobTasks.get(type);
+        log.info("Job was launched, qualifier={}, shardKey={}, entityId={}", qualifier, shardKey, entityId);
+        final var job = jobTasks.get(qualifier);
         if (job != null) {
             // TODO: check shard and reschedule in case of any rebalance
             return job.executeTask(shardKey, entityId)
@@ -121,12 +118,12 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .replaceWithVoid()
                     .onFailure()
                     .recoverWithUni(t -> {
-                        log.error("Job task failed, shardKey={}, entityId={}, type={}, {}",
-                                shardKey, entityId, type, t.getMessage());
+                        log.error("Job task failed, shardKey={}, entityId={}, qualifier={}, {}",
+                                shardKey, entityId, qualifier, t.getMessage(), t);
                         return Uni.createFrom().voidItem();
                     });
         } else {
-            log.warn("Job task was not found, type={}", type);
+            log.warn("Job task was not found, qualifier={}", qualifier);
             return Uni.createFrom().voidItem();
         }
     }

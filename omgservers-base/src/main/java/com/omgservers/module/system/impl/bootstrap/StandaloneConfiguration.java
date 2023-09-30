@@ -31,8 +31,8 @@ public class StandaloneConfiguration {
     final IndexModelFactory indexModelFactory;
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
-    void startup(@Observes @Priority(200) StartupEvent event) {
-        log.info("Standalone configuration bootstrap");
+    void startup(@Observes @Priority(2000) StartupEvent event) {
+        log.info("Bootstrap of standalone configuration");
 
         if (getConfigOperation.getConfig().standalone()) {
             Uni.createFrom().voidItem()

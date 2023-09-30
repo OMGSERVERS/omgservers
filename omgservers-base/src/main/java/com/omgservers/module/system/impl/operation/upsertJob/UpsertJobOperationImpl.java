@@ -29,7 +29,7 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
         return executeChangeObjectOperation.executeChangeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into system.tab_job(id, created, shard_key, entity_id, type)
+                        insert into system.tab_job(id, created, shard_key, entity_id, qualifier)
                         values($1, $2, $3, $4, $5)
                         on conflict (id) do
                         nothing
@@ -39,9 +39,9 @@ class UpsertJobOperationImpl implements UpsertJobOperation {
                         job.getCreated().atOffset(ZoneOffset.UTC),
                         job.getShardKey(),
                         job.getEntityId(),
-                        job.getType()
+                        job.getQualifier()
                 ),
-                () -> new JobCreatedEventBodyModel(job.getShardKey(), job.getEntityId(), job.getType()),
+                () -> new JobCreatedEventBodyModel(job.getShardKey(), job.getEntityId(), job.getQualifier()),
                 () -> logModelFactory.create("Job was created, job=" + job)
         );
     }

@@ -22,6 +22,7 @@ create table if not exists tab_event (
     modified timestamp with time zone not null,
     group_id bigint not null,
     qualifier text not null,
+    relayed boolean not null,
     body json not null,
     status text not null
 );
@@ -31,8 +32,8 @@ create table if not exists tab_job (
     created timestamp with time zone not null,
     shard_key bigint not null,
     entity_id bigint not null,
-    type text not null,
-    unique(shard_key, entity_id)
+    qualifier text not null,
+    unique(shard_key, entity_id, qualifier)
 );
 
 create table if not exists tab_log (

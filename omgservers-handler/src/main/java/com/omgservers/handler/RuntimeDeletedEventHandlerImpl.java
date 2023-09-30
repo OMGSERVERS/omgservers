@@ -4,6 +4,7 @@ import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.getServers.GetServersOperation;
@@ -31,7 +32,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeDeletedEventBodyModel) event.getBody();
         final var runtime = body.getRuntime();
         final var runtimeId = runtime.getId();
-        final var request = new DeleteJobRequest(runtimeId, runtimeId);
+        final var request = new DeleteJobRequest(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);
     }

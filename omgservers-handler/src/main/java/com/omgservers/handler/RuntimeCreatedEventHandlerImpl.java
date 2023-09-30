@@ -8,7 +8,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
@@ -82,7 +82,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     Uni<JobModel> syncJob(final RuntimeModel runtime) {
         final var shardKey = runtime.getId();
         final var entityId = runtime.getId();
-        final var job = jobModelFactory.create(shardKey, entityId, JobTypeEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey, entityId, JobQualifierEnum.RUNTIME);
         final var request = new SyncJobRequest(job);
         return systemModule.getJobService().syncJob(request)
                 .replaceWith(job);

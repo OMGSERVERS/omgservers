@@ -35,5 +35,9 @@
             <groupId>com.omgservers</groupId>
             <artifactId>omgservers-script</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
+        </dependency>
     </dependencies>
 </project>

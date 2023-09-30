@@ -20,11 +20,11 @@ public class SchemaMigration {
     final MigrateOperation migrateOperation;
 
     @WithSpan
-    void startup(@Observes @Priority(100) StartupEvent event) {
-        log.info("Schema migration bootstrap");
+    void startup(@Observes @Priority(1000) StartupEvent event) {
+        log.info("Bootstrap of schema migration");
 
         if (getConfigOperation.getConfig().disableMigration()) {
-            log.warn("Schema migration was disabled, skip");
+            log.warn("Schema migration was disabled, skip operation");
         } else {
             migrateOperation.migrateSystemSchema("db/system");
             migrateOperation.migrateShardsSchema("db/shards");

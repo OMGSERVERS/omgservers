@@ -6,14 +6,11 @@ import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncJobRequest;
 import com.omgservers.dto.internal.SyncJobResponse;
 import com.omgservers.dto.internal.UnscheduleJobRequest;
-import com.omgservers.module.system.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
-import com.omgservers.module.system.impl.operation.getInternalModuleClient.SystemModuleClient;
 import com.omgservers.module.system.impl.service.jobService.JobService;
 import com.omgservers.module.system.impl.service.jobService.impl.method.deleteJob.DeleteJobMethod;
 import com.omgservers.module.system.impl.service.jobService.impl.method.scheduleJob.ScheduleJobMethod;
 import com.omgservers.module.system.impl.service.jobService.impl.method.syncJob.SyncJobMethod;
 import com.omgservers.module.system.impl.service.jobService.impl.method.unscheduleJob.UnscheduleJobMethod;
-import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -31,38 +28,23 @@ class JobServiceImpl implements JobService {
     final DeleteJobMethod deleteJobMethod;
     final SyncJobMethod syncJobMethod;
 
-    final GetInternalModuleClientOperation getInternalModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
-
     @Override
     public Uni<SyncJobResponse> syncJob(@Valid final SyncJobRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getInternalModuleClientOperation::getClient,
-                SystemModuleClient::syncJob,
-                syncJobMethod::syncJob);
+        return syncJobMethod.syncJob(request);
     }
 
     @Override
     public Uni<DeleteJobResponse> deleteJob(@Valid final DeleteJobRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getInternalModuleClientOperation::getClient,
-                SystemModuleClient::deleteJob,
-                deleteJobMethod::deleteJob);
+        return deleteJobMethod.deleteJob(request);
     }
 
     @Override
     public Uni<Void> scheduleJob(@Valid final ScheduleJobRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getInternalModuleClientOperation::getClient,
-                SystemModuleClient::scheduleJob,
-                scheduleJobMethod::scheduleJob);
+        return scheduleJobMethod.scheduleJob(request);
     }
 
     @Override
     public Uni<Void> unscheduleJob(@Valid final UnscheduleJobRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getInternalModuleClientOperation::getClient,
-                SystemModuleClient::unscheduleJob,
-                unscheduleJobMethod::unscheduleJob);
+        return unscheduleJobMethod.unscheduleJob(request);
     }
 }

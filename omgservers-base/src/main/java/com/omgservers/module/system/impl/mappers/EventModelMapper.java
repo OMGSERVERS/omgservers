@@ -27,6 +27,7 @@ public class EventModelMapper {
         event.setGroupId(row.getLong("group_id"));
         final var qualifier = EventQualifierEnum.valueOf(row.getString("qualifier"));
         event.setQualifier(qualifier);
+        event.setRelayed(row.getBoolean("relayed"));
         try {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             event.setBody(body);

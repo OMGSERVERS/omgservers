@@ -1,6 +1,6 @@
 package com.omgservers.exception;
 
-public class ServerSideBadRequestException extends ServerSideClientErrorException {
+public class ServerSideBadRequestException extends ServerSideClientExceptionException {
     public ServerSideBadRequestException() {
         super();
     }

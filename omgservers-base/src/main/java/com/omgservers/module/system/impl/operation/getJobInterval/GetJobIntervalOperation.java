@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.operation.getJobInterval;
 
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 
 public interface GetJobIntervalOperation {
-    Integer getJobIntervalInSeconds(JobTypeEnum type);
+    Integer getJobIntervalInSeconds(JobQualifierEnum type);
 }

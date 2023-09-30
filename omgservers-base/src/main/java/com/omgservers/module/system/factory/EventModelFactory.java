@@ -1,9 +1,9 @@
 package com.omgservers.module.system.factory;
 
-import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +32,7 @@ public class EventModelFactory {
         event.setModified(now);
         event.setGroupId(body.getGroupId());
         event.setQualifier(body.getQualifier());
+        event.setRelayed(false);
         event.setBody(body);
         event.setStatus(EventStatusEnum.NEW);
         return event;

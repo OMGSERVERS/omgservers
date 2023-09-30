@@ -27,18 +27,15 @@ class UnscheduleJobMethodImpl implements UnscheduleJobMethod {
 
     @Override
     public Uni<Void> unscheduleJob(final UnscheduleJobRequest request) {
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var shardKey = request.getShardKey();
-                    final var entityId = request.getEntityId();
-                    return Uni.createFrom().voidItem()
-                            .invoke(voidItem -> unscheduleJob(shardKey, entityId))
-                            .call(voidItem -> {
-                                final var syncLog = logModelFactory
-                                        .create(String.format("Job was unscheduled, entityId=%d", entityId));
-                                final var syncLogHelpRequest = new SyncLogRequest(syncLog);
-                                return logService.syncLog(syncLogHelpRequest);
-                            });
+        final var shardKey = request.getShardKey();
+        final var entityId = request.getEntityId();
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> unscheduleJob(shardKey, entityId))
+                .call(voidItem -> {
+                    final var syncLog = logModelFactory
+                            .create(String.format("Job was unscheduled, entityId=%d", entityId));
+                    final var syncLogHelpRequest = new SyncLogRequest(syncLog);
+                    return logService.syncLog(syncLogHelpRequest);
                 });
     }
 

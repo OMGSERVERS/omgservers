@@ -1,6 +1,6 @@
 package com.omgservers.exception;
 
-public class ServerSideUnauthorizedException extends ServerSideClientErrorException {
+public class ServerSideUnauthorizedException extends ServerSideClientExceptionException {
     public ServerSideUnauthorizedException() {
         super();
     }

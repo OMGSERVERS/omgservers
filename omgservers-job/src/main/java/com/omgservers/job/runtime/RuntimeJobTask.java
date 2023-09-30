@@ -7,7 +7,7 @@ import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.dto.script.CallScriptRequest;
 import com.omgservers.job.runtime.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
@@ -37,8 +37,8 @@ public class RuntimeJobTask implements JobTask {
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
-    public JobTypeEnum getJobType() {
-        return JobTypeEnum.RUNTIME;
+    public JobQualifierEnum getJobType() {
+        return JobQualifierEnum.RUNTIME;
     }
 
     @Override

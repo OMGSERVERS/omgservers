@@ -13,7 +13,7 @@ import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
-import com.omgservers.model.job.JobTypeEnum;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakingResults.MatchmakingResultsModel;
@@ -44,8 +44,8 @@ public class MatchmakerJobTask implements JobTask {
     final DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
 
     @Override
-    public JobTypeEnum getJobType() {
-        return JobTypeEnum.MATCHMAKER;
+    public JobQualifierEnum getJobType() {
+        return JobQualifierEnum.MATCHMAKER;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.omgservers.exception;
 
-public class ServerSideForbiddenException extends ServerSideClientErrorException {
+public class ServerSideForbiddenException extends ServerSideClientExceptionException {
     public ServerSideForbiddenException() {
         super();
     }

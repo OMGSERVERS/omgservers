@@ -24,6 +24,6 @@ public class IndexCreatedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return id;
+        return 0L;
     }
 }
