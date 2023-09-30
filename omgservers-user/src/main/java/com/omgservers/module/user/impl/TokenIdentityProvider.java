@@ -53,7 +53,7 @@ class TokenIdentityProvider implements IdentityProvider<TokenAuthenticationReque
                     final var userId = tokenObject.getUserId();
                     final var role = tokenObject.getRole().getName();
                     final var principal = role + "/" + userId.toString();
-                    log.info("User was authenticated, principal={}, role={}", principal, role);
+                    log.debug("User was authenticated, principal={}, role={}", principal, role);
 
                     return (SecurityIdentity) QuarkusSecurityIdentity.builder()
                             .setPrincipal(new QuarkusPrincipal(principal))
@@ -65,7 +65,7 @@ class TokenIdentityProvider implements IdentityProvider<TokenAuthenticationReque
                 })
                 .onFailure()
                 .transform(t -> {
-                    log.info("Authentication failed, {}", t.getMessage());
+                    log.warn("Authentication failed, {}", t.getMessage());
                     return new AuthenticationFailedException(t);
                 });
     }

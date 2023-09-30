@@ -1,10 +1,10 @@
 package com.omgservers.security;
 
-import com.omgservers.module.system.SystemModule;
 import com.omgservers.dto.internal.ValidateCredentialsRequest;
 import com.omgservers.dto.internal.ValidateCredentialsResponse;
-import com.omgservers.operation.getConfig.GetConfigOperation;
 import com.omgservers.model.internalRole.InternalRoleEnum;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
@@ -42,14 +42,14 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
         if (username.equals(getConfigOperation.getConfig().adminUsername())) {
             if (BcryptUtil.matches(password, getConfigOperation.getConfig().adminPasswordHash())) {
                 final var principal = "admin/" + username;
-                log.info("Admin account was authenticated, principal={}", principal);
+                log.debug("Admin account was authenticated, principal={}", principal);
                 return Uni.createFrom().item(QuarkusSecurityIdentity.builder()
                         .setPrincipal(new QuarkusPrincipal(principal))
                         .addRole(InternalRoleEnum.Names.ADMIN)
                         .setAnonymous(false)
                         .build());
             } else {
-                log.info("Authentication failed, username={}", username);
+                log.warn("Authentication failed, username={}", username);
                 throw new AuthenticationFailedException();
             }
         } else {
@@ -59,19 +59,19 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
                     .map(valid -> {
                         if (valid) {
                             final var principal = "sa/" + username;
-                            log.info("Service account was authenticated, principal={}", principal);
+                            log.debug("Service account was authenticated, principal={}", principal);
                             return (SecurityIdentity) QuarkusSecurityIdentity.builder()
                                     .setPrincipal(new QuarkusPrincipal(principal))
                                     .addRole(InternalRoleEnum.Names.SERVICE)
                                     .setAnonymous(false)
                                     .build();
                         } else {
-                            log.info("Authentication failed, username={}", username);
+                            log.warn("Authentication failed, username={}", username);
                             throw new AuthenticationFailedException();
                         }
                     })
                     .onFailure().transform(t -> {
-                        log.info("Authentication failed, {}", t.getMessage());
+                        log.warn("Authentication failed, {}", t.getMessage());
                         return new AuthenticationFailedException();
                     });
         }

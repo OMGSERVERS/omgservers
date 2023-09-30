@@ -26,7 +26,7 @@ class ValidateStageOperationImpl implements ValidateStageOperation {
 
         var valid = results.values().stream().allMatch(Boolean.TRUE::equals);
         if (valid) {
-            log.info("Stage is valid, stage={}", stage);
+            log.debug("Stage is valid, stage={}", stage);
             return stage;
         } else {
             throw new ServerSideBadRequestException(String.format("bad stage, stage=%s", stage));

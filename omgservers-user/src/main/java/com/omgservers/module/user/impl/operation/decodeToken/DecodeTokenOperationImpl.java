@@ -28,7 +28,7 @@ class DecodeTokenOperationImpl implements DecodeTokenOperation {
             String tokenString = new String(Base64.getUrlDecoder().decode(rawToken));
             UserTokenModel userTokenModel = objectMapper.readValue(tokenString, UserTokenModel.class);
             UserTokenModel.validate(userTokenModel);
-            log.info("Token was decoded, token={}", userTokenModel);
+            log.debug("Token was decoded, token={}", userTokenModel);
             return userTokenModel;
         } catch (Exception e) {
             throw new ServerSideBadRequestException("raw token is wrong, " + e.getMessage(), e);

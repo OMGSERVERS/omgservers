@@ -50,7 +50,7 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
             if (lifetime.isNegative()) {
                 log.info("Token was expired, token={}, lifetime={}", tokenObject, lifetime);
             } else {
-                log.info("Token is valid, token={}, lifetime={}", tokenObject, lifetime);
+                log.debug("Token is valid, token={}, lifetime={}", tokenObject, lifetime);
             }
             return lifetime.toSeconds();
         } else {

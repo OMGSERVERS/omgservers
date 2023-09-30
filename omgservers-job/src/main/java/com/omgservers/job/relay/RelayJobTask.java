@@ -43,6 +43,7 @@ public class RelayJobTask implements JobTask {
         return relayBatchOfEvents()
                 .repeat().until(relayedEventsCount -> relayedEventsCount == 0)
                 .collect().last().replaceWithVoid()
+                .invoke(voidItem -> log.info("Events to relay were not found, exit job"))
                 .replaceWith(true);
     }
 
@@ -61,7 +62,6 @@ public class RelayJobTask implements JobTask {
                                 })
                                 .replaceWith(size);
                     } else {
-                        log.info("Events to relay were not found");
                         return Uni.createFrom().item(size);
                     }
                 });

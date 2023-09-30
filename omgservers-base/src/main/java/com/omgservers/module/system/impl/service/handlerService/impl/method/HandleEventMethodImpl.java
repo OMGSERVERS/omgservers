@@ -35,7 +35,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             if (eventHandlers.put(qualifier, eventHandler) != null) {
                 log.error("Multiple event handlers were detected, qualifier={}", qualifier);
             } else {
-                log.info("Event handler was added, qualifier={}, handler={}",
+                log.debug("Event handler was added, qualifier={}, handler={}",
                         qualifier, eventHandler.getClass().getSimpleName());
             }
         });
@@ -65,7 +65,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return Uni.createFrom().item(true);
             }
         } else {
-            log.info("Event handler wasn't found, qualifier={}", event.getQualifier());
+            log.debug("Event handler wasn't found, qualifier={}", event.getQualifier());
             return Uni.createFrom().item(true);
         }
     }

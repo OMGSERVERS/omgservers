@@ -69,8 +69,8 @@ public class BootstrapEventHandler {
                             .replaceWith(eventId);
                 })
                 .subscribe()
-                .with(eventId -> log.info("Event was handled, id={}", eventId),
-                        t -> log.error("Event handling failed, {}", t.getMessage()));
+                .with(eventId -> log.debug("Event was handled, id={}", eventId),
+                        t -> log.error("Event handler failed, {}", t.getMessage()));
     }
 
     Uni<Void> handleEvent(Long eventId) {
@@ -86,7 +86,8 @@ public class BootstrapEventHandler {
                         .replaceWithVoid())
                 .onFailure(ServerSideClientExceptionException.class)
                 .recoverWithUni(t -> {
-                    log.warn("Event handling failed, event was marked as failed, {}", t.getMessage(), t);
+                    log.warn("Event handling failed, event was marked as failed, " +
+                            "eventId={}, {}", eventId, t.getMessage(), t);
                     return updateStatus(eventId, EventStatusEnum.FAILED)
                             .replaceWithVoid();
                 });

@@ -26,7 +26,7 @@ class ValidateProjectOperationImpl implements ValidateProjectOperation {
 
         var valid = results.values().stream().allMatch(Boolean.TRUE::equals);
         if (valid) {
-            log.info("Project is valid, project={}", project);
+            log.debug("Project is valid, project={}", project);
             return project;
         } else {
             throw new ServerSideBadRequestException(String.format("bad project, project=%s", project));
