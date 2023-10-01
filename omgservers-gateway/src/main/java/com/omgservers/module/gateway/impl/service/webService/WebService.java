@@ -1,4 +1,4 @@
-package com.omgservers.module.gateway.impl.service.gatewayService;
+package com.omgservers.module.gateway.impl.service.webService;
 
 import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.gateway.AssignRuntimeRequest;
@@ -6,7 +6,7 @@ import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
 import io.smallrye.mutiny.Uni;
 
-public interface GatewayService {
+public interface WebService {
 
     Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request);
 

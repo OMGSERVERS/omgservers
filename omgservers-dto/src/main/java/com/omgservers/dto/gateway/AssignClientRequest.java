@@ -1,6 +1,6 @@
 package com.omgservers.dto.gateway;
 
-import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import com.omgservers.model.assignedClient.AssignedClientModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.net.URI;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssignPlayerRequest {
+public class AssignClientRequest {
 
     @NotNull
     URI server;
@@ -20,5 +20,5 @@ public class AssignPlayerRequest {
     Long connectionId;
 
     @NotNull
-    AssignedPlayerModel assignedPlayer;
+    AssignedClientModel assignedClient;
 }

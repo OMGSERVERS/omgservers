@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAssignedPlayerRequest {
+public class GetAssignedClientRequest {
 
     @NotNull
     Long connectionId;

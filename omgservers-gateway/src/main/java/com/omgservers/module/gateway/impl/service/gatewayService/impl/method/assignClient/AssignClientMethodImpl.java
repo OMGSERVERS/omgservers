@@ -1,6 +1,6 @@
-package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer;
+package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignClient;
 
-import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
 import com.omgservers.module.system.SystemModule;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class AssignPlayerMethodImpl implements AssignPlayerMethod {
+class AssignClientMethodImpl implements AssignClientMethod {
 
     final SystemModule systemModule;
 
@@ -22,15 +22,15 @@ class AssignPlayerMethodImpl implements AssignPlayerMethod {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Void> assignPlayer(AssignPlayerRequest request) {
+    public Uni<Void> assignClient(AssignClientRequest request) {
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var connectionId = request.getConnectionId();
-                    final var assignedPlayer = request.getAssignedPlayer();
-                    final var assignPlayerInternalRequest =
-                            new com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest(
-                                    connectionId, assignedPlayer);
-                    connectionService.assignPlayer(assignPlayerInternalRequest);
+                    final var assignedClient = request.getAssignedClient();
+                    final var assignClientRequest =
+                            new com.omgservers.module.gateway.impl.service.connectionService.request.AssignClientRequest(
+                                    connectionId, assignedClient);
+                    connectionService.assignClient(assignClientRequest);
                 })
                 .call(voidItem -> {
                     final var syncLog = logModelFactory.create("Player was assigned, request=" + request);

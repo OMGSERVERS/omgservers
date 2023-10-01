@@ -1,4 +1,4 @@
-package com.omgservers.model.assignedPlayer;
+package com.omgservers.model.assignedClient;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AssignedPlayerModel {
+public class AssignedClientModel {
 
     @NotNull
     Long tenantId;

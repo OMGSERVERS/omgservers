@@ -1,19 +1,19 @@
 package com.omgservers.module.gateway.impl.service.connectionService.impl;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.AssignClientRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedPlayerRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetSessionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.response.DeleteConnectionResponse;
-import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedPlayerResponse;
+import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedClientResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedRuntimeResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetConnectionResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetSessionResponse;
@@ -32,7 +32,7 @@ class ConnectionServiceImpl implements ConnectionService {
 
     final GenerateIdOperation generateIdOperation;
 
-    final Map<Long, AssignedPlayerModel> assignedPlayerByConnection;
+    final Map<Long, AssignedClientModel> assignedClientByConnection;
     final Map<Long, AssignedRuntimeModel> assignedRuntimeByConnection;
     final Map<Long, Session> sessionByConnection;
     final Map<String, Long> connectionBySession;
@@ -42,7 +42,7 @@ class ConnectionServiceImpl implements ConnectionService {
 
         connectionBySession = new HashMap<>();
         sessionByConnection = new HashMap<>();
-        assignedPlayerByConnection = new HashMap<>();
+        assignedClientByConnection = new HashMap<>();
         assignedRuntimeByConnection = new HashMap<>();
     }
 
@@ -68,9 +68,9 @@ class ConnectionServiceImpl implements ConnectionService {
 
         if (connection != null) {
             sessionByConnection.remove(connection);
-            final var assignedPlayer = assignedPlayerByConnection.remove(connection);
+            final var assignedClient = assignedClientByConnection.remove(connection);
             final var assignedRuntime = assignedRuntimeByConnection.remove(connection);
-            return new DeleteConnectionResponse(connection, assignedPlayer, assignedRuntime);
+            return new DeleteConnectionResponse(connection, assignedClient, assignedRuntime);
         } else {
             log.warn("Connection was not found, sessionId={}", sessionId);
             return new DeleteConnectionResponse();
@@ -78,11 +78,11 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized void assignPlayer(@Valid final AssignPlayerRequest request) {
+    public synchronized void assignClient(@Valid final AssignClientRequest request) {
         final var connectionId = request.getConnectionId();
         if (sessionByConnection.containsKey(connectionId)) {
-            final var assignedPlayer = request.getAssignedPlayer();
-            assignedPlayerByConnection.put(connectionId, assignedPlayer);
+            final var assignedClient = request.getAssignedClient();
+            assignedClientByConnection.put(connectionId, assignedClient);
         } else {
             log.warn("Connection was not found, connectionId={}", connectionId);
         }
@@ -123,11 +123,11 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized GetAssignedPlayerResponse getAssignedPlayer(@Valid final GetAssignedPlayerRequest request) {
+    public synchronized GetAssignedClientResponse getAssignedClient(@Valid final GetAssignedClientRequest request) {
         final var connectionId = request.getConnectionId();
-        final var assignedPlayer = assignedPlayerByConnection.get(connectionId);
-        if (assignedPlayer != null) {
-            return new GetAssignedPlayerResponse(assignedPlayer);
+        final var assignedClient = assignedClientByConnection.get(connectionId);
+        if (assignedClient != null) {
+            return new GetAssignedClientResponse(assignedClient);
         } else {
             throw new ServerSideNotFoundException("assigned player was not found, connectionId=" + connectionId);
         }

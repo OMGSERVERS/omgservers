@@ -1,14 +1,14 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
 import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.module.gateway.GatewayModule;
-import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedPlayerRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
 import com.omgservers.module.system.SystemModule;
@@ -38,12 +38,12 @@ class MatchMessageHandlerImpl implements MessageHandler {
 
     @Override
     public Uni<Void> handle(Long connectionId, MessageModel message) {
-        final var assignedPlayer = getAssignedPlayer(connectionId);
-        final var tenantId = assignedPlayer.getTenantId();
-        final var stageId = assignedPlayer.getStageId();
-        final var userId = assignedPlayer.getUserId();
-        final var playerId = assignedPlayer.getPlayerId();
-        final var clientId = assignedPlayer.getClientId();
+        final var assignedClient = getAssignedClient(connectionId);
+        final var tenantId = assignedClient.getTenantId();
+        final var stageId = assignedClient.getStageId();
+        final var userId = assignedClient.getUserId();
+        final var playerId = assignedClient.getPlayerId();
+        final var clientId = assignedClient.getClientId();
 
         final var assignedRuntime = getAssignedRuntime(connectionId);
         final var runtimeId = assignedRuntime.getRuntimeId();
@@ -69,10 +69,10 @@ class MatchMessageHandlerImpl implements MessageHandler {
         }
     }
 
-    AssignedPlayerModel getAssignedPlayer(Long connectionId) {
-        final var request = new GetAssignedPlayerRequest(connectionId);
-        final var response = gatewayModule.getConnectionService().getAssignedPlayer(request);
-        return response.getAssignedPlayer();
+    AssignedClientModel getAssignedClient(Long connectionId) {
+        final var request = new GetAssignedClientRequest(connectionId);
+        final var response = gatewayModule.getConnectionService().getAssignedClient(request);
+        return response.getAssignedClient();
     }
 
     AssignedRuntimeModel getAssignedRuntime(Long connectionId) {

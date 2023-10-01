@@ -1,6 +1,6 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.gateway.AssignPlayerRequest;
+import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
 import com.omgservers.dto.internal.FireEventRequest;
@@ -12,7 +12,7 @@ import com.omgservers.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.dto.user.SyncClientRequest;
 import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncUserRequest;
-import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -171,9 +171,9 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         final var playerId = player.getId();
         final var server = client.getServer();
         final var connectionId = client.getConnectionId();
-        final var assignedPlayer = new AssignedPlayerModel(tenantId, stageId, userId, playerId, client.getId());
-        final var request = new AssignPlayerRequest(server, connectionId, assignedPlayer);
-        return gatewayModule.getGatewayService().assignPlayer(request);
+        final var assignedClient = new AssignedClientModel(tenantId, stageId, userId, playerId, client.getId());
+        final var request = new AssignClientRequest(server, connectionId, assignedClient);
+        return gatewayModule.getGatewayService().assignClient(request);
     }
 
     Uni<Void> fireEvent(final Long tenantId,

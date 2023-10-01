@@ -51,12 +51,12 @@ class WebsocketServiceImpl implements WebsocketService {
 
         if (response.getConnectionId().isPresent()) {
             final var connection = response.getConnectionId().get();
-            if (response.getAssignedPlayer().isPresent()) {
-                final var assignedPlayer = response.getAssignedPlayer().get();
-                log.info("Connection was deleted, connection={}, assignedPlayer={}", connection, assignedPlayer);
+            if (response.getAssignedClient().isPresent()) {
+                final var assignedClient = response.getAssignedClient().get();
+                log.info("Connection was deleted, connection={}, assignedClient={}", connection, assignedClient);
 
-                final var userId = assignedPlayer.getUserId();
-                final var clientId = assignedPlayer.getClientId();
+                final var userId = assignedClient.getUserId();
+                final var clientId = assignedClient.getClientId();
                 final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
                 final var event = eventModelFactory.create(eventBody);
                 final var fireEventRoutedRequest = new FireEventRequest(event);

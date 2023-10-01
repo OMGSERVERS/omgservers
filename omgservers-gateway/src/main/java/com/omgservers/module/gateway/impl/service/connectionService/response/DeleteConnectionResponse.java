@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.connectionService.response;
 
-import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
+import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -12,15 +12,15 @@ import java.util.Optional;
 public class DeleteConnectionResponse {
 
     Long connectionId;
-    AssignedPlayerModel assignedPlayer;
+    AssignedClientModel assignedClient;
     AssignedRuntimeModel assignedRuntime;
 
     public Optional<Long> getConnectionId() {
         return Optional.ofNullable(connectionId);
     }
 
-    public Optional<AssignedPlayerModel> getAssignedPlayer() {
-        return Optional.ofNullable(assignedPlayer);
+    public Optional<AssignedClientModel> getAssignedClient() {
+        return Optional.ofNullable(assignedClient);
     }
 
     public Optional<AssignedRuntimeModel> getAssignedRuntime() {

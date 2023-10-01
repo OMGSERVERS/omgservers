@@ -1,15 +1,15 @@
 package com.omgservers.module.gateway.impl.service.connectionService;
 
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignPlayerRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.AssignClientRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedPlayerRequest;
+import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetSessionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.response.DeleteConnectionResponse;
-import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedPlayerResponse;
+import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedClientResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetAssignedRuntimeResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetConnectionResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.response.GetSessionResponse;
@@ -21,7 +21,7 @@ public interface ConnectionService {
 
     DeleteConnectionResponse deleteConnection(@Valid DeleteConnectionRequest request);
 
-    void assignPlayer(@Valid AssignPlayerRequest request);
+    void assignClient(@Valid AssignClientRequest request);
 
     void assignRuntime(@Valid AssignRuntimeRequest request);
 
@@ -29,7 +29,7 @@ public interface ConnectionService {
 
     GetSessionResponse getSession(@Valid GetSessionRequest request);
 
-    GetAssignedPlayerResponse getAssignedPlayer(@Valid GetAssignedPlayerRequest request);
+    GetAssignedClientResponse getAssignedClient(@Valid GetAssignedClientRequest request);
 
     GetAssignedRuntimeResponse getAssignedRuntime(@Valid GetAssignedRuntimeRequest request);
 }
