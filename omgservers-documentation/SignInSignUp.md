@@ -12,8 +12,10 @@ syncPlayer("syncPlayer()") --> syncClient("syncClient()")
 syncClient("syncClient()") -.-> ClientCreated(CLIENT_CREATED)
 syncClient("syncClient()") --> syncScript("syncScript()")
 syncScript("syncScript()") --> assignClient("assignClient()")
-assignClient("assignClient()") -.-> PlayerSignedUp(PLAYER_SIGNED_UP)
-assignClient("assignClient()") -.-> PlayerSignedIn(PLAYER_SIGNED_IN)
+assignClient("assignClient()") ---> PlayerSignedUp(PLAYER_SIGNED_UP)
+assignClient("assignClient()") ---> PlayerSignedIn(PLAYER_SIGNED_IN)
+PlayerSignedUp(PLAYER_SIGNED_UP) --> callScript("callScript()")
+PlayerSignedIn(PLAYER_SIGNED_IN) --> callScript("callScript()")
 
 SignInRequested(SIGN_IN_REQUESTED) --> findPlayer{"findPlayer()"}
 findPlayer{"findPlayer()"} -- was found --> syncClient("syncClient()")
