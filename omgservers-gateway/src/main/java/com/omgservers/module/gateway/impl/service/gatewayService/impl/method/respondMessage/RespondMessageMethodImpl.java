@@ -2,6 +2,7 @@ package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.re
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.RespondMessageResponse;
 import com.omgservers.module.gateway.impl.operation.sendMessage.SendMessageOperation;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetSessionRequest;
@@ -20,7 +21,7 @@ class RespondMessageMethodImpl implements RespondMessageMethod {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
+    public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> {
                     final var connectionId = request.getConnectionId();
@@ -28,6 +29,7 @@ class RespondMessageMethodImpl implements RespondMessageMethod {
                     final var session = connectionInternalService.getSession(getSessionHelpRequest).getSession();
                     final var message = request.getMessage();
                     return sendMessageOperation.sendMessage(session, message);
-                });
+                })
+                .replaceWith(new RespondMessageResponse());
     }
 }

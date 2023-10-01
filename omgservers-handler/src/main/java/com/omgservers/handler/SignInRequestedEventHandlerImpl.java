@@ -1,6 +1,10 @@
 package com.omgservers.handler;
 
+import com.omgservers.dto.gateway.AssignPlayerRequest;
 import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.script.SyncScriptRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdRequest;
+import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.user.FindPlayerRequest;
 import com.omgservers.dto.user.FindPlayerResponse;
@@ -9,6 +13,7 @@ import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.assignedPlayer.AssignedPlayerModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
@@ -16,7 +21,13 @@ import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
+import com.omgservers.model.script.ScriptConfigModel;
+import com.omgservers.model.script.ScriptModel;
+import com.omgservers.model.script.ScriptTypeEnum;
 import com.omgservers.model.user.UserModel;
+import com.omgservers.module.gateway.GatewayModule;
+import com.omgservers.module.script.ScriptModule;
+import com.omgservers.module.script.factory.ScriptModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
@@ -37,12 +48,15 @@ import java.net.URI;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SignInRequestedEventHandlerImpl implements EventHandler {
 
+    final GatewayModule gatewayModule;
     final SystemModule systemModule;
     final TenantModule tenantModule;
+    final ScriptModule scriptModule;
     final UserModule userModule;
 
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
+    final ScriptModelFactory scriptModelFactory;
     final EventModelFactory eventModelFactory;
 
     @Override
@@ -66,11 +80,14 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> getPlayer(userId, tenantId, stageId)
                         .flatMap(player -> {
                             final var playerId = player.getId();
-                            return createClient(userId, playerId, server, connectionId)
-                                    .flatMap(client -> {
-                                        final var clientUuid = client.getId();
-                                        return fireEvent(tenantId, stageId, userId, playerId, clientUuid);
-                                    });
+                            return syncClient(userId, playerId, server, connectionId)
+                                    .flatMap(client -> getVersionId(tenantId, stageId)
+                                            .flatMap(versionId -> syncScript(tenantId, versionId, client))
+                                            .flatMap(script -> assignPlayer(player, client))
+                                            .flatMap(voidItem -> {
+                                                final var clientId = client.getId();
+                                                return fireEvent(tenantId, stageId, userId, playerId, clientId);
+                                            }));
                         }))
                 .replaceWith(true);
     }
@@ -106,14 +123,46 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .replaceWith(player);
     }
 
-    Uni<ClientModel> createClient(final Long userId,
-                                  final Long playerId,
-                                  final URI server,
-                                  final Long connectionId) {
+    Uni<ClientModel> syncClient(final Long userId,
+                                final Long playerId,
+                                final URI server,
+                                final Long connectionId) {
         final var client = clientModelFactory.create(userId, playerId, server, connectionId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
+    }
+
+    Uni<Long> getVersionId(final Long tenantId, final Long stageId) {
+        final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
+        return tenantModule.getVersionService().getStageVersionId(getStageVersionIdRequest)
+                .map(GetStageVersionIdResponse::getVersionId);
+    }
+
+    Uni<ScriptModel> syncScript(final Long tenantId, final Long versionId, final ClientModel client) {
+        final var type = ScriptTypeEnum.CLIENT;
+        final var config = ScriptConfigModel.builder()
+                .userId(client.getUserId())
+                .playerId(client.getPlayerId())
+                .clientId(client.getId())
+                .build();
+        final var script = scriptModelFactory.create(client.getScriptId(), tenantId, versionId, type, config);
+        final var request = new SyncScriptRequest(script);
+        return scriptModule.getScriptService().syncScript(request)
+                .replaceWith(script);
+    }
+
+    Uni<Void> assignPlayer(final PlayerModel player,
+                           final ClientModel client) {
+        final var tenantId = player.getTenantId();
+        final var stageId = player.getStageId();
+        final var userId = player.getUserId();
+        final var playerId = player.getId();
+        final var server = client.getServer();
+        final var connectionId = client.getConnectionId();
+        final var assignedPlayer = new AssignedPlayerModel(tenantId, stageId, userId, playerId, client.getId());
+        final var request = new AssignPlayerRequest(server, connectionId, assignedPlayer);
+        return gatewayModule.getGatewayService().assignPlayer(request);
     }
 
     Uni<Void> fireEvent(final Long tenantId,

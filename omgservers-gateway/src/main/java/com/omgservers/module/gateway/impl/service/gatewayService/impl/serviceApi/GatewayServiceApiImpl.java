@@ -3,6 +3,7 @@ package com.omgservers.module.gateway.impl.service.gatewayService.impl.serviceAp
 import com.omgservers.dto.gateway.AssignPlayerRequest;
 import com.omgservers.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.RespondMessageResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
@@ -23,7 +24,7 @@ class GatewayServiceApiImpl implements GatewayServiceApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
+    public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, gatewayService::respondMessage);
     }
 

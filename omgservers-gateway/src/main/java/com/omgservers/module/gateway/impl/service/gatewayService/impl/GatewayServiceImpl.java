@@ -3,6 +3,7 @@ package com.omgservers.module.gateway.impl.service.gatewayService.impl;
 import com.omgservers.dto.gateway.AssignPlayerRequest;
 import com.omgservers.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.dto.gateway.RespondMessageRequest;
+import com.omgservers.dto.gateway.RespondMessageResponse;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignPlayer.AssignPlayerMethod;
@@ -28,7 +29,7 @@ class GatewayServiceImpl implements GatewayService {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<Void> respondMessage(RespondMessageRequest request) {
+    public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
         final var currentServer = getConfigOperation.getConfig().serverUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {

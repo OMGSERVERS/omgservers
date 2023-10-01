@@ -33,7 +33,8 @@ class RespondClientMethodImpl implements RespondClientMethod {
                     final var respondMessageRequest =
                             new RespondMessageRequest(server, connection, message);
                     return gatewayModule.getGatewayService().respondMessage(respondMessageRequest);
-                });
+                })
+                .replaceWithVoid();
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {

@@ -1,25 +1,21 @@
-# SignIn/SignUp Event Graph
+# SignIn/SignUp
 
 ```mermaid
 graph TD;
 
-SignUpRequested(SIGN_UP_REQUESTED<br/>GroupId: connectionId) --> syncUser("syncUser()")
-syncUser("syncUser()") --> syncPlayer("syncPlayer()")
+SignUpRequested(SIGN_UP_REQUESTED) --> syncUser("syncUser()")
+syncUser("syncUser()") -.-> UserCreated(USER_CREATED)
+syncUser("syncUser()") --> respondCredentials("respondCredentials()")
+respondCredentials("respondCredentials()") --> syncPlayer("syncPlayer()")
+syncPlayer("syncPlayer()") -.-> PlayerCreated(PLAYER_CREATED)
 syncPlayer("syncPlayer()") --> syncClient("syncClient()")
-syncClient("syncClient()") --> respondCredentials("respondCredentials()")
-respondCredentials("respondCredentials()") --> PlayerSignedUp(PLAYER_SIGNED_UP<br/>GroupId: userId)
+syncClient("syncClient()") -.-> ClientCreated(CLIENT_CREATED)
+syncClient("syncClient()") --> syncScript("syncScript()")
+syncScript("syncScript()") --> assignClient("assignClient()")
+assignClient("assignClient()") -.-> PlayerSignedUp(PLAYER_SIGNED_UP)
+assignClient("assignClient()") -.-> PlayerSignedIn(PLAYER_SIGNED_IN)
 
-SignInRequested(SIGN_IN_REQUESTED<br/>GroupId: connectionId) --> syncPlayer("syncPlayer()")
-syncClient("syncClient()") --> PlayerSignedIn(PLAYER_SIGNED_IN<br/>GroupId: userId)
-
-syncUser("syncUser()") --> UserCreated(USER_CREATED</br>GroupId: userId)
-syncClient("syncClient()") --> ClientCreated(CLIENT_CREATED<br/>GroupId: userId)
-syncPlayer("syncPlayer()") --> PlayerCreated(PLAYER_CREATED<br/>GroupId: userId)
-
-ClientCreated(CLIENT_CREATED<br/>GroupId: userId) --> syncScript("syncScript()") 
-
-PlayerSignedUp(PLAYER_SIGNED_UP<br/>GroupId: userId) --> assignPlayer("assignPlayer()")
-PlayerSignedIn(PLAYER_SIGNED_IN<br/>GroupId: userId) --> assignPlayer("assignPlayer()")
-assignPlayer("assignPlayer()") --> callScript("callScript()")
+SignInRequested(SIGN_IN_REQUESTED) --> findPlayer{"findPlayer()"}
+findPlayer{"findPlayer()"} -- was found --> syncClient("syncClient()")
+findPlayer{"findPlayer()"} -- not found --> syncPlayer("syncPlayer()")
 ```
-
