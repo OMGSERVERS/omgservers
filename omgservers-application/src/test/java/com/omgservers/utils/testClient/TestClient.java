@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
+import com.omgservers.model.message.body.ChangeMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.message.body.EventMessageBodyModel;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
@@ -97,6 +98,13 @@ public class TestClient {
         send(messageString);
     }
 
+    public synchronized void changeRequest(Object data) throws IOException {
+        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.CHANGE_MESSAGE,
+                new ChangeMessageBodyModel(data));
+        final var messageString = objectMapper.writeValueAsString(messageModel);
+        send(messageString);
+    }
+
     public synchronized void sendMatchMessage(Object data) throws IOException {
         final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE,
                 new MatchMessageBodyModel(data));
@@ -114,7 +122,8 @@ public class TestClient {
         return (EventMessageBodyModel) messageModel.getBody();
     }
 
-    public synchronized CredentialsMessageBodyModel consumeCredentialsMessage() throws InterruptedException, IOException {
+    public synchronized CredentialsMessageBodyModel consumeCredentialsMessage()
+            throws InterruptedException, IOException {
         String messageString = testEndpoint.receive(45);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");

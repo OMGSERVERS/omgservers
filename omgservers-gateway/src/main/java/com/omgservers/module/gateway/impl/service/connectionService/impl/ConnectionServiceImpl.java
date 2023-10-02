@@ -129,7 +129,7 @@ class ConnectionServiceImpl implements ConnectionService {
         if (assignedClient != null) {
             return new GetAssignedClientResponse(assignedClient);
         } else {
-            throw new ServerSideNotFoundException("assigned player was not found, connectionId=" + connectionId);
+            throw new ServerSideNotFoundException("assigned client was not found, connectionId=" + connectionId);
         }
     }
 

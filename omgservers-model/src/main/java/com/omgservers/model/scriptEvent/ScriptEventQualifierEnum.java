@@ -1,6 +1,7 @@
 package com.omgservers.model.scriptEvent;
 
 import com.omgservers.model.scriptEvent.body.AddClientEventBodyModel;
+import com.omgservers.model.scriptEvent.body.ChangePlayerScriptEventBodyModel;
 import com.omgservers.model.scriptEvent.body.DeleteClientScriptEventBodyModel;
 import com.omgservers.model.scriptEvent.body.HandleMessageScriptEventBodyModel;
 import com.omgservers.model.scriptEvent.body.InitRuntimeScriptEventBodyModel;
@@ -12,6 +13,7 @@ import com.omgservers.model.scriptEvent.body.UpdateRuntimeScriptEventBodyModel;
 public enum ScriptEventQualifierEnum {
     SIGNED_IN(SignedInScriptEventBodyModel.class),
     SIGNED_UP(SignedUpScriptEventBodyModel.class),
+    CHANGE_PLAYER(ChangePlayerScriptEventBodyModel.class),
 
     INIT_RUNTIME(InitRuntimeScriptEventBodyModel.class),
     UPDATE_RUNTIME(UpdateRuntimeScriptEventBodyModel.class),

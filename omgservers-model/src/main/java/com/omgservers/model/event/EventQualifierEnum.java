@@ -1,5 +1,6 @@
 package com.omgservers.model.event;
 
+import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -107,7 +108,8 @@ public enum EventQualifierEnum {
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
     PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class),
     MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
-    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class);
+    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class),
+    CHANGE_MESSAGE_RECEIVED(ChangeMessageReceivedEventBodyModel.class);
 
     Class<? extends EventBodyModel> bodyClass;
 
