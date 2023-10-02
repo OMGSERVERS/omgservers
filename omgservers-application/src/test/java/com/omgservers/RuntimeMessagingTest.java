@@ -88,11 +88,13 @@ public class RuntimeMessagingTest extends Assertions {
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
-
         final var client2 = testClientFactory.create(uri);
         client2.signUp(version);
 
-        Thread.sleep(5000);
+        final var welcome1 = client1.consumeWelcomeMessage();
+        assertNotNull(welcome1);
+        final var welcome2 = client2.consumeWelcomeMessage();
+        assertNotNull(welcome2);
 
         client1.requestMatchmaking("death-match");
         client2.requestMatchmaking("death-match");
@@ -102,22 +104,22 @@ public class RuntimeMessagingTest extends Assertions {
         final var assignment2 = client2.consumeAssignmentMessage();
         assertNotNull(assignment2);
 
-        final var event11 = client1.consumeEventMessage();
+        final var event11 = client1.consumeServerMessage();
         assertEquals("hello, client", event11.getEvent().toString());
 
-        final var event21 = client2.consumeEventMessage();
+        final var event21 = client2.consumeServerMessage();
         assertEquals("hello, client", event21.getEvent().toString());
 
-        final var event12 = client1.consumeEventMessage();
+        final var event12 = client1.consumeServerMessage();
         assertEquals("hello, client_1 and client_2", event12.getEvent().toString());
 
-        final var event22 = client2.consumeEventMessage();
+        final var event22 = client2.consumeServerMessage();
         assertEquals("hello, client_1 and client_2", event22.getEvent().toString());
 
-        final var event13 = client1.consumeEventMessage();
+        final var event13 = client1.consumeServerMessage();
         assertEquals("hello, all", event13.getEvent().toString());
 
-        final var event23 = client2.consumeEventMessage();
+        final var event23 = client2.consumeServerMessage();
         assertEquals("hello, all", event23.getEvent().toString());
 
         Thread.sleep(5000);

@@ -50,11 +50,13 @@ public class PlayerMatchmakingTest extends Assertions {
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
-
         final var client2 = testClientFactory.create(uri);
         client2.signUp(version);
 
-        Thread.sleep(5000);
+        final var welcome1 = client1.consumeWelcomeMessage();
+        assertNotNull(welcome1);
+        final var welcome2 = client2.consumeWelcomeMessage();
+        assertNotNull(welcome2);
 
         log.info("Request matchmaking");
 
@@ -66,10 +68,10 @@ public class PlayerMatchmakingTest extends Assertions {
         final var assignment2 = client2.consumeAssignmentMessage();
         assertNotNull(assignment2);
 
-        final var event12 = client1.consumeEventMessage();
+        final var event12 = client1.consumeServerMessage();
         assertEquals("hello, client", event12.getEvent().toString());
 
-        final var event21 = client2.consumeEventMessage();
+        final var event21 = client2.consumeServerMessage();
         assertEquals("hello, client", event21.getEvent().toString());
 
         Thread.sleep(5000);

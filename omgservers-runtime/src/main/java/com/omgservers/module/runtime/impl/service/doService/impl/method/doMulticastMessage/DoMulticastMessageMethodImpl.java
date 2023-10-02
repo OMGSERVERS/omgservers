@@ -5,7 +5,7 @@ import com.omgservers.dto.runtime.DoMulticastMessageResponse;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -103,9 +103,9 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
     }
 
     Uni<Void> respondClient(Recipient recipient, String event) {
-        final var body = new EventMessageBodyModel(event);
+        final var body = new ServerMessageBodyModel(event);
         final var message = messageModelFactory
-                .create(MessageQualifierEnum.EVENT_MESSAGE, body);
+                .create(MessageQualifierEnum.SERVER_MESSAGE, body);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(recipient.userId())

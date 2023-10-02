@@ -2,7 +2,7 @@ package com.omgservers.module.script.impl.сontext.player.function;
 
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.script.impl.operation.handleLuaCallOperation.HandleLuaCallOperation;
 import com.omgservers.module.user.UserModule;
@@ -31,8 +31,8 @@ public class LuaPlayerRespondFunction extends VarArgFunction {
         return handleLuaCallOperation.handleLuaCall(() -> {
             final var event = args.arg(1).checkjstring();
 
-            final var body = new EventMessageBodyModel(event);
-            final var message = messageModelFactory.create(MessageQualifierEnum.EVENT_MESSAGE, body);
+            final var body = new ServerMessageBodyModel(event);
+            final var message = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, body);
             final var request = new RespondClientRequest(userId, clientId, message);
             return userModule.getUserService().respondClient(request)
                     .replaceWith(LuaValue.NIL);

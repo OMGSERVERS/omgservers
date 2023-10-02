@@ -6,11 +6,12 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.message.body.ChangeMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.model.message.body.EventMessageBodyModel;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
+import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.utils.operation.VersionParameters;
 import jakarta.websocket.ClientEndpointConfig;
@@ -112,14 +113,14 @@ public class TestClient {
         send(messageString);
     }
 
-    public synchronized EventMessageBodyModel consumeEventMessage() throws InterruptedException, IOException {
+    public synchronized ServerMessageBodyModel consumeServerMessage() throws InterruptedException, IOException {
         String messageString = testEndpoint.receive(450);
         if (messageString == null) {
-            throw new IOException(MessageQualifierEnum.EVENT_MESSAGE + " was not received");
+            throw new IOException(MessageQualifierEnum.SERVER_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
         log.info("Event was consumed, {} ", messageModel);
-        return (EventMessageBodyModel) messageModel.getBody();
+        return (ServerMessageBodyModel) messageModel.getBody();
     }
 
     public synchronized CredentialsMessageBodyModel consumeCredentialsMessage()
@@ -131,6 +132,16 @@ public class TestClient {
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
         log.info("Credentials message was consumed, {} ", messageModel);
         return (CredentialsMessageBodyModel) messageModel.getBody();
+    }
+
+    public synchronized WelcomeMessageBodyModel consumeWelcomeMessage() throws InterruptedException, IOException {
+        String messageString = testEndpoint.receive(45);
+        if (messageString == null) {
+            throw new IOException(MessageQualifierEnum.WELCOME_MESSAGE + " was not received");
+        }
+        MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("Welcome message was consumed, {} ", messageModel);
+        return (WelcomeMessageBodyModel) messageModel.getBody();
     }
 
     public synchronized AssignmentMessageBodyModel consumeAssignmentMessage() throws InterruptedException, IOException {

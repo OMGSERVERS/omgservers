@@ -46,13 +46,20 @@ public class PlayerSetGetAttributeTest extends Assertions {
         final var client = testClientFactory.create(uri);
         client.signUp(version);
 
+        final var welcome1 = client.consumeWelcomeMessage();
+        assertNotNull(welcome1);
+
         client.reconnect();
         client.signIn(version);
-        var message1 = client.consumeEventMessage();
+
+        final var welcome2 = client.consumeWelcomeMessage();
+        assertNotNull(welcome2);
+
+        var message1 = client.consumeServerMessage();
         assertEquals("1", message1.getEvent().toString());
-        var message2 = client.consumeEventMessage();
+        var message2 = client.consumeServerMessage();
         assertEquals("2", message2.getEvent().toString());
-        var message3 = client.consumeEventMessage();
+        var message3 = client.consumeServerMessage();
         assertEquals("3", message3.getEvent().toString());
 
         client.close();

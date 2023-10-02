@@ -43,13 +43,21 @@ public class PlayerSignInSignUpTest extends Assertions {
 
         final var client = testClientFactory.create(uri);
         client.signUp(version);
-        var event1 = client.consumeEventMessage();
-        assertEquals("signed_up", event1.getEvent().toString());
+
+        final var welcome1 = client.consumeWelcomeMessage();
+        assertNotNull(welcome1);
+
+        final var serverMessage1 = client.consumeServerMessage();
+        assertEquals("signed_up", serverMessage1.getEvent().toString());
 
         client.reconnect();
         client.signIn(version);
-        var event2 = client.consumeEventMessage();
-        assertEquals("signed_in", event2.getEvent().toString());
+
+        final var welcome2 = client.consumeWelcomeMessage();
+        assertNotNull(welcome2);
+
+        final var serverMessage2 = client.consumeServerMessage();
+        assertEquals("signed_in", serverMessage2.getEvent().toString());
         client.close();
     }
 }

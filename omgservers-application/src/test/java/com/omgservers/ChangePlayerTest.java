@@ -40,11 +40,12 @@ public class ChangePlayerTest extends Assertions {
         final var client = testClientFactory.create(uri);
         client.signUp(version);
 
-        Thread.sleep(5000);
+        final var welcome = client.consumeWelcomeMessage();
+        assertNotNull(welcome);
 
         client.changeRequest(new TestMessage("change"));
 
-        var message = client.consumeEventMessage();
+        var message = client.consumeServerMessage();
         assertEquals("changed", message.getEvent().toString());
 
         client.close();

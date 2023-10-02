@@ -5,7 +5,7 @@ import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
@@ -67,9 +67,9 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
     }
 
     Uni<Void> respondClient(Long userId, Long clientId, String event) {
-        final var body = new EventMessageBodyModel(event);
+        final var body = new ServerMessageBodyModel(event);
         final var message =
-                messageModelFactory.create(MessageQualifierEnum.EVENT_MESSAGE, body);
+                messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, body);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(userId)

@@ -4,14 +4,19 @@ import com.omgservers.dto.script.CallScriptRequest;
 import com.omgservers.dto.script.CallScriptResponse;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 import com.omgservers.model.scriptEvent.ScriptEventModel;
 import com.omgservers.model.scriptEvent.body.SignedInScriptEventBodyModel;
+import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +31,11 @@ import java.util.Collections;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class PlayerSignedInEventHandlerImpl implements EventHandler {
 
-    final UserModule userModule;
+    final TenantModule tenantModule;
     final ScriptModule scriptModule;
+    final UserModule userModule;
+
+    final MessageModelFactory messageModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -44,16 +52,27 @@ class PlayerSignedInEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
 
         return getClient(userId, clientId)
-                .flatMap(client -> callScript(client.getScriptId(), userId, playerId, client.getId()));
+                .flatMap(client -> respondWelcome(userId, clientId)
+                        .flatMap(voidItem -> callScript(client.getScriptId(), userId, playerId, client.getId())));
     }
 
-    Uni<ClientModel> getClient(Long userId, Long clientId) {
+    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
         final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> callScript(Long scriptId, Long userId, Long playerId, Long clientId) {
+    Uni<Void> respondWelcome(final Long userId, final Long clientId) {
+        final var body = new WelcomeMessageBodyModel();
+        final var message = messageModelFactory.create(MessageQualifierEnum.WELCOME_MESSAGE, body);
+        final var request = new RespondClientRequest(userId, clientId, message);
+        return userModule.getUserService().respondClient(request);
+    }
+
+    Uni<Boolean> callScript(final Long scriptId,
+                            final Long userId,
+                            final Long playerId,
+                            final Long clientId) {
         final var scriptEventBody = SignedInScriptEventBodyModel.builder()
                 .userId(userId)
                 .playerId(playerId)

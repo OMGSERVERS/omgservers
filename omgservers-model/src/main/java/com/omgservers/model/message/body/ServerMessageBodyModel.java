@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EventMessageBodyModel extends MessageBodyModel {
+public class ServerMessageBodyModel extends MessageBodyModel {
 
     @NotNull
     Object event;

@@ -3,21 +3,24 @@ package com.omgservers.model.message;
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.message.body.ChangeMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.model.message.body.EventMessageBodyModel;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
+import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 
 public enum MessageQualifierEnum {
     SIGN_IN_MESSAGE(SignInMessageBodyModel.class),
     SIGN_UP_MESSAGE(SignUpMessageBodyModel.class),
     MATCHMAKER_MESSAGE(MatchmakerMessageBodyModel.class),
-    CHANGE_MESSAGE(ChangeMessageBodyModel.class),
-    CREDENTIALS_MESSAGE(CredentialsMessageBodyModel.class),
-    EVENT_MESSAGE(EventMessageBodyModel.class),
     MATCH_MESSAGE(MatchMessageBodyModel.class),
-    ASSIGNMENT_MESSAGE(AssignmentMessageBodyModel.class);
+    CHANGE_MESSAGE(ChangeMessageBodyModel.class),
+
+    CREDENTIALS_MESSAGE(CredentialsMessageBodyModel.class),
+    WELCOME_MESSAGE(WelcomeMessageBodyModel.class),
+    ASSIGNMENT_MESSAGE(AssignmentMessageBodyModel.class),
+    SERVER_MESSAGE(ServerMessageBodyModel.class);
 
     final Class<? extends MessageBodyModel> bodyClass;
 

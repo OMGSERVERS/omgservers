@@ -4,7 +4,7 @@ import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
 import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.EventMessageBodyModel;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -76,9 +76,9 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
     }
 
     Uni<Void> respondClient(Recipient recipient, String event) {
-        final var body = new EventMessageBodyModel(event);
+        final var body = new ServerMessageBodyModel(event);
         final var message = messageModelFactory
-                .create(MessageQualifierEnum.EVENT_MESSAGE, body);
+                .create(MessageQualifierEnum.SERVER_MESSAGE, body);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(recipient.userId())
