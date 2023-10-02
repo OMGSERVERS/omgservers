@@ -3,6 +3,7 @@ package com.omgservers.utils.testClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.message.body.EventMessageBodyModel;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
@@ -32,7 +33,8 @@ public class TestClient {
     Long userId;
     String password;
 
-    public TestClient(GenerateIdOperation generateIdOperation, ObjectMapper objectMapper, URI uri) throws IOException, DeploymentException {
+    public TestClient(GenerateIdOperation generateIdOperation, ObjectMapper objectMapper, URI uri)
+            throws IOException, DeploymentException {
         this.generateIdOperation = generateIdOperation;
         this.objectMapper = objectMapper;
         this.uri = uri;
@@ -65,35 +67,39 @@ public class TestClient {
     }
 
     public synchronized void signUp(VersionParameters versionParameters) throws InterruptedException, IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_UP_MESSAGE,
-                new SignUpMessageBodyModel(versionParameters.getTenantId(),
-                        versionParameters.getStageId(), versionParameters.getStageSecret()));
+        final var messageModel =
+                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_UP_MESSAGE,
+                        new SignUpMessageBodyModel(versionParameters.getTenantId(),
+                                versionParameters.getStageId(), versionParameters.getStageSecret()));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
 
-        final var credentialsMessage = consumeCredentialsMessage();
-        final var credentials = (CredentialsMessageBodyModel) credentialsMessage.getBody();
-        userId = credentials.getUserId();
-        password = credentials.getPassword();
+        final var credentialsMessageBody = consumeCredentialsMessage();
+        userId = credentialsMessageBody.getUserId();
+        password = credentialsMessageBody.getPassword();
         log.info("User signed up, userId={}, password={}", userId, password);
     }
 
     public synchronized void signIn(VersionParameters versionParameters) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_IN_MESSAGE,
-                new SignInMessageBodyModel(versionParameters.getTenantId(),
-                        versionParameters.getStageId(), versionParameters.getStageSecret(), userId, password));
+        final var messageModel =
+                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_IN_MESSAGE,
+                        new SignInMessageBodyModel(versionParameters.getTenantId(),
+                                versionParameters.getStageId(), versionParameters.getStageSecret(), userId, password));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
 
     public synchronized void requestMatchmaking(String mode) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCHMAKER_MESSAGE, new MatchmakerMessageBodyModel(mode));
+        final var messageModel =
+                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCHMAKER_MESSAGE,
+                        new MatchmakerMessageBodyModel(mode));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
 
     public synchronized void sendMatchMessage(Object data) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE, new MatchMessageBodyModel(data));
+        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE,
+                new MatchMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
@@ -108,14 +114,24 @@ public class TestClient {
         return (EventMessageBodyModel) messageModel.getBody();
     }
 
-    synchronized MessageModel consumeCredentialsMessage() throws InterruptedException, IOException {
-        String messageString = testEndpoint.receive(450);
+    public synchronized CredentialsMessageBodyModel consumeCredentialsMessage() throws InterruptedException, IOException {
+        String messageString = testEndpoint.receive(45);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Credentials were consumed, {} ", messageModel);
-        return messageModel;
+        log.info("Credentials message was consumed, {} ", messageModel);
+        return (CredentialsMessageBodyModel) messageModel.getBody();
+    }
+
+    public synchronized AssignmentMessageBodyModel consumeAssignmentMessage() throws InterruptedException, IOException {
+        String messageString = testEndpoint.receive(45);
+        if (messageString == null) {
+            throw new IOException(MessageQualifierEnum.ASSIGNMENT_MESSAGE + " was not received");
+        }
+        MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("Assignment message was consumed, {} ", messageModel);
+        return (AssignmentMessageBodyModel) messageModel.getBody();
     }
 
     synchronized void send(String messageString) throws IOException {

@@ -25,9 +25,10 @@ syncScript("syncScript()") --> syncJob("syncJob()")
 
 syncMatchmakingResults("syncMatchmakingResults()") --> upsertMatchClient("upsertMatchClient()")
 upsertMatchClient("upsertMatchClient()") --> MatchClientCreated(MATCH_CLIENT_CREATED)
-MatchClientCreated(MATCH_CLIENT_CREATED) --> assignRuntime("assignRuntime()")
-assignRuntime("assignRuntime()") --> syncRuntimeGrant("syncRuntimeGrant(CLIENT)")
+MatchClientCreated(MATCH_CLIENT_CREATED) --> syncRuntimeGrant("syncRuntimeGrant(CLIENT)")
 syncRuntimeGrant("syncRuntimeGrant(CLIENT)") --> syncRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)")
+syncRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)") --> assignRuntime("assignRuntime()")
+assignRuntime("assignRuntime()") --> respondAssignment("respondAssignment()") 
 
 ```
 

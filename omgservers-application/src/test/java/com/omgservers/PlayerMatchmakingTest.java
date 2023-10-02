@@ -61,7 +61,10 @@ public class PlayerMatchmakingTest extends Assertions {
         client1.requestMatchmaking("death-match");
         client2.requestMatchmaking("death-match");
 
-        Thread.sleep(5000);
+        final var assignment1 = client1.consumeAssignmentMessage();
+        assertNotNull(assignment1);
+        final var assignment2 = client2.consumeAssignmentMessage();
+        assertNotNull(assignment2);
 
         final var event12 = client1.consumeEventMessage();
         assertEquals("hello, client", event12.getEvent().toString());

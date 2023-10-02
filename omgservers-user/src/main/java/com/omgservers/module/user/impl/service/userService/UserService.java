@@ -17,9 +17,4 @@ public interface UserService {
     Uni<ValidateCredentialsResponse> validateCredentials(@Valid ValidateCredentialsRequest request);
 
     Uni<Void> respondClient(@Valid RespondClientRequest request);
-
-    default void respondClient(long timeout, RespondClientRequest request) {
-        respondClient(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

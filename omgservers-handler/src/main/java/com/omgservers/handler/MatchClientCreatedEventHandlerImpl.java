@@ -9,6 +9,7 @@ import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.RespondClientRequest;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
@@ -16,6 +17,8 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.gateway.GatewayModule;
@@ -60,9 +63,10 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(metadata -> {
                     final var client = metadata.client;
                     final var runtimeId = metadata.match.getRuntimeId();
-                    return assignRuntime(client, runtimeId)
-                            .flatMap(voidItem -> syncRuntimeGrant(runtimeId, client.getUserId(), client.getId()))
-                            .flatMap(voidItem -> syncAddClientCommand(runtimeId, client));
+                    return syncRuntimeGrant(runtimeId, client.getUserId(), client.getId())
+                            .flatMap(voidItem -> syncAddClientCommand(runtimeId, client))
+                            .flatMap(voidItem -> assignRuntime(client, runtimeId))
+                            .flatMap(voidItem -> respondAssignment(client, runtimeId));
                 })
                 .replaceWith(true);
     }
@@ -97,14 +101,6 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Void> assignRuntime(ClientModel client, Long runtimeId) {
-        final var server = client.getServer();
-        final var connectionId = client.getConnectionId();
-        final var assignedRuntime = new AssignedRuntimeModel(runtimeId);
-        final var assignRuntimeRequest = new AssignRuntimeRequest(server, connectionId, assignedRuntime);
-        return gatewayModule.getGatewayService().assignRuntime(assignRuntimeRequest);
-    }
-
     Uni<Void> syncRuntimeGrant(Long runtimeId, Long userId, Long clientId) {
         final var runtimeGrant = runtimeGrantModelFactory.create(
                 runtimeId,
@@ -125,6 +121,21 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)
                 .replaceWithVoid();
+    }
+
+    Uni<Void> assignRuntime(ClientModel client, Long runtimeId) {
+        final var server = client.getServer();
+        final var connectionId = client.getConnectionId();
+        final var assignedRuntime = new AssignedRuntimeModel(runtimeId);
+        final var assignRuntimeRequest = new AssignRuntimeRequest(server, connectionId, assignedRuntime);
+        return gatewayModule.getGatewayService().assignRuntime(assignRuntimeRequest);
+    }
+
+    Uni<Void> respondAssignment(final ClientModel client, final Long runtimeId) {
+        final var body = new AssignmentMessageBodyModel(runtimeId);
+        final var message = messageModelFactory.create(MessageQualifierEnum.ASSIGNMENT_MESSAGE, body);
+        final var request = new RespondClientRequest(client.getUserId(), client.getId(), message);
+        return userModule.getUserService().respondClient(request);
     }
 
     record Metadata(MatchClientModel matchClient, MatchModel match, ClientModel client) {
