@@ -1,5 +1,6 @@
 package com.omgservers.job.matchmaker.operation.doGreedyMatchmaking;
 
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -41,41 +42,58 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
 
         final var matchmakerRequests = new ArrayList<RequestModel>() {{
             // match 1, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create(
+                    PlayerAttributesModel.create())));
             // match 1, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 1, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 1, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 1, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 1, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
 
             // match 2, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 2, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 2, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 2, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 2, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 2, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
 
             // match 3, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 3, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 3, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 3, group - blue
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
             // match 3, group - red
-            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create()));
+            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
+                    RequestConfigModel.create(PlayerAttributesModel.create())));
         }};
 
         final var result = doGreedyMatchmakingOperation.doGreedyMatchmaking(

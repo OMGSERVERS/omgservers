@@ -2,38 +2,30 @@ package com.omgservers.module.user.impl.service.webService.impl.serviceApi;
 
 import com.omgservers.dto.user.CreateTokenRequest;
 import com.omgservers.dto.user.CreateTokenResponse;
-import com.omgservers.dto.user.DeleteAttributeRequest;
-import com.omgservers.dto.user.DeleteAttributeResponse;
 import com.omgservers.dto.user.DeleteClientRequest;
 import com.omgservers.dto.user.DeleteClientResponse;
-import com.omgservers.dto.user.DeleteObjectRequest;
-import com.omgservers.dto.user.DeleteObjectResponse;
 import com.omgservers.dto.user.DeletePlayerRequest;
 import com.omgservers.dto.user.DeletePlayerResponse;
 import com.omgservers.dto.user.FindPlayerRequest;
 import com.omgservers.dto.user.FindPlayerResponse;
-import com.omgservers.dto.user.GetAttributeRequest;
-import com.omgservers.dto.user.GetAttributeResponse;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
-import com.omgservers.dto.user.GetObjectRequest;
-import com.omgservers.dto.user.GetObjectResponse;
 import com.omgservers.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.dto.user.GetPlayerAttributesResponse;
+import com.omgservers.dto.user.GetPlayerObjectRequest;
+import com.omgservers.dto.user.GetPlayerObjectResponse;
 import com.omgservers.dto.user.GetPlayerRequest;
 import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.dto.user.IntrospectTokenRequest;
 import com.omgservers.dto.user.IntrospectTokenResponse;
-import com.omgservers.dto.user.SyncAttributeRequest;
-import com.omgservers.dto.user.SyncAttributeResponse;
 import com.omgservers.dto.user.SyncClientRequest;
 import com.omgservers.dto.user.SyncClientResponse;
-import com.omgservers.dto.user.SyncObjectRequest;
-import com.omgservers.dto.user.SyncObjectResponse;
 import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncPlayerResponse;
 import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.dto.user.SyncUserResponse;
+import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
+import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -97,6 +89,12 @@ class UserApiImpl implements UserApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::updatePlayerAttributes);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePlayer);
     }
@@ -120,43 +118,13 @@ class UserApiImpl implements UserApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetAttributeResponse> getAttribute(GetAttributeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getAttribute);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayerAttributes);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncAttributeResponse> syncAttribute(SyncAttributeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncAttribute);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteAttributeResponse> deleteAttribute(DeleteAttributeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteAttribute);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetObjectResponse> getObject(GetObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getObject);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncObjectResponse> syncObject(SyncObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncObject);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteObjectResponse> deleteObject(DeleteObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteObject);
+    public Uni<GetPlayerObjectResponse> getPlayerObject(GetPlayerObjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayerObject);
     }
 }

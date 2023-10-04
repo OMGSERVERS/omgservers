@@ -48,7 +48,7 @@ class ExecuteChangeObjectOperationImpl implements ExecuteChangeObjectOperation {
                 .call(result -> upsertEvent(result, changeContext, sqlConnection, eventBodySupplier))
                 .call(result -> upsertLog(result, changeContext, sqlConnection, logSupplier))
                 .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+                .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }
 
     Uni<Void> upsertEvent(final boolean result,

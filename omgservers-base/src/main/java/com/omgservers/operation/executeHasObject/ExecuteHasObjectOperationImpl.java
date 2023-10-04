@@ -47,6 +47,6 @@ class ExecuteHasObjectOperationImpl implements ExecuteHasObjectOperation {
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+                .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }
 }

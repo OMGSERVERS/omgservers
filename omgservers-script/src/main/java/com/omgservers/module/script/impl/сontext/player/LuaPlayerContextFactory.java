@@ -1,8 +1,8 @@
 package com.omgservers.module.script.impl.сontext.player;
 
-import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerGetAttributeFunctionFactory;
+import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerGetAttributesFunctionFactory;
 import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerRespondFunctionFactory;
-import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerSetAttributeFunctionFactory;
+import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerSetAttributesFunctionFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LuaPlayerContextFactory {
 
     final LuaPlayerRespondFunctionFactory respondFunctionFactory;
-    final LuaPlayerSetAttributeFunctionFactory setAttributeFunctionFactory;
-    final LuaPlayerGetAttributeFunctionFactory getAttributeFunctionFactory;
+    final LuaPlayerSetAttributesFunctionFactory setAttributeFunctionFactory;
+    final LuaPlayerGetAttributesFunctionFactory getAttributeFunctionFactory;
 
     public LuaPlayerContext build(Long userId, Long playerId, Long clientId) {
         final var context = LuaPlayerContext.builder()
@@ -22,8 +22,8 @@ public class LuaPlayerContextFactory {
                 .playerId(playerId)
                 .clientId(clientId)
                 .respondFunction(respondFunctionFactory.build(userId, clientId))
-                .setAttributeFunction(setAttributeFunctionFactory.build(userId, playerId))
-                .getAttributeFunction(getAttributeFunctionFactory.build(userId, playerId))
+                .setAttributesFunction(setAttributeFunctionFactory.build(userId, playerId))
+                .getAttributesFunction(getAttributeFunctionFactory.build(userId, playerId))
                 .build();
 
         return context;

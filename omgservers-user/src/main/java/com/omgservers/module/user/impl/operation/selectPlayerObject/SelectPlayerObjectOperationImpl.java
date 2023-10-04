@@ -1,8 +1,8 @@
-package com.omgservers.module.user.impl.operation.selectPlayerAttributes;
+package com.omgservers.module.user.impl.operation.selectPlayerObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.player.PlayerAttributesModel;
+import com.omgservers.model.player.PlayerObjectModel;
 import com.omgservers.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOperation {
+class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
 
     final ExecuteSelectObjectOperation executeSelectObjectOperation;
 
@@ -25,26 +25,26 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<PlayerAttributesModel> selectPlayerAttributes(final SqlConnection sqlConnection,
-                                                             final int shard,
-                                                             final Long userId,
-                                                             final Long playerId) {
+    public Uni<PlayerObjectModel> selectPlayerObject(final SqlConnection sqlConnection,
+                                                     final int shard,
+                                                     final Long userId,
+                                                     final Long playerId) {
         return executeSelectObjectOperation.executeSelectObject(
                 sqlConnection,
                 shard,
                 """
-                        select attributes
+                        select object
                         from $schema.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1
                         """,
                 Arrays.asList(userId, playerId),
-                "Player attributes",
+                "Player object",
                 row -> {
                     try {
-                        return objectMapper.readValue(row.getString("attributes"), PlayerAttributesModel.class);
+                        return objectMapper.readValue(row.getString("object"), PlayerObjectModel.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException(String.format("player attributes can't be parsed, " +
+                        throw new ServerSideConflictException(String.format("player object can't be parsed, " +
                                 "userId=%d, playerId=%d", userId, playerId));
                     }
                 });

@@ -14,18 +14,29 @@ class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation
 
     @Override
     public RuntimeException transformPgException(PgException pgException) {
+        return transformPgException("", pgException);
+    }
+
+    @Override
+    public RuntimeException transformPgException(String sql, PgException pgException) {
         final var code = pgException.getSqlState();
         return switch (code) {
             // foreign_key_violation
             case "23503" -> new ServerSideNotFoundException("foreign key violation, " +
-                    "constraint=" + pgException.getConstraint(), pgException);
+                    "constraint=" + pgException.getConstraint() +
+                    ", sql=" + sql.replaceAll(System.lineSeparator(), " "),
+                    pgException);
             // unique_violation
             case "23505" -> new ServerSideConflictException("unique violation, " +
-                    "constraint=" + pgException.getConstraint(), pgException);
+                    "constraint=" + pgException.getConstraint() +
+                    ", sql=" + sql.replaceAll(System.lineSeparator(), " "),
+                    pgException);
             // not_null_violation
             case "23502" -> new ServerSideBadRequestException("not null violation, " +
                     "constraint=" + pgException.getConstraint(), pgException);
-            default -> new ServerSideInternalException("unhandled PgException, " + pgException.getMessage(),
+            default -> new ServerSideInternalException("unhandled PgException, " +
+                    pgException.getMessage() +
+                    ", sql=" + sql.replaceAll(System.lineSeparator(), " "),
                     pgException);
         };
     }

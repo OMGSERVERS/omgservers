@@ -50,11 +50,11 @@ class ExecuteSelectObjectOperationImpl implements ExecuteSelectObjectOperation {
                         log.debug("{} was selected, {}", objectName, object);
                         return object;
                     } else {
-                        throw new ServerSideNotFoundException(String.format("%s was not found, parameters=%s",
-                                objectName.toLowerCase(), parameters));
+                        throw new ServerSideNotFoundException(String.format("%s was not found, sql=%s, parameters=%s",
+                                objectName.toLowerCase(), preparedSql, parameters));
                     }
                 })
                 .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+                .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }
 }

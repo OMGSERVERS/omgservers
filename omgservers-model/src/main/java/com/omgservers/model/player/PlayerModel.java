@@ -41,5 +41,15 @@ public class PlayerModel {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    PlayerAttributesModel attributes;
+
+    @NotNull
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    PlayerObjectModel object;
+
+    @NotNull
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     PlayerConfigModel config;
 }

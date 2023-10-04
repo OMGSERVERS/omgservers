@@ -1,8 +1,8 @@
 package com.omgservers.module.script.impl.сontext.player;
 
-import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerGetAttributeFunction;
+import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerGetAttributesFunction;
 import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerRespondFunction;
-import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerSetAttributeFunction;
+import com.omgservers.module.script.impl.сontext.player.function.LuaPlayerSetAttributesFunction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -22,16 +22,16 @@ public class LuaPlayerContext extends LuaTable {
     @ToString.Exclude
     final LuaPlayerRespondFunction respondFunction;
     @ToString.Exclude
-    final LuaPlayerSetAttributeFunction setAttributeFunction;
+    final LuaPlayerSetAttributesFunction setAttributesFunction;
     @ToString.Exclude
-    final LuaPlayerGetAttributeFunction getAttributeFunction;
+    final LuaPlayerGetAttributesFunction getAttributesFunction;
 
     public LuaPlayerContext(final Long userId,
                             final Long playerId,
                             final Long clientId,
                             final LuaPlayerRespondFunction respondFunction,
-                            final LuaPlayerSetAttributeFunction setAttributeFunction,
-                            final LuaPlayerGetAttributeFunction getAttributeFunction) {
+                            final LuaPlayerSetAttributesFunction setAttributesFunction,
+                            final LuaPlayerGetAttributesFunction getAttributesFunction) {
         this.userId = userId;
         this.playerId = playerId;
         this.clientId = clientId;
@@ -41,11 +41,11 @@ public class LuaPlayerContext extends LuaTable {
         set("client_id", clientId);
 
         this.respondFunction = respondFunction;
-        this.setAttributeFunction = setAttributeFunction;
-        this.getAttributeFunction = getAttributeFunction;
+        this.setAttributesFunction = setAttributesFunction;
+        this.getAttributesFunction = getAttributesFunction;
 
         set("respond", respondFunction);
-        set("set_attribute", setAttributeFunction);
-        set("get_attribute", getAttributeFunction);
+        set("set_attributes", setAttributesFunction);
+        set("get_attributes", getAttributesFunction);
     }
 }

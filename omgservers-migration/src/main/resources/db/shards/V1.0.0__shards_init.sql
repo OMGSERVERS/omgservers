@@ -23,6 +23,8 @@ create table if not exists tab_user_player (
     modified timestamp with time zone not null,
     tenant_id bigint not null,
     stage_id bigint not null,
+    attributes json not null,
+    object json not null,
     config json not null,
     unique(user_id, stage_id)
 );
@@ -36,28 +38,6 @@ create table if not exists tab_user_client (
     connection_id bigint not null,
     script_id bigint not null,
     unique(player_id, connection_id)
-);
-
-create table if not exists tab_user_attribute (
-    id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
-    player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    name varchar(64) not null,
-    attribute_value varchar(64) not null,
-    unique(player_id, name)
-);
-
-create table if not exists tab_user_object (
-    id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
-    player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    name varchar(64) not null,
-    body bytea not null,
-    unique(player_id, name)
 );
 
 -- tenant module

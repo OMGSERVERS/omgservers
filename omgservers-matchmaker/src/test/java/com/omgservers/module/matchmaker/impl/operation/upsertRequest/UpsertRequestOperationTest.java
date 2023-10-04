@@ -1,5 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
@@ -43,7 +44,7 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
@@ -54,7 +55,7 @@ class UpsertRequestOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
 

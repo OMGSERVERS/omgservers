@@ -63,6 +63,6 @@ class ExecuteSelectListOperationImpl implements ExecuteSelectListOperation {
                     return objects;
                 })
                 .onFailure(PgException.class)
-                .transform(t -> transformPgExceptionOperation.transformPgException((PgException) t));
+                .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }
 }

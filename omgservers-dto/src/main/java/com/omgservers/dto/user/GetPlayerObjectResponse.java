@@ -1,6 +1,6 @@
 package com.omgservers.dto.user;
 
-import com.omgservers.model.player.PlayerAttributesModel;
+import com.omgservers.model.player.PlayerObjectModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetPlayerAttributesResponse {
+public class GetPlayerObjectResponse {
 
-    PlayerAttributesModel attributes;
+    PlayerObjectModel object;
 }

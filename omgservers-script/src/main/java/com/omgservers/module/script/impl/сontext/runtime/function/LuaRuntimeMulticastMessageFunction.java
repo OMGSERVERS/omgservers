@@ -17,6 +17,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class LuaRuntimeMulticastMessageFunction extends VarArgFunction {
+
     final RuntimeModule runtimeModule;
 
     final HandleLuaCallOperation handleLuaCallOperation;

@@ -1,22 +1,20 @@
 package com.omgservers.model.request;
 
 import com.omgservers.exception.ServerSideBadRequestException;
+import com.omgservers.model.player.PlayerAttributesModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestConfigModel {
 
-    static public RequestConfigModel create() {
+    static public RequestConfigModel create(PlayerAttributesModel attributes) {
         final var config = new RequestConfigModel();
-        config.setAttributes(new HashMap<>());
+        config.setAttributes(attributes);
         return config;
     }
 
@@ -27,5 +25,5 @@ public class RequestConfigModel {
     }
 
     @NotNull
-    Map<String, String> attributes;
+    PlayerAttributesModel attributes;
 }

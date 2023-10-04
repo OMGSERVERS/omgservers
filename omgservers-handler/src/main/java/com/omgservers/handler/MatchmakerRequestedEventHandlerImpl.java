@@ -8,6 +8,7 @@ import com.omgservers.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -21,9 +22,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @ApplicationScoped
@@ -77,14 +75,9 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
                 .map(GetStageResponse::getStage);
     }
 
-    Uni<Map<String, String>> getPlayerAttributes(Long userId, Long playerId) {
+    Uni<PlayerAttributesModel> getPlayerAttributes(Long userId, Long playerId) {
         final var request = new GetPlayerAttributesRequest(userId, playerId);
-        return userModule.getAttributeService().getPlayerAttributes(request)
-                .map(GetPlayerAttributesResponse::getAttributes)
-                .map(entities -> {
-                    final var attributes = new HashMap<String, String>();
-                    entities.forEach(entity -> attributes.put(entity.getName(), entity.getValue()));
-                    return attributes;
-                });
+        return userModule.getPlayerService().getPlayerAttributes(request)
+                .map(GetPlayerAttributesResponse::getAttributes);
     }
 }

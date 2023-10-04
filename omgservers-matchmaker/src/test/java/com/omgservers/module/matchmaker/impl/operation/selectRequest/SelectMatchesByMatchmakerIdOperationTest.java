@@ -1,6 +1,7 @@
 package com.omgservers.module.matchmaker.impl.operation.selectRequest;
 
 import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
@@ -48,7 +49,7 @@ class SelectMatchesByMatchmakerIdOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
-        final var matchmakerRequestConfig = RequestConfigModel.create();
+        final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 

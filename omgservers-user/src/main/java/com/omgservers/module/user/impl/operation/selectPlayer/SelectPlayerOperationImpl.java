@@ -31,7 +31,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, created, modified, tenant_id, stage_id, config
+                        select id, user_id, created, modified, tenant_id, stage_id, attributes, object, config
                         from $schema.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1

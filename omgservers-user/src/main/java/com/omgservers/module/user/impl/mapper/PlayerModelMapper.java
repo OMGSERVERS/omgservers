@@ -2,8 +2,10 @@ package com.omgservers.module.user.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
+import com.omgservers.model.player.PlayerObjectModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,16 @@ public class PlayerModelMapper {
         player.setModified(row.getOffsetDateTime("modified").toInstant());
         player.setTenantId(row.getLong("tenant_id"));
         player.setStageId(row.getLong("stage_id"));
+        try {
+            player.setAttributes(objectMapper.readValue(row.getString("attributes"), PlayerAttributesModel.class));
+        } catch (IOException e) {
+            throw new ServerSideConflictException("player attributes can't be parsed, player=" + player, e);
+        }
+        try {
+            player.setObject(objectMapper.readValue(row.getString("object"), PlayerObjectModel.class));
+        } catch (IOException e) {
+            throw new ServerSideConflictException("player object can't be parsed, player=" + player, e);
+        }
         try {
             player.setConfig(objectMapper.readValue(row.getString("config"), PlayerConfigModel.class));
         } catch (IOException e) {
