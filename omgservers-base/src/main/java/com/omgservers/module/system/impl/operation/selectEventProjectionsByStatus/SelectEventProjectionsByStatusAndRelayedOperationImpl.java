@@ -3,7 +3,7 @@ package com.omgservers.module.system.impl.operation.selectEventProjectionsByStat
 import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.model.eventProjection.EventProjectionModel;
 import com.omgservers.module.system.impl.mappers.EventProjectionModelMapper;
-import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
+import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.List;
 class SelectEventProjectionsByStatusAndRelayedOperationImpl
         implements SelectEventProjectionsByStatusAndRelayedOperation {
 
-    final ExecuteSelectListOperation executeSelectListOperation;
+    final SelectListOperation selectListOperation;
 
     final EventProjectionModelMapper eventProjectionModelMapper;
 
@@ -30,7 +30,7 @@ class SelectEventProjectionsByStatusAndRelayedOperationImpl
             final Boolean relayed,
             final int limit) {
 
-        return executeSelectListOperation.executeSelectList(
+        return selectListOperation.selectList(
                 sqlConnection,
                 0,
                 """

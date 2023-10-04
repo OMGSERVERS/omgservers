@@ -1,4 +1,4 @@
-package com.omgservers.operation.executeCount;
+package com.omgservers.operation.hasObject;
 
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.module.system.factory.LogModelFactory;
@@ -8,7 +8,6 @@ import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
-import io.vertx.mutiny.sqlclient.SqlResult;
 import io.vertx.mutiny.sqlclient.Tuple;
 import io.vertx.pgclient.PgException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +19,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class ExecuteCountOperationImpl implements ExecuteCountOperation {
+class HasObjectOperationImpl implements HasObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -31,20 +30,20 @@ class ExecuteCountOperationImpl implements ExecuteCountOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Integer> executeCount(final SqlConnection sqlConnection,
-                                     final int shard,
-                                     final String sql,
-                                     final List<?> parameters,
-                                     final String objectName) {
+    public Uni<Boolean> hasObject(final SqlConnection sqlConnection,
+                                  final int shard,
+                                  final String sql,
+                                  final List<?> parameters,
+                                  final String objectName) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
-                .map(SqlResult::rowCount)
-                .invoke(count -> {
-                    if (count > 0) {
-                        log.debug("{}/s was counted, count={}, parameters={}", objectName, count, parameters);
+                .map(rowSet -> rowSet.rowCount() > 0)
+                .invoke(exists -> {
+                    if (exists) {
+                        log.debug("{} was found, parameters={}", objectName, parameters);
                     } else {
-                        log.debug("{}/s was not found, parameters={}", objectName, parameters);
+                        log.debug("{} was not found, parameters={}", objectName, parameters);
                     }
                 })
                 .onFailure(PgException.class)

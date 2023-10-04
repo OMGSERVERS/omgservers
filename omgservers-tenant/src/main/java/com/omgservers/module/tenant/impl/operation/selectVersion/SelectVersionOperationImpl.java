@@ -6,7 +6,7 @@ import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -15,16 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class SelectVersionOperationImpl implements SelectVersionOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -33,7 +31,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
                                            final int shard,
                                            final Long tenantId,
                                            final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

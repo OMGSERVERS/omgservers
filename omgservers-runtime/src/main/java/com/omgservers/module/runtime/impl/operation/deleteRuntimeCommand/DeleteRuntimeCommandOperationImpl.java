@@ -2,7 +2,7 @@ package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +16,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -25,7 +25,7 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
                                              final int shard,
                                              final Long runtimeId,
                                              final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         delete from $schema.tab_runtime_command

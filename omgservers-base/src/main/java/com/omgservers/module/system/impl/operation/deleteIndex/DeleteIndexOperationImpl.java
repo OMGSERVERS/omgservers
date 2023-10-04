@@ -3,7 +3,7 @@ package com.omgservers.module.system.impl.operation.deleteIndex;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,14 +17,14 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteIndexOperationImpl implements DeleteIndexOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> deleteIndex(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
                         delete from system.tab_index

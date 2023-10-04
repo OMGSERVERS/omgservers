@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.deleteEvent;
 
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +16,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteEventOperationImpl implements DeleteEventOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
 
     final LogModelFactory logModelFactory;
 
@@ -24,7 +24,7 @@ class DeleteEventOperationImpl implements DeleteEventOperation {
     public Uni<Boolean> deleteEvent(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final Long id) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
                         delete from system.tab_event where

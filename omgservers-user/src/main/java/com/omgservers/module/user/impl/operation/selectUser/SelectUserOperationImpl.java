@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.operation.selectUser;
 
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -17,13 +17,13 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectUserOperationImpl implements SelectUserOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     @Override
     public Uni<UserModel> selectUser(final SqlConnection sqlConnection,
                                      final int shard,
                                      final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

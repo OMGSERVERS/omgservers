@@ -4,7 +4,7 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.runtime.impl.operation.selectRuntimeGrant.SelectRuntimeGrantOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteRuntimeGrantOperationImpl implements DeleteRuntimeGrantOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectRuntimeGrantOperation selectRuntimeGrantOperation;
     final LogModelFactory logModelFactory;
 
@@ -29,7 +29,7 @@ class DeleteRuntimeGrantOperationImpl implements DeleteRuntimeGrantOperation {
                                            final Long runtimeId,
                                            final Long id) {
         return selectRuntimeGrantOperation.selectRuntimeGrant(sqlConnection, shard, runtimeId, id)
-                .flatMap(runtimeGrant -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(runtimeGrant -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_runtime_grant

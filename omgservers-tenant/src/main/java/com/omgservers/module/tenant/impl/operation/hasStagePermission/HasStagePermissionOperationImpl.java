@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.hasStagePermission;
 
 import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.operation.executeHasObject.ExecuteHasObjectOperation;
+import com.omgservers.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
 
-    final ExecuteHasObjectOperation executeHasObjectOperation;
+    final HasObjectOperation hasObjectOperation;
 
     @Override
     public Uni<Boolean> hasStagePermission(final SqlConnection sqlConnection,
@@ -24,7 +24,7 @@ class HasStagePermissionOperationImpl implements HasStagePermissionOperation {
                                            final Long stageId,
                                            final Long userId,
                                            final StagePermissionEnum permission) {
-        return executeHasObjectOperation.executeHasObject(
+        return hasObjectOperation.hasObject(
                 sqlConnection,
                 shard,
                 """

@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.selectEvent;
 
 import com.omgservers.model.event.EventModel;
 import com.omgservers.module.system.impl.mappers.EventModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,13 +16,13 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectEventOperationImpl implements SelectEventOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
     final EventModelMapper eventModelMapper;
 
     @Override
     public Uni<EventModel> selectEvent(final SqlConnection sqlConnection,
                                        final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """

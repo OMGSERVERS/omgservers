@@ -1,4 +1,4 @@
-package com.omgservers.operation.executeChangeObject;
+package com.omgservers.operation.changeObject;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class ExecuteChangeObjectOperationImpl implements ExecuteChangeObjectOperation {
+class ChangeObjectOperationImpl implements ChangeObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -34,13 +34,13 @@ class ExecuteChangeObjectOperationImpl implements ExecuteChangeObjectOperation {
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
 
-    public Uni<Boolean> executeChangeObject(final ChangeContext<?> changeContext,
-                                            final SqlConnection sqlConnection,
-                                            final int shard,
-                                            String sql,
-                                            List<?> parameters,
-                                            Supplier<EventBodyModel> eventBodySupplier,
-                                            Supplier<LogModel> logSupplier) {
+    public Uni<Boolean> changeObject(final ChangeContext<?> changeContext,
+                                     final SqlConnection sqlConnection,
+                                     final int shard,
+                                     String sql,
+                                     List<?> parameters,
+                                     Supplier<EventBodyModel> eventBodySupplier,
+                                     Supplier<LogModel> logSupplier) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))

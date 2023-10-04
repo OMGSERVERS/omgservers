@@ -5,7 +5,7 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
 import com.omgservers.model.script.ScriptTypeEnum;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -21,7 +21,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectScriptOperationImpl implements SelectScriptOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -29,7 +29,7 @@ class SelectScriptOperationImpl implements SelectScriptOperation {
     public Uni<ScriptModel> selectScript(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

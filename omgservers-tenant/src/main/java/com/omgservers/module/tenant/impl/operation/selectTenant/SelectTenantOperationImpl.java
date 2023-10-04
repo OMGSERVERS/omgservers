@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -20,7 +20,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectTenantOperationImpl implements SelectTenantOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -28,7 +28,7 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
     public Uni<TenantModel> selectTenant(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.operation.selectMatch;
 
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.matchmaker.impl.mappers.MatchModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectMatchOperationImpl implements SelectMatchOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final MatchModelMapper matchModelMapper;
 
@@ -25,7 +25,7 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
                                        final int shard,
                                        final Long matchmakerId,
                                        final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ import java.util.Collections;
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
     final SelectServiceAccountOperation selectServiceAccountOperation;
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -28,7 +28,7 @@ class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation
                                              final SqlConnection sqlConnection,
                                              final String username) {
         return selectServiceAccountOperation.selectServiceAccount(sqlConnection, username)
-                .flatMap(serviceAccount -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(serviceAccount -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, 0,
                         """
                                 delete from system.tab_service_account

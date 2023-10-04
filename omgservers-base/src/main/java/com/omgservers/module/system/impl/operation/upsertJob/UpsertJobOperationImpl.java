@@ -4,7 +4,7 @@ import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,14 +19,14 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertJobOperationImpl implements UpsertJobOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> upsertJob(final ChangeContext<?> changeContext,
                                   final SqlConnection sqlConnection,
                                   final JobModel job) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
                         insert into system.tab_job(id, created, shard_key, entity_id, qualifier)

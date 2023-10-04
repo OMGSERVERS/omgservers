@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.hasProjectPermission;
 
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
-import com.omgservers.operation.executeHasObject.ExecuteHasObjectOperation;
+import com.omgservers.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation {
 
-    final ExecuteHasObjectOperation executeHasObjectOperation;
+    final HasObjectOperation hasObjectOperation;
 
     @Override
     public Uni<Boolean> hasProjectPermission(final SqlConnection sqlConnection,
@@ -24,7 +24,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
                                              final Long projectId,
                                              final Long userId,
                                              final ProjectPermissionEnum permission) {
-        return executeHasObjectOperation.executeHasObject(
+        return hasObjectOperation.hasObject(
                 sqlConnection,
                 shard,
                 """

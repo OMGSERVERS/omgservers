@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.operation.upsertTenantPermission;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,7 +26,7 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
                                                final SqlConnection sqlConnection,
                                                final int shard,
                                                final TenantPermissionModel permission) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_permission(id, tenant_id, created, user_id, permission)

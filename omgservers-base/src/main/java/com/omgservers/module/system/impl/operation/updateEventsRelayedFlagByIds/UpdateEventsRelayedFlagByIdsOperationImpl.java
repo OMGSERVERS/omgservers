@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.updateEventsRelayedFlagByIds
 
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 class UpdateEventsRelayedFlagByIdsOperationImpl implements UpdateEventsRelayedFlagByIdsOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
 
     final LogModelFactory logModelFactory;
 
@@ -28,7 +28,7 @@ class UpdateEventsRelayedFlagByIdsOperationImpl implements UpdateEventsRelayedFl
                                                  final SqlConnection sqlConnection,
                                                  final List<Long> ids,
                                                  final Boolean relayed) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
                         update system.tab_event

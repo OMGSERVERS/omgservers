@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.selectStage.SelectStageOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteStageOperationImpl implements DeleteStageOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectStageOperation selectStageOperation;
     final LogModelFactory logModelFactory;
 
@@ -30,7 +30,7 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
                                     final Long tenantId,
                                     final Long id) {
         return selectStageOperation.selectStage(sqlConnection, shard, tenantId, id)
-                .flatMap(stage -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(stage -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_tenant_stage

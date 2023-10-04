@@ -3,7 +3,7 @@ package com.omgservers.module.user.impl.operation.selectPlayerByUserIdAndStageId
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.module.user.impl.mapper.PlayerModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserIdAndStageIdOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final PlayerModelMapper playerModelMapper;
     final ObjectMapper objectMapper;
@@ -27,7 +27,7 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
                                                            final int shard,
                                                            final Long userId,
                                                            final Long stageId) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

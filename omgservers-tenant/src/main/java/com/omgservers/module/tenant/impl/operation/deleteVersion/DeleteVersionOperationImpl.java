@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.selectVersion.SelectVersionOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteVersionOperationImpl implements DeleteVersionOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectVersionOperation selectVersionOperation;
     final LogModelFactory logModelFactory;
 
@@ -30,7 +30,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
                                       final Long tenantId,
                                       final Long id) {
         return selectVersionOperation.selectVersion(sqlConnection, shard, tenantId, id)
-                .flatMap(version -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(version -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_tenant_version

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stage.StageModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectStageOperationImpl implements SelectStageOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -29,7 +29,7 @@ class SelectStageOperationImpl implements SelectStageOperation {
                                        final int shard,
                                        final Long tenantId,
                                        final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

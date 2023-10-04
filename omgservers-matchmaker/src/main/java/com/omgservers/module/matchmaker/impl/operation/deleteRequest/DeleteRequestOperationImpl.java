@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.RequestDeletedEventBodyModel;
 import com.omgservers.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteRequestOperationImpl implements DeleteRequestOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectRequestOperation selectRequestOperation;
     final LogModelFactory logModelFactory;
 
@@ -30,7 +30,7 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
                                       final Long matchmakerId,
                                       final Long id) {
         return selectRequestOperation.selectRequest(sqlConnection, shard, matchmakerId, id)
-                .flatMap(request -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(request -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_matchmaker_request

@@ -3,7 +3,7 @@ package com.omgservers.module.user.impl.operation.upsertToken;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertTokenOperationImpl implements UpsertTokenOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,7 +26,7 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final TokenModel token) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_token(id, user_id, created, expire, hash)

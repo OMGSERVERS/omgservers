@@ -6,7 +6,7 @@ import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertMatchOperationImpl implements UpsertMatchOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
 
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
@@ -32,7 +32,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
                                     final SqlConnection sqlConnection,
                                     final int shard,
                                     final MatchModel match) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, config)

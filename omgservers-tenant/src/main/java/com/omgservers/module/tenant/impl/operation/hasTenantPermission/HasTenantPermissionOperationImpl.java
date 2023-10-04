@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.hasTenantPermission;
 
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.operation.executeHasObject.ExecuteHasObjectOperation;
+import com.omgservers.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
 
-    final ExecuteHasObjectOperation executeHasObjectOperation;
+    final HasObjectOperation hasObjectOperation;
 
     @Override
     public Uni<Boolean> hasTenantPermission(final SqlConnection sqlConnection,
@@ -23,7 +23,7 @@ class HasTenantPermissionOperationImpl implements HasTenantPermissionOperation {
                                             final Long tenantId,
                                             final Long userId,
                                             final TenantPermissionEnum permission) {
-        return executeHasObjectOperation.executeHasObject(
+        return hasObjectOperation.hasObject(
                 sqlConnection,
                 shard,
                 """

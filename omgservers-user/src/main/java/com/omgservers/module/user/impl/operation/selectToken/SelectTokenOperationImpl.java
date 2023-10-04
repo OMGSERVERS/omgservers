@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.operation.selectToken;
 
 import com.omgservers.model.token.TokenModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -16,13 +16,13 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectTokenOperationImpl implements SelectTokenOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     @Override
     public Uni<TokenModel> selectToken(final SqlConnection sqlConnection,
                                        final int shard,
                                        final Long tokenId) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

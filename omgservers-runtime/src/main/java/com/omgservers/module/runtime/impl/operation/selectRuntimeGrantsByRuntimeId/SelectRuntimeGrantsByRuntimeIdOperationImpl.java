@@ -2,7 +2,7 @@ package com.omgservers.module.runtime.impl.operation.selectRuntimeGrantsByRuntim
 
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.module.runtime.impl.mapper.RuntimeGrantModelMapper;
-import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
+import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.List;
 class SelectRuntimeGrantsByRuntimeIdOperationImpl implements
         SelectRuntimeGrantsByRuntimeIdOperation {
 
-    final ExecuteSelectListOperation executeSelectListOperation;
+    final SelectListOperation selectListOperation;
 
     final RuntimeGrantModelMapper runtimeGrantModelMapper;
 
@@ -26,7 +26,7 @@ class SelectRuntimeGrantsByRuntimeIdOperationImpl implements
     public Uni<List<RuntimeGrantModel>> selectRuntimeGrantsByRuntimeId(final SqlConnection sqlConnection,
                                                                        final int shard,
                                                                        final Long runtimeId) {
-        return executeSelectListOperation.executeSelectList(
+        return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """

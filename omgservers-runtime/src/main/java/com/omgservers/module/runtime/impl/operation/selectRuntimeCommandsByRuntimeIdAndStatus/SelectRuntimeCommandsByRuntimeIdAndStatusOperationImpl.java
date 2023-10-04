@@ -5,7 +5,7 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
-import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
+import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class SelectRuntimeCommandsByRuntimeIdAndStatusOperationImpl implements SelectRuntimeCommandsByRuntimeIdAndStatusOperation {
 
-    final ExecuteSelectListOperation executeSelectListOperation;
+    final SelectListOperation selectListOperation;
 
     final ObjectMapper objectMapper;
 
@@ -31,7 +31,7 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationImpl implements SelectRu
                                                                                     final int shard,
                                                                                     final Long runtimeId,
                                                                                     final RuntimeCommandStatusEnum status) {
-        return executeSelectListOperation.executeSelectList(
+        return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """

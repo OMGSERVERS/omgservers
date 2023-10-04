@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.operation.hasRuntimeGrant;
 
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
-import com.omgservers.operation.executeHasObject.ExecuteHasObjectOperation;
+import com.omgservers.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class HasRuntimeGrantOperationImpl implements HasRuntimeGrantOperation {
 
-    final ExecuteHasObjectOperation executeHasObjectOperation;
+    final HasObjectOperation hasObjectOperation;
 
     @Override
     public Uni<Boolean> hasRuntimeGrant(final SqlConnection sqlConnection,
@@ -24,7 +24,7 @@ class HasRuntimeGrantOperationImpl implements HasRuntimeGrantOperation {
                                         final Long shardKey,
                                         final Long entityId,
                                         final RuntimeGrantTypeEnum type) {
-        return executeHasObjectOperation.executeHasObject(
+        return hasObjectOperation.hasObject(
                 sqlConnection,
                 shard,
                 """

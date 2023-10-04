@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.operation.selectVersionConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -27,7 +27,7 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                                                        final int shard,
                                                        final Long tenantId,
                                                        final Long versionId) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.selectAllLogs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.log.LogModel;
-import com.omgservers.operation.executeSelectList.ExecuteSelectListOperation;
+import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -17,12 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 class SelectAllLogsOperationImpl implements SelectAllLogsOperation {
 
-    final ExecuteSelectListOperation executeSelectListOperation;
+    final SelectListOperation selectListOperation;
     final ObjectMapper objectMapper;
 
     @Override
     public Uni<List<LogModel>> selectAllLogs(SqlConnection sqlConnection) {
-        return executeSelectListOperation.executeSelectList(
+        return selectListOperation.selectList(
                 sqlConnection,
                 0,
                 """

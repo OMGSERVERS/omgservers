@@ -4,7 +4,7 @@ import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,14 +19,14 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> upsertServiceAccount(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
                                              final ServiceAccountModel serviceAccount) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
                         insert into system.tab_service_account(id, created, modified, username, password_hash)

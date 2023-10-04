@@ -1,4 +1,4 @@
-package com.omgservers.operation.executeSelectObject;
+package com.omgservers.operation.selectObject;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.system.factory.EventModelFactory;
@@ -23,7 +23,7 @@ import java.util.function.Function;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class ExecuteSelectObjectOperationImpl implements ExecuteSelectObjectOperation {
+class SelectObjectOperationImpl implements SelectObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
@@ -34,12 +34,12 @@ class ExecuteSelectObjectOperationImpl implements ExecuteSelectObjectOperation {
     final LogModelFactory logModelFactory;
 
     @Override
-    public <T> Uni<T> executeSelectObject(final SqlConnection sqlConnection,
-                                          final int shard,
-                                          final String sql,
-                                          final List<?> parameters,
-                                          final String objectName,
-                                          final Function<Row, T> objectMapper) {
+    public <T> Uni<T> selectObject(final SqlConnection sqlConnection,
+                                   final int shard,
+                                   final String sql,
+                                   final List<?> parameters,
+                                   final String objectName,
+                                   final Function<Row, T> objectMapper) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))

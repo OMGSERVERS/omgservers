@@ -6,7 +6,7 @@ import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.selectJobByShardKeyAndEntityIdAndQualifierOperation.SelectJobByShardKeyAndEntityIdAndQualifierOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 class DeleteJobOperationImpl implements DeleteJobOperation {
 
     final SelectJobByShardKeyAndEntityIdAndQualifierOperation selectJobByShardKeyAndEntityIdAndQualifierOperation;
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -35,7 +35,7 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
                         shardKey,
                         entityId,
                         qualifier)
-                .flatMap(job -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(job -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, 0,
                         """
                                 delete from system.tab_job

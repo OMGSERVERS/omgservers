@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectRuntimeOperation selectRuntimeOperation;
     final LogModelFactory logModelFactory;
 
@@ -29,7 +29,7 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
                                       final int shard,
                                       final Long id) {
         return selectRuntimeOperation.selectRuntime(sqlConnection, shard, id)
-                .flatMap(runtime -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(runtime -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_runtime

@@ -5,7 +5,7 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -21,7 +21,7 @@ import java.util.Collections;
 @AllArgsConstructor
 class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
@@ -29,7 +29,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
     public Uni<RuntimeModel> selectRuntime(final SqlConnection sqlConnection,
                                            final int shard,
                                            final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

@@ -3,7 +3,7 @@ package com.omgservers.module.system.impl.operation.selectJobByShardKeyAndEntity
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.impl.mappers.JobModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 class selectJobByShardKeyAndEntityIdAndQualifierOperationImpl
         implements SelectJobByShardKeyAndEntityIdAndQualifierOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final JobModelMapper jobModelMapper;
 
@@ -27,7 +27,7 @@ class selectJobByShardKeyAndEntityIdAndQualifierOperationImpl
                                                                     final Long shardKey,
                                                                     final Long entityId,
                                                                     final JobQualifierEnum qualifier) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """

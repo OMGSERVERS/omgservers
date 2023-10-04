@@ -3,7 +3,7 @@ package com.omgservers.module.tenant.impl.operation.upsertProjectPermission;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -26,7 +26,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                                                 final SqlConnection sqlConnection,
                                                 final int shard,
                                                 final ProjectPermissionModel permission) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_project_permission(id, tenant_id, project_id, created, user_id, permission)

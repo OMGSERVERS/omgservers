@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertLogOperationImpl implements UpsertLogOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
 
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
@@ -28,7 +28,7 @@ class UpsertLogOperationImpl implements UpsertLogOperation {
     public Uni<Boolean> upsertLog(final ChangeContext<?> changeContext,
                                   final SqlConnection sqlConnection,
                                   final LogModel logModel) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                         changeContext, sqlConnection, 0,
                         """
                                 insert into system.tab_log(id, created, message)

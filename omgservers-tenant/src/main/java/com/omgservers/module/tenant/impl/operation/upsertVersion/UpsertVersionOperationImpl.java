@@ -6,7 +6,7 @@ import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UpsertVersionOperationImpl implements UpsertVersionOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -33,7 +33,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                                       final int shard,
                                       final Long tenantId,
                                       final VersionModel version) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(id, tenant_id, stage_id, created, modified, config, source_code, bytecode, errors)

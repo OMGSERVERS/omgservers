@@ -4,7 +4,7 @@ import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpsertClientOperationImpl implements UpsertClientOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
@@ -27,7 +27,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final ClientModel client) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_client(id, user_id, player_id, created, server, connection_id, script_id)

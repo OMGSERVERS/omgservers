@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeletePlayerOperationImpl implements DeletePlayerOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectPlayerOperation selectPlayerOperation;
     final LogModelFactory logModelFactory;
 
@@ -30,7 +30,7 @@ class DeletePlayerOperationImpl implements DeletePlayerOperation {
                                      final Long userId,
                                      final Long id) {
         return selectPlayerOperation.selectPlayer(sqlConnection, shard, userId, id)
-                .flatMap(player -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(player -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_user_player

@@ -5,7 +5,7 @@ import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class DeleteProjectOperationImpl implements DeleteProjectOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final SelectProjectOperation selectProjectOperation;
     final LogModelFactory logModelFactory;
 
@@ -30,7 +30,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
                                       final Long tenantId,
                                       final Long id) {
         return selectProjectOperation.selectProject(sqlConnection, shard, tenantId, id)
-                .flatMap(project -> executeChangeObjectOperation.executeChangeObject(
+                .flatMap(project -> changeObjectOperation.changeObject(
                         changeContext, sqlConnection, shard,
                         """
                                 delete from $schema.tab_tenant_project

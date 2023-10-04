@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.selectServiceAccount;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -17,13 +17,13 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final ObjectMapper objectMapper;
 
     @Override
     public Uni<ServiceAccountModel> selectServiceAccount(final SqlConnection sqlConnection, final String username) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """

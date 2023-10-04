@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.player.PlayerObjectModel;
 import com.omgservers.module.user.impl.mapper.PlayerModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final PlayerModelMapper playerModelMapper;
     final ObjectMapper objectMapper;
@@ -29,7 +29,7 @@ class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
                                                      final int shard,
                                                      final Long userId,
                                                      final Long playerId) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

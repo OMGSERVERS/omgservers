@@ -2,7 +2,7 @@ package com.omgservers.module.runtime.impl.operation.selectRuntimeGrant;
 
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.module.runtime.impl.mapper.RuntimeGrantModelMapper;
-import com.omgservers.operation.executeSelectObject.ExecuteSelectObjectOperation;
+import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class SelectRuntimeGrantOperationImpl implements SelectRuntimeGrantOperation {
 
-    final ExecuteSelectObjectOperation executeSelectObjectOperation;
+    final SelectObjectOperation selectObjectOperation;
 
     final RuntimeGrantModelMapper runtimeGrantModelMapper;
 
@@ -25,7 +25,7 @@ class SelectRuntimeGrantOperationImpl implements SelectRuntimeGrantOperation {
                                                      final int shard,
                                                      final Long runtimeId,
                                                      final Long id) {
-        return executeSelectObjectOperation.executeSelectObject(
+        return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """

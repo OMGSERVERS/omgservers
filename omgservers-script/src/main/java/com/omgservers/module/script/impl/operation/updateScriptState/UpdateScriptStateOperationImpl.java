@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.ScriptUpdatedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
-import com.omgservers.operation.executeChangeObject.ExecuteChangeObjectOperation;
+import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 class UpdateScriptStateOperationImpl implements UpdateScriptStateOperation {
 
-    final ExecuteChangeObjectOperation executeChangeObjectOperation;
+    final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
@@ -30,7 +30,7 @@ class UpdateScriptStateOperationImpl implements UpdateScriptStateOperation {
                                           final int shard,
                                           final Long id,
                                           final String state) {
-        return executeChangeObjectOperation.executeChangeObject(
+        return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_script
