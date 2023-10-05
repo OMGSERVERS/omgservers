@@ -31,11 +31,11 @@ public class PlayerSignInSignUpTest extends Assertions {
                 local var event = context.event
                                 
                 if event.id == "signed_up" then
-                    context.respond("signed_up")
+                    context.respond({text="signed_up"})
                 end
                                 
                 if event.id == "signed_in" then
-                    context.respond("signed_in")
+                    context.respond({text="signed_in"})
                 end
                                 
                 return nil
@@ -48,7 +48,7 @@ public class PlayerSignInSignUpTest extends Assertions {
         assertNotNull(welcome1);
 
         final var serverMessage1 = client.consumeServerMessage();
-        assertEquals("signed_up", serverMessage1.getEvent().toString());
+        assertEquals("{text=signed_up}", serverMessage1.getMessage().toString());
 
         client.reconnect();
         client.signIn(version);
@@ -57,7 +57,7 @@ public class PlayerSignInSignUpTest extends Assertions {
         assertNotNull(welcome2);
 
         final var serverMessage2 = client.consumeServerMessage();
-        assertEquals("signed_in", serverMessage2.getEvent().toString());
+        assertEquals("{text=signed_in}", serverMessage2.getMessage().toString());
         client.close();
     }
 }

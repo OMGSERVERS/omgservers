@@ -38,7 +38,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
     @Override
     public Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request) {
         final var runtimeId = request.getRuntimeId();
-        final var event = request.getMessage();
+        final var message = request.getMessage();
 
         log.info("Do broadcast for message, runtimeId={}", runtimeId);
 
@@ -51,7 +51,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
                                     shardModel.shard(),
                                     runtimeId)
                             .map(runtimeGrants -> createRecipientList(runtimeGrants, grantType))
-                            .flatMap(recipients -> doBroadcast(recipients, event))
+                            .flatMap(recipients -> doBroadcast(recipients, message))
                     );
                 })
                 .replaceWith(new DoBroadcastMessageResponse());
@@ -65,25 +65,23 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
                 .toList();
     }
 
-    Uni<Void> doBroadcast(final List<Recipient> recipients,
-                          final String event) {
+    Uni<Void> doBroadcast(final List<Recipient> recipients, final Object message) {
         return Multi.createFrom().iterable(recipients)
-                .onItem().transformToUniAndMerge(recipient -> respondClient(recipient, event))
+                .onItem().transformToUniAndMerge(recipient -> respondClient(recipient, message))
                 .collect().asList().replaceWithVoid()
                 .invoke(voidItem -> log.info("Broadcast for message was finished, " +
                         "recipientCount={}", recipients.size()))
                 .replaceWithVoid();
     }
 
-    Uni<Void> respondClient(Recipient recipient, String event) {
-        final var body = new ServerMessageBodyModel(event);
-        final var message = messageModelFactory
-                .create(MessageQualifierEnum.SERVER_MESSAGE, body);
+    Uni<Void> respondClient(Recipient recipient, Object message) {
+        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(recipient.userId())
                 .clientId(recipient.clientId())
-                .message(message)
+                .message(messageModel)
                 .build();
         return userModule.getUserService().respondClient(respondClientRequest);
     }

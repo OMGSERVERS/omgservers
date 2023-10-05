@@ -24,13 +24,13 @@ public class LuaRuntimeUnicastMessageFunction extends VarArgFunction {
         return handleLuaCallOperation.handleLuaCall(() -> {
             final var userId = Long.valueOf(args.arg(1).checkjstring());
             final var clientId = Long.valueOf(args.arg(2).checkjstring());
-            final var message = args.arg(3).checkjstring();
+            final var luaMessage = args.arg(3).checktable();
 
             final var doUnicastMessageRequest = DoUnicastMessageRequest.builder()
                     .runtimeId(runtimeId)
                     .userId(userId)
                     .clientId(clientId)
-                    .message(message)
+                    .message(luaMessage)
                     .build();
             return runtimeModule.getDoService().doUnicastMessage(doUnicastMessageRequest)
                     .replaceWith(LuaValue.NIL);

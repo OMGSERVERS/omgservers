@@ -36,14 +36,12 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
         final var runtimeId = request.getRuntimeId();
         final var userId = request.getUserId();
         final var clientId = request.getClientId();
-        final var event = request.getMessage();
+        final var message = request.getMessage();
 
         log.info("Do unicast for message, runtimeId={}, userId={}, clientId={}", runtimeId, userId, clientId);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-
-
                     final var permission = RuntimeGrantTypeEnum.CLIENT;
                     return pgPool.withTransaction(sqlConnection -> hasRuntimeGrantOperation.hasRuntimeGrant(
                                     sqlConnection,
@@ -54,7 +52,7 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
                                     permission)
                             .flatMap(has -> {
                                 if (has) {
-                                    return respondClient(userId, clientId, event);
+                                    return respondClient(userId, clientId, message);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of permission, " +
                                                     "runtimeId=%s, client_id=%s, permission=%s",
@@ -66,15 +64,14 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
                 .replaceWith(new DoUnicastMessageResponse());
     }
 
-    Uni<Void> respondClient(Long userId, Long clientId, String event) {
-        final var body = new ServerMessageBodyModel(event);
-        final var message =
-                messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, body);
+    Uni<Void> respondClient(Long userId, Long clientId, Object message) {
+        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(userId)
                 .clientId(clientId)
-                .message(message)
+                .message(messageModel)
                 .build();
         return userModule.getUserService().respondClient(respondClientRequest);
     }

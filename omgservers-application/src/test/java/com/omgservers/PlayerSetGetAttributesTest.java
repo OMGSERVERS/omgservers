@@ -45,7 +45,7 @@ public class PlayerSetGetAttributesTest extends Assertions {
                     assert(type(attributes.a2) == "string", "a2 is wrong")
                     assert(type(attributes.a3) == "number", "a3 is wrong")
                     assert(type(attributes.a4) == "boolean", "a4 is wrong")
-                    context.respond("test passed")
+                    context.respond({text="test passed"})
                 end
                 """);
 
@@ -62,7 +62,7 @@ public class PlayerSetGetAttributesTest extends Assertions {
         assertNotNull(welcome2);
 
         var message1 = client.consumeServerMessage();
-        assertEquals("test passed", message1.getEvent().toString());
+        assertEquals("{text=test passed}", message1.getMessage().toString());
 
         client.close();
     }

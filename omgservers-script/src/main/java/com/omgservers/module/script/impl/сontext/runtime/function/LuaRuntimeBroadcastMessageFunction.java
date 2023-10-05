@@ -21,9 +21,9 @@ public class LuaRuntimeBroadcastMessageFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs args) {
         return handleLuaCallOperation.handleLuaCall(() -> {
-            final var message = args.arg(1).tojstring();
+            final var luaMessage = args.arg(1).checktable();
 
-            final var doBroadcastMessageRequest = new DoBroadcastMessageRequest(runtimeId, message);
+            final var doBroadcastMessageRequest = new DoBroadcastMessageRequest(runtimeId, luaMessage);
             return runtimeModule.getDoService().doBroadcastMessage(doBroadcastMessageRequest)
                     .replaceWith(LuaValue.NIL);
         });

@@ -62,8 +62,8 @@ public class RuntimeMessagingTest extends Assertions {
                             local client_1 = state.clients[1]
                             local client_2 = state.clients[2]
                             
-                            context.unicast_message(client_1.user_id, client_1.client_id, "hello, client")
-                            context.unicast_message(client_2.user_id, client_2.client_id, "hello, client")
+                            context.unicast_message(client_2.user_id, client_2.client_id, { text = "hello, client" })
+                            context.unicast_message(client_1.user_id, client_1.client_id, { text = "hello, client" })
                             
                             local recipients = {
                                 {
@@ -75,9 +75,9 @@ public class RuntimeMessagingTest extends Assertions {
                                     client_id = client_2.client_id
                                 }
                             }
-                            context.multicast_message(recipients, "hello, client_1 and client_2")
+                            context.multicast_message(recipients, { text = "hello, client_1 and client_2" } )
                             
-                            context.broadcast_message("hello, all")
+                            context.broadcast_message({ text = "hello, all" })
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -105,22 +105,22 @@ public class RuntimeMessagingTest extends Assertions {
         assertNotNull(assignment2);
 
         final var event11 = client1.consumeServerMessage();
-        assertEquals("hello, client", event11.getEvent().toString());
+        assertEquals("{text=hello, client}", event11.getMessage().toString());
 
         final var event21 = client2.consumeServerMessage();
-        assertEquals("hello, client", event21.getEvent().toString());
+        assertEquals("{text=hello, client}", event21.getMessage().toString());
 
         final var event12 = client1.consumeServerMessage();
-        assertEquals("hello, client_1 and client_2", event12.getEvent().toString());
+        assertEquals("{text=hello, client_1 and client_2}", event12.getMessage().toString());
 
         final var event22 = client2.consumeServerMessage();
-        assertEquals("hello, client_1 and client_2", event22.getEvent().toString());
+        assertEquals("{text=hello, client_1 and client_2}", event22.getMessage().toString());
 
         final var event13 = client1.consumeServerMessage();
-        assertEquals("hello, all", event13.getEvent().toString());
+        assertEquals("{text=hello, all}", event13.getMessage().toString());
 
         final var event23 = client2.consumeServerMessage();
-        assertEquals("hello, all", event23.getEvent().toString());
+        assertEquals("{text=hello, all}", event23.getMessage().toString());
 
         Thread.sleep(5000);
 
@@ -130,7 +130,7 @@ public class RuntimeMessagingTest extends Assertions {
 
     @Data
     @AllArgsConstructor
-    class TestMessage {
+    static class TestMessage {
         String text;
     }
 }

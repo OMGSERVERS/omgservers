@@ -32,14 +32,14 @@ public class PlayerMatchmakingTest extends Assertions {
 
     @Test
     void playerMatchmakingTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                        
+        final var version = bootstrapVersionOperation.bootstrapVersion("""
                         local var state = context.state
                         local var event = context.event
                                                                         
                         print("event: " .. event.id)
                                                 
                         if event.id == "add_client" then
-                            context.unicast_message(event.user_id, event.client_id, "hello, client")
+                            context.unicast_message(event.user_id, event.client_id, {text="hello, client"})
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -69,10 +69,10 @@ public class PlayerMatchmakingTest extends Assertions {
         assertNotNull(assignment2);
 
         final var event12 = client1.consumeServerMessage();
-        assertEquals("hello, client", event12.getEvent().toString());
+        assertEquals("{text=hello, client}", event12.getMessage().toString());
 
         final var event21 = client2.consumeServerMessage();
-        assertEquals("hello, client", event21.getEvent().toString());
+        assertEquals("{text=hello, client}", event21.getMessage().toString());
 
         Thread.sleep(5000);
 

@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class ServerMessageBodyModel extends MessageBodyModel {
 
     @NotNull
-    Object event;
+    Object message;
 }

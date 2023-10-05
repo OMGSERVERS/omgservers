@@ -30,7 +30,7 @@ public class LuaRuntimeMulticastMessageFunction extends VarArgFunction {
             final var luaRecipients = args.arg(1).checktable();
             final var recipients = parseRecipients(luaRecipients);
 
-            final var message = args.arg(2).checkjstring();
+            final var message = args.arg(2).checktable();
 
             final var doMulticastMessageRequest = new DoMulticastMessageRequest(runtimeId, recipients, message);
             return runtimeModule.getDoService().doMulticastMessage(doMulticastMessageRequest)

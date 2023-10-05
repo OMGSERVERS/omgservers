@@ -23,8 +23,8 @@ public class DoUnicastMessageRequest implements ShardedRequest {
     @NotNull
     Long clientId;
 
-    @NotBlank
-    String message;
+    @NotNull
+    Object message;
 
     @Override
     public String getRequestShardKey() {

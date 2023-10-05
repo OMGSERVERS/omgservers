@@ -29,11 +29,11 @@ public class LuaPlayerRespondFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs args) {
         return handleLuaCallOperation.handleLuaCall(() -> {
-            final var event = args.arg(1).checkjstring();
+            final var message = args.arg(1).checktable();
 
-            final var body = new ServerMessageBodyModel(event);
-            final var message = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, body);
-            final var request = new RespondClientRequest(userId, clientId, message);
+            final var messageBody = new ServerMessageBodyModel(message);
+            final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
+            final var request = new RespondClientRequest(userId, clientId, messageModel);
             return userModule.getUserService().respondClient(request)
                     .replaceWith(LuaValue.NIL);
         });

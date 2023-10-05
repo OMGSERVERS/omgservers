@@ -30,8 +30,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
                     final var server = client.getServer();
                     final var connection = client.getConnectionId();
                     final var message = request.getMessage();
-                    final var respondMessageRequest =
-                            new RespondMessageRequest(server, connection, message);
+                    final var respondMessageRequest = new RespondMessageRequest(server, connection, message);
                     return gatewayModule.getGatewayService().respondMessage(respondMessageRequest);
                 })
                 .replaceWithVoid();

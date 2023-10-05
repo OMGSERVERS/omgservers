@@ -42,7 +42,7 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
     public Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request) {
         final var runtimeId = request.getRuntimeId();
         final var recipients = request.getRecipients();
-        final var event = request.getMessage();
+        final var message = request.getMessage();
 
         log.info("Do multicast for message, runtimeId={}, recipientsCount={}",
                 runtimeId, recipients.size());
@@ -57,7 +57,7 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
                                     shardModel.shard(),
                                     runtimeId,
                                     clientIds)
-                            .flatMap(runtimeGrants -> doMulticast(runtimeId, recipients, runtimeGrants, event))
+                            .flatMap(runtimeGrants -> doMulticast(runtimeId, recipients, runtimeGrants, message))
                     );
                 })
                 .replaceWith(new DoMulticastMessageResponse());
@@ -66,14 +66,14 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
     Uni<Void> doMulticast(final Long runtimeId,
                           final List<Recipient> recipients,
                           final List<RuntimeGrantModel> runtimeGrants,
-                          final String event) {
+                          final Object message) {
         final var grantType = RuntimeGrantTypeEnum.CLIENT;
         final var grantMap = createGrantMap(runtimeGrants, grantType);
 
         return Multi.createFrom().iterable(recipients)
                 .onItem().transformToUniAndMerge(recipient -> {
                     if (grantMap.containsKey(recipient.clientId())) {
-                        return respondClient(recipient, event).map(voidItem -> new RespondResult(recipient, true));
+                        return respondClient(recipient, message).map(voidItem -> new RespondResult(recipient, true));
                     } else {
                         return Uni.createFrom().item(new RespondResult(recipient, false));
                     }
@@ -102,15 +102,14 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> respondClient(Recipient recipient, String event) {
-        final var body = new ServerMessageBodyModel(event);
-        final var message = messageModelFactory
-                .create(MessageQualifierEnum.SERVER_MESSAGE, body);
+    Uni<Void> respondClient(Recipient recipient, Object message) {
+        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
 
         final var respondClientRequest = RespondClientRequest.builder()
                 .userId(recipient.userId())
                 .clientId(recipient.clientId())
-                .message(message)
+                .message(messageModel)
                 .build();
         return userModule.getUserService().respondClient(respondClientRequest);
     }

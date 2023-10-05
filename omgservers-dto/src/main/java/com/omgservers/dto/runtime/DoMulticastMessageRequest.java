@@ -22,8 +22,8 @@ public class DoMulticastMessageRequest implements ShardedRequest {
     @NotEmpty
     List<Recipient> recipients;
 
-    @NotBlank
-    String message;
+    @NotNull
+    Object message;
 
     @Override
     public String getRequestShardKey() {

@@ -33,7 +33,9 @@ public class ChangePlayerTest extends Assertions {
                 local var event = context.event
                                 
                 if event.id == "change_player" then
-                    context.respond("changed")
+                    assert(event.data.text == "text", "event.data.text is wrong")
+                    print("event.data.text=" .. event.data.text)
+                    context.respond({text="changed"})
                 end
                 """);
 
@@ -43,10 +45,10 @@ public class ChangePlayerTest extends Assertions {
         final var welcome = client.consumeWelcomeMessage();
         assertNotNull(welcome);
 
-        client.changeRequest(new TestMessage("change"));
+        client.changeRequest(new TestMessage("text"));
 
         var message = client.consumeServerMessage();
-        assertEquals("changed", message.getEvent().toString());
+        assertEquals("{text=changed}", message.getMessage().toString());
 
         client.close();
     }
