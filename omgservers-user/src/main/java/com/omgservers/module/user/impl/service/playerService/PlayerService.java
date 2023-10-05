@@ -14,6 +14,8 @@ import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncPlayerResponse;
 import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.dto.user.UpdatePlayerObjectRequest;
+import com.omgservers.dto.user.UpdatePlayerObjectResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -30,6 +32,8 @@ public interface PlayerService {
     Uni<SyncPlayerResponse> syncPlayer(@Valid SyncPlayerRequest request);
 
     Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(@Valid UpdatePlayerAttributesRequest request);
+
+    Uni<UpdatePlayerObjectResponse> updatePlayerObject(@Valid UpdatePlayerObjectRequest request);
 
     Uni<DeletePlayerResponse> deletePlayer(@Valid DeletePlayerRequest request);
 }

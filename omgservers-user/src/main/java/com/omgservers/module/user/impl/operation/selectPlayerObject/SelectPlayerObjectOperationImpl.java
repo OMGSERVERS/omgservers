@@ -2,7 +2,6 @@ package com.omgservers.module.user.impl.operation.selectPlayerObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.player.PlayerObjectModel;
 import com.omgservers.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -25,10 +24,10 @@ class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<PlayerObjectModel> selectPlayerObject(final SqlConnection sqlConnection,
-                                                     final int shard,
-                                                     final Long userId,
-                                                     final Long playerId) {
+    public Uni<Object> selectPlayerObject(final SqlConnection sqlConnection,
+                                          final int shard,
+                                          final Long userId,
+                                          final Long playerId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -42,7 +41,7 @@ class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
                 "Player object",
                 row -> {
                     try {
-                        return objectMapper.readValue(row.getString("object"), PlayerObjectModel.class);
+                        return objectMapper.readValue(row.getString("object"), Object.class);
                     } catch (IOException e) {
                         throw new ServerSideConflictException(String.format("player object can't be parsed, " +
                                 "userId=%d, playerId=%d", userId, playerId));

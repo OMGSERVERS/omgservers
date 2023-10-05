@@ -14,6 +14,8 @@ import com.omgservers.dto.user.SyncPlayerRequest;
 import com.omgservers.dto.user.SyncPlayerResponse;
 import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.dto.user.UpdatePlayerObjectRequest;
+import com.omgservers.dto.user.UpdatePlayerObjectResponse;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.module.user.impl.service.playerService.PlayerService;
@@ -24,6 +26,7 @@ import com.omgservers.module.user.impl.service.playerService.impl.method.getPlay
 import com.omgservers.module.user.impl.service.playerService.impl.method.getPlayerObject.GetPlayerObjectMethod;
 import com.omgservers.module.user.impl.service.playerService.impl.method.syncPlayer.SyncPlayerMethod;
 import com.omgservers.module.user.impl.service.playerService.impl.method.updatePlayerAttributes.UpdatePlayerAttributesMethod;
+import com.omgservers.module.user.impl.service.playerService.impl.method.updatePlayerObject.UpdatePlayerObjectMethod;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,6 +42,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     final UpdatePlayerAttributesMethod updatePlayerAttributes;
     final GetPlayerAttributesMethod getPlayerAttributesMethod;
+    final UpdatePlayerObjectMethod updatePlayerObjectMethod;
     final GetPlayerObjectMethod getPlayerObjectMethod;
     final DeletePlayerMethod deletePlayerMethod;
     final SyncPlayerMethod syncPlayerMethod;
@@ -95,6 +99,14 @@ public class PlayerServiceImpl implements PlayerService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::updatePlayerAttributes,
                 updatePlayerAttributes::updatePlayerAttributes);
+    }
+
+    @Override
+    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(@Valid final UpdatePlayerObjectRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getUserModuleClientOperation::getClient,
+                UserModuleClient::updatePlayerObject,
+                updatePlayerObjectMethod::updatePlayerObject);
     }
 
     @Override

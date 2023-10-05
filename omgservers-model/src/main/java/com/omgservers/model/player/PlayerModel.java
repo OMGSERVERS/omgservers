@@ -46,7 +46,7 @@ public class PlayerModel {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    PlayerObjectModel object;
+    Object object;
 
     @NotNull
     @ToString.Exclude

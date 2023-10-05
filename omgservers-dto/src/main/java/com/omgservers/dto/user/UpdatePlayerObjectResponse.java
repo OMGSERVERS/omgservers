@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetPlayerObjectResponse {
+public class UpdatePlayerObjectResponse {
 
-    Object object;
+    Boolean updated;
 }

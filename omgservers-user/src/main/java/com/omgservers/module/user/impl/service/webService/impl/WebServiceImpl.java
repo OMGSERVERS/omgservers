@@ -26,6 +26,8 @@ import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.dto.user.SyncUserResponse;
 import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.dto.user.UpdatePlayerObjectRequest;
+import com.omgservers.dto.user.UpdatePlayerObjectResponse;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import com.omgservers.module.user.impl.service.clientService.ClientService;
@@ -97,6 +99,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request) {
         return playerService.updatePlayerAttributes(request);
+    }
+
+    @Override
+    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(UpdatePlayerObjectRequest request) {
+        return playerService.updatePlayerObject(request);
     }
 
     @Override

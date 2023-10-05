@@ -5,7 +5,6 @@ import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.player.PlayerObjectModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,7 @@ public class PlayerModelMapper {
             throw new ServerSideConflictException("player attributes can't be parsed, player=" + player, e);
         }
         try {
-            player.setObject(objectMapper.readValue(row.getString("object"), PlayerObjectModel.class));
+            player.setObject(objectMapper.readValue(row.getString("object"), Object.class));
         } catch (IOException e) {
             throw new ServerSideConflictException("player object can't be parsed, player=" + player, e);
         }

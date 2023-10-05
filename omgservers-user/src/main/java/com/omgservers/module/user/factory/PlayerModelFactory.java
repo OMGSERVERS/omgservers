@@ -3,7 +3,6 @@ package com.omgservers.module.user.factory;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.player.PlayerObjectModel;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -42,7 +41,7 @@ public class PlayerModelFactory {
         player.setTenantId(tenantId);
         player.setStageId(stageId);
         player.setAttributes(PlayerAttributesModel.create());
-        player.setObject(PlayerObjectModel.create());
+        player.setObject(new Object());
         player.setConfig(config);
 
         return player;

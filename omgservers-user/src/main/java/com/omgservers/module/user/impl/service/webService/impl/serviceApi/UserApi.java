@@ -26,9 +26,12 @@ import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.dto.user.SyncUserResponse;
 import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.dto.user.UpdatePlayerObjectRequest;
+import com.omgservers.dto.user.UpdatePlayerObjectResponse;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
@@ -74,6 +77,10 @@ public interface UserApi {
     @PUT
     @Path("/update-player-attributes")
     Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request);
+
+    @PUT
+    @Path("/update-player-object")
+    Uni<UpdatePlayerObjectResponse> updatePlayerObject(@Valid final UpdatePlayerObjectRequest request);
 
     @PUT
     @Path("/delete-player")

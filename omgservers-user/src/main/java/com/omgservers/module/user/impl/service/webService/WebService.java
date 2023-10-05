@@ -26,6 +26,8 @@ import com.omgservers.dto.user.SyncUserRequest;
 import com.omgservers.dto.user.SyncUserResponse;
 import com.omgservers.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.dto.user.UpdatePlayerObjectRequest;
+import com.omgservers.dto.user.UpdatePlayerObjectResponse;
 import com.omgservers.dto.user.ValidateCredentialsRequest;
 import com.omgservers.dto.user.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
@@ -51,6 +53,8 @@ public interface WebService {
     Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
 
     Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request);
+
+    Uni<UpdatePlayerObjectResponse> updatePlayerObject(UpdatePlayerObjectRequest request);
 
     Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
 

@@ -24,7 +24,7 @@ class MapScriptEventOperationImpl implements MapScriptEventOperation {
             if (scriptEventMappers.put(qualifier, scriptEventMapper) != null) {
                 log.error("Multiple script event mappers were detected, qualifier={}", qualifier);
             } else {
-                log.info("Script event mapper was added, qualifier={}, mapper={}",
+                log.debug("Script event mapper was added, qualifier={}, mapper={}",
                         qualifier, scriptEventMapper.getClass().getSimpleName());
             }
         });
