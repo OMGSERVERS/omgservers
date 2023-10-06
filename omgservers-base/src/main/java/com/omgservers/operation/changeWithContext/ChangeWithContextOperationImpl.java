@@ -1,6 +1,5 @@
 package com.omgservers.operation.changeWithContext;
 
-import com.omgservers.base.Dispatcher;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -19,7 +18,6 @@ class ChangeWithContextOperationImpl implements ChangeWithContextOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
 
-    final Dispatcher dispatcher;
     final PgPool pgPool;
 
     @Override
@@ -34,9 +32,6 @@ class ChangeWithContextOperationImpl implements ChangeWithContextOperation {
                         log.debug("Changed with context, result={}, events={}, logs={}",
                                 result, changeEvents, changeLogs);
                         changeContext.setResult(result);
-                        // cache events
-                        changeEvents.forEach(event ->
-                                dispatcher.addEvent(event.getId(), event.getGroupId()));
                     })
                     .replaceWith(changeContext)
                     .onFailure(PgException.class)
