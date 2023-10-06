@@ -8,8 +8,8 @@ import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
@@ -25,7 +25,7 @@ import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.del
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeCommand.DeleteRuntimeCommandMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeGrant.DeleteRuntimeGrantMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.getRuntime.GetRuntimeMethod;
-import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.markRuntimeCommands.MarkRuntimeCommandsMethod;
+import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.updateRuntimeCommandsStatus.UpdateRuntimeCommandsStatusMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeGrant.SyncRuntimeGrantMethod;
@@ -47,7 +47,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     final HandleInternalRequestOperation handleInternalRequestOperation;
 
     final DeleteRuntimeCommandMethod deleteRuntimeCommandMethod;
-    final MarkRuntimeCommandsMethod markRuntimeCommandsMethod;
+    final UpdateRuntimeCommandsStatusMethod updateRuntimeCommandsStatusMethod;
     final ViewRuntimeCommandsMethod viewRuntimeCommandsMethod;
     final SyncRuntimeCommandMethod syncRuntimeCommandMethod;
     final DeleteRuntimeGrantMethod deleteRuntimeGrantMethod;
@@ -105,11 +105,11 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(@Valid final MarkRuntimeCommandsRequest request) {
+    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(@Valid final UpdateRuntimeCommandsStatusRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::markRuntimeCommands,
-                markRuntimeCommandsMethod::markRuntimeCommands);
+                RuntimeModuleClient::updateRuntimeCommandsStatus,
+                updateRuntimeCommandsStatusMethod::updateRuntimeCommandsStatus);
     }
 
     @Override

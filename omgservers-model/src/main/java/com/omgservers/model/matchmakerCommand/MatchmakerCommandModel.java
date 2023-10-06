@@ -25,7 +25,7 @@ public class MatchmakerCommandModel {
     Long id;
 
     @NotNull
-    Long runtimeId;
+    Long matchmakerId;
 
     @NotNull
     Instant created;

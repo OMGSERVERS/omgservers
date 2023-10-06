@@ -18,8 +18,8 @@ import com.omgservers.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
@@ -82,8 +82,8 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(final MarkRuntimeCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::markRuntimeCommands);
+    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(final UpdateRuntimeCommandsStatusRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateRuntimeCommandsStatus);
     }
 
     @Override

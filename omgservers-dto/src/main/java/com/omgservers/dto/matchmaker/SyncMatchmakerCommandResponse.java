@@ -1,4 +1,4 @@
-package com.omgservers.dto.runtime;
+package com.omgservers.dto.matchmaker;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MarkRuntimeCommandsResponse {
+public class SyncMatchmakerCommandResponse {
 
-    Boolean updated;
+    Boolean created;
 }

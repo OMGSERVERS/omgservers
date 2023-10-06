@@ -8,8 +8,8 @@ import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
@@ -35,7 +35,7 @@ public interface RuntimeService {
 
     Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid ViewRuntimeCommandsRequest request);
 
-    Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(@Valid MarkRuntimeCommandsRequest request);
+    Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(@Valid UpdateRuntimeCommandsStatusRequest request);
 
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(@Valid SyncRuntimeGrantRequest request);
 

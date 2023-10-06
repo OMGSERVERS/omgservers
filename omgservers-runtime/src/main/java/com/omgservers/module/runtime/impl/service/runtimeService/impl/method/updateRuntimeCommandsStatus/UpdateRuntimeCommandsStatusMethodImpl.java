@@ -1,7 +1,7 @@
-package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.markRuntimeCommands;
+package com.omgservers.module.runtime.impl.service.runtimeService.impl.method.updateRuntimeCommandsStatus;
 
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.module.runtime.impl.operation.updateRuntimeCommandsStatusByIds.UpdateRuntimeCommandStatusByIdsOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -14,21 +14,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class MarkRuntimeCommandsMethodImpl implements MarkRuntimeCommandsMethod {
+class UpdateRuntimeCommandsStatusMethodImpl implements UpdateRuntimeCommandsStatusMethod {
 
-    final UpdateRuntimeCommandStatusByIdsOperation runtimeCommandStatusByIdsOperation;
+    final UpdateRuntimeCommandStatusByIdsOperation updateRuntimeCommandStatusByIdsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(final MarkRuntimeCommandsRequest request) {
+    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(final UpdateRuntimeCommandsStatusRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var runtimeId = request.getRuntimeId();
                     final var ids = request.getIds();
                     final var status = request.getStatus();
                     return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                                    runtimeCommandStatusByIdsOperation.updateRuntimeCommandStatusByIds(
+                                    updateRuntimeCommandStatusByIdsOperation.updateRuntimeCommandStatusByIds(
                                             changeContext,
                                             sqlConnection,
                                             shardModel.shard(),
@@ -37,7 +37,7 @@ class MarkRuntimeCommandsMethodImpl implements MarkRuntimeCommandsMethod {
                                             status))
                             .map(ChangeContext::getResult);
                 })
-                .map(MarkRuntimeCommandsResponse::new);
+                .map(UpdateRuntimeCommandsStatusResponse::new);
 
     }
 }

@@ -4,6 +4,8 @@ import com.omgservers.dto.matchmaker.DeleteMatchClientRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerCommandRequest;
+import com.omgservers.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestRequest;
@@ -18,14 +20,20 @@ import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
+import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsResponse;
 import com.omgservers.dto.matchmaker.ViewRequestsRequest;
 import com.omgservers.dto.matchmaker.ViewRequestsResponse;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
@@ -56,6 +64,27 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(final DeleteMatchmakerRequest request) {
         return matchmakerService.deleteMatchmaker(request);
+    }
+
+    @Override
+    public Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(final SyncMatchmakerCommandRequest request) {
+        return matchmakerService.syncMatchmakerCommand(request);
+    }
+
+    @Override
+    public Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(final DeleteMatchmakerCommandRequest request) {
+        return matchmakerService.deleteMatchmakerCommand(request);
+    }
+
+    @Override
+    public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
+        return matchmakerService.viewMatchmakerCommands(request);
+    }
+
+    @Override
+    public Uni<UpdateMatchmakerCommandsStatusResponse> updateMatchmakerCommandsStatus(
+            final UpdateMatchmakerCommandsStatusRequest request) {
+        return matchmakerService.updateMatchmakerCommandsStatus(request);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.omgservers.job.runtime;
 
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.dto.script.CallScriptRequest;
@@ -57,7 +57,7 @@ public class RuntimeJobTask implements JobTask {
                                         runtimeCommands.add(updateRuntime);
 
                                         return callScript(runtime, runtimeCommands)
-                                                .call(voidItem -> markRuntimeCommands(runtime, runtimeCommands));
+                                                .call(voidItem -> updateRuntimeCommandsStatus(runtime, runtimeCommands));
                                     });
                         })
                 .replaceWith(true);
@@ -85,11 +85,11 @@ public class RuntimeJobTask implements JobTask {
                 .replaceWithVoid();
     }
 
-    Uni<Void> markRuntimeCommands(final RuntimeModel runtime,
-                                  final List<RuntimeCommandModel> runtimeCommands) {
+    Uni<Void> updateRuntimeCommandsStatus(final RuntimeModel runtime,
+                                          final List<RuntimeCommandModel> runtimeCommands) {
         final var ids = runtimeCommands.stream().map(RuntimeCommandModel::getId).toList();
-        final var request = new MarkRuntimeCommandsRequest(runtime.getId(), ids, RuntimeCommandStatusEnum.PROCESSED);
-        return runtimeModule.getRuntimeService().markRuntimeCommands(request)
+        final var request = new UpdateRuntimeCommandsStatusRequest(runtime.getId(), ids, RuntimeCommandStatusEnum.PROCESSED);
+        return runtimeModule.getRuntimeService().updateRuntimeCommandsStatus(request)
                 .replaceWithVoid();
     }
 }

@@ -18,8 +18,8 @@ import com.omgservers.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
@@ -43,7 +43,7 @@ public interface WebService {
 
     Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
 
-    Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(MarkRuntimeCommandsRequest request);
+    Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(UpdateRuntimeCommandsStatusRequest request);
 
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
 

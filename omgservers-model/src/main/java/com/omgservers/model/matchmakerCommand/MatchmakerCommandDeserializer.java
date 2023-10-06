@@ -41,9 +41,9 @@ public class MatchmakerCommandDeserializer extends StdDeserializer<MatchmakerCom
             commandModel.setId(Long.valueOf(idNode.asText()));
         }
 
-        final var runtimeIdNode = root.get("runtimeId");
-        if (runtimeIdNode != null) {
-            commandModel.setRuntimeId(Long.valueOf(runtimeIdNode.asText()));
+        final var matchmakerIdNode = root.get("matchmakerId");
+        if (matchmakerIdNode != null) {
+            commandModel.setMatchmakerId(Long.valueOf(matchmakerIdNode.asText()));
         }
 
         final var createdNode = root.get("created");

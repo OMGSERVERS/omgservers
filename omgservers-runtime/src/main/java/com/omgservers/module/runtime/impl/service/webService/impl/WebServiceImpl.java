@@ -18,8 +18,8 @@ import com.omgservers.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsRequest;
-import com.omgservers.dto.runtime.MarkRuntimeCommandsResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
@@ -76,8 +76,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<MarkRuntimeCommandsResponse> markRuntimeCommands(final MarkRuntimeCommandsRequest request) {
-        return runtimeService.markRuntimeCommands(request);
+    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(final UpdateRuntimeCommandsStatusRequest request) {
+        return runtimeService.updateRuntimeCommandsStatus(request);
     }
 
     @Override
