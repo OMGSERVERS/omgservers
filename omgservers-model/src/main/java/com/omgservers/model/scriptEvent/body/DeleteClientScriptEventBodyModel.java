@@ -17,12 +17,6 @@ import lombok.NoArgsConstructor;
 public class DeleteClientScriptEventBodyModel extends ScriptEventBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
-    Long playerId;
-
-    @NotNull
     Long clientId;
 
     @Override

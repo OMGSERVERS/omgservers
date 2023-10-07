@@ -96,8 +96,8 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientShardedRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientShardedRequest)
+        final var request = new GetClientRequest(userId, clientId);
+        return userModule.getClientService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 

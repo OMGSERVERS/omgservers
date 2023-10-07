@@ -1,4 +1,4 @@
-package com.omgservers.dto.user;
+package com.omgservers.dto.runtime;
 
 import com.omgservers.dto.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteClientRequest implements ShardedRequest {
+public class FindRuntimeGrantRequest implements ShardedRequest {
 
     @NotNull
-    Long userId;
+    Long runtimeId;
 
     @NotNull
-    Long clientId;
+    Long entityId;
 
     @Override
     public String getRequestShardKey() {
-        return userId.toString();
+        return runtimeId.toString();
     }
 }

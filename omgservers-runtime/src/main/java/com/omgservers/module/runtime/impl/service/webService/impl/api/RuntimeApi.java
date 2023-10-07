@@ -16,16 +16,18 @@ import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.dto.runtime.DoUnicastMessageResponse;
+import com.omgservers.dto.runtime.FindRuntimeGrantRequest;
+import com.omgservers.dto.runtime.FindRuntimeGrantResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import io.smallrye.mutiny.Uni;
@@ -66,6 +68,10 @@ public interface RuntimeApi {
     @PUT
     @Path("/sync-runtime-grant")
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
+
+    @PUT
+    @Path("/find-runtime-grant")
+    Uni<FindRuntimeGrantResponse> findRuntimeGrant(FindRuntimeGrantRequest request);
 
     @PUT
     @Path("/delete-runtime-grant")

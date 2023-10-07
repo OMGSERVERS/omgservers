@@ -15,7 +15,7 @@ public class IndexedMatchmakerState {
     final MatchmakerState matchmakerState;
 
     final Map<Long, MatchModel> matchById;
-    final Map<Long, MatchClientModel> matchClientById;
+    final Map<Long, MatchClientModel> matchClientByClientId;
 
     public IndexedMatchmakerState(MatchmakerState matchmakerState) {
         this.matchmakerState = matchmakerState;
@@ -23,15 +23,15 @@ public class IndexedMatchmakerState {
         matchById = matchmakerState.getMatches().stream()
                 .collect(Collectors.toMap(MatchModel::getId, Function.identity()));
 
-        matchClientById = matchmakerState.getMatchClients().stream()
-                .collect(Collectors.toMap(MatchClientModel::getId, Function.identity()));
+        matchClientByClientId = matchmakerState.getMatchClients().stream()
+                .collect(Collectors.toMap(MatchClientModel::getClientId, Function.identity()));
     }
 
     public Optional<MatchModel> getMatch(Long id) {
         return Optional.ofNullable(matchById.get(id));
     }
 
-    public Optional<MatchClientModel> getMatchClient(Long id) {
-        return Optional.ofNullable(matchClientById.get(id));
+    public Optional<MatchClientModel> getMatchClientByClientId(Long clientId) {
+        return Optional.ofNullable(matchClientByClientId.get(clientId));
     }
 }

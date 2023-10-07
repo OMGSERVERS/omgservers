@@ -31,7 +31,7 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
         final var body = (DeleteClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
         final var clientId = body.getId();
 
-        indexedMatchmakerState.getMatchClient(clientId)
+        indexedMatchmakerState.getMatchClientByClientId(clientId)
                 .ifPresent(matchClient -> {
                     matchmakerChangeOfState.getDeletedMatchClients().add(matchClient);
 

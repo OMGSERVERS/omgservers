@@ -16,16 +16,18 @@ import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.dto.runtime.DoUnicastMessageResponse;
+import com.omgservers.dto.runtime.FindRuntimeGrantRequest;
+import com.omgservers.dto.runtime.FindRuntimeGrantResponse;
 import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
+import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -82,7 +84,8 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(final UpdateRuntimeCommandsStatusRequest request) {
+    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(
+            final UpdateRuntimeCommandsStatusRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::updateRuntimeCommandsStatus);
     }
 
@@ -90,6 +93,12 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeGrant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<FindRuntimeGrantResponse> findRuntimeGrant(final FindRuntimeGrantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeGrant);
     }
 
     @Override

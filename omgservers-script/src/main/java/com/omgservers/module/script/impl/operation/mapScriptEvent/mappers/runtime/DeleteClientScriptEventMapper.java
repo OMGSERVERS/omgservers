@@ -25,8 +25,6 @@ public class DeleteClientScriptEventMapper implements ScriptEventMapper {
     public LuaEvent map(ScriptEventModel scriptEvent) {
         final var body = (DeleteClientScriptEventBodyModel) scriptEvent.getBody();
         return DeleteClientLuaEvent.builder()
-                .userId(body.getUserId())
-                .playerId(body.getPlayerId())
                 .clientId(body.getClientId())
                 .build();
     }

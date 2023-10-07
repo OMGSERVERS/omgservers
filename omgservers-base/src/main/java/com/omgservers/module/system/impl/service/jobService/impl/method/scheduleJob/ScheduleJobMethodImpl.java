@@ -88,8 +88,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .setAsyncTask(scheduledExecution -> asyncTask(scheduledExecution, shardKey, entityId, type))
                     .schedule();
 
-            log.info("Job task scheduled, interval={}, delay={}, job={}",
-                    jobIntervalInSeconds, jobDelayInSeconds, jobName);
+            log.info("Job task scheduled, type={}, interval={}, delay={}, job={}",
+                    type, jobIntervalInSeconds, jobDelayInSeconds, jobName);
         }
     }
 

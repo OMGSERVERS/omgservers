@@ -47,10 +47,7 @@ class DeleteClientLuaEventTest extends Assertions {
                 end
                 """);
 
-        final var luaEvent = new DeleteClientLuaEvent(
-                27535430859688960L,
-                27535430859688961L,
-                27535430859688962L);
+        final var luaEvent = new DeleteClientLuaEvent(27535430859688962L);
         final var luaContext = createLuaRuntimeContextOperation.createLuaRuntimeContext(TIMEOUT,
                 27535430859688964L,
                 27535430859688965L,
