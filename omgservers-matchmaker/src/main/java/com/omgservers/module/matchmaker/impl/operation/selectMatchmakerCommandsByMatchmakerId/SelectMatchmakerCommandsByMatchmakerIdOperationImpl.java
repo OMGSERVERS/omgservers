@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.operation.selectMatchmakerCommandsByMatchmakerIdAndStatus;
+package com.omgservers.module.matchmaker.impl.operation.selectMatchmakerCommandsByMatchmakerId;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
@@ -14,35 +14,34 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectMatchmakerCommandsByMatchmakerIdAndStatusOperationImpl
-        implements SelectMatchmakerCommandsByMatchmakerIdAndStatusOperation {
+class SelectMatchmakerCommandsByMatchmakerIdOperationImpl
+        implements SelectMatchmakerCommandsByMatchmakerIdOperation {
 
     final SelectListOperation selectListOperation;
 
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<List<MatchmakerCommandModel>> selectMatchmakerCommandsByMatchmakerIdAndStatus(
+    public Uni<List<MatchmakerCommandModel>> selectMatchmakerCommandsByMatchmakerId(
             final SqlConnection sqlConnection,
             final int shard,
-            final Long matchmakerId,
-            final MatchmakerCommandStatusEnum status) {
+            final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
                         select id, matchmaker_id, created, modified, qualifier, body, status
                         from $schema.tab_matchmaker_command
-                        where matchmaker_id = $1 and status = $2
+                        where matchmaker_id = $1
                         order by id asc
                         """,
-                Arrays.asList(matchmakerId, status),
+                Collections.singletonList(matchmakerId),
                 "Matchmaker command",
                 this::createMatchmakerCommand);
     }

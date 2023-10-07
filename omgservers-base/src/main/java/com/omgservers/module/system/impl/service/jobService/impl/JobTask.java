@@ -6,5 +6,11 @@ import io.smallrye.mutiny.Uni;
 public interface JobTask {
     JobQualifierEnum getJobType();
 
-    Uni<Boolean> executeTask(Long shardKey, Long entityId);
+    /**
+     * Execute task for specified entity.
+     *
+     * @param shardKey shard key
+     * @param entityId id of entity
+     */
+    Uni<Void> executeTask(Long shardKey, Long entityId);
 }

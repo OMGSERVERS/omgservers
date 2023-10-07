@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.met
 
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.module.matchmaker.impl.operation.selectMatchmakerCommandsByMatchmakerIdAndStatus.SelectMatchmakerCommandsByMatchmakerIdAndStatusOperation;
+import com.omgservers.module.matchmaker.impl.operation.selectMatchmakerCommandsByMatchmakerId.SelectMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
 
-    final SelectMatchmakerCommandsByMatchmakerIdAndStatusOperation
-            selectMatchmakerCommandsByMatchmakerIdAndStatusOperation;
+    final SelectMatchmakerCommandsByMatchmakerIdOperation
+            selectMatchmakerCommandsByMatchmakerIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -28,11 +28,11 @@ class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
                     final var matchmakerId = request.getMatchmakerId();
                     final var status = request.getStatus();
                     return pgPool.withTransaction(
-                            sqlConnection -> selectMatchmakerCommandsByMatchmakerIdAndStatusOperation
-                                    .selectMatchmakerCommandsByMatchmakerIdAndStatus(sqlConnection,
+                            sqlConnection -> selectMatchmakerCommandsByMatchmakerIdOperation
+                                    .selectMatchmakerCommandsByMatchmakerId(sqlConnection,
                                             shard.shard(),
-                                            matchmakerId,
-                                            status));
+                                            matchmakerId
+                                    ));
                 })
                 .map(ViewMatchmakerCommandsResponse::new);
 

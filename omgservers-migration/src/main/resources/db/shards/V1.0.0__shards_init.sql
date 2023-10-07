@@ -131,7 +131,7 @@ create table if not exists tab_matchmaker_command (
 
 create table if not exists tab_matchmaker_request (
     id bigint primary key,
-    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
@@ -142,7 +142,7 @@ create table if not exists tab_matchmaker_request (
 
 create table if not exists tab_matchmaker_match (
     id bigint primary key,
-    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
@@ -151,8 +151,8 @@ create table if not exists tab_matchmaker_match (
 
 create table if not exists tab_matchmaker_match_client (
     id bigint primary key,
-    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
-    match_id bigint not null references tab_matchmaker_match(id) on delete cascade on update restrict,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
+    match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
@@ -179,7 +179,7 @@ create table if not exists tab_runtime (
 
 create table if not exists tab_runtime_command (
     id bigint primary key,
-    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
@@ -190,7 +190,7 @@ create table if not exists tab_runtime_command (
 
 create table if not exists tab_runtime_grant (
     id bigint primary key,
-    runtime_id bigint not null references tab_runtime(id) on delete cascade on update restrict,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     shard_key bigint not null,

@@ -39,12 +39,11 @@ public class RelayJobTask implements JobTask {
     }
 
     @Override
-    public Uni<Boolean> executeTask(final Long shardKey, final Long entityId) {
+    public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
         return relayBatchOfEvents()
                 .repeat().until(relayedEventsCount -> relayedEventsCount == 0)
                 .collect().last().replaceWithVoid()
-                .invoke(voidItem -> log.info("Events to relay were not found, exit job"))
-                .replaceWith(true);
+                .invoke(voidItem -> log.debug("Events to relay were not found, exit job"));
     }
 
     Uni<Integer> relayBatchOfEvents() {

@@ -42,7 +42,7 @@ public class RuntimeJobTask implements JobTask {
     }
 
     @Override
-    public Uni<Boolean> executeTask(final Long shardKey, final Long entityId) {
+    public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
         return getRuntime(entityId)
                 .flatMap(runtime ->
                         switch (runtime.getType()) {
@@ -57,10 +57,10 @@ public class RuntimeJobTask implements JobTask {
                                         runtimeCommands.add(updateRuntime);
 
                                         return callScript(runtime, runtimeCommands)
-                                                .call(voidItem -> updateRuntimeCommandsStatus(runtime, runtimeCommands));
+                                                .call(voidItem -> updateRuntimeCommandsStatus(runtime,
+                                                        runtimeCommands));
                                     });
-                        })
-                .replaceWith(true);
+                        });
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
@@ -88,7 +88,8 @@ public class RuntimeJobTask implements JobTask {
     Uni<Void> updateRuntimeCommandsStatus(final RuntimeModel runtime,
                                           final List<RuntimeCommandModel> runtimeCommands) {
         final var ids = runtimeCommands.stream().map(RuntimeCommandModel::getId).toList();
-        final var request = new UpdateRuntimeCommandsStatusRequest(runtime.getId(), ids, RuntimeCommandStatusEnum.PROCESSED);
+        final var request =
+                new UpdateRuntimeCommandsStatusRequest(runtime.getId(), ids, RuntimeCommandStatusEnum.PROCESSED);
         return runtimeModule.getRuntimeService().updateRuntimeCommandsStatus(request)
                 .replaceWithVoid();
     }

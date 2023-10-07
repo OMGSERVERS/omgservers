@@ -10,12 +10,16 @@ import com.omgservers.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.dto.matchmaker.DeleteRequestRequest;
 import com.omgservers.dto.matchmaker.DeleteRequestResponse;
+import com.omgservers.dto.matchmaker.FindMatchClientRequest;
+import com.omgservers.dto.matchmaker.FindMatchClientResponse;
 import com.omgservers.dto.matchmaker.GetMatchClientRequest;
 import com.omgservers.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
 import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
+import com.omgservers.dto.matchmaker.GetMatchmakerStateRequest;
+import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
@@ -24,8 +28,8 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.dto.matchmaker.SyncMatchmakingResultsRequest;
-import com.omgservers.dto.matchmaker.SyncMatchmakingResultsResponse;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
@@ -75,5 +79,9 @@ public interface MatchmakerService {
 
     Uni<DeleteMatchClientResponse> deleteMatchClient(@Valid DeleteMatchClientRequest request);
 
-    Uni<SyncMatchmakingResultsResponse> syncMatchmakingResults(@Valid SyncMatchmakingResultsRequest request);
+    Uni<FindMatchClientResponse> findMatchClient(@Valid FindMatchClientRequest request);
+
+    Uni<GetMatchmakerStateResponse> getMatchmakerState(@Valid GetMatchmakerStateRequest request);
+
+    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(@Valid UpdateMatchmakerStateRequest request);
 }

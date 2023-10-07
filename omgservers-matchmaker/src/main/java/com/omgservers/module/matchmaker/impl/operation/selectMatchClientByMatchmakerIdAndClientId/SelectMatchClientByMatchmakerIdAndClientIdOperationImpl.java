@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.operation.selectMatchClient;
+package com.omgservers.module.matchmaker.impl.operation.selectMatchClientByMatchmakerIdAndClientId;
 
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.module.matchmaker.impl.mappers.MatchClientMapper;
@@ -14,27 +14,28 @@ import java.util.Arrays;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectMatchClientOperationImpl implements SelectMatchClientOperation {
+class SelectMatchClientByMatchmakerIdAndClientIdOperationImpl
+        implements SelectMatchClientByMatchmakerIdAndClientIdOperation {
 
     final SelectObjectOperation selectObjectOperation;
 
     final MatchClientMapper matchClientMapper;
 
     @Override
-    public Uni<MatchClientModel> selectMatchClient(final SqlConnection sqlConnection,
-                                                   final int shard,
-                                                   final Long matchmakerId,
-                                                   final Long id) {
+    public Uni<MatchClientModel> selectMatchClientByMatchmakerIdAndClientId(final SqlConnection sqlConnection,
+                                                                            final int shard,
+                                                                            final Long matchmakerId,
+                                                                            final Long clientId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, matchmaker_id, match_id, created, modified, user_id, client_id
                         from $schema.tab_matchmaker_match_client
-                        where matchmaker_id = $1 and id = $2
+                        where matchmaker_id = $1 and client_id = $2
                         limit 1
                         """,
-                Arrays.asList(matchmakerId, id),
+                Arrays.asList(matchmakerId, clientId),
                 "Match client",
                 matchClientMapper::fromRow);
     }

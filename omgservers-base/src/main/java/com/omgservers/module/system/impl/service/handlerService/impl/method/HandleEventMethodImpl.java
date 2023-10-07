@@ -56,7 +56,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             final var eventHandler = eventHandlers.get(qualifier);
             final var eventBody = event.getBody();
             if (qualifier.getBodyClass().isInstance(eventBody)) {
-                log.info("Handle event, qualifier={}, id={}, groupId={}, body={}",
+                log.debug("Handle event, qualifier={}, id={}, groupId={}, body={}",
                         event.getQualifier(), event.getId(), event.getGroupId(), event.getBody());
                 return eventHandler.handle(event)
                         .replaceWith(true);

@@ -52,7 +52,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         jobTaskBeans.stream().forEach(jobTask -> {
             JobQualifierEnum type = jobTask.getJobType();
             jobTasks.put(type, jobTask);
-            log.info("Job task added, type={}, jobTask={}", type, jobTask.getClass().getSimpleName());
+            log.debug("Job task added, type={}, jobTask={}", type, jobTask.getClass().getSimpleName());
         });
         this.scheduler = scheduler;
     }
@@ -99,23 +99,11 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                         final Long entityId,
                         final JobQualifierEnum qualifier) {
         // TODO: calculate and log delay between launch and planning timestamp
-        log.info("Job was launched, qualifier={}, shardKey={}, entityId={}", qualifier, shardKey, entityId);
+        log.debug("Job was launched, qualifier={}, shardKey={}, entityId={}", qualifier, shardKey, entityId);
         final var job = jobTasks.get(qualifier);
         if (job != null) {
             // TODO: check shard and reschedule in case of any rebalance
             return job.executeTask(shardKey, entityId)
-                    .invoke(result -> {
-                        if (!result) {
-                            final var jobName = getJobNameOperation.getJobName(shardKey, entityId);
-                            final var trigger = scheduler.unscheduleJob(jobName);
-                            if (trigger == null) {
-                                log.warn("Job task return false, but job was not found to unschedule, job={}", jobName);
-                            } else {
-                                log.info("Job task return false and was unscheduled, job={}", jobName);
-                            }
-                        }
-                    })
-                    .replaceWithVoid()
                     .onFailure()
                     .recoverWithUni(t -> {
                         log.error("Job task failed, shardKey={}, entityId={}, qualifier={}, {}",
@@ -123,7 +111,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                         return Uni.createFrom().voidItem();
                     });
         } else {
-            log.warn("Job task was not found, qualifier={}", qualifier);
+            log.error("Job task was not found, qualifier={}", qualifier);
             return Uni.createFrom().voidItem();
         }
     }

@@ -2,7 +2,6 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.met
 
 import com.omgservers.dto.matchmaker.DeleteMatchClientRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientResponse;
-import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchClient.DeleteMatchClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -27,14 +26,13 @@ class DeleteMatchClientMethodImpl implements DeleteMatchClientMethod {
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, matchmakerId, id))
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                                (changeContext, sqlConnection) -> deleteMatchClientOperation
+                                        .deleteMatchClient(changeContext,
+                                                sqlConnection,
+                                                shardModel.shard(),
+                                                matchmakerId, id))
+                        .map(ChangeContext::getResult))
                 .map(DeleteMatchClientResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long matchmakerId, Long id) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteMatchClientOperation.deleteMatchClient(changeContext, sqlConnection, shardModel.shard(),
-                                matchmakerId, id))
-                .map(ChangeContext::getResult);
     }
 }
