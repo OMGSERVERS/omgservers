@@ -1,7 +1,6 @@
 package com.omgservers.model.matchmakerChangeOfState;
 
 import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.request.RequestModel;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +15,10 @@ import java.util.Set;
 public class MatchmakerChangeOfState {
 
     @NotNull
-    Set<MatchmakerCommandModel> deletedMatchmakerCommands;
+    Set<MatchmakerCommandModel> deletedCommands;
+
+    @NotNull
+    Set<RequestModel> deletedRequests;
 
     @NotNull
     Set<MatchModel> createdMatches;
@@ -27,22 +29,11 @@ public class MatchmakerChangeOfState {
     @NotNull
     Set<MatchModel> deletedMatches;
 
-    @NotNull
-    Set<MatchClientModel> createdMatchClients;
-
-    @NotNull
-    Set<MatchClientModel> deletedMatchClients;
-
-    @NotNull
-    Set<RequestModel> deletedRequests;
-
     public MatchmakerChangeOfState() {
-        deletedMatchmakerCommands = new HashSet<>();
+        deletedCommands = new HashSet<>();
+        deletedRequests = new HashSet<>();
         createdMatches = new HashSet<>();
         updatedMatches = new HashSet<>();
         deletedMatches = new HashSet<>();
-        createdMatchClients = new HashSet<>();
-        deletedMatchClients = new HashSet<>();
-        deletedRequests = new HashSet<>();
     }
 }

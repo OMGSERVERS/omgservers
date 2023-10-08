@@ -140,8 +140,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                                     .addAll(greedyMatchmakingResult.createdMatches());
                             matchmakerChangeOfState.getUpdatedMatches()
                                     .addAll(greedyMatchmakingResult.updatedMatches());
-                            matchmakerChangeOfState.getCreatedMatchClients()
-                                    .addAll(greedyMatchmakingResult.matchedClients());
                             matchmakerChangeOfState.getDeletedRequests()
                                     .addAll(greedyMatchmakingResult.completedRequests());
                         } else {

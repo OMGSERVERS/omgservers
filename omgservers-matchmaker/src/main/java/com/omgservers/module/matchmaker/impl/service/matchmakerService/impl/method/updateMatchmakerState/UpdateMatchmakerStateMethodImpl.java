@@ -1,18 +1,15 @@
-package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmakerState;
+package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.updateMatchmakerState;
 
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatch.DeleteMatchOperation;
-import com.omgservers.module.matchmaker.impl.operation.deleteMatchClient.DeleteMatchClientOperation;
 import com.omgservers.module.matchmaker.impl.operation.deleteMatchmakerCommand.DeleteMatchmakerCommandOperation;
 import com.omgservers.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
 import com.omgservers.module.matchmaker.impl.operation.updateMatchConfig.UpdateMatchConfigOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
-import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -35,8 +32,6 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     final DeleteMatchmakerCommandOperation deleteMatchmakerCommandOperation;
     final UpdateMatchConfigOperation updateMatchConfigOperation;
-    final UpsertMatchClientOperation upsertMatchClientOperation;
-    final DeleteMatchClientOperation deleteMatchClientOperation;
     final DeleteRequestOperation deleteRequestOperation;
     final UpsertMatchOperation upsertMatchOperation;
     final DeleteMatchOperation deleteMatchOperation;
@@ -56,7 +51,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                             sqlConnection,
                                             shard,
                                             matchmakerId,
-                                            changeOfState.getDeletedMatchmakerCommands())
+                                            changeOfState.getDeletedCommands())
                                             .flatMap(voidItem -> syncCreatedMatches(
                                                     changeContext,
                                                     sqlConnection,
@@ -75,18 +70,6 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                     shard,
                                                     matchmakerId,
                                                     changeOfState.getDeletedMatches()))
-                                            .flatMap(voidItem -> syncCreatedMatchClients(
-                                                    changeContext,
-                                                    sqlConnection,
-                                                    shard,
-                                                    matchmakerId,
-                                                    changeOfState.getCreatedMatchClients()))
-                                            .flatMap(voidItem -> syncDeletedMatchClients(
-                                                    changeContext,
-                                                    sqlConnection,
-                                                    shard,
-                                                    matchmakerId,
-                                                    changeOfState.getDeletedMatchClients()))
                                             .flatMap(voidItem -> syncDeletedRequests(
                                                     changeContext,
                                                     sqlConnection,
@@ -182,51 +165,6 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                     if (deletedMatches.size() > 0) {
                         log.info("Deleted matches were synchronized, " +
                                 "matchmakerId={}, count={}", matchmakerId, deletedMatches.size());
-                    }
-                })
-                .replaceWithVoid();
-    }
-
-    Uni<Void> syncCreatedMatchClients(final ChangeContext<?> changeContext,
-                                      final SqlConnection sqlConnection,
-                                      final int shard,
-                                      final Long matchmakerId,
-                                      final Collection<MatchClientModel> createdMatchClients) {
-        return Multi.createFrom().iterable(createdMatchClients)
-                .onItem().transformToUniAndConcatenate(createdMatchedClient -> upsertMatchClientOperation
-                        .upsertMatchClient(
-                                changeContext,
-                                sqlConnection,
-                                shard,
-                                createdMatchedClient))
-                .collect().asList()
-                .invoke(results -> {
-                    if (createdMatchClients.size() > 0) {
-                        log.info("Created match clients were synchronized, " +
-                                "matchmakerId={}, count={}", matchmakerId, createdMatchClients.size());
-                    }
-                })
-                .replaceWithVoid();
-    }
-
-    Uni<Void> syncDeletedMatchClients(final ChangeContext<?> changeContext,
-                                      final SqlConnection sqlConnection,
-                                      final int shard,
-                                      final Long matchmakerId,
-                                      final Collection<MatchClientModel> deletedMatchClients) {
-        return Multi.createFrom().iterable(deletedMatchClients)
-                .onItem().transformToUniAndConcatenate(deletedMatchClient -> deleteMatchClientOperation
-                        .deleteMatchClient(
-                                changeContext,
-                                sqlConnection,
-                                shard,
-                                deletedMatchClient.getMatchmakerId(),
-                                deletedMatchClient.getId()))
-                .collect().asList()
-                .invoke(results -> {
-                    if (deletedMatchClients.size() > 0) {
-                        log.info("Deleted match clients were synchronized, " +
-                                "matchmakerId={}, count={}", matchmakerId, deletedMatchClients.size());
                     }
                 })
                 .replaceWithVoid();

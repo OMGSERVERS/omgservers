@@ -34,6 +34,8 @@ import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
+import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -163,6 +165,12 @@ public class MatchmakerApiImpl implements MatchmakerApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindMatchClientResponse> findMatchClient(final FindMatchClientRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchClients);
     }
 
     @Override

@@ -34,6 +34,8 @@ import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -119,6 +121,10 @@ public interface MatchmakerApi {
     @PUT
     @Path("/find-match-client")
     Uni<FindMatchClientResponse> findMatchClient(FindMatchClientRequest request);
+
+    @PUT
+    @Path("/view-match-clients")
+    Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request);
 
     @PUT
     @Path("/get-matchmaker-state")

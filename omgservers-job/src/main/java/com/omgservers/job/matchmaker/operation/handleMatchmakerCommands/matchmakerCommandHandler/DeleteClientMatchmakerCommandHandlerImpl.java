@@ -33,8 +33,6 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
 
         indexedMatchmakerState.getMatchClientByClientId(clientId)
                 .ifPresent(matchClient -> {
-                    matchmakerChangeOfState.getDeletedMatchClients().add(matchClient);
-
                     final var matchId = matchClient.getMatchId();
                     indexedMatchmakerState.getMatch(matchId)
                             .ifPresent(match -> {
@@ -49,6 +47,6 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                             });
                 });
 
-        matchmakerChangeOfState.getDeletedMatchmakerCommands().add(matchmakerCommand);
+        matchmakerChangeOfState.getDeletedCommands().add(matchmakerCommand);
     }
 }

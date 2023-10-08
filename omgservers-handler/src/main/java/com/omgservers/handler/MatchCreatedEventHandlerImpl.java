@@ -4,7 +4,10 @@ import com.omgservers.dto.matchmaker.GetMatchRequest;
 import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
+import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
+import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
+import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.model.event.EventModel;
@@ -12,19 +15,24 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.module.matchmaker.MatchmakerModule;
+import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -36,6 +44,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
+    final MatchClientModelFactory matchClientModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
 
     @Override
@@ -51,32 +60,17 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
-                        .flatMap(match -> {
-                            final var tenantId = matchmaker.getTenantId();
-                            final var stageId = matchmaker.getStageId();
-                            final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
-                            return tenantModule.getVersionService()
-                                    .getStageVersionId(getStageVersionIdRequest)
-                                    .map(GetStageVersionIdResponse::getVersionId)
-                                    .flatMap(versionId -> {
-                                        final var runtimeId = match.getRuntimeId();
-                                        final var runtime = runtimeModelFactory.create(
-                                                runtimeId,
-                                                tenantId,
-                                                stageId,
-                                                versionId,
-                                                matchmakerId,
-                                                matchId,
-                                                // TODO: Detect runtime type
-                                                RuntimeTypeEnum.SCRIPT,
-                                                RuntimeConfigModel.create(match.getConfig().getModeConfig()));
-                                        final var syncRuntimeInternalRequest = new SyncRuntimeRequest(runtime);
-                                        return runtimeModule.getRuntimeService()
-                                                .syncRuntime(syncRuntimeInternalRequest)
-                                                .replaceWith(true);
-                                    });
-                        })
-                );
+                        .flatMap(match -> getStageVersionId(matchmaker)
+                                .flatMap(versionId -> syncRuntime(matchmaker, match, versionId)
+                                        .flatMap(runtimeWasCreated -> {
+                                            final var requests = match.getConfig().getGroups().stream()
+                                                    .flatMap(group -> group.getRequests().stream())
+                                                    .toList();
+                                            return syncMatchClients(matchmaker, match, requests);
+                                        }))
+                        )
+                )
+                .replaceWith(true);
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
@@ -89,5 +83,58 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetMatchRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
+    }
+
+    Uni<Long> getStageVersionId(final MatchmakerModel matchmaker) {
+        final var tenantId = matchmaker.getTenantId();
+        final var stageId = matchmaker.getStageId();
+        final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
+        return tenantModule.getVersionService().getStageVersionId(getStageVersionIdRequest)
+                .map(GetStageVersionIdResponse::getVersionId);
+    }
+
+    Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
+                             final MatchModel match,
+                             final Long versionId) {
+        final var matchmakerId = matchmaker.getId();
+        final var tenantId = matchmaker.getTenantId();
+        final var stageId = matchmaker.getStageId();
+        final var matchId = match.getId();
+        final var runtimeId = match.getRuntimeId();
+        final var runtime = runtimeModelFactory.create(
+                runtimeId,
+                tenantId,
+                stageId,
+                versionId,
+                matchmakerId,
+                matchId,
+                // TODO: Detect runtime type
+                RuntimeTypeEnum.SCRIPT,
+                RuntimeConfigModel.create(match.getConfig().getModeConfig()));
+        final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
+        return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
+                .map(SyncRuntimeResponse::getCreated);
+    }
+
+    Uni<Void> syncMatchClients(final MatchmakerModel matchmaker,
+                               final MatchModel match,
+                               final List<RequestModel> requests) {
+        final var matchmakerId = matchmaker.getId();
+        final var matchId = match.getId();
+
+        return Multi.createFrom().iterable(requests)
+                .onItem().transformToUniAndMerge(request -> {
+                    final var userId = request.getUserId();
+                    final var clientId = request.getClientId();
+                    final var matchClient = matchClientModelFactory.create(matchmakerId,
+                            matchId,
+                            userId,
+                            clientId);
+                    final var syncMatchClientRequest = new SyncMatchClientRequest(matchClient);
+                    return matchmakerModule.getMatchmakerService().syncMatchClient(syncMatchClientRequest)
+                            .map(SyncMatchClientResponse::getCreated);
+                })
+                .collect().asList()
+                .replaceWithVoid();
     }
 }

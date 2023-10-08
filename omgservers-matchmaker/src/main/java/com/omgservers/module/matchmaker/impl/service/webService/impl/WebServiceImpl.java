@@ -34,6 +34,8 @@ import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
+import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -144,6 +146,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<FindMatchClientResponse> findMatchClient(final FindMatchClientRequest request) {
         return matchmakerService.findMatchClient(request);
+    }
+
+    @Override
+    public Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request) {
+        return matchmakerService.viewMatchClients(request);
     }
 
     @Override

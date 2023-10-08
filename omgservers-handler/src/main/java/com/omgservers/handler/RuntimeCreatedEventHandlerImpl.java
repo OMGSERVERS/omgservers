@@ -48,7 +48,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var id = body.getId();
         return getRuntime(id)
                 .call(this::syncGame)
-                .call(this::syncJob)
                 .replaceWith(true);
     }
 
@@ -58,9 +57,11 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<ScriptModel> syncGame(final RuntimeModel runtime) {
+    Uni<Void> syncGame(final RuntimeModel runtime) {
         return switch (runtime.getType()) {
-            case SCRIPT -> syncScript(runtime);
+            case SCRIPT -> syncScript(runtime)
+                    .flatMap(script -> syncJob(runtime))
+                    .replaceWithVoid();
         };
     }
 

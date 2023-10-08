@@ -28,12 +28,14 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -80,6 +82,8 @@ public interface MatchmakerService {
     Uni<DeleteMatchClientResponse> deleteMatchClient(@Valid DeleteMatchClientRequest request);
 
     Uni<FindMatchClientResponse> findMatchClient(@Valid FindMatchClientRequest request);
+
+    Uni<ViewMatchClientsResponse> viewMatchClients(@Valid ViewMatchClientsRequest request);
 
     Uni<GetMatchmakerStateResponse> getMatchmakerState(@Valid GetMatchmakerStateRequest request);
 

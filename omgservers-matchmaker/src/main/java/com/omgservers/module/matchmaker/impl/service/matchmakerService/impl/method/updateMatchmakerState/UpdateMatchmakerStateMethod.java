@@ -1,4 +1,4 @@
-package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmakerState;
+package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.updateMatchmakerState;
 
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
