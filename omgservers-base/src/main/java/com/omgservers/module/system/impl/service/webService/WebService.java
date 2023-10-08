@@ -2,8 +2,6 @@ package com.omgservers.module.system.impl.service.webService;
 
 import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.dto.internal.DeleteJobResponse;
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.FireEventResponse;
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncJobRequest;
@@ -18,8 +16,6 @@ public interface WebService {
     Uni<Void> syncIndex(SyncIndexRequest request);
 
     Uni<Void> syncServiceAccount(SyncServiceAccountRequest request);
-
-    Uni<FireEventResponse> fireEvent(FireEventRequest request);
 
     Uni<SyncJobResponse> syncJob(SyncJobRequest request);
 

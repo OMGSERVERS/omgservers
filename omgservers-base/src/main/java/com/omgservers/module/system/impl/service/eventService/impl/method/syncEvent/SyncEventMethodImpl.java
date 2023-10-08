@@ -1,7 +1,7 @@
-package com.omgservers.module.system.impl.service.eventService.impl.method.fireEvent;
+package com.omgservers.module.system.impl.service.eventService.impl.method.syncEvent;
 
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.FireEventResponse;
+import com.omgservers.dto.internal.SyncEventRequest;
+import com.omgservers.dto.internal.SyncEventResponse;
 import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -13,17 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class FireEventMethodImpl implements FireEventMethod {
+class SyncEventMethodImpl implements SyncEventMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertEventOperation upsertEventOperation;
 
     @Override
-    public Uni<FireEventResponse> fireEvent(final FireEventRequest request) {
+    public Uni<SyncEventResponse> syncEvent(final SyncEventRequest request) {
         final var event = request.getEvent();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertEventOperation.upsertEvent(changeContext, sqlConnection, event))
                 .map(ChangeContext::getResult)
-                .map(FireEventResponse::new);
+                .map(SyncEventResponse::new);
     }
 }

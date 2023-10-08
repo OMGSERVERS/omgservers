@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
-import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
@@ -55,8 +55,8 @@ class ChangeMessageHandlerImpl implements MessageHandler {
         if (Objects.nonNull(messageData)) {
             final var eventBody = eventBodyBuilder.data(messageData).build();
             final var event = eventModelFactory.create(eventBody);
-            final var fireEventRequest = new FireEventRequest(event);
-            return systemModule.getEventService().fireEvent(fireEventRequest)
+            final var syncEventRequest = new SyncEventRequest(event);
+            return systemModule.getEventService().syncEvent(syncEventRequest)
                     .replaceWithVoid();
         } else {
             return Uni.createFrom().voidItem();

@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.websocketService.impl;
 
-import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
@@ -59,8 +59,8 @@ class WebsocketServiceImpl implements WebsocketService {
                 final var clientId = assignedClient.getClientId();
                 final var eventBody = new ClientDisconnectedEventBodyModel(connection, userId, clientId);
                 final var event = eventModelFactory.create(eventBody);
-                final var fireEventRoutedRequest = new FireEventRequest(event);
-                systemModule.getEventService().fireEvent(fireEventRoutedRequest)
+                final var syncEventRequest = new SyncEventRequest(event);
+                systemModule.getEventService().syncEvent(syncEventRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
             } else {
                 log.info("There wasn't assigned player, connection was deleted without notification, " +

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FireEventResponse {
+public class SyncEventResponse {
 
     Boolean created;
 }

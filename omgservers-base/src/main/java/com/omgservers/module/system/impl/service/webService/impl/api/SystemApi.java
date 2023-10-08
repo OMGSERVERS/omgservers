@@ -2,8 +2,6 @@ package com.omgservers.module.system.impl.service.webService.impl.api;
 
 import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.dto.internal.DeleteJobResponse;
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.FireEventResponse;
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncJobRequest;
@@ -35,15 +33,6 @@ public interface SystemApi {
 
     default void syncServiceAccount(long timeout, SyncServiceAccountRequest request) {
         syncServiceAccount(request).await().atMost(Duration.ofSeconds(timeout));
-    }
-
-    @PUT
-    @Path("/fire-event")
-    Uni<FireEventResponse> fireEvent(FireEventRequest request);
-
-    default FireEventResponse fireEvent(long timeout, FireEventRequest request) {
-        return fireEvent(request)
-                .await().atMost(Duration.ofSeconds(timeout));
     }
 
     @PUT

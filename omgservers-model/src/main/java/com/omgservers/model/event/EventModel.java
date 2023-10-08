@@ -37,6 +37,7 @@ public class EventModel {
     EventQualifierEnum qualifier;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Boolean relayed;
 
     @NotNull
@@ -44,5 +45,6 @@ public class EventModel {
     EventBodyModel body;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     EventStatusEnum status;
 }

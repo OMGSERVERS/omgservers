@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService;
 
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.FireEventResponse;
+import com.omgservers.dto.internal.SyncEventRequest;
+import com.omgservers.dto.internal.SyncEventResponse;
 import com.omgservers.dto.internal.GetEventRequest;
 import com.omgservers.dto.internal.GetEventResponse;
 import com.omgservers.dto.internal.UpdateEventsRelayedFlagRequest;
@@ -23,5 +23,5 @@ public interface EventService {
 
     Uni<ViewEventsForRelayResponse> viewEventsForRelay(@Valid ViewEventsForRelayRequest request);
 
-    Uni<FireEventResponse> fireEvent(@Valid FireEventRequest request);
+    Uni<SyncEventResponse> syncEvent(@Valid SyncEventRequest request);
 }

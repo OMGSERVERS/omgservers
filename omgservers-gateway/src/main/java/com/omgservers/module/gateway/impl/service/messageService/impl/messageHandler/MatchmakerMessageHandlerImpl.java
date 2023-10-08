@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
-import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
@@ -49,8 +49,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new MatchmakerRequestedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventRequest(event);
-        return systemModule.getEventService().fireEvent(request)
+        final var request = new SyncEventRequest(event);
+        return systemModule.getEventService().syncEvent(request)
                 .replaceWithVoid();
     }
 

@@ -1,20 +1,18 @@
 package com.omgservers.module.system.impl.service.webService.impl.api;
 
-import com.omgservers.module.system.impl.service.webService.WebService;
 import com.omgservers.dto.internal.DeleteJobRequest;
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.ScheduleJobRequest;
-import com.omgservers.dto.internal.ViewLogRequest;
-import com.omgservers.dto.internal.ViewLogsResponse;
-import com.omgservers.dto.internal.SyncIndexRequest;
-import com.omgservers.dto.internal.SyncServiceAccountRequest;
-import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import com.omgservers.dto.internal.DeleteJobResponse;
-import com.omgservers.dto.internal.FireEventResponse;
+import com.omgservers.dto.internal.ScheduleJobRequest;
+import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncJobRequest;
 import com.omgservers.dto.internal.SyncJobResponse;
+import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.dto.internal.UnscheduleJobRequest;
+import com.omgservers.dto.internal.ViewLogRequest;
+import com.omgservers.dto.internal.ViewLogsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
+import com.omgservers.module.system.impl.service.webService.WebService;
+import com.omgservers.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,12 +37,6 @@ class SystemApiImpl implements SystemApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<Void> syncServiceAccount(SyncServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncServiceAccount);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FireEventResponse> fireEvent(FireEventRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::fireEvent);
     }
 
     @Override

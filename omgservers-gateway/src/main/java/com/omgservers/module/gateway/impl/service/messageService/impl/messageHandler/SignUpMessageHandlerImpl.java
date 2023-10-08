@@ -4,7 +4,7 @@ import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHan
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -41,8 +41,8 @@ class SignUpMessageHandlerImpl implements MessageHandler {
 
         final var eventBody = new SignUpRequestedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventRequest(event);
-        return systemModule.getEventService().fireEvent(request)
+        final var request = new SyncEventRequest(event);
+        return systemModule.getEventService().syncEvent(request)
                 .replaceWithVoid();
     }
 }

@@ -1,15 +1,7 @@
 package com.omgservers.module.system.impl.service.webService.impl;
 
-import com.omgservers.module.system.impl.service.eventService.EventService;
-import com.omgservers.module.system.impl.service.indexService.IndexService;
-import com.omgservers.module.system.impl.service.webService.WebService;
-import com.omgservers.module.system.impl.service.jobService.JobService;
-import com.omgservers.module.system.impl.service.logService.LogService;
-import com.omgservers.module.system.impl.service.serviceAccountService.ServiceAccountService;
 import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.dto.internal.DeleteJobResponse;
-import com.omgservers.dto.internal.FireEventRequest;
-import com.omgservers.dto.internal.FireEventResponse;
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncIndexRequest;
 import com.omgservers.dto.internal.SyncJobRequest;
@@ -18,6 +10,12 @@ import com.omgservers.dto.internal.SyncServiceAccountRequest;
 import com.omgservers.dto.internal.UnscheduleJobRequest;
 import com.omgservers.dto.internal.ViewLogRequest;
 import com.omgservers.dto.internal.ViewLogsResponse;
+import com.omgservers.module.system.impl.service.eventService.EventService;
+import com.omgservers.module.system.impl.service.indexService.IndexService;
+import com.omgservers.module.system.impl.service.jobService.JobService;
+import com.omgservers.module.system.impl.service.logService.LogService;
+import com.omgservers.module.system.impl.service.serviceAccountService.ServiceAccountService;
+import com.omgservers.module.system.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class WebServiceImpl implements WebService {
 
-    final ServiceAccountService serviceAccountInternalService;
+    final ServiceAccountService serviceAccountService;
     final EventService eventService;
-    final JobService jobService;
     final IndexService indexService;
+    final JobService jobService;
     final LogService logService;
 
     @Override
@@ -42,12 +40,7 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<Void> syncServiceAccount(SyncServiceAccountRequest request) {
-        return serviceAccountInternalService.syncServiceAccount(request);
-    }
-
-    @Override
-    public Uni<FireEventResponse> fireEvent(FireEventRequest request) {
-        return eventService.fireEvent(request);
+        return serviceAccountService.syncServiceAccount(request);
     }
 
     @Override

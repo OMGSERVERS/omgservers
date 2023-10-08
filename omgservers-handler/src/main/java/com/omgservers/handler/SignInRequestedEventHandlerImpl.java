@@ -1,7 +1,7 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.gateway.AssignClientRequest;
-import com.omgservers.dto.internal.FireEventRequest;
+import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.dto.script.SyncScriptRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdResponse;
@@ -86,7 +86,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                             .flatMap(script -> assignPlayer(player, client))
                                             .flatMap(voidItem -> {
                                                 final var clientId = client.getId();
-                                                return fireEvent(tenantId, stageId, userId, playerId, clientId);
+                                                return syncEvent(tenantId, stageId, userId, playerId, clientId);
                                             }));
                         }))
                 .replaceWith(true);
@@ -165,15 +165,15 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
         return gatewayModule.getGatewayService().assignClient(request);
     }
 
-    Uni<Void> fireEvent(final Long tenantId,
+    Uni<Void> syncEvent(final Long tenantId,
                         final Long stageId,
                         final Long userId,
                         final Long playerId,
                         final Long clientId) {
         final var eventBody = new PlayerSignedInEventBodyModel(tenantId, stageId, userId, playerId, clientId);
         final var event = eventModelFactory.create(eventBody);
-        final var request = new FireEventRequest(event);
-        return systemModule.getEventService().fireEvent(request)
+        final var request = new SyncEventRequest(event);
+        return systemModule.getEventService().syncEvent(request)
                 .replaceWithVoid();
     }
 }
