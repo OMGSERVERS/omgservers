@@ -28,12 +28,10 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
@@ -85,12 +83,6 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
         return matchmakerService.viewMatchmakerCommands(request);
-    }
-
-    @Override
-    public Uni<UpdateMatchmakerCommandsStatusResponse> updateMatchmakerCommandsStatus(
-            final UpdateMatchmakerCommandsStatusRequest request) {
-        return matchmakerService.updateMatchmakerCommandsStatus(request);
     }
 
     @Override

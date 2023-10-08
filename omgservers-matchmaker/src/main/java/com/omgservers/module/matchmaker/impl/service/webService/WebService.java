@@ -30,8 +30,6 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
@@ -57,9 +55,6 @@ public interface WebService {
     Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request);
 
     Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(ViewMatchmakerCommandsRequest request);
-
-    Uni<UpdateMatchmakerCommandsStatusResponse> updateMatchmakerCommandsStatus(
-            UpdateMatchmakerCommandsStatusRequest request);
 
     Uni<SyncRequestResponse> syncRequest(SyncRequestRequest request);
 

@@ -125,8 +125,7 @@ create table if not exists tab_matchmaker_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
-    status text not null
+    body json not null
 );
 
 create table if not exists tab_matchmaker_request (

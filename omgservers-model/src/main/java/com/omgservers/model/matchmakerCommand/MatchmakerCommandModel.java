@@ -42,8 +42,4 @@ public class MatchmakerCommandModel {
     @NotNull
     @EqualsAndHashCode.Exclude
     MatchmakerCommandBodyModel body;
-
-    @NotNull
-    @EqualsAndHashCode.Exclude
-    MatchmakerCommandStatusEnum status;
 }

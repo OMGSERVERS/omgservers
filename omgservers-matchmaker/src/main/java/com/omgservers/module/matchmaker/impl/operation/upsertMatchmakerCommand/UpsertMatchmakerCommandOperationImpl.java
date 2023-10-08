@@ -35,8 +35,8 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_command(
-                            id, matchmaker_id, created, modified, qualifier, body, status)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, matchmaker_id, created, modified, qualifier, body)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
@@ -46,8 +46,7 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                         matchmakerCommand.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerCommand.getModified().atOffset(ZoneOffset.UTC),
                         matchmakerCommand.getQualifier(),
-                        getBodyString(matchmakerCommand),
-                        matchmakerCommand.getStatus()
+                        getBodyString(matchmakerCommand)
                 ),
                 () -> null,
                 () -> logModelFactory.create("Matchmaker command was inserted, matchmakerCommand=" + matchmakerCommand)

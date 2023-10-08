@@ -30,8 +30,6 @@ import com.omgservers.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusRequest;
-import com.omgservers.dto.matchmaker.UpdateMatchmakerCommandsStatusResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
@@ -59,7 +57,6 @@ import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.meth
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmaker.SyncMatchmakerMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmakerCommand.SyncMatchmakerCommandMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncRequest.SyncRequestMethod;
-import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.updateMatchmakerCommandsStatus.UpdateMatchmakerCommandsMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.updateMatchmakerState.UpdateMatchmakerStateMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.viewMatchClients.ViewMatchClientsMethod;
 import com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.viewMatches.ViewMatchesMethod;
@@ -80,7 +77,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MatchmakerServiceImpl implements MatchmakerService {
 
-    final UpdateMatchmakerCommandsMethod updateMatchmakerCommandsMethod;
     final DeleteMatchmakerCommandMethod deleteMatchmakerCommandMethod;
     final ViewMatchmakerCommandsMethod viewMatchmakerCommandsMethod;
     final SyncMatchmakerCommandMethod syncMatchmakerCommandMethod;
@@ -154,15 +150,6 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::viewMatchmakerCommands,
                 viewMatchmakerCommandsMethod::viewMatchmakerCommands);
-    }
-
-    @Override
-    public Uni<UpdateMatchmakerCommandsStatusResponse> updateMatchmakerCommandsStatus(
-            @Valid final UpdateMatchmakerCommandsStatusRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                MatchmakerApi::updateMatchmakerCommandsStatus,
-                updateMatchmakerCommandsMethod::updateMatchmakerCommandsStatus);
     }
 
     @Override

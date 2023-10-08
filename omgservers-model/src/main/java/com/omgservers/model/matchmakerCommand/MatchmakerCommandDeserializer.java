@@ -68,12 +68,6 @@ public class MatchmakerCommandDeserializer extends StdDeserializer<MatchmakerCom
             }
         }
 
-        final var statusNode = root.get("status");
-        if (statusNode != null) {
-            final var status = MatchmakerCommandStatusEnum.valueOf(statusNode.asText());
-            commandModel.setStatus(status);
-        }
-
         return commandModel;
     }
 }

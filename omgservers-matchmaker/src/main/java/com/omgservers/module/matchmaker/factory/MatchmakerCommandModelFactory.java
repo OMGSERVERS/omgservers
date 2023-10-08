@@ -2,7 +2,6 @@ package com.omgservers.module.matchmaker.factory;
 
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandStatusEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,6 @@ public class MatchmakerCommandModelFactory {
         matchmakerCommand.setModified(now);
         matchmakerCommand.setQualifier(body.getQualifier());
         matchmakerCommand.setBody(body);
-        matchmakerCommand.setStatus(MatchmakerCommandStatusEnum.NEW);
         return matchmakerCommand;
     }
 }

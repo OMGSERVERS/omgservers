@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandStatusEnum;
 import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -36,7 +35,7 @@ class SelectMatchmakerCommandsByMatchmakerIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, created, modified, qualifier, body, status
+                        select id, matchmaker_id, created, modified, qualifier, body
                         from $schema.tab_matchmaker_command
                         where matchmaker_id = $1
                         order by id asc
@@ -61,7 +60,6 @@ class SelectMatchmakerCommandsByMatchmakerIdOperationImpl
             throw new ServerSideConflictException("matchmaker command can't be parsed, " +
                     "matchmakerCommand=" + matchmakerCommand, e);
         }
-        matchmakerCommand.setStatus(MatchmakerCommandStatusEnum.valueOf(row.getString("status")));
         return matchmakerCommand;
     }
 }
