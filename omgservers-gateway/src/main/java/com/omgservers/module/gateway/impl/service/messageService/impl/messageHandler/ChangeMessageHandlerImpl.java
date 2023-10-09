@@ -2,7 +2,7 @@ package com.omgservers.module.gateway.impl.service.messageService.impl.messageHa
 
 import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
-import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ChangeMessageBodyModel;
@@ -43,7 +43,7 @@ class ChangeMessageHandlerImpl implements MessageHandler {
         final var playerId = assignedClient.getPlayerId();
         final var clientId = assignedClient.getClientId();
 
-        final var eventBodyBuilder = ChangeMessageReceivedEventBodyModel.builder()
+        final var eventBodyBuilder = ChangeRequestedEventBodyModel.builder()
                 .tenantId(tenantId)
                 .stageId(stageId)
                 .userId(userId)

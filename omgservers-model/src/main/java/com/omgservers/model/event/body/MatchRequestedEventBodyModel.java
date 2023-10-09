@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ChangeMessageReceivedEventBodyModel extends EventBodyModel {
+public class MatchRequestedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long tenantId;
@@ -32,15 +32,18 @@ public class ChangeMessageReceivedEventBodyModel extends EventBodyModel {
     Long clientId;
 
     @NotNull
+    Long runtimeId;
+
+    @NotNull
     Object data;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.CHANGE_MESSAGE_RECEIVED;
+        return EventQualifierEnum.MATCH_REQUESTED;
     }
 
     @Override
     public Long getGroupId() {
-        return clientId;
+        return runtimeId;
     }
 }

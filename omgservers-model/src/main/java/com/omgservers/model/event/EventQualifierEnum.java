@@ -1,6 +1,6 @@
 package com.omgservers.model.event;
 
-import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -16,7 +16,7 @@ import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.MatchRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
@@ -54,6 +54,7 @@ import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 
 public enum EventQualifierEnum {
+    // System events
     INDEX_CREATED(IndexCreatedEventBodyModel.class),
     INDEX_UPDATED(IndexUpdatedEventBodyModel.class),
     INDEX_DELETED(IndexDeletedEventBodyModel.class),
@@ -63,6 +64,7 @@ public enum EventQualifierEnum {
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_UPDATED(JobUpdatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),
+    // Entity events
     TENANT_CREATED(TenantCreatedEventBodyModel.class),
     TENANT_UPDATED(TenantCreatedEventBodyModel.class),
     TENANT_DELETED(TenantDeletedEventBodyModel.class),
@@ -102,14 +104,15 @@ public enum EventQualifierEnum {
     SCRIPT_CREATED(ScriptCreatedEventBodyModel.class),
     SCRIPT_UPDATED(ScriptUpdatedEventBodyModel.class),
     SCRIPT_DELETED(ScriptDeletedEventBodyModel.class),
-
+    // Gateway events
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class),
-    PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
-    PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class),
     MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
-    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class),
-    CHANGE_MESSAGE_RECEIVED(ChangeMessageReceivedEventBodyModel.class);
+    MATCH_REQUESTED(MatchRequestedEventBodyModel.class),
+    CHANGE_REQUESTED(ChangeRequestedEventBodyModel.class),
+    // Internal events
+    PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
+    PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class);
 
     Class<? extends EventBodyModel> bodyClass;
 

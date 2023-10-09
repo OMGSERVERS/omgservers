@@ -7,7 +7,7 @@ import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.scriptEvent.ScriptEventModel;
 import com.omgservers.model.scriptEvent.body.ChangePlayerScriptEventBodyModel;
 import com.omgservers.module.script.ScriptModule;
@@ -31,12 +31,12 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.CHANGE_MESSAGE_RECEIVED;
+        return EventQualifierEnum.CHANGE_REQUESTED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (ChangeMessageReceivedEventBodyModel) event.getBody();
+        final var body = (ChangeRequestedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();
         final var playerId = body.getPlayerId();
