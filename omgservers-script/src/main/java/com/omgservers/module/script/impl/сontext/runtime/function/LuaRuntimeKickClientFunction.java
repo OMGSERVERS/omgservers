@@ -21,9 +21,10 @@ public class LuaRuntimeKickClientFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs args) {
         return handleLuaCallOperation.handleLuaCall(() -> {
-            final var clientId = Long.valueOf(args.arg(1).checkjstring());
+            final var userId = Long.valueOf(args.arg(1).checkjstring());
+            final var clientId = Long.valueOf(args.arg(2).checkjstring());
 
-            final var doKickClientRequest = new DoKickClientRequest(runtimeId, clientId);
+            final var doKickClientRequest = new DoKickClientRequest(runtimeId, userId, clientId);
             return runtimeModule.getDoService().doKickClient(doKickClientRequest)
                     .replaceWith(LuaValue.NIL);
         });

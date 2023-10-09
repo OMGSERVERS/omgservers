@@ -86,22 +86,10 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
                 .sorted(Comparator.comparing(MatchModel::getId))
                 .toList();
 
-        final var resultMatchedClients = Stream.concat(
-                        resultCreatedMatches.stream(),
-                        resultUpdatedMatches.stream())
+        Stream.concat(resultCreatedMatches.stream(), resultUpdatedMatches.stream())
                 .flatMap(match -> getMatchRequests(match).stream())
                 .filter(matchedRequests::containsKey)
-                .map(request -> {
-                    completedRequests.add(request);
-                    final var match = matchedRequests.get(request);
-                    final var matchClient = matchClientModelFactory.create(
-                            matchmakerId,
-                            match.getId(),
-                            request.getUserId(),
-                            request.getClientId());
-                    return matchClient;
-                })
-                .toList();
+                .forEach(completedRequests::add);
 
         // failed + matched requests
         final var resultCompletedRequests = completedRequests.stream().toList();
@@ -109,7 +97,6 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
         return new DoGreedyMatchmakingResult(
                 resultCreatedMatches,
                 resultUpdatedMatches,
-                resultMatchedClients,
                 resultCompletedRequests);
     }
 

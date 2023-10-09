@@ -1,6 +1,7 @@
 package com.omgservers.module.script.impl.сontext.runtime;
 
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeBroadcastMessageFunctionFactory;
+import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeKickClientFunctionFactory;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeMulticastMessageFunctionFactory;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeUnicastMessageFunctionFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,6 +16,7 @@ public class LuaRuntimeContextFactory {
     final LuaRuntimeUnicastMessageFunctionFactory luaRuntimeUnicastMessageFunctionFactory;
     final LuaRuntimeMulticastMessageFunctionFactory luaRuntimeMulticastMessageFunctionFactory;
     final LuaRuntimeBroadcastMessageFunctionFactory luaRuntimeBroadcastMessageFunctionFactory;
+    final LuaRuntimeKickClientFunctionFactory luaRuntimeKickClientFunctionFactory;
 
     public LuaRuntimeContext build(final Long matchmakerId,
                                    final Long matchId,
@@ -26,6 +28,7 @@ public class LuaRuntimeContextFactory {
                 .unicastMessageFunction(luaRuntimeUnicastMessageFunctionFactory.build(runtimeId))
                 .multicastMessageFunction(luaRuntimeMulticastMessageFunctionFactory.build(runtimeId))
                 .broadcastMessageFunction(luaRuntimeBroadcastMessageFunctionFactory.build(runtimeId))
+                .kickClientFunction(luaRuntimeKickClientFunctionFactory.build(runtimeId))
                 .build();
 
         return context;

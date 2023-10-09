@@ -1,5 +1,6 @@
 package com.omgservers.model.event;
 
+import com.omgservers.model.event.body.BroadcastRequestedEventBodyModel;
 import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
@@ -11,6 +12,7 @@ import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
+import com.omgservers.model.event.body.KickRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientUpdatedEventBodyModel;
@@ -22,6 +24,7 @@ import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
+import com.omgservers.model.event.body.MulticastRequestedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
@@ -45,8 +48,10 @@ import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
+import com.omgservers.model.event.body.StopRequestedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
+import com.omgservers.model.event.body.UnicastRequestedEventBodyModel;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.UserDeletedEventBodyModel;
 import com.omgservers.model.event.body.UserUpdatedEventBodyModel;
@@ -104,12 +109,18 @@ public enum EventQualifierEnum {
     SCRIPT_CREATED(ScriptCreatedEventBodyModel.class),
     SCRIPT_UPDATED(ScriptUpdatedEventBodyModel.class),
     SCRIPT_DELETED(ScriptDeletedEventBodyModel.class),
-    // Gateway events
+    // Incoming events
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class),
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
     MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
     MATCH_REQUESTED(MatchRequestedEventBodyModel.class),
     CHANGE_REQUESTED(ChangeRequestedEventBodyModel.class),
+    // Runtime events
+    UNICAST_REQUESTED(UnicastRequestedEventBodyModel.class),
+    MULTICAST_REQUESTED(MulticastRequestedEventBodyModel.class),
+    BROADCAST_REQUESTED(BroadcastRequestedEventBodyModel.class),
+    KICK_REQUESTED(KickRequestedEventBodyModel.class),
+    STOP_REQUESTED(StopRequestedEventBodyModel.class),
     // Internal events
     PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
     PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class);

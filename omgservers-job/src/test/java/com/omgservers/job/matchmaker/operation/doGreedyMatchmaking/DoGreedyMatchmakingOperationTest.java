@@ -107,7 +107,6 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
 
         assertEquals(3, result.createdMatches().size());
         assertTrue(result.updatedMatches().isEmpty());
-        assertEquals(matchmakerRequests.size(), result.matchedClients().size());
         assertEquals(matchmakerRequests.size(), result.completedRequests().size());
 
         // match 1

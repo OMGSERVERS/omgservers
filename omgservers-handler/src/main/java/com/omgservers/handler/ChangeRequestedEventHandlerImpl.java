@@ -24,7 +24,7 @@ import java.util.Collections;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
+public class ChangeRequestedEventHandlerImpl implements EventHandler {
 
     final ScriptModule scriptModule;
     final UserModule userModule;

@@ -1,6 +1,7 @@
 package com.omgservers.module.script.impl.сontext.runtime;
 
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeBroadcastMessageFunction;
+import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeKickClientFunction;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeMulticastMessageFunction;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeUnicastMessageFunction;
 import lombok.Builder;
@@ -25,13 +26,16 @@ public class LuaRuntimeContext extends LuaTable {
     final LuaRuntimeMulticastMessageFunction multicastMessageFunction;
     @ToString.Exclude
     final LuaRuntimeBroadcastMessageFunction broadcastMessageFunction;
+    @ToString.Exclude
+    final LuaRuntimeKickClientFunction kickClientFunction;
 
     public LuaRuntimeContext(final Long matchmakerId,
                              final Long matchId,
                              final Long runtimeId,
                              final LuaRuntimeUnicastMessageFunction unicastMessageFunction,
                              final LuaRuntimeMulticastMessageFunction multicastMessageFunction,
-                             final LuaRuntimeBroadcastMessageFunction broadcastMessageFunction) {
+                             final LuaRuntimeBroadcastMessageFunction broadcastMessageFunction,
+                             final LuaRuntimeKickClientFunction kickClientFunction) {
         this.matchmakerId = matchmakerId;
         this.matchId = matchId;
         this.runtimeId = runtimeId;
@@ -42,9 +46,11 @@ public class LuaRuntimeContext extends LuaTable {
         this.unicastMessageFunction = unicastMessageFunction;
         this.multicastMessageFunction = multicastMessageFunction;
         this.broadcastMessageFunction = broadcastMessageFunction;
+        this.kickClientFunction = kickClientFunction;
 
         set("unicast_message", unicastMessageFunction);
         set("multicast_message", multicastMessageFunction);
         set("broadcast_message", broadcastMessageFunction);
+        set("kick_client", kickClientFunction);
     }
 }
