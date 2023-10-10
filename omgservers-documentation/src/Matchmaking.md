@@ -26,7 +26,7 @@ upsertMatchClient("upsertMatchClient()") --> MatchClientCreated(MATCH_CLIENT_CRE
 MatchClientCreated(MATCH_CLIENT_CREATED) --> syncRuntimeGrant("syncRuntimeGrant(CLIENT)")
 syncRuntimeGrant("syncRuntimeGrant(CLIENT)") --> syncAddClientRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)")
 syncAddClientRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)") --> assignRuntime("assignRuntime()")
-assignRuntime("assignRuntime()") --> respondAssignment("respondAssignment()")
+assignRuntime("assignRuntime()") -.-> respondAssignment("respondAssignment()")
 respondAssignment("respondAssignment()")
 
 RuntimeCreated(RUNTIME_CREATED) --> checkRuntimeType{"type == Script"}
@@ -40,8 +40,9 @@ MatchUpdated(MATCH_UPDATED) --> deleteMatchClient("deleteMatchClient()")
 deleteMatchClient("deleteMatchClient()") --> MatchClientDeleted(MATCH_CLIENT_DELETED)
 MatchClientDeleted(MATCH_CLIENT_DELETED) --> deleteRuntimeGrant("deleteRuntimeGrant(CLIENT)")
 deleteRuntimeGrant("deleteRuntimeGrant(CLIENT)") --> syncDeleteClientRuntimeCommand("syncRuntimeCommand(DELETE_CLIENT)")
-syncDeleteClientRuntimeCommand("syncRuntimeCommand(DELETE_CLIENT)") --> revokeRuntime("revokeRuntime()")
-revokeRuntime("revokeRuntime()") --> respondRevocation("respondRevocation()")
+syncDeleteClientRuntimeCommand("syncRuntimeCommand(DELETE_CLIENT)") --> checkClient{"does client</br>exist yet?"}
+checkClient{"does client</br>exist yet?"} -- Yes --> revokeRuntime("revokeRuntime()")
+revokeRuntime("revokeRuntime()") -.-> respondRevocation("respondRevocation()")
 
 syncJob("syncJob()") --> JobCreated(JOB_CREATED)
 JobCreated(JOB_CREATED) --> scheduleJob("scheduleJob()")

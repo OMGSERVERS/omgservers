@@ -1,13 +1,13 @@
-package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.assignRuntime;
+package com.omgservers.module.gateway.impl.service.gatewayService.impl.method.revokeRuntime;
 
-import com.omgservers.dto.gateway.AssignRuntimeRequest;
-import com.omgservers.dto.gateway.AssignRuntimeResponse;
 import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
+import com.omgservers.dto.gateway.RevokeRuntimeRequest;
+import com.omgservers.dto.gateway.RevokeRuntimeResponse;
 import com.omgservers.dto.internal.SyncLogRequest;
 import com.omgservers.dto.internal.SyncLogResponse;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.AssignmentMessageBodyModel;
+import com.omgservers.model.message.body.RevocationMessageBodyModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.system.SystemModule;
@@ -22,7 +22,7 @@ import java.net.URI;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
+class RevokeRuntimeMethodImpl implements RevokeRuntimeMethod {
 
     final SystemModule systemModule;
 
@@ -32,16 +32,16 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
+    public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
         final var server = request.getServer();
         final var connectionId = request.getConnectionId();
-        final var runtimeId = request.getAssignedRuntime().getRuntimeId();
+        final var runtimeId = request.getRuntimeId();
 
         return Uni.createFrom().voidItem()
-                .map(voidItem -> gatewayModule.getConnectionService().assignRuntime(request))
-                .call(assignRuntimeResponse -> {
-                    if (assignRuntimeResponse.getAssigned()) {
-                        return respondAssignmentMessage(runtimeId, server, connectionId)
+                .map(voidItem -> gatewayModule.getConnectionService().revokeRuntime(request))
+                .call(revokeRuntimeResponse -> {
+                    if (revokeRuntimeResponse.getRevoked()) {
+                        return respondRevocationMessage(runtimeId, server, connectionId)
                                 .flatMap(response -> syncLog(request));
                     } else {
                         return Uni.createFrom().voidItem();
@@ -49,17 +49,17 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
                 });
     }
 
-    Uni<RespondMessageResponse> respondAssignmentMessage(final Long runtimeId,
+    Uni<RespondMessageResponse> respondRevocationMessage(final Long runtimeId,
                                                          final URI server,
                                                          final Long connectionId) {
-        final var messageBody = new AssignmentMessageBodyModel(runtimeId);
-        final var messageModel = messageModelFactory.create(MessageQualifierEnum.ASSIGNMENT_MESSAGE, messageBody);
+        final var messageBody = new RevocationMessageBodyModel(runtimeId);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.REVOCATION_MESSAGE, messageBody);
         final var respondMessageRequest = new RespondMessageRequest(server, connectionId, messageModel);
         return gatewayModule.getGatewayService().respondMessage(respondMessageRequest);
     }
 
-    Uni<SyncLogResponse> syncLog(AssignRuntimeRequest request) {
-        final var syncLog = logModelFactory.create("Runtime was assigned, request=" + request);
+    Uni<SyncLogResponse> syncLog(RevokeRuntimeRequest request) {
+        final var syncLog = logModelFactory.create("Runtime was revoked, request=" + request);
         final var syncLogRequest = new SyncLogRequest(syncLog);
         return systemModule.getLogService().syncLog(syncLogRequest);
     }

@@ -8,6 +8,7 @@ import com.omgservers.model.message.body.ChangeMessageBodyModel;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
+import com.omgservers.model.message.body.RevocationMessageBodyModel;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
@@ -152,6 +153,16 @@ public class TestClient {
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
         log.info("Assignment message was consumed, {} ", messageModel);
         return (AssignmentMessageBodyModel) messageModel.getBody();
+    }
+
+    public synchronized RevocationMessageBodyModel consumeRevocationMessage() throws InterruptedException, IOException {
+        String messageString = testEndpoint.receive(45);
+        if (messageString == null) {
+            throw new IOException(MessageQualifierEnum.REVOCATION_MESSAGE + " was not received");
+        }
+        MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("Revocation message was consumed, {} ", messageModel);
+        return (RevocationMessageBodyModel) messageModel.getBody();
     }
 
     synchronized void send(String messageString) throws IOException {

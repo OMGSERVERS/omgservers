@@ -1,9 +1,13 @@
 package com.omgservers.module.gateway.impl.service.webService.impl;
 
 import com.omgservers.dto.gateway.AssignClientRequest;
+import com.omgservers.dto.gateway.AssignClientResponse;
 import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.AssignRuntimeResponse;
 import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
+import com.omgservers.dto.gateway.RevokeRuntimeRequest;
+import com.omgservers.dto.gateway.RevokeRuntimeResponse;
 import com.omgservers.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.module.gateway.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -25,12 +29,17 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<Void> assignClient(AssignClientRequest request) {
+    public Uni<AssignClientResponse> assignClient(AssignClientRequest request) {
         return gatewayService.assignClient(request);
     }
 
     @Override
-    public Uni<Void> assignRuntime(AssignRuntimeRequest request) {
+    public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
         return gatewayService.assignRuntime(request);
+    }
+
+    @Override
+    public Uni<RevokeRuntimeResponse> revokeRuntime(RevokeRuntimeRequest request) {
+        return gatewayService.revokeRuntime(request);
     }
 }

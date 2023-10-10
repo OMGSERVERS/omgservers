@@ -1,7 +1,11 @@
 package com.omgservers.module.gateway.impl.service.connectionService;
 
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignClientRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.AssignClientRequest;
+import com.omgservers.dto.gateway.AssignClientResponse;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.AssignRuntimeResponse;
+import com.omgservers.dto.gateway.RevokeRuntimeRequest;
+import com.omgservers.dto.gateway.RevokeRuntimeResponse;
 import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
@@ -21,9 +25,11 @@ public interface ConnectionService {
 
     DeleteConnectionResponse deleteConnection(@Valid DeleteConnectionRequest request);
 
-    void assignClient(@Valid AssignClientRequest request);
+    AssignClientResponse assignClient(@Valid AssignClientRequest request);
 
-    void assignRuntime(@Valid AssignRuntimeRequest request);
+    AssignRuntimeResponse assignRuntime(@Valid AssignRuntimeRequest request);
+
+    RevokeRuntimeResponse revokeRuntime(@Valid RevokeRuntimeRequest request);
 
     GetConnectionResponse getConnection(@Valid GetConnectionRequest request);
 

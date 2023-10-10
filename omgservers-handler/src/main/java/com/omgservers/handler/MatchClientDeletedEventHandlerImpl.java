@@ -1,11 +1,17 @@
 package com.omgservers.handler;
 
+import com.omgservers.dto.gateway.RevokeRuntimeRequest;
+import com.omgservers.dto.gateway.RevokeRuntimeResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
 import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.FindRuntimeGrantRequest;
 import com.omgservers.dto.runtime.FindRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
@@ -49,6 +55,7 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
         final var body = (MatchClientDeletedEventBodyModel) event.getBody();
         final var matchClient = body.getMatchClient();
 
+        final var userId = matchClient.getUserId();
         final var clientId = matchClient.getClientId();
         final var matchmakerId = matchClient.getMatchmakerId();
         final var matchId = matchClient.getMatchId();
@@ -56,7 +63,8 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(match -> {
                     final var runtimeId = match.getRuntimeId();
                     return deleteRuntimeGrant(runtimeId, clientId)
-                            .flatMap(voidItem -> syncDeleteClientRuntimeCommand(runtimeId, clientId));
+                            .flatMap(voidItem -> syncDeleteClientRuntimeCommand(runtimeId, clientId))
+                            .flatMap(voidItem -> revokeIfClientExists(userId, clientId, runtimeId));
                 })
                 .replaceWith(true);
     }
@@ -87,4 +95,27 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
         return runtimeModule.getRuntimeService().syncRuntimeCommand(request)
                 .replaceWithVoid();
     }
+
+    Uni<Void> revokeIfClientExists(final Long userId, final Long clientId, final Long runtimeId) {
+        return getClient(userId, clientId)
+                .flatMap(client -> revokeRuntime(client, runtimeId))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull().replaceWithVoid();
+    }
+
+    Uni<ClientModel> getClient(Long userId, Long clientId) {
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        return userModule.getClientService().getClient(getClientServiceRequest)
+                .map(GetClientResponse::getClient);
+    }
+
+    Uni<Void> revokeRuntime(final ClientModel client, final Long runtimeId) {
+        final var server = client.getServer();
+        final var connectionId = client.getConnectionId();
+        final var revokeRuntimeRequest = new RevokeRuntimeRequest(server, connectionId, runtimeId);
+        return gatewayModule.getGatewayService().revokeRuntime(revokeRuntimeRequest)
+                .map(RevokeRuntimeResponse::getRevoked)
+                .replaceWithVoid();
+    }
+
 }

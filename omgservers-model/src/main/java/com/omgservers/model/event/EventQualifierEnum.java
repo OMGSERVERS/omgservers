@@ -27,8 +27,6 @@ import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MulticastRequestedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
-import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
-import com.omgservers.model.event.body.PlayerSignedUpEventBodyModel;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
@@ -120,10 +118,7 @@ public enum EventQualifierEnum {
     MULTICAST_REQUESTED(MulticastRequestedEventBodyModel.class),
     BROADCAST_REQUESTED(BroadcastRequestedEventBodyModel.class),
     KICK_REQUESTED(KickRequestedEventBodyModel.class),
-    STOP_REQUESTED(StopRequestedEventBodyModel.class),
-    // Internal events
-    PLAYER_SIGNED_UP(PlayerSignedUpEventBodyModel.class),
-    PLAYER_SIGNED_IN(PlayerSignedInEventBodyModel.class);
+    STOP_REQUESTED(StopRequestedEventBodyModel.class);
 
     Class<? extends EventBodyModel> bodyClass;
 

@@ -1,11 +1,15 @@
 package com.omgservers.module.gateway.impl.service.connectionService.impl;
 
+import com.omgservers.dto.gateway.AssignClientRequest;
+import com.omgservers.dto.gateway.AssignClientResponse;
+import com.omgservers.dto.gateway.AssignRuntimeRequest;
+import com.omgservers.dto.gateway.AssignRuntimeResponse;
+import com.omgservers.dto.gateway.RevokeRuntimeRequest;
+import com.omgservers.dto.gateway.RevokeRuntimeResponse;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.module.gateway.impl.service.connectionService.ConnectionService;
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignClientRequest;
-import com.omgservers.module.gateway.impl.service.connectionService.request.AssignRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
@@ -78,24 +82,52 @@ class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public synchronized void assignClient(@Valid final AssignClientRequest request) {
+    public synchronized AssignClientResponse assignClient(@Valid final AssignClientRequest request) {
         final var connectionId = request.getConnectionId();
         if (sessionByConnection.containsKey(connectionId)) {
             final var assignedClient = request.getAssignedClient();
-            assignedClientByConnection.put(connectionId, assignedClient);
+            final var prevValue = assignedClientByConnection.put(connectionId, assignedClient);
+            if (prevValue != null) {
+                log.warn("Connection already has assigned client, it was overwritten, " +
+                        "connectionId={}, prevValue={}", connectionId, prevValue);
+            }
+            return new AssignClientResponse(true);
         } else {
             log.warn("Connection was not found, connectionId={}", connectionId);
+            return new AssignClientResponse(false);
         }
     }
 
     @Override
-    public synchronized void assignRuntime(@Valid final AssignRuntimeRequest request) {
+    public synchronized AssignRuntimeResponse assignRuntime(@Valid final AssignRuntimeRequest request) {
         final var connectionId = request.getConnectionId();
         if (sessionByConnection.containsKey(connectionId)) {
             final var assignedRuntime = request.getAssignedRuntime();
-            assignedRuntimeByConnection.put(connectionId, assignedRuntime);
+            final var prevValue = assignedRuntimeByConnection.put(connectionId, assignedRuntime);
+            if (prevValue != null) {
+                log.warn("Connection already has assigned runtime, it was overwritten, " +
+                        "connectionId={}, prevValue={}", connectionId, prevValue);
+            }
+            return new AssignRuntimeResponse(true);
         } else {
             log.warn("Connection was not found, connectionId={}", connectionId);
+            return new AssignRuntimeResponse(false);
+        }
+    }
+
+    @Override
+    public synchronized RevokeRuntimeResponse revokeRuntime(@Valid final RevokeRuntimeRequest request) {
+        final var connectionId = request.getConnectionId();
+        if (sessionByConnection.containsKey(connectionId)) {
+            if (assignedRuntimeByConnection.remove(connectionId) != null) {
+                return new RevokeRuntimeResponse(true);
+            } else {
+                log.warn("Connection has not assigned runtime, connectionId={}", connectionId);
+                return new RevokeRuntimeResponse(false);
+            }
+        } else {
+            log.warn("Connection was not found, connectionId={}", connectionId);
+            return new RevokeRuntimeResponse(false);
         }
     }
 

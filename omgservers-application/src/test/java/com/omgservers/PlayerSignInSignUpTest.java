@@ -28,7 +28,7 @@ public class PlayerSignInSignUpTest extends Assertions {
     void playerSignInSignUpTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
                 local var state = context.state
-                local var event = context.event
+                local var event = context.eventw
                                 
                 if event.id == "signed_up" then
                     context.respond({text="signed_up"})
@@ -37,27 +37,27 @@ public class PlayerSignInSignUpTest extends Assertions {
                 if event.id == "signed_in" then
                     context.respond({text="signed_in"})
                 end
-                                
-                return nil
+                
                 """);
 
         final var client = testClientFactory.create(uri);
         client.signUp(version);
 
-        final var welcome1 = client.consumeWelcomeMessage();
-        assertNotNull(welcome1);
-
         final var serverMessage1 = client.consumeServerMessage();
         assertEquals("{text=signed_up}", serverMessage1.getMessage().toString());
+
+        final var welcome1 = client.consumeWelcomeMessage();
+        assertNotNull(welcome1);
 
         client.reconnect();
         client.signIn(version);
 
+        final var serverMessage2 = client.consumeServerMessage();
+        assertEquals("{text=signed_in}", serverMessage2.getMessage().toString());
+
         final var welcome2 = client.consumeWelcomeMessage();
         assertNotNull(welcome2);
 
-        final var serverMessage2 = client.consumeServerMessage();
-        assertEquals("{text=signed_in}", serverMessage2.getMessage().toString());
         client.close();
     }
 }

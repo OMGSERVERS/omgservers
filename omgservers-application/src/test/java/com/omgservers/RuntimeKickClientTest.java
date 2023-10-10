@@ -83,8 +83,11 @@ public class RuntimeKickClientTest extends Assertions {
         final var assignment2 = client2.consumeAssignmentMessage();
         assertNotNull(assignment2);
 
-        final var event = client1.consumeServerMessage();
-        assertEquals("{text=client2 was kicked}", event.getMessage().toString());
+        final var event1 = client2.consumeRevocationMessage();
+        assertNotNull(event1);
+
+        final var event2 = client1.consumeServerMessage();
+        assertEquals("{text=client2 was kicked}", event2.getMessage().toString());
 
         client1.close();
         client2.close();

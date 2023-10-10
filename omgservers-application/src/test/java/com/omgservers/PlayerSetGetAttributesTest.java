@@ -58,11 +58,11 @@ public class PlayerSetGetAttributesTest extends Assertions {
         client.reconnect();
         client.signIn(version);
 
-        final var welcome2 = client.consumeWelcomeMessage();
-        assertNotNull(welcome2);
-
         var message1 = client.consumeServerMessage();
         assertEquals("{text=test passed}", message1.getMessage().toString());
+
+        final var welcome2 = client.consumeWelcomeMessage();
+        assertNotNull(welcome2);
 
         client.close();
     }

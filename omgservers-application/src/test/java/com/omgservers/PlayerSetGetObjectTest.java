@@ -32,7 +32,10 @@ public class PlayerSetGetObjectTest extends Assertions {
                 local var object = context.object
                 local var event = context.event
                                 
+                print("event: " .. event.id)
+
                 if event.id == "signed_up" then
+                    print(event.client_id)
                     context.set_object({
                         a1 = 1,
                         a2 = "string",
@@ -42,6 +45,7 @@ public class PlayerSetGetObjectTest extends Assertions {
                 end
                                 
                 if event.id == "signed_in" then
+                    print(event.client_id)
                     local var object = context.get_object()
                     assert(type(object.a1) == "number", "a1 is wrong")
                     assert(type(object.a2) == "string", "a2 is wrong")
@@ -60,11 +64,11 @@ public class PlayerSetGetObjectTest extends Assertions {
         client.reconnect();
         client.signIn(version);
 
-        final var welcome2 = client.consumeWelcomeMessage();
-        assertNotNull(welcome2);
-
         var message1 = client.consumeServerMessage();
         assertEquals("{text=test passed}", message1.getMessage().toString());
+
+        final var welcome2 = client.consumeWelcomeMessage();
+        assertNotNull(welcome2);
 
         client.close();
     }

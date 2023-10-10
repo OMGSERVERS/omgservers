@@ -1,19 +1,23 @@
-package com.omgservers.module.gateway.impl.service.connectionService.request;
+package com.omgservers.dto.gateway;
 
-import com.omgservers.model.assignedClient.AssignedClientModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URI;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssignClientRequest {
+public class RevokeRuntimeRequest {
+
+    @NotNull
+    URI server;
 
     @NotNull
     Long connectionId;
 
     @NotNull
-    AssignedClientModel assignedClient;
+    Long runtimeId;
 }

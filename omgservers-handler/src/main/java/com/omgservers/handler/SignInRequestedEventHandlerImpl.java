@@ -1,7 +1,9 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.gateway.AssignClientRequest;
-import com.omgservers.dto.internal.SyncEventRequest;
+import com.omgservers.dto.gateway.AssignClientResponse;
+import com.omgservers.dto.script.CallScriptRequest;
+import com.omgservers.dto.script.CallScriptResponse;
 import com.omgservers.dto.script.SyncScriptRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
 import com.omgservers.dto.tenant.GetStageVersionIdResponse;
@@ -17,13 +19,14 @@ import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.PlayerSignedInEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.script.ScriptConfigModel;
 import com.omgservers.model.script.ScriptModel;
 import com.omgservers.model.script.ScriptTypeEnum;
+import com.omgservers.model.scriptEvent.ScriptEventModel;
+import com.omgservers.model.scriptEvent.body.SignedInScriptEventBodyModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.script.ScriptModule;
@@ -42,6 +45,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -83,11 +87,14 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                             return syncClient(userId, playerId, server, connectionId)
                                     .flatMap(client -> getVersionId(tenantId, stageId)
                                             .flatMap(versionId -> syncScript(tenantId, versionId, client))
-                                            .flatMap(script -> assignPlayer(player, client))
-                                            .flatMap(voidItem -> {
+                                            .flatMap(script -> {
+                                                final var scriptId = client.getScriptId();
                                                 final var clientId = client.getId();
-                                                return syncEvent(tenantId, stageId, userId, playerId, clientId);
-                                            }));
+                                                return callScript(scriptId, userId, playerId, clientId)
+                                                        .replaceWithVoid();
+                                            })
+                                            .flatMap(script -> assignClient(player, client))
+                                    );
                         }))
                 .replaceWith(true);
     }
@@ -152,7 +159,23 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .replaceWith(script);
     }
 
-    Uni<Void> assignPlayer(final PlayerModel player,
+    Uni<Boolean> callScript(final Long scriptId,
+                            final Long userId,
+                            final Long playerId,
+                            final Long clientId) {
+        final var scriptEventBody = SignedInScriptEventBodyModel.builder()
+                .userId(userId)
+                .playerId(playerId)
+                .clientId(clientId)
+                .build();
+
+        final var request = new CallScriptRequest(scriptId,
+                Collections.singletonList(new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody)));
+        return scriptModule.getScriptService().callScript(request)
+                .map(CallScriptResponse::getResult);
+    }
+
+    Uni<Void> assignClient(final PlayerModel player,
                            final ClientModel client) {
         final var tenantId = player.getTenantId();
         final var stageId = player.getStageId();
@@ -162,18 +185,8 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
         final var connectionId = client.getConnectionId();
         final var assignedClient = new AssignedClientModel(tenantId, stageId, userId, playerId, client.getId());
         final var request = new AssignClientRequest(server, connectionId, assignedClient);
-        return gatewayModule.getGatewayService().assignClient(request);
-    }
-
-    Uni<Void> syncEvent(final Long tenantId,
-                        final Long stageId,
-                        final Long userId,
-                        final Long playerId,
-                        final Long clientId) {
-        final var eventBody = new PlayerSignedInEventBodyModel(tenantId, stageId, userId, playerId, clientId);
-        final var event = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(event);
-        return systemModule.getEventService().syncEvent(request)
+        return gatewayModule.getGatewayService().assignClient(request)
+                .map(AssignClientResponse::getAssigned)
                 .replaceWithVoid();
     }
 }
