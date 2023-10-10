@@ -26,14 +26,10 @@ public class MatchmakerChangeOfState {
     @NotNull
     Set<MatchModel> updatedMatches;
 
-    @NotNull
-    Set<MatchModel> deletedMatches;
-
     public MatchmakerChangeOfState() {
         deletedCommands = new HashSet<>();
         deletedRequests = new HashSet<>();
         createdMatches = new HashSet<>();
         updatedMatches = new HashSet<>();
-        deletedMatches = new HashSet<>();
     }
 }

@@ -25,6 +25,7 @@ public class MatchModelMapper {
         match.setCreated(row.getOffsetDateTime("created").toInstant());
         match.setModified(row.getOffsetDateTime("modified").toInstant());
         match.setRuntimeId(row.getLong("runtime_id"));
+        match.setStopped(row.getBoolean("stopped"));
         try {
             match.setConfig(objectMapper.readValue(row.getString("config"), MatchConfigModel.class));
         } catch (IOException e) {

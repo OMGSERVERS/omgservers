@@ -29,7 +29,7 @@ class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchma
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, created, modified, runtime_id, config
+                        select id, matchmaker_id, created, modified, runtime_id, stopped, config
                         from $schema.tab_matchmaker_match
                         where matchmaker_id = $1
                         """,

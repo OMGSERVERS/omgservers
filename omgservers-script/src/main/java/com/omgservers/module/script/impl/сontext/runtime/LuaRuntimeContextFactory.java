@@ -3,6 +3,7 @@ package com.omgservers.module.script.impl.сontext.runtime;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeBroadcastMessageFunctionFactory;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeKickClientFunctionFactory;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeMulticastMessageFunctionFactory;
+import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeStopRuntimeFunctionFactory;
 import com.omgservers.module.script.impl.сontext.runtime.function.LuaRuntimeUnicastMessageFunctionFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class LuaRuntimeContextFactory {
     final LuaRuntimeMulticastMessageFunctionFactory luaRuntimeMulticastMessageFunctionFactory;
     final LuaRuntimeBroadcastMessageFunctionFactory luaRuntimeBroadcastMessageFunctionFactory;
     final LuaRuntimeKickClientFunctionFactory luaRuntimeKickClientFunctionFactory;
+    final LuaRuntimeStopRuntimeFunctionFactory luaRuntimeStopRuntimeFunctionFactory;
 
     public LuaRuntimeContext build(final Long matchmakerId,
                                    final Long matchId,
@@ -29,6 +31,7 @@ public class LuaRuntimeContextFactory {
                 .multicastMessageFunction(luaRuntimeMulticastMessageFunctionFactory.build(runtimeId))
                 .broadcastMessageFunction(luaRuntimeBroadcastMessageFunctionFactory.build(runtimeId))
                 .kickClientFunction(luaRuntimeKickClientFunctionFactory.build(runtimeId))
+                .stopRuntimeFunction(luaRuntimeStopRuntimeFunctionFactory.build(runtimeId))
                 .build();
 
         return context;

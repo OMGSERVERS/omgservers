@@ -83,7 +83,9 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                                 final Long versionId,
                                 final VersionConfigModel versionConfig) {
         final var requests = indexedMatchmakerState.getMatchmakerState().getRequests();
-        final var matches = indexedMatchmakerState.getMatchmakerState().getMatches();
+        final var matches = indexedMatchmakerState.getMatchmakerState().getMatches().stream()
+                .filter(match -> match.getStopped().equals(Boolean.FALSE))
+                .toList();
 
         if (requests.isEmpty()) {
             log.debug("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);

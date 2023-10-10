@@ -31,6 +31,9 @@ public class MatchModel {
     Long runtimeId;
 
     @NotNull
+    Boolean stopped;
+
+    @NotNull
     @EqualsAndHashCode.Exclude
     MatchConfigModel config;
 }

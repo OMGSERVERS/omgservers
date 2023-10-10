@@ -17,8 +17,8 @@ handleMatchmakerRequests("handleMatchmakerRequests()") --> updateMatchmakerState
 updateMatchmakerState("updateMatchmakerState()") --> deleteMatchmakerCommand("deleteMatchmakerCommand()")
 updateMatchmakerState("updateMatchmakerState()") --> deleteRequest("deleteRequest()")
 
-updateMatchmakerState("updateMatchmakerState()") --> upserMatch("upserMatch()")
-upserMatch("upsertMatch()") --> MatchCreated(MATCH_CREATED)
+updateMatchmakerState("updateMatchmakerState()") --> upsertMatch("upsertMatch()")
+upsertMatch("upsertMatch()") --> MatchCreated(MATCH_CREATED)
 MatchCreated(MATCH_CREATED) --> syncRuntime("syncRuntime()")
 syncRuntime("syncRuntime()") -.-> RuntimeCreated(RUNTIME_CREATED)
 syncRuntime("syncRuntime()") --> upsertMatchClient("upsertMatchClient()")

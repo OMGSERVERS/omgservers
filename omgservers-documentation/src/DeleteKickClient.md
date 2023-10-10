@@ -1,4 +1,4 @@
-# Client Cleanup
+# Delete/Kick client
 
 ```mermaid
 graph TD;

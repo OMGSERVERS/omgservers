@@ -145,6 +145,7 @@ create table if not exists tab_matchmaker_match (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
+    stopped boolean not null,
     config json not null
 );
 

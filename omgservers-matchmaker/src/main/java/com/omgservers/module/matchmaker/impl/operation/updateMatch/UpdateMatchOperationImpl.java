@@ -1,12 +1,13 @@
-package com.omgservers.module.matchmaker.impl.operation.updateMatchConfig;
+package com.omgservers.module.matchmaker.impl.operation.updateMatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.match.MatchConfigModel;
+import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
+class UpdateMatchOperationImpl implements UpdateMatchOperation {
 
     final ChangeObjectOperation changeObjectOperation;
 
@@ -32,21 +33,22 @@ class UpdateMatchConfigOperationImpl implements UpdateMatchConfigOperation {
     public Uni<Boolean> updateMatch(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
-                                    final Long matchmakerId,
-                                    final Long matchId,
-                                    final MatchConfigModel config) {
+                                    final MatchModel match) {
+        final var matchmakerId = match.getMatchmakerId();
+        final var matchId = match.getId();
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_matchmaker_match
-                        set modified = $3, config = $4
+                        set modified = $3, stopped = $4, config = $5
                         where matchmaker_id = $1 and id = $2
                         """,
                 Arrays.asList(
                         matchmakerId,
                         matchId,
                         Instant.now().atOffset(ZoneOffset.UTC),
-                        getConfigString(config)
+                        match.getStopped(),
+                        getConfigString(match.getConfig())
                 ),
                 () -> new MatchUpdatedEventBodyModel(matchmakerId, matchId),
                 () -> logModelFactory.create(String.format("Match was updated, " +

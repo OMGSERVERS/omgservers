@@ -28,7 +28,7 @@ public class PlayerSignInSignUpTest extends Assertions {
     void playerSignInSignUpTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
                 local var state = context.state
-                local var event = context.eventw
+                local var event = context.event
                                 
                 if event.id == "signed_up" then
                     context.respond({text="signed_up"})

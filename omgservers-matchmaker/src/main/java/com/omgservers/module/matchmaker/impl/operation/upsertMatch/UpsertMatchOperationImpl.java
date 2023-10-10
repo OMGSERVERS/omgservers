@@ -35,8 +35,8 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, config)
-                        values($1, $2, $3, $4, $5, $6)
+                        insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, stopped, config)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -46,6 +46,7 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
                         match.getCreated().atOffset(ZoneOffset.UTC),
                         match.getModified().atOffset(ZoneOffset.UTC),
                         match.getRuntimeId(),
+                        match.getStopped(),
                         getConfigString(match)
                 ),
                 () -> new MatchCreatedEventBodyModel(match.getMatchmakerId(), match.getId()),

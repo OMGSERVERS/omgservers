@@ -36,6 +36,7 @@ public class MatchModelFactory {
         match.setCreated(now);
         match.setModified(now);
         match.setRuntimeId(runtimeId);
+        match.setStopped(Boolean.FALSE);
         match.setConfig(config);
         return match;
     }
