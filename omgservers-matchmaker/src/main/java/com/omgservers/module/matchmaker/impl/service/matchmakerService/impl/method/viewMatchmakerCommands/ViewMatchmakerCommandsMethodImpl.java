@@ -15,24 +15,24 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
 
-    final SelectMatchmakerCommandsByMatchmakerIdOperation
-            selectMatchmakerCommandsByMatchmakerIdOperation;
+    final SelectMatchmakerCommandsByMatchmakerIdOperation selectMatchmakerCommandsByMatchmakerIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(ViewMatchmakerCommandsRequest request) {
+    public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
+        final var matchmakerId = request.getMatchmakerId();
+
+        log.info("View matchmaker commands, matchmakerId={}", matchmakerId);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var matchmakerId = request.getMatchmakerId();
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectMatchmakerCommandsByMatchmakerIdOperation
-                                    .selectMatchmakerCommandsByMatchmakerId(sqlConnection,
-                                            shard.shard(),
-                                            matchmakerId
-                                    ));
-                })
+                .flatMap(shard -> pgPool.withTransaction(
+                        sqlConnection -> selectMatchmakerCommandsByMatchmakerIdOperation
+                                .selectMatchmakerCommandsByMatchmakerIdAndMatchId(sqlConnection,
+                                        shard.shard(),
+                                        matchmakerId
+                                )))
                 .map(ViewMatchmakerCommandsResponse::new);
 
     }

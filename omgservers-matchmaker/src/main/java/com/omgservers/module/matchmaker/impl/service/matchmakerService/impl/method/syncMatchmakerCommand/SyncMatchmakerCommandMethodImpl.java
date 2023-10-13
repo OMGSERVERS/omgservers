@@ -26,6 +26,12 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
     @Override
     public Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(final SyncMatchmakerCommandRequest request) {
         final var matchmakerCommand = request.getMatchmakerCommand();
+
+        log.info("Sync matchmaker command, qualifier={}, id={}, matchmakerId={}",
+                matchmakerCommand.getQualifier(),
+                matchmakerCommand.getId(),
+                matchmakerCommand.getMatchmakerId());
+
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
@@ -35,14 +41,6 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
                                                 shardModel.shard(),
                                                 matchmakerCommand))
                         .map(ChangeContext::getResult))
-                .invoke(created -> {
-                    if (created) {
-                        log.info("Matchmaker command was created, qualifier={}, id={}, matchmakerId={}",
-                                matchmakerCommand.getQualifier(),
-                                matchmakerCommand.getId(),
-                                matchmakerCommand.getMatchmakerId());
-                    }
-                })
                 .map(SyncMatchmakerCommandResponse::new);
     }
 }

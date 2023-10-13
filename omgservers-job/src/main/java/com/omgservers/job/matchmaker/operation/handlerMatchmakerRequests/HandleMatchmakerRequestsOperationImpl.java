@@ -7,10 +7,9 @@ import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
-import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
-import com.omgservers.model.matchmakerState.IndexedMatchmakerState;
+import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -21,7 +20,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -36,21 +34,17 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
 
     @Override
     public Uni<Void> handleMatchmakerRequests(final Long matchmakerId,
-                                              final IndexedMatchmakerState indexedMatchmakerState,
-                                              final MatchmakerChangeOfState matchmakerChangeOfState) {
+                                              final MatchmakerState matchmakerState,
+                                              final MatchmakerChangeOfState changeOfState) {
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
                     final var tenantId = matchmaker.getTenantId();
                     final var stageId = matchmaker.getStageId();
                     return getStageVersionId(tenantId, stageId)
                             .flatMap(versionId -> getVersionConfig(tenantId, versionId)
-                                    .flatMap(versionConfig -> executeMatchmaker(
-                                            matchmakerId,
-                                            indexedMatchmakerState,
-                                            matchmakerChangeOfState,
-                                            tenantId,
-                                            stageId,
-                                            versionId,
+                                    .flatMap(versionConfig -> executeMatchmaker(matchmakerId,
+                                            matchmakerState,
+                                            changeOfState,
                                             versionConfig)
                                     )
                             );
@@ -76,79 +70,78 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     }
 
     Uni<Void> executeMatchmaker(final Long matchmakerId,
-                                final IndexedMatchmakerState indexedMatchmakerState,
-                                final MatchmakerChangeOfState matchmakerChangeOfState,
-                                final Long tenantId,
-                                final Long stageId,
-                                final Long versionId,
+                                final MatchmakerState matchmakerState,
+                                final MatchmakerChangeOfState changeOfState,
                                 final VersionConfigModel versionConfig) {
-        final var requests = indexedMatchmakerState.getMatchmakerState().getRequests();
-        final var matches = indexedMatchmakerState.getMatchmakerState().getMatches().stream()
+        final var requests = matchmakerState.getRequests();
+        // Filter out all stopped matches from matchmaking
+        final var matches = matchmakerState.getMatches().stream()
                 .filter(match -> match.getStopped().equals(Boolean.FALSE))
                 .toList();
+        final var matchClients = matchmakerState.getMatchClients();
 
         if (requests.isEmpty()) {
             log.debug("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);
             return Uni.createFrom().voidItem();
         } else {
-            log.info("Execute matchmaker, matchmakerId={}, requests={}, matches={}",
-                    matchmakerId, requests.size(), matches.size());
-            return doMatchmaking(
-                    tenantId,
-                    stageId,
-                    versionId,
-                    matchmakerId,
-                    matchmakerChangeOfState,
-                    requests,
-                    matches,
-                    versionConfig);
+            log.info("Execute matchmaker, matchmakerId={}, requests={}, matches={}, matchClients={}",
+                    matchmakerId, requests.size(), matches.size(), matchClients.size());
+            return doMatchmaking(versionConfig,
+                    matchmakerState,
+                    changeOfState);
         }
     }
 
-    Uni<Void> doMatchmaking(final Long tenantId,
-                            final Long stageId,
-                            final Long versionId,
-                            final Long matchmakerId,
-                            final MatchmakerChangeOfState matchmakerChangeOfState,
-                            final List<RequestModel> matchmakerRequests,
-                            final List<MatchModel> matchmakerMatches,
-                            final VersionConfigModel versionConfig) {
+    Uni<Void> doMatchmaking(final VersionConfigModel versionConfig,
+                            final MatchmakerState matchmakerState,
+                            final MatchmakerChangeOfState changeOfState) {
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
-                    final var groupedRequests = matchmakerRequests.stream()
+
+                    final var groupedRequests = matchmakerState.getRequests().stream()
                             .collect(Collectors.groupingBy(RequestModel::getMode));
 
-                    final var groupedMatches = matchmakerMatches.stream()
+                    final var groupedMatches = matchmakerState.getMatches().stream()
                             .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
+
+                    final var groupedMatchClients = matchmakerState.getMatchClients().stream()
+                            .collect(Collectors.groupingBy(
+                                    matchClient -> matchClient.getConfig().getRequest().getMode()));
 
                     groupedRequests.forEach((modeName, modeRequests) -> {
                         final var modeMatches = groupedMatches.getOrDefault(modeName, new ArrayList<>());
+                        final var modeMatchClients = groupedMatchClients.getOrDefault(modeName, new ArrayList<>());
 
                         final var modeConfigOptional = versionConfig.getModes().stream()
                                 .filter(mode -> mode.getName().equals(modeName)).findFirst();
                         if (modeConfigOptional.isPresent()) {
                             final var modeConfig = modeConfigOptional.get();
-                            // TODO: detect matchmaking type (default - greedy)
                             final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(
-                                    tenantId,
-                                    stageId,
-                                    versionId,
-                                    matchmakerId,
                                     modeConfig,
                                     modeRequests,
-                                    modeMatches);
-                            matchmakerChangeOfState.getCreatedMatches()
+                                    modeMatches,
+                                    modeMatchClients);
+                            changeOfState.getCreatedMatches()
                                     .addAll(greedyMatchmakingResult.createdMatches());
-                            matchmakerChangeOfState.getUpdatedMatches()
-                                    .addAll(greedyMatchmakingResult.updatedMatches());
-                            matchmakerChangeOfState.getDeletedRequests()
-                                    .addAll(greedyMatchmakingResult.completedRequests());
+                            changeOfState.getEndedMatches()
+                                    .addAll(greedyMatchmakingResult.endedMatches());
+                            changeOfState.getCreatedMatchClients()
+                                    .addAll(greedyMatchmakingResult.createdMatchClients());
                         } else {
-                            log.warn("Unknown mode for matchmaking, mode={}", modeName);
-                            matchmakerChangeOfState.getDeletedRequests().addAll(modeRequests);
+                            log.warn("Matchmaker requests with unknown mode, mode={}, requests={}",
+                                    modeName, modeRequests.size());
                         }
+
+                        changeOfState.getCompletedRequests().addAll(modeRequests);
                     });
+
+                    log.info("Matchmaking finished, " +
+                                    "completedRequests={}, createdMatches={}, endedMatches={}, createdMatchClients={}",
+                            changeOfState.getCompletedRequests().size(),
+                            changeOfState.getCreatedMatches().size(),
+                            changeOfState.getEndedMatches().size(),
+                            changeOfState.getCreatedMatchClients().size());
                 });
     }
 }

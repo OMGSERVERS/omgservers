@@ -56,10 +56,7 @@ class DeleteMatchOperationTest extends Assertions {
             add(VersionGroupModel.create("red", 1, 4));
             add(VersionGroupModel.create("blue", 1, 4));
         }});
-        final var matchConfig = MatchConfigModel.create(tenantId(),
-                stageId(),
-                versionId(),
-                modeConfig);
+        final var matchConfig = new MatchConfigModel(modeConfig);
         final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
 

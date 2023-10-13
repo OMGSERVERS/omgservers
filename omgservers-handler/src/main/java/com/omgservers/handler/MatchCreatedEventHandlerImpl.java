@@ -1,11 +1,11 @@
 package com.omgservers.handler;
 
+import com.omgservers.dto.internal.SyncJobRequest;
+import com.omgservers.dto.internal.SyncJobResponse;
 import com.omgservers.dto.matchmaker.GetMatchRequest;
 import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
-import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.dto.tenant.GetStageVersionIdRequest;
@@ -13,9 +13,9 @@ import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.module.matchmaker.MatchmakerModule;
@@ -23,16 +23,14 @@ import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -46,6 +44,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
 
     final MatchClientModelFactory matchClientModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -62,12 +61,13 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
                         .flatMap(match -> getStageVersionId(matchmaker)
                                 .flatMap(versionId -> syncRuntime(matchmaker, match, versionId)
-                                        .flatMap(runtimeWasCreated -> {
-                                            final var requests = match.getConfig().getGroups().stream()
-                                                    .flatMap(group -> group.getRequests().stream())
-                                                    .toList();
-                                            return syncMatchClients(matchmaker, match, requests);
-                                        }))
+                                        .flatMap(runtimeWasCreated -> syncMatchJob(match))
+                                        .invoke(jobWasCreated -> {
+                                            log.info("New match was initialized, " +
+                                                            "matchmakerId={}, matchId={}, versionId={}",
+                                                    matchmakerId, matchId, versionId);
+                                        })
+                                )
                         )
                 )
                 .replaceWith(true);
@@ -116,25 +116,12 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncRuntimeResponse::getCreated);
     }
 
-    Uni<Void> syncMatchClients(final MatchmakerModel matchmaker,
-                               final MatchModel match,
-                               final List<RequestModel> requests) {
-        final var matchmakerId = matchmaker.getId();
-        final var matchId = match.getId();
-
-        return Multi.createFrom().iterable(requests)
-                .onItem().transformToUniAndMerge(request -> {
-                    final var userId = request.getUserId();
-                    final var clientId = request.getClientId();
-                    final var matchClient = matchClientModelFactory.create(matchmakerId,
-                            matchId,
-                            userId,
-                            clientId);
-                    final var syncMatchClientRequest = new SyncMatchClientRequest(matchClient);
-                    return matchmakerModule.getMatchmakerService().syncMatchClient(syncMatchClientRequest)
-                            .map(SyncMatchClientResponse::getCreated);
-                })
-                .collect().asList()
-                .replaceWithVoid();
+    Uni<Boolean> syncMatchJob(final MatchModel match) {
+        final var shardKey = match.getMatchmakerId();
+        final var entityId = match.getId();
+        final var job = jobModelFactory.create(shardKey, entityId, JobQualifierEnum.MATCH);
+        final var request = new SyncJobRequest(job);
+        return systemModule.getJobService().syncJob(request)
+                .map(SyncJobResponse::getCreated);
     }
 }

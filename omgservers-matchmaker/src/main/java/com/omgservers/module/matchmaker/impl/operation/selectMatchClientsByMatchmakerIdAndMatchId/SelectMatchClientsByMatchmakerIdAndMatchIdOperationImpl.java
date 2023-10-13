@@ -31,7 +31,7 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, match_id, created, modified, user_id, client_id
+                        select id, matchmaker_id, match_id, created, modified, user_id, client_id, group_name, config
                         from $schema.tab_matchmaker_match_client
                         where matchmaker_id = $1 and match_id = $2
                         """,

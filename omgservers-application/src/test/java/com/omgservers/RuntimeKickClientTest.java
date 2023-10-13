@@ -31,7 +31,7 @@ public class RuntimeKickClientTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void runtimeDeleteClientTest() throws Exception {
+    void runtimeKickClientTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""                        
                         local var event = context.event
                         local var state = context.state
@@ -46,7 +46,7 @@ public class RuntimeKickClientTest extends Assertions {
                             local var user_id = event.user_id
                             local var client_id = event.client_id
                             
-                            if state.flag then
+                            if state.flag then                                
                                 context.kick_client(user_id, client_id)
                             else
                                 state.flag = true

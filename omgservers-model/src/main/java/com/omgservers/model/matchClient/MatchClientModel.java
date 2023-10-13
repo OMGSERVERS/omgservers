@@ -1,5 +1,6 @@
 package com.omgservers.model.matchClient;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,4 +36,10 @@ public class MatchClientModel {
 
     @NotNull
     Long clientId;
+
+    @NotBlank
+    String groupName;
+
+    @NotNull
+    MatchClientConfigModel config;
 }

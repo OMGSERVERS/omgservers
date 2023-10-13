@@ -4,14 +4,15 @@ import com.omgservers.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.job.matchmaker.operation.handleMatchmakerCommands.HandleMatchmakerCommandsOperation;
+import com.omgservers.exception.ServerSideClientExceptionException;
+import com.omgservers.job.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
 import com.omgservers.job.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
-import com.omgservers.model.matchmakerState.IndexedMatchmakerState;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,8 +27,8 @@ public class MatchmakerJobTask implements JobTask {
 
     final MatchmakerModule matchmakerModule;
 
-    final HandleMatchmakerCommandsOperation handleMatchmakerCommandsOperation;
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
+    final HandleMatchmakerCommandOperation handleMatchmakerCommandOperation;
 
     @Override
     public JobQualifierEnum getJobType() {
@@ -40,25 +41,21 @@ public class MatchmakerJobTask implements JobTask {
         //TODO: get full state only first time, next use caching approach
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
-                // Step 1. Get current matchmaker state
+                // Step 1. Getting current matchmaker state
                 .flatMap(voidItem -> getMatchmakerState(matchmakerId))
-                .map(IndexedMatchmakerState::new)
-                .flatMap(indexedMatchmakerState -> {
-                    final var matchmakerChangeOfState = new MatchmakerChangeOfState();
-                    // Step 2. Handle matchmaker commands
-                    return handleMatchmakerCommandsOperation.handleMatchmakerCommands(
-                                    matchmakerId,
-                                    indexedMatchmakerState,
-                                    matchmakerChangeOfState)
-                            // Step 3. Handle matchmaker requests
+                .flatMap(matchmakerState -> {
+                    final var changeOfState = new MatchmakerChangeOfState();
+                    // Step 2. Handling matchmaker commands
+                    return handleMatchmakerCommands(matchmakerState, changeOfState)
+                            // Step 3. Handling matchmaker requests
                             .flatMap(voidItem -> handleMatchmakerRequestsOperation.handleMatchmakerRequests(
                                     matchmakerId,
-                                    indexedMatchmakerState,
-                                    matchmakerChangeOfState))
-                            .replaceWith(matchmakerChangeOfState);
+                                    matchmakerState,
+                                    changeOfState))
+                            .replaceWith(changeOfState);
                 })
-                // Step 4. Store new matchmaker state
-                .flatMap(matchmakerChangeOfState -> updateMatchmakerState(matchmakerId, matchmakerChangeOfState))
+                // Step 4. Updating matchmaker state
+                .flatMap(changeOfState -> updateMatchmakerState(matchmakerId, changeOfState))
                 .replaceWithVoid();
     }
 
@@ -68,8 +65,21 @@ public class MatchmakerJobTask implements JobTask {
                 .map(GetMatchmakerStateResponse::getMatchmakerState);
     }
 
-    Uni<Boolean> updateMatchmakerState(final Long matchmakerId, MatchmakerChangeOfState matchmakerChangeOfState) {
-        final var request = new UpdateMatchmakerStateRequest(matchmakerId, matchmakerChangeOfState);
+    Uni<Void> handleMatchmakerCommands(final MatchmakerState matchmakerState,
+                                       final MatchmakerChangeOfState changeOfState) {
+        final var matchmakerCommands = matchmakerState.getMatchmakerCommands();
+        return Multi.createFrom().iterable(matchmakerCommands)
+                .onItem().transformToUniAndConcatenate(matchmakerCommand -> handleMatchmakerCommandOperation
+                        .handleMatchmakerCommand(matchmakerState, changeOfState, matchmakerCommand)
+                        .onFailure(ServerSideClientExceptionException.class)
+                        .recoverWithNull().replaceWithVoid())
+                .collect().asList()
+                .invoke(results -> changeOfState.getCompletedMatchmakerCommands().addAll(matchmakerCommands))
+                .replaceWithVoid();
+    }
+
+    Uni<Boolean> updateMatchmakerState(final Long matchmakerId, MatchmakerChangeOfState changeOfState) {
+        final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
         return matchmakerModule.getMatchmakerService().updateMatchmakerState(request)
                 .map(UpdateMatchmakerStateResponse::getUpdated);
     }

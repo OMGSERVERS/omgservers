@@ -20,9 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
 
     final SelectMatchmakerCommandsByMatchmakerIdOperation selectMatchmakerCommandsByMatchmakerIdOperation;
+    final SelectMatchClientsByMatchmakerIdOperation selectMatchClientsByMatchmakerIdOperation;
     final SelectRequestsByMatchmakerIdOperation selectRequestsByMatchmakerIdOperation;
     final SelectMatchesByMatchmakerIdOperation selectMatchesByMatchmakerIdOperation;
-    final SelectMatchClientsByMatchmakerIdOperation selectMatchClientsByMatchmakerIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -35,14 +35,11 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                     final var shard = shardModel.shard();
                     return pgPool.withTransaction(sqlConnection ->
                             selectMatchmakerCommandsByMatchmakerIdOperation
-                                    .selectMatchmakerCommandsByMatchmakerId(
-                                            sqlConnection,
+                                    .selectMatchmakerCommandsByMatchmakerIdAndMatchId(sqlConnection,
                                             shard,
-                                            matchmakerId
-                                    )
+                                            matchmakerId)
                                     .flatMap(matchmakerCommands -> selectRequestsByMatchmakerIdOperation
-                                            .selectRequestsByMatchmakerId(
-                                                    sqlConnection,
+                                            .selectRequestsByMatchmakerId(sqlConnection,
                                                     shard,
                                                     matchmakerId)
                                             .flatMap(requests -> selectMatchesByMatchmakerIdOperation

@@ -10,7 +10,7 @@ create table if not exists tab_user (
 
 create table if not exists tab_user_token (
     id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
+    user_id bigint not null references tab_user(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     expire timestamp with time zone not null,
     hash text not null
@@ -18,7 +18,7 @@ create table if not exists tab_user_token (
 
 create table if not exists tab_user_player (
     id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
+    user_id bigint not null references tab_user(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
@@ -31,8 +31,8 @@ create table if not exists tab_user_player (
 
 create table if not exists tab_user_client (
     id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete cascade on update restrict,
-    player_id bigint not null references tab_user_player(id) on delete cascade on update restrict,
+    user_id bigint not null references tab_user(id) on delete restrict on update restrict,
+    player_id bigint not null references tab_user_player(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     server text not null,
     connection_id bigint not null,
@@ -51,7 +51,7 @@ create table if not exists tab_tenant (
 
 create table if not exists tab_tenant_permission (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
@@ -60,7 +60,7 @@ create table if not exists tab_tenant_permission (
 
 create table if not exists tab_tenant_project (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null
@@ -68,8 +68,8 @@ create table if not exists tab_tenant_project (
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
-    project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
@@ -78,8 +78,8 @@ create table if not exists tab_tenant_project_permission (
 
 create table if not exists tab_tenant_stage (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
-    project_id bigint not null references tab_tenant_project(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     secret text not null,
@@ -89,8 +89,8 @@ create table if not exists tab_tenant_stage (
 
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
-    stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
@@ -99,8 +99,8 @@ create table if not exists tab_tenant_stage_permission (
 
 create table if not exists tab_tenant_version (
     id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete cascade on update restrict,
-    stage_id bigint not null references tab_tenant_stage(id) on delete cascade on update restrict,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null,
@@ -121,7 +121,7 @@ create table if not exists tab_matchmaker (
 
 create table if not exists tab_matchmaker_command (
     id bigint primary key,
-    matchmaker_id bigint not null references tab_matchmaker(id) on delete cascade on update restrict,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
@@ -149,6 +149,16 @@ create table if not exists tab_matchmaker_match (
     config json not null
 );
 
+create table if not exists tab_matchmaker_match_command (
+    id bigint primary key,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
+    match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    body json not null
+);
+
 create table if not exists tab_matchmaker_match_client (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -157,6 +167,8 @@ create table if not exists tab_matchmaker_match_client (
     modified timestamp with time zone not null,
     user_id bigint not null,
     client_id bigint not null,
+    group_name varchar(64) not null,
+    config json not null,
     unique(match_id, user_id, client_id)
 );
 

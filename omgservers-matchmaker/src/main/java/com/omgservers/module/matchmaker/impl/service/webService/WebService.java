@@ -2,6 +2,8 @@ package com.omgservers.module.matchmaker.impl.service.webService;
 
 import com.omgservers.dto.matchmaker.DeleteMatchClientRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandRequest;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerCommandRequest;
@@ -22,6 +24,8 @@ import com.omgservers.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
+import com.omgservers.dto.matchmaker.SyncMatchCommandRequest;
+import com.omgservers.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
@@ -34,6 +38,8 @@ import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -69,6 +75,12 @@ public interface WebService {
     Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request);
 
     Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
+
+    Uni<SyncMatchCommandResponse> syncMatchCommand(SyncMatchCommandRequest request);
+
+    Uni<DeleteMatchCommandResponse> deleteMatchCommand(DeleteMatchCommandRequest request);
+
+    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
 
     Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
 

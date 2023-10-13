@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 public class DeleteClientRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
+    Long userId;
+
+    @NotNull
     Long clientId;
 
     @Override

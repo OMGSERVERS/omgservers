@@ -56,7 +56,8 @@ public class KickRequestedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId, final Long clientId) {
+    Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
+                                                   final Long clientId) {
         final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);

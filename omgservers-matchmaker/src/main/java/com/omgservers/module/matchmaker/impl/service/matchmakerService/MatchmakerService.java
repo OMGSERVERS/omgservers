@@ -2,6 +2,8 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerService;
 
 import com.omgservers.dto.matchmaker.DeleteMatchClientRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandRequest;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerCommandRequest;
@@ -22,6 +24,8 @@ import com.omgservers.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
+import com.omgservers.dto.matchmaker.SyncMatchCommandRequest;
+import com.omgservers.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
@@ -34,6 +38,8 @@ import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -49,6 +55,10 @@ public interface MatchmakerService {
     Uni<GetMatchmakerResponse> getMatchmaker(@Valid GetMatchmakerRequest request);
 
     Uni<DeleteMatchmakerResponse> deleteMatchmaker(@Valid DeleteMatchmakerRequest request);
+
+    Uni<GetMatchmakerStateResponse> getMatchmakerState(@Valid GetMatchmakerStateRequest request);
+
+    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(@Valid UpdateMatchmakerStateRequest request);
 
     Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(@Valid SyncMatchmakerCommandRequest request);
 
@@ -70,6 +80,12 @@ public interface MatchmakerService {
 
     Uni<ViewMatchesResponse> viewMatches(@Valid ViewMatchesRequest request);
 
+    Uni<SyncMatchCommandResponse> syncMatchCommand(@Valid SyncMatchCommandRequest request);
+
+    Uni<DeleteMatchCommandResponse> deleteMatchCommand(@Valid DeleteMatchCommandRequest request);
+
+    Uni<ViewMatchCommandsResponse> viewMatchCommands(@Valid ViewMatchCommandsRequest request);
+
     Uni<GetMatchClientResponse> getMatchClient(@Valid GetMatchClientRequest request);
 
     Uni<SyncMatchClientResponse> syncMatchClient(@Valid SyncMatchClientRequest request);
@@ -79,8 +95,4 @@ public interface MatchmakerService {
     Uni<FindMatchClientResponse> findMatchClient(@Valid FindMatchClientRequest request);
 
     Uni<ViewMatchClientsResponse> viewMatchClients(@Valid ViewMatchClientsRequest request);
-
-    Uni<GetMatchmakerStateResponse> getMatchmakerState(@Valid GetMatchmakerStateRequest request);
-
-    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(@Valid UpdateMatchmakerStateRequest request);
 }

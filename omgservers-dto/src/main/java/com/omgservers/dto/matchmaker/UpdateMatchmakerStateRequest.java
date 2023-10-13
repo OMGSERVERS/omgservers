@@ -16,7 +16,7 @@ public class UpdateMatchmakerStateRequest implements ShardedRequest {
     Long matchmakerId;
 
     @NotNull
-    MatchmakerChangeOfState matchmakerChangeOfState;
+    MatchmakerChangeOfState changeOfState;
 
     @Override
     public String getRequestShardKey() {

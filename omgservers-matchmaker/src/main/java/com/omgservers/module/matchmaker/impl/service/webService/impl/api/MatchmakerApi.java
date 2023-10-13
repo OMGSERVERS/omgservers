@@ -2,6 +2,8 @@ package com.omgservers.module.matchmaker.impl.service.webService.impl.api;
 
 import com.omgservers.dto.matchmaker.DeleteMatchClientRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandRequest;
+import com.omgservers.dto.matchmaker.DeleteMatchCommandResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchRequest;
 import com.omgservers.dto.matchmaker.DeleteMatchResponse;
 import com.omgservers.dto.matchmaker.DeleteMatchmakerCommandRequest;
@@ -22,6 +24,8 @@ import com.omgservers.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.dto.matchmaker.SyncMatchClientResponse;
+import com.omgservers.dto.matchmaker.SyncMatchCommandRequest;
+import com.omgservers.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.dto.matchmaker.SyncMatchResponse;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
@@ -34,6 +38,8 @@ import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.ViewMatchClientsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchClientsResponse;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsRequest;
+import com.omgservers.dto.matchmaker.ViewMatchCommandsResponse;
 import com.omgservers.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.dto.matchmaker.ViewMatchesResponse;
 import com.omgservers.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -58,6 +64,14 @@ public interface MatchmakerApi {
     @PUT
     @Path("/delete-matchmaker")
     Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request);
+
+    @PUT
+    @Path("/get-matchmaker-state")
+    Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request);
+
+    @PUT
+    @Path("/update-matchmaker-state")
+    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(UpdateMatchmakerStateRequest request);
 
     @PUT
     @Path("/sync-matchmaker-command")
@@ -100,6 +114,18 @@ public interface MatchmakerApi {
     Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
 
     @PUT
+    @Path("/sync-match-command")
+    Uni<SyncMatchCommandResponse> syncMatchCommand(SyncMatchCommandRequest request);
+
+    @PUT
+    @Path("/delete-match-command")
+    Uni<DeleteMatchCommandResponse> deleteMatchCommand(DeleteMatchCommandRequest request);
+
+    @PUT
+    @Path("/view-match-commands")
+    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
+
+    @PUT
     @Path("/get-match-client")
     Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
 
@@ -118,12 +144,4 @@ public interface MatchmakerApi {
     @PUT
     @Path("/view-match-clients")
     Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request);
-
-    @PUT
-    @Path("/get-matchmaker-state")
-    Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request);
-
-    @PUT
-    @Path("/update-matchmaker-state")
-    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(UpdateMatchmakerStateRequest request);
 }

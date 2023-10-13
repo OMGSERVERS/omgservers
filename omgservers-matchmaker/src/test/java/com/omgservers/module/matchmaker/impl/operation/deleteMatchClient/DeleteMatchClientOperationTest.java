@@ -2,6 +2,7 @@ package com.omgservers.module.matchmaker.impl.operation.deleteMatchClient;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.match.MatchConfigModel;
+import com.omgservers.model.matchClient.MatchClientConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchModelFactory;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
@@ -16,6 +17,8 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
@@ -56,10 +59,13 @@ class DeleteMatchClientOperationTest extends Assertions {
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
         final var match = matchModelFactory.create(matchmaker.getId(), new MatchConfigModel());
         upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
-        final var matchClient = matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId());
+        final var matchClient =
+                matchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId(), groupName(),
+                        new MatchClientConfigModel());
         upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient);
 
-        final var changeContext = deleteMatchClientOperation.deleteMatchClient(shard, matchmaker.getId(), matchClient.getId());
+        final var changeContext =
+                deleteMatchClientOperation.deleteMatchClient(shard, matchmaker.getId(), matchClient.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.MATCH_CLIENT_DELETED));
     }
@@ -93,5 +99,9 @@ class DeleteMatchClientOperationTest extends Assertions {
 
     Long requestId() {
         return generateIdOperation.generateId();
+    }
+
+    String groupName() {
+        return "group-" + UUID.randomUUID();
     }
 }

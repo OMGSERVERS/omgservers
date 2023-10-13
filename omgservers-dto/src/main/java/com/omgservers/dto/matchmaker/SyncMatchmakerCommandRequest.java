@@ -1,6 +1,7 @@
 package com.omgservers.dto.matchmaker;
 
 import com.omgservers.dto.ShardedRequest;
+import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

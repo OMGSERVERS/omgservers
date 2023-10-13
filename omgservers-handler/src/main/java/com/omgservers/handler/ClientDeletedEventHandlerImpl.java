@@ -1,6 +1,7 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.dto.tenant.GetStageRequest;
 import com.omgservers.dto.tenant.GetStageResponse;
 import com.omgservers.dto.user.GetPlayerRequest;
@@ -71,13 +72,13 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 .map(GetStageResponse::getStage);
     }
 
-    Uni<Void> syncDeleteClientMatchmakerCommand(final Long matchmakerId, final Long clientId) {
+    Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
+                                                   final Long clientId) {
         final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService()
-                .syncMatchmakerCommand(request)
-                .replaceWithVoid();
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+                .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }
 

@@ -27,7 +27,7 @@ class SelectMatchmakerCommandsByMatchmakerIdOperationImpl
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<List<MatchmakerCommandModel>> selectMatchmakerCommandsByMatchmakerId(
+    public Uni<List<MatchmakerCommandModel>> selectMatchmakerCommandsByMatchmakerIdAndMatchId(
             final SqlConnection sqlConnection,
             final int shard,
             final Long matchmakerId) {
