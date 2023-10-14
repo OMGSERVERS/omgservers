@@ -50,9 +50,15 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
         final var playerId = body.getPlayerId();
         final var clientId = body.getClientId();
         final var mode = body.getMode();
+
         return getStage(tenantId, stageId)
                 .flatMap(stage -> {
                     final var matchmakerId = stage.getMatchmakerId();
+
+                    log.info("Matchmaker was requested, " +
+                                    "matchmakerId={}, clientId={}, mode={}, userId={}, tenantId={}, stageId={}",
+                            matchmakerId, clientId, mode, userId, tenantId, stageId);
+
                     return getPlayerAttributes(userId, playerId)
                             .flatMap(attributes -> {
                                 final var requestConfig = new RequestConfigModel(attributes);

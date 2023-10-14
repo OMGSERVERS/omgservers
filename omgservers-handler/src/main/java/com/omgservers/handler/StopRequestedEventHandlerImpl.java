@@ -44,6 +44,10 @@ public class StopRequestedEventHandlerImpl implements EventHandler {
                 .flatMap(runtime -> {
                     final var matchmakerId = runtime.getMatchmakerId();
                     final var matchId = runtime.getMatchId();
+
+                    log.info("Stop was requested, matchmakerId={}, matchId={}, runtimeId={}",
+                            matchmakerId, matchId, runtimeId);
+
                     return syncStopMatchMatchmakerCommand(matchmakerId, matchId)
                             .replaceWithVoid();
                 })

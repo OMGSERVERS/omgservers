@@ -83,8 +83,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         if (requests.isEmpty()) {
             return Uni.createFrom().voidItem();
         } else {
-            log.info("Execute matchmaker, matchmakerId={}, requests={}, matches={}, matchClients={}",
-                    matchmakerId, requests.size(), matches.size(), matchClients.size());
             return doMatchmaking(versionConfig,
                     matchmakerState,
                     changeOfState);
@@ -128,19 +126,28 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                             changeOfState.getCreatedMatchClients()
                                     .addAll(greedyMatchmakingResult.createdMatchClients());
                         } else {
-                            log.warn("Matchmaker requests with unknown mode, mode={}, requests={}",
+                            log.warn("Matchmaker requests with unknown mode were found, mode={}, requests={}",
                                     modeName, modeRequests.size());
                         }
 
                         changeOfState.getCompletedRequests().addAll(modeRequests);
                     });
 
-                    log.info("Matchmaking finished, " +
-                                    "completedRequests={}, createdMatches={}, endedMatches={}, createdMatchClients={}",
+                    log.info("Matchmaking has done, " +
+                                    "completedMatchmakerCommand={}, " +
+                                    "completedRequests={}, " +
+                                    "createdMatches={}, " +
+                                    "updatedMatches={}, " +
+                                    "endedMatches={}, " +
+                                    "createdMatchClients={}, " +
+                                    "orphanedMatchClients={}",
+                            changeOfState.getCompletedMatchmakerCommands().size(),
                             changeOfState.getCompletedRequests().size(),
                             changeOfState.getCreatedMatches().size(),
+                            changeOfState.getUpdatedMatches().size(),
                             changeOfState.getEndedMatches().size(),
-                            changeOfState.getCreatedMatchClients().size());
+                            changeOfState.getCreatedMatchClients().size(),
+                            changeOfState.getOrphanedMatchClients().size());
                 });
     }
 }

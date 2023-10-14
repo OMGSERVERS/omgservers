@@ -69,7 +69,19 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                                             userId,
                                             playerId,
                                             clientId))
-                                    .call(ignored -> assignRuntime(runtimeId, client));
+                                    .call(ignored -> assignRuntime(runtimeId, client))
+                                    .invoke(voidItem -> {
+                                        log.info(
+                                                "Client was added into match, " +
+                                                        "clientId={}, " +
+                                                        "matchmakerId={}, " +
+                                                        "matchId={}, " +
+                                                        "modeName={}",
+                                                clientId,
+                                                matchmakerId,
+                                                matchId,
+                                                match.getConfig().getModeConfig().getName());
+                                    });
                         })
                         .onFailure(ServerSideNotFoundException.class)
                         .invoke(t -> log.warn("Add client match command failed, client doesn't exist anymore, " +

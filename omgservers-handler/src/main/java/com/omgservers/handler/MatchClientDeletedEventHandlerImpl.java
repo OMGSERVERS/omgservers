@@ -39,6 +39,9 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
         final var userId = matchClient.getUserId();
         final var clientId = matchClient.getClientId();
 
+        log.info("Match client was deleted, matchmakerId={}, matchId={}, userId={}, clientId={}",
+                matchmakerId, matchId, userId, clientId);
+
         return syncDeleteClientMatchCommand(matchmakerId, matchId, userId, clientId)
                 .replaceWith(true);
     }

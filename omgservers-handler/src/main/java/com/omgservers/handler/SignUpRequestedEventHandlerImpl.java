@@ -105,6 +105,11 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                                     return callScript(scriptId, userId, playerId, clientId);
                                                 })
                                                 .flatMap(script -> assignClient(player, client))
+                                                .invoke(voidItem -> {
+                                                    log.info("User signed up, " +
+                                                                    "userId={}, clientId={}, tenantId={}, stageId={}, scriptId={}",
+                                                            userId, client.getId(), tenantId, stageId, client.getScriptId());
+                                                })
                                         );
                             });
 

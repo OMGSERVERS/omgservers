@@ -32,6 +32,12 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeDeletedEventBodyModel) event.getBody();
         final var runtime = body.getRuntime();
         final var runtimeId = runtime.getId();
+
+        log.info("Runtime was deleted, matchmakerId={}, matchId={}, mode={}",
+                runtime.getMatchmakerId(),
+                runtime.getMatchId(),
+                runtime.getConfig().getModeConfig().getName());
+
         final var request = new DeleteJobRequest(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);

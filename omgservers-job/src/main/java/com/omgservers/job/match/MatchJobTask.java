@@ -39,13 +39,6 @@ public class MatchJobTask implements JobTask {
         return viewMatchCommands(matchmakerId, matchId)
                 .call(this::handleMatchCommands)
                 .call(this::deleteMatchCommands)
-                .invoke(matchCommands -> {
-                    if (matchCommands.size() > 0) {
-                        log.info("Match commands have been processed, " +
-                                        "count={}, matchmakerId={}, matchId={}",
-                                matchCommands.size(), matchmakerId, matchId);
-                    }
-                })
                 .replaceWithVoid();
     }
 

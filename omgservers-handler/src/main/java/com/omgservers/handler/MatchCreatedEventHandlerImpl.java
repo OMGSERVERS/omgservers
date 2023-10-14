@@ -59,15 +59,14 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
-                        .flatMap(match -> getStageVersionId(matchmaker)
-                                .flatMap(versionId -> syncRuntime(matchmaker, match, versionId)
-                                        .flatMap(runtimeWasCreated -> syncMatchJob(match))
-                                        .invoke(jobWasCreated -> {
-                                            log.info("New match was initialized, " +
-                                                            "matchmakerId={}, matchId={}, versionId={}",
-                                                    matchmakerId, matchId, versionId);
-                                        })
-                                )
+                        .flatMap(match -> {
+                                    log.info("Match was created, matchId={}, mode={}, matchmakerId={}",
+                                            matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
+                                    return getStageVersionId(matchmaker)
+                                            .flatMap(versionId -> syncRuntime(matchmaker, match, versionId)
+                                                    .flatMap(runtimeWasCreated -> syncMatchJob(match))
+                                            );
+                                }
                         )
                 )
                 .replaceWith(true);

@@ -40,6 +40,9 @@ class RevokeRuntimeMethodImpl implements RevokeRuntimeMethod {
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().revokeRuntime(request))
                 .call(revokeRuntimeResponse -> {
+
+                    log.info("Runtime was revoked, runtimeId={}, connectionId={}", runtimeId, connectionId);
+
                     if (revokeRuntimeResponse.getRevoked()) {
                         return respondRevocationMessage(runtimeId, server, connectionId)
                                 .flatMap(response -> syncLog(request));

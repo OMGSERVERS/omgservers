@@ -40,6 +40,9 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().assignRuntime(request))
                 .call(assignRuntimeResponse -> {
+
+                    log.info("Runtime was assigned, runtimeId={}, connectionId={}", runtimeId, connectionId);
+
                     if (assignRuntimeResponse.getAssigned()) {
                         return respondAssignmentMessage(runtimeId, server, connectionId)
                                 .flatMap(response -> syncLog(request));

@@ -55,6 +55,19 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                             .toList();
 
                     changeOfState.getOrphanedMatchClients().addAll((orphanedMatchClients));
+
+                    log.info(
+                            "Client was deleted from matchmaker, " +
+                                    "clientId={}, " +
+                                    "matchmakerId={}, " +
+                                    "orphanedRequests={}, " +
+                                    "orphanedMatchClients={}, " +
+                                    "matchmakerCommandId={}",
+                            clientId,
+                            matchmakerCommand.getMatchmakerId(),
+                            orphanedRequests.size(),
+                            orphanedMatchClients.size(),
+                            matchmakerCommand.getId());
                 });
     }
 }

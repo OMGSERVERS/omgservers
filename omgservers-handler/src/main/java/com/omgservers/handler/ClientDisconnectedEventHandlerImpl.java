@@ -1,11 +1,11 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.module.user.UserModule;
 import com.omgservers.dto.user.DeleteClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,6 +30,9 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
         final var request = new DeleteClientRequest(userId, clientId);
+
+        log.info("Client disconnected, userId={}, clientId={}", userId, clientId);
+
         return userModule.getClientService().deleteClient(request)
                 .replaceWith(true);
     }

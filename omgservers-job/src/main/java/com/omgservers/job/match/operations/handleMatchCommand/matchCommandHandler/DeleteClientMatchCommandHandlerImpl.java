@@ -67,6 +67,20 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
                                     .flatMap(runtimeCommandWasCreated -> revokeIfClientExists(userId,
                                             clientId,
                                             runtimeId))
+                                    .invoke(voidItem -> {
+                                        log.info(
+                                                "Client was deleted from match, " +
+                                                        "clientId={}, " +
+                                                        "matchmakerId={}, " +
+                                                        "matchId={}, " +
+                                                        "modeName={}," +
+                                                        "matchCommandId={}",
+                                                clientId,
+                                                matchmakerId,
+                                                matchId,
+                                                match.getConfig().getModeConfig().getName(),
+                                                matchCommand.getId());
+                                    })
                             );
                 })
                 .replaceWithVoid();

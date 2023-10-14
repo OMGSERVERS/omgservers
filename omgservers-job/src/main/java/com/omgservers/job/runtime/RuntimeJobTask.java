@@ -48,7 +48,7 @@ public class RuntimeJobTask implements JobTask {
                         switch (runtime.getType()) {
                             case SCRIPT -> viewRuntimeCommands(runtime.getId())
                                     .flatMap(runtimeCommands -> {
-                                        // Add updateRuntime command automatically for every iteration
+                                        // Adding update runtime command automatically for every iteration
                                         final var commandBody = UpdateRuntimeCommandBodyModel.builder()
                                                 .time(Instant.now().toEpochMilli())
                                                 .build();

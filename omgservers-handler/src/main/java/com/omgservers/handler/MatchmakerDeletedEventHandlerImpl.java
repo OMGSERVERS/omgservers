@@ -31,6 +31,12 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
         final var matchmaker = body.getMatchmaker();
         final var matchmakerId = matchmaker.getId();
         final var request = new DeleteJobRequest(matchmakerId, matchmakerId, JobQualifierEnum.MATCHMAKER);
+
+        log.info("Matchmaker was deleted, id={}, tenantId={}, stageId={}",
+                matchmaker.getId(),
+                matchmaker.getTenantId(),
+                matchmaker.getStageId());
+
         return systemModule.getJobService().deleteJob(request)
                 .replaceWith(true);
     }

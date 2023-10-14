@@ -53,6 +53,10 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(matchClient -> {
                     final var userId = matchClient.getUserId();
                     final var clientId = matchClient.getClientId();
+
+                    log.info("Match client was created, matchmakerId={}, matchId={}, userId={}, clientId={}",
+                            matchmakerId, matchId, userId, clientId);
+
                     return syncAddClientMatchCommand(matchmakerId,
                             matchId,
                             userId,

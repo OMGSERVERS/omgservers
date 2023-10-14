@@ -46,6 +46,8 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var userId = client.getUserId();
         final var playerId = client.getPlayerId();
 
+        log.info("Client was deleted, userId={}, clientId={}", userId, client.getId());
+
         return getPlayer(userId, playerId)
                 .flatMap(player -> {
                     final var tenantId = player.getTenantId();

@@ -38,6 +38,10 @@ class AssignClientMethodImpl implements AssignClientMethod {
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().assignClient(request))
                 .call(assignClientResponse -> {
+
+                    log.info("Client was assigned, connectionId={}, client={}", connectionId,
+                            request.getAssignedClient());
+
                     if (assignClientResponse.getAssigned()) {
                         return respondWelcomeMessage(server, connectionId)
                                 .flatMap(response -> syncLog(request));

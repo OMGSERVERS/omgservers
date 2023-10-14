@@ -41,6 +41,13 @@ class StopMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler 
                             .toList();
 
                     changeOfState.getUpdatedMatches().addAll(updatedMatches);
+
+                    log.info(
+                            "Match was marked as stopped, " +
+                                    "matchId={}, " +
+                                    "matchmakerId={}",
+                            matchId,
+                            matchmakerCommand.getMatchmakerId());
                 });
     }
 }

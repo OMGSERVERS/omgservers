@@ -41,6 +41,9 @@ public class KickRequestedEventHandlerImpl implements EventHandler {
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
 
+        log.info("Kick was requested, userId={}, clientId={}, runtimeId={}",
+                userId, clientId, runtimeId);
+
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     final var matchmakerId = runtime.getMatchmakerId();

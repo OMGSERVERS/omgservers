@@ -94,6 +94,19 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                                         .replaceWithVoid();
                                             })
                                             .flatMap(script -> assignClient(player, client))
+                                            .invoke(voidItem -> {
+                                                log.info("User signed in, " +
+                                                                "userId={}, " +
+                                                                "clientId={}, " +
+                                                                "tenantId={}, " +
+                                                                "stageId={}, " +
+                                                                "scriptId={}",
+                                                        userId,
+                                                        client.getId(),
+                                                        tenantId,
+                                                        stageId,
+                                                        client.getScriptId());
+                                            })
                                     );
                         }))
                 .replaceWith(true);

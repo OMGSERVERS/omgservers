@@ -46,8 +46,17 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     public Uni<Boolean> handle(EventModel event) {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
+
         return getRuntime(id)
-                .call(this::syncGame)
+                .call(runtime -> {
+                    log.info("Runtime was created, runtimeId={}, mode={}, matchmakerId={}, matchId={}",
+                            runtime.getId(),
+                            runtime.getConfig().getModeConfig().getName(),
+                            runtime.getMatchmakerId(),
+                            runtime.getMatchId());
+
+                    return syncGame(runtime);
+                })
                 .replaceWith(true);
     }
 
