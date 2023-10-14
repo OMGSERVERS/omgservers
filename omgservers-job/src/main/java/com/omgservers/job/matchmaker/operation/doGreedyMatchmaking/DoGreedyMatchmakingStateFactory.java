@@ -51,19 +51,11 @@ public class DoGreedyMatchmakingStateFactory {
 
         final List<MatchmakingMatch> createdMatches;
         final List<MatchmakingMatch> currentMatches;
-        final List<MatchModel> endedMatches;
         final VersionModeModel config;
 
         public DoGreedyMatchmakingState(VersionModeModel config, List<MatchmakingMatch> allMatches) {
             this.config = config;
             this.currentMatches = allMatches.stream().filter(match -> match.getSize() > 0).collect(Collectors.toList());
-
-            // Matches without clients are decided as ended
-            this.endedMatches = allMatches.stream()
-                    .filter(match -> match.getSize() == 0)
-                    .map(MatchmakingMatch::getMatch)
-                    .toList();
-
             createdMatches = new ArrayList<>();
         }
 
@@ -104,7 +96,7 @@ public class DoGreedyMatchmakingStateFactory {
                     .flatMap(match -> match.getCreatedMatchClients().stream())
                     .toList();
 
-            return new DoGreedyMatchmakingResult(endedMatches, resultMatches, resultMatchClients);
+            return new DoGreedyMatchmakingResult(resultMatches, resultMatchClients);
         }
 
         MatchmakingMatch createMatch(final Long matchmakerId) {

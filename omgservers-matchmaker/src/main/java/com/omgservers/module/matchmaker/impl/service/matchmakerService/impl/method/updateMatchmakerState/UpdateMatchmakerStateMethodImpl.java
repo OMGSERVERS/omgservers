@@ -104,7 +104,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                 final Long matchmakerId,
                                                 final Collection<MatchmakerCommandModel> completedMatchmakerCommands) {
         return Multi.createFrom().iterable(completedMatchmakerCommands)
-                .onItem().transformToUniAndMerge(completedMatchmakerCommand -> deleteMatchmakerCommandOperation
+                .onItem().transformToUniAndConcatenate(completedMatchmakerCommand -> deleteMatchmakerCommandOperation
                         .deleteMatchmakerCommand(
                                 changeContext,
                                 sqlConnection,
@@ -121,7 +121,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                       final Long matchmakerId,
                                       final Collection<RequestModel> deletedRequests) {
         return Multi.createFrom().iterable(deletedRequests)
-                .onItem().transformToUniAndMerge(deletedRequest -> deleteRequestOperation.deleteRequest(
+                .onItem().transformToUniAndConcatenate(deletedRequest -> deleteRequestOperation.deleteRequest(
                         changeContext,
                         sqlConnection,
                         shard,
@@ -164,12 +164,12 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                  final Long matchmakerId,
                                  final Collection<MatchModel> endedMatches) {
         return Multi.createFrom().iterable(endedMatches)
-                .onItem().transformToUniAndMerge(deletedMatch -> deleteMatchOperation.deleteMatch(
+                .onItem().transformToUniAndConcatenate(endedMatch -> deleteMatchOperation.deleteMatch(
                         changeContext,
                         sqlConnection,
                         shard,
-                        deletedMatch.getMatchmakerId(),
-                        deletedMatch.getId()))
+                        endedMatch.getMatchmakerId(),
+                        endedMatch.getId()))
                 .collect().asList()
                 .replaceWithVoid();
     }
@@ -195,7 +195,8 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                          final Long matchmakerId,
                                          final Collection<MatchClientModel> orphanedMatchClients) {
         return Multi.createFrom().iterable(orphanedMatchClients)
-                .onItem().transformToUniAndMerge(orphanedMatchClient -> deleteMatchClientOperation.deleteMatchClient(
+                .onItem()
+                .transformToUniAndConcatenate(orphanedMatchClient -> deleteMatchClientOperation.deleteMatchClient(
                         changeContext,
                         sqlConnection,
                         shard,

@@ -5,6 +5,7 @@ import com.omgservers.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.exception.ServerSideClientExceptionException;
+import com.omgservers.job.matchmaker.operation.handleEndedMatches.HandleEndedMatchesOperation;
 import com.omgservers.job.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
 import com.omgservers.job.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
 import com.omgservers.model.job.JobQualifierEnum;
@@ -29,6 +30,7 @@ public class MatchmakerJobTask implements JobTask {
 
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
     final HandleMatchmakerCommandOperation handleMatchmakerCommandOperation;
+    final HandleEndedMatchesOperation handleEndedMatchesOperation;
 
     @Override
     public JobQualifierEnum getJobType() {
@@ -47,15 +49,38 @@ public class MatchmakerJobTask implements JobTask {
                     final var changeOfState = new MatchmakerChangeOfState();
                     // Step 2. Handling matchmaker commands
                     return handleMatchmakerCommands(matchmakerState, changeOfState)
-                            // Step 3. Handling matchmaker requests
+                            // Step 3. Handling ended matched
+                            .invoke(voidItem -> handleEndedMatchesOperation
+                                    .handleEndedMatches(matchmakerState, changeOfState))
+                            // Step 4. Handling matchmaker requests
                             .flatMap(voidItem -> handleMatchmakerRequestsOperation.handleMatchmakerRequests(
                                     matchmakerId,
                                     matchmakerState,
                                     changeOfState))
                             .replaceWith(changeOfState);
                 })
-                // Step 4. Updating matchmaker state
-                .flatMap(changeOfState -> updateMatchmakerState(matchmakerId, changeOfState))
+                // Step 5. Updating matchmaker state
+                .flatMap(changeOfState -> updateMatchmakerState(matchmakerId, changeOfState)
+                        .invoke(voidItem -> {
+                            if (changeOfState.isNotEmpty()) {
+                                log.info("Matchmaker was executed, matchmakerId={}, " +
+                                                "completedMatchmakerCommands={}, " +
+                                                "completedRequests={}, " +
+                                                "createdMatches={}, " +
+                                                "updatedMatches={}, " +
+                                                "endedMatches={}, " +
+                                                "createdMatchClients={}, " +
+                                                "orphanedMatchClients={}",
+                                        matchmakerId,
+                                        changeOfState.getCompletedMatchmakerCommands().size(),
+                                        changeOfState.getCompletedRequests().size(),
+                                        changeOfState.getCreatedMatches().size(),
+                                        changeOfState.getUpdatedMatches().size(),
+                                        changeOfState.getEndedMatches().size(),
+                                        changeOfState.getCreatedMatchClients().size(),
+                                        changeOfState.getOrphanedMatchClients().size());
+                            }
+                        }))
                 .replaceWithVoid();
     }
 

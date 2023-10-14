@@ -25,7 +25,7 @@ class CompileSourceCodeOperationImpl implements CompileSourceCodeOperation {
             final var inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
             final var prototype = globals.compilePrototype(inputStream, fileName);
             // TODO: add conditional print
-            Print.print(prototype);
+//            Print.print(prototype);
             final var outputStream = new ByteArrayOutputStream();
             DumpState.dump(prototype, outputStream, false);
             final var bytecode = outputStream.toByteArray();

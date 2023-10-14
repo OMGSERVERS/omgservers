@@ -1,5 +1,6 @@
 package com.omgservers.model.matchmakerChangeOfState;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
@@ -44,5 +45,16 @@ public class MatchmakerChangeOfState {
         endedMatches = new HashSet<>();
         createdMatchClients = new HashSet<>();
         orphanedMatchClients = new HashSet<>();
+    }
+
+    @JsonIgnore
+    public boolean isNotEmpty() {
+        return completedMatchmakerCommands.size() > 0 ||
+                completedRequests.size() > 0 ||
+                createdMatches.size() > 0 ||
+                updatedMatches.size() > 0 ||
+                endedMatches.size() > 0 ||
+                createdMatchClients.size() > 0 ||
+                orphanedMatchClients.size() > 0;
     }
 }

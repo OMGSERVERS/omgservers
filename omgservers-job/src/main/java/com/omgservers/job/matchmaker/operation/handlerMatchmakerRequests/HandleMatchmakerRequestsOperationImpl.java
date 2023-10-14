@@ -42,8 +42,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                     final var stageId = matchmaker.getStageId();
                     return getStageVersionId(tenantId, stageId)
                             .flatMap(versionId -> getVersionConfig(tenantId, versionId)
-                                    .flatMap(versionConfig -> executeMatchmaker(matchmakerId,
-                                            matchmakerState,
+                                    .flatMap(versionConfig -> executeMatchmaker(matchmakerState,
                                             changeOfState,
                                             versionConfig)
                                     )
@@ -69,16 +68,10 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .map(GetVersionConfigResponse::getVersionConfig);
     }
 
-    Uni<Void> executeMatchmaker(final Long matchmakerId,
-                                final MatchmakerState matchmakerState,
+    Uni<Void> executeMatchmaker(final MatchmakerState matchmakerState,
                                 final MatchmakerChangeOfState changeOfState,
                                 final VersionConfigModel versionConfig) {
         final var requests = matchmakerState.getRequests();
-        // Filter out all stopped matches from matchmaking
-        final var matches = matchmakerState.getMatches().stream()
-                .filter(match -> match.getStopped().equals(Boolean.FALSE))
-                .toList();
-        final var matchClients = matchmakerState.getMatchClients();
 
         if (requests.isEmpty()) {
             return Uni.createFrom().voidItem();
@@ -96,19 +89,21 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
 
-                    final var groupedRequests = matchmakerState.getRequests().stream()
+                    final var requests = matchmakerState.getRequests().stream()
                             .collect(Collectors.groupingBy(RequestModel::getMode));
 
-                    final var groupedMatches = matchmakerState.getMatches().stream()
+                    final var matches = matchmakerState.getMatches().stream()
+                            // Filter out all stopped matches from matchmaking
+                            .filter(match -> match.getStopped().equals(Boolean.FALSE))
                             .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
 
-                    final var groupedMatchClients = matchmakerState.getMatchClients().stream()
+                    final var matchClients = matchmakerState.getMatchClients().stream()
                             .collect(Collectors.groupingBy(
                                     matchClient -> matchClient.getConfig().getRequest().getMode()));
 
-                    groupedRequests.forEach((modeName, modeRequests) -> {
-                        final var modeMatches = groupedMatches.getOrDefault(modeName, new ArrayList<>());
-                        final var modeMatchClients = groupedMatchClients.getOrDefault(modeName, new ArrayList<>());
+                    requests.forEach((modeName, modeRequests) -> {
+                        final var modeMatches = matches.getOrDefault(modeName, new ArrayList<>());
+                        final var modeMatchClients = matchClients.getOrDefault(modeName, new ArrayList<>());
 
                         final var modeConfigOptional = versionConfig.getModes().stream()
                                 .filter(mode -> mode.getName().equals(modeName)).findFirst();
@@ -121,8 +116,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                                     modeMatchClients);
                             changeOfState.getCreatedMatches()
                                     .addAll(greedyMatchmakingResult.createdMatches());
-                            changeOfState.getEndedMatches()
-                                    .addAll(greedyMatchmakingResult.endedMatches());
                             changeOfState.getCreatedMatchClients()
                                     .addAll(greedyMatchmakingResult.createdMatchClients());
                         } else {
@@ -132,22 +125,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
 
                         changeOfState.getCompletedRequests().addAll(modeRequests);
                     });
-
-                    log.info("Matchmaking has done, " +
-                                    "completedMatchmakerCommand={}, " +
-                                    "completedRequests={}, " +
-                                    "createdMatches={}, " +
-                                    "updatedMatches={}, " +
-                                    "endedMatches={}, " +
-                                    "createdMatchClients={}, " +
-                                    "orphanedMatchClients={}",
-                            changeOfState.getCompletedMatchmakerCommands().size(),
-                            changeOfState.getCompletedRequests().size(),
-                            changeOfState.getCreatedMatches().size(),
-                            changeOfState.getUpdatedMatches().size(),
-                            changeOfState.getEndedMatches().size(),
-                            changeOfState.getCreatedMatchClients().size(),
-                            changeOfState.getOrphanedMatchClients().size());
                 });
     }
 }

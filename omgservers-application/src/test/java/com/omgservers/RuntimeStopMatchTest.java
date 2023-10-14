@@ -60,9 +60,9 @@ public class RuntimeStopMatchTest extends Assertions {
         final var assignment1 = client1.consumeAssignmentMessage();
         assertNotNull(assignment1);
 
-        Thread.sleep(5000);
-
         client1.close();
+
+        Thread.sleep(20000);
     }
 
     @Data

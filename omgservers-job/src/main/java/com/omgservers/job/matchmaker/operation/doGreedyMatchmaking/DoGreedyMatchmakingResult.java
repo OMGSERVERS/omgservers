@@ -6,7 +6,6 @@ import com.omgservers.model.matchClient.MatchClientModel;
 import java.util.List;
 
 public record DoGreedyMatchmakingResult(
-        List<MatchModel> endedMatches,
         List<MatchModel> createdMatches,
         List<MatchClientModel> createdMatchClients) {
 }
