@@ -27,12 +27,6 @@ class SyncMatchCommandMethodImpl implements SyncMatchCommandMethod {
     public Uni<SyncMatchCommandResponse> syncMatchCommand(final SyncMatchCommandRequest request) {
         final var matchCommand = request.getMatchCommand();
 
-        log.info("Sync match command, qualifier={}, id={}, matchmakerId={}, matchId={}",
-                matchCommand.getQualifier(),
-                matchCommand.getId(),
-                matchCommand.getMatchmakerId(),
-                matchCommand.getMatchId());
-
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

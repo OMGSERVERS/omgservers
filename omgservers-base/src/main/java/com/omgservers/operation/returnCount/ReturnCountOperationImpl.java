@@ -40,13 +40,6 @@ class ReturnCountOperationImpl implements ReturnCountOperation {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(SqlResult::rowCount)
-                .invoke(count -> {
-                    if (count > 0) {
-                        log.debug("{}/s was counted, count={}, parameters={}", objectName, count, parameters);
-                    } else {
-                        log.debug("{}/s was not found, parameters={}", objectName, parameters);
-                    }
-                })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }

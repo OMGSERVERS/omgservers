@@ -29,7 +29,6 @@ public class DeleteMatchmakerOperationTestInterface {
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })
-                .invoke(changeContext -> log.info("Change context, {}", changeContext))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

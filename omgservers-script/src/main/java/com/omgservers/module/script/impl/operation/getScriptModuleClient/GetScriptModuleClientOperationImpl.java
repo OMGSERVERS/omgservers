@@ -30,7 +30,6 @@ class GetScriptModuleClientOperationImpl implements GetScriptModuleClientOperati
                     .baseUri(uri)
                     .build(ScriptModuleClient.class);
             cache.put(uri, restClient);
-            log.info("Internal client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

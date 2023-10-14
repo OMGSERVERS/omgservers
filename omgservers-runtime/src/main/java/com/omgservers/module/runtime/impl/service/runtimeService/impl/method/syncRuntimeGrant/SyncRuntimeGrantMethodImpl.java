@@ -24,9 +24,6 @@ class SyncRuntimeGrantMethodImpl implements SyncRuntimeGrantMethod {
     public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request) {
         final var runtimeGrant = request.getRuntimeGrant();
 
-        log.info("Sync runtime grant, runtimeId={}, type={}, entityId={}",
-                runtimeGrant.getRuntimeId(), runtimeGrant.getType(), runtimeGrant.getEntityId());
-
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

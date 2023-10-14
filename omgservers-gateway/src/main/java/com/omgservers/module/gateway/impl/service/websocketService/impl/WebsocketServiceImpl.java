@@ -53,7 +53,6 @@ class WebsocketServiceImpl implements WebsocketService {
             final var connection = response.getConnectionId().get();
             if (response.getAssignedClient().isPresent()) {
                 final var assignedClient = response.getAssignedClient().get();
-                log.info("Connection was deleted, connection={}, assignedClient={}", connection, assignedClient);
 
                 final var userId = assignedClient.getUserId();
                 final var clientId = assignedClient.getClientId();
@@ -62,9 +61,6 @@ class WebsocketServiceImpl implements WebsocketService {
                 final var syncEventRequest = new SyncEventRequest(event);
                 systemModule.getEventService().syncEvent(syncEventRequest)
                         .await().atMost(Duration.ofSeconds(TIMEOUT));
-            } else {
-                log.info("There wasn't assigned player, connection was deleted without notification, " +
-                        "connection={}", connection);
             }
         }
     }

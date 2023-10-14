@@ -50,7 +50,6 @@ class HandleRuntimeCommandOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRuntimeOperation
                 .selectRuntime(TIMEOUT, pgPool, shard, id));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

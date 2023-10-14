@@ -26,8 +26,6 @@ class SendMessageOperationImpl implements SendMessageOperation {
                     try {
                         final var textMessage = objectMapper.writeValueAsString(message);
                         session.getBasicRemote().sendText(textMessage);
-                        log.debug("Message was sent, sessionId={}, qualifier={}", session.getId(),
-                                message.getQualifier());
                     } catch (IOException e) {
                         log.warn("Unable to send message, {}, qualifier={}", e.getMessage(), message.getQualifier());
                     }

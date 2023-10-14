@@ -34,9 +34,6 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             final var qualifier = eventHandler.getQualifier();
             if (eventHandlers.put(qualifier, eventHandler) != null) {
                 log.error("Multiple event handlers were detected, qualifier={}", qualifier);
-            } else {
-                log.debug("Event handler was added, qualifier={}, handler={}",
-                        qualifier, eventHandler.getClass().getSimpleName());
             }
         });
         this.pgPool = pgPool;
@@ -56,8 +53,6 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             final var eventHandler = eventHandlers.get(qualifier);
             final var eventBody = event.getBody();
             if (qualifier.getBodyClass().isInstance(eventBody)) {
-                log.debug("Handle event, qualifier={}, id={}, groupId={}, body={}",
-                        event.getQualifier(), event.getId(), event.getGroupId(), event.getBody());
                 return eventHandler.handle(event)
                         .replaceWith(true);
             } else {
@@ -65,7 +60,6 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return Uni.createFrom().item(true);
             }
         } else {
-            log.debug("Event handler wasn't found, qualifier={}", event.getQualifier());
             return Uni.createFrom().item(true);
         }
     }

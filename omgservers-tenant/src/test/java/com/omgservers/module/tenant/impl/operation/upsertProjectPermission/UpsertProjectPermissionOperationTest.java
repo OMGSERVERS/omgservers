@@ -78,7 +78,6 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         final var permission = projectPermissionModelFactory.create(tenantId(), projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long userId() {

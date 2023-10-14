@@ -22,7 +22,6 @@ class CreateLuaRuntimeContextOperationImpl implements CreateLuaRuntimeContextOpe
                                                           final Long matchId,
                                                           final Long runtimeId) {
         return Uni.createFrom().voidItem()
-                .map(voidItem -> luaRuntimeContextFactory.build(matchmakerId, matchId, runtimeId))
-                .invoke(luaRuntimeContext -> log.info("Lua runtime context was created, {}", luaRuntimeContext));
+                .map(voidItem -> luaRuntimeContextFactory.build(matchmakerId, matchId, runtimeId));
     }
 }

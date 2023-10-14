@@ -32,13 +32,10 @@ public class StandaloneConfiguration {
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
     void startup(@Observes @Priority(2000) StartupEvent event) {
-        log.info("Bootstrap of standalone configuration");
-
         if (getConfigOperation.getConfig().standalone()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> syncIndex())
                     .flatMap(voidItem -> syncServiceAccount())
-                    .invoke(voidItem -> log.info("Standalone configuration was created"))
                     .await().indefinitely();
         } else {
             log.warn("Bootstrap of standalone configuration was skipped");

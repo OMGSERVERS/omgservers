@@ -46,11 +46,7 @@ public class TestClient {
     }
 
     public synchronized void reconnect() throws IOException, DeploymentException {
-        if (close()) {
-            log.info("Reconnect to {}", uri);
-        } else {
-            log.info("Connect to {}", uri);
-        }
+        close();
 
         testEndpoint = new TestEndpoint();
         final var clientEndpointConfig = ClientEndpointConfig.Builder.create().build();
@@ -60,7 +56,6 @@ public class TestClient {
 
     public synchronized boolean close() throws IOException {
         if (session != null) {
-            log.info("Close connection to {}", uri);
             session.close();
             session = null;
             return true;
@@ -80,7 +75,6 @@ public class TestClient {
         final var credentialsMessageBody = consumeCredentialsMessage();
         userId = credentialsMessageBody.getUserId();
         password = credentialsMessageBody.getPassword();
-        log.info("User signed up, userId={}, password={}", userId, password);
     }
 
     public synchronized void signIn(VersionParameters versionParameters) throws IOException {
@@ -120,7 +114,6 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.SERVER_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Event was consumed, {} ", messageModel);
         return (ServerMessageBodyModel) messageModel.getBody();
     }
 
@@ -131,7 +124,6 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Credentials message was consumed, {} ", messageModel);
         return (CredentialsMessageBodyModel) messageModel.getBody();
     }
 
@@ -141,7 +133,6 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.WELCOME_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Welcome message was consumed, {} ", messageModel);
         return (WelcomeMessageBodyModel) messageModel.getBody();
     }
 
@@ -151,7 +142,6 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.ASSIGNMENT_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Assignment message was consumed, {} ", messageModel);
         return (AssignmentMessageBodyModel) messageModel.getBody();
     }
 
@@ -161,12 +151,10 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.REVOCATION_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
-        log.info("Revocation message was consumed, {} ", messageModel);
         return (RevocationMessageBodyModel) messageModel.getBody();
     }
 
     synchronized void send(String messageString) throws IOException {
         session.getBasicRemote().sendText(messageString);
-        log.info("Sent, {}", messageString);
     }
 }

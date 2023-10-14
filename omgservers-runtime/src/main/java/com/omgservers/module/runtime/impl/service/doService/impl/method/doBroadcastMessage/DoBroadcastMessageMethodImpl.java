@@ -40,8 +40,6 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
         final var runtimeId = request.getRuntimeId();
         final var message = request.getMessage();
 
-        log.info("Do broadcast for message, runtimeId={}", runtimeId);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var grantType = RuntimeGrantTypeEnum.CLIENT;
@@ -69,8 +67,6 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
         return Multi.createFrom().iterable(recipients)
                 .onItem().transformToUniAndMerge(recipient -> respondClient(recipient, message))
                 .collect().asList().replaceWithVoid()
-                .invoke(voidItem -> log.info("Broadcast for message was finished, " +
-                        "recipientCount={}", recipients.size()))
                 .replaceWithVoid();
     }
 

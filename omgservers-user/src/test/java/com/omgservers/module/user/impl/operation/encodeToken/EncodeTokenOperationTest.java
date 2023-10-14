@@ -29,6 +29,5 @@ class EncodeTokenOperationTest extends Assertions {
 
         String rawToken = encodeTokenOperation.encodeToken(token);
         assertNotNull(rawToken);
-        log.info("Raw token, {}", rawToken);
     }
 }

@@ -71,7 +71,6 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
                 .create(runtimeId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeGrantOperation
                 .upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

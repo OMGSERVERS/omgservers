@@ -65,7 +65,6 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
                 .selectRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long userId() {

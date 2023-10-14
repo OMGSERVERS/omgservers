@@ -44,9 +44,6 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
         final var recipients = request.getRecipients();
         final var message = request.getMessage();
 
-        log.info("Do multicast for message, runtimeId={}, recipientsCount={}",
-                runtimeId, recipients.size());
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var clientIds = recipients.stream().map(Recipient::clientId).toList();
@@ -95,8 +92,6 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
                                             "missingGrantsFor={}, totalRecipients={}",
                                     missingGrantsFor.size(), recipients.size());
                         }
-                    } else {
-                        log.info("Multicast for message was finished, recipientCount={}", recipients.size());
                     }
                 })
                 .replaceWithVoid();

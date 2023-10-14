@@ -17,16 +17,8 @@ class HandleApiRequestOperationImpl implements HandleApiRequestOperation {
 
     @Override
     public <T, R> Uni<R> handleApiRequest(Logger log, T request, Function<T, Uni<? extends R>> service) {
-        log.info("Request, principal={}, {}", securityIdentity.getPrincipal().getName(), request);
         return Uni.createFrom().item(request)
                 .flatMap(service)
-                .invoke(response -> {
-                    if (response != null) {
-                        log.info("Request was finished, {}", response);
-                    } else {
-                        log.info("Request was finished");
-                    }
-                })
                 .onFailure().invoke(t -> log.error("Request failed, {}", t.getMessage()));
     }
 }

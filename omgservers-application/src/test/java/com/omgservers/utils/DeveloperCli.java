@@ -32,7 +32,6 @@ public class DeveloperCli {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenDeveloperResponse.class);
-        log.info("Token was created, response={}", response);
         return response.getRawToken();
     }
 
@@ -46,7 +45,6 @@ public class DeveloperCli {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateProjectDeveloperResponse.class);
-        log.info("Project was created, response={}", response);
         return response;
     }
 
@@ -60,7 +58,6 @@ public class DeveloperCli {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateVersionDeveloperResponse.class);
-        log.info("Version was created, response={}", response);
         return response;
     }
 }

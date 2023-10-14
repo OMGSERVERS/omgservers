@@ -21,8 +21,6 @@ public class SchemaMigration {
 
     @WithSpan
     void startup(@Observes @Priority(1000) StartupEvent event) {
-        log.info("Bootstrap of schema migration");
-
         if (getConfigOperation.getConfig().disableMigration()) {
             log.warn("Schema migration was disabled, skip operation");
         } else {

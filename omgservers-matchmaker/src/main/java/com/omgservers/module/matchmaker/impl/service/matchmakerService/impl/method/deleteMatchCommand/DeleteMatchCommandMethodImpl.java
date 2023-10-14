@@ -25,8 +25,6 @@ class DeleteMatchCommandMethodImpl implements DeleteMatchCommandMethod {
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
 
-        log.info("Delete match commands, matchmakerId={}, id={}", matchmakerId, id);
-
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

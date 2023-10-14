@@ -52,7 +52,6 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         jobTaskBeans.stream().forEach(jobTask -> {
             JobQualifierEnum type = jobTask.getJobType();
             jobTasks.put(type, jobTask);
-            log.debug("Job task added, type={}, jobTask={}", type, jobTask.getClass().getSimpleName());
         });
         this.scheduler = scheduler;
     }
@@ -87,9 +86,6 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                     .setAsyncTask(scheduledExecution -> asyncTask(scheduledExecution, shardKey, entityId, type))
                     .schedule();
-
-            log.info("Job task scheduled, type={}, interval={}, delay={}, job={}",
-                    type, jobIntervalInSeconds, jobDelayInSeconds, jobName);
         }
     }
 
@@ -99,7 +95,6 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                         final Long entityId,
                         final JobQualifierEnum qualifier) {
         // TODO: calculate and log delay between launch and planning timestamp
-        log.debug("Job was launched, qualifier={}, shardKey={}, entityId={}", qualifier, shardKey, entityId);
         final var job = jobTasks.get(qualifier);
         if (job != null) {
             // TODO: check shard and reschedule in case of any rebalance

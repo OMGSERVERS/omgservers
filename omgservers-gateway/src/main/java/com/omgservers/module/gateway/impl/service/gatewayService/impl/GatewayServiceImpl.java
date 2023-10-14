@@ -41,7 +41,6 @@ class GatewayServiceImpl implements GatewayService {
         if (currentServer.equals(targetServer)) {
             return respondMessageMethod.respondMessage(request);
         } else {
-            log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .respondMessage(request);
         }
@@ -54,7 +53,6 @@ class GatewayServiceImpl implements GatewayService {
         if (currentServer.equals(targetServer)) {
             return assignClientMethod.assignClient(request);
         } else {
-            log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .assignClient(request);
         }
@@ -67,7 +65,6 @@ class GatewayServiceImpl implements GatewayService {
         if (currentServer.equals(targetServer)) {
             return assignRuntimeMethod.assignRuntime(request);
         } else {
-            log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .assignRuntime(request);
         }
@@ -80,7 +77,6 @@ class GatewayServiceImpl implements GatewayService {
         if (currentServer.equals(targetServer)) {
             return revokeRuntimeMethod.revokeRuntime(request);
         } else {
-            log.info("Request will be routed, targetServer={}, request={}", targetServer, request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .revokeRuntime(request);
         }

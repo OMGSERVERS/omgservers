@@ -23,7 +23,6 @@ class ProcessMessageOperationImpl implements ProcessMessageOperation {
     public Uni<Void> processMessage(final Long connectionId, final String messageString) {
         try {
             final var message = objectMapper.readValue(messageString, MessageModel.class);
-            log.info("Handle message, connectionId={}, message={}", connectionId, message);
             final var handleMessageRequest = new HandleMessageRequest(connectionId, message);
             return messageService.handleMessage(handleMessageRequest);
         } catch (Exception e) {

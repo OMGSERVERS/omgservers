@@ -34,9 +34,7 @@ class UpdatePlayerObjectMethodImpl implements UpdatePlayerObjectMethod {
                                             userId,
                                             playerId,
                                             object))
-                            .map(ChangeContext::getResult)
-                            .invoke(result -> log.info("Player object was updated, " +
-                                    "userId={}, playerId={}", userId, playerId));
+                            .map(ChangeContext::getResult);
                 })
                 .map(UpdatePlayerObjectResponse::new);
     }

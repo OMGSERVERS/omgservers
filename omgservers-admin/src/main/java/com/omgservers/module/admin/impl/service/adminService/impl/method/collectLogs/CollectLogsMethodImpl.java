@@ -33,7 +33,6 @@ class CollectLogsMethodImpl implements CollectLogsMethod {
     }
 
     Uni<List<ServerLogModel>> collectLogs(List<URI> servers) {
-        log.info("Collect logs from servers, servers={}", servers);
         return Multi.createFrom().iterable(servers)
                 .onItem().transformToUniAndMerge(server -> {
                     final var client = getInternalModuleClientOperation.getClient(server);

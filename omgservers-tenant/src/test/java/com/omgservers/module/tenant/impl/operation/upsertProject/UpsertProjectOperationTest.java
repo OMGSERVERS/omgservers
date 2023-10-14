@@ -64,7 +64,6 @@ class UpsertProjectOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenantId(), ProjectConfigModel.create());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

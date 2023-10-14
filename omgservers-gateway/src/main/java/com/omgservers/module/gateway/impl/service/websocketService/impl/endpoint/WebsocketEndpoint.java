@@ -22,21 +22,18 @@ public class WebsocketEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        log.info("Session was closed, sessionId={}", session.getId());
         final var request = new CleanUpRequest(session);
         websocketService.cleanUp(request);
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        log.info("Session failed, sessionId={}, {}", session.getId(), throwable.getMessage());
         final var request = new CleanUpRequest(session);
         websocketService.cleanUp(request);
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("Incoming message, sessionId={}, message={}", session.getId(), message);
         final var request = new ReceiveTextMessageRequest(session, message);
         websocketService.receiveTextMessage(request);
     }

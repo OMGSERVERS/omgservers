@@ -25,7 +25,5 @@ class SignedInLuaEventTest extends Assertions {
                     print(event.id)
                 end
                 """);
-
-        log.info("Finished");
     }
 }

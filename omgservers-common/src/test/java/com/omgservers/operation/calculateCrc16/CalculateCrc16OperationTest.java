@@ -28,7 +28,6 @@ public class CalculateCrc16OperationTest extends Assertions {
     void testBasedOnUuid() {
         final var iterations = 10_000_000;
         final var buckets = 16;
-        log.info("Test based on uuid, iterations={}, buckets={}", iterations, buckets);
 
         final var testMap = new TestMap<UUID>(buckets);
 
@@ -45,7 +44,6 @@ public class CalculateCrc16OperationTest extends Assertions {
     void testBasedOnNumbers() {
         final var iterations = 100_000_000;
         final var buckets = 16;
-        log.info("Test based on numbers, iterations={}, buckets={}", iterations, buckets);
 
         final var testMap = new TestMap<UUID>(buckets);
 
@@ -69,7 +67,6 @@ public class CalculateCrc16OperationTest extends Assertions {
 
         final List<String> words = lines.stream().distinct().toList();
         final var buckets = 16;
-        log.info("Test based on numbers, words={}, buckets={}", words.size(), buckets);
 
         final var testMap = new TestMap<UUID>(buckets);
 
@@ -107,7 +104,6 @@ public class CalculateCrc16OperationTest extends Assertions {
                     .mapToLong(AtomicLong::get)
                     .mapToDouble(value -> {
                         var result = Math.abs(value - average) / average * 100;
-                        log.info("{} -> {}", value, String.format("%4.3f", result));
                         return result;
                     })
                     .forEach(value -> {

@@ -26,7 +26,6 @@ class ValidateIndexOperationImpl implements ValidateIndexOperation {
 
         var valid = results.values().stream().allMatch(Boolean.TRUE::equals);
         if (valid) {
-            log.info("Index is valid, name={}, version={}", indexModel.getName(), indexModel.getVersion());
             return indexModel;
         } else {
             throw new ServerSideBadRequestException(String.format("bad index, index=%s", indexModel));

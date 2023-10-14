@@ -19,7 +19,6 @@ class CreateLuaPlayerContextOperationImpl implements CreateLuaPlayerContextOpera
                                                         final Long playerId,
                                                         final Long clientId) {
         return Uni.createFrom().voidItem()
-                .map(voidItem -> luaPlayerContextFactory.build(userId, playerId, clientId))
-                .invoke(luaPlayerContext -> log.info("Lua player context was created, {}", luaPlayerContext));
+                .map(voidItem -> luaPlayerContextFactory.build(userId, playerId, clientId));
     }
 }

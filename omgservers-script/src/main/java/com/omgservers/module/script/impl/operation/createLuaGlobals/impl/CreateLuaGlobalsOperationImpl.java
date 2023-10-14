@@ -28,17 +28,13 @@ class CreateLuaGlobalsOperationImpl implements CreateLuaGlobalsOperation {
         return getVersionBytecode(tenantId, versionId)
                 .map(versionBytecode -> {
                     final var base64Files = versionBytecode.getFiles();
-                    log.info("Creating lua globals, tenantId={}, versionId={}, countOfFiles={}",
-                            tenantId, versionId, base64Files.size());
                     final var luaBytecode = decodeLuaBytecodeOperation.decodeLuaBytecode(base64Files);
                     // TODO: use user globals?
                     final var globals = createServerGlobalsOperation.createServerGlobals();
                     globals.finder = new LuaResourceFinder(luaBytecode);
                     final var luaGlobals = new LuaGlobals(tenantId, versionId, globals);
                     return luaGlobals;
-                })
-                .invoke(luaGlobals -> log.info("Lua globals was created, tenantId={}, versionId={}",
-                        tenantId, versionId));
+                });
     }
 
     Uni<VersionBytecodeModel> getVersionBytecode(final Long tenantId, final Long versionId) {

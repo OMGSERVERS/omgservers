@@ -25,8 +25,6 @@ class ViewMatchCommandsMethodImpl implements ViewMatchCommandsMethod {
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();
 
-        log.info("View match commands, matchmakerId={}, matchId={}", matchmakerId, matchId);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     return pgPool.withTransaction(

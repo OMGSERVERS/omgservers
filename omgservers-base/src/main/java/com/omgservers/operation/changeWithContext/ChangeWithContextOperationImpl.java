@@ -29,8 +29,6 @@ class ChangeWithContextOperationImpl implements ChangeWithContextOperation {
                     .invoke(result -> {
                         final var changeEvents = changeContext.getChangeEvents();
                         final var changeLogs = changeContext.getChangeLogs();
-                        log.debug("Changed with context, result={}, events={}, logs={}",
-                                result, changeEvents, changeLogs);
                         changeContext.setResult(result);
                     })
                     .replaceWith(changeContext)

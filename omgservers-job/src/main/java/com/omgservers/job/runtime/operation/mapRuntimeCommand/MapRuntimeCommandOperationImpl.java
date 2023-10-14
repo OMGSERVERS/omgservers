@@ -23,9 +23,6 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
             final var qualifier = runtimeCommandMapper.getQualifier();
             if (runtimeCommandMappers.put(qualifier, runtimeCommandMapper) != null) {
                 log.error("Multiple runtime command mappers were detected, qualifier={}", qualifier);
-            } else {
-                log.debug("Runtime command mapper was added, qualifier={}, mapper={}",
-                        qualifier, runtimeCommandMapper.getClass().getSimpleName());
             }
         });
     }

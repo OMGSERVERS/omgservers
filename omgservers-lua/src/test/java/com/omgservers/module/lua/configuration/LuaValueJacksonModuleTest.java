@@ -39,7 +39,6 @@ class LuaValueJacksonModuleTest extends Assertions {
         final var luaValue = globals.get("dofile").call(LuaValue.valueOf("main.lua"));
 
         String valueAsString = objectMapper.writeValueAsString(luaValue);
-        log.info("Json, {}", valueAsString);
 
         final var root = objectMapper.readTree(valueAsString);
         final var logical = root.get("logical");

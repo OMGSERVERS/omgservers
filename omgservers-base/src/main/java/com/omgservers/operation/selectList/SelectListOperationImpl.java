@@ -54,12 +54,6 @@ class SelectListOperationImpl implements SelectListOperation {
                             log.error("Skip {}, {}", objectName.toLowerCase(), e.getMessage());
                         }
                     }
-                    if (objects.size() > 0) {
-                        log.debug("List of {}/s were selected, parameters={}",
-                                objectName.toLowerCase(), parameters);
-                    } else {
-                        log.debug("{}/s were not found, parameters={}", objectName, parameters);
-                    }
                     return objects;
                 })
                 .onFailure(PgException.class)

@@ -91,7 +91,6 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var permission = stagePermissionModelFactory.create(tenantId(), stageId(), userId(), StagePermissionEnum.CREATE_VERSION);
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertStagePermissionOperation
                 .upsertStagePermission(TIMEOUT, pgPool, shard, permission));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long userId() {

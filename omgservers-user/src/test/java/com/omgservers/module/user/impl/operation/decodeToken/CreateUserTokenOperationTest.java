@@ -33,17 +33,14 @@ class CreateUserTokenOperationTest extends Assertions {
         userToken1.setSecret(1234567890L);
 
         String rawToken = encodeTokenOperation.encodeToken(userToken1);
-        log.info("Raw token, {}", rawToken);
 
         UserTokenModel userToken2 = decodeTokenOperation.decodeToken(rawToken);
         assertEquals(userToken1, userToken2);
-        log.info("Token, {}", userToken2);
     }
 
     @Test
     void givenInvalidToken_whenDecodeToken_thenException() {
         String rawToken = "invalidtoken";
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> decodeTokenOperation.decodeToken(rawToken));
-        log.info("Exception: {}", exception.getMessage());
     }
 }

@@ -28,7 +28,6 @@ class MigrateOperationImpl implements MigrateOperation {
                 .defaultSchema("system")
                 .load();
         flyway.migrate();
-        log.info("System schema migration was finished, location={}", location);
     }
 
     @Override
@@ -52,7 +51,6 @@ class MigrateOperationImpl implements MigrateOperation {
                             .defaultSchema(String.format("shard_%05d", shard))
                             .load();
                     flyway.migrate();
-                    log.info("Shard schema migration was finished, location={}, shard={}", location, shard);
                 });
     }
 }

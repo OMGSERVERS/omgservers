@@ -66,7 +66,6 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeCommandOperation
                 .upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

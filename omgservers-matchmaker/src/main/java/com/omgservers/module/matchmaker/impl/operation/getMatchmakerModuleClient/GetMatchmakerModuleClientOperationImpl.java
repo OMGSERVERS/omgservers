@@ -30,7 +30,6 @@ class GetMatchmakerModuleClientOperationImpl implements GetMatchmakerModuleClien
                     .baseUri(uri)
                     .build(MatchmakerModuleClient.class);
             cache.put(uri, client);
-            log.info("Client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

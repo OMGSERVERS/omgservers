@@ -38,6 +38,5 @@ class ValidateCredentialsOperationTest extends Assertions {
         final var incorrectPassword = "incorrect";
         final var exception = assertThrows(ServerSideUnauthorizedException.class, () -> validateCredentialsOperation
                 .validateCredentials(TIMEOUT, user, incorrectPassword));
-        log.info("Exception: {}", exception.getMessage());
     }
 }

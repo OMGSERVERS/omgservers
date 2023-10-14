@@ -30,7 +30,6 @@ class GetGatewayModuleClientOperationImpl implements GetGatewayModuleClientOpera
                     .baseUri(uri)
                     .build(GatewayModuleClient.class);
             cache.put(uri, client);
-            log.info("Client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

@@ -38,8 +38,6 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
         final var clientId = request.getClientId();
         final var message = request.getMessage();
 
-        log.info("Do unicast for message, runtimeId={}, userId={}, clientId={}", runtimeId, userId, clientId);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var permission = RuntimeGrantTypeEnum.CLIENT;

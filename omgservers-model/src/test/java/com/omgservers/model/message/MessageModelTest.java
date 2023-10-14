@@ -27,6 +27,5 @@ class MessageModelTest extends Assertions {
                     }
                 }
                 """, MessageModel.class);
-        log.info("Message, {}", message);
     }
 }

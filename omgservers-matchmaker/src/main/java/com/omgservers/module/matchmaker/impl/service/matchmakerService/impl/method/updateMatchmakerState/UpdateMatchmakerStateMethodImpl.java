@@ -143,7 +143,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                 .collect().asList()
                 .invoke(results -> {
                     if (results.size() > 0) {
-                        log.info("Updated matches were udpated, " +
+                        log.info("Updated matches were updated, " +
                                 "matchmakerId={}, count={}", matchmakerId, results.size());
                     }
                 })

@@ -30,7 +30,6 @@ class GetUserModuleClientOperationImpl implements GetUserModuleClientOperation {
                     .baseUri(uri)
                     .build(UserModuleClient.class);
             cache.put(uri, client);
-            log.info("Client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

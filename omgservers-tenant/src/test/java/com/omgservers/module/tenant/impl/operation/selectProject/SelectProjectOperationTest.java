@@ -62,6 +62,5 @@ class SelectProjectOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
                 .selectProject(TIMEOUT, pgPool, shard, id, tenantId));
-        log.info("Exception: {}", exception.getMessage());
     }
 }

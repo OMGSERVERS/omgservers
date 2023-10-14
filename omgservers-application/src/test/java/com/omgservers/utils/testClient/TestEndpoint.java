@@ -22,25 +22,19 @@ class TestEndpoint extends Endpoint {
     @Override
     public void onClose(Session session, CloseReason closeReason) {
         super.onClose(session, closeReason);
-        log.info("Session was closed, sessionId={}", session.getId());
     }
 
     @Override
     public void onError(Session session, Throwable thr) {
         super.onError(session, thr);
-        log.info("Session was failed, sessionId={}, {}", session.getId(), thr.getMessage());
     }
 
     @Override
     public void onOpen(Session session, EndpointConfig config) {
-        log.info("Session was opened, sessionId={}", session.getId());
-
         session.addMessageHandler(String.class, message -> {
-            log.info("Message, sessionId={}, {}", session.getId(), message);
             try {
                 messages.put(message);
             } catch (InterruptedException e) {
-                log.info("Interrupted, {}", e.getMessage());
             }
         });
     }

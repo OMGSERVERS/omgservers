@@ -30,7 +30,6 @@ class GetInternalModuleClientOperationImpl implements GetInternalModuleClientOpe
                     .baseUri(uri)
                     .build(SystemModuleClient.class);
             cache.put(uri, client);
-            log.info("Client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

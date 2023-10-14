@@ -35,9 +35,7 @@ class UpdatePlayerAttributesMethodImpl implements UpdatePlayerAttributesMethod {
                                             userId,
                                             playerId,
                                             attributes))
-                            .map(ChangeContext::getResult)
-                            .invoke(result -> log.info("Player attributes were updated, " +
-                                    "userId={}, playerId={}, attributes={}", userId, playerId, attributes));
+                            .map(ChangeContext::getResult);
                 })
                 .map(UpdatePlayerAttributesResponse::new);
     }

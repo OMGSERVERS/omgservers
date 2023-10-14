@@ -25,9 +25,6 @@ class MessageServiceImpl implements MessageService {
             final var qualifier = messageHandler.getQualifier();
             if (messageHandlers.put(qualifier, messageHandler) != null) {
                 log.error("Multiple message handlers were detected, qualifier={}", qualifier);
-            } else {
-                log.debug("Message handler was added, qualifier={}, handler={}",
-                        qualifier, messageHandler.getClass().getSimpleName());
             }
         });
     }

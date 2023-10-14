@@ -29,7 +29,6 @@ class EncodeTokenOperationImpl implements EncodeTokenOperation {
             String tokenString = objectMapper.writeValueAsString(tokenObject);
             String encodedToken = Base64.getUrlEncoder()
                     .encodeToString(tokenString.getBytes(StandardCharsets.UTF_8));
-            log.debug("Token was encoded, token={}", tokenObject);
             return encodedToken;
         } catch (Exception e) {
             throw new ServerSideBadRequestException("encoding failed, " + e.getMessage());

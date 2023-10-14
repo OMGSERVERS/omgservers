@@ -51,7 +51,6 @@ class TokenServiceImpl implements TokenService {
                     return calculateShardOperation.calculateShard(shardKey)
                             .flatMap(shard -> {
                                 if (shard.foreign()) {
-                                    log.info("Request will be routed, request={}, shard={}", request, shard);
                                     return getUserModuleClientOperation.getClient(shard.serverUri())
                                             .introspectToken(request);
                                 } else {

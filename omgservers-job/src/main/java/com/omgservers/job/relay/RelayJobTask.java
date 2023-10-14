@@ -42,8 +42,7 @@ public class RelayJobTask implements JobTask {
     public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
         return relayBatchOfEvents()
                 .repeat().until(relayedEventsCount -> relayedEventsCount == 0)
-                .collect().last().replaceWithVoid()
-                .invoke(voidItem -> log.debug("Events to relay were not found, exit job"));
+                .collect().last().replaceWithVoid();
     }
 
     Uni<Integer> relayBatchOfEvents() {
@@ -51,7 +50,6 @@ public class RelayJobTask implements JobTask {
                 .flatMap(eventProjections -> {
                     final var size = eventProjections.size();
                     if (size > 0) {
-                        log.info("Events to relay were found, count={}", eventProjections.size());
                         return relayEvents(eventProjections)
                                 .flatMap(voidItem -> {
                                     final var ids = eventProjections.stream()

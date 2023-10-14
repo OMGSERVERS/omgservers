@@ -58,8 +58,6 @@ public class PlayerMatchmakingTest extends Assertions {
         final var welcome2 = client2.consumeWelcomeMessage();
         assertNotNull(welcome2);
 
-        log.info("Request matchmaking");
-
         client1.requestMatchmaking("death-match");
         client2.requestMatchmaking("death-match");
 

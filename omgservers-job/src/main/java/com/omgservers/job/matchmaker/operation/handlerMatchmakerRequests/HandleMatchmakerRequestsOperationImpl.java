@@ -81,7 +81,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         final var matchClients = matchmakerState.getMatchClients();
 
         if (requests.isEmpty()) {
-            log.debug("There aren't any requests for matchmaking, matchmakerId={}", matchmakerId);
             return Uni.createFrom().voidItem();
         } else {
             log.info("Execute matchmaker, matchmakerId={}, requests={}, matches={}, matchClients={}",

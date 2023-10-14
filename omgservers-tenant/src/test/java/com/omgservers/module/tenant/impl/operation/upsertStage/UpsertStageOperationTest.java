@@ -76,7 +76,6 @@ class UpsertStageOperationTest extends Assertions {
         final var stage = stageModelFactory.create(tenantId(), projectId(), StageConfigModel.create());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenantId(), stage));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

@@ -24,8 +24,6 @@ public class BootstrapRelayJob {
 
     @WithSpan
     void startup(@Observes @Priority(3000) StartupEvent event) {
-        log.info("Bootstrap of relay job");
-
         final var disableRelay = getConfigOperation.getConfig().disableRelay();
         if (disableRelay) {
             log.warn("Relay job was disabled, skip operation");

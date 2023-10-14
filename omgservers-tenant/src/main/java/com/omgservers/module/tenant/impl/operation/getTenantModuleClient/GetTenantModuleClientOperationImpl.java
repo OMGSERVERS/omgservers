@@ -30,7 +30,6 @@ class GetTenantModuleClientOperationImpl implements GetTenantModuleClientOperati
                     .baseUri(uri)
                     .build(TenantModuleClient.class);
             cache.put(uri, restClient);
-            log.info("Internal client was created and cached, uri={}", uri);
         }
         return cache.get(uri);
     }

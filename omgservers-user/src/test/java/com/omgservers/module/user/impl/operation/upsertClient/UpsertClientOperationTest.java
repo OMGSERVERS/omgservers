@@ -81,7 +81,6 @@ class UpsertClientOperationTest extends Assertions {
         final var client = clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId());
         final var exception = assertThrows(ServerSideNotFoundException.class, () ->
                 insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

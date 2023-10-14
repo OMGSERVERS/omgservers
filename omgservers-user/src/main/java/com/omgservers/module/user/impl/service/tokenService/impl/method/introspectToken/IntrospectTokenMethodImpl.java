@@ -48,9 +48,7 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
         if (BcryptUtil.matches(rawToken, tokenHash)) {
             final var lifetime = Duration.between(Instant.now(), tokenModel.getExpire());
             if (lifetime.isNegative()) {
-                log.info("Token was expired, token={}, lifetime={}", tokenObject, lifetime);
-            } else {
-                log.debug("Token is valid, token={}, lifetime={}", tokenObject, lifetime);
+                log.warn("Token was expired, token={}, lifetime={}", tokenObject, lifetime);
             }
             return lifetime.toSeconds();
         } else {

@@ -26,7 +26,6 @@ class ValidateTenantOperationImpl implements ValidateTenantOperation {
 
         var valid = results.values().stream().allMatch(Boolean.TRUE::equals);
         if (valid) {
-            log.info("Tenant is valid, tenant={}", tenant);
             return tenant;
         } else {
             throw new ServerSideBadRequestException(String.format("bad tenant, tenant=%s", tenant));

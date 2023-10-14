@@ -59,8 +59,6 @@ class ConnectionServiceImpl implements ConnectionService {
             final var connectionId = generateIdOperation.generateId();
             connectionBySession.put(sessionId, connectionId);
             sessionByConnection.put(connectionId, session);
-            log.info("Session was associated with connectionId, sessionId={}, connectionId={}", sessionId,
-                    connectionId);
         }
     }
 

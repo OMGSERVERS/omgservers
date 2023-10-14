@@ -47,12 +47,10 @@ public class ChangeContext<T> {
 
     public void add(EventModel changeEvent) {
         changeEvents.add(changeEvent);
-        log.debug("Event was added to context, event={}", changeEvent);
     }
 
     public void add(LogModel changeLog) {
         changeLogs.add(changeLog);
-        log.debug("Log was added to context, log={}", changeLog);
     }
 
     public boolean contains(EventQualifierEnum qualifier) {

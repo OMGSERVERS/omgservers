@@ -39,13 +39,6 @@ class HasObjectOperationImpl implements HasObjectOperation {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(rowSet -> rowSet.rowCount() > 0)
-                .invoke(exists -> {
-                    if (exists) {
-                        log.debug("{} was found, parameters={}", objectName, parameters);
-                    } else {
-                        log.debug("{} was not found, parameters={}", objectName, parameters);
-                    }
-                })
                 .onFailure(PgException.class)
                 .transform(t -> transformPgExceptionOperation.transformPgException(preparedSql, (PgException) t));
     }

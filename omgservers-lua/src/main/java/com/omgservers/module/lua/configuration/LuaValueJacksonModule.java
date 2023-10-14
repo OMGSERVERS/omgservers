@@ -15,7 +15,6 @@ public class LuaValueJacksonModule implements ObjectMapperCustomizer {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(LuaValue.class, new LuaValueSerializer(LuaValue.class));
         simpleModule.addDeserializer(LuaValue.class, new LuaValueDeserializer(LuaValue.class));
-        log.info("LuaValue serializer/deserializer was installed");
         mapper.registerModule(simpleModule);
     }
 }

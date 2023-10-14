@@ -31,7 +31,6 @@ public class AdminCli {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantAdminResponse.class);
-        log.info("Tenant was created, response={}", response);
         return response.getId();
     }
 
@@ -45,7 +44,6 @@ public class AdminCli {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateDeveloperAdminResponse.class);
-        log.info("Developer was created, response={}", response);
         return response;
     }
 }

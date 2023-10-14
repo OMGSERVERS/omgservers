@@ -24,9 +24,6 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
             final var qualifier = matchmakerCommandHandler.getQualifier();
             if (matchmakerCommandHandlers.put(qualifier, matchmakerCommandHandler) != null) {
                 log.error("Multiple matchmaker command handlers were detected, qualifier={}", qualifier);
-            } else {
-                log.debug("Matchmaker command handler was added, qualifier={}, handler={}",
-                        qualifier, matchmakerCommandHandler.getClass().getSimpleName());
             }
         });
     }

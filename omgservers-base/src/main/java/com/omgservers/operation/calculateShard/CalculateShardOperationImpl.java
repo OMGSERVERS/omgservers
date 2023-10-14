@@ -49,7 +49,6 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                     final var locked = index.getConfig().getLockedShards().contains(shardIndex);
 
                     final var shardModel = new ShardModel(shardIndex, shardServerUri, foreign, locked);
-                    log.debug("Shard was calculated, shard={}, keys={}", shardModel, keys);
                     return shardModel;
                 });
     }

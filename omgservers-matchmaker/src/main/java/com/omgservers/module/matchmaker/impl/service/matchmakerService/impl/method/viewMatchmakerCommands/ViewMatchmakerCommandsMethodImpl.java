@@ -24,8 +24,6 @@ class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
     public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
         final var matchmakerId = request.getMatchmakerId();
 
-        log.info("View matchmaker commands, matchmakerId={}", matchmakerId);
-
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> pgPool.withTransaction(
                         sqlConnection -> selectMatchmakerCommandsByMatchmakerIdOperation

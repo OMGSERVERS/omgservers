@@ -48,7 +48,6 @@ class SelectMatchmakerOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectMatchmakerOperation
                 .selectMatchmaker(TIMEOUT, pgPool, shard, id));
-        log.info("Exception: {}", exception.getMessage());
     }
 
     Long tenantId() {

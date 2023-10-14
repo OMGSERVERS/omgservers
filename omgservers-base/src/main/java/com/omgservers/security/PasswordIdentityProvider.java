@@ -42,7 +42,6 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
         if (username.equals(getConfigOperation.getConfig().adminUsername())) {
             if (BcryptUtil.matches(password, getConfigOperation.getConfig().adminPasswordHash())) {
                 final var principal = "admin/" + username;
-                log.debug("Admin account was authenticated, principal={}", principal);
                 return Uni.createFrom().item(QuarkusSecurityIdentity.builder()
                         .setPrincipal(new QuarkusPrincipal(principal))
                         .addRole(InternalRoleEnum.Names.ADMIN)
@@ -59,7 +58,6 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
                     .map(valid -> {
                         if (valid) {
                             final var principal = "sa/" + username;
-                            log.debug("Service account was authenticated, principal={}", principal);
                             return (SecurityIdentity) QuarkusSecurityIdentity.builder()
                                     .setPrincipal(new QuarkusPrincipal(principal))
                                     .addRole(InternalRoleEnum.Names.SERVICE)

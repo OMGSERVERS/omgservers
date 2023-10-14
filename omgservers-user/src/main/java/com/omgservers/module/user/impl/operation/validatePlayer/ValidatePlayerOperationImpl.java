@@ -26,7 +26,6 @@ class ValidatePlayerOperationImpl implements ValidatePlayerOperation {
 
         var valid = results.values().stream().allMatch(Boolean.TRUE::equals);
         if (valid) {
-            log.info("Player is valid, player={}", player);
             return player;
         } else {
             throw new ServerSideBadRequestException(String.format("bad player, player=%s", player));

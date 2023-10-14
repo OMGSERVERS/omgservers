@@ -45,8 +45,6 @@ public class BootstrapEventHandler {
 
     @WithSpan
     void startup(@Observes @Priority(3000) StartupEvent event) {
-        log.info("Bootstrap of event handler");
-
         final var disableEventHandler = getConfigOperation.getConfig().disableEventHandler();
         if (disableEventHandler) {
             log.warn("Event handler was disabled, skip operation");
