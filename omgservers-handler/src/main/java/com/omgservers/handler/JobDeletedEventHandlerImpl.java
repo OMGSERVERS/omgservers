@@ -31,6 +31,10 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
         final var shardKey = job.getShardKey();
         final var entityId = job.getEntityId();
         final var qualifier = job.getQualifier();
+
+        log.info("Job was deleted, qualifier={}, shardKey={}, entityId={}",
+                qualifier, shardKey, entityId);
+
         final var request = new UnscheduleJobRequest(shardKey, entityId, qualifier);
         return systemModule.getJobService().unscheduleJob(request)
                 .replaceWith(true);

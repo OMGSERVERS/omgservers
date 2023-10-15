@@ -22,7 +22,7 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
     Long entityId;
 
     @NotNull
-    JobQualifierEnum type;
+    JobQualifierEnum jobQualifier;
 
     @Override
     public EventQualifierEnum getQualifier() {

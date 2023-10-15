@@ -1,11 +1,11 @@
 package com.omgservers.handler;
 
-import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,8 +29,12 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
         final var body = (JobCreatedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();
         final var entityId = body.getEntityId();
-        final var type = body.getType();
-        final var request = new ScheduleJobRequest(shardKey, entityId, type);
+        final var jobQualifier = body.getJobQualifier();
+        final var request = new ScheduleJobRequest(shardKey, entityId, jobQualifier);
+
+        log.info("Job was created, qualifier={}, shardKey={}, entityId={}",
+                jobQualifier, shardKey, entityId);
+
         return systemModule.getJobService().scheduleJob(request)
                 .replaceWith(true);
     }

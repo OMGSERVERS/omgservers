@@ -11,41 +11,54 @@ MatchmakerRequested(MATCHMAKER_REQUESTED) --> syncRequest("syncRequest()")
 
 MatchmakerJob(Job<br/>type: MATCHMAKER) --> getMatchmakerState("getMatchmakerState()")
 getMatchmakerState("getMatchmakerState()") --> handleMatchmakerCommands("handleMatchmakerCommands()")
-handleMatchmakerCommands("handleMatchmakerCommands()") --> handleMatchmakerRequests("handleMatchmakerRequests()")
+handleMatchmakerCommands("handleMatchmakerCommands()") --> handleEndedMatches("handleEndedMatches()")
+handleEndedMatches("handleEndedMatches()") --> handleMatchmakerRequests("handleMatchmakerRequests()")
 handleMatchmakerRequests("handleMatchmakerRequests()") --> updateMatchmakerState("updateMatchmakerState()")
 
-updateMatchmakerState("updateMatchmakerState()") --> deleteMatchmakerCommand("deleteMatchmakerCommand()")
-updateMatchmakerState("updateMatchmakerState()") --> deleteRequest("deleteRequest()")
+updateMatchmakerState("updateMatchmakerState()") --> deleteCompletedRequests("deleteCompletedRequests()")
+updateMatchmakerState("updateMatchmakerState()") --> deleteCompletedMatchmakerCommands("deleteCompletedMatchmakerCommands()")
+updateMatchmakerState("updateMatchmakerState()") --> syncCreatedMatches("syncCreatedMatches()")
+updateMatchmakerState("updateMatchmakerState()") --> updateUpdatedMatches("updateUpdatedMatches()")
+updateMatchmakerState("updateMatchmakerState()") --> deleteEndedMatches("deleteEndedMatches()")
+updateMatchmakerState("updateMatchmakerState()") --> syncCreatedMatchClients("syncCreatedMatchClients()")
+updateMatchmakerState("updateMatchmakerState()") --> deleteOrphanedMatchClients("deleteOrphanedMatchClients()")
 
-updateMatchmakerState("updateMatchmakerState()") --> upsertMatch("upsertMatch()")
-upsertMatch("upsertMatch()") --> MatchCreated(MATCH_CREATED)
+syncCreatedMatches("syncCreatedMatches()") --> MatchCreated(MATCH_CREATED)
+deleteEndedMatches("deleteEndedMatches()") --> MatchDeleted(MATCH_DELETED)
+syncCreatedMatchClients("syncCreatedMatchClients()") --> MatchClientCreated(MATCH_CLIENT_CREATED)
+deleteOrphanedMatchClients("deleteOrphanedMatchClients()") --> MatchClientDeleted(MATCH_CLIENT_DELETED)
+
 MatchCreated(MATCH_CREATED) --> syncRuntime("syncRuntime()")
-syncRuntime("syncRuntime()") -.-> RuntimeCreated(RUNTIME_CREATED)
-syncRuntime("syncRuntime()") --> upsertMatchClient("upsertMatchClient()")
-upsertMatchClient("upsertMatchClient()") --> MatchClientCreated(MATCH_CLIENT_CREATED)
-MatchClientCreated(MATCH_CLIENT_CREATED) --> syncRuntimeGrant("syncRuntimeGrant(CLIENT)")
-syncRuntimeGrant("syncRuntimeGrant(CLIENT)") --> syncAddClientRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)")
-syncAddClientRuntimeCommand("syncRuntimeCommand(ADD_CLIENT)") --> assignRuntime("assignRuntime()")
-assignRuntime("assignRuntime()") -.-> respondAssignment("respondAssignment()")
-respondAssignment("respondAssignment()")
+syncRuntime("syncRuntime()") --> syncMatchJob("syncJob(MATCH)")
+syncMatchJob("syncJob(MATCH)") --> JobCreated(JOB_CREATED)
 
-RuntimeCreated(RUNTIME_CREATED) --> checkRuntimeType{"type == Script"}
-checkRuntimeType{"type == Script"} -- Yes --> syncScript("syncScript()")
-syncScript("syncScript()") --> syncJob("syncJob()")
+MatchDeleted(MATCH_DELETED) --> deleteRuntime("deleteRuntime()")
+deleteRuntime("deleteRuntime()") --> deleteMatchJob("deleteJob(MATCH)")
+deleteMatchJob("deleteJob(MATCH)") --> JobDeleted(JOB_DELETED)
 
-updateMatchmakerState("updateMatchmakerState()") --> updateMatch("updateMatch()")
-updateMatch("updateMatch()") --> MatchUpdated(MATCH_UPDATED)
-MatchUpdated(MATCH_UPDATED) --> upsertMatchClient("upsertMatchClient()")
-MatchUpdated(MATCH_UPDATED) --> deleteMatchClient("deleteMatchClient()")
-deleteMatchClient("deleteMatchClient()") --> MatchClientDeleted(MATCH_CLIENT_DELETED)
-MatchClientDeleted(MATCH_CLIENT_DELETED) --> deleteRuntimeGrant("deleteRuntimeGrant(CLIENT)")
-deleteRuntimeGrant("deleteRuntimeGrant(CLIENT)") --> syncDeleteClientRuntimeCommand("syncRuntimeCommand(DELETE_CLIENT)")
-syncDeleteClientRuntimeCommand("syncRuntimeCommand(DELETE_CLIENT)") --> checkClient{"does client</br>exist yet?"}
+MatchClientCreated(MATCH_CLIENT_CREATED) --> syncAddClientMatchCommand("syncMatchCommand(ADD_CLIENT)")
+MatchClientDeleted(MATCH_CLIENT_DELETED) --> syncDeleteClientMatchCommand("syncMatchCommand(DELETE_CLIENT)")
+
+JobCreated(JOB_CREATED) --> scheduleJob("scheduleJob()")
+JobDeleted(JOB_DELETED) --> unscheduleJob("unscheduleJob()")
+
+
+MatchJob(Job<br/>type: MATCH) --> viewMatchCommands("viewMatchCommands()")
+viewMatchCommands("viewMatchCommands()") --> handleMatchCommands("handleMatchCommands()")
+handleMatchCommands("handleMatchCommands()") --> deleteMatchCommands("deleteMatchCommands()")
+
+handleMatchCommands("handleMatchCommands()") --> addClientCommand("ADD_CLIENT")
+handleMatchCommands("handleMatchCommands()") --> deleteClientCommand("DELETE_CLIENT")
+
+addClientCommand("ADD_CLIENT") --> syncRuntimeGrant("syncRuntimeGrant()")
+syncRuntimeGrant("syncRuntimeGrant()") --> syncAddClientRuntimeCommand("syncAddClientRuntimeCommand()")
+syncAddClientRuntimeCommand("syncAddClientRuntimeCommand()") --> assignRuntime("assignRuntime()")
+
+deleteClientCommand("DELETE_CLIENT") --> deleteRuntimeGrant("deleteRuntimeGrant()")
+deleteRuntimeGrant("deleteRuntimeGrant()") --> syncDeleteClientRuntimeCommand("syncDeleteClientRuntimeCommand()")
+syncDeleteClientRuntimeCommand("syncDeleteClientRuntimeCommand()") --> checkClient{"does client</br>exist yet?"}
 checkClient{"does client</br>exist yet?"} -- Yes --> revokeRuntime("revokeRuntime()")
 revokeRuntime("revokeRuntime()") -.-> respondRevocation("respondRevocation()")
-
-syncJob("syncJob()") --> JobCreated(JOB_CREATED)
-JobCreated(JOB_CREATED) --> scheduleJob("scheduleJob()")
 
 ```
 

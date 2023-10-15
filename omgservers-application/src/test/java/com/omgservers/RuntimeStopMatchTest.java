@@ -62,7 +62,7 @@ public class RuntimeStopMatchTest extends Assertions {
 
         client1.close();
 
-        Thread.sleep(40000);
+        Thread.sleep(10000);
     }
 
     @Data
