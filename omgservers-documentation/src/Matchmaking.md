@@ -5,7 +5,8 @@ graph TD;
 
 StageCreated(STAGE_CREATED) --> syncMatchmaker("syncMatchmaker()")
 syncMatchmaker("syncMatchmaker()") --> MatchmakerCreated(MATCHMAKER_CREATED)
-MatchmakerCreated(MATCHMAKER_CREATED) --> syncJob("syncJob()")
+MatchmakerCreated(MATCHMAKER_CREATED) --> syncMatchmakerJob("syncJob(MATCHMAKER)")
+syncMatchmakerJob("syncJob(MATCHMAKER)") --> JobCreated(JOB_CREATED)
 
 MatchmakerRequested(MATCHMAKER_REQUESTED) --> syncRequest("syncRequest()")
 
@@ -47,14 +48,14 @@ MatchJob(Job<br/>type: MATCH) --> viewMatchCommands("viewMatchCommands()")
 viewMatchCommands("viewMatchCommands()") --> handleMatchCommands("handleMatchCommands()")
 handleMatchCommands("handleMatchCommands()") --> deleteMatchCommands("deleteMatchCommands()")
 
-handleMatchCommands("handleMatchCommands()") --> addClientCommand("ADD_CLIENT")
-handleMatchCommands("handleMatchCommands()") --> deleteClientCommand("DELETE_CLIENT")
+handleMatchCommands("handleMatchCommands()") --> addClientMatchCommand("ADD_CLIENT")
+handleMatchCommands("handleMatchCommands()") --> deleteClientMatchCommand("DELETE_CLIENT")
 
-addClientCommand("ADD_CLIENT") --> syncRuntimeGrant("syncRuntimeGrant()")
+addClientMatchCommand("ADD_CLIENT") --> syncRuntimeGrant("syncRuntimeGrant()")
 syncRuntimeGrant("syncRuntimeGrant()") --> syncAddClientRuntimeCommand("syncAddClientRuntimeCommand()")
 syncAddClientRuntimeCommand("syncAddClientRuntimeCommand()") --> assignRuntime("assignRuntime()")
 
-deleteClientCommand("DELETE_CLIENT") --> deleteRuntimeGrant("deleteRuntimeGrant()")
+deleteClientMatchCommand("DELETE_CLIENT") --> deleteRuntimeGrant("deleteRuntimeGrant()")
 deleteRuntimeGrant("deleteRuntimeGrant()") --> syncDeleteClientRuntimeCommand("syncDeleteClientRuntimeCommand()")
 syncDeleteClientRuntimeCommand("syncDeleteClientRuntimeCommand()") --> checkClient{"does client</br>exist yet?"}
 checkClient{"does client</br>exist yet?"} -- Yes --> revokeRuntime("revokeRuntime()")
