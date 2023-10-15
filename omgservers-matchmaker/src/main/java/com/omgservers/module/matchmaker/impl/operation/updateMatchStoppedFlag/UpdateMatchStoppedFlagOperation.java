@@ -1,13 +1,14 @@
-package com.omgservers.module.matchmaker.impl.operation.updateMatch;
+package com.omgservers.module.matchmaker.impl.operation.updateMatchStoppedFlag;
 
-import com.omgservers.model.match.MatchModel;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
-public interface UpdateMatchOperation {
+public interface UpdateMatchStoppedFlagOperation {
     Uni<Boolean> updateMatch(ChangeContext<?> changeContext,
                              SqlConnection sqlConnection,
                              int shard,
-                             MatchModel match);
+                             final Long matchmakerId,
+                             final Long matchId,
+                             final Boolean stopped);
 }

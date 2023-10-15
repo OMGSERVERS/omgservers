@@ -1,10 +1,7 @@
-package com.omgservers.module.matchmaker.impl.operation.updateMatch;
+package com.omgservers.module.matchmaker.impl.operation.updateMatchStoppedFlag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
-import com.omgservers.model.match.MatchConfigModel;
-import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
@@ -14,7 +11,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -22,7 +18,7 @@ import java.util.Arrays;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class UpdateMatchOperationImpl implements UpdateMatchOperation {
+class UpdateMatchStoppedFlagOperationImpl implements UpdateMatchStoppedFlagOperation {
 
     final ChangeObjectOperation changeObjectOperation;
 
@@ -33,34 +29,25 @@ class UpdateMatchOperationImpl implements UpdateMatchOperation {
     public Uni<Boolean> updateMatch(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
                                     final int shard,
-                                    final MatchModel match) {
-        final var matchmakerId = match.getMatchmakerId();
-        final var matchId = match.getId();
+                                    final Long matchmakerId,
+                                    final Long matchId,
+                                    final Boolean stopped) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_matchmaker_match
-                        set modified = $3, stopped = $4, config = $5
+                        set modified = $3, stopped = $4
                         where matchmaker_id = $1 and id = $2
                         """,
                 Arrays.asList(
                         matchmakerId,
                         matchId,
                         Instant.now().atOffset(ZoneOffset.UTC),
-                        match.getStopped(),
-                        getConfigString(match.getConfig())
+                        stopped
                 ),
                 () -> new MatchUpdatedEventBodyModel(matchmakerId, matchId),
-                () -> logModelFactory.create(String.format("Match was updated, " +
+                () -> logModelFactory.create(String.format("Match was marked as stopped, " +
                         "matchmakerId=%d, matchId=%d", matchmakerId, matchId))
         );
-    }
-
-    String getConfigString(MatchConfigModel config) {
-        try {
-            return objectMapper.writeValueAsString(config);
-        } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
-        }
     }
 }

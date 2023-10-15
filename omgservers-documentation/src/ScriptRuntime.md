@@ -1,4 +1,4 @@
-# Script Runtime Event Graph
+# Script Runtime
 
 ```mermaid
 graph TD;

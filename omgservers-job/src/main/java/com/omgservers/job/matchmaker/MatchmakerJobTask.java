@@ -75,7 +75,7 @@ public class MatchmakerJobTask implements JobTask {
                                         changeOfState.getCompletedMatchmakerCommands().size(),
                                         changeOfState.getCompletedRequests().size(),
                                         changeOfState.getCreatedMatches().size(),
-                                        changeOfState.getUpdatedMatches().size(),
+                                        changeOfState.getStoppedMatches().size(),
                                         changeOfState.getEndedMatches().size(),
                                         changeOfState.getCreatedMatchClients().size(),
                                         changeOfState.getOrphanedMatchClients().size());

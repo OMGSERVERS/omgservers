@@ -1,4 +1,4 @@
-# Delete match
+# Stop match
 
 ```mermaid
 graph TD;

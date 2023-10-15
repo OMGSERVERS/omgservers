@@ -35,12 +35,12 @@ class StopMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
 
-                    final var updatedMatches = matchmakerState.getMatches()
+                    final var stoppedMatches = matchmakerState.getMatches()
                             .stream().filter(match -> match.getId().equals(matchId))
                             .peek(match -> match.setStopped(true))
                             .toList();
 
-                    changeOfState.getUpdatedMatches().addAll(updatedMatches);
+                    changeOfState.getStoppedMatches().addAll(stoppedMatches);
 
                     log.info(
                             "Match was marked as stopped, " +

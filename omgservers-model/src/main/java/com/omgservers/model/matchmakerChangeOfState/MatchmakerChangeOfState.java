@@ -26,7 +26,7 @@ public class MatchmakerChangeOfState {
     Set<MatchModel> createdMatches;
 
     @NotNull
-    Set<MatchModel> updatedMatches;
+    Set<MatchModel> stoppedMatches;
 
     @NotNull
     Set<MatchModel> endedMatches;
@@ -41,7 +41,7 @@ public class MatchmakerChangeOfState {
         completedMatchmakerCommands = new HashSet<>();
         completedRequests = new HashSet<>();
         createdMatches = new HashSet<>();
-        updatedMatches = new HashSet<>();
+        stoppedMatches = new HashSet<>();
         endedMatches = new HashSet<>();
         createdMatchClients = new HashSet<>();
         orphanedMatchClients = new HashSet<>();
@@ -52,7 +52,7 @@ public class MatchmakerChangeOfState {
         return completedMatchmakerCommands.size() > 0 ||
                 completedRequests.size() > 0 ||
                 createdMatches.size() > 0 ||
-                updatedMatches.size() > 0 ||
+                stoppedMatches.size() > 0 ||
                 endedMatches.size() > 0 ||
                 createdMatchClients.size() > 0 ||
                 orphanedMatchClients.size() > 0;

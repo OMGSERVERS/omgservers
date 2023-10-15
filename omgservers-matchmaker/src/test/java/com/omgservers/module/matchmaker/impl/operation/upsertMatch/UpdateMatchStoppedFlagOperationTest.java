@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class UpdateMatchOperationTest extends Assertions {
+class UpdateMatchStoppedFlagOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject

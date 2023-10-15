@@ -1,4 +1,4 @@
-# Matchmaking Event Graph
+# Matchmaking schema
 
 ```mermaid
 graph TD;
@@ -18,7 +18,7 @@ handleMatchmakerRequests("handleMatchmakerRequests()") --> updateMatchmakerState
 updateMatchmakerState("updateMatchmakerState()") --> deleteCompletedRequests("deleteCompletedRequests()")
 updateMatchmakerState("updateMatchmakerState()") --> deleteCompletedMatchmakerCommands("deleteCompletedMatchmakerCommands()")
 updateMatchmakerState("updateMatchmakerState()") --> syncCreatedMatches("syncCreatedMatches()")
-updateMatchmakerState("updateMatchmakerState()") --> updateUpdatedMatches("updateUpdatedMatches()")
+updateMatchmakerState("updateMatchmakerState()") --> updateStoppedMatches("updateStoppedMatches()")
 updateMatchmakerState("updateMatchmakerState()") --> deleteEndedMatches("deleteEndedMatches()")
 updateMatchmakerState("updateMatchmakerState()") --> syncCreatedMatchClients("syncCreatedMatchClients()")
 updateMatchmakerState("updateMatchmakerState()") --> deleteOrphanedMatchClients("deleteOrphanedMatchClients()")
