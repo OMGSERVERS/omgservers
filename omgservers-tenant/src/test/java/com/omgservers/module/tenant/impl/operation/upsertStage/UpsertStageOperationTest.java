@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertStage;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
@@ -74,7 +75,7 @@ class UpsertStageOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertStage_thenException() {
         final var shard = 0;
         final var stage = stageModelFactory.create(tenantId(), projectId(), StageConfigModel.create());
-        final var exception = assertThrows(ServerSideNotFoundException.class, () ->
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenantId(), stage));
     }
 

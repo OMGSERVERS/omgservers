@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertProject;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
@@ -59,10 +60,10 @@ class UpsertProjectOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownTenant_whenUpsertProject_thenServerSideNotFoundException() {
+    void givenUnknownTenant_whenUpsertProject_thenException() {
         final var shard = 0;
         final var project = projectModelFactory.create(tenantId(), ProjectConfigModel.create());
-        final var exception = assertThrows(ServerSideNotFoundException.class, () ->
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
     }
 

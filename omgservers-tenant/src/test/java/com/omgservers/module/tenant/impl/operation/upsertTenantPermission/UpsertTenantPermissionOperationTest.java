@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertTenantPermission;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.tenant.TenantConfigModel;
@@ -59,11 +60,11 @@ class UpsertTenantPermissionOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownTenantUuid_whenUpsertTenantPermission_thenServerSideNotFoundException() {
+    void givenUnknownTenantUuid_whenUpsertTenantPermission_thenException() {
         final var shard = 0;
 
         final var permission = tenantPermissionModelFactory.create(tenantId(), userId(), TenantPermissionEnum.CREATE_PROJECT);
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertTenantPermissionOperation
+        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertTenantPermissionOperation
                 .upsertTenantPermission(TIMEOUT, pgPool, shard, permission));
     }
 

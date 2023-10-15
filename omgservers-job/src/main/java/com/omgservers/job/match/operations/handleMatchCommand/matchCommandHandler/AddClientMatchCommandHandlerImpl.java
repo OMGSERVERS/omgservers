@@ -86,13 +86,12 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                         .onFailure(ServerSideNotFoundException.class)
                         .invoke(t -> log.warn("Add client match command failed, client doesn't exist anymore, " +
                                         "userId={}, clientId={}, matchmakerId={}, matchId={}",
-                                userId, clientId, matchmakerId, matchId))
-                )
+                                userId, clientId, matchmakerId, matchId)))
                 .replaceWithVoid();
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
+        final var request = new GetMatchRequest(matchmakerId, matchId, false);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
     }

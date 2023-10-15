@@ -14,6 +14,9 @@ public class GetRuntimeRequest implements ShardedRequest {
     @NotNull
     Long id;
 
+    @NotNull
+    Boolean deleted;
+
     @Override
     public String getRequestShardKey() {
         return id.toString();

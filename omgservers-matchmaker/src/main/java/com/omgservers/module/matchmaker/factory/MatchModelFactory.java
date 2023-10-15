@@ -38,6 +38,7 @@ public class MatchModelFactory {
         match.setRuntimeId(runtimeId);
         match.setStopped(Boolean.FALSE);
         match.setConfig(config);
+        match.setDeleted(Boolean.FALSE);
         return match;
     }
 }

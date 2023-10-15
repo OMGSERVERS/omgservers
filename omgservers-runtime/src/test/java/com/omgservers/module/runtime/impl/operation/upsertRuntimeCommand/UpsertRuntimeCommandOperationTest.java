@@ -1,5 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
@@ -61,10 +62,10 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownRuntimeId_whenUpsertRuntimeCommand_thenServerSideNotFoundException() {
+    void givenUnknownRuntimeId_whenUpsertRuntimeCommand_thenException() {
         final var shard = 0;
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeCommandOperation
+        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertRuntimeCommandOperation
                 .upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
     }
 

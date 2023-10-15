@@ -1,5 +1,6 @@
 package com.omgservers.module.user.impl.operation.upsertClient;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
@@ -79,7 +80,7 @@ class UpsertClientOperationTest extends Assertions {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var client = clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId());
-        final var exception = assertThrows(ServerSideNotFoundException.class, () ->
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
                 insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
     }
 

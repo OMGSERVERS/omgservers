@@ -1,6 +1,5 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteMatch;
 
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
 import com.omgservers.module.matchmaker.impl.operation.selectMatch.SelectMatchOperation;
 import com.omgservers.module.system.factory.LogModelFactory;
@@ -29,21 +28,20 @@ class DeleteMatchOperationImpl implements DeleteMatchOperation {
                                     final int shard,
                                     final Long matchmakerId,
                                     final Long id) {
-        return selectMatchOperation.selectMatch(sqlConnection, shard, matchmakerId, id)
-                .flatMap(match -> changeObjectOperation.changeObject(
-                        changeContext, sqlConnection, shard,
-                        """
-                                delete from $schema.tab_matchmaker_match
-                                where matchmaker_id = $1 and id = $2
-                                """,
-                        Arrays.asList(
-                                matchmakerId,
-                                id
-                        ),
-                        () -> new MatchDeletedEventBodyModel(match),
-                        () -> logModelFactory.create("Match was deleted, match=" + match)
-                ))
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(false);
+        return changeObjectOperation.changeObject(
+                changeContext, sqlConnection, shard,
+                """
+                        update $schema.tab_matchmaker_match
+                        set deleted = true
+                        where matchmaker_id = $1 and id = $2 and deleted = false
+                        """,
+                Arrays.asList(
+                        matchmakerId,
+                        id
+                ),
+                () -> new MatchDeletedEventBodyModel(matchmakerId, id),
+                () -> logModelFactory.create(String.format("Match was deleted, " +
+                        "matchmakerId=%d, matchId=%d", matchmakerId, id))
+        );
     }
 }

@@ -146,7 +146,8 @@ create table if not exists tab_matchmaker_match (
     modified timestamp with time zone not null,
     runtime_id bigint not null,
     stopped boolean not null,
-    config json not null
+    config json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_matchmaker_match_command (
@@ -186,7 +187,8 @@ create table if not exists tab_runtime (
     type text not null,
     step bigint not null,
     script_id bigint not null,
-    config json not null
+    config json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_runtime_command (

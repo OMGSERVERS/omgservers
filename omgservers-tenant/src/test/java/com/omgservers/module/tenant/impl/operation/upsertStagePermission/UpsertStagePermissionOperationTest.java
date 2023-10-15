@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertStagePermission;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
@@ -89,7 +90,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var shard = 0;
 
         final var permission = stagePermissionModelFactory.create(tenantId(), stageId(), userId(), StagePermissionEnum.CREATE_VERSION);
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertStagePermissionOperation
+        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertStagePermissionOperation
                 .upsertStagePermission(TIMEOUT, pgPool, shard, permission));
     }
 

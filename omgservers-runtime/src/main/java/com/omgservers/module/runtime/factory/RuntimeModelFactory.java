@@ -52,6 +52,7 @@ public class RuntimeModelFactory {
         runtime.setStep(0L);
         runtime.setScriptId(generateIdOperation.generateId());
         runtime.setConfig(config);
+        runtime.setDeleted(Boolean.FALSE);
         return runtime;
     }
 }

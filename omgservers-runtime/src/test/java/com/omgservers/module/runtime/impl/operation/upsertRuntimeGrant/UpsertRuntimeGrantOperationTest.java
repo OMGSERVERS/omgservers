@@ -1,5 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntimeGrant;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
@@ -69,7 +70,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
         final var shard = 0;
         final var runtimeGrant = runtimeGrantModelFactory
                 .create(runtimeId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertRuntimeGrantOperation
+        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertRuntimeGrantOperation
                 .upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
     }
 

@@ -26,12 +26,10 @@ class HandleEndedMatchesOperationImpl implements HandleEndedMatchesOperation {
                 .filter(match -> !groupedMatchClients.containsKey(match.getId()))
                 .toList();
 
-        // TODO: handle issue with on delete restrict for match commands
-
         // Step 4. Removing ended matches from current matchmaking
-        // matchmakerState.getMatches().removeAll(endedMatches);
+        matchmakerState.getMatches().removeAll(endedMatches);
 
         // Step 5. Adding for removing
-        // changeOfState.getEndedMatches().addAll(endedMatches);
+        changeOfState.getEndedMatches().addAll(endedMatches);
     }
 }

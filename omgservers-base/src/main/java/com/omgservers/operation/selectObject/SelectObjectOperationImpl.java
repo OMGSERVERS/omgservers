@@ -50,7 +50,9 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
                         return object;
                     } else {
                         throw new ServerSideNotFoundException(String.format("%s was not found, sql=%s, parameters=%s",
-                                objectName.toLowerCase(), preparedSql, parameters));
+                                objectName.toLowerCase(),
+                                preparedSql.replaceAll(System.lineSeparator(), " "),
+                                parameters));
                     }
                 })
                 .onFailure(PgException.class)

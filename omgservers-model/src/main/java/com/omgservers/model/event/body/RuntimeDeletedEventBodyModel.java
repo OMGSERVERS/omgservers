@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class RuntimeDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    RuntimeModel runtime;
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -25,6 +25,6 @@ public class RuntimeDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return runtime.getId();
+        return id;
     }
 }

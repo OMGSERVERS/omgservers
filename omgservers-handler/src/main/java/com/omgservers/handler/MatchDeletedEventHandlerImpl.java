@@ -2,12 +2,16 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.internal.DeleteJobRequest;
 import com.omgservers.dto.internal.DeleteJobResponse;
+import com.omgservers.dto.matchmaker.GetMatchRequest;
+import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.model.match.MatchModel;
+import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
@@ -22,8 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchDeletedEventHandlerImpl implements EventHandler {
 
-    final SystemModule systemModule;
+    final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
+    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -33,17 +38,24 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchDeletedEventBodyModel) event.getBody();
-        final var match = body.getMatch();
-        final var matchmakerId = match.getMatchmakerId();
-        final var matchId = match.getId();
-        final var runtimeId = match.getRuntimeId();
+        final var matchmakerId = body.getMatchmakerId();
+        final var matchId = body.getId();
 
-        log.info("Match was deleted, matchId={}, mode={}, matchmakerId={}",
-                matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
-
-        return deleteRuntime(runtimeId)
-                .flatMap(runtimeWasDeleted -> deleteMatchJob(matchmakerId, matchId))
+        return getDeletedMatch(matchmakerId, matchId)
+                .flatMap(match -> {
+                    log.info("Match was deleted, matchId={}, mode={}, matchmakerId={}",
+                            matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
+                    final var runtimeId = match.getRuntimeId();
+                    return deleteRuntime(runtimeId)
+                            .flatMap(runtimeWasDeleted -> deleteMatchJob(matchmakerId, matchId));
+                })
                 .replaceWith(true);
+    }
+
+    Uni<MatchModel> getDeletedMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchRequest(matchmakerId, matchId, true);
+        return matchmakerModule.getMatchmakerService().getMatch(request)
+                .map(GetMatchResponse::getMatch);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {

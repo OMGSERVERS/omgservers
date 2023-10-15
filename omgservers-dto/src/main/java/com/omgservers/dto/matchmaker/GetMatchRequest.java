@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetMatchRequest implements ShardedRequest {
 
-
     @NotNull
     Long matchmakerId;
 
     @NotNull
     Long id;
+
+    @NotNull
+    Boolean deleted;
 
     @Override
     public String getRequestShardKey() {

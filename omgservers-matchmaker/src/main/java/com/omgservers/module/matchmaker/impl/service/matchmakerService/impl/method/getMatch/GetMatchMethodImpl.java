@@ -26,8 +26,9 @@ class GetMatchMethodImpl implements GetMatchMethod {
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();
                     final var id = request.getId();
+                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectMatchOperation
-                            .selectMatch(sqlConnection, shard.shard(), matchmakerId, id));
+                            .selectMatch(sqlConnection, shard.shard(), matchmakerId, id, deleted));
                 })
                 .map(GetMatchResponse::new);
     }

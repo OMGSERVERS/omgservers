@@ -54,7 +54,7 @@ public class KickRequestedEventHandlerImpl implements EventHandler {
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id);
+        final var request = new GetRuntimeRequest(id, false);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }

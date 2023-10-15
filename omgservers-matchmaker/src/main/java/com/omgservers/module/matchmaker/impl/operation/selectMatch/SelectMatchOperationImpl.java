@@ -24,17 +24,18 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
     public Uni<MatchModel> selectMatch(final SqlConnection sqlConnection,
                                        final int shard,
                                        final Long matchmakerId,
-                                       final Long id) {
+                                       final Long id,
+                                       final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, created, modified, runtime_id, stopped, config
+                        select id, matchmaker_id, created, modified, runtime_id, stopped, config, deleted
                         from $schema.tab_matchmaker_match
-                        where matchmaker_id = $1 and id = $2
+                        where matchmaker_id = $1 and id = $2 and deleted = $3
                         limit 1
                         """,
-                Arrays.asList(matchmakerId, id),
+                Arrays.asList(matchmakerId, id, deleted),
                 "Match",
                 matchModelMapper::fromRow);
     }

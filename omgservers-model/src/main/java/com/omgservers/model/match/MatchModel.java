@@ -36,4 +36,7 @@ public class MatchModel {
     @NotNull
     @EqualsAndHashCode.Exclude
     MatchConfigModel config;
+
+    @NotNull
+    Boolean deleted;
 }

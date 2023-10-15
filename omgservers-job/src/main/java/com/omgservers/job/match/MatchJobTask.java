@@ -1,11 +1,15 @@
 package com.omgservers.job.match;
 
 import com.omgservers.dto.matchmaker.DeleteMatchCommandRequest;
+import com.omgservers.dto.matchmaker.GetMatchRequest;
+import com.omgservers.dto.matchmaker.GetMatchResponse;
 import com.omgservers.dto.matchmaker.ViewMatchCommandsRequest;
 import com.omgservers.dto.matchmaker.ViewMatchCommandsResponse;
 import com.omgservers.exception.ServerSideClientExceptionException;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.job.match.operations.handleMatchCommand.HandleMatchCommandOperation;
 import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.system.impl.service.jobService.impl.JobTask;
@@ -16,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -36,10 +41,24 @@ public class MatchJobTask implements JobTask {
         final var matchmakerId = shardKey;
         final var matchId = entityId;
 
-        return viewMatchCommands(matchmakerId, matchId)
-                .call(this::handleMatchCommands)
-                .call(this::deleteMatchCommands)
+        return getMatch(matchmakerId, matchId)
+                .onFailure(ServerSideNotFoundException.class).recoverWithNull()
+                .invoke(runtime -> {
+                    if (Objects.isNull(runtime)) {
+                        log.info("Match was not found, skip job execution, " +
+                                "matchmakerId={}, matchId={}", matchmakerId, matchId);
+                    }
+                })
+                .onItem().ifNotNull().transformToUni(match -> viewMatchCommands(matchmakerId, matchId)
+                        .call(this::handleMatchCommands)
+                        .call(this::deleteMatchCommands))
                 .replaceWithVoid();
+    }
+
+    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchRequest(matchmakerId, matchId, false);
+        return matchmakerModule.getMatchmakerService().getMatch(request)
+                .map(GetMatchResponse::getMatch);
     }
 
     Uni<List<MatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {

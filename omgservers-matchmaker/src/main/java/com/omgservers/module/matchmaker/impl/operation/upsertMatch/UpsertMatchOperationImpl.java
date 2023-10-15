@@ -5,8 +5,8 @@ import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,8 +35,8 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, stopped, config)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                        insert into $schema.tab_matchmaker_match(id, matchmaker_id, created, modified, runtime_id, stopped, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,7 +47,8 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
                         match.getModified().atOffset(ZoneOffset.UTC),
                         match.getRuntimeId(),
                         match.getStopped(),
-                        getConfigString(match)
+                        getConfigString(match),
+                        match.getDeleted()
                 ),
                 () -> new MatchCreatedEventBodyModel(match.getMatchmakerId(), match.getId()),
                 () -> logModelFactory.create("Match was inserted, match=" + match)

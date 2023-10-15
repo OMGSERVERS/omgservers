@@ -1,5 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.selectRequest;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;

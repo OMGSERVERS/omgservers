@@ -7,5 +7,8 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.util.List;
 
 public interface SelectMatchesByMatchmakerIdOperation {
-    Uni<List<MatchModel>> selectMatchesByMatchmakerId(SqlConnection sqlConnection, int shard, Long matchmakerId);
+    Uni<List<MatchModel>> selectMatchesByMatchmakerId(SqlConnection sqlConnection,
+                                                      int shard,
+                                                      Long matchmakerId,
+                                                      Boolean deleted);
 }

@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -24,16 +24,17 @@ class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchma
     @Override
     public Uni<List<MatchModel>> selectMatchesByMatchmakerId(final SqlConnection sqlConnection,
                                                              final int shard,
-                                                             final Long matchmakerId) {
+                                                             final Long matchmakerId,
+                                                             final Boolean deleted) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, created, modified, runtime_id, stopped, config
+                        select id, matchmaker_id, created, modified, runtime_id, stopped, config, deleted
                         from $schema.tab_matchmaker_match
-                        where matchmaker_id = $1
+                        where matchmaker_id = $1 and deleted = $2
                         """,
-                Collections.singletonList(matchmakerId),
+                Arrays.asList(matchmakerId, deleted),
                 "Match",
                 matchModelMapper::fromRow);
     }

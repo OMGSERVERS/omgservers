@@ -1,5 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertProjectPermission;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
@@ -76,7 +77,7 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         final var shard = 0;
 
         final var permission = projectPermissionModelFactory.create(tenantId(), projectId(), userId(), ProjectPermissionEnum.CREATE_STAGE);
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> upsertProjectPermissionOperation
+        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
     }
 

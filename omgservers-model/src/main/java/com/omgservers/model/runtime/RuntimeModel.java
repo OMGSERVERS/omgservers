@@ -54,4 +54,7 @@ public class RuntimeModel {
 
     @NotNull
     RuntimeConfigModel config;
+
+    @NotNull
+    Boolean deleted;
 }

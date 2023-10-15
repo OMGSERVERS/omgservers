@@ -84,8 +84,8 @@ public class BootstrapEventHandler {
                         .replaceWithVoid())
                 .onFailure(ServerSideClientExceptionException.class)
                 .recoverWithUni(t -> {
-                    log.warn("Event handling failed, event was marked as failed, " +
-                            "eventId={}, {}", eventId, t.getMessage(), t);
+                    log.error("Event handling failed, event was marked as failed, " +
+                            "eventId={}, {}", eventId, t.getMessage());
                     return updateStatus(eventId, EventStatusEnum.FAILED)
                             .replaceWithVoid();
                 });

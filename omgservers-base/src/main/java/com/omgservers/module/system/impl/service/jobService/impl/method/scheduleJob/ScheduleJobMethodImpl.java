@@ -2,6 +2,7 @@ package com.omgservers.module.system.impl.service.jobService.impl.method.schedul
 
 import com.omgservers.dto.internal.ScheduleJobRequest;
 import com.omgservers.dto.internal.SyncLogRequest;
+import com.omgservers.exception.ServerSideClientExceptionException;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
@@ -102,7 +103,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
                     .onFailure()
                     .recoverWithUni(t -> {
                         log.error("Job task failed, shardKey={}, entityId={}, qualifier={}, {}",
-                                shardKey, entityId, qualifier, t.getMessage(), t);
+                                shardKey, entityId, qualifier, t.getMessage());
                         return Uni.createFrom().voidItem();
                     });
         } else {

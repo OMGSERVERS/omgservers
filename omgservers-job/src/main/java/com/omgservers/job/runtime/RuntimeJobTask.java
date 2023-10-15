@@ -6,6 +6,7 @@ import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.dto.script.CallScriptRequest;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.job.runtime.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -43,28 +45,35 @@ public class RuntimeJobTask implements JobTask {
 
     @Override
     public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
-        return getRuntime(entityId)
-                .flatMap(runtime ->
-                        switch (runtime.getType()) {
-                            case SCRIPT -> viewRuntimeCommands(runtime.getId())
-                                    .flatMap(runtimeCommands -> {
-                                        // Adding update runtime command automatically for every iteration
-                                        final var commandBody = UpdateRuntimeCommandBodyModel.builder()
-                                                .time(Instant.now().toEpochMilli())
-                                                .build();
-                                        final var updateRuntime = runtimeCommandModelFactory
-                                                .create(runtime.getId(), commandBody);
-                                        runtimeCommands.add(updateRuntime);
+        final var runtimeId = entityId;
+        return getRuntime(runtimeId)
+                .onFailure(ServerSideNotFoundException.class).recoverWithNull()
+                .invoke(runtime -> {
+                    if (Objects.isNull(runtime)) {
+                        log.info("Runtime was not found, skip job execution, runtimeId={}", runtimeId);
+                    }
+                })
+                .onItem().ifNotNull().transformToUni(runtime -> switch (runtime.getType()) {
+                    case SCRIPT -> viewRuntimeCommands(runtime.getId())
+                            .flatMap(runtimeCommands -> {
+                                // Adding update runtime command automatically for every iteration
+                                final var commandBody = UpdateRuntimeCommandBodyModel.builder()
+                                        .time(Instant.now().toEpochMilli())
+                                        .build();
+                                final var updateRuntime = runtimeCommandModelFactory
+                                        .create(runtime.getId(), commandBody);
+                                runtimeCommands.add(updateRuntime);
 
-                                        return callScript(runtime, runtimeCommands)
-                                                .call(voidItem -> updateRuntimeCommandsStatus(runtime,
-                                                        runtimeCommands));
-                                    });
-                        });
+                                return callScript(runtime, runtimeCommands)
+                                        .call(voidItem -> updateRuntimeCommandsStatus(runtime,
+                                                runtimeCommands));
+                            });
+                })
+                .replaceWithVoid();
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id);
+        final var request = new GetRuntimeRequest(id, false);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }

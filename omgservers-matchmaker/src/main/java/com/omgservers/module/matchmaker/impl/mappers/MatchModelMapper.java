@@ -31,6 +31,7 @@ public class MatchModelMapper {
         } catch (IOException e) {
             throw new ServerSideConflictException("match config can't be parsed, match=" + match, e);
         }
+        match.setDeleted(row.getBoolean("deleted"));
         return match;
     }
 }
