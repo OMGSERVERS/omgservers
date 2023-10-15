@@ -32,6 +32,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -61,7 +63,15 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
 
         return getMatch(matchmakerId, matchId)
                 .flatMap(match -> getClient(userId, clientId)
-                        .flatMap(client -> {
+                        .onFailure(ServerSideNotFoundException.class).recoverWithNull()
+                        .invoke(client -> {
+                            if (Objects.isNull(client)) {
+                                log.warn("Add client match command failed, client doesn't exist anymore, " +
+                                                "userId={}, clientId={}, matchmakerId={}, matchId={}",
+                                        userId, clientId, matchmakerId, matchId);
+                            }
+                        })
+                        .onItem().ifNotNull().transformToUni(client -> {
                             final var runtimeId = match.getRuntimeId();
                             final var playerId = client.getPlayerId();
                             return syncRuntimeGrant(runtimeId, userId, clientId)
@@ -83,10 +93,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                                                 match.getConfig().getModeConfig().getName());
                                     });
                         })
-                        .onFailure(ServerSideNotFoundException.class)
-                        .invoke(t -> log.warn("Add client match command failed, client doesn't exist anymore, " +
-                                        "userId={}, clientId={}, matchmakerId={}, matchId={}",
-                                userId, clientId, matchmakerId, matchId)))
+                )
                 .replaceWithVoid();
     }
 
