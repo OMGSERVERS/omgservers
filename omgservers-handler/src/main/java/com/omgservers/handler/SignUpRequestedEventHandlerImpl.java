@@ -4,11 +4,10 @@ import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.gateway.AssignClientResponse;
 import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
-import com.omgservers.dto.script.CallScriptRequest;
-import com.omgservers.dto.script.CallScriptResponse;
-import com.omgservers.dto.script.SyncScriptRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdResponse;
+import com.omgservers.dto.tenant.FindStageVersionIdRequest;
+import com.omgservers.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
+import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.dto.user.SyncClientRequest;
@@ -23,13 +22,9 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.script.ScriptConfigModel;
-import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptTypeEnum;
-import com.omgservers.model.scriptEvent.ScriptEventModel;
-import com.omgservers.model.scriptEvent.body.SignedUpScriptEventBodyModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.script.ScriptModule;
@@ -51,7 +46,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
 import java.security.SecureRandom;
-import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -93,23 +87,33 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> {
                     final var userId = user.getId();
                     return respondCredentials(server, connectionId, userId, password)
-                            .flatMap(respondMessageResponse -> syncPlayer(userId, tenantId, stageId))
+                            .flatMap(respondMessageResponse -> createPlayer(userId, tenantId, stageId))
                             .flatMap(player -> {
                                 final var playerId = player.getId();
-                                return syncClient(userId, playerId, server, connectionId)
-                                        .flatMap(client -> getVersionId(tenantId, stageId)
-                                                .flatMap(versionId -> syncScript(tenantId, versionId, client))
-                                                .flatMap(script -> {
-                                                    final var clientId = client.getId();
-                                                    final var scriptId = client.getScriptId();
-                                                    return callScript(scriptId, userId, playerId, clientId);
-                                                })
-                                                .flatMap(script -> assignClient(player, client))
-                                                .invoke(voidItem -> {
-                                                    log.info("User signed up, " +
-                                                                    "userId={}, clientId={}, tenantId={}, stageId={}, scriptId={}",
-                                                            userId, client.getId(), tenantId, stageId, client.getScriptId());
-                                                })
+                                return findVersionId(tenantId, stageId)
+                                        .flatMap(versionId -> selectVersionRuntime(tenantId, versionId)
+                                                .flatMap(versionRuntime -> createClient(userId,
+                                                        playerId,
+                                                        server,
+                                                        connectionId,
+                                                        versionId,
+                                                        versionRuntime.getRuntimeId())
+                                                        .flatMap(client -> assignClient(player, client)
+                                                                .invoke(voidItem -> {
+                                                                    log.info("User signed up, " +
+                                                                                    "userId={}, " +
+                                                                                    "clientId={}, " +
+                                                                                    "tenantId={}, " +
+                                                                                    "stageId={}, " +
+                                                                                    "versionId={}",
+                                                                            userId,
+                                                                            client.getId(),
+                                                                            tenantId,
+                                                                            stageId,
+                                                                            client.getVersionId());
+                                                                })
+                                                        )
+                                                )
                                         );
                             });
 
@@ -138,56 +142,42 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         return gatewayModule.getGatewayService().respondMessage(request);
     }
 
-    Uni<PlayerModel> syncPlayer(Long userId, Long tenantId, Long stageId) {
+    Uni<PlayerModel> createPlayer(Long userId, Long tenantId, Long stageId) {
         final var player = playerModelFactory.create(userId, tenantId, stageId, new PlayerConfigModel());
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
     }
 
-    Uni<ClientModel> syncClient(final Long userId,
-                                final Long playerId,
-                                final URI server,
-                                final Long connectionId) {
-        final var client = clientModelFactory.create(userId, playerId, server, connectionId);
+    Uni<Long> findVersionId(final Long tenantId, final Long stageId) {
+        final var request = new FindStageVersionIdRequest(tenantId, stageId);
+        return tenantModule.getVersionService().findStageVersionId(request)
+                .map(FindStageVersionIdResponse::getVersionId);
+    }
+
+    Uni<VersionRuntimeModel> selectVersionRuntime(final Long tenantId, final Long versionId) {
+        final var request = new SelectVersionRuntimeRequest(tenantId,
+                versionId,
+                SelectVersionRuntimeRequest.Strategy.RANDOM);
+        return tenantModule.getVersionService().selectVersionRuntime(request)
+                .map(SelectVersionRuntimeResponse::getVersionRuntime);
+    }
+
+    Uni<ClientModel> createClient(final Long userId,
+                                  final Long playerId,
+                                  final URI server,
+                                  final Long connectionId,
+                                  final Long versionId,
+                                  final Long defaultVersionId) {
+        final var client = clientModelFactory.create(userId,
+                playerId,
+                server,
+                connectionId,
+                versionId,
+                defaultVersionId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
-    }
-
-    Uni<Long> getVersionId(final Long tenantId, final Long stageId) {
-        final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().getStageVersionId(getStageVersionIdRequest)
-                .map(GetStageVersionIdResponse::getVersionId);
-    }
-
-    Uni<ScriptModel> syncScript(final Long tenantId, final Long versionId, final ClientModel client) {
-        final var type = ScriptTypeEnum.CLIENT;
-        final var config = ScriptConfigModel.builder()
-                .userId(client.getUserId())
-                .playerId(client.getPlayerId())
-                .clientId(client.getId())
-                .build();
-        final var script = scriptModelFactory.create(client.getScriptId(), tenantId, versionId, type, config);
-        final var request = new SyncScriptRequest(script);
-        return scriptModule.getScriptService().syncScript(request)
-                .replaceWith(script);
-    }
-
-    Uni<Boolean> callScript(final Long scriptId,
-                            final Long userId,
-                            final Long playerId,
-                            final Long clientId) {
-        final var scriptEventBody = SignedUpScriptEventBodyModel.builder()
-                .userId(userId)
-                .playerId(playerId)
-                .clientId(clientId)
-                .build();
-
-        final var request = new CallScriptRequest(scriptId,
-                Collections.singletonList(new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody)));
-        return scriptModule.getScriptService().callScript(request)
-                .map(CallScriptResponse::getResult);
     }
 
     Uni<Void> assignClient(final PlayerModel player,

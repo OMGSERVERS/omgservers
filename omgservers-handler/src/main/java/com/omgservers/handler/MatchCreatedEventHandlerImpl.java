@@ -8,8 +8,6 @@ import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.tenant.GetStageVersionIdRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -26,6 +24,7 @@ import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -46,6 +45,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModelFactory runtimeModelFactory;
     final JobModelFactory jobModelFactory;
 
+    final GenerateIdOperation generateIdOperation;
+
     @Override
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.MATCH_CREATED;
@@ -62,10 +63,10 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             log.info("Match was created, matchId={}, mode={}, matchmakerId={}",
                                     matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
-                            return getStageVersionId(matchmaker)
-                                    .flatMap(versionId -> syncRuntime(matchmaker, match, versionId)
-                                            .flatMap(runtimeWasCreated -> syncMatchJob(match))
-                                    );
+
+                            final var versionId = matchmaker.getVersionId();
+                            return syncRuntime(matchmaker, match, versionId)
+                                    .flatMap(runtimeWasCreated -> syncMatchJob(match));
                         })
                 )
                 .replaceWith(true);
@@ -83,32 +84,25 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .map(GetMatchResponse::getMatch);
     }
 
-    Uni<Long> getStageVersionId(final MatchmakerModel matchmaker) {
-        final var tenantId = matchmaker.getTenantId();
-        final var stageId = matchmaker.getStageId();
-        final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().getStageVersionId(getStageVersionIdRequest)
-                .map(GetStageVersionIdResponse::getVersionId);
-    }
-
     Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
                              final MatchModel match,
                              final Long versionId) {
-        final var matchmakerId = matchmaker.getId();
         final var tenantId = matchmaker.getTenantId();
-        final var stageId = matchmaker.getStageId();
+        final var matchmakerId = matchmaker.getId();
         final var matchId = match.getId();
+        final var modeConfig = match.getConfig().getModeConfig();
         final var runtimeId = match.getRuntimeId();
+        final var runtimeConfig = new RuntimeConfigModel();
+        runtimeConfig.setMatchConfig(new RuntimeConfigModel.MatchConfig(matchmakerId, matchId, modeConfig));
+        final var scriptId = generateIdOperation.generateId();
+        runtimeConfig.setScriptConfig(new RuntimeConfigModel.ScriptConfig(scriptId));
         final var runtime = runtimeModelFactory.create(
                 runtimeId,
                 tenantId,
-                stageId,
                 versionId,
-                matchmakerId,
-                matchId,
                 // TODO: Detect runtime type
-                RuntimeTypeEnum.SCRIPT,
-                RuntimeConfigModel.create(match.getConfig().getModeConfig()));
+                RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                runtimeConfig);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
                 .map(SyncRuntimeResponse::getCreated);

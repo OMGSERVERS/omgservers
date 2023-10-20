@@ -12,6 +12,12 @@ import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoRespondClientRequest;
+import com.omgservers.dto.runtime.DoRespondClientResponse;
+import com.omgservers.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.dto.runtime.DoSetAttributesResponse;
+import com.omgservers.dto.runtime.DoSetObjectRequest;
+import com.omgservers.dto.runtime.DoSetObjectResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
@@ -31,6 +37,8 @@ import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
 
 public interface WebService {
     Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request);
@@ -52,6 +60,12 @@ public interface WebService {
     Uni<FindRuntimeGrantResponse> findRuntimeGrant(FindRuntimeGrantRequest request);
 
     Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request);
+
+    Uni<DoRespondClientResponse> doRespondClient(DoRespondClientRequest request);
+
+    Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request);
+
+    Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request);
 
     Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request);
 

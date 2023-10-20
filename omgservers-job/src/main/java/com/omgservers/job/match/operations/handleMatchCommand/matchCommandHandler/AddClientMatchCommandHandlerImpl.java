@@ -114,7 +114,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 runtimeId,
                 userId,
                 clientId,
-                RuntimeGrantTypeEnum.CLIENT);
+                RuntimeGrantTypeEnum.MATCH_CLIENT);
         final var request = new SyncRuntimeGrantRequest(runtimeGrant);
         return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
                 .map(SyncRuntimeGrantResponse::getCreated);

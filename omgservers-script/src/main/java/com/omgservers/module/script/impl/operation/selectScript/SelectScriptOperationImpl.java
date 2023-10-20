@@ -33,7 +33,7 @@ class SelectScriptOperationImpl implements SelectScriptOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, created, modified, tenant_id, version_id, type, state, config
+                        select id, created, modified, tenant_id, version_id, runtime_id, type, state, config
                         from $schema.tab_script
                         where id = $1
                         limit 1
@@ -50,6 +50,7 @@ class SelectScriptOperationImpl implements SelectScriptOperation {
         script.setModified(row.getOffsetDateTime("modified").toInstant());
         script.setTenantId(row.getLong("tenant_id"));
         script.setVersionId(row.getLong("version_id"));
+        script.setRuntimeId(row.getLong("runtime_id"));
         script.setType(ScriptTypeEnum.valueOf(row.getString("type")));
         script.setState(row.getString("state"));
         try {

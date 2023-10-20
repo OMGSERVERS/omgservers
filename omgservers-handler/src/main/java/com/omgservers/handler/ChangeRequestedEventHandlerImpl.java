@@ -8,8 +8,8 @@ import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
-import com.omgservers.model.scriptEvent.ScriptEventModel;
-import com.omgservers.model.scriptEvent.body.ChangePlayerScriptEventBodyModel;
+import com.omgservers.model.scriptRequest.ScriptRequestModel;
+import com.omgservers.model.scriptRequest.arguments.ChangePlayerScriptRequestArgumentsModel;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
@@ -44,7 +44,7 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
         final var data = body.getData();
 
         return getClient(userId, clientId)
-                .flatMap(client -> callScript(client.getScriptId(), userId, playerId, client.getId(), data));
+                .flatMap(client -> callScript(client.getVersionId(), userId, playerId, client.getId(), data));
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
@@ -58,7 +58,7 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
                             final Long playerId,
                             final Long clientId,
                             final Object data) {
-        final var scriptEventBody = ChangePlayerScriptEventBodyModel.builder()
+        final var scriptEventBody = ChangePlayerScriptRequestArgumentsModel.builder()
                 .userId(userId)
                 .playerId(playerId)
                 .clientId(clientId)
@@ -66,7 +66,7 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
                 .build();
 
         final var request = new CallScriptRequest(scriptId,
-                Collections.singletonList(new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody)));
+                Collections.singletonList(new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody)));
         return scriptModule.getScriptService().callScript(request)
                 .map(CallScriptResponse::getResult);
     }

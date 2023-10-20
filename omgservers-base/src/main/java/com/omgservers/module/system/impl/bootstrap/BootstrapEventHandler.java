@@ -61,7 +61,8 @@ public class BootstrapEventHandler {
                             .call(voidItem -> Uni.createFrom().completionStage(message.ack()))
                             .onFailure()
                             .recoverWithUni(t -> {
-                                log.warn("Handling of event failed, handler={}, {}", index, t.getMessage());
+                                log.warn("Handling of event failed, handler={}, eventId={}, {}",
+                                        index, eventId, t.getMessage());
                                 return Uni.createFrom().completionStage(message.nack(t));
                             })
                             .replaceWith(eventId);
@@ -81,14 +82,19 @@ public class BootstrapEventHandler {
                                 return updateStatus(eventId, EventStatusEnum.FAILED);
                             }
                         })
-                        .replaceWithVoid())
-                .onFailure(ServerSideClientExceptionException.class)
-                .recoverWithUni(t -> {
-                    log.error("Event handling failed, event was marked as failed, " +
-                            "eventId={}, {}", eventId, t.getMessage());
-                    return updateStatus(eventId, EventStatusEnum.FAILED)
-                            .replaceWithVoid();
-                });
+                        .onFailure(ServerSideClientExceptionException.class)
+                        .recoverWithUni(t -> {
+                            log.error("Event handling failed, event was marked as failed, " +
+                                            "eventId={}, " +
+                                            "qualifier={}, " +
+                                            "{}",
+                                    eventId,
+                                    event.getQualifier(),
+                                    t.getMessage());
+                            return updateStatus(eventId, EventStatusEnum.FAILED);
+                        })
+                )
+                .replaceWithVoid();
     }
 
     Uni<EventModel> getEvent(final Long eventId) {

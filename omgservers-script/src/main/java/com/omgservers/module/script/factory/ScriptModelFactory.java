@@ -20,15 +20,17 @@ public class ScriptModelFactory {
 
     public ScriptModel create(final Long tenantId,
                               final Long versionId,
+                              final Long runtimeId,
                               final ScriptTypeEnum type,
                               final ScriptConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, type, config);
+        return create(id, tenantId, versionId, runtimeId, type, config);
     }
 
     public ScriptModel create(final Long id,
                               final Long tenantId,
                               final Long versionId,
+                              final Long runtimeId,
                               final ScriptTypeEnum type,
                               final ScriptConfigModel config) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -39,6 +41,7 @@ public class ScriptModelFactory {
         script.setModified(now);
         script.setTenantId(tenantId);
         script.setVersionId(versionId);
+        script.setRuntimeId(runtimeId);
         script.setType(type);
         script.setState("{}");
         script.setConfig(config);

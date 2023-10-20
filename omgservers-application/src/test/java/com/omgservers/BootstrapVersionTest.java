@@ -19,5 +19,7 @@ public class BootstrapVersionTest extends Assertions {
         bootstrapVersionOperation.bootstrapVersion("""
                 print("test")
                 """);
+
+        Thread.sleep(5000);
     }
 }

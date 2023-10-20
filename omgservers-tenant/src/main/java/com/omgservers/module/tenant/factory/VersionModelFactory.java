@@ -26,23 +26,36 @@ public class VersionModelFactory {
             final VersionSourceCodeModel sourceCode,
             final VersionBytecodeModel bytecode) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, stageId, versionConfig, sourceCode, bytecode);
+        final var defaultMatchmakerId = generateIdOperation.generateId();
+        final var defaultRuntimeId = generateIdOperation.generateId();
+        return create(id,
+                tenantId,
+                stageId,
+                defaultMatchmakerId,
+                defaultRuntimeId,
+                versionConfig,
+                sourceCode,
+                bytecode);
     }
 
     public VersionModel create(final Long id,
                                final Long tenantId,
                                final Long stageId,
+                               final Long defaultMatchmakerId,
+                               final Long defaultRuntimeId,
                                final VersionConfigModel versionConfig,
                                final VersionSourceCodeModel sourceCode,
                                final VersionBytecodeModel bytecode) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        VersionModel version = new VersionModel();
+        final var version = new VersionModel();
         version.setId(id);
         version.setTenantId(tenantId);
         version.setStageId(stageId);
         version.setCreated(now);
         version.setModified(now);
+        version.setDefaultMatchmakerId(defaultMatchmakerId);
+        version.setDefaultRuntimeId(defaultRuntimeId);
         version.setConfig(versionConfig);
         version.setSourceCode(sourceCode);
         version.setBytecode(bytecode);

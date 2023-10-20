@@ -28,6 +28,9 @@ public class ScriptModel {
     Long versionId;
 
     @NotNull
+    Long runtimeId;
+
+    @NotNull
     ScriptTypeEnum type;
 
     @NotNull

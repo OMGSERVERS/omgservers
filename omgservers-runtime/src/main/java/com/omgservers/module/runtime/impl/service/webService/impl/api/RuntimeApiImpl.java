@@ -12,6 +12,12 @@ import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoRespondClientRequest;
+import com.omgservers.dto.runtime.DoRespondClientResponse;
+import com.omgservers.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.dto.runtime.DoSetAttributesResponse;
+import com.omgservers.dto.runtime.DoSetObjectRequest;
+import com.omgservers.dto.runtime.DoSetObjectResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
@@ -105,6 +111,24 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeGrant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoRespondClientResponse> doRespondClient(DoRespondClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doRespondClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doSetAttributes);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doSetObject);
     }
 
     @Override

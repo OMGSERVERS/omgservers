@@ -1,7 +1,6 @@
 package com.omgservers.module.user.impl.operation.upsertClient;
 
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.user.factory.ClientModelFactory;
@@ -57,7 +56,9 @@ class UpsertClientOperationTest extends Assertions {
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var client = clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId());
+        final var client =
+                clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
+                        versionId(), defaultRuntimeId());
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
     }
 
@@ -69,7 +70,9 @@ class UpsertClientOperationTest extends Assertions {
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client = clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId());
+        final var client =
+                clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
+                        versionId(), defaultRuntimeId());
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
         assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
@@ -79,7 +82,9 @@ class UpsertClientOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertClient_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
-        final var client = clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId());
+        final var client =
+                clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId(),
+                        versionId(), defaultRuntimeId());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
     }
@@ -97,6 +102,14 @@ class UpsertClientOperationTest extends Assertions {
     }
 
     long stageId() {
+        return generateIdOperation.generateId();
+    }
+
+    long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    long defaultRuntimeId() {
         return generateIdOperation.generateId();
     }
 }

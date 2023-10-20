@@ -1,7 +1,7 @@
 package com.omgservers.dto.script;
 
 import com.omgservers.dto.ShardedRequest;
-import com.omgservers.model.scriptEvent.ScriptEventModel;
+import com.omgservers.model.scriptRequest.ScriptRequestModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class CallScriptRequest implements ShardedRequest {
     Long scriptId;
 
     @NotNull
-    List<ScriptEventModel> events;
+    List<ScriptRequestModel> requests;
 
     @Override
     public String getRequestShardKey() {

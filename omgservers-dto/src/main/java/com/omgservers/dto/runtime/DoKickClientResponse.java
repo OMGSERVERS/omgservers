@@ -6,4 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DoKickClientResponse {
+
+    Boolean approved;
 }

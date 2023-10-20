@@ -59,7 +59,8 @@ class DeleteClientOperationTest extends Assertions {
         upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"), connectionId());
+        final var client = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"),
+                connectionId(), versionId(), defaultRuntimeId());
         final var clientId = client.getId();
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
@@ -88,6 +89,14 @@ class DeleteClientOperationTest extends Assertions {
     }
 
     Long connectionId() {
+        return generateIdOperation.generateId();
+    }
+
+    long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    long defaultRuntimeId() {
         return generateIdOperation.generateId();
     }
 }

@@ -26,14 +26,14 @@ class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation
                     pgException);
             // unique_violation
             case "23505" -> new ServerSideConflictException("unique violation, " +
-                    "constraint=" + pgException.getConstraint() +
+                    "errorMessage=" + pgException.getErrorMessage() +
                     ", sql=" + sql.replaceAll(System.lineSeparator(), " "),
                     pgException);
             // not_null_violation
             case "23502" -> new ServerSideConflictException("not null violation, " +
-                    "constraint=" + pgException.getConstraint(), pgException);
+                    "errorMessage=" + pgException.getErrorMessage(), pgException);
             default -> new ServerSideInternalException("unhandled PgException, " +
-                    pgException.getMessage() +
+                    pgException.getErrorMessage() +
                     ", sql=" + sql.replaceAll(System.lineSeparator(), " "),
                     pgException);
         };

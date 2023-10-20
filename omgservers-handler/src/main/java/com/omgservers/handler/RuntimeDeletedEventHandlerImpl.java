@@ -10,6 +10,7 @@ import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.operation.getServers.GetServersOperation;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +28,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final SystemModule systemModule;
 
     final GetServersOperation getServersOperation;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -40,11 +42,12 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime was deleted, id={}, matchmakerId={}, matchId={}, mode={}",
+                    log.info("Runtime was deleted, type={}, id={}, tenantId={}, versionId={}, versionId={}",
+                            runtime.getType(),
                             runtime.getId(),
-                            runtime.getMatchmakerId(),
-                            runtime.getMatchId(),
-                            runtime.getConfig().getModeConfig().getName());
+                            runtime.getTenantId(),
+                            runtime.getVersionId(),
+                            runtime.getVersionId());
                     return deleteRuntimeJob(runtimeId);
                 });
     }

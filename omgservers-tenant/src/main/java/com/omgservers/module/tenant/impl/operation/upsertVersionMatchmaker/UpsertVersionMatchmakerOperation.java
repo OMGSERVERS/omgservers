@@ -1,0 +1,13 @@
+package com.omgservers.module.tenant.impl.operation.upsertVersionMatchmaker;
+
+import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.operation.changeWithContext.ChangeContext;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlConnection;
+
+public interface UpsertVersionMatchmakerOperation {
+    Uni<Boolean> upsertStageMatchmaker(ChangeContext<?> changeContext,
+                                       SqlConnection sqlConnection,
+                                       int shard,
+                                       VersionMatchmakerModel stageMatchmaker);
+}

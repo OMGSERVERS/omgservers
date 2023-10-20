@@ -1,18 +1,17 @@
 package com.omgservers.module.runtime.impl.service.doService.impl.method.doBroadcastMessage;
 
+import com.omgservers.dto.internal.SyncEventRequest;
+import com.omgservers.dto.internal.SyncEventResponse;
 import com.omgservers.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.dto.user.RespondClientRequest;
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
-import com.omgservers.module.gateway.factory.MessageModelFactory;
 import com.omgservers.module.runtime.impl.operation.selectRuntimeGrantsByRuntimeId.SelectRuntimeGrantsByRuntimeIdOperation;
-import com.omgservers.module.user.UserModule;
+import com.omgservers.module.system.SystemModule;
+import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.operation.checkShard.CheckShardOperation;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,12 +25,12 @@ import java.util.List;
 @AllArgsConstructor
 class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
 
-    final UserModule userModule;
+    final SystemModule systemModule;
 
     final SelectRuntimeGrantsByRuntimeIdOperation selectRuntimeGrantsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
-    final MessageModelFactory messageModelFactory;
+    final EventModelFactory eventModelFactory;
 
     final PgPool pgPool;
 
@@ -42,17 +41,16 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var grantType = RuntimeGrantTypeEnum.CLIENT;
+                    final var grant = RuntimeGrantTypeEnum.MATCH_CLIENT;
                     return pgPool.withTransaction(sqlConnection -> selectRuntimeGrantsByRuntimeIdOperation
-                            .selectRuntimeGrantsByRuntimeId(
-                                    sqlConnection,
+                            .selectRuntimeGrantsByRuntimeId(sqlConnection,
                                     shardModel.shard(),
                                     runtimeId)
-                            .map(runtimeGrants -> createRecipientList(runtimeGrants, grantType))
-                            .flatMap(recipients -> doBroadcast(recipients, message))
+                            .map(runtimeGrants -> createRecipientList(runtimeGrants, grant))
+                            .flatMap(recipients -> syncApprove(runtimeId, recipients, message))
                     );
                 })
-                .replaceWith(new DoBroadcastMessageResponse());
+                .replaceWith(new DoBroadcastMessageResponse(true));
     }
 
     List<Recipient> createRecipientList(final List<RuntimeGrantModel> runtimeGrants,
@@ -63,22 +61,13 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
                 .toList();
     }
 
-    Uni<Void> doBroadcast(final List<Recipient> recipients, final Object message) {
-        return Multi.createFrom().iterable(recipients)
-                .onItem().transformToUniAndMerge(recipient -> respondClient(recipient, message))
-                .collect().asList().replaceWithVoid()
-                .replaceWithVoid();
-    }
-
-    Uni<Void> respondClient(Recipient recipient, Object message) {
-        final var messageBody = new ServerMessageBodyModel(message);
-        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
-
-        final var respondClientRequest = RespondClientRequest.builder()
-                .userId(recipient.userId())
-                .clientId(recipient.clientId())
-                .message(messageModel)
-                .build();
-        return userModule.getUserService().respondClient(respondClientRequest);
+    Uni<Boolean> syncApprove(final Long runtimeId,
+                             final List<Recipient> recipients,
+                             final Object message) {
+        final var eventBody = new BroadcastApprovedEventBodyModel(runtimeId, recipients, message);
+        final var eventModel = eventModelFactory.create(eventBody);
+        final var request = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(request)
+                .map(SyncEventResponse::getCreated);
     }
 }

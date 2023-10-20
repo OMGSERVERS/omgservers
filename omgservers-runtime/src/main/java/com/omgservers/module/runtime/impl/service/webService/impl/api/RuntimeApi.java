@@ -12,6 +12,12 @@ import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoRespondClientRequest;
+import com.omgservers.dto.runtime.DoRespondClientResponse;
+import com.omgservers.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.dto.runtime.DoSetAttributesResponse;
+import com.omgservers.dto.runtime.DoSetObjectRequest;
+import com.omgservers.dto.runtime.DoSetObjectResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
@@ -76,6 +82,18 @@ public interface RuntimeApi {
     @PUT
     @Path("/delete-runtime-grant")
     Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request);
+
+    @PUT
+    @Path("/do-respond-client")
+    Uni<DoRespondClientResponse> doRespondClient(DoRespondClientRequest request);
+
+    @PUT
+    @Path("/do-set-attributes")
+    Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request);
+
+    @PUT
+    @Path("/do-set-object")
+    Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request);
 
     @PUT
     @Path("/do-kick-client")

@@ -35,16 +35,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StageServiceImpl implements StageService {
 
-    final GetTenantModuleClientOperation getTenantModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
-    final CalculateShardOperation calculateShardOperation;
-
     final SyncStagePermissionMethod syncStagePermissionMethod;
     final ValidateStageSecretMethod validateStageSecretMethod;
     final HasStagePermissionMethod hasStagePermissionMethod;
     final DeleteStageMethod deleteStageMethod;
     final SyncStageMethod syncStageMethod;
     final GetStageMethod getStageMethod;
+
+    final GetTenantModuleClientOperation getTenantModuleClientOperation;
+    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetStageResponse> getStage(@Valid final GetStageRequest request) {

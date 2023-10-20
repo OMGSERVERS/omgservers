@@ -14,11 +14,8 @@ class GetJobIntervalOperationImpl implements GetJobIntervalOperation {
     public Integer getJobIntervalInSeconds(JobQualifierEnum type) {
         // TODO: move to settings/properties?
         return switch (type) {
-            case RELAY -> 1; // 1s
-            case TENANT -> 60 * 60; // 1h
-            case PROJECT -> 60; // 1m
-            case STAGE -> 1; // 1s
-            case MATCHMAKER, MATCH, RUNTIME -> 1; // 1s
+            case TENANT, PROJECT, STAGE, RUNTIME -> 60;
+            case RELAY, MATCHMAKER, MATCH, SCRIPT -> 1;
         };
     }
 }

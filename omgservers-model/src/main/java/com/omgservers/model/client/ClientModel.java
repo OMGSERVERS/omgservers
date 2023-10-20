@@ -33,11 +33,17 @@ public class ClientModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     URI server;
 
     @NotNull
     Long connectionId;
 
     @NotNull
-    Long scriptId;
+    Long versionId;
+
+    @NotNull
+    Long defaultRuntimeId;
 }

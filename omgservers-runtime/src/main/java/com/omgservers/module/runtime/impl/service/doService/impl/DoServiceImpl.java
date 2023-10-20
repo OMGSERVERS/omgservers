@@ -6,6 +6,12 @@ import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoRespondClientRequest;
+import com.omgservers.dto.runtime.DoRespondClientResponse;
+import com.omgservers.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.dto.runtime.DoSetAttributesResponse;
+import com.omgservers.dto.runtime.DoSetObjectRequest;
+import com.omgservers.dto.runtime.DoSetObjectResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
@@ -16,6 +22,9 @@ import com.omgservers.module.runtime.impl.service.doService.DoService;
 import com.omgservers.module.runtime.impl.service.doService.impl.method.doBroadcastMessage.DoBroadcastMessageMethod;
 import com.omgservers.module.runtime.impl.service.doService.impl.method.doKickClient.DoKickClientMethod;
 import com.omgservers.module.runtime.impl.service.doService.impl.method.doMulticastMessage.DoMulticastMessageMethod;
+import com.omgservers.module.runtime.impl.service.doService.impl.method.doRespondClient.DoRespondClientMethod;
+import com.omgservers.module.runtime.impl.service.doService.impl.method.doSetAttributes.DoSetAttributesMethod;
+import com.omgservers.module.runtime.impl.service.doService.impl.method.doSetObject.DoSetObjectMethod;
 import com.omgservers.module.runtime.impl.service.doService.impl.method.doStopRuntime.DoStopRuntimeMethod;
 import com.omgservers.module.runtime.impl.service.doService.impl.method.doUnicastMessage.DoUnicastMessageMethod;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -39,6 +48,34 @@ public class DoServiceImpl implements DoService {
     final DoUnicastMessageMethod doUnicastMessageMethod;
     final DoStopRuntimeMethod doStopRuntimeMethod;
     final DoKickClientMethod doKickClientMethod;
+
+    final DoRespondClientMethod doRespondClientMethod;
+    final DoSetAttributesMethod doSetAttributesMethod;
+    final DoSetObjectMethod doSetObjectMethod;
+
+    @Override
+    public Uni<DoRespondClientResponse> doRespondClient(@Valid final DoRespondClientRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::doRespondClient,
+                doRespondClientMethod::doRespondClient);
+    }
+
+    @Override
+    public Uni<DoSetAttributesResponse> doSetAttributes(@Valid final DoSetAttributesRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::doSetAttributes,
+                doSetAttributesMethod::doSetAttributes);
+    }
+
+    @Override
+    public Uni<DoSetObjectResponse> doSetObject(@Valid final DoSetObjectRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::doSetObject,
+                doSetObjectMethod::doSetObject);
+    }
 
     @Override
     public Uni<DoKickClientResponse> doKickClient(@Valid final DoKickClientRequest request) {

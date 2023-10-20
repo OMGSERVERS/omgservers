@@ -5,8 +5,8 @@ import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.ScriptCreatedEventBodyModel;
 import com.omgservers.model.script.ScriptModel;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,8 +34,9 @@ class UpsertScriptOperationImpl implements UpsertScriptOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_script(id, created, modified, tenant_id, version_id, type, state, config)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                        insert into $schema.tab_script(
+                            id, created, modified, tenant_id, version_id, runtime_id, type, state, config)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,6 +46,7 @@ class UpsertScriptOperationImpl implements UpsertScriptOperation {
                         script.getModified().atOffset(ZoneOffset.UTC),
                         script.getTenantId(),
                         script.getVersionId(),
+                        script.getRuntimeId(),
                         script.getType(),
                         script.getState(),
                         getConfigString(script)

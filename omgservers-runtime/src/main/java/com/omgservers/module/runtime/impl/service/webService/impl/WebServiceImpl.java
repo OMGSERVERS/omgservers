@@ -12,6 +12,12 @@ import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.dto.runtime.DoMulticastMessageResponse;
+import com.omgservers.dto.runtime.DoRespondClientRequest;
+import com.omgservers.dto.runtime.DoRespondClientResponse;
+import com.omgservers.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.dto.runtime.DoSetAttributesResponse;
+import com.omgservers.dto.runtime.DoSetObjectRequest;
+import com.omgservers.dto.runtime.DoSetObjectResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.dto.runtime.DoUnicastMessageRequest;
@@ -96,6 +102,21 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         return runtimeService.deleteRuntimeGrant(request);
+    }
+
+    @Override
+    public Uni<DoRespondClientResponse> doRespondClient(DoRespondClientRequest request) {
+        return doService.doRespondClient(request);
+    }
+
+    @Override
+    public Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request) {
+        return doService.doSetAttributes(request);
+    }
+
+    @Override
+    public Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request) {
+        return doService.doSetObject(request);
     }
 
     @Override

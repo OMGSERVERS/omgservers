@@ -2,11 +2,10 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.gateway.AssignClientResponse;
-import com.omgservers.dto.script.CallScriptRequest;
-import com.omgservers.dto.script.CallScriptResponse;
-import com.omgservers.dto.script.SyncScriptRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdResponse;
+import com.omgservers.dto.tenant.FindStageVersionIdRequest;
+import com.omgservers.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
+import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.dto.user.FindPlayerRequest;
 import com.omgservers.dto.user.FindPlayerResponse;
@@ -22,12 +21,8 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.script.ScriptConfigModel;
-import com.omgservers.model.script.ScriptModel;
-import com.omgservers.model.script.ScriptTypeEnum;
-import com.omgservers.model.scriptEvent.ScriptEventModel;
-import com.omgservers.model.scriptEvent.body.SignedInScriptEventBodyModel;
 import com.omgservers.model.user.UserModel;
+import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.script.factory.ScriptModelFactory;
@@ -45,7 +40,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -81,34 +75,36 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
 
         return validateStageSecret(tenantId, stageId, secret)
                 .flatMap(voidItem -> validateCredentials(tenantId, userId, password))
-                .flatMap(user -> getPlayer(userId, tenantId, stageId)
+                .flatMap(user -> findOrSyncPlayer(userId, tenantId, stageId)
                         .flatMap(player -> {
                             final var playerId = player.getId();
-                            return syncClient(userId, playerId, server, connectionId)
-                                    .flatMap(client -> getVersionId(tenantId, stageId)
-                                            .flatMap(versionId -> syncScript(tenantId, versionId, client))
-                                            .flatMap(script -> {
-                                                final var scriptId = client.getScriptId();
-                                                final var clientId = client.getId();
-                                                return callScript(scriptId, userId, playerId, clientId)
-                                                        .replaceWithVoid();
-                                            })
-                                            .flatMap(script -> assignClient(player, client))
-                                            .invoke(voidItem -> {
-                                                log.info("User signed in, " +
-                                                                "userId={}, " +
-                                                                "clientId={}, " +
-                                                                "tenantId={}, " +
-                                                                "stageId={}, " +
-                                                                "scriptId={}",
-                                                        userId,
-                                                        client.getId(),
-                                                        tenantId,
-                                                        stageId,
-                                                        client.getScriptId());
-                                            })
+                            return findVersionId(tenantId, stageId)
+                                    .flatMap(versionId -> selectVersionRuntime(tenantId, versionId)
+                                            .flatMap(versionRuntime -> createClient(userId,
+                                                    playerId,
+                                                    server,
+                                                    connectionId,
+                                                    versionId,
+                                                    versionRuntime.getRuntimeId())
+                                                    .flatMap(client -> assignClient(player, client)
+                                                            .invoke(voidItem -> {
+                                                                log.info("User signed in, " +
+                                                                                "userId={}, " +
+                                                                                "clientId={}, " +
+                                                                                "tenantId={}, " +
+                                                                                "stageId={}, " +
+                                                                                "scriptId={}",
+                                                                        userId,
+                                                                        client.getId(),
+                                                                        tenantId,
+                                                                        stageId,
+                                                                        client.getVersionId());
+                                                            })
+                                                    )
+                                            )
                                     );
-                        }))
+                        })
+                )
                 .replaceWith(true);
     }
 
@@ -124,7 +120,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .map(ValidateCredentialsResponse::getUser);
     }
 
-    Uni<PlayerModel> getPlayer(Long userId, Long tenantId, Long stageId) {
+    Uni<PlayerModel> findOrSyncPlayer(Long userId, Long tenantId, Long stageId) {
         return findPlayer(userId, stageId)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> syncPlayer(userId, tenantId, stageId));
@@ -143,49 +139,35 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                 .replaceWith(player);
     }
 
-    Uni<ClientModel> syncClient(final Long userId,
-                                final Long playerId,
-                                final URI server,
-                                final Long connectionId) {
-        final var client = clientModelFactory.create(userId, playerId, server, connectionId);
+    Uni<Long> findVersionId(final Long tenantId, final Long stageId) {
+        final var request = new FindStageVersionIdRequest(tenantId, stageId);
+        return tenantModule.getVersionService().findStageVersionId(request)
+                .map(FindStageVersionIdResponse::getVersionId);
+    }
+
+    Uni<VersionRuntimeModel> selectVersionRuntime(final Long tenantId, final Long versionId) {
+        final var request = new SelectVersionRuntimeRequest(tenantId,
+                versionId,
+                SelectVersionRuntimeRequest.Strategy.RANDOM);
+        return tenantModule.getVersionService().selectVersionRuntime(request)
+                .map(SelectVersionRuntimeResponse::getVersionRuntime);
+    }
+
+    Uni<ClientModel> createClient(final Long userId,
+                                  final Long playerId,
+                                  final URI server,
+                                  final Long connectionId,
+                                  final Long versionId,
+                                  final Long defaultRuntimeId) {
+        final var client = clientModelFactory.create(userId,
+                playerId,
+                server,
+                connectionId,
+                versionId,
+                defaultRuntimeId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
-    }
-
-    Uni<Long> getVersionId(final Long tenantId, final Long stageId) {
-        final var getStageVersionIdRequest = new GetStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().getStageVersionId(getStageVersionIdRequest)
-                .map(GetStageVersionIdResponse::getVersionId);
-    }
-
-    Uni<ScriptModel> syncScript(final Long tenantId, final Long versionId, final ClientModel client) {
-        final var type = ScriptTypeEnum.CLIENT;
-        final var config = ScriptConfigModel.builder()
-                .userId(client.getUserId())
-                .playerId(client.getPlayerId())
-                .clientId(client.getId())
-                .build();
-        final var script = scriptModelFactory.create(client.getScriptId(), tenantId, versionId, type, config);
-        final var request = new SyncScriptRequest(script);
-        return scriptModule.getScriptService().syncScript(request)
-                .replaceWith(script);
-    }
-
-    Uni<Boolean> callScript(final Long scriptId,
-                            final Long userId,
-                            final Long playerId,
-                            final Long clientId) {
-        final var scriptEventBody = SignedInScriptEventBodyModel.builder()
-                .userId(userId)
-                .playerId(playerId)
-                .clientId(clientId)
-                .build();
-
-        final var request = new CallScriptRequest(scriptId,
-                Collections.singletonList(new ScriptEventModel(scriptEventBody.getQualifier(), scriptEventBody)));
-        return scriptModule.getScriptService().callScript(request)
-                .map(CallScriptResponse::getResult);
     }
 
     Uni<Void> assignClient(final PlayerModel player,

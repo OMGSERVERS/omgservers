@@ -66,7 +66,7 @@ public class LuaValueDeserializer extends StdDeserializer<LuaValue> {
         } else if (node.isBoolean()) {
             return LuaValue.valueOf(node.booleanValue());
         } else {
-            throw new IllegalArgumentException("Unknown json node type, type=" + node.getNodeType().toString());
+            return LuaValue.NIL;
         }
     }
 }

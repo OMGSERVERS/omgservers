@@ -53,14 +53,15 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationImpl implements SelectRu
         runtimeCommand.setModified(row.getOffsetDateTime("modified").toInstant());
         final var qualifier = RuntimeCommandQualifierEnum.valueOf(row.getString("qualifier"));
         runtimeCommand.setQualifier(qualifier);
+        runtimeCommand.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
+        runtimeCommand.setStep(row.getLong("step"));
         try {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             runtimeCommand.setBody(body);
         } catch (IOException e) {
             throw new ServerSideConflictException("runtime command can't be parsed, runtimeCommand=" + runtimeCommand, e);
         }
-        runtimeCommand.setStatus(RuntimeCommandStatusEnum.valueOf(row.getString("status")));
-        runtimeCommand.setStep(row.getLong("step"));
+
         return runtimeCommand;
     }
 }

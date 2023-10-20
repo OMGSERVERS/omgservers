@@ -17,14 +17,14 @@ public class MatchmakerModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public MatchmakerModel create(final Long tenantId,
-                                  final Long stageId) {
+                                  final Long versionId) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, stageId);
+        return create(id, tenantId, versionId);
     }
 
     public MatchmakerModel create(final Long id,
                                   final Long tenantId,
-                                  final Long stageId) {
+                                  final Long versionId) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var matchmaker = new MatchmakerModel();
@@ -32,7 +32,7 @@ public class MatchmakerModelFactory {
         matchmaker.setCreated(now);
         matchmaker.setModified(now);
         matchmaker.setTenantId(tenantId);
-        matchmaker.setStageId(stageId);
+        matchmaker.setVersionId(versionId);
         return matchmaker;
     }
 }

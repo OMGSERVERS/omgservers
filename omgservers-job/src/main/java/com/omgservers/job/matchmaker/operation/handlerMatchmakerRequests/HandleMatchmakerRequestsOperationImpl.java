@@ -2,8 +2,6 @@ package com.omgservers.job.matchmaker.operation.handlerMatchmakerRequests;
 
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.dto.tenant.GetStageVersionIdRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
@@ -39,13 +37,11 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
                     final var tenantId = matchmaker.getTenantId();
-                    final var stageId = matchmaker.getStageId();
-                    return getStageVersionId(tenantId, stageId)
-                            .flatMap(versionId -> getVersionConfig(tenantId, versionId)
-                                    .flatMap(versionConfig -> executeMatchmaker(matchmakerState,
-                                            changeOfState,
-                                            versionConfig)
-                                    )
+                    final var versionId = matchmaker.getVersionId();
+                    return getVersionConfig(tenantId, versionId)
+                            .flatMap(versionConfig -> executeMatchmaker(matchmakerState,
+                                    changeOfState,
+                                    versionConfig)
                             );
                 });
     }
@@ -54,12 +50,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         final var request = new GetMatchmakerRequest(id);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
-    Uni<Long> getStageVersionId(final Long tenantId, final Long stageId) {
-        final var request = new GetStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().getStageVersionId(request)
-                .map(GetStageVersionIdResponse::getVersionId);
     }
 
     Uni<VersionConfigModel> getVersionConfig(final Long tenantId, final Long versionId) {

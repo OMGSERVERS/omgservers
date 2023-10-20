@@ -1,5 +1,6 @@
 package com.omgservers.model.runtime;
 
 public enum RuntimeTypeEnum {
-    SCRIPT,
+    EMBEDDED_GLOBAL_SCRIPT,
+    EMBEDDED_MATCH_SCRIPT,
 }

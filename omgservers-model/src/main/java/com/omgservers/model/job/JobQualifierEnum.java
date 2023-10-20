@@ -7,5 +7,6 @@ public enum JobQualifierEnum {
     STAGE,
     MATCHMAKER,
     MATCH,
-    RUNTIME
+    RUNTIME,
+    SCRIPT
 }

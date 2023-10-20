@@ -20,18 +20,20 @@ public class ClientModelFactory {
     public ClientModel create(final Long userId,
                               final Long playerId,
                               final URI server,
-                              final Long connectionId) {
+                              final Long connectionId,
+                              final Long versionId,
+                              final Long defaultRuntimeId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, server, connectionId);
+        return create(id, userId, playerId, server, connectionId, versionId, defaultRuntimeId);
     }
 
     public ClientModel create(final Long id,
                               final Long userId,
                               final Long playerId,
                               final URI server,
-                              final Long connectionId) {
-        final var scriptId = generateIdOperation.generateId();
-
+                              final Long connectionId,
+                              final Long versionId,
+                              final Long defaultRuntimeId) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         ClientModel client = new ClientModel();
@@ -39,9 +41,11 @@ public class ClientModelFactory {
         client.setUserId(userId);
         client.setPlayerId(playerId);
         client.setCreated(now);
+        client.setModified(now);
         client.setServer(server);
         client.setConnectionId(connectionId);
-        client.setScriptId(scriptId);
+        client.setVersionId(versionId);
+        client.setDefaultRuntimeId(defaultRuntimeId);
 
         return client;
     }

@@ -4,14 +4,22 @@ import com.omgservers.dto.tenant.DeleteProjectRequest;
 import com.omgservers.dto.tenant.DeleteStageRequest;
 import com.omgservers.dto.tenant.DeleteStageResponse;
 import com.omgservers.dto.tenant.DeleteTenantRequest;
+import com.omgservers.dto.tenant.DeleteVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.DeleteVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.DeleteVersionRequest;
 import com.omgservers.dto.tenant.DeleteVersionResponse;
-import com.omgservers.dto.tenant.GetStageVersionIdRequest;
-import com.omgservers.dto.tenant.GetStageVersionIdResponse;
+import com.omgservers.dto.tenant.DeleteVersionRuntimeRequest;
+import com.omgservers.dto.tenant.DeleteVersionRuntimeResponse;
+import com.omgservers.dto.tenant.FindVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.FindVersionMatchmakerResponse;
+import com.omgservers.dto.tenant.FindVersionRuntimeRequest;
+import com.omgservers.dto.tenant.FindVersionRuntimeResponse;
 import com.omgservers.dto.tenant.GetProjectRequest;
 import com.omgservers.dto.tenant.GetProjectResponse;
 import com.omgservers.dto.tenant.GetStageRequest;
 import com.omgservers.dto.tenant.GetStageResponse;
+import com.omgservers.dto.tenant.FindStageVersionIdRequest;
+import com.omgservers.dto.tenant.FindStageVersionIdResponse;
 import com.omgservers.dto.tenant.GetTenantRequest;
 import com.omgservers.dto.tenant.GetTenantResponse;
 import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
@@ -26,6 +34,8 @@ import com.omgservers.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
+import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.dto.tenant.SyncProjectRequest;
@@ -38,8 +48,16 @@ import com.omgservers.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.dto.tenant.SyncTenantRequest;
 import com.omgservers.dto.tenant.SyncTenantResponse;
+import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SyncVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SyncVersionRequest;
 import com.omgservers.dto.tenant.SyncVersionResponse;
+import com.omgservers.dto.tenant.SyncVersionRuntimeRequest;
+import com.omgservers.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.dto.tenant.ViewVersionMatchmakersRequest;
+import com.omgservers.dto.tenant.ViewVersionMatchmakersResponse;
+import com.omgservers.dto.tenant.ViewVersionRuntimesRequest;
+import com.omgservers.dto.tenant.ViewVersionRuntimesResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -84,5 +102,23 @@ public interface WebService {
 
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 
-    Uni<GetStageVersionIdResponse> getStageVersionId(GetStageVersionIdRequest request);
+    Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(SyncVersionMatchmakerRequest request);
+
+    Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(FindVersionMatchmakerRequest request);
+
+    Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(ViewVersionMatchmakersRequest request);
+
+    Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(DeleteVersionMatchmakerRequest request);
+
+    Uni<SyncVersionRuntimeResponse> syncVersionRuntime(SyncVersionRuntimeRequest request);
+
+    Uni<FindVersionRuntimeResponse> findVersionRuntime(FindVersionRuntimeRequest request);
+
+    Uni<SelectVersionRuntimeResponse> selectVersionRuntime(SelectVersionRuntimeRequest request);
+
+    Uni<ViewVersionRuntimesResponse> viewVersionRuntimes(ViewVersionRuntimesRequest request);
+
+    Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(DeleteVersionRuntimeRequest request);
+
+    Uni<FindStageVersionIdResponse> findStageVersionId(FindStageVersionIdRequest request);
 }

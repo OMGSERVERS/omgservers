@@ -1,7 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntimeGrant;
 
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -42,24 +41,24 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     @Test
     void givenRuntimeGrant_whenUpsertRuntimeGrant_thenTrue() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
-                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
         assertTrue(upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
     }
 
     @Test
     void givenRuntimeGrant_whenUpsertRuntimeGrantAgain_thenFalse() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
-                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
         upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant);
 
         assertFalse(upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
@@ -69,7 +68,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertRuntimeGrant_thenException() {
         final var shard = 0;
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtimeId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
+                .create(runtimeId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
         final var exception = assertThrows(ServerSideConflictException.class, () -> upsertRuntimeGrantOperation
                 .upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant));
     }

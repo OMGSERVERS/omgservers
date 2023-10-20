@@ -45,12 +45,13 @@ class DeleteRuntimeGrantOperationTest extends Assertions {
     @Test
     void givenRuntimeGrant_whenDeleteRuntimeGrant_thenDeleted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
-                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime =
+                runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                        new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.CLIENT);
+                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
         upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant);
 
         final var changeContext = deleteRuntimeGrant.deleteRuntimeGrant(shard, runtime.getId(), runtimeGrant.getId());

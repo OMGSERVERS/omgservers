@@ -32,5 +32,5 @@ public class MatchmakerModel {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long versionId;
 }

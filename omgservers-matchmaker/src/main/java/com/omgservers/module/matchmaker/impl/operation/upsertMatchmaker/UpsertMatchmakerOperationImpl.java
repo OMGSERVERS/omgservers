@@ -3,8 +3,8 @@ package com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,7 +30,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker(id, created, modified, tenant_id, stage_id)
+                        insert into $schema.tab_matchmaker(id, created, modified, tenant_id, version_id)
                         values($1, $2, $3, $4, $5)
                         on conflict (id) do
                         nothing
@@ -40,7 +40,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
                         matchmaker.getTenantId(),
-                        matchmaker.getStageId()
+                        matchmaker.getVersionId()
                 ),
                 () -> new MatchmakerCreatedEventBodyModel(matchmaker.getId()),
                 () -> logModelFactory.create("Matchmaker was inserted, matchmaker=" + matchmaker)

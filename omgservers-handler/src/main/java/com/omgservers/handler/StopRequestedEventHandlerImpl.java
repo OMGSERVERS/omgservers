@@ -1,14 +1,10 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.dto.runtime.GetRuntimeRequest;
-import com.omgservers.dto.runtime.GetRuntimeResponse;
+import com.omgservers.dto.runtime.DoStopRuntimeRequest;
+import com.omgservers.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StopRequestedEventBodyModel;
-import com.omgservers.model.matchmakerCommand.body.StopMatchMatchmakerCommandBodyModel;
-import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.factory.MatchmakerCommandModelFactory;
 import com.omgservers.module.runtime.RuntimeModule;
@@ -40,31 +36,13 @@ public class StopRequestedEventHandlerImpl implements EventHandler {
         final var runtimeId = body.getRuntimeId();
         final var reason = body.getReason();
 
-        return getRuntime(runtimeId)
-                .flatMap(runtime -> {
-                    final var matchmakerId = runtime.getMatchmakerId();
-                    final var matchId = runtime.getMatchId();
-
-                    log.info("Stop was requested, matchmakerId={}, matchId={}, runtimeId={}, reason={}",
-                            matchmakerId, matchId, runtimeId, reason);
-
-                    return syncStopMatchMatchmakerCommand(matchmakerId, matchId)
-                            .replaceWithVoid();
-                })
+        return doStopRuntime(runtimeId, reason)
                 .replaceWith(true);
     }
 
-    Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id, false);
-        return runtimeModule.getRuntimeService().getRuntime(request)
-                .map(GetRuntimeResponse::getRuntime);
-    }
-
-    Uni<Boolean> syncStopMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
-        final var commandBody = new StopMatchMatchmakerCommandBodyModel(matchId);
-        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
-        final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
-                .map(SyncMatchmakerCommandResponse::getCreated);
+    Uni<Boolean> doStopRuntime(final Long runtimeId, final String reason) {
+        final var doStopRuntimeRequest = new DoStopRuntimeRequest(runtimeId, reason);
+        return runtimeModule.getDoService().doStopRuntime(doStopRuntimeRequest)
+                .map(DoStopRuntimeResponse::getApproved);
     }
 }

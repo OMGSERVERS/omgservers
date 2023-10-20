@@ -1,5 +1,6 @@
 package com.omgservers.model.event;
 
+import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
 import com.omgservers.model.event.body.BroadcastRequestedEventBodyModel;
 import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
@@ -12,6 +13,7 @@ import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
+import com.omgservers.model.event.body.KickApprovedEventBodyModel;
 import com.omgservers.model.event.body.KickRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
@@ -24,6 +26,7 @@ import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
+import com.omgservers.model.event.body.MulticastApprovedEventBodyModel;
 import com.omgservers.model.event.body.MulticastRequestedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
@@ -32,6 +35,8 @@ import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import com.omgservers.model.event.body.RequestCreatedEventBodyModel;
 import com.omgservers.model.event.body.RequestUpdatedEventBodyModel;
+import com.omgservers.model.event.body.RespondApprovedEventBodyModel;
+import com.omgservers.model.event.body.RespondRequestedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
@@ -41,23 +46,36 @@ import com.omgservers.model.event.body.ScriptUpdatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesRequestedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectRequestedEventBodyModel;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
+import com.omgservers.model.event.body.StageMatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.StageMatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.StageMatchmakerUpdatedEventBodyModel;
+import com.omgservers.model.event.body.StageRuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.StageRuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.StageRuntimeUpdatedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
+import com.omgservers.model.event.body.StopApprovedEventBodyModel;
 import com.omgservers.model.event.body.StopRequestedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
+import com.omgservers.model.event.body.UnicastApprovedEventBodyModel;
 import com.omgservers.model.event.body.UnicastRequestedEventBodyModel;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.UserDeletedEventBodyModel;
 import com.omgservers.model.event.body.UserUpdatedEventBodyModel;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
+import com.omgservers.model.event.body.VersionUpdatedEventBodyModel;
 
 public enum EventQualifierEnum {
-    // System events
+    // System
     INDEX_CREATED(IndexCreatedEventBodyModel.class),
     INDEX_UPDATED(IndexUpdatedEventBodyModel.class),
     INDEX_DELETED(IndexDeletedEventBodyModel.class),
@@ -67,7 +85,7 @@ public enum EventQualifierEnum {
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_UPDATED(JobUpdatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),
-    // Entity events
+    // Entity
     TENANT_CREATED(TenantCreatedEventBodyModel.class),
     TENANT_UPDATED(TenantCreatedEventBodyModel.class),
     TENANT_DELETED(TenantDeletedEventBodyModel.class),
@@ -77,7 +95,14 @@ public enum EventQualifierEnum {
     STAGE_CREATED(StageCreatedEventBodyModel.class),
     STAGE_UPDATED(StageUpdatedEventBodyModel.class),
     STAGE_DELETED(StageDeletedEventBodyModel.class),
+    STAGE_MATCHMAKER_CREATED(StageMatchmakerCreatedEventBodyModel.class),
+    STAGE_MATCHMAKER_UPDATED(StageMatchmakerUpdatedEventBodyModel.class),
+    STAGE_MATCHMAKER_DELETED(StageMatchmakerDeletedEventBodyModel.class),
+    STAGE_RUNTIME_CREATED(StageRuntimeCreatedEventBodyModel.class),
+    STAGE_RUNTIME_UPDATED(StageRuntimeUpdatedEventBodyModel.class),
+    STAGE_RUNTIME_DELETED(StageRuntimeDeletedEventBodyModel.class),
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
+    VERSION_UPDATED(VersionUpdatedEventBodyModel.class),
     VERSION_DELETED(VersionDeletedEventBodyModel.class),
     USER_CREATED(UserCreatedEventBodyModel.class),
     USER_UPDATED(UserUpdatedEventBodyModel.class),
@@ -107,18 +132,29 @@ public enum EventQualifierEnum {
     SCRIPT_CREATED(ScriptCreatedEventBodyModel.class),
     SCRIPT_UPDATED(ScriptUpdatedEventBodyModel.class),
     SCRIPT_DELETED(ScriptDeletedEventBodyModel.class),
-    // Incoming events
+    // Gateway
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class),
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class),
     MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class),
     MATCH_REQUESTED(MatchRequestedEventBodyModel.class),
     CHANGE_REQUESTED(ChangeRequestedEventBodyModel.class),
-    // Runtime events
+    // Runtime
+    RESPOND_REQUESTED(RespondRequestedEventBodyModel.class),
+    RESPOND_APPROVED(RespondApprovedEventBodyModel.class),
+    SET_ATTRIBUTES_REQUESTED(SetAttributesRequestedEventBodyModel.class),
+    SET_ATTRIBUTES_APPROVED(SetAttributesApprovedEventBodyModel.class),
+    SET_OBJECT_REQUESTED(SetObjectRequestedEventBodyModel.class),
+    SET_OBJECT_APPROVED(SetObjectApprovedEventBodyModel.class),
     UNICAST_REQUESTED(UnicastRequestedEventBodyModel.class),
+    UNICAST_APPROVED(UnicastApprovedEventBodyModel.class),
     MULTICAST_REQUESTED(MulticastRequestedEventBodyModel.class),
+    MULTICAST_APPROVED(MulticastApprovedEventBodyModel.class),
     BROADCAST_REQUESTED(BroadcastRequestedEventBodyModel.class),
+    BROADCAST_APPROVED(BroadcastApprovedEventBodyModel.class),
     KICK_REQUESTED(KickRequestedEventBodyModel.class),
-    STOP_REQUESTED(StopRequestedEventBodyModel.class);
+    KICK_APPROVED(KickApprovedEventBodyModel.class),
+    STOP_REQUESTED(StopRequestedEventBodyModel.class),
+    STOP_APPROVED(StopApprovedEventBodyModel.class);
 
     Class<? extends EventBodyModel> bodyClass;
 

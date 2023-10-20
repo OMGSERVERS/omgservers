@@ -3,6 +3,8 @@ package com.omgservers.handler;
 import com.omgservers.dto.internal.SyncJobRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.dto.matchmaker.GetMatchmakerResponse;
+import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SyncVersionMatchmakerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
@@ -12,6 +14,8 @@ import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.factory.VersionMatchmakerModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +29,9 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final SystemModule systemModule;
+    final TenantModule tenantModule;
 
+    final VersionMatchmakerModelFactory versionMatchmakerModelFactory;
     final JobModelFactory jobModelFactory;
 
     @Override
@@ -40,11 +46,12 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(id)
                 .flatMap(matchmaker -> {
-                    log.info("Matchmaker was created, id={}, tenantId={}, stageId={}",
+                    log.info("Matchmaker was created, id={}, tenantId={}, versionId={}",
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
-                            matchmaker.getStageId());
-                    return syncMatchmakerJob(id);
+                            matchmaker.getVersionId());
+                    return syncVersionMatchmaker(matchmaker)
+                            .flatMap(stageMatchmakerWasCreated -> syncMatchmakerJob(id));
                 });
     }
 
@@ -52,6 +59,19 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetMatchmakerRequest(matchmakerId);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
+    }
+
+    Uni<Boolean> syncVersionMatchmaker(MatchmakerModel matchmaker) {
+        final var matchmakerId = matchmaker.getId();
+        final var tenantId = matchmaker.getTenantId();
+        final var versionId = matchmaker.getVersionId();
+
+        final var stageMatchmaker = versionMatchmakerModelFactory.create(tenantId,
+                versionId,
+                matchmakerId);
+        final var request = new SyncVersionMatchmakerRequest(stageMatchmaker);
+        return tenantModule.getVersionService().syncVersionMatchmaker(request)
+                .map(SyncVersionMatchmakerResponse::getCreated);
     }
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId) {

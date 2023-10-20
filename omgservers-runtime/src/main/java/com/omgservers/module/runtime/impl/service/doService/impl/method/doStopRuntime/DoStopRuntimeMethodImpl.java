@@ -4,7 +4,7 @@ import com.omgservers.dto.internal.SyncEventRequest;
 import com.omgservers.dto.internal.SyncEventResponse;
 import com.omgservers.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.event.body.StopRequestedEventBodyModel;
+import com.omgservers.model.event.body.StopApprovedEventBodyModel;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.EventModelFactory;
 import com.omgservers.operation.checkShard.CheckShardOperation;
@@ -37,7 +37,7 @@ class DoStopRuntimeMethodImpl implements DoStopRuntimeMethod {
 
     Uni<Boolean> syncEvent(final Long runtimeId,
                            final String reason) {
-        final var eventBody = new StopRequestedEventBodyModel(runtimeId, reason);
+        final var eventBody = new StopApprovedEventBodyModel(runtimeId, reason);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

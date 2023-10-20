@@ -1,7 +1,7 @@
 package com.omgservers.module.script.impl.operation.getLuaInstance;
 
 import com.omgservers.exception.ServerSideBadRequestException;
-import com.omgservers.module.script.impl.event.LuaEvent;
+import com.omgservers.module.script.impl.luaRequest.LuaRequest;
 import com.omgservers.module.script.impl.operation.createLuaGlobals.impl.LuaGlobals;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,17 +16,16 @@ import org.luaj.vm2.LuaValue;
 public class LuaInstance {
 
     final LuaGlobals luaGlobals;
-    final LuaTable luaContext;
 
-    public synchronized void callScript(final LuaValue luaState, final LuaEvent luaEvent) {
+    public synchronized LuaValue callScript(final LuaValue luaState, final LuaRequest luaRequest) {
         try {
             final var globals = luaGlobals.getGlobals();
-            luaContext.set("state", luaState);
-            luaContext.set("event", luaEvent);
-            globals.set("context", luaContext);
-            globals.loadfile("main.lua").call();
+//            luaContext.set("state", luaState);
+//            luaContext.set("event", luaRequest);
+//            globals.set("context", luaContext);
+            return globals.loadfile("main.lua").call();
         } catch (LuaError luaError) {
-            log.warn("Lua instance failed, reason={}, luaEvent={}", luaError.getMessage(), luaEvent);
+            log.warn("Lua instance failed, reason={}, luaRequest={}", luaError.getMessage(), luaRequest);
             throw new ServerSideBadRequestException("Lua error, " + luaError.getMessage(), luaError);
         }
     }

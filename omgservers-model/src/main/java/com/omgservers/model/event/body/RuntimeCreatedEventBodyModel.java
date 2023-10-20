@@ -17,12 +17,6 @@ public class RuntimeCreatedEventBodyModel extends EventBodyModel {
     @NotNull
     Long id;
 
-    @NotNull
-    Long matchmakerId;
-
-    @NotNull
-    Long matchId;
-
     @Override
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.RUNTIME_CREATED;

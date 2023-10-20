@@ -1,7 +1,6 @@
 package com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand;
 
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
 import com.omgservers.model.runtime.RuntimeConfigModel;
@@ -42,7 +41,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenCommand_whenUpsertRuntimeCommand_thenInserted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -52,7 +51,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenCommand_whenUpsertRuntimeCommandAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());

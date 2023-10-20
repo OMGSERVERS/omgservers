@@ -31,16 +31,16 @@ class UpdateRuntimeCommandStatusByIdsOperationTest extends Assertions {
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
-                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                new RuntimeConfigModel());
         assertTrue(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1));
     }
 
     @Test
     void givenRuntime_whenInsertRuntimeAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(),
-                RuntimeTypeEnum.SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         assertFalse(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime));

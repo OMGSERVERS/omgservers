@@ -5,7 +5,7 @@ import com.omgservers.dto.internal.SyncEventResponse;
 import com.omgservers.dto.runtime.DoKickClientRequest;
 import com.omgservers.dto.runtime.DoKickClientResponse;
 import com.omgservers.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.KickRequestedEventBodyModel;
+import com.omgservers.model.event.body.KickApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.module.system.SystemModule;
@@ -34,7 +34,7 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
     public Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var permission = RuntimeGrantTypeEnum.CLIENT;
+                    final var permission = RuntimeGrantTypeEnum.MATCH_CLIENT;
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();
@@ -47,7 +47,7 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                                     permission)
                             .flatMap(has -> {
                                 if (has) {
-                                    return syncEvent(runtimeId, userId, clientId);
+                                    return syncApprove(runtimeId, userId, clientId);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of permission, " +
                                                     "runtimeId=%s, client_id=%s, permission=%s",
@@ -59,10 +59,10 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                 .replaceWith(new DoKickClientResponse());
     }
 
-    Uni<Boolean> syncEvent(final Long runtimeId,
-                           final Long userId,
-                           final Long clientId) {
-        final var eventBody = new KickRequestedEventBodyModel(runtimeId, userId, clientId);
+    Uni<Boolean> syncApprove(final Long runtimeId,
+                             final Long userId,
+                             final Long clientId) {
+        final var eventBody = new KickApprovedEventBodyModel(runtimeId, userId, clientId);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)
