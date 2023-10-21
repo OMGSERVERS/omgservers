@@ -110,6 +110,22 @@ class CallScriptMethodImpl implements CallScriptMethod {
 
                     final var scriptEvents = new ArrayList<EventModel>();
                     for (final var luaRequest : luaRequests) {
+                        if (luaRequest.getInfoLogging()) {
+                            log.info("Call script, " +
+                                            "type={}, " +
+                                            "request={}, " +
+                                            "id={}, " +
+                                            "runtimeId={}, " +
+                                            "tenantId={}, " +
+                                            "versionId={}, ",
+                                    script.getType(),
+                                    luaRequest,
+                                    script.getId(),
+                                    script.getRuntimeId(),
+                                    script.getTenantId(),
+                                    script.getVersionId());
+                        }
+
                         final var returnValue = luaInstance.callScript(luaState, luaRequest);
                         if (returnValue != LuaValue.NIL) {
                             final var returnTable = returnValue.checktable();
@@ -117,6 +133,18 @@ class CallScriptMethodImpl implements CallScriptMethod {
                             final var callEvents = luaCommands.stream()
                                     .map(luaCommand -> mapLuaCommandOperation
                                             .mapLuaCommand(script, luaCommand))
+                                    .peek(event -> {
+                                        final var qualifier = event.getQualifier();
+                                        if (qualifier.getInfoLogging()) {
+                                            log.info("Script produced event, " +
+                                                            "qualifier={}, " +
+                                                            "id={}, " +
+                                                            "body={}",
+                                                    qualifier,
+                                                    event.getId(),
+                                                    event.getBody());
+                                        }
+                                    })
                                     .toList();
                             scriptEvents.addAll(callEvents);
                         }

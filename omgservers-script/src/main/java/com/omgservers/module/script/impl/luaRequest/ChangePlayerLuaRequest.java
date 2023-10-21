@@ -19,7 +19,7 @@ public class ChangePlayerLuaRequest extends LuaRequest {
                                   final Long playerId,
                                   final Long clientId,
                                   final LuaValue data) {
-        super("change_player");
+        super("change_player", false);
         this.userId = userId;
         this.playerId = playerId;
         this.clientId = clientId;

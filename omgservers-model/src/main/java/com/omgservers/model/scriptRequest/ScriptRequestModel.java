@@ -13,12 +13,6 @@ import lombok.NoArgsConstructor;
 @JsonDeserialize(using = ScriptRequestDeserializer.class)
 public class ScriptRequestModel {
 
-    public static void validate(ScriptRequestModel scriptEvent) {
-        if (scriptEvent == null) {
-            throw new IllegalArgumentException("scriptEvent is null");
-        }
-    }
-
     @NotNull
     ScriptRequestQualifierEnum qualifier;
 

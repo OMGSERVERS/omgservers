@@ -14,7 +14,7 @@ public class SignedUpLuaRequest extends LuaRequest {
     final Long clientId;
 
     public SignedUpLuaRequest(Long userId, Long playerId, Long clientId) {
-        super("signed_up");
+        super("signed_up", true);
         this.userId = userId;
         this.playerId = playerId;
         this.clientId = clientId;

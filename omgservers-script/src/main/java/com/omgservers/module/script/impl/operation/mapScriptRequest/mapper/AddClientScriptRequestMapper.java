@@ -3,8 +3,8 @@ package com.omgservers.module.script.impl.operation.mapScriptRequest.mapper;
 import com.omgservers.model.scriptRequest.ScriptRequestModel;
 import com.omgservers.model.scriptRequest.ScriptRequestQualifierEnum;
 import com.omgservers.model.scriptRequest.arguments.AddClientRequestArgumentsModel;
-import com.omgservers.module.script.impl.luaRequest.LuaRequest;
 import com.omgservers.module.script.impl.luaRequest.AddClientLuaRequest;
+import com.omgservers.module.script.impl.luaRequest.LuaRequest;
 import com.omgservers.module.script.impl.operation.mapScriptRequest.ScriptRequestMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -26,7 +26,6 @@ public class AddClientScriptRequestMapper implements ScriptRequestMapper {
         final var body = (AddClientRequestArgumentsModel) scriptRequest.getArguments();
         return AddClientLuaRequest.builder()
                 .userId(body.getUserId())
-                .playerId(body.getPlayerId())
                 .clientId(body.getClientId())
                 .build();
     }

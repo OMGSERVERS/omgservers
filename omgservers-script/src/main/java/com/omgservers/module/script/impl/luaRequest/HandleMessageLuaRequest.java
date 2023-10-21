@@ -19,7 +19,7 @@ public class HandleMessageLuaRequest extends LuaRequest {
                                    final Long playerId,
                                    final Long clientId,
                                    final LuaValue data) {
-        super("handle_message");
+        super("handle_message", false);
         this.userId = userId;
         this.playerId = playerId;
         this.clientId = clientId;

@@ -26,7 +26,6 @@ public class AddClientRuntimeCommandMapper implements RuntimeCommandMapper {
         final var runtimeCommandBody = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var scriptEventBody = AddClientRequestArgumentsModel.builder()
                 .userId(runtimeCommandBody.getUserId())
-                .playerId(runtimeCommandBody.getPlayerId())
                 .clientId(runtimeCommandBody.getClientId())
                 .build();
         return new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody);

@@ -4,6 +4,8 @@ import com.omgservers.dto.gateway.AssignClientRequest;
 import com.omgservers.dto.gateway.AssignClientResponse;
 import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.gateway.RespondMessageResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.tenant.FindStageVersionIdRequest;
 import com.omgservers.dto.tenant.FindStageVersionIdResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
@@ -22,15 +24,14 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
+import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
-import com.omgservers.module.script.ScriptModule;
-import com.omgservers.module.script.factory.ScriptModelFactory;
-import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;
@@ -53,16 +54,14 @@ import java.security.SecureRandom;
 class SignUpRequestedEventHandlerImpl implements EventHandler {
 
     final GatewayModule gatewayModule;
-    final SystemModule systemModule;
+    final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
-    final ScriptModule scriptModule;
     final UserModule userModule;
 
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
     final MessageModelFactory messageModelFactory;
-    final ScriptModelFactory scriptModelFactory;
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
-    final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
 
     @Override
@@ -98,7 +97,10 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                                         connectionId,
                                                         versionId,
                                                         versionRuntime.getRuntimeId())
-                                                        .flatMap(client -> assignClient(player, client)
+                                                        .call(client -> syncAddClientRuntimeCommand(
+                                                                versionRuntime.getRuntimeId(),
+                                                                client))
+                                                        .call(client -> assignClient(player, client)
                                                                 .invoke(voidItem -> {
                                                                     log.info("User signed up, " +
                                                                                     "userId={}, " +
@@ -178,6 +180,17 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);
+    }
+
+    Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,
+                                             final ClientModel client) {
+        final var clientId = client.getId();
+        final var userId = client.getUserId();
+        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, clientId);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+        final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
+        return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)
+                .map(SyncRuntimeCommandResponse::getCreated);
     }
 
     Uni<Void> assignClient(final PlayerModel player,

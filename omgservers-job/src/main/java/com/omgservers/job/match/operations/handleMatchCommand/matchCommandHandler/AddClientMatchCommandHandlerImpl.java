@@ -77,7 +77,6 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                             return syncRuntimeGrant(runtimeId, userId, clientId)
                                     .call(ignored -> syncAddClientRuntimeCommand(runtimeId,
                                             userId,
-                                            playerId,
                                             clientId))
                                     .call(ignored -> assignRuntime(runtimeId, client))
                                     .invoke(voidItem -> {
@@ -122,9 +121,8 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
 
     Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,
                                              final Long userId,
-                                             final Long playerId,
                                              final Long clientId) {
-        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, playerId, clientId);
+        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

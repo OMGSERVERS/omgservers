@@ -20,9 +20,6 @@ public class AddClientRequestArgumentsModel extends ScriptRequestArgumentsModel 
     Long userId;
 
     @NotNull
-    Long playerId;
-
-    @NotNull
     Long clientId;
 
     @Override

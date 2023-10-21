@@ -18,9 +18,6 @@ public class AddClientRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
     Long userId;
 
     @NotNull
-    Long playerId;
-
-    @NotNull
     Long clientId;
 
     @Override

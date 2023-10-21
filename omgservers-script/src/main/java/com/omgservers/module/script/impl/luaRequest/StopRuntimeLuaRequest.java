@@ -10,6 +10,6 @@ import lombok.ToString;
 public class StopRuntimeLuaRequest extends LuaRequest {
 
     public StopRuntimeLuaRequest() {
-        super("stop_runtime");
+        super("stop_runtime", true);
     }
 }

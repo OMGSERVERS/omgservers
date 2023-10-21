@@ -10,19 +10,15 @@ import lombok.ToString;
 public class AddClientLuaRequest extends LuaRequest {
 
     final Long userId;
-    final Long playerId;
     final Long clientId;
 
     public AddClientLuaRequest(final Long userId,
-                               final Long playerId,
                                final Long clientId) {
-        super("add_client");
+        super("add_client", true);
         this.userId = userId;
-        this.playerId = playerId;
         this.clientId = clientId;
 
         set("user_id", userId.toString());
-        set("player_id", playerId.toString());
         set("client_id", clientId.toString());
     }
 }
