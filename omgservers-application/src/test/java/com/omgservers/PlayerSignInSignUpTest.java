@@ -26,32 +26,30 @@ public class PlayerSignInSignUpTest extends Assertions {
 
     @Test
     void playerSignInSignUpTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""
-                local var state = context.state
-                local var event = context.event
+        final var version = bootstrapVersionOperation.bootstrapVersion("""                
                                 
-                if event.id == "signed_up" then
+                if request.id == "signed_up" then
                     context.respond({text="signed_up"})
                 end
                                 
-                if event.id == "signed_in" then
+                if request.id == "signed_in" then
                     context.respond({text="signed_in"})
                 end
-                
+                                
                 """);
 
-        Thread.sleep(5000);
+        Thread.sleep(10000);
 
         final var client = testClientFactory.create(uri);
         client.signUp(version);
+
+        final var welcome1 = client.consumeWelcomeMessage();
+        assertNotNull(welcome1);
 
         Thread.sleep(5000);
 
 //        final var serverMessage1 = client.consumeServerMessage();
 //        assertEquals("{text=signed_up}", serverMessage1.getMessage().toString());
-
-//        final var welcome1 = client.consumeWelcomeMessage();
-//        assertNotNull(welcome1);
 //
 //        client.reconnect();
 //        client.signIn(version);

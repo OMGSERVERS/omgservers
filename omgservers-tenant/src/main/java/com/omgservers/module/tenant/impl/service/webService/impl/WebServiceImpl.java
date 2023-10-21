@@ -26,8 +26,12 @@ import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
+import com.omgservers.dto.tenant.GetVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
+import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
+import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.dto.tenant.HasStagePermissionRequest;
@@ -155,6 +159,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(final GetVersionMatchmakerRequest request) {
+        return versionService.getVersionMatchmaker(request);
+    }
+
+    @Override
     public Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(final SyncVersionMatchmakerRequest request) {
         return versionService.syncVersionMatchmaker(request);
     }
@@ -172,6 +181,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(final DeleteVersionMatchmakerRequest request) {
         return versionService.deleteVersionMatchmaker(request);
+    }
+
+    @Override
+    public Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request) {
+        return versionService.getVersionRuntime(request);
     }
 
     @Override

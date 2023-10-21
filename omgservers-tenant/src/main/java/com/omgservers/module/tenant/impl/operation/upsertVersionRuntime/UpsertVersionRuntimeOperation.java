@@ -6,8 +6,8 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface UpsertVersionRuntimeOperation {
-    Uni<Boolean> upsertStageRuntime(ChangeContext<?> changeContext,
-                                    SqlConnection sqlConnection,
-                                    int shard,
-                                    VersionRuntimeModel stageRuntime);
+    Uni<Boolean> upsertVersionRuntime(ChangeContext<?> changeContext,
+                                      SqlConnection sqlConnection,
+                                      int shard,
+                                      VersionRuntimeModel stageRuntime);
 }

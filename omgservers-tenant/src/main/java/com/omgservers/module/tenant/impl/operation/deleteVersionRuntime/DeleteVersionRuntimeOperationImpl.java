@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.deleteVersionRuntime;
 
-import com.omgservers.model.event.body.StageRuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
@@ -31,10 +31,10 @@ class DeleteVersionRuntimeOperationImpl implements DeleteVersionRuntimeOperation
                 """
                         update $schema.tab_tenant_version_runtime
                         set deleted = true
-                        where tenant_id = $1 and id = $3 and deleted = false
+                        where tenant_id = $1 and id = $2 and deleted = false
                         """,
                 Arrays.asList(tenantId, id),
-                () -> new StageRuntimeDeletedEventBodyModel(tenantId, id),
+                () -> new VersionRuntimeDeletedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version runtime was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))
         );

@@ -6,8 +6,8 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface UpsertVersionMatchmakerOperation {
-    Uni<Boolean> upsertStageMatchmaker(ChangeContext<?> changeContext,
-                                       SqlConnection sqlConnection,
-                                       int shard,
-                                       VersionMatchmakerModel stageMatchmaker);
+    Uni<Boolean> upsertVersionMatchmaker(ChangeContext<?> changeContext,
+                                         SqlConnection sqlConnection,
+                                         int shard,
+                                         VersionMatchmakerModel stageMatchmaker);
 }

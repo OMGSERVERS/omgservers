@@ -18,8 +18,12 @@ import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
+import com.omgservers.dto.tenant.GetVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
+import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
+import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
@@ -49,6 +53,8 @@ public interface VersionService {
 
     Uni<GetVersionConfigResponse> getVersionConfig(@Valid GetVersionConfigRequest request);
 
+    Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(@Valid GetVersionMatchmakerRequest request);
+
     Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(@Valid SyncVersionMatchmakerRequest request);
 
     Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(@Valid FindVersionMatchmakerRequest request);
@@ -56,6 +62,8 @@ public interface VersionService {
     Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(@Valid ViewVersionMatchmakersRequest request);
 
     Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(@Valid DeleteVersionMatchmakerRequest request);
+
+    Uni<GetVersionRuntimeResponse> getVersionRuntime(@Valid GetVersionRuntimeRequest request);
 
     Uni<SyncVersionRuntimeResponse> syncVersionRuntime(@Valid SyncVersionRuntimeRequest request);
 

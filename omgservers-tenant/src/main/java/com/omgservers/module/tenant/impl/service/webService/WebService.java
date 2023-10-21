@@ -10,6 +10,8 @@ import com.omgservers.dto.tenant.DeleteVersionRequest;
 import com.omgservers.dto.tenant.DeleteVersionResponse;
 import com.omgservers.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.dto.tenant.DeleteVersionRuntimeResponse;
+import com.omgservers.dto.tenant.FindStageVersionIdRequest;
+import com.omgservers.dto.tenant.FindStageVersionIdResponse;
 import com.omgservers.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.FindVersionRuntimeRequest;
@@ -18,16 +20,18 @@ import com.omgservers.dto.tenant.GetProjectRequest;
 import com.omgservers.dto.tenant.GetProjectResponse;
 import com.omgservers.dto.tenant.GetStageRequest;
 import com.omgservers.dto.tenant.GetStageResponse;
-import com.omgservers.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.dto.tenant.FindStageVersionIdResponse;
 import com.omgservers.dto.tenant.GetTenantRequest;
 import com.omgservers.dto.tenant.GetTenantResponse;
 import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
+import com.omgservers.dto.tenant.GetVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
+import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
+import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.dto.tenant.HasStagePermissionRequest;
@@ -102,6 +106,8 @@ public interface WebService {
 
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 
+    Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(GetVersionMatchmakerRequest request);
+
     Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(SyncVersionMatchmakerRequest request);
 
     Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(FindVersionMatchmakerRequest request);
@@ -109,6 +115,8 @@ public interface WebService {
     Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(ViewVersionMatchmakersRequest request);
 
     Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(DeleteVersionMatchmakerRequest request);
+
+    Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request);
 
     Uni<SyncVersionRuntimeResponse> syncVersionRuntime(SyncVersionRuntimeRequest request);
 

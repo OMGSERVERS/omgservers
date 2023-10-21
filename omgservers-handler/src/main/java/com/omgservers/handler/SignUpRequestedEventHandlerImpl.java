@@ -168,13 +168,13 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId,
                                   final Long versionId,
-                                  final Long defaultVersionId) {
+                                  final Long defaultRuntimeId) {
         final var client = clientModelFactory.create(userId,
                 playerId,
                 server,
                 connectionId,
                 versionId,
-                defaultVersionId);
+                defaultRuntimeId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)
                 .replaceWith(client);

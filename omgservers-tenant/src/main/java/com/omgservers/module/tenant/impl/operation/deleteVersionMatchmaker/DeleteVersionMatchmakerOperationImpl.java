@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.deleteVersionMatchmaker;
 
-import com.omgservers.model.event.body.StageMatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.VersionMatchmakerDeletedEventBodyModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
@@ -31,10 +31,10 @@ class DeleteVersionMatchmakerOperationImpl implements DeleteVersionMatchmakerOpe
                 """
                         update $schema.tab_tenant_version_matchmaker
                         set deleted = true
-                        where tenant_id = $1 and id = $3 and deleted = false
+                        where tenant_id = $1 and id = $2 and deleted = false
                         """,
                 Arrays.asList(tenantId, id),
-                () -> new StageMatchmakerDeletedEventBodyModel(tenantId, id),
+                () -> new VersionMatchmakerDeletedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version matchmaker was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))
         );

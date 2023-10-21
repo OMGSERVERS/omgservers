@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.upsertVersionMatchmaker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.StageMatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.VersionMatchmakerCreatedEventBodyModel;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
@@ -25,10 +25,10 @@ class UpsertVersionMatchmakerOperationImpl implements UpsertVersionMatchmakerOpe
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> upsertStageMatchmaker(final ChangeContext<?> changeContext,
-                                              final SqlConnection sqlConnection,
-                                              final int shard,
-                                              final VersionMatchmakerModel stageMatchmaker) {
+    public Uni<Boolean> upsertVersionMatchmaker(final ChangeContext<?> changeContext,
+                                                final SqlConnection sqlConnection,
+                                                final int shard,
+                                                final VersionMatchmakerModel stageMatchmaker) {
         final var tenantId = stageMatchmaker.getTenantId();
         final var id = stageMatchmaker.getId();
 
@@ -50,7 +50,7 @@ class UpsertVersionMatchmakerOperationImpl implements UpsertVersionMatchmakerOpe
                         stageMatchmaker.getMatchmakerId(),
                         stageMatchmaker.getDeleted()
                 ),
-                () -> new StageMatchmakerCreatedEventBodyModel(tenantId, id),
+                () -> new VersionMatchmakerCreatedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version matchmaker was created, " +
                         "tenantId=%d, id=%d", tenantId, id))
         );

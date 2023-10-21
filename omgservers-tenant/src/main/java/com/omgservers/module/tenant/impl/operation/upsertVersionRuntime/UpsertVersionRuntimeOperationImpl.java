@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.upsertVersionRuntime;
 
-import com.omgservers.model.event.body.StageMatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.system.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
@@ -23,10 +23,10 @@ class UpsertVersionRuntimeOperationImpl implements UpsertVersionRuntimeOperation
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> upsertStageRuntime(final ChangeContext<?> changeContext,
-                                           final SqlConnection sqlConnection,
-                                           final int shard,
-                                           final VersionRuntimeModel stageRuntime) {
+    public Uni<Boolean> upsertVersionRuntime(final ChangeContext<?> changeContext,
+                                             final SqlConnection sqlConnection,
+                                             final int shard,
+                                             final VersionRuntimeModel stageRuntime) {
         final var tenantId = stageRuntime.getTenantId();
         final var id = stageRuntime.getId();
 
@@ -34,7 +34,7 @@ class UpsertVersionRuntimeOperationImpl implements UpsertVersionRuntimeOperation
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version_runtime(
-                            id, tenant_id, stage_id, created, modified, runtime_id, deleted)
+                            id, tenant_id, version_id, created, modified, runtime_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
@@ -48,7 +48,7 @@ class UpsertVersionRuntimeOperationImpl implements UpsertVersionRuntimeOperation
                         stageRuntime.getRuntimeId(),
                         stageRuntime.getDeleted()
                 ),
-                () -> new StageMatchmakerCreatedEventBodyModel(tenantId, id),
+                () -> new VersionRuntimeCreatedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version runtime was created, " +
                         "tenantId=%d, id=%d", tenantId, id))
         );

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class StageMatchmakerDeletedEventBodyModel extends EventBodyModel {
+public class VersionRuntimeDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long tenantId;
@@ -22,7 +22,7 @@ public class StageMatchmakerDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STAGE_MATCHMAKER_DELETED;
+        return EventQualifierEnum.VERSION_RUNTIME_DELETED;
     }
 
     @Override

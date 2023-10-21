@@ -18,8 +18,12 @@ import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
+import com.omgservers.dto.tenant.GetVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
+import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
+import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
@@ -45,6 +49,8 @@ import com.omgservers.module.tenant.impl.service.versionService.impl.method.find
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersion.GetVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionBytecode.GetVersionBytecodeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionConfig.GetVersionConfigMethod;
+import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionMatchmaker.GetVersionMatchmakerMethod;
+import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionRuntime.GetVersionRuntimeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.selectVersionRuntime.SelectVersionRuntimeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.syncVersion.SyncVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.syncVersionMatchmaker.SyncVersionMatchmakerMethod;
@@ -76,6 +82,8 @@ public class VersionServiceImpl implements VersionService {
     final FindVersionRuntimeMethod findVersionRuntimeMethod;
     final GetVersionBytecodeMethod getVersionBytecodeMethod;
     final FindStageVersionIdMethod findStageVersionIdMethod;
+    final GetVersionMatchmakerMethod getVersionMatchmaker;
+    final GetVersionRuntimeMethod getVersionRuntimeMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final BuildVersionMethod buildVersionMethod;
@@ -132,6 +140,14 @@ public class VersionServiceImpl implements VersionService {
     }
 
     @Override
+    public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(@Valid final GetVersionMatchmakerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getVersionMatchmaker,
+                getVersionMatchmaker::getVersionMatchmaker);
+    }
+
+    @Override
     public Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(@Valid final SyncVersionMatchmakerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
@@ -163,6 +179,14 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteVersionMatchmaker,
                 deleteVersionMatchmakerMethod::deleteVersionMatchmaker);
+    }
+
+    @Override
+    public Uni<GetVersionRuntimeResponse> getVersionRuntime(@Valid final GetVersionRuntimeRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getVersionRuntime,
+                getVersionRuntimeMethod::getVersionRuntime);
     }
 
     @Override

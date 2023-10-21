@@ -31,7 +31,7 @@ class SyncVersionRuntimeMethodImpl implements SyncVersionRuntimeMethod {
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) ->
-                                        upsertVersionRuntimeOperation.upsertStageRuntime(changeContext,
+                                        upsertVersionRuntimeOperation.upsertVersionRuntime(changeContext,
                                                 sqlConnection,
                                                 shardModel.shard(),
                                                 versionRuntime

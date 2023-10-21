@@ -5,6 +5,8 @@ import com.omgservers.dto.runtime.GetRuntimeRequest;
 import com.omgservers.dto.runtime.GetRuntimeResponse;
 import com.omgservers.dto.script.SyncScriptRequest;
 import com.omgservers.dto.script.SyncScriptResponse;
+import com.omgservers.dto.tenant.SyncVersionRuntimeRequest;
+import com.omgservers.dto.tenant.SyncVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
@@ -19,6 +21,8 @@ import com.omgservers.module.script.factory.ScriptModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.tenant.TenantModule;
+import com.omgservers.module.tenant.factory.VersionRuntimeModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -33,7 +37,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final SystemModule systemModule;
     final ScriptModule scriptModule;
+    final TenantModule tenantModule;
 
+    final VersionRuntimeModelFactory versionRuntimeModelFactory;
     final ScriptModelFactory scriptModelFactory;
     final JobModelFactory jobModelFactory;
 
@@ -68,8 +74,19 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncByType(final RuntimeModel runtime) {
         return switch (runtime.getType()) {
-            case EMBEDDED_GLOBAL_SCRIPT, EMBEDDED_MATCH_SCRIPT -> syncScript(runtime);
+            case EMBEDDED_GLOBAL_SCRIPT -> syncVersionRuntime(runtime)
+                    .flatMap(wasVersionRuntimeCreated -> syncScript(runtime));
+            case EMBEDDED_MATCH_SCRIPT -> syncScript(runtime);
         };
+    }
+
+    Uni<Boolean> syncVersionRuntime(final RuntimeModel runtime) {
+        final var versionRuntime = versionRuntimeModelFactory.create(runtime.getTenantId(),
+                runtime.getVersionId(),
+                runtime.getId());
+        final var request = new SyncVersionRuntimeRequest(versionRuntime);
+        return tenantModule.getVersionService().syncVersionRuntime(request)
+                .map(SyncVersionRuntimeResponse::getCreated);
     }
 
     Uni<Boolean> syncScript(final RuntimeModel runtime) {

@@ -31,7 +31,7 @@ class SelectVersionRuntimeOperationImpl implements SelectVersionRuntimeOperation
                 """
                         select id, tenant_id, version_id, created, modified, runtime_id, deleted
                         from $schema.tab_tenant_version_runtime
-                        where tenant_id = $1 and id = $3
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
                 Arrays.asList(tenantId, id),

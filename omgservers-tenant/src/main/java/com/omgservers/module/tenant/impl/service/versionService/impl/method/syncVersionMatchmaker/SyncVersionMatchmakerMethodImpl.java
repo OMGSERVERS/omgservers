@@ -31,7 +31,7 @@ class SyncVersionMatchmakerMethodImpl implements SyncVersionMatchmakerMethod {
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) ->
-                                        upsertVersionMatchmakerOperation.upsertStageMatchmaker(changeContext,
+                                        upsertVersionMatchmakerOperation.upsertVersionMatchmaker(changeContext,
                                                 sqlConnection,
                                                 shardModel.shard(),
                                                 versionMatchmaker

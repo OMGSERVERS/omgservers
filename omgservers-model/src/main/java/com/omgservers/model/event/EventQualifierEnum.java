@@ -54,12 +54,12 @@ import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
-import com.omgservers.model.event.body.StageMatchmakerCreatedEventBodyModel;
-import com.omgservers.model.event.body.StageMatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.StageMatchmakerUpdatedEventBodyModel;
-import com.omgservers.model.event.body.StageRuntimeCreatedEventBodyModel;
-import com.omgservers.model.event.body.StageRuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.StageRuntimeUpdatedEventBodyModel;
+import com.omgservers.model.event.body.VersionMatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.VersionMatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.VersionMatchmakerUpdatedEventBodyModel;
+import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.VersionRuntimeUpdatedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import com.omgservers.model.event.body.StopApprovedEventBodyModel;
 import com.omgservers.model.event.body.StopRequestedEventBodyModel;
@@ -95,12 +95,12 @@ public enum EventQualifierEnum {
     STAGE_CREATED(StageCreatedEventBodyModel.class),
     STAGE_UPDATED(StageUpdatedEventBodyModel.class),
     STAGE_DELETED(StageDeletedEventBodyModel.class),
-    STAGE_MATCHMAKER_CREATED(StageMatchmakerCreatedEventBodyModel.class),
-    STAGE_MATCHMAKER_UPDATED(StageMatchmakerUpdatedEventBodyModel.class),
-    STAGE_MATCHMAKER_DELETED(StageMatchmakerDeletedEventBodyModel.class),
-    STAGE_RUNTIME_CREATED(StageRuntimeCreatedEventBodyModel.class),
-    STAGE_RUNTIME_UPDATED(StageRuntimeUpdatedEventBodyModel.class),
-    STAGE_RUNTIME_DELETED(StageRuntimeDeletedEventBodyModel.class),
+    VERSION_MATCHMAKER_CREATED(VersionMatchmakerCreatedEventBodyModel.class),
+    VERSION_MATCHMAKER_UPDATED(VersionMatchmakerUpdatedEventBodyModel.class),
+    VERSION_MATCHMAKER_DELETED(VersionMatchmakerDeletedEventBodyModel.class),
+    VERSION_RUNTIME_CREATED(VersionRuntimeCreatedEventBodyModel.class),
+    VERSION_RUNTIME_UPDATED(VersionRuntimeUpdatedEventBodyModel.class),
+    VERSION_RUNTIME_DELETED(VersionRuntimeDeletedEventBodyModel.class),
     VERSION_CREATED(VersionCreatedEventBodyModel.class),
     VERSION_UPDATED(VersionUpdatedEventBodyModel.class),
     VERSION_DELETED(VersionDeletedEventBodyModel.class),

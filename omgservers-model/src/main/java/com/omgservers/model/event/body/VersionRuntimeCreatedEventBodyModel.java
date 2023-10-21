@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class StageRuntimeDeletedEventBodyModel extends EventBodyModel {
+public class VersionRuntimeCreatedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long tenantId;
@@ -22,7 +22,7 @@ public class StageRuntimeDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STAGE_RUNTIME_DELETED;
+        return EventQualifierEnum.VERSION_RUNTIME_CREATED;
     }
 
     @Override

@@ -26,8 +26,12 @@ import com.omgservers.dto.tenant.GetVersionBytecodeRequest;
 import com.omgservers.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.dto.tenant.GetVersionConfigResponse;
+import com.omgservers.dto.tenant.GetVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
+import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
+import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.dto.tenant.HasStagePermissionRequest;
@@ -146,6 +150,10 @@ public interface TenantApi {
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 
     @PUT
+    @Path("/get-version-matchmaker")
+    Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(GetVersionMatchmakerRequest request);
+
+    @PUT
     @Path("/sync-version-matchmaker")
     Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(SyncVersionMatchmakerRequest request);
 
@@ -160,6 +168,10 @@ public interface TenantApi {
     @PUT
     @Path("/delete-version-matchmaker")
     Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(DeleteVersionMatchmakerRequest request);
+
+    @PUT
+    @Path("/get-version-runtime")
+    Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request);
 
     @PUT
     @Path("/sync-version-runtime")

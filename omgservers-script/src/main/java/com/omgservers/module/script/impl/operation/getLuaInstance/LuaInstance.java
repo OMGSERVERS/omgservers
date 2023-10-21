@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
 @Data
@@ -20,9 +19,8 @@ public class LuaInstance {
     public synchronized LuaValue callScript(final LuaValue luaState, final LuaRequest luaRequest) {
         try {
             final var globals = luaGlobals.getGlobals();
-//            luaContext.set("state", luaState);
-//            luaContext.set("event", luaRequest);
-//            globals.set("context", luaContext);
+            globals.set("request", luaRequest);
+            globals.set("stage", luaState);
             return globals.loadfile("main.lua").call();
         } catch (LuaError luaError) {
             log.warn("Lua instance failed, reason={}, luaRequest={}", luaError.getMessage(), luaRequest);
