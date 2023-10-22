@@ -38,6 +38,8 @@ import com.omgservers.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
@@ -111,6 +113,8 @@ public interface WebService {
     Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(SyncVersionMatchmakerRequest request);
 
     Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(FindVersionMatchmakerRequest request);
+
+    Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(SelectVersionMatchmakerRequest request);
 
     Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(ViewVersionMatchmakersRequest request);
 

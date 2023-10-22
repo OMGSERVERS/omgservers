@@ -38,6 +38,8 @@ import com.omgservers.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
@@ -216,6 +218,12 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(final FindVersionMatchmakerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionMatchmaker);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(final SelectVersionMatchmakerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectVersionMatchmaker);
     }
 
     @Override

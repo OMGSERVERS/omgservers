@@ -20,7 +20,7 @@ public class LuaInstance {
         try {
             final var globals = luaGlobals.getGlobals();
             globals.set("request", luaRequest);
-            globals.set("stage", luaState);
+            globals.set("state", luaState);
             return globals.loadfile("main.lua").call();
         } catch (LuaError luaError) {
             log.warn("Lua instance failed, reason={}, luaRequest={}", luaError.getMessage(), luaRequest);

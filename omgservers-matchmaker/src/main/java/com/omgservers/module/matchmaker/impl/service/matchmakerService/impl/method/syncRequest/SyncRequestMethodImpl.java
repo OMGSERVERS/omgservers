@@ -2,8 +2,6 @@ package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.met
 
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.model.request.RequestModel;
-import com.omgservers.model.shard.ShardModel;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
@@ -27,13 +25,10 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
         final var requestModel = request.getRequest();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, requestModel))
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                                (context, sqlConnection) -> upsertRequestOperation
+                                        .upsertRequest(context, sqlConnection, shardModel.shard(), requestModel))
+                        .map(ChangeContext::getResult))
                 .map(SyncRequestResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, RequestModel request) {
-        return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                        upsertRequestOperation.upsertRequest(context, sqlConnection, shardModel.shard(), request))
-                .map(ChangeContext::getResult);
     }
 }

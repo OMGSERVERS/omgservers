@@ -1,16 +1,17 @@
 package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncRequestRequest;
-import com.omgservers.dto.tenant.GetStageRequest;
-import com.omgservers.dto.tenant.GetStageResponse;
+import com.omgservers.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.dto.user.GetClientRequest;
+import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.dto.user.GetPlayerAttributesResponse;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
-import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
@@ -51,39 +52,58 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var mode = body.getMode();
 
-        return getStage(tenantId, stageId)
-                .flatMap(stage -> {
-                    final var matchmakerId = stage.getMatchmakerId();
-
+        return getClient(userId, clientId)
+                .flatMap(client -> {
+                    final var matchmakerId = client.getDefaultMatchmakerId();
                     log.info("Matchmaker was requested, " +
-                                    "matchmakerId={}, clientId={}, mode={}, userId={}, tenantId={}, stageId={}",
-                            matchmakerId, clientId, mode, userId, tenantId, stageId);
+                                    "mode={}, " +
+                                    "matchmakerId={}, " +
+                                    "userId={}, " +
+                                    "clientId={}, " +
+                                    "tenantId={}, " +
+                                    "stageId={}",
+                            mode,
+                            matchmakerId,
+                            userId,
+                            clientId,
+                            tenantId,
+                            stageId);
 
                     return getPlayerAttributes(userId, playerId)
-                            .flatMap(attributes -> {
-                                final var requestConfig = new RequestConfigModel(attributes);
-                                final var requestModel = requestModelFactory.create(
-                                        matchmakerId,
-                                        userId,
-                                        clientId,
-                                        mode,
-                                        requestConfig);
-                                final var request = new SyncRequestRequest(requestModel);
-                                return matchmakerModule.getMatchmakerService().syncRequest(request);
-                            });
-                })
-                .replaceWith(true);
+                            .flatMap(attributes -> syncMatchmakerRequest(matchmakerId,
+                                    userId,
+                                    clientId,
+                                    mode,
+                                    attributes));
+                });
     }
 
-    Uni<StageModel> getStage(Long tenantId, Long stageId) {
-        final var request = new GetStageRequest(tenantId, stageId);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
+    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        return userModule.getClientService().getClient(getClientServiceRequest)
+                .map(GetClientResponse::getClient);
     }
 
     Uni<PlayerAttributesModel> getPlayerAttributes(Long userId, Long playerId) {
         final var request = new GetPlayerAttributesRequest(userId, playerId);
         return userModule.getPlayerService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesResponse::getAttributes);
+    }
+
+    Uni<Boolean> syncMatchmakerRequest(final Long matchmakerId,
+                                       final Long userId,
+                                       final Long clientId,
+                                       final String mode,
+                                       final PlayerAttributesModel attributes) {
+        final var requestConfig = new RequestConfigModel(attributes);
+        final var requestModel = requestModelFactory.create(
+                matchmakerId,
+                userId,
+                clientId,
+                mode,
+                requestConfig);
+        final var request = new SyncRequestRequest(requestModel);
+        return matchmakerModule.getMatchmakerService().syncRequest(request)
+                .map(SyncRequestResponse::getCreated);
     }
 }

@@ -26,6 +26,7 @@ public class ClientModelMapper {
         client.setServer(URI.create(row.getString("server")));
         client.setConnectionId(row.getLong("connection_id"));
         client.setVersionId(row.getLong("version_id"));
+        client.setDefaultMatchmakerId(row.getLong("default_matchmaker_id"));
         client.setDefaultRuntimeId(row.getLong("default_runtime_id"));
         return client;
     }

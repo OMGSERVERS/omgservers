@@ -24,6 +24,8 @@ import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
 import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
 import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
@@ -51,6 +53,7 @@ import com.omgservers.module.tenant.impl.service.versionService.impl.method.getV
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionConfig.GetVersionConfigMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionMatchmaker.GetVersionMatchmakerMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionRuntime.GetVersionRuntimeMethod;
+import com.omgservers.module.tenant.impl.service.versionService.impl.method.selectVersionMatchmaker.SelectVersionMatchmakerMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.selectVersionRuntime.SelectVersionRuntimeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.syncVersion.SyncVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.syncVersionMatchmaker.SyncVersionMatchmakerMethod;
@@ -71,6 +74,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VersionServiceImpl implements VersionService {
 
+    final SelectVersionMatchmakerMethod selectVersionMatchmakerMethod;
     final DeleteVersionMatchmakerMethod deleteVersionMatchmakerMethod;
     final ViewVersionMatchmakersMethod viewVersionMatchmakersMethod;
     final SyncVersionMatchmakerMethod syncVersionMatchmakerMethod;
@@ -161,6 +165,12 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findVersionMatchmaker,
                 findVersionMatchmakerMethod::findVersionMatchmaker);
+    }
+
+    @Override
+    public Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(
+            @Valid final SelectVersionMatchmakerRequest request) {
+        return selectVersionMatchmakerMethod.selectVersionMatchmaker(request);
     }
 
     @Override

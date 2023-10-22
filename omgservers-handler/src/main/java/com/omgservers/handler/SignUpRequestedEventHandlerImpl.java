@@ -10,6 +10,8 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.tenant.FindStageVersionIdRequest;
 import com.omgservers.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.ValidateStageSecretRequest;
@@ -30,6 +32,7 @@ import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.gateway.factory.MessageModelFactory;
@@ -95,37 +98,43 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                             .flatMap(player -> {
                                 final var playerId = player.getId();
                                 return findVersionId(tenantId, stageId)
-                                        .flatMap(versionId -> selectVersionRuntime(tenantId, versionId)
-                                                .flatMap(versionRuntime -> {
-                                                            final var runtimeId = versionRuntime.getRuntimeId();
-                                                            return createClient(userId,
-                                                                    playerId,
-                                                                    server,
-                                                                    connectionId,
-                                                                    versionId,
-                                                                    runtimeId)
-                                                                    .call(client -> syncRuntimeGrantForClient(
-                                                                            runtimeId,
-                                                                            client))
-                                                                    .call(client -> syncSignUpRuntimeCommand(
-                                                                            runtimeId,
-                                                                            client))
-                                                                    .call(client -> assignClient(player, client)
-                                                                            .invoke(voidItem -> {
-                                                                                log.info("User signed up, " +
-                                                                                                "userId={}, " +
-                                                                                                "clientId={}, " +
-                                                                                                "tenantId={}, " +
-                                                                                                "stageId={}, " +
-                                                                                                "versionId={}",
-                                                                                        userId,
-                                                                                        client.getId(),
-                                                                                        tenantId,
-                                                                                        stageId,
-                                                                                        client.getVersionId());
-                                                                            })
-                                                                    );
-                                                        }
+                                        .flatMap(versionId -> selectVersionMatchmaker(tenantId, versionId)
+                                                .flatMap(versionMatchmaker -> selectVersionRuntime(tenantId, versionId)
+                                                        .flatMap(versionRuntime -> {
+                                                                    final var matchmakerId = versionMatchmaker
+                                                                            .getMatchmakerId();
+                                                                    final var runtimeId = versionRuntime
+                                                                            .getRuntimeId();
+                                                                    return createClient(userId,
+                                                                            playerId,
+                                                                            server,
+                                                                            connectionId,
+                                                                            versionId,
+                                                                            matchmakerId,
+                                                                            runtimeId)
+                                                                            .call(client -> syncRuntimeGrantForClient(
+                                                                                    runtimeId,
+                                                                                    client))
+                                                                            .call(client -> syncSignUpRuntimeCommand(
+                                                                                    runtimeId,
+                                                                                    client))
+                                                                            .call(client -> assignClient(player, client)
+                                                                                    .invoke(voidItem -> {
+                                                                                        log.info("User signed up, " +
+                                                                                                        "userId={}, " +
+                                                                                                        "clientId={}, " +
+                                                                                                        "tenantId={}, " +
+                                                                                                        "stageId={}, " +
+                                                                                                        "versionId={}",
+                                                                                                userId,
+                                                                                                client.getId(),
+                                                                                                tenantId,
+                                                                                                stageId,
+                                                                                                client.getVersionId());
+                                                                                    })
+                                                                            );
+                                                                }
+                                                        )
                                                 )
                                         );
                             });
@@ -168,6 +177,14 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                 .map(FindStageVersionIdResponse::getVersionId);
     }
 
+    Uni<VersionMatchmakerModel> selectVersionMatchmaker(final Long tenantId, final Long versionId) {
+        final var request = new SelectVersionMatchmakerRequest(tenantId,
+                versionId,
+                SelectVersionMatchmakerRequest.Strategy.RANDOM);
+        return tenantModule.getVersionService().selectVersionMatchmaker(request)
+                .map(SelectVersionMatchmakerResponse::getVersionMatchmaker);
+    }
+
     Uni<VersionRuntimeModel> selectVersionRuntime(final Long tenantId, final Long versionId) {
         final var request = new SelectVersionRuntimeRequest(tenantId,
                 versionId,
@@ -181,12 +198,14 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
                                   final URI server,
                                   final Long connectionId,
                                   final Long versionId,
+                                  final Long defaultMatchmakerId,
                                   final Long defaultRuntimeId) {
         final var client = clientModelFactory.create(userId,
                 playerId,
                 server,
                 connectionId,
                 versionId,
+                defaultMatchmakerId,
                 defaultRuntimeId);
         final var request = new SyncClientRequest(client);
         return userModule.getClientService().syncClient(request)

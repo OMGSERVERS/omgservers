@@ -38,6 +38,7 @@ create table if not exists tab_user_client (
     server text not null,
     connection_id bigint not null,
     version_id bigint not null,
+    default_matchmaker_id bigint not null,
     default_runtime_id bigint not null,
     unique(connection_id)
 );

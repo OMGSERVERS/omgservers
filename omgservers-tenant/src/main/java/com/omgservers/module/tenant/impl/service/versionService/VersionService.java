@@ -24,6 +24,8 @@ import com.omgservers.dto.tenant.GetVersionRequest;
 import com.omgservers.dto.tenant.GetVersionResponse;
 import com.omgservers.dto.tenant.GetVersionRuntimeRequest;
 import com.omgservers.dto.tenant.GetVersionRuntimeResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncVersionMatchmakerRequest;
@@ -58,6 +60,8 @@ public interface VersionService {
     Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(@Valid SyncVersionMatchmakerRequest request);
 
     Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(@Valid FindVersionMatchmakerRequest request);
+
+    Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(@Valid SelectVersionMatchmakerRequest request);
 
     Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(@Valid ViewVersionMatchmakersRequest request);
 

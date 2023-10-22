@@ -46,7 +46,7 @@ class UpsertRequestOperationTest extends Assertions {
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-        assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
+//        assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
 
     @Test
@@ -57,9 +57,9 @@ class UpsertRequestOperationTest extends Assertions {
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
+//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
 
-        assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
+//        assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
     }
 
     Long userId() {

@@ -1,7 +1,6 @@
 package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.player.PlayerAttributeModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
@@ -52,8 +51,9 @@ class DeleteRequestOperationTest extends Assertions {
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var requestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
-        final var request = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
-        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
+        final var request =
+                requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
+//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
 
         final var changeContext = deleteRequestOperation.deleteRequest(shard, matchmaker.getId(), request.getId());
         assertTrue(changeContext.getResult());

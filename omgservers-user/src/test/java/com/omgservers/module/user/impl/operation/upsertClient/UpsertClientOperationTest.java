@@ -58,7 +58,7 @@ class UpsertClientOperationTest extends Assertions {
 
         final var client =
                 clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultRuntimeId());
+                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
     }
 
@@ -72,7 +72,7 @@ class UpsertClientOperationTest extends Assertions {
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client =
                 clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultRuntimeId());
+                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
         insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
 
         assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
@@ -84,7 +84,7 @@ class UpsertClientOperationTest extends Assertions {
         final var userId = generateIdOperation.generateId();
         final var client =
                 clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultRuntimeId());
+                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
     }
@@ -106,6 +106,10 @@ class UpsertClientOperationTest extends Assertions {
     }
 
     long versionId() {
+        return generateIdOperation.generateId();
+    }
+
+    long defaultMatchmakerId() {
         return generateIdOperation.generateId();
     }
 

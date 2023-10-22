@@ -45,5 +45,8 @@ public class ClientModel {
     Long versionId;
 
     @NotNull
+    Long defaultMatchmakerId;
+
+    @NotNull
     Long defaultRuntimeId;
 }

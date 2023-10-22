@@ -117,7 +117,7 @@ class CallScriptMethodImpl implements CallScriptMethod {
                                             "id={}, " +
                                             "runtimeId={}, " +
                                             "tenantId={}, " +
-                                            "versionId={}, ",
+                                            "versionId={}",
                                     script.getType(),
                                     luaRequest,
                                     script.getId(),

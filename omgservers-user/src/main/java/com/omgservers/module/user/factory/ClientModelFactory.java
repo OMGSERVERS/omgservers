@@ -22,9 +22,10 @@ public class ClientModelFactory {
                               final URI server,
                               final Long connectionId,
                               final Long versionId,
+                              final Long defaultMatchmakerId,
                               final Long defaultRuntimeId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, server, connectionId, versionId, defaultRuntimeId);
+        return create(id, userId, playerId, server, connectionId, versionId, defaultMatchmakerId, defaultRuntimeId);
     }
 
     public ClientModel create(final Long id,
@@ -33,6 +34,7 @@ public class ClientModelFactory {
                               final URI server,
                               final Long connectionId,
                               final Long versionId,
+                              final Long defaultMatchmakerId,
                               final Long defaultRuntimeId) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -45,6 +47,7 @@ public class ClientModelFactory {
         client.setServer(server);
         client.setConnectionId(connectionId);
         client.setVersionId(versionId);
+        client.setDefaultMatchmakerId(defaultMatchmakerId);
         client.setDefaultRuntimeId(defaultRuntimeId);
 
         return client;

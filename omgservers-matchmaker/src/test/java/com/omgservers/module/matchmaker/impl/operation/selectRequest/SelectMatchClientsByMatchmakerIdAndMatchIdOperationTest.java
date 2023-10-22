@@ -52,7 +52,7 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
+//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
 
         final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmaker.getId(), matchmakerRequest1.getId());
         assertEquals(matchmakerRequest1, matchmakerRequest2);

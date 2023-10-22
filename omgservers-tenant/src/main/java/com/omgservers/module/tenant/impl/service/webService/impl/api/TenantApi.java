@@ -38,6 +38,8 @@ import com.omgservers.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerRequest;
+import com.omgservers.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.dto.tenant.SyncProjectPermissionRequest;
@@ -160,6 +162,10 @@ public interface TenantApi {
     @PUT
     @Path("/find-version-matchmaker")
     Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(FindVersionMatchmakerRequest request);
+
+    @PUT
+    @Path("/select-version-matchmaker")
+    Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(SelectVersionMatchmakerRequest request);
 
     @PUT
     @Path("/view-version-matchmakers")
