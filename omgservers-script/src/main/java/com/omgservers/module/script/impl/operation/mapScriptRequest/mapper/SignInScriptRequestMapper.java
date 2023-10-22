@@ -2,9 +2,9 @@ package com.omgservers.module.script.impl.operation.mapScriptRequest.mapper;
 
 import com.omgservers.model.scriptRequest.ScriptRequestModel;
 import com.omgservers.model.scriptRequest.ScriptRequestQualifierEnum;
-import com.omgservers.model.scriptRequest.arguments.SignedInScriptRequestArgumentsModel;
+import com.omgservers.model.scriptRequest.arguments.SignInScriptRequestArgumentsModel;
 import com.omgservers.module.script.impl.luaRequest.LuaRequest;
-import com.omgservers.module.script.impl.luaRequest.SignedInLuaRequest;
+import com.omgservers.module.script.impl.luaRequest.SignInLuaRequest;
 import com.omgservers.module.script.impl.operation.mapScriptRequest.ScriptRequestMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -14,19 +14,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class SignedInScriptRequestMapper implements ScriptRequestMapper {
+public class SignInScriptRequestMapper implements ScriptRequestMapper {
 
     @Override
     public ScriptRequestQualifierEnum getQualifier() {
-        return ScriptRequestQualifierEnum.SIGNED_IN;
+        return ScriptRequestQualifierEnum.SIGN_IN;
     }
 
     @Override
     public LuaRequest map(ScriptRequestModel scriptRequest) {
-        final var body = (SignedInScriptRequestArgumentsModel) scriptRequest.getArguments();
-        return SignedInLuaRequest.builder()
+        final var body = (SignInScriptRequestArgumentsModel) scriptRequest.getArguments();
+        return SignInLuaRequest.builder()
                 .userId(body.getUserId())
-                .playerId(body.getPlayerId())
                 .clientId(body.getClientId())
                 .build();
     }

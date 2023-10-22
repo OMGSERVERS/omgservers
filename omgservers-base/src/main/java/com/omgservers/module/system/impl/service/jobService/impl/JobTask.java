@@ -4,7 +4,7 @@ import com.omgservers.model.job.JobQualifierEnum;
 import io.smallrye.mutiny.Uni;
 
 public interface JobTask {
-    JobQualifierEnum getJobType();
+    JobQualifierEnum getJobQualifier();
 
     /**
      * Execute task for specified entity.

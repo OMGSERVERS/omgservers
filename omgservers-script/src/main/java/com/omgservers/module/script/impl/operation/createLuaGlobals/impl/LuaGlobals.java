@@ -23,7 +23,7 @@ public class LuaGlobals {
     final Globals globals;
 
     public void handleEvent(LuaRequest luaRequest, LuaTable luaContext) {
-        final var eventId = luaRequest.getId();
+        final var eventId = luaRequest.getQualifier();
         final var closure = globals.get(eventId);
         if (closure.isnil()) {
             log.warn("Closure was not found, id={}", eventId);

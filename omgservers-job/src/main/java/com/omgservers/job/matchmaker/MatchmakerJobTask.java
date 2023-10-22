@@ -33,7 +33,7 @@ public class MatchmakerJobTask implements JobTask {
     final HandleEndedMatchesOperation handleEndedMatchesOperation;
 
     @Override
-    public JobQualifierEnum getJobType() {
+    public JobQualifierEnum getJobQualifier() {
         return JobQualifierEnum.MATCHMAKER;
     }
 

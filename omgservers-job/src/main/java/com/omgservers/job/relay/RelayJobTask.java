@@ -34,7 +34,7 @@ public class RelayJobTask implements JobTask {
     }
 
     @Override
-    public JobQualifierEnum getJobType() {
+    public JobQualifierEnum getJobQualifier() {
         return JobQualifierEnum.RELAY;
     }
 

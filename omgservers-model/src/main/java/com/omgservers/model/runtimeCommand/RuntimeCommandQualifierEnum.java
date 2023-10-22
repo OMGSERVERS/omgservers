@@ -4,10 +4,15 @@ import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel
 import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 
 public enum RuntimeCommandQualifierEnum {
+    SIGN_IN(SignInRuntimeCommandBodyModel.class),
+    SIGN_UP(SignUpRuntimeCommandBodyModel.class),
+
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
     UPDATE_RUNTIME(UpdateRuntimeCommandBodyModel.class),
     STOP_RUNTIME(StopRuntimeCommandBodyModel.class),

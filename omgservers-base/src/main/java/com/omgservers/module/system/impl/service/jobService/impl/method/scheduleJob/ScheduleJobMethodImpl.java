@@ -50,8 +50,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         this.logModelFactory = logModelFactory;
         this.jobTasks = new ConcurrentHashMap<>();
         jobTaskBeans.stream().forEach(jobTask -> {
-            JobQualifierEnum type = jobTask.getJobType();
-            jobTasks.put(type, jobTask);
+            JobQualifierEnum qualifier = jobTask.getJobQualifier();
+            jobTasks.put(qualifier, jobTask);
         });
         this.scheduler = scheduler;
     }

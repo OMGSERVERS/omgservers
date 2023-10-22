@@ -1,5 +1,7 @@
 package com.omgservers.model.luaCommand;
 
+import com.omgservers.exception.ServerSideConflictException;
+
 public enum LuaCommandQualifierEnum {
 
     RESPOND("respond"),
@@ -20,5 +22,15 @@ public enum LuaCommandQualifierEnum {
 
     public String getQualifier() {
         return qualifier;
+    }
+
+    public static LuaCommandQualifierEnum fromString(String qualifier) {
+        for (final var q : LuaCommandQualifierEnum.values()) {
+            if (q.qualifier.equals(qualifier)) {
+                return q;
+            }
+        }
+        throw new ServerSideConflictException("Unknown lua command qualifier, " +
+                "qualifier=" + qualifier);
     }
 }

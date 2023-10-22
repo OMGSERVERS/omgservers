@@ -40,7 +40,7 @@ public class ScriptJobTask implements JobTask {
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
-    public JobQualifierEnum getJobType() {
+    public JobQualifierEnum getJobQualifier() {
         return JobQualifierEnum.SCRIPT;
     }
 

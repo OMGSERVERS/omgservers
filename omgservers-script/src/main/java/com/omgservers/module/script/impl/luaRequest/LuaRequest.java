@@ -8,13 +8,13 @@ import org.luaj.vm2.LuaTable;
 @ToString
 abstract public class LuaRequest extends LuaTable {
 
-    final String id;
+    final String qualifier;
     final Boolean infoLogging;
 
-    public LuaRequest(final String id, final Boolean infoLogging) {
-        this.id = id;
+    public LuaRequest(final String qualifier, final Boolean infoLogging) {
+        this.qualifier = qualifier;
         this.infoLogging = infoLogging;
 
-        set("id", id);
+        set("qualifier", qualifier);
     }
 }

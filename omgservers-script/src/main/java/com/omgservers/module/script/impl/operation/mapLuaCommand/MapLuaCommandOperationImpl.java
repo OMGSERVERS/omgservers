@@ -1,5 +1,6 @@
 package com.omgservers.module.script.impl.operation.mapLuaCommand;
 
+import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
 import com.omgservers.model.script.ScriptModel;
@@ -29,9 +30,13 @@ class MapLuaCommandOperationImpl implements MapLuaCommandOperation {
 
     @Override
     public EventModel mapLuaCommand(ScriptModel script, final LuaTable luaCommand) {
-        final var name = luaCommand.get("name").checkjstring();
-        final var qualifier = LuaCommandQualifierEnum.valueOf(name);
-        final var mapper = luaCommandMappers.get(qualifier);
-        return mapper.map(script, luaCommand);
+        try {
+            final var luaQualifier = luaCommand.get("qualifier").checkjstring();
+            final var qualifier = LuaCommandQualifierEnum.fromString(luaQualifier);
+            final var mapper = luaCommandMappers.get(qualifier);
+            return mapper.map(script, luaCommand);
+        } catch (Exception e) {
+            throw new ServerSideConflictException(e.getMessage(), e);
+        }
     }
 }

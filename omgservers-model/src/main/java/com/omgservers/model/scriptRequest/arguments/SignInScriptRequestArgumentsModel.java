@@ -14,19 +14,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SignedUpScriptRequestArgumentsModel extends ScriptRequestArgumentsModel {
+public class SignInScriptRequestArgumentsModel extends ScriptRequestArgumentsModel {
 
     @NotNull
     Long userId;
-
-    @NotNull
-    Long playerId;
 
     @NotNull
     Long clientId;
 
     @Override
     public ScriptRequestQualifierEnum getQualifier() {
-        return ScriptRequestQualifierEnum.SIGNED_UP;
+        return ScriptRequestQualifierEnum.SIGN_IN;
     }
 }

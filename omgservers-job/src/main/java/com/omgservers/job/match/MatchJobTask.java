@@ -32,7 +32,7 @@ public class MatchJobTask implements JobTask {
     final HandleMatchCommandOperation handleMatchCommandOperation;
 
     @Override
-    public JobQualifierEnum getJobType() {
+    public JobQualifierEnum getJobQualifier() {
         return JobQualifierEnum.MATCH;
     }
 
