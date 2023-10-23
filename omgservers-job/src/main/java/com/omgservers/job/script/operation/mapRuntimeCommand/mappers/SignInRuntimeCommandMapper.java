@@ -27,6 +27,8 @@ public class SignInRuntimeCommandMapper implements RuntimeCommandMapper {
         final var scriptEventBody = SignInScriptRequestArgumentsModel.builder()
                 .userId(runtimeCommandBody.getUserId())
                 .clientId(runtimeCommandBody.getClientId())
+                .attributes(runtimeCommandBody.getAttributes())
+                .object(runtimeCommandBody.getObject())
                 .build();
         return new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody);
     }
