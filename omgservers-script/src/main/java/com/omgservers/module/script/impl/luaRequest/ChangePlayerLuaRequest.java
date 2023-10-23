@@ -3,6 +3,7 @@ package com.omgservers.module.script.impl.luaRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
 @Getter
@@ -11,23 +12,27 @@ import org.luaj.vm2.LuaValue;
 public class ChangePlayerLuaRequest extends LuaRequest {
 
     final Long userId;
-    final Long playerId;
     final Long clientId;
-    final LuaValue data;
+    final LuaTable attributes;
+    final LuaValue object;
+    final LuaValue message;
 
     public ChangePlayerLuaRequest(final Long userId,
-                                  final Long playerId,
                                   final Long clientId,
-                                  final LuaValue data) {
+                                  final LuaTable attributes,
+                                  final LuaValue object,
+                                  final LuaValue message) {
         super("change_player", false);
         this.userId = userId;
-        this.playerId = playerId;
         this.clientId = clientId;
-        this.data = data;
+        this.attributes = attributes;
+        this.object = object;
+        this.message = message;
 
         set("user_id", userId.toString());
-        set("player_id", playerId.toString());
         set("client_id", clientId.toString());
-        set("data", data);
+        set("attributes", attributes);
+        set("object", object);
+        set("message", message);
     }
 }

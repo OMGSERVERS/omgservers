@@ -1,15 +1,19 @@
 package com.omgservers.handler;
 
-import com.omgservers.dto.script.CallScriptRequest;
-import com.omgservers.dto.script.CallScriptResponse;
+import com.omgservers.dto.runtime.SyncRuntimeCommandRequest;
+import com.omgservers.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
-import com.omgservers.model.scriptRequest.ScriptRequestModel;
-import com.omgservers.model.scriptRequest.arguments.ChangePlayerScriptRequestArgumentsModel;
+import com.omgservers.model.player.PlayerModel;
+import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
+import com.omgservers.module.runtime.RuntimeModule;
+import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
@@ -19,15 +23,16 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ChangeRequestedEventHandlerImpl implements EventHandler {
 
+    final RuntimeModule runtimeModule;
     final ScriptModule scriptModule;
     final UserModule userModule;
+
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -39,12 +44,18 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
         final var body = (ChangeRequestedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();
-        final var playerId = body.getPlayerId();
         final var clientId = body.getClientId();
-        final var data = body.getData();
+        final var message = body.getMessage();
 
         return getClient(userId, clientId)
-                .flatMap(client -> callScript(client.getVersionId(), userId, playerId, client.getId(), data));
+                .flatMap(client -> {
+                    final var playerId = client.getPlayerId();
+                    return getPlayer(userId, playerId)
+                            .flatMap(player -> {
+                                final var runtimeId = client.getDefaultRuntimeId();
+                                return syncChangeRuntimeCommand(runtimeId, player, client, message);
+                            });
+                });
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
@@ -53,21 +64,28 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> callScript(final Long scriptId,
-                            final Long userId,
-                            final Long playerId,
-                            final Long clientId,
-                            final Object data) {
-        final var scriptEventBody = ChangePlayerScriptRequestArgumentsModel.builder()
-                .userId(userId)
-                .playerId(playerId)
-                .clientId(clientId)
-                .data(data)
-                .build();
+    Uni<PlayerModel> getPlayer(final Long userId, final Long playerId) {
+        final var request = new GetPlayerRequest(userId, playerId);
+        return userModule.getPlayerService().getPlayer(request)
+                .map(GetPlayerResponse::getPlayer);
+    }
 
-        final var request = new CallScriptRequest(scriptId,
-                Collections.singletonList(new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody)));
-        return scriptModule.getScriptService().callScript(request)
-                .map(CallScriptResponse::getResult);
+    Uni<Boolean> syncChangeRuntimeCommand(final Long runtimeId,
+                                          final PlayerModel player,
+                                          final ClientModel client,
+                                          final Object message) {
+        final var userId = client.getUserId();
+        final var clientId = client.getId();
+        final var playerAttributes = player.getAttributes();
+        final var playerObject = player.getObject();
+        final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId,
+                clientId,
+                playerAttributes,
+                playerObject,
+                message);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+        final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
+        return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)
+                .map(SyncRuntimeCommandResponse::getCreated);
     }
 }

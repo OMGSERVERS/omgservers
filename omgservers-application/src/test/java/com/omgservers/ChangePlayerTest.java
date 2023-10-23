@@ -28,27 +28,36 @@ public class ChangePlayerTest extends Assertions {
 
     @Test
     void changePlayerTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""
-                local var state = context.state
-                local var event = context.event
-                                
-                if event.id == "change_player" then
-                    assert(event.data.text == "text", "event.data.text is wrong")
-                    print("event.data.text=" .. event.data.text)
-                    context.respond({text="changed"})
-                end
-                """);
+        final var version =
+                bootstrapVersionOperation.bootstrapVersion("""                                               
+                        if request.qualifier == "change_player" then
+                            local var message = request.message
+                            assert(message.text == "reset", "message.text is wrong")
+                            return {
+                                {
+                                    qualifier = "respond",
+                                    user_id = request.user_id,
+                                    client_id = request.client_id,
+                                    message = {
+                                        text = "changed"
+                                    }
+                                }
+                            }
+                        end
+                        """);
+
+        Thread.sleep(10000);
 
         final var client = testClientFactory.create(uri);
+
         client.signUp(version);
+        final var welcome1 = client.consumeWelcomeMessage();
+        assertNotNull(welcome1);
 
-        final var welcome = client.consumeWelcomeMessage();
-        assertNotNull(welcome);
+        client.changeRequest(new TestMessage("reset"));
 
-        client.changeRequest(new TestMessage("text"));
-
-        var message = client.consumeServerMessage();
-//        assertEquals("{text=changed}", message.getMessage().toString());
+        final var serverMessage1 = client.consumeServerMessage();
+        assertEquals("{text=changed}", serverMessage1.getMessage().toString());
 
         client.close();
     }

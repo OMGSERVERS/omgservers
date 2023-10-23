@@ -53,7 +53,7 @@ class ChangeMessageHandlerImpl implements MessageHandler {
         final var messageBody = (ChangeMessageBodyModel) message.getBody();
         final var messageData = messageBody.getData();
         if (Objects.nonNull(messageData)) {
-            final var eventBody = eventBodyBuilder.data(messageData).build();
+            final var eventBody = eventBodyBuilder.message(messageData).build();
             final var event = eventModelFactory.create(eventBody);
             final var syncEventRequest = new SyncEventRequest(event);
             return systemModule.getEventService().syncEvent(syncEventRequest)

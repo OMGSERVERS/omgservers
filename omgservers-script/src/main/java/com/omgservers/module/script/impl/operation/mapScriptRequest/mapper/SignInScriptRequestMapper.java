@@ -29,12 +29,12 @@ public class SignInScriptRequestMapper implements ScriptRequestMapper {
 
     @Override
     public LuaRequest map(ScriptRequestModel scriptRequest) {
-        final var body = (SignInScriptRequestArgumentsModel) scriptRequest.getArguments();
+        final var arguments = (SignInScriptRequestArgumentsModel) scriptRequest.getArguments();
         return SignInLuaRequest.builder()
-                .userId(body.getUserId())
-                .clientId(body.getClientId())
-                .attributes(parseAttributes(body.getAttributes()))
-                .object(coerceJavaObjectOperation.coerceJavaObject(body.getObject()))
+                .userId(arguments.getUserId())
+                .clientId(arguments.getClientId())
+                .attributes(parseAttributes(arguments.getAttributes()))
+                .object(coerceJavaObjectOperation.coerceJavaObject(arguments.getObject()))
                 .build();
     }
 

@@ -32,7 +32,7 @@ public class ChangeRequestedEventBodyModel extends EventBodyModel {
     Long clientId;
 
     @NotNull
-    Object data;
+    Object message;
 
     @Override
     public EventQualifierEnum getQualifier() {

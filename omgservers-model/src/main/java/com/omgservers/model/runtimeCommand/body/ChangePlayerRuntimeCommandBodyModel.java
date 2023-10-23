@@ -1,27 +1,22 @@
-package com.omgservers.model.scriptRequest.arguments;
+package com.omgservers.model.runtimeCommand.body;
 
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.scriptRequest.ScriptRequestArgumentsModel;
-import com.omgservers.model.scriptRequest.ScriptRequestQualifierEnum;
+import com.omgservers.model.runtimeCommand.RuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ChangePlayerScriptRequestArgumentsModel extends ScriptRequestArgumentsModel {
+public class ChangePlayerRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
     Long userId;
-
-    @NotNull
-    Long playerId;
 
     @NotNull
     Long clientId;
@@ -36,7 +31,7 @@ public class ChangePlayerScriptRequestArgumentsModel extends ScriptRequestArgume
     Object message;
 
     @Override
-    public ScriptRequestQualifierEnum getQualifier() {
-        return ScriptRequestQualifierEnum.CHANGE_PLAYER;
+    public RuntimeCommandQualifierEnum getQualifier() {
+        return RuntimeCommandQualifierEnum.CHANGE_PLAYER;
     }
 }

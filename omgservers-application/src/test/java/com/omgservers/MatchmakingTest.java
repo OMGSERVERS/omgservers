@@ -8,8 +8,6 @@ import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-public class PlayerMatchmakingTest extends Assertions {
+public class MatchmakingTest extends Assertions {
 
     @TestHTTPResource("/omgservers/gateway")
     URI uri;
@@ -31,15 +29,20 @@ public class PlayerMatchmakingTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void playerMatchmakingTest() throws Exception {
+    void matchmakingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                        local var state = context.state
-                        local var event = context.event
-                                                                        
-                        print("event: " .. event.id)
+                        if request.qualifier == "add_client" then
                                                 
-                        if event.id == "add_client" then
-                            context.unicast_message(event.user_id, event.client_id, {text="hello, client"})
+                            return {
+                                {
+                                    qualifier = "unicast",
+                                    user_id = request.user_id,
+                                    client_id = request.client_id,
+                                    message = {
+                                        text = "added"
+                                    }
+                                }
+                            }
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -47,6 +50,8 @@ public class PlayerMatchmakingTest extends Assertions {
                         add(new VersionGroupModel("players", 2, 16));
                     }}));
                 }}));
+
+        Thread.sleep(10000);
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
@@ -67,20 +72,14 @@ public class PlayerMatchmakingTest extends Assertions {
         assertNotNull(assignment2);
 
         final var event12 = client1.consumeServerMessage();
-//        assertEquals("{text=hello, client}", event12.getMessage().toString());
+        assertEquals("{text=added}", event12.getMessage().toString());
 
         final var event21 = client2.consumeServerMessage();
-//        assertEquals("{text=hello, client}", event21.getMessage().toString());
+        assertEquals("{text=added}", event21.getMessage().toString());
 
         Thread.sleep(5000);
 
         client1.close();
         client2.close();
-    }
-
-    @Data
-    @AllArgsConstructor
-    class TestMessage {
-        String text;
     }
 }
