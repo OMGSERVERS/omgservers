@@ -8,8 +8,6 @@ import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-public class RuntimeKickClientTest extends Assertions {
+public class KickClientTest extends Assertions {
 
     @TestHTTPResource("/omgservers/gateway")
     URI uri;
@@ -31,30 +29,38 @@ public class RuntimeKickClientTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void runtimeKickClientTest() throws Exception {
+    void kickClientTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""                        
-                        local var event = context.event
-                        local var state = context.state
-
-                        print("event: " .. event.id)
-                                                
-                        if event.id == "init_runtime" then
-                            state.flag = false
-                        end
                                                
-                        if event.id == "add_client" then
-                            local var user_id = event.user_id
-                            local var client_id = event.client_id
+                        if request.qualifier == "add_client" then
+                            local var user_id = request.user_id
+                            local var client_id = request.client_id
                             
-                            if state.flag then                                
-                                context.kick_client(user_id, client_id)
+                            if state.admin then
+                                return {
+                                    {
+                                        qualifier = "kick",
+                                        user_id = request.user_id,
+                                        client_id = request.client_id
+                                    }
+                                }
                             else
-                                state.flag = true
+                                state.admin = {
+                                    user_id = request.user_id,
+                                    client_id = request.client_id
+                                }
                             end
                         end
                                                 
-                        if event.id == "delete_client" then
-                            context.broadcast_message({text="client2 was kicked"})
+                        if request.qualifier == "delete_client" then
+                            return {
+                                {
+                                    qualifier = "broadcast",
+                                    message = {
+                                        text = "kicked"
+                                    }
+                                }
+                            }
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -62,6 +68,8 @@ public class RuntimeKickClientTest extends Assertions {
                         add(new VersionGroupModel("players", 1, 16));
                     }}));
                 }}));
+
+        Thread.sleep(10000);
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
@@ -87,15 +95,11 @@ public class RuntimeKickClientTest extends Assertions {
         assertNotNull(event1);
 
         final var event2 = client1.consumeServerMessage();
-//        assertEquals("{text=client2 was kicked}", event2.getMessage().toString());
+        assertEquals("{text=kicked}", event2.getMessage().toString());
 
         client1.close();
         client2.close();
-    }
 
-    @Data
-    @AllArgsConstructor
-    static class TestMessage {
-        String text;
+        Thread.sleep(10000);
     }
 }
