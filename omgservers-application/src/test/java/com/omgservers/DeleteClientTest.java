@@ -88,10 +88,10 @@ public class DeleteClientTest extends Assertions {
 
         client1.close();
 
-        Thread.sleep(5000);
-
         final var event = client2.consumeServerMessage();
         assertEquals("{text=deleted}", event.getMessage().toString());
         client2.close();
+
+        Thread.sleep(10000);
     }
 }

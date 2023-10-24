@@ -2,15 +2,18 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
+import com.omgservers.dto.runtime.FindRuntimeGrantRequest;
+import com.omgservers.dto.runtime.FindRuntimeGrantResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.factory.MatchmakerCommandModelFactory;
+import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,8 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final RuntimeModule runtimeModule;
 
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
@@ -39,12 +41,26 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var client = body.getClient();
         final var userId = client.getUserId();
         final var clientId = client.getId();
+        final var runtimeId = client.getDefaultRuntimeId();
         final var matchmakerId = client.getDefaultMatchmakerId();
 
         log.info("Client was deleted, userId={}, clientId={}", userId, clientId);
 
-        return syncDeleteClientMatchmakerCommand(matchmakerId, clientId)
+        return deleteRuntimeGrantForClient(runtimeId, clientId)
+                .flatMap(wasGrantDeleted -> syncDeleteClientMatchmakerCommand(matchmakerId, clientId))
                 .replaceWith(true);
+    }
+
+    Uni<Boolean> deleteRuntimeGrantForClient(final Long runtimeId,
+                                             final Long clientId) {
+        final var findRuntimeGrantRequest = new FindRuntimeGrantRequest(runtimeId, clientId);
+        return runtimeModule.getRuntimeService().findRuntimeGrant(findRuntimeGrantRequest)
+                .map(FindRuntimeGrantResponse::getRuntimeGrant)
+                .flatMap(runtimeGrant -> {
+                    final var request = new DeleteRuntimeGrantRequest(runtimeId, clientId);
+                    return runtimeModule.getRuntimeService().deleteRuntimeGrant(request)
+                            .map(DeleteRuntimeGrantResponse::getDeleted);
+                });
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

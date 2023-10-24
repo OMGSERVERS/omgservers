@@ -60,6 +60,8 @@ public class ChangePlayerTest extends Assertions {
         assertEquals("{text=changed}", serverMessage1.getMessage().toString());
 
         client.close();
+
+        Thread.sleep(10000);
     }
 
     @Data

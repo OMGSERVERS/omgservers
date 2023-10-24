@@ -87,8 +87,8 @@ public class SetGetAttributesTest extends Assertions {
         var message = client.consumeServerMessage();
         assertEquals("{text=signed_in}", message.getMessage().toString());
 
-        Thread.sleep(10000);
-
         client.close();
+
+        Thread.sleep(10000);
     }
 }

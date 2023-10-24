@@ -135,6 +135,8 @@ public class MessagingTest extends Assertions {
 
         client1.close();
         client2.close();
+
+        Thread.sleep(10000);
     }
 
     @Data

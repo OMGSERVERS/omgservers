@@ -77,5 +77,7 @@ public class SignInSignUpTest extends Assertions {
         final var serverMessage2 = client.consumeServerMessage();
         assertEquals("{text=signed_in}", serverMessage2.getMessage().toString());
         client.close();
+
+        Thread.sleep(10000);
     }
 }

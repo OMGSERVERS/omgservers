@@ -77,9 +77,9 @@ public class MatchmakingTest extends Assertions {
         final var event21 = client2.consumeServerMessage();
         assertEquals("{text=added}", event21.getMessage().toString());
 
-        Thread.sleep(5000);
-
         client1.close();
         client2.close();
+
+        Thread.sleep(10000);
     }
 }
