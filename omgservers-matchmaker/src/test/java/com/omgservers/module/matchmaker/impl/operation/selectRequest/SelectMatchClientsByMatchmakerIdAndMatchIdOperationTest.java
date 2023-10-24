@@ -1,13 +1,12 @@
 package com.omgservers.module.matchmaker.impl.operation.selectRequest;
 
-import com.omgservers.exception.ServerSideConflictException;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
+import com.omgservers.module.matchmaker.impl.operation.UpsertRequestOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
-import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -30,7 +29,7 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
     UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
-    UpsertRequestOperation upsertRequestOperation;
+    UpsertRequestOperationTestInterface upsertRequestOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -51,20 +50,22 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
-        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest1);
+        final var matchmakerRequest1 = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(),
+                matchmakerRequestConfig);
+        upsertRequestOperation.upsertRequest(shard, matchmakerRequest1);
 
-        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmaker.getId(), matchmakerRequest1.getId());
+        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmaker.getId(),
+                matchmakerRequest1.getId());
         assertEquals(matchmakerRequest1, matchmakerRequest2);
     }
 
     @Test
-    void givenUnknownUuid_whenSelectMatchmakerRequest_thenException() {
+    void givenUnknownIds_whenSelectMatchmakerRequest_thenException() {
         final var shard = 0;
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
+        assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
                 .selectRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
     }
 

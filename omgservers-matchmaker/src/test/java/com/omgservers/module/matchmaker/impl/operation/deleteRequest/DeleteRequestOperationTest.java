@@ -6,6 +6,7 @@ import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.DeleteRequestOperationTestInterface;
+import com.omgservers.module.matchmaker.impl.operation.UpsertRequestOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -30,7 +31,7 @@ class DeleteRequestOperationTest extends Assertions {
     UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
-    UpsertRequestOperation upsertRequestOperation;
+    UpsertRequestOperationTestInterface upsertRequestOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -53,7 +54,7 @@ class DeleteRequestOperationTest extends Assertions {
         final var requestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var request =
                 requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
-//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, request);
+        upsertRequestOperation.upsertRequest(shard, request);
 
         final var changeContext = deleteRequestOperation.deleteRequest(shard, matchmaker.getId(), request.getId());
         assertTrue(changeContext.getResult());

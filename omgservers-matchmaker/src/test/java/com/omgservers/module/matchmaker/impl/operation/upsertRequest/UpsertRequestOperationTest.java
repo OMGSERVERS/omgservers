@@ -1,9 +1,11 @@
 package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.factory.RequestModelFactory;
 import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.module.matchmaker.impl.operation.UpsertRequestOperationTestInterface;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -21,7 +23,7 @@ class UpsertRequestOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertRequestOperation upsertRequestOperation;
+    UpsertRequestOperationTestInterface upsertRequestOperation;
 
     @Inject
     UpsertMatchmakerOperation upsertMatchmakerOperation;
@@ -46,7 +48,8 @@ class UpsertRequestOperationTest extends Assertions {
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-//        assertTrue(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
+        final var changeContext = upsertRequestOperation.upsertRequest(shard, matchmakerRequest);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
@@ -57,9 +60,10 @@ class UpsertRequestOperationTest extends Assertions {
 
         final var matchmakerRequestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest = requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
-//        upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest);
+        upsertRequestOperation.upsertRequest(shard, matchmakerRequest);
 
-//        assertFalse(upsertRequestOperation.upsertRequest(TIMEOUT, pgPool, shard, matchmakerRequest));
+        final var changeContext = upsertRequestOperation.upsertRequest(shard, matchmakerRequest);
+        assertFalse(changeContext.getResult());
     }
 
     Long userId() {

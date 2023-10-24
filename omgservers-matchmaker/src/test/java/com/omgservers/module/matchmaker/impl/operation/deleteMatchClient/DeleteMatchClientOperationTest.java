@@ -64,8 +64,8 @@ class DeleteMatchClientOperationTest extends Assertions {
                         new MatchClientConfigModel());
         upsertMatchClientOperation.upsertMatchClient(TIMEOUT, pgPool, shard, matchClient);
 
-        final var changeContext =
-                deleteMatchClientOperation.deleteMatchClient(shard, matchmaker.getId(), matchClient.getId());
+        final var changeContext = deleteMatchClientOperation
+                .deleteMatchClient(shard, matchmaker.getId(), matchClient.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.MATCH_CLIENT_DELETED));
     }
