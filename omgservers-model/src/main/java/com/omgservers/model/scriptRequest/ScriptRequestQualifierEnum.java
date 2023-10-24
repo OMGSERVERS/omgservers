@@ -7,7 +7,6 @@ import com.omgservers.model.scriptRequest.arguments.HandleMessageScriptRequestAr
 import com.omgservers.model.scriptRequest.arguments.InitRuntimeScriptRequestArgumentsModel;
 import com.omgservers.model.scriptRequest.arguments.SignInScriptRequestArgumentsModel;
 import com.omgservers.model.scriptRequest.arguments.SignUpScriptRequestArgumentsModel;
-import com.omgservers.model.scriptRequest.arguments.StopRuntimeScriptRequestArgumentsModel;
 import com.omgservers.model.scriptRequest.arguments.UpdateRuntimeScriptRequestArgumentsModel;
 
 public enum ScriptRequestQualifierEnum {
@@ -17,7 +16,6 @@ public enum ScriptRequestQualifierEnum {
 
     INIT_RUNTIME(InitRuntimeScriptRequestArgumentsModel.class),
     UPDATE_RUNTIME(UpdateRuntimeScriptRequestArgumentsModel.class),
-    STOP_RUNTIME(StopRuntimeScriptRequestArgumentsModel.class),
     ADD_CLIENT(AddClientRequestArgumentsModel.class),
     DELETE_CLIENT(DeleteClientScriptRequestArgumentsModel.class),
     HANDLE_MESSAGE(HandleMessageScriptRequestArgumentsModel.class);

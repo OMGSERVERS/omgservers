@@ -7,7 +7,6 @@ import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyM
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 
 public enum RuntimeCommandQualifierEnum {
@@ -17,7 +16,6 @@ public enum RuntimeCommandQualifierEnum {
 
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
     UPDATE_RUNTIME(UpdateRuntimeCommandBodyModel.class),
-    STOP_RUNTIME(StopRuntimeCommandBodyModel.class),
     ADD_CLIENT(AddClientRuntimeCommandBodyModel.class),
     DELETE_CLIENT(DeleteClientRuntimeCommandBodyModel.class),
     HANDLE_MESSAGE(HandleMessageRuntimeCommandBodyModel.class);

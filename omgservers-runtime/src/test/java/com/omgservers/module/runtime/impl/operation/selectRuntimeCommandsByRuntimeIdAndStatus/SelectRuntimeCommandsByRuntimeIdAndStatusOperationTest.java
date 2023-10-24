@@ -2,10 +2,6 @@ package com.omgservers.module.runtime.impl.operation.selectRuntimeCommandsByRunt
 
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.StopRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
@@ -14,7 +10,6 @@ import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
