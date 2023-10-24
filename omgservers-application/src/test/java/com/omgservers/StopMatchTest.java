@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-public class RuntimeStopMatchTest extends Assertions {
+public class StopMatchTest extends Assertions {
 
     @TestHTTPResource("/omgservers/gateway")
     URI uri;
@@ -31,15 +31,15 @@ public class RuntimeStopMatchTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void runtimeStopMatchTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                        
-                        local var event = context.event
-                        local var state = context.state
-
-                        print("event: " .. event.id)
-                                               
-                        if event.id == "add_client" then
-                            context.stop_runtime("why not?")
+    void stopMatchTest() throws Exception {
+        final var version = bootstrapVersionOperation.bootstrapVersion("""                                                                                              
+                        if request.qualifier == "add_client" then
+                            return {
+                                {
+                                    qualifier = "stop",
+                                    reason = "why not?"
+                                }
+                            }
                         end
                                                 
                         """,
@@ -48,6 +48,8 @@ public class RuntimeStopMatchTest extends Assertions {
                         add(new VersionGroupModel("players", 1, 16));
                     }}));
                 }}));
+
+        Thread.sleep(10000);
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
