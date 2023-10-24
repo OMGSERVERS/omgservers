@@ -25,6 +25,7 @@ public class DeleteClientRuntimeCommandMapper implements RuntimeCommandMapper {
     public ScriptRequestModel map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (DeleteClientRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var scriptEventBody = DeleteClientScriptRequestArgumentsModel.builder()
+                .userId(runtimeCommandBody.getUserId())
                 .clientId(runtimeCommandBody.getClientId())
                 .build();
         return new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody);

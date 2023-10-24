@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 public class DeleteClientScriptRequestArgumentsModel extends ScriptRequestArgumentsModel {
 
     @NotNull
+    Long userId;
+
+    @NotNull
     Long clientId;
 
     @Override

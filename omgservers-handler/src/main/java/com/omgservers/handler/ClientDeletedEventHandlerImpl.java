@@ -2,16 +2,10 @@ package com.omgservers.handler;
 
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.dto.tenant.GetStageRequest;
-import com.omgservers.dto.tenant.GetStageResponse;
-import com.omgservers.dto.user.GetPlayerRequest;
-import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
-import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.stage.StageModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.matchmaker.factory.MatchmakerCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
@@ -44,34 +38,13 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var body = (ClientDeletedEventBodyModel) event.getBody();
         final var client = body.getClient();
         final var userId = client.getUserId();
-        final var playerId = client.getPlayerId();
+        final var clientId = client.getId();
+        final var matchmakerId = client.getDefaultMatchmakerId();
 
-        log.info("Client was deleted, userId={}, clientId={}", userId, client.getId());
+        log.info("Client was deleted, userId={}, clientId={}", userId, clientId);
 
-        return getPlayer(userId, playerId)
-                .flatMap(player -> {
-                    final var tenantId = player.getTenantId();
-                    final var stageId = player.getStageId();
-                    return getStage(tenantId, stageId)
-                            .flatMap(stage -> {
-                                final var matchmakerId = stage.getMatchmakerId();
-                                final var clientId = client.getId();
-                                return syncDeleteClientMatchmakerCommand(matchmakerId, clientId);
-                            });
-                })
+        return syncDeleteClientMatchmakerCommand(matchmakerId, clientId)
                 .replaceWith(true);
-    }
-
-    Uni<PlayerModel> getPlayer(final Long userId, final Long playerId) {
-        final var request = new GetPlayerRequest(userId, playerId);
-        return userModule.getPlayerService().getPlayer(request)
-                .map(GetPlayerResponse::getPlayer);
-    }
-
-    Uni<StageModel> getStage(final Long tenantId, final Long stageId) {
-        final var request = new GetStageRequest(tenantId, stageId);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

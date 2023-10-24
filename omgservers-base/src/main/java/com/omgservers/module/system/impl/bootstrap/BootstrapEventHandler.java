@@ -87,9 +87,10 @@ public class BootstrapEventHandler {
                             log.error("Event handling failed, event was marked as failed, " +
                                             "eventId={}, " +
                                             "qualifier={}, " +
-                                            "{}",
+                                            "{}:{}",
                                     eventId,
                                     event.getQualifier(),
+                                    t.getClass().getSimpleName(),
                                     t.getMessage());
                             return updateStatus(eventId, EventStatusEnum.FAILED);
                         })

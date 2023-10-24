@@ -8,8 +8,6 @@ import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 
 @Slf4j
 @QuarkusTest
-public class RuntimeDeleteClientTest extends Assertions {
+public class DeleteClientTest extends Assertions {
 
     @TestHTTPResource("/omgservers/gateway")
     URI uri;
@@ -31,30 +29,33 @@ public class RuntimeDeleteClientTest extends Assertions {
     TestClientFactory testClientFactory;
 
     @Test
-    void runtimeDeleteClientTest() throws Exception {
+    void deleteClientTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""                        
-                        local var event = context.event
-                        local var state = context.state
 
-                        print("event: " .. event.id)
-                                                
-                        if event.id == "init_runtime" then                            
+                        if request.qualifier == "init_runtime" then
                             state.clients = {}
                         end
                                                
-                        if event.id == "add_client" then
-                            state.clients[event.client_id] = {
-                                user_id = event.user_id,
-                                player_id = event.player_id
-                            }                            
+                        if request.qualifier == "add_client" then
+                            state.clients[request.client_id] = {
+                                user_id = request.user_id,
+                                client_id = request.client_id
+                            }
                         end
                                                 
-                        if event.id == "delete_client" then
-                            local var client = state.clients[event.client_id]
+                        if request.qualifier == "delete_client" then
+                            local var client = state.clients[request.client_id]
                             assert(client.user_id ~= nil, "client.user_id is wrong")
-                            assert(client.player_id ~= nil, "client.player_id is wrong")
+                            assert(client.client_id ~= nil, "client.client_id is wrong")
                             
-                            context.broadcast_message({text="client was deleted"})
+                            return {
+                                {
+                                    qualifier = "broadcast",
+                                    message = {
+                                        text = "deleted"
+                                    }
+                                }
+                            }
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
@@ -62,6 +63,8 @@ public class RuntimeDeleteClientTest extends Assertions {
                         add(new VersionGroupModel("players", 2, 16));
                     }}));
                 }}));
+
+        Thread.sleep(10000);
 
         final var client1 = testClientFactory.create(uri);
         client1.signUp(version);
@@ -88,13 +91,7 @@ public class RuntimeDeleteClientTest extends Assertions {
         Thread.sleep(5000);
 
         final var event = client2.consumeServerMessage();
-//        assertEquals("{text=client was deleted}", event.getMessage().toString());
+        assertEquals("{text=deleted}", event.getMessage().toString());
         client2.close();
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class TestMessage {
-        String text;
     }
 }
