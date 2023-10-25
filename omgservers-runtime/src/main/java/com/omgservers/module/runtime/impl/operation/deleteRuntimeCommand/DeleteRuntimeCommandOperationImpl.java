@@ -9,6 +9,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -29,10 +31,14 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
                 changeContext, sqlConnection, shard,
                 """                        
                         update $schema.tab_runtime_command
-                        set deleted = true
+                        set modified = $3, deleted = true
                         where runtime_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(runtimeId, id),
+                Arrays.asList(
+                        runtimeId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
                 () -> null,
                 () -> logModelFactory.create(String.format("Runtime command was deleted, " +
                         "runtimeId=%d, id=%d", runtimeId, id))

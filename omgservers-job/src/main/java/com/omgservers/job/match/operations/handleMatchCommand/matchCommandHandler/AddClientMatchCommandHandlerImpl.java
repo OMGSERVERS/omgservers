@@ -10,6 +10,8 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
+import com.omgservers.dto.user.GetPlayerRequest;
+import com.omgservers.dto.user.GetPlayerResponse;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.job.match.operations.handleMatchCommand.MatchCommandHandler;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
@@ -18,6 +20,7 @@ import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
+import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.gateway.GatewayModule;
@@ -75,9 +78,10 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                             final var runtimeId = match.getRuntimeId();
                             final var playerId = client.getPlayerId();
                             return syncRuntimeGrant(runtimeId, userId, clientId)
-                                    .call(ignored -> syncAddClientRuntimeCommand(runtimeId,
-                                            userId,
-                                            clientId))
+                                    .call(ignored -> getPlayer(client)
+                                            .flatMap(player -> syncAddClientRuntimeCommand(runtimeId,
+                                                    player,
+                                                    client)))
                                     .call(ignored -> assignRuntime(runtimeId, client))
                                     .invoke(voidItem -> {
                                         log.info(
@@ -119,10 +123,23 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .map(SyncRuntimeGrantResponse::getCreated);
     }
 
+    Uni<PlayerModel> getPlayer(final ClientModel client) {
+        final var userId = client.getUserId();
+        final var playerId = client.getPlayerId();
+        final var request = new GetPlayerRequest(userId, playerId);
+        return userModule.getPlayerService().getPlayer(request)
+                .map(GetPlayerResponse::getPlayer);
+    }
+
     Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,
-                                             final Long userId,
-                                             final Long clientId) {
-        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, clientId);
+                                             final PlayerModel player,
+                                             final ClientModel client) {
+        final var userId = client.getUserId();
+        final var clientId = client.getId();
+        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId,
+                clientId,
+                player.getAttributes(),
+                player.getObject());
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

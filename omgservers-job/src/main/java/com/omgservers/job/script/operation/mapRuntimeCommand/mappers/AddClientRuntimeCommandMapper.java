@@ -24,10 +24,11 @@ public class AddClientRuntimeCommandMapper implements RuntimeCommandMapper {
     @Override
     public ScriptRequestModel map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
-        final var scriptEventBody = AddClientRequestArgumentsModel.builder()
-                .userId(runtimeCommandBody.getUserId())
-                .clientId(runtimeCommandBody.getClientId())
-                .build();
+        final var scriptEventBody = new AddClientRequestArgumentsModel(
+                runtimeCommandBody.getUserId(),
+                runtimeCommandBody.getClientId(),
+                runtimeCommandBody.getAttributes(),
+                runtimeCommandBody.getObject());
         return new ScriptRequestModel(scriptEventBody.getQualifier(), scriptEventBody);
     }
 }
