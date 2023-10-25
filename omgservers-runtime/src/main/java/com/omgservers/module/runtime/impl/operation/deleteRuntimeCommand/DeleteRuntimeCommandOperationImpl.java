@@ -1,15 +1,15 @@
 package com.omgservers.module.runtime.impl.operation.deleteRuntimeCommand;
 
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -27,11 +27,12 @@ class DeleteRuntimeCommandOperationImpl implements DeleteRuntimeCommandOperation
                                              final Long id) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
-                """
-                        delete from $schema.tab_runtime_command
-                        where id = $1
+                """                        
+                        update $schema.tab_runtime_command
+                        set deleted = true
+                        where runtime_id = $1 and id = $2 and deleted = false
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(runtimeId, id),
                 () -> null,
                 () -> logModelFactory.create(String.format("Runtime command was deleted, " +
                         "runtimeId=%d, id=%d", runtimeId, id))

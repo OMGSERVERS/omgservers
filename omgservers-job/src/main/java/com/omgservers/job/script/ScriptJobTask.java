@@ -1,7 +1,7 @@
 package com.omgservers.job.script;
 
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.dto.script.CallScriptRequest;
@@ -11,7 +11,6 @@ import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.job.script.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
 import com.omgservers.model.script.ScriptModel;
 import com.omgservers.module.runtime.RuntimeModule;
@@ -65,7 +64,7 @@ public class ScriptJobTask implements JobTask {
                             runtimeCommands.add(updateRuntime);
 
                             return callScript(script, runtimeCommands)
-                                    .call(voidItem -> updateRuntimeCommandsStatus(script,
+                                    .call(voidItem -> deleteRuntimeCommands(script,
                                             runtimeCommands));
                         })
                 )
@@ -79,7 +78,7 @@ public class ScriptJobTask implements JobTask {
     }
 
     Uni<List<RuntimeCommandModel>> viewRuntimeCommands(final Long runtimeId) {
-        final var request = new ViewRuntimeCommandsRequest(runtimeId, RuntimeCommandStatusEnum.NEW);
+        final var request = new ViewRuntimeCommandsRequest(runtimeId, false);
         return runtimeModule.getRuntimeService().viewRuntimeCommands(request)
                 .map(ViewRuntimeCommandsResponse::getRuntimeCommands);
     }
@@ -95,13 +94,11 @@ public class ScriptJobTask implements JobTask {
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> updateRuntimeCommandsStatus(final ScriptModel script,
-                                             final List<RuntimeCommandModel> runtimeCommands) {
+    Uni<Boolean> deleteRuntimeCommands(final ScriptModel script,
+                                       final List<RuntimeCommandModel> runtimeCommands) {
         final var ids = runtimeCommands.stream().map(RuntimeCommandModel::getId).toList();
-        final var request = new UpdateRuntimeCommandsStatusRequest(script.getRuntimeId(),
-                ids,
-                RuntimeCommandStatusEnum.PROCESSED);
-        return runtimeModule.getRuntimeService().updateRuntimeCommandsStatus(request)
-                .map(UpdateRuntimeCommandsStatusResponse::getUpdated);
+        final var request = new DeleteRuntimeCommandsRequest(script.getRuntimeId(), ids);
+        return runtimeModule.getRuntimeService().deleteRuntimeCommands(request)
+                .map(DeleteRuntimeCommandsResponse::getDeleted);
     }
 }

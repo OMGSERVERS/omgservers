@@ -16,7 +16,7 @@ public class ViewRuntimeCommandsRequest implements ShardedRequest {
     Long runtimeId;
 
     @NotNull
-    RuntimeCommandStatusEnum status;
+    Boolean deleted;
 
     @Override
     public String getRequestShardKey() {

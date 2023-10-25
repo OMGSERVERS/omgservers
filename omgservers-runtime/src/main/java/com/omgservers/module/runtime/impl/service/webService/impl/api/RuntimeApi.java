@@ -32,8 +32,8 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import io.smallrye.mutiny.Uni;
@@ -56,6 +56,10 @@ public interface RuntimeApi {
     Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request);
 
     @PUT
+    @Path("/view-runtime-commands")
+    Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
+
+    @PUT
     @Path("/sync-runtime-command")
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
 
@@ -64,12 +68,8 @@ public interface RuntimeApi {
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
 
     @PUT
-    @Path("/view-runtime-commands")
-    Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
-
-    @PUT
-    @Path("/update-runtime-commands-status")
-    Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(UpdateRuntimeCommandsStatusRequest request);
+    @Path("/delete-runtime-commands")
+    Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
     @PUT
     @Path("/sync-runtime-grant")

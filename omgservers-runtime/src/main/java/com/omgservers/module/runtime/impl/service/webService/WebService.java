@@ -32,13 +32,11 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
 
 public interface WebService {
     Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request);
@@ -47,13 +45,13 @@ public interface WebService {
 
     Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request);
 
+    Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
+
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
 
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
 
-    Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
-
-    Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(UpdateRuntimeCommandsStatusRequest request);
+    Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
 

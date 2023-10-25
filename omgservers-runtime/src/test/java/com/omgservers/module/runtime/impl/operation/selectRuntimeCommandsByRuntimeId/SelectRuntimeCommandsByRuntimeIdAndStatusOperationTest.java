@@ -1,4 +1,4 @@
-package com.omgservers.module.runtime.impl.operation.selectRuntimeCommandsByRuntimeIdAndStatus;
+package com.omgservers.module.runtime.impl.operation.selectRuntimeCommandsByRuntimeId;
 
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.factory.RuntimeModelFactory;
@@ -17,7 +17,7 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions 
     private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectRuntimeCommandsByRuntimeIdAndStatusOperation selectRuntimeCommandsByRuntimeIdAndStatusOperation;
+    SelectRuntimeCommandsByRuntimeIdOperation selectRuntimeCommandsByRuntimeIdOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
@@ -54,7 +54,7 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions 
 //        final var runtimeCommand21 = runtimeCommandModelFactory.create(runtime21.getId(), new InitMatchCommandBodyModel());
 //        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand21);
 //
-//        final var newRuntimeCommands = selectRuntimeCommandsByRuntimeIdAndStatusOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, runtime1.getId());
+//        final var newRuntimeCommands = selectRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, runtime1.getId());
 //        assertEquals(2, newRuntimeCommands.size());
 //        assertEquals(runtimeCommand11, newRuntimeCommands.get(0));
 //        assertEquals(runtimeCommand12, newRuntimeCommands.get(1));
@@ -65,7 +65,7 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions 
 //        final var shard = 0;
 //        final var id = generateIdOperation.generateId();
 //
-//        final var newRuntimeCommands = selectRuntimeCommandsByRuntimeIdAndStatusOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, id);
+//        final var newRuntimeCommands = selectRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, id);
 //        assertTrue(newRuntimeCommands.isEmpty());
 //    }
 

@@ -2,6 +2,8 @@ package com.omgservers.module.runtime.impl.service.webService.impl.api;
 
 import com.omgservers.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
@@ -32,8 +34,6 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -73,6 +73,11 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
+    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeCommands);
+    }
+
+    @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
@@ -85,14 +90,8 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeCommands);
-    }
-
-    @Override
-    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(
-            final UpdateRuntimeCommandsStatusRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateRuntimeCommandsStatus);
+    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeCommands);
     }
 
     @Override

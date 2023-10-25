@@ -220,8 +220,7 @@ create table if not exists tab_runtime_command (
     modified timestamp with time zone not null,
     qualifier text not null,
     body json not null,
-    status text not null,
-    step bigint
+    deleted boolean not null
 );
 
 create table if not exists tab_runtime_grant (

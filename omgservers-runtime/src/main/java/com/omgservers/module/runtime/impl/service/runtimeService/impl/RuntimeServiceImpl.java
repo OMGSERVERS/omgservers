@@ -2,6 +2,8 @@ package com.omgservers.module.runtime.impl.service.runtimeService.impl;
 
 import com.omgservers.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
@@ -16,8 +18,6 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
@@ -31,7 +31,7 @@ import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.get
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeGrant.SyncRuntimeGrantMethod;
-import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.updateRuntimeCommandsStatus.UpdateRuntimeCommandsStatusMethod;
+import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.updateRuntimeCommandsStatus.DeleteRuntimeCommandsMethod;
 import com.omgservers.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeCommands.ViewRuntimeCommandsMethod;
 import com.omgservers.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -46,11 +46,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeServiceImpl implements RuntimeService {
 
-    final GetRuntimeModuleClientOperation getRuntimeModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
-
+    final DeleteRuntimeCommandsMethod deleteRuntimeCommandsMethod;
     final DeleteRuntimeCommandMethod deleteRuntimeCommandMethod;
-    final UpdateRuntimeCommandsStatusMethod updateRuntimeCommandsStatusMethod;
     final ViewRuntimeCommandsMethod viewRuntimeCommandsMethod;
     final SyncRuntimeCommandMethod syncRuntimeCommandMethod;
     final DeleteRuntimeGrantMethod deleteRuntimeGrantMethod;
@@ -59,6 +56,9 @@ public class RuntimeServiceImpl implements RuntimeService {
     final DeleteRuntimeMethod deleteRuntimeMethod;
     final SyncRuntimeMethod syncRuntimeMethod;
     final GetRuntimeMethod getRuntimeMethod;
+
+    final GetRuntimeModuleClientOperation getRuntimeModuleClientOperation;
+    final HandleInternalRequestOperation handleInternalRequestOperation;
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(@Valid final SyncRuntimeRequest request) {
@@ -85,6 +85,14 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid final ViewRuntimeCommandsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::viewRuntimeCommands,
+                viewRuntimeCommandsMethod::viewRuntimeCommands);
+    }
+
+    @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid final SyncRuntimeCommandRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
@@ -101,20 +109,11 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid final ViewRuntimeCommandsRequest request) {
+    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid final DeleteRuntimeCommandsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::viewRuntimeCommands,
-                viewRuntimeCommandsMethod::viewRuntimeCommands);
-    }
-
-    @Override
-    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(
-            @Valid final UpdateRuntimeCommandsStatusRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::updateRuntimeCommandsStatus,
-                updateRuntimeCommandsStatusMethod::updateRuntimeCommandsStatus);
+                RuntimeModuleClient::deleteRuntimeCommands,
+                deleteRuntimeCommandsMethod::deleteRuntimeCommands);
     }
 
     @Override

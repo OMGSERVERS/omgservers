@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateRuntimeCommandsStatusResponse {
+public class DeleteRuntimeCommandsResponse {
 
-    Boolean updated;
+    Boolean deleted;
 }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,8 +35,8 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_command(
-                            id, runtime_id, created, modified, qualifier, body, status, step)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, runtime_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,8 +47,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                         runtimeCommand.getModified().atOffset(ZoneOffset.UTC),
                         runtimeCommand.getQualifier(),
                         getBodyString(runtimeCommand),
-                        runtimeCommand.getStatus(),
-                        runtimeCommand.getStep()
+                        runtimeCommand.getDeleted()
                 ),
                 () -> null,
                 () -> logModelFactory.create("Runtime command was inserted, runtimeCommand=" + runtimeCommand)

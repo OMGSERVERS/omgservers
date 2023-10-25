@@ -2,6 +2,8 @@ package com.omgservers.module.runtime.impl.service.webService.impl;
 
 import com.omgservers.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeCommandResponse;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.dto.runtime.DeleteRuntimeRequest;
@@ -32,8 +34,6 @@ import com.omgservers.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusRequest;
-import com.omgservers.dto.runtime.UpdateRuntimeCommandsStatusResponse;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.module.runtime.impl.service.doService.DoService;
@@ -84,9 +84,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<UpdateRuntimeCommandsStatusResponse> updateRuntimeCommandsStatus(
-            final UpdateRuntimeCommandsStatusRequest request) {
-        return runtimeService.updateRuntimeCommandsStatus(request);
+    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
+        return runtimeService.deleteRuntimeCommands(request);
     }
 
     @Override

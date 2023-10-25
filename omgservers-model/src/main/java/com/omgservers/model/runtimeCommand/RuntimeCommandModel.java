@@ -1,7 +1,6 @@
 package com.omgservers.model.runtimeCommand;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.omgservers.exception.ServerSideBadRequestException;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,12 +13,6 @@ import java.time.Instant;
 @AllArgsConstructor
 @JsonDeserialize(using = RuntimeCommandDeserializer.class)
 public class RuntimeCommandModel {
-
-    public static void validate(RuntimeCommandModel command) {
-        if (command == null) {
-            throw new ServerSideBadRequestException("command is null");
-        }
-    }
 
     @NotNull
     Long id;
@@ -40,8 +33,5 @@ public class RuntimeCommandModel {
     RuntimeCommandBodyModel body;
 
     @NotNull
-    RuntimeCommandStatusEnum status;
-
-    @NotNull
-    Long step;
+    Boolean deleted;
 }

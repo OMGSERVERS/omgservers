@@ -2,7 +2,6 @@ package com.omgservers.module.runtime.factory;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.runtimeCommand.RuntimeCommandStatusEnum;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,7 @@ public class RuntimeCommandModelFactory {
         runtimeCommand.setModified(now);
         runtimeCommand.setQualifier(body.getQualifier());
         runtimeCommand.setBody(body);
-        runtimeCommand.setStatus(RuntimeCommandStatusEnum.NEW);
+        runtimeCommand.setDeleted(false);
         return runtimeCommand;
     }
 }
