@@ -4,6 +4,7 @@ import com.omgservers.dto.gateway.RespondMessageRequest;
 import com.omgservers.dto.user.GetClientRequest;
 import com.omgservers.dto.user.GetClientResponse;
 import com.omgservers.dto.user.RespondClientRequest;
+import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.user.UserModule;
@@ -11,6 +12,8 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -26,7 +29,19 @@ class RespondClientMethodImpl implements RespondClientMethod {
         final var clientId = request.getClientId();
 
         return getClient(userId, clientId)
-                .flatMap(client -> {
+                .onFailure(ServerSideNotFoundException.class).recoverWithNull()
+                .invoke(client -> {
+                    if (Objects.isNull(client)) {
+                        log.warn("Respond client method failed, client doesn't exist anymore, " +
+                                        "userId={}, " +
+                                        "clientId={}, " +
+                                        "messageQualifier={}",
+                                userId,
+                                clientId,
+                                request.getMessage().getQualifier());
+                    }
+                })
+                .onItem().ifNotNull().transformToUni(client -> {
                     final var server = client.getServer();
                     final var connection = client.getConnectionId();
                     final var message = request.getMessage();

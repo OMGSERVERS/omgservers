@@ -43,9 +43,16 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedMatch(matchmakerId, matchId)
                 .flatMap(match -> {
-                    log.info("Match was deleted, matchId={}, mode={}, matchmakerId={}",
-                            matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
                     final var runtimeId = match.getRuntimeId();
+                    log.info("Match was deleted, " +
+                                    "matchId={}, " +
+                                    "mode={}, " +
+                                    "matchmakerId={}, " +
+                                    "runtimeId={}",
+                            matchId,
+                            match.getConfig().getModeConfig().getName(),
+                            matchmakerId,
+                            runtimeId);
                     return deleteRuntime(runtimeId)
                             .flatMap(runtimeWasDeleted -> deleteMatchJob(matchmakerId, matchId));
                 })

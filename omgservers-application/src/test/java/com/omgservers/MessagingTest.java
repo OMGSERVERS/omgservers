@@ -8,8 +8,6 @@ import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -136,12 +134,6 @@ public class MessagingTest extends Assertions {
         client1.close();
         client2.close();
 
-        Thread.sleep(10000);
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class TestMessage {
-        String text;
+        Thread.sleep(20000);
     }
 }
