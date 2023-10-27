@@ -52,8 +52,8 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
                 throw new AuthenticationFailedException();
             }
         } else {
-            final var validateCredentialsInternalRequest = new ValidateCredentialsRequest(username, password);
-            return systemModule.getServiceAccountService().validateCredentials(validateCredentialsInternalRequest)
+            final var validateCredentialsRequest = new ValidateCredentialsRequest(username, password);
+            return systemModule.getServiceAccountService().validateCredentials(validateCredentialsRequest)
                     .map(ValidateCredentialsResponse::getValid)
                     .map(valid -> {
                         if (valid) {

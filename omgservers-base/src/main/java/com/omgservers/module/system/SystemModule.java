@@ -1,5 +1,6 @@
 package com.omgservers.module.system;
 
+import com.omgservers.module.system.impl.service.containerService.ContainerService;
 import com.omgservers.module.system.impl.service.eventService.EventService;
 import com.omgservers.module.system.impl.service.handlerService.HandlerService;
 import com.omgservers.module.system.impl.service.indexService.IndexService;
@@ -12,15 +13,19 @@ public interface SystemModule {
 
     ServiceAccountService getServiceAccountService();
 
-    EventService getEventService();
+    ContainerService getContainerService();
 
     HandlerService getHandlerService();
 
+    EventService getEventService();
+
+    IndexService getIndexService();
+    
     SyncService getSyncService();
 
     JobService getJobService();
 
-    IndexService getIndexService();
-
     LogService getLogService();
+
+
 }

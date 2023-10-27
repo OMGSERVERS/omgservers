@@ -105,6 +105,11 @@
                 <artifactId>omgservers-documentation</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.omgservers</groupId>
+                <artifactId>omgservers-worker</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

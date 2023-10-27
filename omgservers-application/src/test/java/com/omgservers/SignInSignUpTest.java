@@ -1,6 +1,5 @@
 package com.omgservers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.utils.operation.BootstrapVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
@@ -24,9 +23,6 @@ public class SignInSignUpTest extends Assertions {
 
     @Inject
     TestClientFactory testClientFactory;
-
-    @Inject
-    ObjectMapper objectMapper;
 
     @Test
     void signInSignUpTest() throws Exception {

@@ -7,6 +7,9 @@ import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
+import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
+import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.ContainerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
 import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
@@ -85,6 +88,9 @@ public enum EventQualifierEnum {
     JOB_CREATED(JobCreatedEventBodyModel.class, true),
     JOB_UPDATED(JobUpdatedEventBodyModel.class, true),
     JOB_DELETED(JobDeletedEventBodyModel.class, true),
+    CONTAINER_CREATED(ContainerCreatedEventBodyModel.class, true),
+    CONTAINER_UPDATED(ContainerUpdatedEventBodyModel.class, true),
+    CONTAINER_DELETED(ContainerDeletedEventBodyModel.class, true),
     // Entity
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_UPDATED(TenantCreatedEventBodyModel.class, true),
