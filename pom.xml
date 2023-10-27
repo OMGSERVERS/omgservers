@@ -23,27 +23,8 @@
     </properties>
 
     <modules>
-        <module>omgservers-admin</module>
-        <module>omgservers-application</module>
-        <module>omgservers-base</module>
-        <module>omgservers-bom</module>
-        <module>omgservers-common</module>
-        <module>omgservers-script</module>
-        <module>omgservers-developer</module>
         <module>omgservers-documentation</module>
-        <module>omgservers-dto</module>
-        <module>omgservers-exception</module>
-        <module>omgservers-gateway</module>
-        <module>omgservers-handler</module>
-        <module>omgservers-job</module>
-        <module>omgservers-lua</module>
-        <module>omgservers-matchmaker</module>
-        <module>omgservers-migration</module>
-        <module>omgservers-model</module>
-        <module>omgservers-parent</module>
-        <module>omgservers-runtime</module>
-        <module>omgservers-tenant</module>
-        <module>omgservers-user</module>
+        <module>omgservers-service</module>
     </modules>
 
     <dependencies>
