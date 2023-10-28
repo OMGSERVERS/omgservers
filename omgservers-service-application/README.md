@@ -1,1 +1,1 @@
-# omgservers-service
+# omgservers-service-application

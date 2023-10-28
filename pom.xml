@@ -26,6 +26,7 @@
         <module>omgservers-platform-docs</module>
         <module>omgservers-service-application</module>
         <module>omgservers-service-model</module>
+        <module>omgservers-worker-application</module>
     </modules>
 
     <dependencies>
