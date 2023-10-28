@@ -1,0 +1,9 @@
+package com.omgservers.module.matchmaker.impl.service.matchmakerService.impl.method.syncMatchmakerCommand;
+
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
+import io.smallrye.mutiny.Uni;
+
+public interface SyncMatchmakerCommandMethod {
+    Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(SyncMatchmakerCommandRequest request);
+}

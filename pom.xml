@@ -23,8 +23,9 @@
     </properties>
 
     <modules>
-        <module>omgservers-documentation</module>
-        <module>omgservers-service</module>
+        <module>omgservers-platform-docs</module>
+        <module>omgservers-service-application</module>
+        <module>omgservers-service-model</module>
     </modules>
 
     <dependencies>
