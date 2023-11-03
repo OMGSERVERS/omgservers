@@ -242,17 +242,3 @@ create table if not exists tab_runtime_grant (
     type text not null,
     unique(runtime_id, entity_id, type)
 );
-
--- script module
-
-create table if not exists tab_script (
-    id bigint primary key,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    tenant_id bigint not null,
-    version_id bigint not null,
-    runtime_id bigint not null,
-    type text not null,
-    state json not null,
-    config json not null
-);

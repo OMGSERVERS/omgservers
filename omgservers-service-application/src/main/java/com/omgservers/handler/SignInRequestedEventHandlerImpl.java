@@ -1,5 +1,8 @@
 package com.omgservers.handler;
 
+import com.omgservers.exception.ServerSideNotFoundException;
+import com.omgservers.model.assignedClient.AssignedClientModel;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -19,9 +22,6 @@ import com.omgservers.model.dto.user.SyncClientRequest;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
-import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.model.assignedClient.AssignedClientModel;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
@@ -114,7 +114,7 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
                                                                                                     "clientId={}, " +
                                                                                                     "tenantId={}, " +
                                                                                                     "stageId={}, " +
-                                                                                                    "scriptId={}",
+                                                                                                    "versionId={}",
                                                                                             userId,
                                                                                             client.getId(),
                                                                                             tenantId,

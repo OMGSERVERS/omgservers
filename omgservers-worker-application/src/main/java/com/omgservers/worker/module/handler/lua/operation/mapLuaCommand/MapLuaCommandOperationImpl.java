@@ -16,9 +16,9 @@ class MapLuaCommandOperationImpl implements MapLuaCommandOperation {
 
     final Map<LuaCommandQualifierEnum, LuaCommandMapper> luaCommandMappers;
 
-    MapLuaCommandOperationImpl(Instance<LuaCommandMapper> scriptEventMappersBeans) {
+    MapLuaCommandOperationImpl(Instance<LuaCommandMapper> luaCommandMappersBeans) {
         this.luaCommandMappers = new ConcurrentHashMap<>();
-        scriptEventMappersBeans.stream().forEach(luaCommandMapper -> {
+        luaCommandMappersBeans.stream().forEach(luaCommandMapper -> {
             final var qualifier = luaCommandMapper.getQualifier();
             if (luaCommandMappers.put(qualifier, luaCommandMapper) != null) {
                 log.error("Multiple lua command mappers were detected, qualifier={}", qualifier);

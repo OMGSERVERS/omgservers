@@ -43,9 +43,6 @@ import com.omgservers.model.event.body.RespondRequestedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
-import com.omgservers.model.event.body.ScriptCreatedEventBodyModel;
-import com.omgservers.model.event.body.ScriptDeletedEventBodyModel;
-import com.omgservers.model.event.body.ScriptUpdatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
@@ -135,9 +132,6 @@ public enum EventQualifierEnum {
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class, true),
     RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class, true),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
-    SCRIPT_CREATED(ScriptCreatedEventBodyModel.class, true),
-    SCRIPT_UPDATED(ScriptUpdatedEventBodyModel.class, true),
-    SCRIPT_DELETED(ScriptDeletedEventBodyModel.class, true),
     // Gateway
     SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class, true),
     SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class, true),
