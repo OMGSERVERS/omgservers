@@ -16,6 +16,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
@@ -62,7 +63,13 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
                     // TODO: cleanup container user and runtime permission
                     return deleteContainer(runtimeId)
-                            .flatMap(wasContainerDeleted -> deleteVersionRuntime(runtime));
+                            .flatMap(wasContainerDeleted -> {
+                                if (runtime.getType().equals(RuntimeTypeEnum.VERSION)) {
+                                    return deleteVersionRuntime(runtime);
+                                } else {
+                                    return Uni.createFrom().voidItem();
+                                }
+                            });
                 })
                 .replaceWith(true);
     }
