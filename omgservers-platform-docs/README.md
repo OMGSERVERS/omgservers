@@ -1,1 +1,1 @@
-# omgservers-documentation
+# omgservers-platform-docs
