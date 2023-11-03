@@ -1,15 +1,15 @@
 package com.omgservers.module.system.impl.service.webService.impl;
 
-import com.omgservers.model.dto.internal.DeleteJobRequest;
-import com.omgservers.model.dto.internal.DeleteJobResponse;
-import com.omgservers.model.dto.internal.ScheduleJobRequest;
-import com.omgservers.model.dto.internal.SyncIndexRequest;
-import com.omgservers.model.dto.internal.SyncJobRequest;
-import com.omgservers.model.dto.internal.SyncJobResponse;
-import com.omgservers.model.dto.internal.SyncServiceAccountRequest;
-import com.omgservers.model.dto.internal.UnscheduleJobRequest;
-import com.omgservers.model.dto.internal.ViewLogRequest;
-import com.omgservers.model.dto.internal.ViewLogsResponse;
+import com.omgservers.model.dto.system.DeleteJobRequest;
+import com.omgservers.model.dto.system.DeleteJobResponse;
+import com.omgservers.model.dto.system.ScheduleJobRequest;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncJobRequest;
+import com.omgservers.model.dto.system.SyncJobResponse;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.UnscheduleJobRequest;
+import com.omgservers.model.dto.system.ViewLogRequest;
+import com.omgservers.model.dto.system.ViewLogsResponse;
 import com.omgservers.module.system.impl.service.eventService.EventService;
 import com.omgservers.module.system.impl.service.indexService.IndexService;
 import com.omgservers.module.system.impl.service.jobService.JobService;

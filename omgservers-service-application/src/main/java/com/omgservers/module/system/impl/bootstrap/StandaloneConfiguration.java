@@ -1,12 +1,13 @@
 package com.omgservers.module.system.impl.bootstrap;
 
-import com.omgservers.model.dto.internal.SyncIndexRequest;
-import com.omgservers.model.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.IndexModelFactory;
 import com.omgservers.module.system.factory.ServiceAccountModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
@@ -31,6 +32,7 @@ public class StandaloneConfiguration {
     final IndexModelFactory indexModelFactory;
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
+    @WithSpan
     void startup(@Observes @Priority(2000) StartupEvent event) {
         if (getConfigOperation.getConfig().standalone()) {
             Uni.createFrom().voidItem()

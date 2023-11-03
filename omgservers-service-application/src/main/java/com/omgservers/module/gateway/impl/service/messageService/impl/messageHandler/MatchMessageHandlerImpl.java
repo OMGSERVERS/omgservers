@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.model.event.body.MatchRequestedEventBodyModel;
@@ -12,7 +12,7 @@ import com.omgservers.module.gateway.impl.service.connectionService.request.GetA
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedRuntimeRequest;
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

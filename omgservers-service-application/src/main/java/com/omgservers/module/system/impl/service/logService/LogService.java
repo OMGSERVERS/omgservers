@@ -1,9 +1,9 @@
 package com.omgservers.module.system.impl.service.logService;
 
-import com.omgservers.model.dto.internal.SyncLogRequest;
-import com.omgservers.model.dto.internal.ViewLogRequest;
-import com.omgservers.model.dto.internal.SyncLogResponse;
-import com.omgservers.model.dto.internal.ViewLogsResponse;
+import com.omgservers.model.dto.system.SyncLogRequest;
+import com.omgservers.model.dto.system.ViewLogRequest;
+import com.omgservers.model.dto.system.SyncLogResponse;
+import com.omgservers.model.dto.system.ViewLogsResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

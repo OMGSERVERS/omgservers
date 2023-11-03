@@ -1,11 +1,11 @@
 package com.omgservers.operation.getServers;
 
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
+import com.omgservers.model.index.IndexServerModel;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.model.dto.internal.GetIndexRequest;
-import com.omgservers.model.dto.internal.GetIndexResponse;
-import com.omgservers.model.index.IndexServerModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

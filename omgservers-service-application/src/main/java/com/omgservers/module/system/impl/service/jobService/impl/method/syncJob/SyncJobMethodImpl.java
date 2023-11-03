@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.syncJob;
 
-import com.omgservers.model.dto.internal.SyncJobRequest;
-import com.omgservers.model.dto.internal.SyncJobResponse;
+import com.omgservers.model.dto.system.SyncJobRequest;
+import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.module.system.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.getIndex;
 
-import com.omgservers.model.dto.internal.GetIndexRequest;
-import com.omgservers.model.dto.internal.GetIndexResponse;
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.module.system.impl.operation.getIndex.GetIndexOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

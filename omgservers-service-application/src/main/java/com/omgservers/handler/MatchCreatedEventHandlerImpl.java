@@ -1,7 +1,7 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.SyncJobRequest;
-import com.omgservers.model.dto.internal.SyncJobResponse;
+import com.omgservers.model.dto.system.SyncJobRequest;
+import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
@@ -37,8 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final SystemModule systemModule;
     final RuntimeModule runtimeModule;
+    final SystemModule systemModule;
     final TenantModule tenantModule;
 
     final MatchClientModelFactory matchClientModelFactory;
@@ -94,14 +94,12 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var runtimeId = match.getRuntimeId();
         final var runtimeConfig = new RuntimeConfigModel();
         runtimeConfig.setMatchConfig(new RuntimeConfigModel.MatchConfig(matchmakerId, matchId, modeConfig));
-        final var scriptId = generateIdOperation.generateId();
-        runtimeConfig.setScriptConfig(new RuntimeConfigModel.ScriptConfig(scriptId));
         final var runtime = runtimeModelFactory.create(
                 runtimeId,
                 tenantId,
                 versionId,
                 // TODO: Detect runtime type
-                RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
+                RuntimeTypeEnum.MATCH,
                 runtimeConfig);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)

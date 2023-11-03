@@ -1,7 +1,7 @@
 package com.omgservers.security;
 
-import com.omgservers.model.dto.internal.ValidateCredentialsRequest;
-import com.omgservers.model.dto.internal.ValidateCredentialsResponse;
+import com.omgservers.model.dto.system.ValidateCredentialsRequest;
+import com.omgservers.model.dto.system.ValidateCredentialsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;

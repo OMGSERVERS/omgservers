@@ -1,37 +1,44 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.SyncContainerRequest;
-import com.omgservers.model.dto.internal.SyncContainerResponse;
-import com.omgservers.model.dto.internal.SyncJobRequest;
+import com.omgservers.model.container.ContainerConfigModel;
+import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.script.SyncScriptRequest;
-import com.omgservers.model.dto.script.SyncScriptResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
+import com.omgservers.model.dto.system.SyncContainerRequest;
+import com.omgservers.model.dto.system.SyncContainerResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
-import com.omgservers.model.container.ContainerTypeEnum;
+import com.omgservers.model.dto.user.SyncUserRequest;
+import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
-import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.script.ScriptConfigModel;
-import com.omgservers.model.script.ScriptTypeEnum;
+import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.model.user.UserModel;
+import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.module.script.ScriptModule;
-import com.omgservers.module.script.factory.ScriptModelFactory;
+import com.omgservers.module.runtime.factory.RuntimePermissionModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.ContainerModelFactory;
 import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.tenant.factory.VersionRuntimeModelFactory;
+import com.omgservers.module.user.UserModule;
+import com.omgservers.module.user.factory.UserModelFactory;
+import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.security.SecureRandom;
+import java.util.HashMap;
 
 @Slf4j
 @ApplicationScoped
@@ -40,12 +47,13 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final SystemModule systemModule;
-    final ScriptModule scriptModule;
     final TenantModule tenantModule;
+    final UserModule userModule;
 
+    final RuntimePermissionModelFactory runtimePermissionModelFactory;
     final VersionRuntimeModelFactory versionRuntimeModelFactory;
     final ContainerModelFactory containerModelFactory;
-    final ScriptModelFactory scriptModelFactory;
+    final UserModelFactory userModelFactory;
     final JobModelFactory jobModelFactory;
 
     @Override
@@ -59,15 +67,13 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var id = body.getId();
 
         return getRuntime(id)
-                .call(runtime -> {
+                .flatMap(runtime -> {
                     log.info("Runtime was created, id={}, type={}",
                             runtime.getId(),
                             runtime.getType());
 
-                    return syncByType(runtime)
-                            .replaceWithVoid();
+                    return createContainer(runtime);
                 })
-                .call(this::syncRuntimeJob)
                 .replaceWith(true);
     }
 
@@ -77,15 +83,61 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> syncByType(final RuntimeModel runtime) {
-        return switch (runtime.getType()) {
-            case EMBEDDED_GLOBAL_SCRIPT -> syncVersionRuntime(runtime)
-                    .flatMap(wasVersionRuntimeCreated -> syncScript(runtime, ScriptTypeEnum.GLOBAL));
-            case EMBEDDED_MATCH_SCRIPT -> syncScript(runtime, ScriptTypeEnum.MATCH);
-            case CONTAINER_GLOBAL_SCRIPT -> syncVersionRuntime(runtime)
-                    .flatMap(wasVersionRuntimeCreated -> syncContainer(runtime, ContainerTypeEnum.GLOBAL));
-            case CONTAINER_MATCH_SCRIPT -> syncContainer(runtime, ContainerTypeEnum.MATCH);
-        };
+    Uni<Void> createContainer(final RuntimeModel runtime) {
+        // TODO: improve it
+        final var password = String.valueOf(new SecureRandom().nextLong());
+        return createUser(password)
+                .flatMap(user -> {
+                    final var runtimeId = runtime.getId();
+                    final var userId = user.getId();
+                    return syncRuntimePermission(runtimeId, userId)
+                            .flatMap(wasRuntimePermissionCreated -> syncContainer(userId, password, runtime)
+                                    .flatMap(wasContainerCreated -> {
+                                        if (runtime.getType().equals(RuntimeTypeEnum.VERSION)) {
+                                            return syncVersionRuntime(runtime);
+                                        } else {
+                                            return Uni.createFrom().voidItem();
+                                        }
+                                    })
+                                    .replaceWithVoid());
+                });
+    }
+
+    Uni<UserModel> createUser(String password) {
+        final var passwordHash = BcryptUtil.bcryptHash(password);
+        final var user = userModelFactory.create(UserRoleEnum.CONTAINER, passwordHash);
+        final var request = new SyncUserRequest(user);
+        return userModule.getUserService().syncUser(request)
+                .map(SyncUserResponse::getCreated)
+                .replaceWith(user);
+    }
+
+    Uni<Boolean> syncRuntimePermission(final Long runtimeId, final Long userId) {
+        final var runtimePermission = runtimePermissionModelFactory.create(runtimeId,
+                userId,
+                RuntimePermissionEnum.HANDLE_RUNTIME);
+        final var request = new SyncRuntimePermissionRequest(runtimePermission);
+        return runtimeModule.getRuntimeService().syncRuntimePermission(request)
+                .map(SyncRuntimePermissionResponse::getCreated);
+    }
+
+    Uni<Boolean> syncContainer(final Long userId,
+                               final String password,
+                               final RuntimeModel runtime) {
+        final var runtimeId = runtime.getId();
+        final var environment = new HashMap<String, String>();
+        environment.put("OMGSERVERS_URL", "http://host.docker.internal:8081");
+        environment.put("OMGSERVERS_USER_ID", userId.toString());
+        environment.put("OMGSERVERS_PASSWORD", password);
+        environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());
+        final var config = new ContainerConfigModel(environment);
+        final var container = containerModelFactory.create(runtimeId,
+                ContainerQualifierEnum.RUNTIME,
+                "omgservers/omgservers-worker-application:1.0.0-SNAPSHOT",
+                config);
+        final var request = new SyncContainerRequest(container);
+        return systemModule.getContainerService().syncContainer(request)
+                .map(SyncContainerResponse::getCreated);
     }
 
     Uni<Boolean> syncVersionRuntime(final RuntimeModel runtime) {
@@ -95,37 +147,5 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var request = new SyncVersionRuntimeRequest(versionRuntime);
         return tenantModule.getVersionService().syncVersionRuntime(request)
                 .map(SyncVersionRuntimeResponse::getCreated);
-    }
-
-    Uni<Boolean> syncScript(final RuntimeModel runtime, final ScriptTypeEnum type) {
-        final var runtimeId = runtime.getId();
-        final var tenantId = runtime.getTenantId();
-        final var versionId = runtime.getVersionId();
-        final var config = new ScriptConfigModel();
-        final var scriptId = runtime.getConfig().getScriptConfig().getScriptId();
-        final var script = scriptModelFactory.create(scriptId, tenantId, versionId, runtimeId, type, config);
-        final var request = new SyncScriptRequest(script);
-        return scriptModule.getScriptService().syncScript(request)
-                .map(SyncScriptResponse::getCreated);
-    }
-
-    Uni<Boolean> syncContainer(final RuntimeModel runtime, final ContainerTypeEnum type) {
-        final var runtimeId = runtime.getId();
-        final var tenantId = runtime.getTenantId();
-        final var versionId = runtime.getVersionId();
-        final var containerId = runtime.getConfig().getContainerConfig().getContainerId();
-        final var container = containerModelFactory.create(containerId, tenantId, versionId, runtimeId, type);
-        final var request = new SyncContainerRequest(container);
-        return systemModule.getContainerService().syncContainer(request)
-                .map(SyncContainerResponse::getCreated);
-    }
-
-    Uni<JobModel> syncRuntimeJob(final RuntimeModel runtime) {
-        final var shardKey = runtime.getId();
-        final var entityId = runtime.getId();
-        final var job = jobModelFactory.create(shardKey, entityId, JobQualifierEnum.RUNTIME);
-        final var request = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJob(request)
-                .replaceWith(job);
     }
 }

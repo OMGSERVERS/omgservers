@@ -1,15 +1,17 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.GetContainerRequest;
-import com.omgservers.model.dto.internal.GetContainerResponse;
-import com.omgservers.model.dto.internal.RunContainerRequest;
-import com.omgservers.model.dto.internal.RunContainerResponse;
 import com.omgservers.model.container.ContainerModel;
+import com.omgservers.model.dto.system.GetContainerRequest;
+import com.omgservers.model.dto.system.GetContainerResponse;
+import com.omgservers.model.dto.system.RunContainerRequest;
+import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
+import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ContainerCreatedEventHandlerImpl implements EventHandler {
 
+    final RuntimeModule runtimeModule;
     final SystemModule systemModule;
+    final UserModule userModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -36,18 +40,18 @@ public class ContainerCreatedEventHandlerImpl implements EventHandler {
         log.info("Container was created, id={}", id);
 
         return getContainer(id)
-                .flatMap(container -> runContainer(id))
+                .flatMap(this::runContainer)
                 .replaceWith(true);
     }
 
     Uni<ContainerModel> getContainer(final Long id) {
-        final var request = new GetContainerRequest(id);
+        final var request = new GetContainerRequest(id, false);
         return systemModule.getContainerService().getContainer(request)
                 .map(GetContainerResponse::getContainer);
     }
 
-    Uni<Boolean> runContainer(final Long id) {
-        final var request = new RunContainerRequest(id);
+    Uni<Boolean> runContainer(final ContainerModel container) {
+        final var request = new RunContainerRequest(container);
         return systemModule.getContainerService().runContainer(request)
                 .map(RunContainerResponse::getRan);
     }

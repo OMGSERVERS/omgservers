@@ -1,7 +1,7 @@
 package com.omgservers.operation.upsertJob;
 
-import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -30,13 +30,13 @@ class UpsertJobOperationTest extends Assertions {
 
     @Test
     void givenJob_whenUpsertJob_thenInserted() {
-        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.TENANT);
         assertTrue(upsertJobOperation.upsertJob(TIMEOUT, pgPool, job));
     }
 
     @Test
     void givenJob_whenUpsertJob_thenUpdated() {
-        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.RUNTIME);
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.TENANT);
         upsertJobOperation.upsertJob(TIMEOUT, pgPool, job);
 
         assertFalse(upsertJobOperation.upsertJob(TIMEOUT, pgPool, job));

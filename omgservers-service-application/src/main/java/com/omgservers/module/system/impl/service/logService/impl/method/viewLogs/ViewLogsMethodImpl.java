@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.logService.impl.method.viewLogs;
 
-import com.omgservers.model.dto.internal.ViewLogRequest;
-import com.omgservers.model.dto.internal.ViewLogsResponse;
+import com.omgservers.model.dto.system.ViewLogRequest;
+import com.omgservers.model.dto.system.ViewLogsResponse;
 import com.omgservers.module.system.impl.operation.selectAllLogs.SelectAllLogsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

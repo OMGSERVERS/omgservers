@@ -44,9 +44,4 @@ public class VersionModel {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     VersionSourceCodeModel sourceCode;
-
-    @NotNull
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    VersionBytecodeModel bytecode;
 }

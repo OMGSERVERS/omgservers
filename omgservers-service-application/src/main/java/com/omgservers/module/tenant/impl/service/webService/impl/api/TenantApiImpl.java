@@ -22,8 +22,6 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -188,12 +186,6 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionResponse> deleteVersion(final DeleteVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetVersionBytecodeResponse> getVersionBytecode(final GetVersionBytecodeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getBytecode);
     }
 
     @Override

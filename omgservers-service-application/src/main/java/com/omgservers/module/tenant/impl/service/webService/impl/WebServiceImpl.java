@@ -22,8 +22,6 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -233,11 +231,6 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteVersionResponse> deleteVersion(final DeleteVersionRequest request) {
         return versionService.deleteVersion(request);
-    }
-
-    @Override
-    public Uni<GetVersionBytecodeResponse> getBytecode(final GetVersionBytecodeRequest request) {
-        return versionService.getVersionBytecode(request);
     }
 
     @Override

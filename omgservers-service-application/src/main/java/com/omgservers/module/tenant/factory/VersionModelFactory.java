@@ -1,6 +1,5 @@
 package com.omgservers.module.tenant.factory;
 
-import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
@@ -23,8 +22,7 @@ public class VersionModelFactory {
             final Long tenantId,
             final Long stageId,
             final VersionConfigModel versionConfig,
-            final VersionSourceCodeModel sourceCode,
-            final VersionBytecodeModel bytecode) {
+            final VersionSourceCodeModel sourceCode) {
         final var id = generateIdOperation.generateId();
         final var defaultMatchmakerId = generateIdOperation.generateId();
         final var defaultRuntimeId = generateIdOperation.generateId();
@@ -34,8 +32,7 @@ public class VersionModelFactory {
                 defaultMatchmakerId,
                 defaultRuntimeId,
                 versionConfig,
-                sourceCode,
-                bytecode);
+                sourceCode);
     }
 
     public VersionModel create(final Long id,
@@ -44,8 +41,7 @@ public class VersionModelFactory {
                                final Long defaultMatchmakerId,
                                final Long defaultRuntimeId,
                                final VersionConfigModel versionConfig,
-                               final VersionSourceCodeModel sourceCode,
-                               final VersionBytecodeModel bytecode) {
+                               final VersionSourceCodeModel sourceCode) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var version = new VersionModel();
@@ -58,7 +54,6 @@ public class VersionModelFactory {
         version.setDefaultRuntimeId(defaultRuntimeId);
         version.setConfig(versionConfig);
         version.setSourceCode(sourceCode);
-        version.setBytecode(bytecode);
         return version;
     }
 }

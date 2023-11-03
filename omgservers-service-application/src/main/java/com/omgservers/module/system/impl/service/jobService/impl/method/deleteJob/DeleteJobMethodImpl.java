@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.deleteJob;
 
-import com.omgservers.model.dto.internal.DeleteJobRequest;
-import com.omgservers.model.dto.internal.DeleteJobResponse;
+import com.omgservers.model.dto.system.DeleteJobRequest;
+import com.omgservers.model.dto.system.DeleteJobResponse;
 import com.omgservers.module.system.impl.operation.deleteJob.DeleteJobOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

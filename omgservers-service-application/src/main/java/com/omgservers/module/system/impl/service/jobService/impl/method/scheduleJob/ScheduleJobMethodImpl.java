@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.scheduleJob;
 
-import com.omgservers.model.dto.internal.ScheduleJobRequest;
-import com.omgservers.model.dto.internal.SyncLogRequest;
+import com.omgservers.model.dto.system.ScheduleJobRequest;
+import com.omgservers.model.dto.system.SyncLogRequest;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;

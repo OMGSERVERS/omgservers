@@ -22,16 +22,16 @@ public class ContainerModel {
     Instant modified;
 
     @NotNull
-    Long tenantId;
+    Long entityId;
 
     @NotNull
-    Long versionId;
+    ContainerQualifierEnum qualifier;
 
     @NotNull
-    Long runtimeId;
+    String image;
 
     @NotNull
-    ContainerTypeEnum type;
+    ContainerConfigModel config;
 
     @NotNull
     Boolean deleted;

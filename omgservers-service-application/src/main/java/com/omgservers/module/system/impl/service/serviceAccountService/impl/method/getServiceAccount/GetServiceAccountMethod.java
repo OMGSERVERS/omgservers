@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.getServiceAccount;
 
-import com.omgservers.model.dto.internal.GetServiceAccountRequest;
-import com.omgservers.model.dto.internal.GetServiceAccountResponse;
+import com.omgservers.model.dto.system.GetServiceAccountRequest;
+import com.omgservers.model.dto.system.GetServiceAccountResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetServiceAccountMethod {

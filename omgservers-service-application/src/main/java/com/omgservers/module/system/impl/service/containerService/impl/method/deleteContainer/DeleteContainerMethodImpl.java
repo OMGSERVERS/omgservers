@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.containerService.impl.method.deleteContainer;
 
-import com.omgservers.model.dto.internal.DeleteContainerRequest;
-import com.omgservers.model.dto.internal.DeleteContainerResponse;
+import com.omgservers.model.dto.system.DeleteContainerRequest;
+import com.omgservers.model.dto.system.DeleteContainerResponse;
 import com.omgservers.module.system.impl.operation.deleteContainer.DeleteContainerOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

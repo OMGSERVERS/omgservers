@@ -22,8 +22,6 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -103,8 +101,6 @@ public interface WebService {
     Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
 
     Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
-
-    Uni<GetVersionBytecodeResponse> getBytecode(GetVersionBytecodeRequest request);
 
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 

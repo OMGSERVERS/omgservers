@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.syncEvent;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
-import com.omgservers.model.dto.internal.SyncEventResponse;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncEventMethod {

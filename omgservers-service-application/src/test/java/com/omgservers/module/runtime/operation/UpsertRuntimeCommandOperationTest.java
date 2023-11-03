@@ -42,7 +42,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenCommand_whenUpsertRuntimeCommand_thenInserted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
@@ -52,7 +52,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenCommand_whenUpsertRuntimeCommandAgain_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT, new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());

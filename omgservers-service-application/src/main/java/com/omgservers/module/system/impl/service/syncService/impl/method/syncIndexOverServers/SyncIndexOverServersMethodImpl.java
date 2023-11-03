@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.syncService.impl.method.syncIndexOverServers;
 
-import com.omgservers.model.dto.internal.SyncIndexOverServersRequest;
-import com.omgservers.model.dto.internal.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexOverServersRequest;
+import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.module.system.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

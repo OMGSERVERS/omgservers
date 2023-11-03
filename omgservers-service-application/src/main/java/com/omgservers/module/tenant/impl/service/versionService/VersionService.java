@@ -1,7 +1,5 @@
 package com.omgservers.module.tenant.impl.service.versionService;
 
-import com.omgservers.model.dto.tenant.BuildVersionRequest;
-import com.omgservers.model.dto.tenant.BuildVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
@@ -14,8 +12,6 @@ import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -43,15 +39,11 @@ import jakarta.validation.Valid;
 
 public interface VersionService {
 
-    Uni<BuildVersionResponse> buildVersion(@Valid BuildVersionRequest request);
-
     Uni<GetVersionResponse> getVersion(@Valid GetVersionRequest request);
 
     Uni<SyncVersionResponse> syncVersion(@Valid SyncVersionRequest request);
 
     Uni<DeleteVersionResponse> deleteVersion(@Valid DeleteVersionRequest request);
-
-    Uni<GetVersionBytecodeResponse> getVersionBytecode(@Valid GetVersionBytecodeRequest request);
 
     Uni<GetVersionConfigResponse> getVersionConfig(@Valid GetVersionConfigRequest request);
 

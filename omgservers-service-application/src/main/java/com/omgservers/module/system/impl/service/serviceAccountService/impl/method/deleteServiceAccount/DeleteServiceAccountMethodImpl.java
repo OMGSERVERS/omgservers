@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.deleteServiceAccount;
 
-import com.omgservers.model.dto.internal.DeleteServiceAccountRequest;
+import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
 import com.omgservers.module.system.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

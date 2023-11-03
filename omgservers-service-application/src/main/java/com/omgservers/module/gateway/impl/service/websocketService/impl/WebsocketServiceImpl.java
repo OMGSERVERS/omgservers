@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.websocketService.impl;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
@@ -13,7 +13,7 @@ import com.omgservers.module.gateway.impl.service.websocketService.WebsocketServ
 import com.omgservers.module.gateway.impl.service.websocketService.request.CleanUpRequest;
 import com.omgservers.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

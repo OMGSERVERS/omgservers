@@ -36,19 +36,19 @@ create table if not exists tab_job (
     unique(shard_key, entity_id, qualifier)
 );
 
-create table if not exists tab_log (
-    id bigint primary key,
-    created timestamp with time zone not null,
-    message text not null
-);
-
 create table if not exists tab_container (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    tenant_id bigint not null,
-    version_id bigint not null,
-    runtime_id bigint not null,
-    type text not null,
+    entity_id bigint not null,
+    qualifier text not null,
+    image text not null,
+    config json not null,
     deleted boolean not null
+);
+
+create table if not exists tab_log (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    message text not null
 );

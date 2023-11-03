@@ -2,7 +2,6 @@ package com.omgservers.module.tenant.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideConflictException;
-import com.omgservers.model.version.VersionBytecodeModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
@@ -32,7 +31,6 @@ public class VersionMapper {
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));
             version.setSourceCode(objectMapper.readValue(row.getString("source_code"), VersionSourceCodeModel.class));
-            version.setBytecode(objectMapper.readValue(row.getString("bytecode"), VersionBytecodeModel.class));
         } catch (IOException e) {
             throw new ServerSideConflictException("version can't be parsed, version=" + version, e);
         }

@@ -3,7 +3,7 @@ package com.omgservers.module.admin.impl.service.adminService.impl.method.collec
 import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.module.system.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
-import com.omgservers.model.dto.internal.ViewLogRequest;
+import com.omgservers.model.dto.system.ViewLogRequest;
 import com.omgservers.operation.getServers.GetServersOperation;
 import com.omgservers.model.serverLog.ServerLogModel;
 import io.smallrye.mutiny.Multi;

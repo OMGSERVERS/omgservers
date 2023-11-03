@@ -33,13 +33,12 @@ public class MatchMessageReceivedEventHandlerImpl implements EventHandler {
         final var body = (MatchRequestedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();
-        final var playerId = body.getPlayerId();
         final var clientId = body.getClientId();
         final var runtimeId = body.getRuntimeId();
 
         final var data = body.getData();
 
-        final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(userId, playerId, clientId, data);
+        final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(userId, clientId, data);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandRequest)

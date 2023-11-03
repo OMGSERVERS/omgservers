@@ -1,6 +1,6 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.ScheduleJobRequest;
+import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;

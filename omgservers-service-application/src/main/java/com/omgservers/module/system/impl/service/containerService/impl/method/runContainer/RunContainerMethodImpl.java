@@ -1,9 +1,11 @@
 package com.omgservers.module.system.impl.service.containerService.impl.method.runContainer;
 
-import com.omgservers.model.dto.internal.RunContainerRequest;
-import com.omgservers.model.dto.internal.RunContainerResponse;
+import com.github.dockerjava.api.model.HostConfig;
+import com.omgservers.model.dto.system.RunContainerRequest;
+import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.module.system.impl.component.dockerClientWrapper.DockerClientWrapper;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,11 +20,25 @@ class RunContainerMethodImpl implements RunContainerMethod {
 
     @Override
     public Uni<RunContainerResponse> runContainer(final RunContainerRequest request) {
-        final var id = request.getId();
+        final var container = request.getContainer();
         return Uni.createFrom().voidItem()
+                .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
-                    final var containers = dockerClientWrapper.getDockerClient().listContainersCmd().exec();
-                    log.info("Containers, {}", containers);
+                    final var image = container.getImage();
+                    final var name = container.getId().toString();
+                    final var environment = container.getConfig().getEnvironment().entrySet().stream()
+                            .map(entry -> entry.getKey() + "=" + entry.getValue())
+                            .toList();
+
+                    final var dockerClient = dockerClientWrapper.getDockerClient();
+
+                    dockerClient.createContainerCmd(image)
+                            .withName(name)
+                            .withEnv(environment)
+                            .withHostConfig(HostConfig.newHostConfig().withNetworkMode("host"))
+                            .exec();
+
+                    dockerClient.startContainerCmd(name).exec();
                 })
                 .replaceWith(RunContainerResponse::new);
     }

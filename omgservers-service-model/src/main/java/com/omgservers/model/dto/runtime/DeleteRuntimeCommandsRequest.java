@@ -17,7 +17,6 @@ public class DeleteRuntimeCommandsRequest implements ShardedRequest {
     @NotNull
     Long runtimeId;
 
-    @NotNull
     @NotEmpty
     List<Long> ids;
 

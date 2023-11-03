@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.unscheduleJob;
 
-import com.omgservers.model.dto.internal.SyncLogRequest;
-import com.omgservers.model.dto.internal.UnscheduleJobRequest;
+import com.omgservers.model.dto.system.SyncLogRequest;
+import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
 import com.omgservers.module.system.impl.service.logService.LogService;
 import com.omgservers.module.system.factory.LogModelFactory;

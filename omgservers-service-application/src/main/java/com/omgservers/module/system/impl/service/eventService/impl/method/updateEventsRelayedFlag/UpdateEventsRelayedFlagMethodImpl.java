@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.updateEventsRelayedFlag;
 
-import com.omgservers.model.dto.internal.UpdateEventsRelayedFlagRequest;
-import com.omgservers.model.dto.internal.UpdateEventsRelayedFlagResponse;
+import com.omgservers.model.dto.system.UpdateEventsRelayedFlagRequest;
+import com.omgservers.model.dto.system.UpdateEventsRelayedFlagResponse;
 import com.omgservers.module.system.impl.operation.updateEventsRelayedFlagByIds.UpdateEventsRelayedFlagByIdsOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

@@ -1,11 +1,11 @@
 package com.omgservers.module.system.impl.bootstrap;
 
-import com.omgservers.model.dto.internal.GetEventRequest;
-import com.omgservers.model.dto.internal.GetEventResponse;
-import com.omgservers.model.dto.internal.HandleEventRequest;
-import com.omgservers.model.dto.internal.HandleEventResponse;
-import com.omgservers.model.dto.internal.UpdateEventsStatusRequest;
-import com.omgservers.model.dto.internal.UpdateEventsStatusResponse;
+import com.omgservers.model.dto.system.GetEventRequest;
+import com.omgservers.model.dto.system.GetEventResponse;
+import com.omgservers.model.dto.system.HandleEventRequest;
+import com.omgservers.model.dto.system.HandleEventResponse;
+import com.omgservers.model.dto.system.UpdateEventsStatusRequest;
+import com.omgservers.model.dto.system.UpdateEventsStatusResponse;
 import com.omgservers.exception.ServerSideClientExceptionException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventStatusEnum;

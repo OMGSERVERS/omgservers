@@ -1,7 +1,6 @@
 package com.omgservers.operation.upsertEvent;
 
-import com.omgservers.module.system.factory.EventModelFactory;
-import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import io.quarkus.test.junit.QuarkusTest;

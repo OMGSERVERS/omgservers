@@ -1,12 +1,12 @@
 package com.omgservers.module.runtime.impl.service.doService.impl.method.doStopRuntime;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
-import com.omgservers.model.dto.internal.SyncEventResponse;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.event.body.StopApprovedEventBodyModel;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

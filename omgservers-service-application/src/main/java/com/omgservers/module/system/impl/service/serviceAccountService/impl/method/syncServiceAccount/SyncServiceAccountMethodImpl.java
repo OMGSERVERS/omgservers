@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.syncServiceAccount;
 
-import com.omgservers.model.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.module.system.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

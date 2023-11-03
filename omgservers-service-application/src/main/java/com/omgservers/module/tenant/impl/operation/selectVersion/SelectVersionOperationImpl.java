@@ -30,7 +30,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
                 shard,
                 """
                         select id, tenant_id, stage_id, created, modified,
-                            default_matchmaker_id, default_runtime_id, config, source_code, bytecode
+                            default_matchmaker_id, default_runtime_id, config, source_code
                         from $schema.tab_tenant_version
                         where tenant_id = $1 and id = $2
                         limit 1

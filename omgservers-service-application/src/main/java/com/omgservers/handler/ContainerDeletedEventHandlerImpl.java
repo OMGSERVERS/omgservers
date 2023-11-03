@@ -1,10 +1,10 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.GetContainerRequest;
-import com.omgservers.model.dto.internal.GetContainerResponse;
-import com.omgservers.model.dto.internal.StopContainerRequest;
-import com.omgservers.model.dto.internal.StopContainerResponse;
 import com.omgservers.model.container.ContainerModel;
+import com.omgservers.model.dto.system.GetContainerRequest;
+import com.omgservers.model.dto.system.GetContainerResponse;
+import com.omgservers.model.dto.system.StopContainerRequest;
+import com.omgservers.model.dto.system.StopContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
@@ -35,19 +35,19 @@ public class ContainerDeletedEventHandlerImpl implements EventHandler {
 
         log.info("Container was deleted, id={}", id);
 
-        return getContainer(id)
+        return getDeletedContainer(id)
                 .flatMap(container -> stopContainer(id))
                 .replaceWith(true);
     }
 
-    Uni<ContainerModel> getContainer(final Long id) {
-        final var request = new GetContainerRequest(id);
+    Uni<ContainerModel> getDeletedContainer(final Long id) {
+        final var request = new GetContainerRequest(id, true);
         return systemModule.getContainerService().getContainer(request)
                 .map(GetContainerResponse::getContainer);
     }
 
     Uni<Boolean> stopContainer(final Long id) {
-        final var request = new StopContainerRequest(id);
+        final var request = new StopContainerRequest(id, true);
         return systemModule.getContainerService().stopContainer(request)
                 .map(StopContainerResponse::getStopped);
     }

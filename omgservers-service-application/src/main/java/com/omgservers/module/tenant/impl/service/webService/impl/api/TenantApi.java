@@ -22,8 +22,6 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -142,10 +140,6 @@ public interface TenantApi {
     @PUT
     @Path("/delete-version")
     Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
-
-    @PUT
-    @Path("/get-version-bytecode")
-    Uni<GetVersionBytecodeResponse> getVersionBytecode(GetVersionBytecodeRequest request);
 
     @PUT
     @Path("/get-version-config")

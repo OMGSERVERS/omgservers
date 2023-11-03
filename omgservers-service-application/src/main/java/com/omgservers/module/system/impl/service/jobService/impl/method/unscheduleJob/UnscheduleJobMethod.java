@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.service.jobService.impl.method.unscheduleJob;
 
-import com.omgservers.model.dto.internal.UnscheduleJobRequest;
+import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import io.smallrye.mutiny.Uni;
 
 public interface UnscheduleJobMethod {

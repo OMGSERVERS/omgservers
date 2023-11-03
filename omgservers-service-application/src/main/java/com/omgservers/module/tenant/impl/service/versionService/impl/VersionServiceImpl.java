@@ -1,7 +1,5 @@
 package com.omgservers.module.tenant.impl.service.versionService.impl;
 
-import com.omgservers.model.dto.tenant.BuildVersionRequest;
-import com.omgservers.model.dto.tenant.BuildVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
@@ -14,8 +12,6 @@ import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeRequest;
-import com.omgservers.model.dto.tenant.GetVersionBytecodeResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
@@ -41,7 +37,6 @@ import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
 import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.module.tenant.impl.service.versionService.VersionService;
-import com.omgservers.module.tenant.impl.service.versionService.impl.method.buildVersion.BuildVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.deleteVersion.DeleteVersionMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.deleteVersionMatchmaker.DeleteVersionMatchmakerMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.deleteVersionRuntime.DeleteVersionRuntimeMethod;
@@ -49,7 +44,6 @@ import com.omgservers.module.tenant.impl.service.versionService.impl.method.find
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.findVersionMatchmaker.FindVersionMatchmakerMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.findVersionRuntime.FindVersionRuntimeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersion.GetVersionMethod;
-import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionBytecode.GetVersionBytecodeMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionConfig.GetVersionConfigMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionMatchmaker.GetVersionMatchmakerMethod;
 import com.omgservers.module.tenant.impl.service.versionService.impl.method.getVersionRuntime.GetVersionRuntimeMethod;
@@ -84,24 +78,17 @@ public class VersionServiceImpl implements VersionService {
     final ViewVersionRuntimesMethod viewVersionRuntimesMethod;
     final SyncVersionRuntimeMethod syncVersionRuntimeMethod;
     final FindVersionRuntimeMethod findVersionRuntimeMethod;
-    final GetVersionBytecodeMethod getVersionBytecodeMethod;
     final FindStageVersionIdMethod findStageVersionIdMethod;
     final GetVersionMatchmakerMethod getVersionMatchmaker;
     final GetVersionRuntimeMethod getVersionRuntimeMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
     final DeleteVersionMethod deleteVersionMethod;
-    final BuildVersionMethod buildVersionMethod;
     final SyncVersionMethod syncVersionMethod;
     final GetVersionMethod getVersionMethod;
 
     final GetTenantModuleClientOperation getTenantModuleClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
     final CalculateShardOperation calculateShardOperation;
-
-    @Override
-    public Uni<BuildVersionResponse> buildVersion(@Valid final BuildVersionRequest request) {
-        return buildVersionMethod.buildVersion(request);
-    }
 
     @Override
     public Uni<GetVersionResponse> getVersion(@Valid final GetVersionRequest request) {
@@ -125,14 +112,6 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteVersion,
                 deleteVersionMethod::deleteVersion);
-    }
-
-    @Override
-    public Uni<GetVersionBytecodeResponse> getVersionBytecode(@Valid final GetVersionBytecodeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getVersionBytecode,
-                getVersionBytecodeMethod::getVersionBytecode);
     }
 
     @Override

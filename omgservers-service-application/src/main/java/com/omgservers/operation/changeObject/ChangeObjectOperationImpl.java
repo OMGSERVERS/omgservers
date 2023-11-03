@@ -2,9 +2,9 @@ package com.omgservers.operation.changeObject;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;

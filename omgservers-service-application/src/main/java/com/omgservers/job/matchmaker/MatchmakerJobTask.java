@@ -1,13 +1,13 @@
 package com.omgservers.job.matchmaker;
 
+import com.omgservers.job.matchmaker.operation.handleEndedMatches.HandleEndedMatchesOperation;
+import com.omgservers.job.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
+import com.omgservers.job.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.exception.ServerSideClientExceptionException;
-import com.omgservers.job.matchmaker.operation.handleEndedMatches.HandleEndedMatchesOperation;
-import com.omgservers.job.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
-import com.omgservers.job.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerState.MatchmakerState;

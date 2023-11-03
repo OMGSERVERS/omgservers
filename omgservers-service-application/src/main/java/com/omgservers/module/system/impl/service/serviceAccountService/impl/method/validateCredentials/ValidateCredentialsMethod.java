@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.serviceAccountService.impl.method.validateCredentials;
 
-import com.omgservers.model.dto.internal.ValidateCredentialsRequest;
-import com.omgservers.model.dto.internal.ValidateCredentialsResponse;
+import com.omgservers.model.dto.system.ValidateCredentialsRequest;
+import com.omgservers.model.dto.system.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ValidateCredentialsMethod {

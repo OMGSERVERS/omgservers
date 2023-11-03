@@ -22,17 +22,18 @@ class SelectContainerOperationImpl implements SelectContainerOperation {
 
     @Override
     public Uni<ContainerModel> selectContainer(final SqlConnection sqlConnection,
-                                               final Long id) {
+                                               final Long id,
+                                               final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, tenant_id, version_id, runtime_id, type, deleted
+                        select id, created, modified, entity_id, qualifier, image, config, deleted
                         from system.tab_container
-                        where id = $1
+                        where id = $1 and deleted = $2
                         limit 1
                         """,
-                Arrays.asList(id),
+                Arrays.asList(id, deleted),
                 "Container",
                 containerModelMapper::fromRow);
     }

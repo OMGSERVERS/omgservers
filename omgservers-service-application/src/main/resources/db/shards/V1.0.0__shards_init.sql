@@ -109,9 +109,7 @@ create table if not exists tab_tenant_version (
     default_matchmaker_id bigint not null,
     default_runtime_id bigint not null,
     config json not null,
-    source_code json not null,
-    bytecode json not null,
-    errors text
+    source_code json not null
 );
 
 create table if not exists tab_tenant_version_matchmaker (
@@ -211,6 +209,17 @@ create table if not exists tab_runtime (
     type text not null,
     config json not null,
     deleted boolean not null
+);
+
+create table if not exists tab_runtime_permission (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    user_id bigint not null,
+    permission text not null,
+    deleted boolean not null,
+    unique(runtime_id, user_id, permission)
 );
 
 create table if not exists tab_runtime_command (

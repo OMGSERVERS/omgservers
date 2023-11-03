@@ -1,8 +1,8 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.syncEvent;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
-import com.omgservers.model.dto.internal.SyncEventResponse;
-import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;

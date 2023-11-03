@@ -1,9 +1,9 @@
 package com.omgservers.operation.selectObject;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.module.system.factory.LogModelFactory;
-import com.omgservers.module.system.impl.operation.upsertEvent.UpsertEventOperation;
+import com.omgservers.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.operation.transformPgException.TransformPgExceptionOperation;

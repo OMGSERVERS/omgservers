@@ -1,5 +1,6 @@
 package com.omgservers.model.version;
 
+import com.omgservers.model.file.EncodedFileModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,5 @@ public class VersionSourceCodeModel {
 
     @NotNull
     @NotEmpty
-    List<VersionFileModel> files;
+    List<EncodedFileModel> files;
 }

@@ -1,6 +1,6 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
@@ -10,7 +10,7 @@ import com.omgservers.module.gateway.impl.service.connectionService.ConnectionSe
 import com.omgservers.module.gateway.impl.service.connectionService.request.GetAssignedClientRequest;
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

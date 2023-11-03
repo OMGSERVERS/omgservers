@@ -38,7 +38,7 @@ public class TokenAuthenticationMechanism implements HttpAuthenticationMechanism
         List<String> authHeaders = context.request().headers().getAll(HttpHeaderNames.AUTHORIZATION);
         if (authHeaders != null) {
             for (String current : authHeaders) {
-                if (current.toLowerCase(Locale.ENGLISH).startsWith(LOWERCASE_BEARER_PREFIX)) {
+                 if (current.toLowerCase(Locale.ENGLISH).startsWith(LOWERCASE_BEARER_PREFIX)) {
 
                     var base64Challenge = current.substring(PREFIX_LENGTH);
                     var token = new TokenCredential(base64Challenge, BEARER);

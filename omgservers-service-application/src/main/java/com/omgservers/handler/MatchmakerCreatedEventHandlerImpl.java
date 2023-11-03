@@ -1,6 +1,6 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.SyncJobRequest;
+import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;

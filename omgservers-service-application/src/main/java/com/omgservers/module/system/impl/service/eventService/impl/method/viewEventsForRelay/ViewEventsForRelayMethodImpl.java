@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.viewEventsForRelay;
 
-import com.omgservers.model.dto.internal.ViewEventsForRelayRequest;
-import com.omgservers.model.dto.internal.ViewEventsForRelayResponse;
+import com.omgservers.model.dto.system.ViewEventsForRelayRequest;
+import com.omgservers.model.dto.system.ViewEventsForRelayResponse;
 import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.module.system.impl.operation.selectEventProjectionsByStatus.SelectEventProjectionsByStatusAndRelayedOperation;
 import io.smallrye.mutiny.Uni;

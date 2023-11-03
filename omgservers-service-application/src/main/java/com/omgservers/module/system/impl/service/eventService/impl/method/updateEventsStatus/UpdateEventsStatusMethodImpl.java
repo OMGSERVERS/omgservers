@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.updateEventsStatus;
 
-import com.omgservers.model.dto.internal.UpdateEventsStatusRequest;
-import com.omgservers.model.dto.internal.UpdateEventsStatusResponse;
+import com.omgservers.model.dto.system.UpdateEventsStatusRequest;
+import com.omgservers.model.dto.system.UpdateEventsStatusResponse;
 import com.omgservers.module.system.impl.operation.updateEventsStatusByIds.UpdateEventsStatusByIdsOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

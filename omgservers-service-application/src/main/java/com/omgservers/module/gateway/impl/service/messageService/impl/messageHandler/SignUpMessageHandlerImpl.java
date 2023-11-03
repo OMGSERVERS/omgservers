@@ -1,10 +1,10 @@
 package com.omgservers.module.gateway.impl.service.messageService.impl.messageHandler;
 
 import com.omgservers.module.gateway.impl.service.messageService.impl.MessageHandler;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;
-import com.omgservers.model.dto.internal.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;

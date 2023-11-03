@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.syncService.impl.method.syncServiceAccountOverServers;
 
-import com.omgservers.model.dto.internal.SyncServiceAccountOverServersRequest;
-import com.omgservers.model.dto.internal.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountOverServersRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.module.system.impl.operation.getInternalModuleClient.GetInternalModuleClientOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

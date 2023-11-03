@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.deleteIndex;
 
-import com.omgservers.model.dto.internal.DeleteIndexRequest;
+import com.omgservers.model.dto.system.DeleteIndexRequest;
 import com.omgservers.module.system.impl.operation.deleteIndex.DeleteIndexOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;

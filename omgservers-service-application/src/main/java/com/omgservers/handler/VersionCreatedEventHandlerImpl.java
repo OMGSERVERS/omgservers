@@ -84,14 +84,12 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntime(final VersionModel version) {
         final var runtimeConfig = new RuntimeConfigModel();
-        runtimeConfig.setScriptConfig(new RuntimeConfigModel.ScriptConfig(generateIdOperation.generateId()));
-//        runtimeConfig.setContainerConfig(new RuntimeConfigModel.ContainerConfig(generateIdOperation.generateId()));
         final var runtime = runtimeModelFactory.create(
                 version.getDefaultRuntimeId(),
                 version.getTenantId(),
                 version.getId(),
                 // TODO: Detect runtime type
-                RuntimeTypeEnum.EMBEDDED_GLOBAL_SCRIPT,
+                RuntimeTypeEnum.VERSION,
                 runtimeConfig);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)

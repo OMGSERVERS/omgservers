@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.service.indexService.impl.method.syncIndex;
 
-import com.omgservers.model.dto.internal.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.module.system.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.module.system.impl.operation.validateIndex.ValidateIndexOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;

@@ -1,6 +1,6 @@
 package com.omgservers.module.system.impl.bootstrap;
 
-import com.omgservers.model.dto.internal.ScheduleJobRequest;
+import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.operation.getConfig.GetConfigOperation;

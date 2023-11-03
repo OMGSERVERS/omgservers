@@ -42,8 +42,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     @Test
     void givenRuntimeGrant_whenUpsertRuntimeGrant_thenTrue() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
-                new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
@@ -54,8 +53,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
     @Test
     void givenRuntimeGrant_whenUpsertRuntimeGrantAgain_thenFalse() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.EMBEDDED_MATCH_SCRIPT,
-                new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory

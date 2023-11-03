@@ -1,15 +1,15 @@
 package com.omgservers.module.system.impl.service.eventService;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
-import com.omgservers.model.dto.internal.SyncEventResponse;
-import com.omgservers.model.dto.internal.GetEventRequest;
-import com.omgservers.model.dto.internal.GetEventResponse;
-import com.omgservers.model.dto.internal.UpdateEventsRelayedFlagRequest;
-import com.omgservers.model.dto.internal.UpdateEventsRelayedFlagResponse;
-import com.omgservers.model.dto.internal.UpdateEventsStatusRequest;
-import com.omgservers.model.dto.internal.UpdateEventsStatusResponse;
-import com.omgservers.model.dto.internal.ViewEventsForRelayRequest;
-import com.omgservers.model.dto.internal.ViewEventsForRelayResponse;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.system.GetEventRequest;
+import com.omgservers.model.dto.system.GetEventResponse;
+import com.omgservers.model.dto.system.UpdateEventsRelayedFlagRequest;
+import com.omgservers.model.dto.system.UpdateEventsRelayedFlagResponse;
+import com.omgservers.model.dto.system.UpdateEventsStatusRequest;
+import com.omgservers.model.dto.system.UpdateEventsStatusResponse;
+import com.omgservers.model.dto.system.ViewEventsForRelayRequest;
+import com.omgservers.model.dto.system.ViewEventsForRelayResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

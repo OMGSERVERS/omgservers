@@ -4,10 +4,10 @@ import com.omgservers.module.system.impl.service.indexService.impl.method.getInd
 import com.omgservers.module.system.impl.service.indexService.IndexService;
 import com.omgservers.module.system.impl.service.indexService.impl.method.deleteIndex.DeleteIndexMethod;
 import com.omgservers.module.system.impl.service.indexService.impl.method.syncIndex.SyncIndexMethod;
-import com.omgservers.model.dto.internal.DeleteIndexRequest;
-import com.omgservers.model.dto.internal.GetIndexRequest;
-import com.omgservers.model.dto.internal.SyncIndexRequest;
-import com.omgservers.model.dto.internal.GetIndexResponse;
+import com.omgservers.model.dto.system.DeleteIndexRequest;
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -18,13 +18,10 @@ public class HandleMessageRuntimeCommandBodyModel extends RuntimeCommandBodyMode
     Long userId;
 
     @NotNull
-    Long playerId;
-
-    @NotNull
     Long clientId;
 
     @NotNull
-    Object data;
+    Object message;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {

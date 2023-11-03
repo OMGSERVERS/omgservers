@@ -1,17 +1,27 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.DeleteJobRequest;
+import com.omgservers.model.container.ContainerModel;
+import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.system.DeleteContainerRequest;
+import com.omgservers.model.dto.system.DeleteContainerResponse;
+import com.omgservers.model.dto.system.FindContainerRequest;
+import com.omgservers.model.dto.system.FindContainerResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
+import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
-import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
 import com.omgservers.module.system.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.operation.getServers.GetServersOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
+    final TenantModule tenantModule;
     final SystemModule systemModule;
 
     final GetServersOperation getServersOperation;
@@ -48,8 +59,12 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getTenantId(),
                             runtime.getVersionId(),
                             runtime.getVersionId());
-                    return deleteRuntimeJob(runtimeId);
-                });
+
+                    // TODO: cleanup container user and runtime permission
+                    return deleteContainer(runtimeId)
+                            .flatMap(wasContainerDeleted -> deleteVersionRuntime(runtime));
+                })
+                .replaceWith(true);
     }
 
     Uni<RuntimeModel> getDeletedRuntime(final Long id) {
@@ -58,9 +73,37 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> deleteRuntimeJob(final Long runtimeId) {
-        final var request = new DeleteJobRequest(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
-        return systemModule.getJobService().deleteJob(request)
-                .replaceWith(true);
+    Uni<Boolean> deleteContainer(final Long runtimeId) {
+        return findContainer(runtimeId)
+                .flatMap(container -> {
+                    final var request = new DeleteContainerRequest(container.getId());
+                    return systemModule.getContainerService().deleteContainer(request)
+                            .map(DeleteContainerResponse::getDeleted);
+                });
+    }
+
+    Uni<ContainerModel> findContainer(final Long runtimeId) {
+        final var request = new FindContainerRequest(runtimeId, ContainerQualifierEnum.RUNTIME, false);
+        return systemModule.getContainerService().findContainer(request)
+                .map(FindContainerResponse::getContainer);
+    }
+
+    Uni<Boolean> deleteVersionRuntime(RuntimeModel runtime) {
+        return findVersionRuntime(runtime)
+                .flatMap(versionRuntime -> {
+                    final var request = new DeleteVersionRuntimeRequest(versionRuntime.getTenantId(),
+                            versionRuntime.getId());
+                    return tenantModule.getVersionService().deleteVersionRuntime(request)
+                            .map(DeleteVersionRuntimeResponse::getDeleted);
+                });
+    }
+
+    Uni<VersionRuntimeModel> findVersionRuntime(RuntimeModel runtime) {
+        final var tenantId = runtime.getTenantId();
+        final var versionId = runtime.getVersionId();
+        final var runtimeId = runtime.getId();
+        final var request = new FindVersionRuntimeRequest(tenantId, versionId, runtimeId);
+        return tenantModule.getVersionService().findVersionRuntime(request)
+                .map(FindVersionRuntimeResponse::getVersionRuntime);
     }
 }

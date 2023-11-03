@@ -1,12 +1,12 @@
 package com.omgservers.handler;
 
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
@@ -14,7 +14,6 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
-import com.omgservers.module.script.ScriptModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ChangeRequestedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
-    final ScriptModule scriptModule;
     final UserModule userModule;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;

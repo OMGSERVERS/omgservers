@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.handlerService;
 
-import com.omgservers.model.dto.internal.HandleEventRequest;
-import com.omgservers.model.dto.internal.HandleEventResponse;
+import com.omgservers.model.dto.system.HandleEventRequest;
+import com.omgservers.model.dto.system.HandleEventResponse;
 import io.smallrye.mutiny.Uni;
 
 import java.time.Duration;

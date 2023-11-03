@@ -1,13 +1,11 @@
 package com.omgservers.module.developer.impl.service.developerService.impl.method.createVersion;
 
+import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.model.dto.tenant.BuildVersionRequest;
-import com.omgservers.model.dto.tenant.BuildVersionResponse;
 import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRequest;
-import com.omgservers.exception.ServerSideForbiddenException;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
@@ -67,14 +65,9 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                     final Long stageId,
                                     final VersionConfigModel versionConfig,
                                     final VersionSourceCodeModel sourceCode) {
-        //TODO: redesign in more async way
-        final var buildVersionRequest = new BuildVersionRequest(tenantId, stageId, versionConfig, sourceCode);
-        return tenantModule.getVersionService().buildVersion(buildVersionRequest)
-                .map(BuildVersionResponse::getVersion)
-                .flatMap(version -> {
-                    final var syncVersionInternalRequest = new SyncVersionRequest(tenantId, version);
-                    return tenantModule.getVersionService().syncVersion(syncVersionInternalRequest)
-                            .replaceWith(version);
-                });
+        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, sourceCode);
+        final var request = new SyncVersionRequest(tenantId, version);
+        return tenantModule.getVersionService().syncVersion(request)
+                .replaceWith(version);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.handler;
 
-import com.omgservers.model.dto.internal.DeleteJobRequest;
-import com.omgservers.model.dto.internal.DeleteJobResponse;
+import com.omgservers.model.dto.system.DeleteJobRequest;
+import com.omgservers.model.dto.system.DeleteJobResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;

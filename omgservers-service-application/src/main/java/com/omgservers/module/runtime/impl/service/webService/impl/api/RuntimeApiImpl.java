@@ -6,6 +6,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
@@ -26,12 +28,18 @@ import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
+import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
@@ -73,6 +81,24 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(final SyncRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimePermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimePermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(final DeleteRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimePermission);
+    }
+
+    @Override
     public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeCommands);
     }
@@ -81,6 +107,12 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(final HandleRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::handleRuntimeCommands);
     }
 
     @Override

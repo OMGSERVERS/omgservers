@@ -15,8 +15,6 @@ public class RuntimeConfigModel {
         return runtimeConfig;
     }
 
-    ContainerConfig containerConfig;
-    ScriptConfig scriptConfig;
     MatchConfig matchConfig;
 
     @Data
@@ -27,19 +25,5 @@ public class RuntimeConfigModel {
         Long matchId;
 
         VersionModeModel modeConfig;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ScriptConfig {
-        Long scriptId;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ContainerConfig {
-        Long containerId;
     }
 }

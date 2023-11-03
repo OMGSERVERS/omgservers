@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.service.doService.impl.method.doKickClient;
 
-import com.omgservers.model.dto.internal.SyncEventRequest;
-import com.omgservers.model.dto.internal.SyncEventResponse;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.exception.ServerSideForbiddenException;
@@ -9,7 +9,7 @@ import com.omgservers.model.event.body.KickApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.EventModelFactory;
+import com.omgservers.factory.EventModelFactory;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

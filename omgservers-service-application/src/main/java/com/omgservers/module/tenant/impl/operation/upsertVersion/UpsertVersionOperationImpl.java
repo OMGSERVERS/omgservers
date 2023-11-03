@@ -37,8 +37,8 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(id, tenant_id, stage_id, created, modified,
-                            default_matchmaker_id, default_runtime_id, config, source_code, bytecode)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                            default_matchmaker_id, default_runtime_id, config, source_code)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -51,8 +51,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                         version.getDefaultMatchmakerId(),
                         version.getDefaultRuntimeId(),
                         getConfigString(version),
-                        getSourceCode(version),
-                        getBytecode(version)
+                        getSourceCode(version)
                 ),
                 () -> new VersionCreatedEventBodyModel(tenantId, version.getId()),
                 () -> logModelFactory.create(String.format("Stage was created, " +
@@ -71,14 +70,6 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
     String getSourceCode(VersionModel version) {
         try {
             return objectMapper.writeValueAsString(version.getSourceCode());
-        } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
-        }
-    }
-
-    String getBytecode(VersionModel version) {
-        try {
-            return objectMapper.writeValueAsString(version.getBytecode());
         } catch (IOException e) {
             throw new ServerSideBadRequestException(e.getMessage(), e);
         }

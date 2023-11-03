@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.handlerService.impl.method;
 
-import com.omgservers.model.dto.internal.HandleEventRequest;
-import com.omgservers.model.dto.internal.HandleEventResponse;
+import com.omgservers.model.dto.system.HandleEventRequest;
+import com.omgservers.model.dto.system.HandleEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.module.system.impl.operation.selectEvent.SelectEventOperation;

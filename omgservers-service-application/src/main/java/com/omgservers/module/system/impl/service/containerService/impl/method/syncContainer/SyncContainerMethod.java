@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.containerService.impl.method.syncContainer;
 
-import com.omgservers.model.dto.internal.SyncContainerRequest;
-import com.omgservers.model.dto.internal.SyncContainerResponse;
+import com.omgservers.model.dto.system.SyncContainerRequest;
+import com.omgservers.model.dto.system.SyncContainerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncContainerMethod {

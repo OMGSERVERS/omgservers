@@ -1,7 +1,7 @@
 package com.omgservers.module.system.impl.service.eventService.impl.method.getEvent;
 
-import com.omgservers.model.dto.internal.GetEventRequest;
-import com.omgservers.model.dto.internal.GetEventResponse;
+import com.omgservers.model.dto.system.GetEventRequest;
+import com.omgservers.model.dto.system.GetEventResponse;
 import com.omgservers.module.system.impl.operation.selectEvent.SelectEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

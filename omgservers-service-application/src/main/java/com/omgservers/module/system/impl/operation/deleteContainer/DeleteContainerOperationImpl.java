@@ -30,7 +30,7 @@ class DeleteContainerOperationImpl implements DeleteContainerOperation {
                 changeContext, sqlConnection, 0,
                 """                        
                         update system.tab_container
-                        set modified = $3, deleted = true
+                        set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,
                 Arrays.asList(

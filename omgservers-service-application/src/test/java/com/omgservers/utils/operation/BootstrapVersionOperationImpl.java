@@ -2,7 +2,7 @@ package com.omgservers.utils.operation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionFileModel;
+import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.DeveloperCli;
@@ -47,7 +47,7 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
         final var stageSecret = createProjectDeveloperResponse.getSecret();
 
         final var sourceCode = VersionSourceCodeModel.create();
-        sourceCode.getFiles().add(new VersionFileModel("main.lua", Base64.getEncoder()
+        sourceCode.getFiles().add(new EncodedFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();

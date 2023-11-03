@@ -1,8 +1,8 @@
 package com.omgservers.job.relay;
 
-import com.omgservers.model.dto.internal.UpdateEventsRelayedFlagRequest;
-import com.omgservers.model.dto.internal.ViewEventsForRelayRequest;
-import com.omgservers.model.dto.internal.ViewEventsForRelayResponse;
+import com.omgservers.model.dto.system.UpdateEventsRelayedFlagRequest;
+import com.omgservers.model.dto.system.ViewEventsForRelayRequest;
+import com.omgservers.model.dto.system.ViewEventsForRelayResponse;
 import com.omgservers.model.eventProjection.EventProjectionModel;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.module.system.SystemModule;

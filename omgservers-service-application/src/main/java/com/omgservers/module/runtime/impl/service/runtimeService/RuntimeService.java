@@ -6,16 +6,24 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
+import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
@@ -31,9 +39,17 @@ public interface RuntimeService {
 
     Uni<DeleteRuntimeResponse> deleteRuntime(@Valid DeleteRuntimeRequest request);
 
+    Uni<SyncRuntimePermissionResponse> syncRuntimePermission(@Valid SyncRuntimePermissionRequest request);
+
+    Uni<FindRuntimePermissionResponse> findRuntimePermission(@Valid FindRuntimePermissionRequest request);
+
+    Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(@Valid DeleteRuntimePermissionRequest request);
+
     Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid ViewRuntimeCommandsRequest request);
 
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid SyncRuntimeCommandRequest request);
+
+    Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(@Valid HandleRuntimeCommandsRequest request);
 
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid DeleteRuntimeCommandRequest request);
 
