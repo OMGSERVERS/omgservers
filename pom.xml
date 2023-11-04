@@ -23,10 +23,10 @@
     </properties>
 
     <modules>
-        <module>omgservers-platform-docs</module>
-        <module>omgservers-service-application</module>
-        <module>omgservers-service-model</module>
-        <module>omgservers-worker-application</module>
+        <module>omgservers-documentation</module>
+        <module>omgservers-service</module>
+        <module>omgservers-model</module>
+        <module>omgservers-worker</module>
     </modules>
 
     <dependencies>

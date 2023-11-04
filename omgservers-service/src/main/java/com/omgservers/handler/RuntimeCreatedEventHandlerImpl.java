@@ -1,5 +1,10 @@
 package com.omgservers.handler;
 
+import com.omgservers.factory.ContainerModelFactory;
+import com.omgservers.factory.JobModelFactory;
+import com.omgservers.factory.RuntimePermissionModelFactory;
+import com.omgservers.factory.UserModelFactory;
+import com.omgservers.factory.VersionRuntimeModelFactory;
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
@@ -21,15 +26,10 @@ import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.factory.RuntimePermissionModelFactory;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.factory.ContainerModelFactory;
-import com.omgservers.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.factory.VersionRuntimeModelFactory;
 import com.omgservers.module.user.UserModule;
-import com.omgservers.factory.UserModelFactory;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -133,7 +133,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var config = new ContainerConfigModel(environment);
         final var container = containerModelFactory.create(runtimeId,
                 ContainerQualifierEnum.RUNTIME,
-                "omgservers/omgservers-worker-application:1.0.0-SNAPSHOT",
+                "omgservers/omgservers-worker:1.0.0-SNAPSHOT",
                 config);
         final var request = new SyncContainerRequest(container);
         return systemModule.getContainerService().syncContainer(request)

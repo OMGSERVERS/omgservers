@@ -7,10 +7,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-service-model</artifactId>
+    <artifactId>omgservers-model</artifactId>
     <packaging>jar</packaging>
 
-    <name>omgservers-service-model</name>
+    <name>omgservers-model</name>
     <url>http://maven.apache.org</url>
 
     <properties>
