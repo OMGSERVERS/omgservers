@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.selectVersion;
 
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.module.tenant.impl.mapper.VersionMapper;
+import com.omgservers.module.tenant.impl.mapper.VersionModelMapper;
 import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -18,7 +18,7 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
 
     final SelectObjectOperation selectObjectOperation;
 
-    final VersionMapper versionMapper;
+    final VersionModelMapper versionModelMapper;
 
     @Override
     public Uni<VersionModel> selectVersion(final SqlConnection sqlConnection,
@@ -37,6 +37,6 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
                         """,
                 Arrays.asList(tenantId, id),
                 "Version",
-                versionMapper::fromRow);
+                versionModelMapper::fromRow);
     }
 }

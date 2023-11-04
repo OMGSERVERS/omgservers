@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class RuntimeMapper {
+public class RuntimeModelMapper {
 
     final ObjectMapper objectMapper;
 

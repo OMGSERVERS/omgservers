@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.selectVersionMatchmakers;
 
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
-import com.omgservers.module.tenant.impl.mapper.VersionMatchmakerMapper;
+import com.omgservers.module.tenant.impl.mapper.VersionMatchmakerModelMapper;
 import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -19,7 +19,7 @@ class SelectVersionMatchmakersImpl implements SelectVersionMatchmakers {
 
     final SelectListOperation selectListOperation;
 
-    final VersionMatchmakerMapper versionMatchmakerMapper;
+    final VersionMatchmakerModelMapper versionMatchmakerModelMapper;
 
     @Override
     public Uni<List<VersionMatchmakerModel>> selectVersionMatchmakers(final SqlConnection sqlConnection,
@@ -37,6 +37,6 @@ class SelectVersionMatchmakersImpl implements SelectVersionMatchmakers {
                         """,
                 Arrays.asList(tenantId, versionId, deleted),
                 "Version matchmaker",
-                versionMatchmakerMapper::fromRow);
+                versionMatchmakerModelMapper::fromRow);
     }
 }

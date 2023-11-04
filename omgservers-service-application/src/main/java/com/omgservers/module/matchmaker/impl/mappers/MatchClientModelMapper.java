@@ -14,7 +14,7 @@ import java.io.IOException;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class MatchClientMapper {
+public class MatchClientModelMapper {
 
     final ObjectMapper objectMapper;
 

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class VersionMatchmakerMapper {
+public class VersionMatchmakerModelMapper {
 
     public VersionMatchmakerModel fromRow(Row row) {
         final var stageMatchmaker = new VersionMatchmakerModel();

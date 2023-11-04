@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.operation.selectRuntimeCommandsByRuntimeId;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.module.runtime.impl.mapper.RuntimeCommandMapper;
+import com.omgservers.module.runtime.impl.mapper.RuntimeCommandModelMapper;
 import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -20,7 +20,7 @@ class SelectRuntimeCommandsByRuntimeIdOperationImpl
 
     final SelectListOperation selectListOperation;
 
-    final RuntimeCommandMapper runtimeCommandMapper;
+    final RuntimeCommandModelMapper runtimeCommandModelMapper;
 
     @Override
     public Uni<List<RuntimeCommandModel>> selectRuntimeCommandsByRuntimeId(final SqlConnection sqlConnection,
@@ -38,6 +38,6 @@ class SelectRuntimeCommandsByRuntimeIdOperationImpl
                         """,
                 Arrays.asList(runtimeId, deleted),
                 "Runtime command",
-                runtimeCommandMapper::fromRow);
+                runtimeCommandModelMapper::fromRow);
     }
 }

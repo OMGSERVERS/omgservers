@@ -1,7 +1,7 @@
 package com.omgservers.module.runtime.impl.operation.selectRuntime;
 
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.module.runtime.impl.mapper.RuntimeMapper;
+import com.omgservers.module.runtime.impl.mapper.RuntimeModelMapper;
 import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -18,7 +18,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     final SelectObjectOperation selectObjectOperation;
 
-    final RuntimeMapper runtimeMapper;
+    final RuntimeModelMapper runtimeModelMapper;
 
     @Override
     public Uni<RuntimeModel> selectRuntime(final SqlConnection sqlConnection,
@@ -36,6 +36,6 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                         """,
                 Arrays.asList(id, deleted),
                 "Runtime",
-                runtimeMapper::fromRow);
+                runtimeModelMapper::fromRow);
     }
 }

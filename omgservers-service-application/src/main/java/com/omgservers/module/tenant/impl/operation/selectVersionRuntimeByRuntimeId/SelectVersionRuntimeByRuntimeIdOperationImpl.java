@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.selectVersionRuntimeByRuntimeId;
 
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
-import com.omgservers.module.tenant.impl.mapper.VersionRuntimeMapper;
+import com.omgservers.module.tenant.impl.mapper.VersionRuntimeModelMapper;
 import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -18,7 +18,7 @@ class SelectVersionRuntimeByRuntimeIdOperationImpl implements SelectVersionRunti
 
     final SelectObjectOperation selectObjectOperation;
 
-    final VersionRuntimeMapper versionRuntimeMapper;
+    final VersionRuntimeModelMapper versionRuntimeModelMapper;
 
     @Override
     public Uni<VersionRuntimeModel> selectVersionRuntimeByRuntimeId(final SqlConnection sqlConnection,
@@ -37,6 +37,6 @@ class SelectVersionRuntimeByRuntimeIdOperationImpl implements SelectVersionRunti
                         """,
                 Arrays.asList(tenantId, versionId, runtimeId),
                 "Version runtime",
-                versionRuntimeMapper::fromRow);
+                versionRuntimeModelMapper::fromRow);
     }
 }

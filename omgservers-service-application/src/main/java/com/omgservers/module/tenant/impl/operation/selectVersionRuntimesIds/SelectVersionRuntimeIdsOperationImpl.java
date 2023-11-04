@@ -1,6 +1,6 @@
 package com.omgservers.module.tenant.impl.operation.selectVersionRuntimesIds;
 
-import com.omgservers.module.tenant.impl.mapper.VersionRuntimeMapper;
+import com.omgservers.module.tenant.impl.mapper.VersionRuntimeModelMapper;
 import com.omgservers.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -18,7 +18,7 @@ class SelectVersionRuntimeIdsOperationImpl implements SelectVersionRuntimeIdsOpe
 
     final SelectListOperation selectListOperation;
 
-    final VersionRuntimeMapper versionRuntimeMapper;
+    final VersionRuntimeModelMapper versionRuntimeModelMapper;
 
     @Override
     public Uni<List<Long>> selectVersionRuntimeIds(final SqlConnection sqlConnection,

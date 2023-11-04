@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class VersionMapper {
+public class VersionModelMapper {
 
     final ObjectMapper objectMapper;
 

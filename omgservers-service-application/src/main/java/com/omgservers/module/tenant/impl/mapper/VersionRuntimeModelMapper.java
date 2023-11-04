@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class VersionRuntimeMapper {
+public class VersionRuntimeModelMapper {
 
     public VersionRuntimeModel fromRow(Row row) {
         final var stageRuntime = new VersionRuntimeModel();

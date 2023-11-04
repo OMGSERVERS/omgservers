@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class MatchmakerMapper {
+public class MatchmakerModelMapper {
 
     public MatchmakerModel fromRow(Row row) {
         final var matchmakerModel = new MatchmakerModel();

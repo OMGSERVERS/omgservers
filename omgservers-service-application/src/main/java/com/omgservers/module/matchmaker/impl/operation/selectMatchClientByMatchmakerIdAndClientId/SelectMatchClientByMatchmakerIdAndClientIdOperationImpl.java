@@ -1,7 +1,7 @@
 package com.omgservers.module.matchmaker.impl.operation.selectMatchClientByMatchmakerIdAndClientId;
 
 import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.module.matchmaker.impl.mappers.MatchClientMapper;
+import com.omgservers.module.matchmaker.impl.mappers.MatchClientModelMapper;
 import com.omgservers.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -19,7 +19,7 @@ class SelectMatchClientByMatchmakerIdAndClientIdOperationImpl
 
     final SelectObjectOperation selectObjectOperation;
 
-    final MatchClientMapper matchClientMapper;
+    final MatchClientModelMapper matchClientModelMapper;
 
     @Override
     public Uni<MatchClientModel> selectMatchClientByMatchmakerIdAndClientId(final SqlConnection sqlConnection,
@@ -37,6 +37,6 @@ class SelectMatchClientByMatchmakerIdAndClientIdOperationImpl
                         """,
                 Arrays.asList(matchmakerId, clientId),
                 "Match client",
-                matchClientMapper::fromRow);
+                matchClientModelMapper::fromRow);
     }
 }
