@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.Bit32Lib;
 import org.luaj.vm2.lib.PackageLib;
@@ -42,6 +41,7 @@ public class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperatio
         final var decodedFiles = decodeFilesOperation.decodeFiles(versionSourceCode.getFiles());
         globals.finder = new LuaResourceFinder(decodedFiles);
         globals.set("print", new LuaPrintFunction(globals));
-        return new LuaInstance(new LuaTable(), globals, "main.lua");
+        // TODO: determine filename
+        return new LuaInstance(globals, "main.lua");
     }
 }

@@ -11,14 +11,11 @@ import org.luaj.vm2.LuaValue;
 @AllArgsConstructor
 public class LuaInstance {
 
-    final LuaValue luaState;
     final Globals globals;
     final LuaValue chunk;
 
-    public LuaInstance(final LuaValue luaState,
-                       final Globals globals,
+    public LuaInstance(final Globals globals,
                        final String filename) {
-        this.luaState = luaState;
         this.globals = globals;
         chunk = globals.loadfile(filename);
     }
@@ -26,7 +23,6 @@ public class LuaInstance {
     public synchronized LuaValue call(final LuaRequest luaRequest) {
         try {
             globals.set("request", luaRequest);
-            globals.set("state", luaState);
             return chunk.call();
         } catch (LuaError luaError) {
             log.warn("Lua instance failed, reason={}, luaRequest={}", luaError.getMessage(), luaRequest);
