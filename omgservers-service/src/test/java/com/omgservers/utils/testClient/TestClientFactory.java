@@ -1,7 +1,7 @@
 package com.omgservers.utils.testClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.DeploymentException;
 import lombok.AllArgsConstructor;

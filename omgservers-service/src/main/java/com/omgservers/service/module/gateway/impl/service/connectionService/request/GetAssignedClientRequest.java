@@ -1,0 +1,15 @@
+package com.omgservers.service.module.gateway.impl.service.connectionService.request;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetAssignedClientRequest {
+
+    @NotNull
+    Long connectionId;
+}

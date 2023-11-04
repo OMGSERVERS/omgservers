@@ -1,8 +1,8 @@
 package com.omgservers.worker.job;
 
-import com.omgservers.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
-import com.omgservers.factory.RequestModelFactory;
-import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
+import com.omgservers.service.factory.RequestModelFactory;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

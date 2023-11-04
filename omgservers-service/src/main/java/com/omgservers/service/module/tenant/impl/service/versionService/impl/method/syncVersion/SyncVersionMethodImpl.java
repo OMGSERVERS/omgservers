@@ -1,0 +1,43 @@
+package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.syncVersion;
+
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.model.dto.tenant.SyncVersionRequest;
+import com.omgservers.model.dto.tenant.SyncVersionResponse;
+import com.omgservers.model.shard.ShardModel;
+import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.module.tenant.impl.operation.upsertVersion.UpsertVersionOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+class SyncVersionMethodImpl implements SyncVersionMethod {
+
+    final ChangeWithContextOperation changeWithContextOperation;
+    final UpsertVersionOperation upsertVersionOperation;
+    final CheckShardOperation checkShardOperation;
+
+    final PgPool pgPool;
+
+    @Override
+    public Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request) {
+        final var tenantId = request.getTenantId();
+        final var version = request.getVersion();
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+                .flatMap(shardModel -> changeFunction(shardModel, tenantId, version))
+                .map(SyncVersionResponse::new);
+    }
+
+    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, VersionModel version) {
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertVersionOperation.upsertVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, version))
+                .map(ChangeContext::getResult);
+    }
+}

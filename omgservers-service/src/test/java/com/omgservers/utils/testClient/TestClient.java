@@ -13,7 +13,7 @@ import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
-import com.omgservers.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.utils.operation.VersionParameters;
 import jakarta.websocket.ClientEndpointConfig;
 import jakarta.websocket.ContainerProvider;
