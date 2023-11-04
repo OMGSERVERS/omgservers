@@ -1,21 +1,19 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
+import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.service.factory.VersionMatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.factory.VersionMatchmakerModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -50,8 +48,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
                             matchmaker.getVersionId());
-                    return syncVersionMatchmaker(matchmaker)
-                            .flatMap(stageMatchmakerWasCreated -> syncMatchmakerJob(id));
+                    return syncMatchmakerJob(id);
                 });
     }
 
@@ -59,19 +56,6 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetMatchmakerRequest(matchmakerId);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
-    Uni<Boolean> syncVersionMatchmaker(MatchmakerModel matchmaker) {
-        final var matchmakerId = matchmaker.getId();
-        final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getVersionId();
-
-        final var stageMatchmaker = versionMatchmakerModelFactory.create(tenantId,
-                versionId,
-                matchmakerId);
-        final var request = new SyncVersionMatchmakerRequest(stageMatchmaker);
-        return tenantModule.getVersionService().syncVersionMatchmaker(request)
-                .map(SyncVersionMatchmakerResponse::getCreated);
     }
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId) {

@@ -8,19 +8,13 @@ import com.omgservers.model.dto.system.DeleteContainerRequest;
 import com.omgservers.model.dto.system.DeleteContainerResponse;
 import com.omgservers.model.dto.system.FindContainerRequest;
 import com.omgservers.model.dto.system.FindContainerResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.model.versionRuntime.VersionRuntimeModel;
+import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.getServers.GetServersOperation;
@@ -54,7 +48,12 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime was deleted, type={}, id={}, tenantId={}, versionId={}, versionId={}",
+                    log.info("Runtime was deleted, " +
+                                    "type={}, " +
+                                    "id={}, " +
+                                    "tenantId={}, " +
+                                    "versionId={}, " +
+                                    "versionId={}",
                             runtime.getType(),
                             runtime.getId(),
                             runtime.getTenantId(),
@@ -62,14 +61,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getVersionId());
 
                     // TODO: cleanup container user and runtime permission
-                    return deleteContainer(runtimeId)
-                            .flatMap(wasContainerDeleted -> {
-                                if (runtime.getType().equals(RuntimeTypeEnum.VERSION)) {
-                                    return deleteVersionRuntime(runtime);
-                                } else {
-                                    return Uni.createFrom().voidItem();
-                                }
-                            });
+                    return deleteContainer(runtimeId);
                 })
                 .replaceWith(true);
     }
@@ -93,24 +85,5 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var request = new FindContainerRequest(runtimeId, ContainerQualifierEnum.RUNTIME, false);
         return systemModule.getContainerService().findContainer(request)
                 .map(FindContainerResponse::getContainer);
-    }
-
-    Uni<Boolean> deleteVersionRuntime(RuntimeModel runtime) {
-        return findVersionRuntime(runtime)
-                .flatMap(versionRuntime -> {
-                    final var request = new DeleteVersionRuntimeRequest(versionRuntime.getTenantId(),
-                            versionRuntime.getId());
-                    return tenantModule.getVersionService().deleteVersionRuntime(request)
-                            .map(DeleteVersionRuntimeResponse::getDeleted);
-                });
-    }
-
-    Uni<VersionRuntimeModel> findVersionRuntime(RuntimeModel runtime) {
-        final var tenantId = runtime.getTenantId();
-        final var versionId = runtime.getVersionId();
-        final var runtimeId = runtime.getId();
-        final var request = new FindVersionRuntimeRequest(tenantId, versionId, runtimeId);
-        return tenantModule.getVersionService().findVersionRuntime(request)
-                .map(FindVersionRuntimeResponse::getVersionRuntime);
     }
 }

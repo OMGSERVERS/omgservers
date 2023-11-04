@@ -8,5 +8,6 @@ public interface SelectVersionRuntimeOperation {
     Uni<VersionRuntimeModel> selectVersionRuntime(SqlConnection sqlConnection,
                                                   int shard,
                                                   Long tenantId,
-                                                  Long id);
+                                                  Long id,
+                                                  Boolean deleted);
 }

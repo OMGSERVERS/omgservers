@@ -1,10 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.service.factory.ContainerModelFactory;
-import com.omgservers.service.factory.JobModelFactory;
-import com.omgservers.service.factory.RuntimePermissionModelFactory;
-import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.factory.VersionRuntimeModelFactory;
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
@@ -13,18 +8,19 @@ import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.system.SyncContainerRequest;
 import com.omgservers.model.dto.system.SyncContainerResponse;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.factory.ContainerModelFactory;
+import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.service.factory.RuntimePermissionModelFactory;
+import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
@@ -51,7 +47,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
 
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
-    final VersionRuntimeModelFactory versionRuntimeModelFactory;
     final ContainerModelFactory containerModelFactory;
     final UserModelFactory userModelFactory;
     final JobModelFactory jobModelFactory;
@@ -92,13 +87,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     final var userId = user.getId();
                     return syncRuntimePermission(runtimeId, userId)
                             .flatMap(wasRuntimePermissionCreated -> syncContainer(userId, password, runtime)
-                                    .flatMap(wasContainerCreated -> {
-                                        if (runtime.getType().equals(RuntimeTypeEnum.VERSION)) {
-                                            return syncVersionRuntime(runtime);
-                                        } else {
-                                            return Uni.createFrom().voidItem();
-                                        }
-                                    })
                                     .replaceWithVoid());
                 });
     }
@@ -138,14 +126,5 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var request = new SyncContainerRequest(container);
         return systemModule.getContainerService().syncContainer(request)
                 .map(SyncContainerResponse::getCreated);
-    }
-
-    Uni<Boolean> syncVersionRuntime(final RuntimeModel runtime) {
-        final var versionRuntime = versionRuntimeModelFactory.create(runtime.getTenantId(),
-                runtime.getVersionId(),
-                runtime.getId());
-        final var request = new SyncVersionRuntimeRequest(versionRuntime);
-        return tenantModule.getVersionService().syncVersionRuntime(request)
-                .map(SyncVersionRuntimeResponse::getCreated);
     }
 }

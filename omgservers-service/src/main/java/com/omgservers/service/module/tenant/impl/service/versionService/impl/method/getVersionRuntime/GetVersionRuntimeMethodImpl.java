@@ -21,14 +21,15 @@ class GetVersionRuntimeMethodImpl implements GetVersionRuntimeMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request) {
+    public Uni<GetVersionRuntimeResponse> getVersionRuntime(final GetVersionRuntimeRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
+                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectVersionRuntimeOperation
-                            .selectVersionRuntime(sqlConnection, shard, tenantId, id));
+                            .selectVersionRuntime(sqlConnection, shard, tenantId, id, deleted));
                 })
                 .map(GetVersionRuntimeResponse::new);
     }

@@ -21,14 +21,15 @@ class GetVersionMatchmakerMethodImpl implements GetVersionMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(GetVersionMatchmakerRequest request) {
+    public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(final GetVersionMatchmakerRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
+                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectVersionMatchmakerOperation
-                            .selectVersionMatchmaker(sqlConnection, shard, tenantId, id));
+                            .selectVersionMatchmaker(sqlConnection, shard, tenantId, id, deleted));
                 })
                 .map(GetVersionMatchmakerResponse::new);
     }

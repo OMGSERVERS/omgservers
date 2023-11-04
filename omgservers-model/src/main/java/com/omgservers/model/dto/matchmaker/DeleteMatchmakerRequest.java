@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteMatchmakerRequest implements ShardedRequest {
 
-
     @NotNull
     Long id;
 

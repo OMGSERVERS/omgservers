@@ -24,17 +24,18 @@ class SelectVersionMatchmakerOperationImpl implements SelectVersionMatchmakerOpe
     public Uni<VersionMatchmakerModel> selectVersionMatchmaker(final SqlConnection sqlConnection,
                                                                final int shard,
                                                                final Long tenantId,
-                                                               final Long id) {
+                                                               final Long id,
+                                                               final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, tenant_id, version_id, created, modified, matchmaker_id, deleted
                         from $schema.tab_tenant_version_matchmaker
-                        where tenant_id = $1 and id = $2
+                        where tenant_id = $1 and id = $2 and deleted = $3
                         limit 1
                         """,
-                Arrays.asList(tenantId, id),
+                Arrays.asList(tenantId, id, deleted),
                 "Version matchmaker",
                 versionMatchmakerModelMapper::fromRow);
     }

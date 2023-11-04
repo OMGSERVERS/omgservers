@@ -1,22 +1,18 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.tenant.GetVersionRequest;
 import com.omgservers.model.dto.tenant.GetVersionResponse;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
+import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.factory.VersionMatchmakerModelFactory;
+import com.omgservers.service.factory.VersionRuntimeModelFactory;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -31,12 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VersionCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    final MatchmakerModelFactory matchmakerModelFactory;
-    final RuntimeModelFactory runtimeModelFactory;
+    final VersionMatchmakerModelFactory versionMatchmakerModelFactory;
+    final VersionRuntimeModelFactory versionRuntimeModelFactory;
 
     final GenerateIdOperation generateIdOperation;
 
@@ -60,8 +54,8 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                             version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
                             version.getSourceCode().getFiles().size());
 
-                    return syncMatchmaker(version)
-                            .flatMap(wasMatchmakerCreated -> syncRuntime(version));
+                    return syncVersionMatchmaker(version)
+                            .flatMap(wasVersionMatchmakerCreated -> syncVersionRuntime(version));
                 })
                 .replaceWith(true);
     }
@@ -72,27 +66,29 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                 .map(GetVersionResponse::getVersion);
     }
 
-    Uni<Boolean> syncMatchmaker(final VersionModel version) {
-        final var matchmakerId = version.getDefaultMatchmakerId();
+    Uni<Boolean> syncVersionMatchmaker(final VersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var matchmaker = matchmakerModelFactory.create(matchmakerId, tenantId, versionId);
-        final var request = new SyncMatchmakerRequest(matchmaker);
-        return matchmakerModule.getMatchmakerService().syncMatchmaker(request)
-                .map(SyncMatchmakerResponse::getCreated);
+        final var matchmakerId = generateIdOperation.generateId();
+
+        final var stageMatchmaker = versionMatchmakerModelFactory.create(tenantId,
+                versionId,
+                matchmakerId);
+        final var request = new SyncVersionMatchmakerRequest(stageMatchmaker);
+        return tenantModule.getVersionService().syncVersionMatchmaker(request)
+                .map(SyncVersionMatchmakerResponse::getCreated);
     }
 
-    Uni<Boolean> syncRuntime(final VersionModel version) {
-        final var runtimeConfig = new RuntimeConfigModel();
-        final var runtime = runtimeModelFactory.create(
-                version.getDefaultRuntimeId(),
-                version.getTenantId(),
-                version.getId(),
-                // TODO: Detect runtime type
-                RuntimeTypeEnum.VERSION,
-                runtimeConfig);
-        final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
-                .map(SyncRuntimeResponse::getCreated);
+    Uni<Boolean> syncVersionRuntime(final VersionModel version) {
+        final var tenantId = version.getTenantId();
+        final var versionId = version.getId();
+        final var runtimeId = generateIdOperation.generateId();
+
+        final var versionRuntime = versionRuntimeModelFactory.create(tenantId,
+                versionId,
+                runtimeId);
+        final var request = new SyncVersionRuntimeRequest(versionRuntime);
+        return tenantModule.getVersionService().syncVersionRuntime(request)
+                .map(SyncVersionRuntimeResponse::getCreated);
     }
 }
