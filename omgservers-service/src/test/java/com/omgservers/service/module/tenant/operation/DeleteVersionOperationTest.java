@@ -11,7 +11,6 @@ import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.factory.VersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertVersion.UpsertVersionOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -38,7 +37,7 @@ class DeleteVersionOperationTest extends Assertions {
     UpsertStageOperation upsertStageOperation;
 
     @Inject
-    UpsertVersionOperation upsertVersionOperation;
+    UpsertVersionOperationTestInterface upsertVersionOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -70,7 +69,7 @@ class DeleteVersionOperationTest extends Assertions {
         final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
                 VersionSourceCodeModel.create());
         final var id = version.getId();
-        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version);
+        upsertVersionOperation.upsertVersion(shard, version);
 
         final var changeContext = deleteVersionOperation.deleteVersion(shard, tenant.getId(), id);
         assertTrue(changeContext.getResult());
@@ -88,10 +87,6 @@ class DeleteVersionOperationTest extends Assertions {
     }
 
     Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long stageId() {
         return generateIdOperation.generateId();
     }
 }

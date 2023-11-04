@@ -37,7 +37,7 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
 
     Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, VersionModel version) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertVersionOperation.upsertVersion(changeContext, sqlConnection, shardModel.shard(), tenantId, version))
+                        upsertVersionOperation.upsertVersion(changeContext, sqlConnection, shardModel.shard(), version))
                 .map(ChangeContext::getResult);
     }
 }

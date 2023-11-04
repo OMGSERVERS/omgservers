@@ -2,7 +2,6 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.version.VersionModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,10 @@ import lombok.NoArgsConstructor;
 public class VersionDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    VersionModel version;
+    Long tenantId;
+
+    @NotNull
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -25,6 +27,6 @@ public class VersionDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return version.getTenantId();
+        return tenantId;
     }
 }

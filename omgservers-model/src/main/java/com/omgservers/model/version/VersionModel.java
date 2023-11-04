@@ -44,4 +44,7 @@ public class VersionModel {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     VersionSourceCodeModel sourceCode;
+
+    @NotNull
+    Boolean deleted;
 }

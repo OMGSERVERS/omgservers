@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.operation.upsertVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -31,14 +31,13 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
     public Uni<Boolean> upsertVersion(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
-                                      final Long tenantId,
                                       final VersionModel version) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(id, tenant_id, stage_id, created, modified,
-                            default_matchmaker_id, default_runtime_id, config, source_code)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            default_matchmaker_id, default_runtime_id, config, source_code, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -51,11 +50,11 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                         version.getDefaultMatchmakerId(),
                         version.getDefaultRuntimeId(),
                         getConfigString(version),
-                        getSourceCode(version)
+                        getSourceCode(version),
+                        version.getDeleted()
                 ),
-                () -> new VersionCreatedEventBodyModel(tenantId, version.getId()),
-                () -> logModelFactory.create(String.format("Stage was created, " +
-                        "tenantId=%d, version=%s", tenantId, version))
+                () -> new VersionCreatedEventBodyModel(version.getTenantId(), version.getId()),
+                () -> logModelFactory.create("Version was created, " + version)
         );
     }
 

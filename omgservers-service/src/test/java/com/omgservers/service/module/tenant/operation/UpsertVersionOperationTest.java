@@ -10,7 +10,6 @@ import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.factory.VersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertVersion.UpsertVersionOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -34,7 +33,7 @@ class UpsertVersionOperationTest extends Assertions {
     UpsertStageOperation upsertStageOperation;
 
     @Inject
-    UpsertVersionOperation upsertVersionOperation;
+    UpsertVersionOperationTestInterface upsertVersionOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -65,7 +64,8 @@ class UpsertVersionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
                 VersionSourceCodeModel.create());
-        assertTrue(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version));
+        final var changeContext = upsertVersionOperation.upsertVersion(shard, version);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
@@ -79,8 +79,9 @@ class UpsertVersionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
                 VersionSourceCodeModel.create());
-        upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version);
+        upsertVersionOperation.upsertVersion(shard, version);
 
-        assertFalse(upsertVersionOperation.upsertVersion(TIMEOUT, pgPool, shard, tenant.getId(), version));
+        final var changeContext = upsertVersionOperation.upsertVersion(shard, version);
+        assertFalse(changeContext.getResult());
     }
 }

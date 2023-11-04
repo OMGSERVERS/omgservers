@@ -109,7 +109,8 @@ create table if not exists tab_tenant_version (
     default_matchmaker_id bigint not null,
     default_runtime_id bigint not null,
     config json not null,
-    source_code json not null
+    source_code json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_version_matchmaker (

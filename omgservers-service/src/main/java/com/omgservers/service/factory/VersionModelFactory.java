@@ -54,6 +54,7 @@ public class VersionModelFactory {
         version.setDefaultRuntimeId(defaultRuntimeId);
         version.setConfig(versionConfig);
         version.setSourceCode(sourceCode);
+        version.setDeleted(false);
         return version;
     }
 }

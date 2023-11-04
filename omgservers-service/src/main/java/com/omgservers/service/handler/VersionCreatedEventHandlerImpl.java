@@ -13,10 +13,10 @@ import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.factory.RuntimeModelFactory;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -67,7 +67,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
+        final var request = new GetVersionRequest(tenantId, id, false);
         return tenantModule.getVersionService().getVersion(request)
                 .map(GetVersionResponse::getVersion);
     }

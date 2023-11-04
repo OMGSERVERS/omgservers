@@ -24,18 +24,19 @@ class SelectVersionOperationImpl implements SelectVersionOperation {
     public Uni<VersionModel> selectVersion(final SqlConnection sqlConnection,
                                            final int shard,
                                            final Long tenantId,
-                                           final Long id) {
+                                           final Long id,
+                                           final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, tenant_id, stage_id, created, modified,
-                            default_matchmaker_id, default_runtime_id, config, source_code
+                            default_matchmaker_id, default_runtime_id, config, source_code, deleted
                         from $schema.tab_tenant_version
-                        where tenant_id = $1 and id = $2
+                        where tenant_id = $1 and id = $2 and deleted = $3
                         limit 1
                         """,
-                Arrays.asList(tenantId, id),
+                Arrays.asList(tenantId, id, deleted),
                 "Version",
                 versionModelMapper::fromRow);
     }

@@ -1,7 +1,5 @@
 package com.omgservers.service.module.worker.impl.service.workerService.impl.method.getVersion;
 
-import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
@@ -14,6 +12,8 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -66,7 +66,7 @@ class GetVersionMethodImpl implements GetVersionMethod {
     }
 
     Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
+        final var request = new GetVersionRequest(tenantId, id, false);
         return tenantModule.getVersionService().getVersion(request)
                 .map(GetVersionResponse::getVersion);
     }

@@ -1,10 +1,10 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -28,6 +28,7 @@ public class VersionModelMapper {
         version.setModified(row.getOffsetDateTime("modified").toInstant());
         version.setDefaultMatchmakerId(row.getLong("default_matchmaker_id"));
         version.setDefaultRuntimeId(row.getLong("default_runtime_id"));
+        version.setDeleted(row.getBoolean("deleted"));
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));
             version.setSourceCode(objectMapper.readValue(row.getString("source_code"), VersionSourceCodeModel.class));
