@@ -1,7 +1,7 @@
 package com.omgservers.module.user.operation;
 
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.factory.UserModelFactory;
 import com.omgservers.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

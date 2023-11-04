@@ -5,7 +5,7 @@ import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.shard.ShardModel;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;

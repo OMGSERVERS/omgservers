@@ -3,7 +3,7 @@ package com.omgservers.module.system.impl.operation.deleteServiceAccount;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.module.system.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

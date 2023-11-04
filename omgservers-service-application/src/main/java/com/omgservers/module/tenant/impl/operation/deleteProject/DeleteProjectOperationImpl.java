@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.operation.deleteProject;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;

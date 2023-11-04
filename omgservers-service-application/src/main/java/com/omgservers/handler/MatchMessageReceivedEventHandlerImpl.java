@@ -6,7 +6,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchRequestedEventBodyModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

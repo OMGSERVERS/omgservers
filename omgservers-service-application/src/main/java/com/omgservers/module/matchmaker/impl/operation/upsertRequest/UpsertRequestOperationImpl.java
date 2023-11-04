@@ -3,7 +3,7 @@ package com.omgservers.module.matchmaker.impl.operation.upsertRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.exception.ServerSideBadRequestException;
 import com.omgservers.model.request.RequestModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

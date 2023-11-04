@@ -5,8 +5,8 @@ import com.omgservers.module.tenant.impl.operation.upsertProject.UpsertProjectOp
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.tenant.TenantConfigModel;
-import com.omgservers.module.tenant.factory.ProjectModelFactory;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.factory.ProjectModelFactory;
+import com.omgservers.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

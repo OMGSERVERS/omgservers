@@ -1,7 +1,7 @@
 package com.omgservers.module.tenant.impl.operation.deleteVersionRuntime;
 
 import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

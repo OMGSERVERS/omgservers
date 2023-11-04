@@ -1,7 +1,7 @@
 package com.omgservers.module.matchmaker.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

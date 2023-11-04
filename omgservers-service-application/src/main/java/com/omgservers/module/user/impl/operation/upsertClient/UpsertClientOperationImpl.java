@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.operation.upsertClient;
 
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

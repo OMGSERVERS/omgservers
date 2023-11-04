@@ -11,7 +11,7 @@ import com.omgservers.model.event.body.KickApprovedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.module.matchmaker.factory.MatchmakerCommandModelFactory;
+import com.omgservers.factory.MatchmakerCommandModelFactory;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;

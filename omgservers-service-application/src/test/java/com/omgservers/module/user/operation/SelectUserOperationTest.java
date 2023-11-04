@@ -2,7 +2,7 @@ package com.omgservers.module.user.operation;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.factory.UserModelFactory;
 import com.omgservers.module.user.impl.operation.selectUser.SelectUserOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;

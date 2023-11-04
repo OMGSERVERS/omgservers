@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.operation.deleteVersion;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.selectVersion.SelectVersionOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;

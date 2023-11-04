@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.operation.deleteMatch;
 
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
 import com.omgservers.module.matchmaker.impl.operation.selectMatch.SelectMatchOperation;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

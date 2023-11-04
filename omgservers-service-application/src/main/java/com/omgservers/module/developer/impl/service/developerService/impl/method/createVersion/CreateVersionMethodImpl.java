@@ -11,7 +11,7 @@ import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.module.tenant.TenantModule;
-import com.omgservers.module.tenant.factory.VersionModelFactory;
+import com.omgservers.factory.VersionModelFactory;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

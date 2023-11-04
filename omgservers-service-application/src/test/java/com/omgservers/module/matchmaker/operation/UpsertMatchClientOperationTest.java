@@ -2,9 +2,9 @@ package com.omgservers.module.matchmaker.operation;
 
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.model.matchClient.MatchClientConfigModel;
-import com.omgservers.module.matchmaker.factory.MatchClientModelFactory;
-import com.omgservers.module.matchmaker.factory.MatchModelFactory;
-import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.factory.MatchClientModelFactory;
+import com.omgservers.factory.MatchModelFactory;
+import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;

@@ -4,8 +4,8 @@ import com.omgservers.module.tenant.impl.operation.hasTenantPermission.HasTenant
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
-import com.omgservers.module.tenant.factory.TenantPermissionModelFactory;
+import com.omgservers.factory.TenantModelFactory;
+import com.omgservers.factory.TenantPermissionModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
 import io.quarkus.test.junit.QuarkusTest;

@@ -1,7 +1,7 @@
 package com.omgservers.module.matchmaker.operation;
 
 import com.omgservers.exception.ServerSideNotFoundException;
-import com.omgservers.module.matchmaker.factory.MatchmakerModelFactory;
+import com.omgservers.factory.MatchmakerModelFactory;
 import com.omgservers.module.matchmaker.impl.operation.selectMatchmaker.SelectMatchmakerOperation;
 import com.omgservers.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;

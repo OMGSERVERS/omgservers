@@ -4,7 +4,7 @@ import com.omgservers.model.dto.system.SyncLogRequest;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import com.omgservers.module.system.impl.operation.getJobName.GetJobNameOperation;
 import com.omgservers.module.system.impl.service.logService.LogService;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.checkShard.CheckShardOperation;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;

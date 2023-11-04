@@ -13,7 +13,7 @@ import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.module.matchmaker.factory.RequestModelFactory;
+import com.omgservers.factory.RequestModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.module.user.UserModule;

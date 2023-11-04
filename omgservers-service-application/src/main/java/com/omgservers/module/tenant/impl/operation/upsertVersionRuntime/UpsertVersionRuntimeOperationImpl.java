@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.impl.operation.upsertVersionRuntime;
 
 import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

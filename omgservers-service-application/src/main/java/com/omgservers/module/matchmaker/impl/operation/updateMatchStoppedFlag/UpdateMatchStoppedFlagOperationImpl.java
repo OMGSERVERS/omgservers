@@ -2,7 +2,7 @@ package com.omgservers.module.matchmaker.impl.operation.updateMatchStoppedFlag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

@@ -3,7 +3,7 @@ package com.omgservers.module.system.impl.operation.deleteJob;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.system.impl.operation.selectJobByShardKeyAndEntityIdAndQualifierOperation.SelectJobByShardKeyAndEntityIdAndQualifierOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;

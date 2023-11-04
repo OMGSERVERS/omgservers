@@ -23,7 +23,7 @@ import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyMo
 import com.omgservers.module.gateway.GatewayModule;
 import com.omgservers.module.matchmaker.MatchmakerModule;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

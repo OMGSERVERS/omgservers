@@ -2,7 +2,7 @@ package com.omgservers.module.system.impl.operation.upsertLog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.log.LogModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

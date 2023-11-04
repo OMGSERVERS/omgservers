@@ -7,7 +7,7 @@ import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
-import com.omgservers.module.gateway.factory.MessageModelFactory;
+import com.omgservers.factory.MessageModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Multi;

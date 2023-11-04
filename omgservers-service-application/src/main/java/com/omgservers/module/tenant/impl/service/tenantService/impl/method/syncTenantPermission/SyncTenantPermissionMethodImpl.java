@@ -6,7 +6,7 @@ import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
 import com.omgservers.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.operation.checkShard.CheckShardOperation;

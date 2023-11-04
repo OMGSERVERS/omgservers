@@ -1,7 +1,7 @@
 package com.omgservers.operation.upsertJob;
 
 import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.module.system.factory.JobModelFactory;
+import com.omgservers.factory.JobModelFactory;
 import com.omgservers.module.system.impl.operation.upsertJob.UpsertJobOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

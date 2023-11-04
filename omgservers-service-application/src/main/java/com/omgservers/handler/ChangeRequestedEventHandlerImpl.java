@@ -13,7 +13,7 @@ import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
 import com.omgservers.module.runtime.RuntimeModule;
-import com.omgservers.module.runtime.factory.RuntimeCommandModelFactory;
+import com.omgservers.factory.RuntimeCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.user.UserModule;
 import io.smallrye.mutiny.Uni;

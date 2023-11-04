@@ -6,7 +6,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StopRequestedEventBodyModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.module.matchmaker.factory.MatchmakerCommandModelFactory;
+import com.omgservers.factory.MatchmakerCommandModelFactory;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;

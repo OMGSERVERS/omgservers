@@ -1,7 +1,7 @@
 package com.omgservers.module.user.impl.operation.upsertToken;
 
 import com.omgservers.model.token.TokenModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

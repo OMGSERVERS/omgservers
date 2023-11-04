@@ -1,7 +1,7 @@
 package com.omgservers.operation.selectList;
 
 import com.omgservers.factory.EventModelFactory;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.operation.prepareShardSql.PrepareShardSqlOperation;

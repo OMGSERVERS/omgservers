@@ -7,7 +7,7 @@ import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.module.matchmaker.factory.MatchCommandModelFactory;
+import com.omgservers.factory.MatchCommandModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

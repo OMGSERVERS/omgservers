@@ -3,7 +3,7 @@ package com.omgservers.module.matchmaker.impl.operation.deleteRequest;
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.RequestDeletedEventBodyModel;
 import com.omgservers.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

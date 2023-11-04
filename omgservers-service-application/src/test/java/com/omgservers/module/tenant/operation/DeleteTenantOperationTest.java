@@ -2,7 +2,7 @@ package com.omgservers.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.tenant.TenantConfigModel;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.factory.TenantModelFactory;
 import com.omgservers.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

@@ -20,7 +20,7 @@ import com.omgservers.model.runtime.RuntimeTypeEnum;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.module.runtime.RuntimeModule;
 import com.omgservers.module.system.SystemModule;
-import com.omgservers.module.system.factory.JobModelFactory;
+import com.omgservers.factory.JobModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.operation.getServers.GetServersOperation;

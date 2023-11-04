@@ -3,7 +3,7 @@ package com.omgservers.module.admin.impl.service.adminService.impl.method.create
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.tenant.SyncTenantRequest;
-import com.omgservers.module.tenant.factory.TenantModelFactory;
+import com.omgservers.factory.TenantModelFactory;
 import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.module.tenant.TenantModule;
 import com.omgservers.operation.generateId.GenerateIdOperation;

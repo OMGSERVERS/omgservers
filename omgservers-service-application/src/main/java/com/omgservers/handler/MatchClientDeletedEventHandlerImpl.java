@@ -7,7 +7,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.matchCommand.body.DeleteClientMatchCommandBodyModel;
 import com.omgservers.module.matchmaker.MatchmakerModule;
-import com.omgservers.module.matchmaker.factory.MatchCommandModelFactory;
+import com.omgservers.factory.MatchCommandModelFactory;
 import com.omgservers.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

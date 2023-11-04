@@ -4,7 +4,7 @@ import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.dto.user.CreateTokenRequest;
 import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.model.user.UserTokenContainerModel;
-import com.omgservers.module.user.factory.TokenModelFactory;
+import com.omgservers.factory.TokenModelFactory;
 import com.omgservers.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import com.omgservers.module.user.impl.operation.selectUser.SelectUserOperation;
 import com.omgservers.module.user.impl.operation.upsertToken.UpsertTokenOperation;

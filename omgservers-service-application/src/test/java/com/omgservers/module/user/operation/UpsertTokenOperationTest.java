@@ -1,8 +1,8 @@
 package com.omgservers.module.user.operation;
 
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.module.user.factory.TokenModelFactory;
-import com.omgservers.module.user.factory.UserModelFactory;
+import com.omgservers.factory.TokenModelFactory;
+import com.omgservers.factory.UserModelFactory;
 import com.omgservers.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import com.omgservers.module.user.impl.operation.upsertToken.UpsertTokenOperation;
 import com.omgservers.module.user.impl.operation.upsertUser.UpsertUserOperation;

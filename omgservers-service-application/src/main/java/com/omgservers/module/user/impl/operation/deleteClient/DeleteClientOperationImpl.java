@@ -2,7 +2,7 @@ package com.omgservers.module.user.impl.operation.deleteClient;
 
 import com.omgservers.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
-import com.omgservers.module.system.factory.LogModelFactory;
+import com.omgservers.factory.LogModelFactory;
 import com.omgservers.module.user.impl.operation.selectClient.SelectClientOperation;
 import com.omgservers.operation.changeWithContext.ChangeContext;
 import com.omgservers.operation.changeObject.ChangeObjectOperation;
