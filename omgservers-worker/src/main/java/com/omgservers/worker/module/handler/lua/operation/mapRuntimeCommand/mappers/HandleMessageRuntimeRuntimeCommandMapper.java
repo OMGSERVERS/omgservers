@@ -3,7 +3,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.HandleMessageLuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.HandleMessageLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,10 +24,10 @@ public class HandleMessageRuntimeRuntimeCommandMapper implements RuntimeCommandM
     }
 
     @Override
-    public HandleMessageLuaRequest map(final RuntimeCommandModel runtimeCommand) {
+    public HandleMessageLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (HandleMessageRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var luaMessage = coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getMessage());
-        return new HandleMessageLuaRequest(runtimeCommandBody.getUserId(),
+        return new HandleMessageLuaCommand(runtimeCommandBody.getUserId(),
                 runtimeCommandBody.getClientId(),
                 luaMessage);
     }

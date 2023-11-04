@@ -3,7 +3,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.SignUpLuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.SignUpLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,8 +21,8 @@ public class SignUpRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public SignUpLuaRequest map(final RuntimeCommandModel runtimeCommand) {
+    public SignUpLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (SignUpRuntimeCommandBodyModel) runtimeCommand.getBody();
-        return new SignUpLuaRequest(runtimeCommandBody.getUserId(), runtimeCommandBody.getClientId());
+        return new SignUpLuaCommand(runtimeCommandBody.getUserId(), runtimeCommandBody.getClientId());
     }
 }

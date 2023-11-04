@@ -4,8 +4,8 @@ import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.SignInLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.SignInLuaRequest;
 import com.omgservers.worker.module.handler.lua.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,9 +27,9 @@ public class SignInRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public SignInLuaRequest map(final RuntimeCommandModel runtimeCommand) {
+    public SignInLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (SignInRuntimeCommandBodyModel) runtimeCommand.getBody();
-        return new SignInLuaRequest(runtimeCommandBody.getUserId(),
+        return new SignInLuaCommand(runtimeCommandBody.getUserId(),
                 runtimeCommandBody.getClientId(),
                 parseAttributes(runtimeCommandBody.getAttributes()),
                 coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getObject()));

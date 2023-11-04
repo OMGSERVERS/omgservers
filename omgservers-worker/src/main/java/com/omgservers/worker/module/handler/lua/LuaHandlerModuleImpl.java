@@ -3,7 +3,7 @@ package com.omgservers.worker.module.handler.lua;
 import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.worker.module.handler.HandlerModule;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.UpdateRuntimeLuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.UpdateRuntimeLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.createLuaInstance.LuaInstance;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.MapLuaCommandOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
@@ -38,7 +38,7 @@ public class LuaHandlerModuleImpl implements HandlerModule {
                 .collect(Collectors.toList());
 
         // Add update command automatically
-        final var updateRuntimeLuaRequest = new UpdateRuntimeLuaRequest(Instant.now().toEpochMilli());
+        final var updateRuntimeLuaRequest = new UpdateRuntimeLuaCommand(Instant.now().toEpochMilli());
         luaRequests.add(updateRuntimeLuaRequest);
 
         final var doCommands = new ArrayList<DoCommandModel>();

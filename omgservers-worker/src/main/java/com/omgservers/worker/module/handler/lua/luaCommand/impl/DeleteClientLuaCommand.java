@@ -1,17 +1,17 @@
-package com.omgservers.worker.module.handler.lua.luaRequest.impl;
+package com.omgservers.worker.module.handler.lua.luaCommand.impl;
 
-import com.omgservers.worker.module.handler.lua.luaRequest.LuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.LuaCommand;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class DeleteClientLuaRequest extends LuaRequest {
+public class DeleteClientLuaCommand extends LuaCommand {
 
     final Long userId;
     final Long clientId;
 
-    public DeleteClientLuaRequest(final Long userId,
+    public DeleteClientLuaCommand(final Long userId,
                                   final Long clientId) {
         super("delete_client", true);
         this.userId = userId;

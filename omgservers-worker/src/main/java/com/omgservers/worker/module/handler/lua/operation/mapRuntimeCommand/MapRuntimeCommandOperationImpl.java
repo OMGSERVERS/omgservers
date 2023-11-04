@@ -2,7 +2,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand;
 
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
-import com.omgservers.worker.module.handler.lua.luaRequest.LuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.LuaCommand;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
     }
 
     @Override
-    public LuaRequest mapRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
+    public LuaCommand mapRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var qualifier = runtimeCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
 

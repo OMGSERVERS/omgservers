@@ -4,7 +4,7 @@ import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.ChangePlayerLuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.ChangePlayerLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import com.omgservers.worker.module.handler.lua.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,10 +27,10 @@ public class ChangeRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public ChangePlayerLuaRequest map(final RuntimeCommandModel runtimeCommand) {
+    public ChangePlayerLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (ChangePlayerRuntimeCommandBodyModel) runtimeCommand.getBody();
 
-        return new ChangePlayerLuaRequest(
+        return new ChangePlayerLuaCommand(
                 runtimeCommandBody.getUserId(),
                 runtimeCommandBody.getClientId(),
                 parseAttributes(runtimeCommandBody.getAttributes()),

@@ -1,6 +1,6 @@
-package com.omgservers.worker.module.handler.lua.luaRequest.impl;
+package com.omgservers.worker.module.handler.lua.luaCommand.impl;
 
-import com.omgservers.worker.module.handler.lua.luaRequest.LuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.LuaCommand;
 import lombok.Getter;
 import lombok.ToString;
 import org.luaj.vm2.LuaTable;
@@ -8,12 +8,12 @@ import org.luaj.vm2.LuaValue;
 
 @Getter
 @ToString
-public class SignInLuaRequest extends LuaRequest {
+public class SignInLuaCommand extends LuaCommand {
 
     final Long userId;
     final Long clientId;
 
-    public SignInLuaRequest(final Long userId,
+    public SignInLuaCommand(final Long userId,
                             final Long clientId,
                             final LuaTable attributes,
                             final LuaValue object) {

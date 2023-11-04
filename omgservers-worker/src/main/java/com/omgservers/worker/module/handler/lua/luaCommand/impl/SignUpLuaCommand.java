@@ -1,17 +1,17 @@
-package com.omgservers.worker.module.handler.lua.luaRequest.impl;
+package com.omgservers.worker.module.handler.lua.luaCommand.impl;
 
-import com.omgservers.worker.module.handler.lua.luaRequest.LuaRequest;
+import com.omgservers.worker.module.handler.lua.luaCommand.LuaCommand;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class SignUpLuaRequest extends LuaRequest {
+public class SignUpLuaCommand extends LuaCommand {
 
     final Long userId;
     final Long clientId;
 
-    public SignUpLuaRequest(Long userId, Long clientId) {
+    public SignUpLuaCommand(Long userId, Long clientId) {
         super("sign_up", true);
         this.userId = userId;
         this.clientId = clientId;

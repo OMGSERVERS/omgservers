@@ -21,7 +21,6 @@ public class UnicastLuaCommandMapper implements LuaCommandMapper {
         return LuaCommandQualifierEnum.UNICAST;
     }
 
-
     @Override
     public DoCommandModel map(LuaTable luaCommand) {
         final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());

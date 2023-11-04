@@ -3,8 +3,8 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
+import com.omgservers.worker.module.handler.lua.luaCommand.impl.UpdateRuntimeLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
-import com.omgservers.worker.module.handler.lua.luaRequest.impl.UpdateRuntimeLuaRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,8 +21,8 @@ public class UpdateRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public UpdateRuntimeLuaRequest map(RuntimeCommandModel runtimeCommand) {
+    public UpdateRuntimeLuaCommand map(RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (UpdateRuntimeCommandBodyModel) runtimeCommand.getBody();
-        return new UpdateRuntimeLuaRequest(runtimeCommandBody.getTime());
+        return new UpdateRuntimeLuaCommand(runtimeCommandBody.getTime());
     }
 }
