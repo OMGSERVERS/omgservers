@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.Instant;
 
@@ -12,7 +11,6 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TenantModel {
-
 
     @NotNull
     Long id;
@@ -24,6 +22,5 @@ public class TenantModel {
     Instant modified;
 
     @NotNull
-    @ToString.Exclude
-    TenantConfigModel config;
+    Boolean deleted;
 }

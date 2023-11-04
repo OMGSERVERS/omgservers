@@ -1,11 +1,8 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.service.module.tenant.impl.operation.selectTenant.SelectTenantOperation;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -16,13 +13,12 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class SelectTenantOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectTenantOperation selectTenantOperation;
+    SelectTenantOperationTestInterface selectTenantOperation;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -36,11 +32,11 @@ class SelectTenantOperationTest extends Assertions {
     @Test
     void givenTenant_whenSelectTenant_thenSelected() {
         final var shard = 0;
-        final var tenant1 = tenantModelFactory.create(TenantConfigModel.create());
+        final var tenant1 = tenantModelFactory.create();
         final var uuid = tenant1.getId();
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant1);
+        upsertTenantOperation.upsertTenant(shard, tenant1);
 
-        final var tenant2 = selectTenantOperation.selectTenant(TIMEOUT, pgPool, shard, uuid);
+        final var tenant2 = selectTenantOperation.selectTenant(shard, uuid, false);
         assertEquals(tenant1, tenant2);
     }
 
@@ -50,6 +46,6 @@ class SelectTenantOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectTenantOperation
-                .selectTenant(TIMEOUT, pgPool, shard, id));
+                .selectTenant(shard, id, false));
     }
 }

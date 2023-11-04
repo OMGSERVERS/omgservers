@@ -2,11 +2,9 @@ package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.project.ProjectConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -24,7 +22,7 @@ class DeleteProjectOperationTest extends Assertions {
     DeleteProjectOperationTestInterface deleteProjectOperation;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperation upsertProjectOperation;
@@ -44,8 +42,8 @@ class DeleteProjectOperationTest extends Assertions {
     @Test
     void givenProject_whenDeleteProject_thenDeleted() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         final var id = project.getId();
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);

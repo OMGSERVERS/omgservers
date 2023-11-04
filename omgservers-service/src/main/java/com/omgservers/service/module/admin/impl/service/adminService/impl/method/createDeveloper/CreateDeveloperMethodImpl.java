@@ -11,10 +11,10 @@ import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.factory.TenantPermissionModelFactory;
-import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.factory.UserModelFactory;
+import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -49,8 +49,8 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
-        final var getTenantServiceRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getTenantService().getTenant(getTenantServiceRequest)
+        final var getTenantRequest = new GetTenantRequest(tenantId, false);
+        return tenantModule.getTenantService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 

@@ -1,13 +1,11 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.selectProject.SelectProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,7 +23,7 @@ class SelectProjectOperationTest extends Assertions {
     SelectProjectOperation selectProjectOperation;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperation upsertProjectOperation;
@@ -45,13 +43,14 @@ class SelectProjectOperationTest extends Assertions {
     @Test
     void givenProject_whenSelectProject_thenSelected() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
 
         final var project1 = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project1);
 
-        final var project2 = selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, tenant.getId(), project1.getId());
+        final var project2 =
+                selectProjectOperation.selectProject(TIMEOUT, pgPool, shard, tenant.getId(), project1.getId());
         assertEquals(project1, project2);
     }
 
@@ -61,7 +60,7 @@ class SelectProjectOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
         final var tenantId = generateIdOperation.generateId();
 
-        final var exception = assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
+        assertThrows(ServerSideNotFoundException.class, () -> selectProjectOperation
                 .selectProject(TIMEOUT, pgPool, shard, id, tenantId));
     }
 }

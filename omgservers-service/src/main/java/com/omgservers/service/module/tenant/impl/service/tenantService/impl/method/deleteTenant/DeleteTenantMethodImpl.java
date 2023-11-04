@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.deleteTenant;
 
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.service.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -24,18 +24,14 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<Void> deleteTenant(final DeleteTenantRequest request) {
+    public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, id))
-                //TODO implement response with deleted flag
-                .replaceWithVoid();
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long id) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteTenantOperation.deleteTenant(changeContext, sqlConnection, shardModel.shard(), id))
-                .map(ChangeContext::getResult);
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                                (changeContext, sqlConnection) -> deleteTenantOperation
+                                        .deleteTenant(changeContext, sqlConnection, shardModel.shard(), id))
+                        .map(ChangeContext::getResult))
+                .map(DeleteTenantResponse::new);
     }
 }

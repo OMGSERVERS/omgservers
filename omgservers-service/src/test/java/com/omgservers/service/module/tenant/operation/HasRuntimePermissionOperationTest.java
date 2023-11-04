@@ -1,13 +1,11 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.service.module.tenant.impl.operation.hasTenantPermission.HasTenantPermissionOperation;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.factory.TenantPermissionModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.service.module.tenant.impl.operation.hasTenantPermission.HasTenantPermissionOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -27,7 +25,7 @@ class HasRuntimePermissionOperationTest extends Assertions {
     UpsertTenantPermissionOperation upsertTenantPermissionOperation;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -44,19 +42,22 @@ class HasRuntimePermissionOperationTest extends Assertions {
     @Test
     void givenTenantPermission_whenHasTenantPermission_thenYes() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
-        final var permission = tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionEnum.CREATE_PROJECT);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
+        final var permission =
+                tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionEnum.CREATE_PROJECT);
         upsertTenantPermissionOperation.upsertTenantPermission(TIMEOUT, pgPool, shard, permission);
 
-        assertTrue(hasTenantPermissionOperation.hasTenantPermission(TIMEOUT, pgPool, shard, tenant.getId(), permission.getUserId(), permission.getPermission()));
+        assertTrue(hasTenantPermissionOperation.hasTenantPermission(TIMEOUT, pgPool, shard, tenant.getId(),
+                permission.getUserId(), permission.getPermission()));
     }
 
     @Test
     void givenUnknownUuids_whenHasTenantPermission_thenNo() {
         final var shard = 0;
 
-        assertFalse(hasTenantPermissionOperation.hasTenantPermission(TIMEOUT, pgPool, shard, tenantId(), userId(), TenantPermissionEnum.CREATE_PROJECT));
+        assertFalse(hasTenantPermissionOperation.hasTenantPermission(TIMEOUT, pgPool, shard, tenantId(), userId(),
+                TenantPermissionEnum.CREATE_PROJECT));
     }
 
     Long userId() {

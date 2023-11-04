@@ -4,7 +4,6 @@ import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +24,7 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
     @Override
     public Uni<CreateTenantAdminResponse> createTenant(final CreateTenantAdminRequest request) {
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
+        final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
         return tenantModule.getTenantService().syncTenant(syncTenantInternalRequest)
                 .replaceWith(new CreateTenantAdminResponse(tenant.getId()));

@@ -3,7 +3,6 @@ package com.omgservers.service.module.tenant.operation;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
@@ -28,7 +27,7 @@ class SelectProjectStagesOperationTest extends Assertions {
     SelectStageOperation selectStageOperation;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperation upsertProjectOperation;
@@ -54,8 +53,8 @@ class SelectProjectStagesOperationTest extends Assertions {
     @Test
     void givenStage_whenSelectStage_thenSelected() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
 
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);

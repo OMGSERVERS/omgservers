@@ -49,7 +49,7 @@ create table if not exists tab_tenant (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    config json not null
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_permission (

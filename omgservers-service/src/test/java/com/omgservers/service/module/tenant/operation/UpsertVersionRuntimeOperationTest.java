@@ -1,15 +1,13 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -24,7 +22,7 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperation upsertProjectOperation;
@@ -50,8 +48,8 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
     @Test
     void givenProject_whenUpsertStage_thenInserted() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
@@ -61,8 +59,8 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
     @Test
     void givenStage_whenUpsertStage_thenUpdated() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
@@ -75,7 +73,7 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertStage_thenException() {
         final var shard = 0;
         final var stage = stageModelFactory.create(tenantId(), projectId(), StageConfigModel.create());
-        final var exception = assertThrows(ServerSideConflictException.class, () ->
+        assertThrows(ServerSideConflictException.class, () ->
                 upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenantId(), stage));
     }
 

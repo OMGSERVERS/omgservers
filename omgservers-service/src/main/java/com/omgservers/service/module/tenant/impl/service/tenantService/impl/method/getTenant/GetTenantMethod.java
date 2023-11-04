@@ -8,9 +8,4 @@ import java.time.Duration;
 
 public interface GetTenantMethod {
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
-
-    default GetTenantResponse getTenant(long timeout, GetTenantRequest request) {
-        return getTenant(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

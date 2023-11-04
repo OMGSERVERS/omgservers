@@ -1,13 +1,11 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.project.ProjectConfigModel;
-import com.omgservers.model.tenant.TenantConfigModel;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -21,7 +19,7 @@ class UpsertProjectOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertTenantOperation upsertTenantOperation;
+    UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperation upsertProjectOperation;
@@ -41,8 +39,8 @@ class UpsertProjectOperationTest extends Assertions {
     @Test
     void givenTenant_whenUpsertProject_thenInserted() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
 
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         assertTrue(upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
@@ -51,8 +49,8 @@ class UpsertProjectOperationTest extends Assertions {
     @Test
     void givenProject_whenUpsertProject_thenUpdated() {
         final var shard = 0;
-        final var tenant = tenantModelFactory.create(TenantConfigModel.create());
-        upsertTenantOperation.upsertTenant(TIMEOUT, pgPool, shard, tenant);
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
         upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
 
@@ -63,7 +61,7 @@ class UpsertProjectOperationTest extends Assertions {
     void givenUnknownTenant_whenUpsertProject_thenException() {
         final var shard = 0;
         final var project = projectModelFactory.create(tenantId(), ProjectConfigModel.create());
-        final var exception = assertThrows(ServerSideConflictException.class, () ->
+        assertThrows(ServerSideConflictException.class, () ->
                 upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
     }
 

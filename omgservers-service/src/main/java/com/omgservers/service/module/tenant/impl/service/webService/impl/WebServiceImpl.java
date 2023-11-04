@@ -4,6 +4,7 @@ import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
+import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
@@ -94,7 +95,7 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<Void> deleteTenant(final DeleteTenantRequest request) {
+    public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
         return tenantService.deleteTenant(request);
     }
 

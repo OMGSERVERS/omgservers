@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl;
 
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
+import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
@@ -58,7 +59,7 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<Void> deleteTenant(@Valid final DeleteTenantRequest request) {
+    public Uni<DeleteTenantResponse> deleteTenant(@Valid final DeleteTenantRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenant,
