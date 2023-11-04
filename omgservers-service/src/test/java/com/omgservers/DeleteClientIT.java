@@ -30,21 +30,22 @@ public class DeleteClientIT extends Assertions {
 
     @Test
     void deleteClientTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                        
+        final var version = bootstrapVersionOperation.bootstrapVersion("""
+                        local var command = ...
 
-                        if request.qualifier == "init_runtime" then
-                            state.clients = {}
+                        if command.qualifier == "init_runtime" then
+                            clients = {}
                         end
                                                
-                        if request.qualifier == "add_client" then
-                            state.clients[request.client_id] = {
-                                user_id = request.user_id,
-                                client_id = request.client_id
+                        if command.qualifier == "add_client" then
+                            clients[command.client_id] = {
+                                user_id = command.user_id,
+                                client_id = command.client_id
                             }
                         end
                                                 
-                        if request.qualifier == "delete_client" then
-                            local var client = state.clients[request.client_id]
+                        if command.qualifier == "delete_client" then
+                            local var client = clients[command.client_id]
                             assert(client.user_id ~= nil, "client.user_id is wrong")
                             assert(client.client_id ~= nil, "client.client_id is wrong")
                             

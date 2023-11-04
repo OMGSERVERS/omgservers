@@ -30,29 +30,30 @@ public class KickClientIT extends Assertions {
 
     @Test
     void kickClientTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                        
+        final var version = bootstrapVersionOperation.bootstrapVersion("""
+                        local var command = ...
                                                
-                        if request.qualifier == "add_client" then
-                            local var user_id = request.user_id
-                            local var client_id = request.client_id
+                        if command.qualifier == "add_client" then
+                            local var user_id = command.user_id
+                            local var client_id = command.client_id
                             
-                            if state.admin then
+                            if admin then
                                 return {
                                     {
                                         qualifier = "kick",
-                                        user_id = request.user_id,
-                                        client_id = request.client_id
+                                        user_id = command.user_id,
+                                        client_id = command.client_id
                                     }
                                 }
                             else
-                                state.admin = {
-                                    user_id = request.user_id,
-                                    client_id = request.client_id
+                                admin = {
+                                    user_id = command.user_id,
+                                    client_id = command.client_id
                                 }
                             end
                         end
                                                 
-                        if request.qualifier == "delete_client" then
+                        if command.qualifier == "delete_client" then
                             return {
                                 {
                                     qualifier = "broadcast",

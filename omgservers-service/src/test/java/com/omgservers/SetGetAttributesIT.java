@@ -27,12 +27,14 @@ public class SetGetAttributesIT extends Assertions {
     @Test
     void setGetAttributeTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                if request.qualifier == "sign_up" then
+                local var command = ...
+                
+                if command.qualifier == "sign_up" then
                     return {
                         {
                             qualifier = "set_attributes",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             attributes = {
                                 a1 = 1,
                                 a2 = "string",
@@ -42,8 +44,8 @@ public class SetGetAttributesIT extends Assertions {
                         },
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_up"
                             }
@@ -51,8 +53,8 @@ public class SetGetAttributesIT extends Assertions {
                     }
                 end
                                 
-                if request.qualifier == "sign_in" then
-                    local attributes = request.attributes
+                if command.qualifier == "sign_in" then
+                    local attributes = command.attributes
                     assert(type(attributes.a1) == "number", "a1 is wrong")
                     assert(type(attributes.a2) == "string", "a2 is wrong")
                     assert(type(attributes.a3) == "number", "a3 is wrong")
@@ -61,8 +63,8 @@ public class SetGetAttributesIT extends Assertions {
                     return {
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_in"
                             }

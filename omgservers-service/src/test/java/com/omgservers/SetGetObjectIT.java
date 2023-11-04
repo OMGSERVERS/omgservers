@@ -27,12 +27,14 @@ public class SetGetObjectIT extends Assertions {
     @Test
     void setGetAttributeTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                if request.qualifier == "sign_up" then
+                local var command = ...
+                
+                if command.qualifier == "sign_up" then
                     return {
                         {
                             qualifier = "set_object",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             object = {
                                 a1 = 1,
                                 a2 = "string",
@@ -42,8 +44,8 @@ public class SetGetObjectIT extends Assertions {
                         },
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_up"
                             }
@@ -51,8 +53,8 @@ public class SetGetObjectIT extends Assertions {
                     }
                 end
                                 
-                if request.qualifier == "sign_in" then
-                    local var object = request.object
+                if command.qualifier == "sign_in" then
+                    local var object = command.object
                     assert(type(object.a1) == "number", "a1 is wrong")
                     assert(type(object.a2) == "string", "a2 is wrong")
                     assert(type(object.a3) == "number", "a3 is wrong")
@@ -61,8 +63,8 @@ public class SetGetObjectIT extends Assertions {
                     return {
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_in"
                             }

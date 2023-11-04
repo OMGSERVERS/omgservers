@@ -32,8 +32,11 @@ public class StopMatchIT extends Assertions {
 
     @Test
     void stopMatchTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                                                                                              
-                        if request.qualifier == "add_client" then
+        final var version = bootstrapVersionOperation.bootstrapVersion(
+                """                                                                                              
+                        local var command = ...
+                                                
+                        if command.qualifier == "add_client" then
                             return {
                                 {
                                     qualifier = "stop",

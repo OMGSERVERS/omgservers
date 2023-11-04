@@ -31,13 +31,15 @@ public class MatchmakingIT extends Assertions {
     @Test
     void matchmakingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
-                        if request.qualifier == "add_client" then
+                        local var command = ...
+                                                
+                        if command.qualifier == "add_client" then
                                                 
                             return {
                                 {
                                     qualifier = "unicast",
-                                    user_id = request.user_id,
-                                    client_id = request.client_id,
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
                                     message = {
                                         text = "added"
                                     }

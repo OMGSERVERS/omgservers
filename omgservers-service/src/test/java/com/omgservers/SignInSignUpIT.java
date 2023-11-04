@@ -26,14 +26,15 @@ public class SignInSignUpIT extends Assertions {
 
     @Test
     void signInSignUpTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""                
+        final var version = bootstrapVersionOperation.bootstrapVersion("""
+                local var command = ...
                                 
-                if request.qualifier == "sign_up" then
+                if command.qualifier == "sign_up" then
                     return {
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_up"
                             }
@@ -41,12 +42,12 @@ public class SignInSignUpIT extends Assertions {
                     }
                 end
                                 
-                if request.qualifier == "sign_in" then
+                if command.qualifier == "sign_in" then
                     return {
                         {
                             qualifier = "respond",
-                            user_id = request.user_id,
-                            client_id = request.client_id,
+                            user_id = command.user_id,
+                            client_id = command.client_id,
                             message = {
                                 text = "signed_in"
                             }

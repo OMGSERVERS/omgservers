@@ -31,22 +31,23 @@ public class MessagingIT extends Assertions {
     @Test
     void messagingTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
+                        local var command = ...
                                                 
-                        if request.qualifier == "init_runtime" then
-                            state.clients = {}
+                        if command.qualifier == "init_runtime" then
+                            clients = {}
                         end
                                                 
-                        if request.qualifier == "add_client" then
-                            table.insert(state.clients, {
-                                user_id = request.user_id,
-                                client_id = request.client_id
+                        if command.qualifier == "add_client" then
+                            table.insert(clients, {
+                                user_id = command.user_id,
+                                client_id = command.client_id
                             })
                             
                             return {
                                 {
                                     qualifier = "unicast",
-                                    user_id = request.user_id,
-                                    client_id = request.client_id,
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
                                     message = {
                                         text = "hello, client"
                                     }
@@ -54,11 +55,11 @@ public class MessagingIT extends Assertions {
                             }
                         end
                                                 
-                        if request.qualifier == "update_runtime" then
+                        if command.qualifier == "update_runtime" then
                            
-                            if #state.clients >= 2 then
-                                local client_1 = state.clients[1]
-                                local client_2 = state.clients[2]
+                            if #clients >= 2 then
+                                local client_1 = clients[1]
+                                local client_2 = clients[2]
                                 
                                 return {
                                     {

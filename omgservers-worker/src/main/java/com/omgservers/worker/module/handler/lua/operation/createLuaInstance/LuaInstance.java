@@ -22,8 +22,7 @@ public class LuaInstance {
 
     public synchronized LuaValue call(final LuaRequest luaRequest) {
         try {
-            globals.set("request", luaRequest);
-            return chunk.call();
+            return chunk.call(luaRequest);
         } catch (LuaError luaError) {
             log.warn("Lua instance failed, reason={}, luaRequest={}", luaError.getMessage(), luaRequest);
             throw new IllegalArgumentException("Lua error, " + luaError.getMessage(), luaError);

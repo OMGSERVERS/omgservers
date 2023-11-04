@@ -30,14 +30,16 @@ public class ChangePlayerIT extends Assertions {
     void changePlayerTest() throws Exception {
         final var version =
                 bootstrapVersionOperation.bootstrapVersion("""                                               
-                        if request.qualifier == "change_player" then
-                            local var message = request.message
+                        local var command = ...
+
+                        if command.qualifier == "change_player" then
+                            local var message = command.message
                             assert(message.text == "reset", "message.text is wrong")
                             return {
                                 {
                                     qualifier = "respond",
-                                    user_id = request.user_id,
-                                    client_id = request.client_id,
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
                                     message = {
                                         text = "changed"
                                     }
