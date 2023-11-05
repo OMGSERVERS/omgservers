@@ -14,7 +14,7 @@ import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.utils.operation.VersionParameters;
+import com.omgservers.utils.model.VersionParameters;
 import jakarta.websocket.ClientEndpointConfig;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.DeploymentException;

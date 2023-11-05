@@ -8,6 +8,8 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import io.restassured.RestAssured;
@@ -48,16 +50,35 @@ public class DeveloperCli {
         return response;
     }
 
-    public CreateVersionDeveloperResponse createVersion(String token, Long tenantId, Long stageId, VersionConfigModel versionConfig, VersionSourceCodeModel sourceCode) throws JsonProcessingException {
+    public CreateVersionDeveloperResponse createVersion(String token, Long tenantId, Long stageId,
+                                                        VersionConfigModel versionConfig,
+                                                        VersionSourceCodeModel sourceCode)
+            throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
+                .body(objectMapper.writeValueAsString(
+                        new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
                 .when().put("/omgservers/developer-api/v1/requests/create-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateVersionDeveloperResponse.class);
+        return response;
+    }
+
+    public DeleteVersionDeveloperResponse deleteVersion(String token, Long tenantId, Long id)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(
+                        new DeleteVersionDeveloperRequest(tenantId, id)))
+                .when().put("/omgservers/developer-api/v1/requests/delete-version");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(DeleteVersionDeveloperResponse.class);
         return response;
     }
 }

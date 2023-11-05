@@ -6,13 +6,18 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface DeveloperService {
 
-    Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
+    Uni<CreateTokenDeveloperResponse> createToken(@Valid CreateTokenDeveloperRequest request);
 
-    Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
+    Uni<CreateProjectDeveloperResponse> createProject(@Valid CreateProjectDeveloperRequest request);
 
-    Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
+    Uni<CreateVersionDeveloperResponse> createVersion(@Valid CreateVersionDeveloperRequest request);
+
+    Uni<DeleteVersionDeveloperResponse> deleteVersion(@Valid DeleteVersionDeveloperRequest request);
 }

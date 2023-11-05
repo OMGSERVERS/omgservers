@@ -45,7 +45,7 @@ public class MatchJobTask implements JobTask {
                 .onFailure(ServerSideNotFoundException.class).recoverWithNull()
                 .invoke(runtime -> {
                     if (Objects.isNull(runtime)) {
-                        log.info("Match was not found, skip job execution, " +
+                        log.warn("Match was not found, skip job execution, " +
                                 "matchmakerId={}, matchId={}", matchmakerId, matchId);
                     }
                 })

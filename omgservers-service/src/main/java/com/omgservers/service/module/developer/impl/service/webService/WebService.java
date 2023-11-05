@@ -6,6 +6,8 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -15,4 +17,6 @@ public interface WebService {
     Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
 
     Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
+
+    Uni<DeleteVersionDeveloperResponse> deleteVersion(DeleteVersionDeveloperRequest request);
 }

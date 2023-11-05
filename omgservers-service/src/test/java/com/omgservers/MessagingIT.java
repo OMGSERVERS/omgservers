@@ -3,7 +3,8 @@ package com.omgservers;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.utils.operation.BootstrapVersionOperation;
+import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
+import com.omgservers.utils.operation.deleteVersionOperation.DeleteVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,6 +25,9 @@ public class MessagingIT extends Assertions {
 
     @Inject
     BootstrapVersionOperation bootstrapVersionOperation;
+
+    @Inject
+    DeleteVersionOperation deleteVersionOperation;
 
     @Inject
     TestClientFactory testClientFactory;
@@ -135,6 +139,9 @@ public class MessagingIT extends Assertions {
         client1.close();
         client2.close();
 
-        Thread.sleep(20000);
+        Thread.sleep(10000);
+
+        deleteVersionOperation.deleteVersion(version);
+        Thread.sleep(10000);
     }
 }

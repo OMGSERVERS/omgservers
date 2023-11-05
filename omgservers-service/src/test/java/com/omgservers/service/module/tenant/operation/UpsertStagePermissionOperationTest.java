@@ -65,7 +65,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
 
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
-                StagePermissionEnum.CREATE_VERSION);
+                StagePermissionEnum.VERSION_MANAGEMENT);
         assertTrue(upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission));
     }
 
@@ -79,7 +79,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
-                StagePermissionEnum.CREATE_VERSION);
+                StagePermissionEnum.VERSION_MANAGEMENT);
         upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
 
         assertFalse(upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission));
@@ -90,7 +90,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var shard = 0;
 
         final var permission =
-                stagePermissionModelFactory.create(tenantId(), stageId(), userId(), StagePermissionEnum.CREATE_VERSION);
+                stagePermissionModelFactory.create(tenantId(), stageId(), userId(), StagePermissionEnum.VERSION_MANAGEMENT);
         assertThrows(ServerSideConflictException.class, () -> upsertStagePermissionOperation
                 .upsertStagePermission(TIMEOUT, pgPool, shard, permission));
     }

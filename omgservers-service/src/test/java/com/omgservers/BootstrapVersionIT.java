@@ -1,6 +1,7 @@
 package com.omgservers;
 
-import com.omgservers.utils.operation.BootstrapVersionOperation;
+import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
+import com.omgservers.utils.operation.deleteVersionOperation.DeleteVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,18 @@ public class BootstrapVersionIT extends Assertions {
     @Inject
     BootstrapVersionOperation bootstrapVersionOperation;
 
+    @Inject
+    DeleteVersionOperation deleteVersionOperation;
+
     @Test
     void bootstrapVersionTest() throws Exception {
-        bootstrapVersionOperation.bootstrapVersion("""
+        final var version = bootstrapVersionOperation.bootstrapVersion("""
                 print("test")
                 """);
 
-        Thread.sleep(5000);
+        Thread.sleep(10000);
+
+        deleteVersionOperation.deleteVersion(version);
+        Thread.sleep(10000);
     }
 }

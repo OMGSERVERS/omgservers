@@ -6,6 +6,8 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.module.developer.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -33,7 +35,7 @@ class DeveloperApiImpl implements DeveloperApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
-    public Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createProject);
     }
 
@@ -41,5 +43,11 @@ class DeveloperApiImpl implements DeveloperApi {
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
+    public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
     }
 }

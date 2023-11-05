@@ -108,7 +108,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     Uni<StagePermissionModel> syncStagePermission(final Long tenantId,
                                                   final Long stageId,
                                                   final Long userId) {
-        final var permission = StagePermissionEnum.CREATE_VERSION;
+        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
         final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
         final var request = new SyncStagePermissionRequest(stagePermission);
         return tenantModule.getStageService().syncStagePermission(request)

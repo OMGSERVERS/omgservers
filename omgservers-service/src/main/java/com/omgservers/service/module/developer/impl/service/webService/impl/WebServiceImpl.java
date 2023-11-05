@@ -6,6 +6,8 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.service.module.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.module.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -22,17 +24,22 @@ class WebServiceImpl implements WebService {
     final DeveloperService developerService;
 
     @Override
-    public Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request) {
+    public Uni<CreateTokenDeveloperResponse> createToken(final CreateTokenDeveloperRequest request) {
         return developerService.createToken(request);
     }
 
     @Override
-    public Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         return developerService.createProject(request);
     }
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return developerService.createVersion(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
+        return developerService.deleteVersion(request);
     }
 }

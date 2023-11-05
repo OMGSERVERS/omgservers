@@ -6,12 +6,16 @@ import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.service.module.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createProject.CreateProjectMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
+import com.omgservers.service.module.developer.impl.service.developerService.impl.method.deleteVersion.DeleteVersionMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,20 +27,26 @@ class DeveloperServiceImpl implements DeveloperService {
 
     final CreateProjectMethod createProjectMethod;
     final CreateVersionMethod createVersionMethod;
+    final DeleteVersionMethod deleteVersionMethod;
     final CreateTokenMethod createTokenMethod;
 
     @Override
-    public Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request) {
+    public Uni<CreateTokenDeveloperResponse> createToken(@Valid final CreateTokenDeveloperRequest request) {
         return createTokenMethod.createToken(request);
     }
 
     @Override
-    public Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(@Valid final CreateProjectDeveloperRequest request) {
         return createProjectMethod.createProject(request);
     }
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> createVersion(@Valid final CreateVersionDeveloperRequest request) {
         return createVersionMethod.createVersion(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionDeveloperResponse> deleteVersion(@Valid final DeleteVersionDeveloperRequest request) {
+        return deleteVersionMethod.deleteVersion(request);
     }
 }

@@ -68,7 +68,7 @@ class HasStagePermissionOperationTest extends Assertions {
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId,
-                StagePermissionEnum.CREATE_VERSION);
+                StagePermissionEnum.VERSION_MANAGEMENT);
         upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
 
         assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId(),
@@ -80,7 +80,7 @@ class HasStagePermissionOperationTest extends Assertions {
         final var shard = 0;
 
         assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenantId(), projectId(),
-                userId(), StagePermissionEnum.CREATE_VERSION));
+                userId(), StagePermissionEnum.VERSION_MANAGEMENT));
     }
 
     Long userId() {

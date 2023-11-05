@@ -1,4 +1,4 @@
-package com.omgservers.utils.operation;
+package com.omgservers.utils.model;
 
 import lombok.Builder;
 import lombok.Data;

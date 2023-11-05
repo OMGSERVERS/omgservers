@@ -1,4 +1,4 @@
-package com.omgservers.utils.operation;
+package com.omgservers.utils.operation.bootstrapVersionOperation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omgservers.model.version.VersionConfigModel;
@@ -6,6 +6,7 @@ import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.DeveloperCli;
+import com.omgservers.utils.model.VersionParameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AccessLevel;

@@ -1,14 +1,15 @@
-package com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion;
+package com.omgservers.service.module.developer.impl.service.developerService.impl.method.deleteVersion;
 
-import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionResponse;
+import com.omgservers.model.dto.tenant.GetVersionRequest;
+import com.omgservers.model.dto.tenant.GetVersionResponse;
 import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
-import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.VersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class CreateVersionMethodImpl implements CreateVersionMethod {
+class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
     final TenantModule tenantModule;
 
@@ -31,17 +32,25 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
-        final var stageId = request.getStageId();
-        final var stageConfig = request.getVersionConfig();
-        final var sourceCode = request.getSourceCode();
+        final var versionId = request.getId();
 
-        return checkVersionManagementPermission(tenantId, stageId, userId)
-                .flatMap(voidItem -> createVersion(tenantId, stageId, stageConfig, sourceCode))
-                .map(VersionModel::getId)
-                .map(CreateVersionDeveloperResponse::new);
+        return getVersion(tenantId, versionId)
+                .flatMap(version -> {
+                    final var stageId = version.getStageId();
+
+                    return checkVersionManagementPermission(tenantId, stageId, userId)
+                            .flatMap(voidItem -> deleteVersion(tenantId, versionId))
+                            .map(DeleteVersionDeveloperResponse::new);
+                });
+    }
+
+    Uni<VersionModel> getVersion(Long tenantId, Long id) {
+        final var request = new GetVersionRequest(tenantId, id, false);
+        return tenantModule.getVersionService().getVersion(request)
+                .map(GetVersionResponse::getVersion);
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
@@ -61,13 +70,10 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                 .replaceWithVoid();
     }
 
-    Uni<VersionModel> createVersion(final Long tenantId,
-                                    final Long stageId,
-                                    final VersionConfigModel versionConfig,
-                                    final VersionSourceCodeModel sourceCode) {
-        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, sourceCode);
-        final var request = new SyncVersionRequest(tenantId, version);
-        return tenantModule.getVersionService().syncVersion(request)
-                .replaceWith(version);
+    Uni<Boolean> deleteVersion(final Long tenantId,
+                               final Long id) {
+        final var request = new DeleteVersionRequest(tenantId, id);
+        return tenantModule.getVersionService().deleteVersion(request)
+                .map(DeleteVersionResponse::getDeleted);
     }
 }

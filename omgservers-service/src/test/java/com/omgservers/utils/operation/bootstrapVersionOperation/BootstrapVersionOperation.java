@@ -1,7 +1,8 @@
-package com.omgservers.utils.operation;
+package com.omgservers.utils.operation.bootstrapVersionOperation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.utils.model.VersionParameters;
 
 public interface BootstrapVersionOperation {
 
