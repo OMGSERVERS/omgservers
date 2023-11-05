@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl;
 
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
@@ -59,10 +60,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagesRequest;
+import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.module.tenant.impl.service.tenantService.TenantService;
@@ -120,7 +127,12 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<Void> deleteProject(final DeleteProjectRequest request) {
+    public Uni<ViewProjectsResponse> viewProjects(final ViewProjectsRequest request) {
+        return projectService.viewProjects(request);
+    }
+
+    @Override
+    public Uni<DeleteProjectResponse> deleteProject(final DeleteProjectRequest request) {
         return projectService.deleteProject(request);
     }
 
@@ -142,6 +154,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
         return stageService.syncStage(request);
+    }
+
+    @Override
+    public Uni<ViewStagesResponse> viewStages(final ViewStagesRequest request) {
+        return stageService.viewStages(request);
     }
 
     @Override
@@ -227,6 +244,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
         return versionService.syncVersion(request);
+    }
+
+    @Override
+    public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
+        return versionService.viewVersions(request);
     }
 
     @Override

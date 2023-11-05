@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl;
 
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.HasProjectPermissionRequest;
@@ -9,6 +10,8 @@ import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncProjectResponse;
+import com.omgservers.model.dto.tenant.ViewProjectsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectsResponse;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
@@ -17,6 +20,7 @@ import com.omgservers.service.module.tenant.impl.service.projectService.impl.met
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.hasProjectPermission.HasProjectPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.syncProject.SyncProjectMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.syncProjectPermission.SyncProjectPermissionMethod;
+import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.viewProjects.ViewProjectsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -34,6 +38,7 @@ class ProjectServiceImpl implements ProjectService {
     final SyncProjectPermissionMethod syncProjectPermissionMethod;
     final HasProjectPermissionMethod hasProjectPermissionMethod;
     final DeleteProjectMethod deleteProjectMethod;
+    final ViewProjectsMethod viewProjectsMethod;
     final SyncProjectMethod syncProjectMethod;
     final GetProjectMethod getProjectMethod;
 
@@ -58,7 +63,15 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Uni<Void> deleteProject(@Valid final DeleteProjectRequest request) {
+    public Uni<ViewProjectsResponse> viewProjects(@Valid final ViewProjectsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewProjects,
+                viewProjectsMethod::viewProjects);
+    }
+
+    @Override
+    public Uni<DeleteProjectResponse> deleteProject(@Valid final DeleteProjectRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteProject,

@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
@@ -59,10 +60,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagesRequest;
+import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -99,8 +106,12 @@ public interface TenantApi {
     Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
 
     @PUT
+    @Path("/view-projects")
+    Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request);
+
+    @PUT
     @Path("/delete-project")
-    Uni<Void> deleteProject(DeleteProjectRequest request);
+    Uni<DeleteProjectResponse> deleteProject(DeleteProjectRequest request);
 
     @PUT
     @Path("/has-project-permission")
@@ -117,6 +128,10 @@ public interface TenantApi {
     @PUT
     @Path("/sync-stage")
     Uni<SyncStageResponse> syncStage(SyncStageRequest request);
+
+    @PUT
+    @Path("/view-stages")
+    Uni<ViewStagesResponse> viewStages(ViewStagesRequest request);
 
     @PUT
     @Path("/delete-stage")
@@ -137,6 +152,10 @@ public interface TenantApi {
     @PUT
     @Path("/sync-version")
     Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
+
+    @PUT
+    @Path("/view-versions")
+    Uni<ViewVersionsResponse> viewVersions(ViewVersionsRequest request);
 
     @PUT
     @Path("/delete-version")

@@ -1,8 +1,8 @@
-package com.omgservers.service.module.tenant.impl.operation.selectProject;
+package com.omgservers.service.module.tenant.impl.operation.selectProjectsByTenantId;
 
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.service.module.tenant.impl.mapper.ProjectModelMapper;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,35 +10,33 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectProjectOperationImpl implements SelectProjectOperation {
+class SelectProjectsByTenantIdOperationImpl implements SelectProjectsByTenantIdOperation {
 
-    final SelectObjectOperation selectObjectOperation;
+    final SelectListOperation selectListOperation;
 
     final ProjectModelMapper projectModelMapper;
 
     @Override
-    public Uni<ProjectModel> selectProject(final SqlConnection sqlConnection,
-                                           final int shard,
-                                           final Long tenantId,
-                                           final Long id,
-                                           final Boolean deleted) {
-        return selectObjectOperation.selectObject(
+    public Uni<List<ProjectModel>> selectProjectsByTenantId(final SqlConnection sqlConnection,
+                                                            final int shard,
+                                                            final Long tenantId,
+                                                            final Boolean deleted) {
+        return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
                         select
                             id, tenant_id, created, modified, deleted
                         from $schema.tab_tenant_project
-                        where tenant_id = $1 and id = $2 and deleted = $3
-                        limit 1
+                        where tenant_id = $1 and deleted = $3
                         """,
                 Arrays.asList(
                         tenantId,
-                        id,
                         deleted
                 ),
                 "Project",

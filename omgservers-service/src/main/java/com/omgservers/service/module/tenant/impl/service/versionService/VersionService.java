@@ -34,6 +34,8 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -42,6 +44,8 @@ public interface VersionService {
     Uni<GetVersionResponse> getVersion(@Valid GetVersionRequest request);
 
     Uni<SyncVersionResponse> syncVersion(@Valid SyncVersionRequest request);
+
+    Uni<ViewVersionsResponse> viewVersions(@Valid ViewVersionsRequest request);
 
     Uni<DeleteVersionResponse> deleteVersion(@Valid DeleteVersionRequest request);
 

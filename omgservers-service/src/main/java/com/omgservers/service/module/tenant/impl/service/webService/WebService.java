@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.webService;
 
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
@@ -59,10 +60,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagesRequest;
+import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -81,7 +88,9 @@ public interface WebService {
 
     Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
 
-    Uni<Void> deleteProject(DeleteProjectRequest request);
+    Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request);
+
+    Uni<DeleteProjectResponse> deleteProject(DeleteProjectRequest request);
 
     Uni<HasProjectPermissionResponse> hasProjectPermission(HasProjectPermissionRequest request);
 
@@ -90,6 +99,8 @@ public interface WebService {
     Uni<GetStageResponse> getStage(GetStageRequest request);
 
     Uni<SyncStageResponse> syncStage(SyncStageRequest request);
+
+    Uni<ViewStagesResponse> viewStages(ViewStagesRequest request);
 
     Uni<DeleteStageResponse> deleteStage(DeleteStageRequest request);
 
@@ -100,6 +111,8 @@ public interface WebService {
     Uni<GetVersionResponse> getVersion(GetVersionRequest request);
 
     Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
+
+    Uni<ViewVersionsResponse> viewVersions(ViewVersionsRequest request);
 
     Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
 

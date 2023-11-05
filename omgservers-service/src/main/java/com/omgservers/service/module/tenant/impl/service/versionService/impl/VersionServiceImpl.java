@@ -34,6 +34,8 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.versionService.VersionService;
@@ -54,6 +56,7 @@ import com.omgservers.service.module.tenant.impl.service.versionService.impl.met
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.syncVersionRuntime.SyncVersionRuntimeMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.viewVersionMatchmakers.ViewVersionMatchmakersMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.viewVersionRuntimes.ViewVersionRuntimesMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.viewVersions.ViewVersionsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -83,6 +86,7 @@ public class VersionServiceImpl implements VersionService {
     final GetVersionRuntimeMethod getVersionRuntimeMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
     final DeleteVersionMethod deleteVersionMethod;
+    final ViewVersionsMethod viewVersionsMethod;
     final SyncVersionMethod syncVersionMethod;
     final GetVersionMethod getVersionMethod;
 
@@ -104,6 +108,14 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncVersion,
                 syncVersionMethod::syncVersion);
+    }
+
+    @Override
+    public Uni<ViewVersionsResponse> viewVersions(@Valid final ViewVersionsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewVersions,
+                viewVersionsMethod::viewVersions);
     }
 
     @Override

@@ -12,6 +12,8 @@ import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.dto.tenant.SyncStageResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
+import com.omgservers.model.dto.tenant.ViewStagesRequest;
+import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
@@ -21,6 +23,7 @@ import com.omgservers.service.module.tenant.impl.service.stageService.impl.metho
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.syncStage.SyncStageMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.syncStagePermission.SyncStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.validateStageSecret.ValidateStageSecretMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.viewStages.ViewStagesMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -39,6 +42,7 @@ public class StageServiceImpl implements StageService {
     final ValidateStageSecretMethod validateStageSecretMethod;
     final HasStagePermissionMethod hasStagePermissionMethod;
     final DeleteStageMethod deleteStageMethod;
+    final ViewStagesMethod viewStagesMethod;
     final SyncStageMethod syncStageMethod;
     final GetStageMethod getStageMethod;
 
@@ -60,6 +64,14 @@ public class StageServiceImpl implements StageService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncStage,
                 syncStageMethod::syncStage);
+    }
+
+    @Override
+    public Uni<ViewStagesResponse> viewStages(@Valid final ViewStagesRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewStages,
+                viewStagesMethod::viewStages);
     }
 
     @Override

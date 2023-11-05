@@ -1,9 +1,13 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.dto.tenant.GetTenantRequest;
+import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
+import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -15,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantCreatedEventHandlerImpl implements EventHandler {
 
+    final TenantModule tenantModule;
+
     @Override
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.TENANT_CREATED;
@@ -23,9 +29,19 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (TenantCreatedEventBodyModel) event.getBody();
-        final var id = body.getId();
+        final var tenantId = body.getId();
 
-        log.info("Tenant was created, tenantId={}", id);
-        return Uni.createFrom().item(true);
+        return getTenant(tenantId)
+                .flatMap(tenant -> {
+                    log.info("Tenant was created, tenantId={}", tenantId);
+                    return Uni.createFrom().voidItem();
+                })
+                .replaceWith(true);
+    }
+
+    Uni<TenantModel> getTenant(final Long id) {
+        final var request = new GetTenantRequest(id, false);
+        return tenantModule.getTenantService().getTenant(request)
+                .map(GetTenantResponse::getTenant);
     }
 }
