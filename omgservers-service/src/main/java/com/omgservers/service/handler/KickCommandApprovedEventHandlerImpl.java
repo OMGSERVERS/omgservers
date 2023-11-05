@@ -25,7 +25,7 @@ import java.util.Objects;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class KickApprovedEventHandlerImpl implements EventHandler {
+public class KickCommandApprovedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;

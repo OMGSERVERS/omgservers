@@ -2,6 +2,8 @@ package com.omgservers.service.module.runtime.impl.service.doService.impl;
 
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -20,6 +22,7 @@ import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClie
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doBroadcastMessage.DoBroadcastMessageMethod;
+import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doChangePlayer.DoChangePlayerMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doKickClient.DoKickClientMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doMulticastMessage.DoMulticastMessageMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doRespondClient.DoRespondClientMethod;
@@ -46,11 +49,11 @@ public class DoServiceImpl implements DoService {
     final DoMulticastMessageMethod doMulticastMessageMethod;
     final DoBroadcastMessageMethod doBroadcastMessageMethod;
     final DoUnicastMessageMethod doUnicastMessageMethod;
-    final DoStopRuntimeMethod doStopRuntimeMethod;
-    final DoKickClientMethod doKickClientMethod;
-
     final DoRespondClientMethod doRespondClientMethod;
     final DoSetAttributesMethod doSetAttributesMethod;
+    final DoChangePlayerMethod doChangePlayerMethod;
+    final DoStopRuntimeMethod doStopRuntimeMethod;
+    final DoKickClientMethod doKickClientMethod;
     final DoSetObjectMethod doSetObjectMethod;
 
     @Override
@@ -91,6 +94,14 @@ public class DoServiceImpl implements DoService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::doStopRuntime,
                 doStopRuntimeMethod::doStopRuntime);
+    }
+
+    @Override
+    public Uni<DoChangePlayerResponse> doChangePlayer(@Valid final DoChangePlayerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::doChangePlayer,
+                doChangePlayerMethod::doChangePlayer);
     }
 
     @Override

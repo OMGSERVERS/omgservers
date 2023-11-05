@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchMesssageReceivedEventBodyModel;
+import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
@@ -30,7 +30,7 @@ public class MatchMessageReceivedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (MatchMesssageReceivedEventBodyModel) event.getBody();
+        final var body = (MatchMessageReceivedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

@@ -1,10 +1,11 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.runtime.DoRespondClientRequest;
-import com.omgservers.model.dto.runtime.DoRespondClientResponse;
+import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
+import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RespondCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesCommandReceivedEventBodyModel;
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -16,33 +17,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class RespondRequestedEventHandlerImpl implements EventHandler {
+public class SetAttributesCommandReceivedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.RESPOND_COMMAND_RECEIVED;
+        return EventQualifierEnum.SET_ATTRIBUTES_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (RespondCommandReceivedEventBodyModel) event.getBody();
+        final var body = (SetAttributesCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
-        final var message = body.getMessage();
+        final var attributes = body.getAttributes();
 
-        return doRespondClient(runtimeId, userId, clientId, message)
+        return doSetAttributes(runtimeId, userId, clientId, attributes)
                 .replaceWith(true);
     }
 
-    Uni<Boolean> doRespondClient(final Long runtimeId,
+    Uni<Boolean> doSetAttributes(final Long runtimeId,
                                  final Long userId,
                                  final Long clientId,
-                                 final Object message) {
-        final var doRespondClientRequest = new DoRespondClientRequest(runtimeId, userId, clientId, message);
-        return runtimeModule.getDoService().doRespondClient(doRespondClientRequest)
-                .map(DoRespondClientResponse::getApproved);
+                                 final PlayerAttributesModel attributes) {
+        final var request = new DoSetAttributesRequest(runtimeId, userId, clientId, attributes);
+        return runtimeModule.getDoService().doSetAttributes(request)
+                .map(DoSetAttributesResponse::getApproved);
     }
 }

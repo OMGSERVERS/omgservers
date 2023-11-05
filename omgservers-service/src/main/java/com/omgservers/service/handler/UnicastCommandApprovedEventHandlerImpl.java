@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RespondCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.service.factory.MessageModelFactory;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class RespondApprovedEventHandlerImpl implements EventHandler {
+public class UnicastCommandApprovedEventHandlerImpl implements EventHandler {
 
     final UserModule userModule;
 
@@ -26,12 +26,12 @@ public class RespondApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.RESPOND_COMMAND_APPROVED;
+        return EventQualifierEnum.UNICAST_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (RespondCommandApprovedEventBodyModel) event.getBody();
+        final var body = (UnicastCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

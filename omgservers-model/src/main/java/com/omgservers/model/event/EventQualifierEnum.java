@@ -2,6 +2,8 @@ package com.omgservers.model.event;
 
 import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
 import com.omgservers.model.event.body.BroadcastCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.ChangeCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
@@ -23,11 +25,11 @@ import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchMesssageReceivedEventBodyModel;
+import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchmakerMesssageReceivedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MulticastCommandApprovedEventBodyModel;
 import com.omgservers.model.event.body.MulticastCommandReceivedEventBodyModel;
@@ -135,8 +137,8 @@ public enum EventQualifierEnum {
     // Gateway
     SIGN_UP_MESSAGE_RECEIVED(SignUpMessageReceivedEventBodyModel.class, true),
     SIGN_IN_MESSAGE_RECEIVED(SignInMessageReceivedEventBodyModel.class, true),
-    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMesssageReceivedEventBodyModel.class, true),
-    MATCH_MESSAGE_RECEIVED(MatchMesssageReceivedEventBodyModel.class, true),
+    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class, true),
+    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class, true),
     CHANGE_MESSAGE_RECEIVED(ChangeMessageReceivedEventBodyModel.class, false),
     // Commands
     RESPOND_COMMAND_RECEIVED(RespondCommandReceivedEventBodyModel.class, false),
@@ -151,6 +153,8 @@ public enum EventQualifierEnum {
     MULTICAST_COMMAND_APPROVED(MulticastCommandApprovedEventBodyModel.class, false),
     BROADCAST_COMMAND_RECEIVED(BroadcastCommandReceivedEventBodyModel.class, false),
     BROADCAST_COMMAND_APPROVED(BroadcastCommandApprovedEventBodyModel.class, false),
+    CHANGE_COMMAND_RECEIVED(ChangeCommandReceivedEventBodyModel.class, false),
+    CHANGE_COMMAND_APPROVED(ChangeCommandApprovedEventBodyModel.class, false),
     KICK_COMMAND_RECEIVED(KickCommandReceivedEventBodyModel.class, true),
     KICK_COMMAND_APPROVED(KickCommandApprovedEventBodyModel.class, true),
     STOP_COMMAND_RECEIVED(StopCommandReceivedEventBodyModel.class, true),

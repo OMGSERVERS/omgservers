@@ -12,6 +12,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -81,13 +83,15 @@ public interface WebService {
 
     Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request);
 
-    Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request);
+    Uni<DoKickClientResponse> doKickClient(DoKickClientRequest request);
 
-    Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request);
+    Uni<DoStopRuntimeResponse> doStopRuntime(DoStopRuntimeRequest request);
 
-    Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request);
+    Uni<DoChangePlayerResponse> doChangePlayer(DoChangePlayerRequest request);
 
-    Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request);
+    Uni<DoUnicastMessageResponse> doUnicastMessage(DoUnicastMessageRequest request);
 
-    Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request);
+    Uni<DoMulticastMessageResponse> doMulticastMessage(DoMulticastMessageRequest request);
+
+    Uni<DoBroadcastMessageResponse> doBroadcastMessage(DoBroadcastMessageRequest request);
 }

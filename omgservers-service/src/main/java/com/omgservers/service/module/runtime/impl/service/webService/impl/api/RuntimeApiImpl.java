@@ -12,6 +12,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -172,6 +174,12 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::doStopRuntime);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DoChangePlayerResponse> doChangePlayer(final DoChangePlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doChangePlayer);
     }
 
     @Override

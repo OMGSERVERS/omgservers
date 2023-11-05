@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MulticastCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MulticastApprovedEventHandlerImpl implements EventHandler {
+public class BroadcastCommandApprovedEventHandlerImpl implements EventHandler {
 
     final UserModule userModule;
 
@@ -30,21 +30,21 @@ public class MulticastApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MULTICAST_COMMAND_APPROVED;
+        return EventQualifierEnum.BROADCAST_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (MulticastCommandApprovedEventBodyModel) event.getBody();
+        final var body = (BroadcastCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var recipients = body.getRecipients();
         final var message = body.getMessage();
 
-        return doMulticastMessage(recipients, message)
+        return doBroadcastMessage(recipients, message)
                 .replaceWith(true);
     }
 
-    Uni<Void> doMulticastMessage(final List<Recipient> recipients,
+    Uni<Void> doBroadcastMessage(final List<Recipient> recipients,
                                  final Object message) {
         return Multi.createFrom().iterable(recipients)
                 .onItem().transformToUniAndConcatenate(recipient -> {

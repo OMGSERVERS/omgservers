@@ -12,6 +12,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -154,6 +156,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
         return doService.doStopRuntime(request);
+    }
+
+    @Override
+    public Uni<DoChangePlayerResponse> doChangePlayer(final DoChangePlayerRequest request) {
+        return doService.doChangePlayer(request);
     }
 
     @Override

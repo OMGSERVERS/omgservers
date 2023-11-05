@@ -9,11 +9,11 @@ import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeCommandApprovedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class ChangeRequestedEventHandlerImpl implements EventHandler {
+public class ChangeCommandApprovedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final UserModule userModule;
@@ -34,13 +34,12 @@ public class ChangeRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.CHANGE_MESSAGE_RECEIVED;
+        return EventQualifierEnum.CHANGE_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (ChangeMessageReceivedEventBodyModel) event.getBody();
-
+        final var body = (ChangeCommandApprovedEventBodyModel) event.getBody();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
         final var message = body.getMessage();

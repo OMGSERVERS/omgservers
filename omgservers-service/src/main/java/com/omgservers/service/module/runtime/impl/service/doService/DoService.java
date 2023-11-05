@@ -2,6 +2,8 @@ package com.omgservers.service.module.runtime.impl.service.doService;
 
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -30,6 +32,8 @@ public interface DoService {
     Uni<DoKickClientResponse> doKickClient(@Valid DoKickClientRequest request);
 
     Uni<DoStopRuntimeResponse> doStopRuntime(@Valid DoStopRuntimeRequest request);
+
+    Uni<DoChangePlayerResponse> doChangePlayer(@Valid DoChangePlayerRequest request);
 
     Uni<DoUnicastMessageResponse> doUnicastMessage(@Valid DoUnicastMessageRequest request);
 

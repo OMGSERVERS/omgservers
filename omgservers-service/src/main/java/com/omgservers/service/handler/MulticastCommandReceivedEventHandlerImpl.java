@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MulticastRequestedEventHandlerImpl implements EventHandler {
+public class MulticastCommandReceivedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
 

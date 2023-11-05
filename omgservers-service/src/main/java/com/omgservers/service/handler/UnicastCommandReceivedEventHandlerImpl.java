@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class UnicastRequestedEventHandlerImpl implements EventHandler {
+public class UnicastCommandReceivedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
 

@@ -2,7 +2,7 @@ package com.omgservers.service.module.gateway.impl.service.messageService.impl.m
 
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
-import com.omgservers.model.event.body.MatchmakerMesssageReceivedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
@@ -47,7 +47,7 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
         final var messageBody = (MatchmakerMessageBodyModel) message.getBody();
         final var mode = messageBody.getMode();
 
-        final var eventBody = new MatchmakerMesssageReceivedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
+        final var eventBody = new MatchmakerMessageReceivedEventBodyModel(tenantId, stageId, userId, playerId, clientId, mode);
         final var event = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(event);
         return systemModule.getEventService().syncEvent(request)

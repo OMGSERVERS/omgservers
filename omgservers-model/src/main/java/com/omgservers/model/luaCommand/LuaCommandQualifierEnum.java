@@ -9,6 +9,9 @@ public enum LuaCommandQualifierEnum {
     UNICAST("unicast"),
     MULTICAST("multicast"),
     BROADCAST("broadcast"),
+
+    CHANGE("change"),
+
     KICK("kick"),
     STOP("stop");
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class MatchmakerMesssageReceivedEventBodyModel extends EventBodyModel {
+public class MatchmakerMessageReceivedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long tenantId;

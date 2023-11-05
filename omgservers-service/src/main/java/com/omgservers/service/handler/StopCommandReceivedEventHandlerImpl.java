@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class StopRequestedEventHandlerImpl implements EventHandler {
+public class StopCommandReceivedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;

@@ -12,6 +12,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
+import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
+import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -126,6 +128,10 @@ public interface RuntimeApi {
     @PUT
     @Path("/do-stop-runtime")
     Uni<DoStopRuntimeResponse> doStopRuntime(DoStopRuntimeRequest request);
+
+    @PUT
+    @Path("/do-change-player")
+    Uni<DoChangePlayerResponse> doChangePlayer(DoChangePlayerRequest request);
 
     @PUT
     @Path("/do-unicast-message")

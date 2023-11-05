@@ -4,42 +4,31 @@ import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class MatchMesssageReceivedEventBodyModel extends EventBodyModel {
-
-    @NotNull
-    Long tenantId;
-
-    @NotNull
-    Long stageId;
-
-    @NotNull
-    Long userId;
-
-    @NotNull
-    Long playerId;
-
-    @NotNull
-    Long clientId;
+public class ChangeCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
 
     @NotNull
-    Object data;
+    Long userId;
+
+    @NotNull
+    Long clientId;
+
+    @NotNull
+    Object message;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_MESSAGE_RECEIVED;
+        return EventQualifierEnum.CHANGE_COMMAND_APPROVED;
     }
 
     @Override
