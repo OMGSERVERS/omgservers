@@ -1,6 +1,5 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
@@ -26,7 +25,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
     UpsertStagePermissionOperation upsertStagePermissionOperation;
 
     @Inject
-    UpsertStageOperation upsertStageOperation;
+    UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
     UpsertProjectOperationTestInterface upsertProjectOperation;
@@ -59,8 +58,8 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
-        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage);
 
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
                 StagePermissionEnum.VERSION_MANAGEMENT);
@@ -74,8 +73,8 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
-        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage);
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
                 StagePermissionEnum.VERSION_MANAGEMENT);
         upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);

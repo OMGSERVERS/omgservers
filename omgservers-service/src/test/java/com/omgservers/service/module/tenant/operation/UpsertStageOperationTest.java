@@ -1,14 +1,10 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.factory.VersionModelFactory;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -16,20 +12,16 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertVersionOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
+class UpsertStageOperationTest extends Assertions {
+
+    @Inject
+    UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     UpsertProjectOperationTestInterface upsertProjectOperation;
-
-    @Inject
-    UpsertStageOperationTestInterface upsertStageOperation;
-
-    @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -40,32 +32,22 @@ class UpsertVersionOperationTest extends Assertions {
     @Inject
     StageModelFactory stageModelFactory;
 
-    @Inject
-    VersionModelFactory versionModelFactory;
-
-    @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenVersion_whenUpsertVersion_thenInserted() {
+    void whenUpsertStage_thenInserted() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
+
         final var stage = stageModelFactory.create(tenant.getId(), project.getId());
-        upsertStageOperation.upsertStage(shard, stage);
-        final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
-        final var changeContext = upsertVersionOperation.upsertVersion(shard, version);
+        final var changeContext = upsertStageOperation.upsertStage(shard, stage);
         assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.STAGE_CREATED));
     }
 
     @Test
-    void givenVersion_whenUpsertVersion_thenUpdated() {
+    void givenStage_whenUpsertStage_thenUpdated() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -73,11 +55,9 @@ class UpsertVersionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
-        upsertVersionOperation.upsertVersion(shard, version);
 
-        final var changeContext = upsertVersionOperation.upsertVersion(shard, version);
+        final var changeContext = upsertStageOperation.upsertStage(shard, stage);
         assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.STAGE_CREATED));
     }
 }

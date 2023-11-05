@@ -36,9 +36,5 @@ public class StageModel {
     String secret;
 
     @NotNull
-    Long matchmakerId;
-
-    @NotNull
-    @ToString.Exclude
-    StageConfigModel config;
+    Boolean deleted;
 }

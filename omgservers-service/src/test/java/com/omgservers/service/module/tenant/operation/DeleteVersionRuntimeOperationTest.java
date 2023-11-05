@@ -1,11 +1,9 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -29,7 +27,7 @@ class DeleteVersionRuntimeOperationTest extends Assertions {
     UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
-    UpsertStageOperation upsertStageOperation;
+    UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -55,8 +53,8 @@ class DeleteVersionRuntimeOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
 
-        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage);
 
         final var changeContext = deleteStageOperation.deleteStage(shard, tenant.getId(), stage.getId());
         assertTrue(changeContext.getResult());

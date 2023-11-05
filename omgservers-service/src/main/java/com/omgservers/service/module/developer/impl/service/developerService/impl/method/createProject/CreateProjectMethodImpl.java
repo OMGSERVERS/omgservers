@@ -11,7 +11,6 @@ import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.stagePermission.StagePermissionModel;
@@ -97,7 +96,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     Uni<StageModel> syncStage(final Long tenantId,
                               final Long projectId,
                               final Long userId) {
-        final var stage = stageModelFactory.create(tenantId, projectId, new StageConfigModel());
+        final var stage = stageModelFactory.create(tenantId, projectId);
         final var syncStageInternalRequest = new SyncStageRequest(tenantId, stage);
         return tenantModule.getStageService().syncStage(syncStageInternalRequest)
                 .flatMap(response -> syncStagePermission(tenantId, stage.getId(), userId))

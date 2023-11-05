@@ -1,6 +1,5 @@
 package com.omgservers.service.factory;
 
-import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,20 +18,16 @@ public class StageModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public StageModel create(final Long tenantId,
-                             final Long projectId,
-                             final StageConfigModel config) {
+                             final Long projectId) {
         final var id = generateIdOperation.generateId();
-        final var matchmakerId = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
-        return create(id, tenantId, projectId, secret, matchmakerId, config);
+        return create(id, tenantId, projectId, secret);
     }
 
     public StageModel create(final Long id,
                              final Long tenantId,
                              final Long projectId,
-                             final String secret,
-                             final Long matchmakerId,
-                             final StageConfigModel config) {
+                             final String secret) {
         var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         StageModel stage = new StageModel();
@@ -42,8 +37,7 @@ public class StageModelFactory {
         stage.setCreated(now);
         stage.setModified(now);
         stage.setSecret(secret);
-        stage.setMatchmakerId(matchmakerId);
-        stage.setConfig(config);
+        stage.setDeleted(false);
         return stage;
     }
 

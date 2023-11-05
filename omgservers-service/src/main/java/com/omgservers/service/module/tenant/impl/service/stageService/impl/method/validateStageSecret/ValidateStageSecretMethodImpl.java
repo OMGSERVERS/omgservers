@@ -3,8 +3,8 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
-import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageRequest(tenantId, stageId);
+        final var getStageServiceRequest = new GetStageRequest(tenantId, stageId, false);
         return stageService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();

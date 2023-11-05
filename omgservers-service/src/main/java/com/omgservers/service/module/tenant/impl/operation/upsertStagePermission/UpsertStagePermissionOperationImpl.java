@@ -29,7 +29,8 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_stage_permission(id, tenant_id, stage_id, created, user_id, permission)
+                        insert into $schema.tab_tenant_stage_permission(
+                            id, tenant_id, stage_id, created, user_id, permission)
                         values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing

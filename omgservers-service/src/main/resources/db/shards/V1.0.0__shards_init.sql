@@ -86,8 +86,7 @@ create table if not exists tab_tenant_stage (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     secret text not null,
-    matchmaker_id bigint not null,
-    config json not null
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_stage_permission (

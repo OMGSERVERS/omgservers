@@ -1,17 +1,18 @@
 package com.omgservers.service.module.tenant.impl.operation.deleteStage;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.selectStage.SelectStageOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -29,18 +30,20 @@ class DeleteStageOperationImpl implements DeleteStageOperation {
                                     final int shard,
                                     final Long tenantId,
                                     final Long id) {
-        return selectStageOperation.selectStage(sqlConnection, shard, tenantId, id)
-                .flatMap(stage -> changeObjectOperation.changeObject(
-                        changeContext, sqlConnection, shard,
-                        """
-                                delete from $schema.tab_tenant_stage
-                                where tenant_id = $1 and id = $2
-                                """,
-                        Arrays.asList(tenantId, id),
-                        () -> new StageDeletedEventBodyModel(stage),
-                        () -> logModelFactory.create("Stage was deleted, stage=" + stage)
-                ))
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(false);
+        return changeObjectOperation.changeObject(
+                changeContext, sqlConnection, shard,
+                """
+                        update $schema.tab_tenant_stage
+                        set modified = $3, deleted = true
+                        where tenant_id = $1 and id = $2 and deleted = false
+                        """,
+                Arrays.asList(
+                        tenantId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
+                () -> new StageDeletedEventBodyModel(tenantId, id),
+                () -> logModelFactory.create(String.format("Stage was deleted, tenantId=%d, id=%d", tenantId, id))
+        );
     }
 }

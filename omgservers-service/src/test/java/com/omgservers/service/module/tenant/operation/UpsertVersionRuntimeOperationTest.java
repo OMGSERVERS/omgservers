@@ -1,11 +1,10 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.stage.StageConfigModel;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +25,7 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
     UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
-    UpsertStageOperation upsertStageOperation;
+    UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -50,8 +49,11 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
-        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
-        assertTrue(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage));
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId());
+
+        final var changeContext = upsertStageOperation.upsertStage(shard, stage);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.STAGE_CREATED));
     }
 
     @Test
@@ -61,18 +63,20 @@ class UpsertVersionRuntimeOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
-        final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
-        upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
+        final var stage = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage);
 
-        assertFalse(upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage));
+        final var changeContext = upsertStageOperation.upsertStage(shard, stage);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.STAGE_CREATED));
     }
 
     @Test
     void givenUnknownIds_whenUpsertStage_thenException() {
         final var shard = 0;
-        final var stage = stageModelFactory.create(tenantId(), projectId(), StageConfigModel.create());
+        final var stage = stageModelFactory.create(tenantId(), projectId());
         assertThrows(ServerSideConflictException.class, () ->
-                upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenantId(), stage));
+                upsertStageOperation.upsertStage(shard, stage));
     }
 
     Long tenantId() {
