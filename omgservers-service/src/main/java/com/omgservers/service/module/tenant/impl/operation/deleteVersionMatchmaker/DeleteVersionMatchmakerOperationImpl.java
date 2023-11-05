@@ -10,6 +10,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -30,10 +32,14 @@ class DeleteVersionMatchmakerOperationImpl implements DeleteVersionMatchmakerOpe
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_tenant_version_matchmaker
-                        set deleted = true
+                        set modified = $3, deleted = true
                         where tenant_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(tenantId, id),
+                Arrays.asList(
+                        tenantId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
                 () -> new VersionMatchmakerDeletedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version matchmaker was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.impl.operation.deleteRuntime;
 
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.module.runtime.impl.operation.selectRuntime.SelectRuntimeOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
@@ -11,7 +11,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -30,10 +32,13 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
         return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_runtime
-                        set deleted = true
+                        set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
                 () -> new RuntimeDeletedEventBodyModel(id),
                 () -> logModelFactory.create("Runtime was deleted, id=" + id)
         );
