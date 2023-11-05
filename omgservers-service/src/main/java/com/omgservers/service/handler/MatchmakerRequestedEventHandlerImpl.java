@@ -9,7 +9,7 @@ import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMesssageReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -39,12 +39,12 @@ public class MatchmakerRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCHMAKER_REQUESTED;
+        return EventQualifierEnum.MATCHMAKER_MESSAGE_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (MatchmakerRequestedEventBodyModel) event.getBody();
+        final var body = (MatchmakerMesssageReceivedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var stageId = body.getStageId();
         final var userId = body.getUserId();

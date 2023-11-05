@@ -5,7 +5,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoStopCommandBodyModel;
 import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.body.StopRequestedEventBodyModel;
+import com.omgservers.model.event.body.StopCommandReceivedEventBodyModel;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.mapDoCommand.DoCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,7 +29,7 @@ public class StopDoCommandMapper implements DoCommandMapper {
         final var commandBody = (DoStopCommandBodyModel) doCommand.getBody();
         final var reason = commandBody.getReason();
 
-        final var eventBody = new StopRequestedEventBodyModel(runtimeId, reason);
+        final var eventBody = new StopCommandReceivedEventBodyModel(runtimeId, reason);
         final var eventModel = eventModelFactory.create(eventBody);
         return eventModel;
     }

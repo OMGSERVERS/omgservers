@@ -1,8 +1,8 @@
 package com.omgservers.model.event;
 
-import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
-import com.omgservers.model.event.body.BroadcastRequestedEventBodyModel;
-import com.omgservers.model.event.body.ChangeRequestedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -16,21 +16,21 @@ import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
-import com.omgservers.model.event.body.KickApprovedEventBodyModel;
-import com.omgservers.model.event.body.KickRequestedEventBodyModel;
+import com.omgservers.model.event.body.KickCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.KickCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchRequestedEventBodyModel;
+import com.omgservers.model.event.body.MatchMesssageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchmakerRequestedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMesssageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
-import com.omgservers.model.event.body.MulticastApprovedEventBodyModel;
-import com.omgservers.model.event.body.MulticastRequestedEventBodyModel;
+import com.omgservers.model.event.body.MulticastCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.MulticastCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
@@ -38,29 +38,29 @@ import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
 import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import com.omgservers.model.event.body.RequestCreatedEventBodyModel;
 import com.omgservers.model.event.body.RequestUpdatedEventBodyModel;
-import com.omgservers.model.event.body.RespondApprovedEventBodyModel;
-import com.omgservers.model.event.body.RespondRequestedEventBodyModel;
+import com.omgservers.model.event.body.RespondCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.RespondCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
-import com.omgservers.model.event.body.SetAttributesApprovedEventBodyModel;
-import com.omgservers.model.event.body.SetAttributesRequestedEventBodyModel;
-import com.omgservers.model.event.body.SetObjectApprovedEventBodyModel;
-import com.omgservers.model.event.body.SetObjectRequestedEventBodyModel;
-import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
-import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
-import com.omgservers.model.event.body.StopApprovedEventBodyModel;
-import com.omgservers.model.event.body.StopRequestedEventBodyModel;
+import com.omgservers.model.event.body.StopCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.StopCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
-import com.omgservers.model.event.body.UnicastApprovedEventBodyModel;
-import com.omgservers.model.event.body.UnicastRequestedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.UserDeletedEventBodyModel;
 import com.omgservers.model.event.body.UserUpdatedEventBodyModel;
@@ -88,7 +88,7 @@ public enum EventQualifierEnum {
     CONTAINER_CREATED(ContainerCreatedEventBodyModel.class, true),
     CONTAINER_UPDATED(ContainerUpdatedEventBodyModel.class, true),
     CONTAINER_DELETED(ContainerDeletedEventBodyModel.class, true),
-    // Entity
+    // Application
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_UPDATED(TenantCreatedEventBodyModel.class, true),
     TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
@@ -133,28 +133,28 @@ public enum EventQualifierEnum {
     RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class, true),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
     // Gateway
-    SIGN_UP_REQUESTED(SignUpRequestedEventBodyModel.class, true),
-    SIGN_IN_REQUESTED(SignInRequestedEventBodyModel.class, true),
-    MATCHMAKER_REQUESTED(MatchmakerRequestedEventBodyModel.class, true),
-    MATCH_REQUESTED(MatchRequestedEventBodyModel.class, true),
-    CHANGE_REQUESTED(ChangeRequestedEventBodyModel.class, false),
-    // Runtime
-    RESPOND_REQUESTED(RespondRequestedEventBodyModel.class, false),
-    RESPOND_APPROVED(RespondApprovedEventBodyModel.class, false),
-    SET_ATTRIBUTES_REQUESTED(SetAttributesRequestedEventBodyModel.class, false),
-    SET_ATTRIBUTES_APPROVED(SetAttributesApprovedEventBodyModel.class, false),
-    SET_OBJECT_REQUESTED(SetObjectRequestedEventBodyModel.class, false),
-    SET_OBJECT_APPROVED(SetObjectApprovedEventBodyModel.class, false),
-    UNICAST_REQUESTED(UnicastRequestedEventBodyModel.class, false),
-    UNICAST_APPROVED(UnicastApprovedEventBodyModel.class, false),
-    MULTICAST_REQUESTED(MulticastRequestedEventBodyModel.class, false),
-    MULTICAST_APPROVED(MulticastApprovedEventBodyModel.class, false),
-    BROADCAST_REQUESTED(BroadcastRequestedEventBodyModel.class, false),
-    BROADCAST_APPROVED(BroadcastApprovedEventBodyModel.class, false),
-    KICK_REQUESTED(KickRequestedEventBodyModel.class, true),
-    KICK_APPROVED(KickApprovedEventBodyModel.class, true),
-    STOP_REQUESTED(StopRequestedEventBodyModel.class, true),
-    STOP_APPROVED(StopApprovedEventBodyModel.class, true);
+    SIGN_UP_MESSAGE_RECEIVED(SignUpMessageReceivedEventBodyModel.class, true),
+    SIGN_IN_MESSAGE_RECEIVED(SignInMessageReceivedEventBodyModel.class, true),
+    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMesssageReceivedEventBodyModel.class, true),
+    MATCH_MESSAGE_RECEIVED(MatchMesssageReceivedEventBodyModel.class, true),
+    CHANGE_MESSAGE_RECEIVED(ChangeMessageReceivedEventBodyModel.class, false),
+    // Commands
+    RESPOND_COMMAND_RECEIVED(RespondCommandReceivedEventBodyModel.class, false),
+    RESPOND_COMMAND_APPROVED(RespondCommandApprovedEventBodyModel.class, false),
+    SET_ATTRIBUTES_COMMAND_RECEIVED(SetAttributesCommandReceivedEventBodyModel.class, false),
+    SET_ATTRIBUTES_COMMAND_APPROVED(SetAttributesCommandApprovedEventBodyModel.class, false),
+    SET_OBJECT_COMMAND_RECEIVED(SetObjectCommandReceivedEventBodyModel.class, false),
+    SET_OBJECT_COMMAND_APPROVED(SetObjectCommandApprovedEventBodyModel.class, false),
+    UNICAST_COMMAND_RECEIVED(UnicastCommandReceivedEventBodyModel.class, false),
+    UNICAST_COMMAND_APPROVED(UnicastCommandApprovedEventBodyModel.class, false),
+    MULTICAST_COMMAND_RECEIVED(MulticastCommandReceivedEventBodyModel.class, false),
+    MULTICAST_COMMAND_APPROVED(MulticastCommandApprovedEventBodyModel.class, false),
+    BROADCAST_COMMAND_RECEIVED(BroadcastCommandReceivedEventBodyModel.class, false),
+    BROADCAST_COMMAND_APPROVED(BroadcastCommandApprovedEventBodyModel.class, false),
+    KICK_COMMAND_RECEIVED(KickCommandReceivedEventBodyModel.class, true),
+    KICK_COMMAND_APPROVED(KickCommandApprovedEventBodyModel.class, true),
+    STOP_COMMAND_RECEIVED(StopCommandReceivedEventBodyModel.class, true),
+    STOP_COMMAND_APPROVED(StopCommandApprovedEventBodyModel.class, true);
 
     final Class<? extends EventBodyModel> bodyClass;
     final Boolean infoLogging;

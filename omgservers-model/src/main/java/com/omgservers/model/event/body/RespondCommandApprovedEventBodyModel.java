@@ -2,7 +2,6 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.player.PlayerAttributesModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SetAttributesRequestedEventBodyModel extends EventBodyModel {
+public class RespondCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
@@ -25,11 +24,11 @@ public class SetAttributesRequestedEventBodyModel extends EventBodyModel {
     Long clientId;
 
     @NotNull
-    PlayerAttributesModel attributes;
+    Object message;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SET_ATTRIBUTES_REQUESTED;
+        return EventQualifierEnum.RESPOND_COMMAND_APPROVED;
     }
 
     @Override

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class KickApprovedEventBodyModel extends EventBodyModel {
+public class KickCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
@@ -25,7 +25,7 @@ public class KickApprovedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.KICK_APPROVED;
+        return EventQualifierEnum.KICK_COMMAND_APPROVED;
     }
 
     @Override

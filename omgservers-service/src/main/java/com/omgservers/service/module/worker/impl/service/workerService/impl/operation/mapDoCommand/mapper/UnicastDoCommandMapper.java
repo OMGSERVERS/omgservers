@@ -5,7 +5,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoUnicastCommandBodyModel;
 import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.body.UnicastRequestedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandReceivedEventBodyModel;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.mapDoCommand.DoCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -31,7 +31,7 @@ public class UnicastDoCommandMapper implements DoCommandMapper {
         final var clientId = commandBody.getClientId();
         final var message = commandBody.getMessage();
 
-        final var eventBody = new UnicastRequestedEventBodyModel(runtimeId, userId, clientId, message);
+        final var eventBody = new UnicastCommandReceivedEventBodyModel(runtimeId, userId, clientId, message);
         final var eventModel = eventModelFactory.create(eventBody);
         return eventModel;
     }

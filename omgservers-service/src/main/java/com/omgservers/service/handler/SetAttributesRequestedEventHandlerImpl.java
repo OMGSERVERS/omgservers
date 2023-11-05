@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.SetAttributesRequestedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesCommandReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
@@ -23,12 +23,12 @@ public class SetAttributesRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SET_ATTRIBUTES_REQUESTED;
+        return EventQualifierEnum.SET_ATTRIBUTES_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (SetAttributesRequestedEventBodyModel) event.getBody();
+        final var body = (SetAttributesCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

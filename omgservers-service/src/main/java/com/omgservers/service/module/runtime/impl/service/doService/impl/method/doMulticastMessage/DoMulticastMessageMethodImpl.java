@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.model.dto.runtime.DoMulticastMessageResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.MulticastApprovedEventBodyModel;
+import com.omgservers.model.event.body.MulticastCommandApprovedEventBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -83,7 +83,7 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
     Uni<Boolean> syncApprove(final Long runtimeId,
                              final List<Recipient> recipients,
                              final Object message) {
-        final var eventBody = new MulticastApprovedEventBodyModel(runtimeId, recipients, message);
+        final var eventBody = new MulticastCommandApprovedEventBodyModel(runtimeId, recipients, message);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

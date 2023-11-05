@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MulticastApprovedEventBodyModel;
+import com.omgservers.model.event.body.MulticastCommandApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
@@ -30,12 +30,12 @@ public class MulticastApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MULTICAST_APPROVED;
+        return EventQualifierEnum.MULTICAST_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (MulticastApprovedEventBodyModel) event.getBody();
+        final var body = (MulticastCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var recipients = body.getRecipients();
         final var message = body.getMessage();

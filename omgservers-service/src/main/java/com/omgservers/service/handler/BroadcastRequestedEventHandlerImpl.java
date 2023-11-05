@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.BroadcastRequestedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandReceivedEventBodyModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -22,12 +22,12 @@ public class BroadcastRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.BROADCAST_REQUESTED;
+        return EventQualifierEnum.BROADCAST_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (BroadcastRequestedEventBodyModel) event.getBody();
+        final var body = (BroadcastCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var message = body.getMessage();
 

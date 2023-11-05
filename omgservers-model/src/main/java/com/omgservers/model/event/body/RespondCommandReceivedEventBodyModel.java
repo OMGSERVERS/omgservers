@@ -12,17 +12,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class BroadcastRequestedEventBodyModel extends EventBodyModel {
+public class RespondCommandReceivedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
+
+    @NotNull
+    Long userId;
+
+    @NotNull
+    Long clientId;
 
     @NotNull
     Object message;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.BROADCAST_REQUESTED;
+        return EventQualifierEnum.RESPOND_COMMAND_RECEIVED;
     }
 
     @Override

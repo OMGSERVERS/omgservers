@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.model.dto.runtime.DoMulticastMessageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MulticastRequestedEventBodyModel;
+import com.omgservers.model.event.body.MulticastCommandReceivedEventBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
@@ -25,12 +25,12 @@ public class MulticastRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MULTICAST_REQUESTED;
+        return EventQualifierEnum.MULTICAST_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (MulticastRequestedEventBodyModel) event.getBody();
+        final var body = (MulticastCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var recipients = body.getRecipients();
         final var message = body.getMessage();

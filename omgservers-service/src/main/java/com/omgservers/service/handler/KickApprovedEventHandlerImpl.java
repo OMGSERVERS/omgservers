@@ -7,7 +7,7 @@ import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.KickApprovedEventBodyModel;
+import com.omgservers.model.event.body.KickCommandApprovedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -34,12 +34,12 @@ public class KickApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.KICK_APPROVED;
+        return EventQualifierEnum.KICK_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (KickApprovedEventBodyModel) event.getBody();
+        final var body = (KickCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

@@ -5,7 +5,7 @@ import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
+import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
@@ -41,7 +41,7 @@ class SignInMessageHandlerImpl implements MessageHandler {
         final var userPassword = messageBody.getPassword();
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
-        final var eventBody = new SignInRequestedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
+        final var eventBody = new SignInMessageReceivedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
         final var event = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(event);
         return systemModule.getEventService().syncEvent(request)

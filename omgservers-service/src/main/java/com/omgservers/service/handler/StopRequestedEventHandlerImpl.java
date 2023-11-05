@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.StopRequestedEventBodyModel;
+import com.omgservers.model.event.body.StopCommandReceivedEventBodyModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -27,12 +27,12 @@ public class StopRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STOP_REQUESTED;
+        return EventQualifierEnum.STOP_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (StopRequestedEventBodyModel) event.getBody();
+        final var body = (StopCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var reason = body.getReason();
 

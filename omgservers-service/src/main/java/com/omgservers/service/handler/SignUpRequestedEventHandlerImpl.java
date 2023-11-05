@@ -23,7 +23,7 @@ import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
+import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
@@ -74,12 +74,12 @@ class SignUpRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SIGN_UP_REQUESTED;
+        return EventQualifierEnum.SIGN_UP_MESSAGE_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (SignUpRequestedEventBodyModel) event.getBody();
+        final var body = (SignUpMessageReceivedEventBodyModel) event.getBody();
         final var server = body.getServer();
         final var connectionId = body.getConnectionId();
         final var tenantId = body.getTenantId();

@@ -5,7 +5,7 @@ import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.event.body.SignUpRequestedEventBodyModel;
+import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
@@ -39,7 +39,7 @@ class SignUpMessageHandlerImpl implements MessageHandler {
         final var stageSecret = messageBody.getSecret();
         final var serverUri = getConfigOperation.getConfig().serverUri();
 
-        final var eventBody = new SignUpRequestedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
+        final var eventBody = new SignUpMessageReceivedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
         final var event = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(event);
         return systemModule.getEventService().syncEvent(request)

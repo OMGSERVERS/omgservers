@@ -2,45 +2,38 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.model.recipient.Recipient;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class MatchmakerRequestedEventBodyModel extends EventBodyModel {
+public class BroadcastCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    Long tenantId;
+    Long runtimeId;
+
+    @NotEmpty
+    List<Recipient> recipients;
 
     @NotNull
-    Long stageId;
-
-    @NotNull
-    Long userId;
-
-    @NotNull
-    Long playerId;
-
-    @NotNull
-    Long clientId;
-
-    @NotNull
-    @Size(max = 64)
-    String mode;
+    Object message;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCHMAKER_REQUESTED;
+        return EventQualifierEnum.BROADCAST_COMMAND_APPROVED;
     }
 
     @Override
     public Long getGroupId() {
-        return clientId;
+        return runtimeId;
     }
 }

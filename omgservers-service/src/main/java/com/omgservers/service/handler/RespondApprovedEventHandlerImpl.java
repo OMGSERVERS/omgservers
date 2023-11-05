@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RespondApprovedEventBodyModel;
+import com.omgservers.model.event.body.RespondCommandApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.service.factory.MessageModelFactory;
@@ -26,12 +26,12 @@ public class RespondApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.RESPOND_APPROVED;
+        return EventQualifierEnum.RESPOND_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (RespondApprovedEventBodyModel) event.getBody();
+        final var body = (RespondCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

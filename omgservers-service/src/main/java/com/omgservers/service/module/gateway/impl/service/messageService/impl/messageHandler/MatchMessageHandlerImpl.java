@@ -3,7 +3,7 @@ package com.omgservers.service.module.gateway.impl.service.messageService.impl.m
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
-import com.omgservers.model.event.body.MatchRequestedEventBodyModel;
+import com.omgservers.model.event.body.MatchMesssageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchMessageBodyModel;
@@ -48,7 +48,7 @@ class MatchMessageHandlerImpl implements MessageHandler {
         final var assignedRuntime = getAssignedRuntime(connectionId);
         final var runtimeId = assignedRuntime.getRuntimeId();
 
-        final var eventBodyBuilder = MatchRequestedEventBodyModel.builder()
+        final var eventBodyBuilder = MatchMesssageReceivedEventBodyModel.builder()
                 .tenantId(tenantId)
                 .stageId(stageId)
                 .userId(userId)

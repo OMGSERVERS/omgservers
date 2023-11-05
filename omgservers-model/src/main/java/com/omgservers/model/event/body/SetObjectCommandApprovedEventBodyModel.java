@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SetObjectApprovedEventBodyModel extends EventBodyModel {
+public class SetObjectCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
@@ -28,7 +28,7 @@ public class SetObjectApprovedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SET_OBJECT_APPROVED;
+        return EventQualifierEnum.SET_OBJECT_COMMAND_APPROVED;
     }
 
     @Override

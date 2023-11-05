@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RespondRequestedEventBodyModel;
+import com.omgservers.model.event.body.RespondCommandReceivedEventBodyModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -22,12 +22,12 @@ public class RespondRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.RESPOND_REQUESTED;
+        return EventQualifierEnum.RESPOND_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (RespondRequestedEventBodyModel) event.getBody();
+        final var body = (RespondCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

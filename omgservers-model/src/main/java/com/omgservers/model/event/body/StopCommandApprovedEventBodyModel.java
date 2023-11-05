@@ -2,6 +2,7 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,23 +13,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UnicastApprovedEventBodyModel extends EventBodyModel {
+public class StopCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
 
-    @NotNull
-    Long userId;
-
-    @NotNull
-    Long clientId;
-
-    @NotNull
-    Object message;
+    @NotEmpty
+    String reason;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.UNICAST_APPROVED;
+        return EventQualifierEnum.STOP_COMMAND_APPROVED;
     }
 
     @Override

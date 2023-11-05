@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.KickApprovedEventBodyModel;
+import com.omgservers.model.event.body.KickCommandApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.service.module.system.SystemModule;
@@ -62,7 +62,7 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
     Uni<Boolean> syncApprove(final Long runtimeId,
                              final Long userId,
                              final Long clientId) {
-        final var eventBody = new KickApprovedEventBodyModel(runtimeId, userId, clientId);
+        final var eventBody = new KickCommandApprovedEventBodyModel(runtimeId, userId, clientId);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

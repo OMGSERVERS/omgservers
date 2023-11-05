@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.RespondApprovedEventBodyModel;
+import com.omgservers.model.event.body.RespondCommandApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.service.module.system.SystemModule;
@@ -64,7 +64,7 @@ class DoRespondClientMethodImpl implements DoRespondClientMethod {
                              final Long userId,
                              final Long clientId,
                              final Object message) {
-        final var eventBody = new RespondApprovedEventBodyModel(runtimeId, userId, clientId, message);
+        final var eventBody = new RespondCommandApprovedEventBodyModel(runtimeId, userId, clientId, message);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

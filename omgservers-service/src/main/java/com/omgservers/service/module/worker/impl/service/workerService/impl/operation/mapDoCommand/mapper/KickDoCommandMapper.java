@@ -5,7 +5,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoKickCommandBodyModel;
 import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.body.KickRequestedEventBodyModel;
+import com.omgservers.model.event.body.KickCommandReceivedEventBodyModel;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.mapDoCommand.DoCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,7 +30,7 @@ public class KickDoCommandMapper implements DoCommandMapper {
         final var userId = commandBody.getUserId();
         final var clientId = commandBody.getClientId();
 
-        final var eventBody = new KickRequestedEventBodyModel(runtimeId, userId, clientId);
+        final var eventBody = new KickCommandReceivedEventBodyModel(runtimeId, userId, clientId);
         final var eventModel = eventModelFactory.create(eventBody);
         return eventModel;
     }

@@ -2,7 +2,6 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,17 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class StopRequestedEventBodyModel extends EventBodyModel {
+public class KickCommandReceivedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
 
-    @NotEmpty
-    String reason;
+    @NotNull
+    Long userId;
+
+    @NotNull
+    Long clientId;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STOP_REQUESTED;
+        return EventQualifierEnum.KICK_COMMAND_RECEIVED;
     }
 
     @Override

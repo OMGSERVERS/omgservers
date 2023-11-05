@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.UnicastRequestedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandReceivedEventBodyModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -22,12 +22,12 @@ public class UnicastRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.UNICAST_REQUESTED;
+        return EventQualifierEnum.UNICAST_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (UnicastRequestedEventBodyModel) event.getBody();
+        final var body = (UnicastCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

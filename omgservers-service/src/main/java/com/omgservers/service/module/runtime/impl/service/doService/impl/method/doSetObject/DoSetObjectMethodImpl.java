@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoSetObjectRequest;
 import com.omgservers.model.dto.runtime.DoSetObjectResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.SetObjectApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectCommandApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.service.module.system.SystemModule;
@@ -64,7 +64,7 @@ class DoSetObjectMethodImpl implements DoSetObjectMethod {
                            final Long userId,
                            final Long clientId,
                            final Object object) {
-        final var eventBody = new SetObjectApprovedEventBodyModel(runtimeId, userId, clientId, object);
+        final var eventBody = new SetObjectCommandApprovedEventBodyModel(runtimeId, userId, clientId, object);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

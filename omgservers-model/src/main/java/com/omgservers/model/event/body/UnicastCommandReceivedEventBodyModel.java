@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class KickRequestedEventBodyModel extends EventBodyModel {
+public class UnicastCommandReceivedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
@@ -23,9 +23,12 @@ public class KickRequestedEventBodyModel extends EventBodyModel {
     @NotNull
     Long clientId;
 
+    @NotNull
+    Object message;
+
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.KICK_REQUESTED;
+        return EventQualifierEnum.UNICAST_COMMAND_RECEIVED;
     }
 
     @Override

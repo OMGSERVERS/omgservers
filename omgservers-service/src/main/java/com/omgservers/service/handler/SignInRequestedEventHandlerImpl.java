@@ -24,7 +24,7 @@ import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.SignInRequestedEventBodyModel;
+import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
@@ -66,12 +66,12 @@ class SignInRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SIGN_IN_REQUESTED;
+        return EventQualifierEnum.SIGN_IN_MESSAGE_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (SignInRequestedEventBodyModel) event.getBody();
+        final var body = (SignInMessageReceivedEventBodyModel) event.getBody();
         final var server = body.getServer();
         final var connectionId = body.getConnectionId();
         final var tenantId = body.getTenantId();

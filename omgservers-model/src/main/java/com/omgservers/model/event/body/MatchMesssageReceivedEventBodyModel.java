@@ -2,27 +2,19 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SignInRequestedEventBodyModel extends EventBodyModel {
-
-    @NotNull
-    URI server;
-
-    @NotNull
-    Long connectionId;
+public class MatchMesssageReceivedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long tenantId;
@@ -30,24 +22,28 @@ public class SignInRequestedEventBodyModel extends EventBodyModel {
     @NotNull
     Long stageId;
 
-    @NotBlank
-    @Size(max = 1024)
-    String secret;
-
     @NotNull
     Long userId;
 
     @NotNull
-    @Size(max = 1024)
-    String password;
+    Long playerId;
+
+    @NotNull
+    Long clientId;
+
+    @NotNull
+    Long runtimeId;
+
+    @NotNull
+    Object data;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SIGN_IN_REQUESTED;
+        return EventQualifierEnum.MATCH_MESSAGE_RECEIVED;
     }
 
     @Override
     public Long getGroupId() {
-        return connectionId;
+        return runtimeId;
     }
 }

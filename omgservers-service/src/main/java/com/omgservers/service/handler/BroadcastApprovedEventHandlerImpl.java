@@ -3,7 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
@@ -30,12 +30,12 @@ public class BroadcastApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.BROADCAST_APPROVED;
+        return EventQualifierEnum.BROADCAST_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (BroadcastApprovedEventBodyModel) event.getBody();
+        final var body = (BroadcastCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var recipients = body.getRecipients();
         final var message = body.getMessage();

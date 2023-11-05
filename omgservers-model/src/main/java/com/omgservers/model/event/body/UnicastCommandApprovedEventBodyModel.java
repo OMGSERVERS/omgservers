@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class RespondApprovedEventBodyModel extends EventBodyModel {
+public class UnicastCommandApprovedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long runtimeId;
@@ -28,7 +28,7 @@ public class RespondApprovedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.RESPOND_APPROVED;
+        return EventQualifierEnum.UNICAST_COMMAND_APPROVED;
     }
 
     @Override

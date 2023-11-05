@@ -4,7 +4,7 @@ import com.omgservers.model.dto.runtime.DoSetObjectRequest;
 import com.omgservers.model.dto.runtime.DoSetObjectResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.SetObjectRequestedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectCommandReceivedEventBodyModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -22,12 +22,12 @@ public class SetObjectRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SET_OBJECT_REQUESTED;
+        return EventQualifierEnum.SET_OBJECT_COMMAND_RECEIVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (SetObjectRequestedEventBodyModel) event.getBody();
+        final var body = (SetObjectCommandReceivedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

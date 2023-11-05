@@ -4,7 +4,7 @@ import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.event.body.BroadcastApprovedEventBodyModel;
+import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -64,7 +64,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
     Uni<Boolean> syncApprove(final Long runtimeId,
                              final List<Recipient> recipients,
                              final Object message) {
-        final var eventBody = new BroadcastApprovedEventBodyModel(runtimeId, recipients, message);
+        final var eventBody = new BroadcastCommandApprovedEventBodyModel(runtimeId, recipients, message);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)

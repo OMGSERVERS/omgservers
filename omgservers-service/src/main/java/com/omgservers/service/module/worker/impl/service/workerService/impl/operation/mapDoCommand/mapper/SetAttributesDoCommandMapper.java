@@ -5,7 +5,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoSetAttributesCommandBodyModel;
 import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.body.SetAttributesRequestedEventBodyModel;
+import com.omgservers.model.event.body.SetAttributesCommandReceivedEventBodyModel;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.mapDoCommand.DoCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -31,7 +31,7 @@ public class SetAttributesDoCommandMapper implements DoCommandMapper {
         final var clientId = commandBody.getClientId();
         final var attributes = commandBody.getAttributes();
 
-        final var eventBody = new SetAttributesRequestedEventBodyModel(runtimeId, userId, clientId, attributes);
+        final var eventBody = new SetAttributesCommandReceivedEventBodyModel(runtimeId, userId, clientId, attributes);
         final var eventModel = eventModelFactory.create(eventBody);
         return eventModel;
     }

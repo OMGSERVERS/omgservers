@@ -7,7 +7,7 @@ import com.omgservers.model.dto.user.UpdatePlayerObjectResponse;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.SetObjectApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetObjectCommandApprovedEventBodyModel;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -25,12 +25,12 @@ public class SetObjectApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.SET_OBJECT_APPROVED;
+        return EventQualifierEnum.SET_OBJECT_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (SetObjectApprovedEventBodyModel) event.getBody();
+        final var body = (SetObjectCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();

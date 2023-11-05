@@ -7,7 +7,7 @@ import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.StopApprovedEventBodyModel;
+import com.omgservers.model.event.body.StopCommandApprovedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.StopMatchMatchmakerCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -34,12 +34,12 @@ public class StopApprovedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STOP_APPROVED;
+        return EventQualifierEnum.STOP_COMMAND_APPROVED;
     }
 
     @Override
     public Uni<Boolean> handle(EventModel event) {
-        final var body = (StopApprovedEventBodyModel) event.getBody();
+        final var body = (StopCommandApprovedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         final var reason = body.getReason();
 

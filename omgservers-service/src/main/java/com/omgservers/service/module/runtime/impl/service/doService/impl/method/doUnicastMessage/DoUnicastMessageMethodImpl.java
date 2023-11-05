@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.UnicastApprovedEventBodyModel;
+import com.omgservers.model.event.body.UnicastCommandApprovedEventBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
 import com.omgservers.service.module.system.SystemModule;
@@ -66,7 +66,7 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
                              final Long userId,
                              final Long clientId,
                              final Object message) {
-        final var eventBody = new UnicastApprovedEventBodyModel(runtimeId, userId, clientId, message);
+        final var eventBody = new UnicastCommandApprovedEventBodyModel(runtimeId, userId, clientId, message);
         final var eventModel = eventModelFactory.create(eventBody);
         final var request = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(request)
