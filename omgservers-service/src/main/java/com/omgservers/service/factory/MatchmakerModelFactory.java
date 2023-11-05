@@ -33,6 +33,7 @@ public class MatchmakerModelFactory {
         matchmaker.setModified(now);
         matchmaker.setTenantId(tenantId);
         matchmaker.setVersionId(versionId);
+        matchmaker.setDeleted(false);
         return matchmaker;
     }
 }

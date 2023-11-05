@@ -1,17 +1,15 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
 import com.omgservers.model.dto.system.DeleteJobResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -26,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
+    final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
     final SystemModule systemModule;
 
@@ -37,37 +36,20 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchmakerDeletedEventBodyModel) event.getBody();
-        final var matchmaker = body.getMatchmaker();
-        final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getVersionId();
-        final var matchmakerId = matchmaker.getId();
+        final var matchmakerId = body.getId();
 
-        log.info("Matchmaker was deleted, id={}, tenantId={}, versionId={}",
-                matchmakerId,
-                tenantId,
-                versionId);
-
-        return deleteMatchmakerJob(matchmakerId)
-                .flatMap(wasJobDeleted -> findVersionMatchmaker(tenantId, matchmakerId)
-                        .onFailure(ServerSideNotFoundException.class).recoverWithNull()
-                        .onItem().ifNotNull().transformToUni(versionMatchmaker ->
-                                deleteVersionMatchmaker(tenantId, versionMatchmaker.getId())
-                        )
-                )
+        return getDeletedMatchmaker(matchmakerId)
+                .flatMap(matchmaker -> {
+                    log.info("Matchmaker was deleted, id={}", matchmakerId);
+                    return deleteMatchmakerJob(matchmakerId);
+                })
                 .replaceWith(true);
     }
 
-    Uni<VersionMatchmakerModel> findVersionMatchmaker(final Long tenantId,
-                                                      final Long matchmakerId) {
-        final var request = new FindVersionMatchmakerRequest(tenantId, matchmakerId);
-        return tenantModule.getVersionService().findVersionMatchmaker(request)
-                .map(FindVersionMatchmakerResponse::getVersionMatchmaker);
-    }
-
-    Uni<Boolean> deleteVersionMatchmaker(final Long tenantId, final Long id) {
-        final var request = new DeleteVersionMatchmakerRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersionMatchmaker(request)
-                .map(DeleteVersionMatchmakerResponse::getDeleted);
+    Uni<MatchmakerModel> getDeletedMatchmaker(final Long id) {
+        final var request = new GetMatchmakerRequest(id, true);
+        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+                .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<Boolean> deleteMatchmakerJob(final Long matchmakerId) {

@@ -30,8 +30,9 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker(id, created, modified, tenant_id, version_id)
-                        values($1, $2, $3, $4, $5)
+                        insert into $schema.tab_matchmaker(
+                            id, created, modified, tenant_id, version_id, deleted)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
@@ -40,7 +41,8 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
                         matchmaker.getTenantId(),
-                        matchmaker.getVersionId()
+                        matchmaker.getVersionId(),
+                        matchmaker.getDeleted()
                 ),
                 () -> new MatchmakerCreatedEventBodyModel(matchmaker.getId()),
                 () -> logModelFactory.create("Matchmaker was inserted, matchmaker=" + matchmaker)

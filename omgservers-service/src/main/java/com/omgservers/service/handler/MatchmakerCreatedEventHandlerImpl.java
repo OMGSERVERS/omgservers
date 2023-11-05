@@ -48,12 +48,13 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
                             matchmaker.getVersionId());
+
                     return syncMatchmakerJob(id);
                 });
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
+        final var request = new GetMatchmakerRequest(matchmakerId, false);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }

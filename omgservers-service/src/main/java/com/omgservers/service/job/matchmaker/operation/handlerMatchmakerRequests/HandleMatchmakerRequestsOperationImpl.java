@@ -4,12 +4,12 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
-import com.omgservers.service.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.service.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -47,7 +47,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long id) {
-        final var request = new GetMatchmakerRequest(id);
+        final var request = new GetMatchmakerRequest(id, false);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }

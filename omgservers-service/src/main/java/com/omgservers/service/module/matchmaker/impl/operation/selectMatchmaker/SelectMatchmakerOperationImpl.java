@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
@@ -23,17 +23,21 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
     @Override
     public Uni<MatchmakerModel> selectMatchmaker(final SqlConnection sqlConnection,
                                                  final int shard,
-                                                 final Long id) {
+                                                 final Long id,
+                                                 final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, created, modified, tenant_id, version_id
+                        select id, created, modified, tenant_id, version_id, deleted
                         from $schema.tab_matchmaker
-                        where id = $1
+                        where id = $1 and deleted = $2
                         limit 1
                         """,
-                Collections.singletonList(id),
+                Arrays.asList(
+                        id,
+                        deleted
+                ),
                 "Matchmaker",
                 matchmakerModelMapper::fromRow);
     }

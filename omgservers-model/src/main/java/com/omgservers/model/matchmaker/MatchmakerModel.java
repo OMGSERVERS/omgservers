@@ -26,4 +26,7 @@ public class MatchmakerModel {
 
     @NotNull
     Long versionId;
+
+    @NotNull
+    Boolean deleted;
 }

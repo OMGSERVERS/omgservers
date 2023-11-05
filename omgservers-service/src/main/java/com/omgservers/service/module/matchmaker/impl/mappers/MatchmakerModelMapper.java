@@ -18,6 +18,7 @@ public class MatchmakerModelMapper {
         matchmakerModel.setModified(row.getOffsetDateTime("modified").toInstant());
         matchmakerModel.setTenantId(row.getLong("tenant_id"));
         matchmakerModel.setVersionId(row.getLong("version_id"));
+        matchmakerModel.setDeleted(row.getBoolean("deleted"));
         return matchmakerModel;
     }
 }

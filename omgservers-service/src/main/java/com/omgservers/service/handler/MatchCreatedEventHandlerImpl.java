@@ -1,13 +1,13 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.SyncJobRequest;
-import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.model.dto.system.SyncJobRequest;
+import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -16,12 +16,12 @@ import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeTypeEnum;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.factory.MatchClientModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.service.factory.MatchClientModelFactory;
+import com.omgservers.service.factory.RuntimeModelFactory;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -73,7 +73,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
+        final var request = new GetMatchmakerRequest(matchmakerId, false);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }

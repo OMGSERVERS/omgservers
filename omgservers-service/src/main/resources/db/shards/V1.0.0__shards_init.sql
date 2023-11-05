@@ -142,7 +142,8 @@ create table if not exists tab_matchmaker (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
-    version_id bigint not null
+    version_id bigint not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_matchmaker_command (
