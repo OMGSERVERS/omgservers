@@ -1,10 +1,9 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.project.ProjectConfigModel;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,7 +21,7 @@ class UpsertProjectOperationTest extends Assertions {
     UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
-    UpsertProjectOperation upsertProjectOperation;
+    UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -42,8 +41,10 @@ class UpsertProjectOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
 
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        assertTrue(upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
+        final var project = projectModelFactory.create(tenant.getId());
+        final var changeContext = upsertProjectOperation.upsertProject(shard, project);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.PROJECT_CREATED));
     }
 
     @Test
@@ -51,18 +52,20 @@ class UpsertProjectOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
 
-        assertFalse(upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
+        final var changeContext = upsertProjectOperation.upsertProject(shard, project);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.PROJECT_CREATED));
     }
 
     @Test
     void givenUnknownTenant_whenUpsertProject_thenException() {
         final var shard = 0;
-        final var project = projectModelFactory.create(tenantId(), ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenantId());
         assertThrows(ServerSideConflictException.class, () ->
-                upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project));
+                upsertProjectOperation.upsertProject(shard, project));
     }
 
     Long tenantId() {

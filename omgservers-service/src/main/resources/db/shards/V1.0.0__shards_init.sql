@@ -66,7 +66,7 @@ create table if not exists tab_tenant_project (
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    config json not null
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_project_permission (

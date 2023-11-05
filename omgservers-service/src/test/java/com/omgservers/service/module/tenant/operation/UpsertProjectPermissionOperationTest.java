@@ -1,12 +1,10 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.ProjectPermissionModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -25,7 +23,7 @@ class UpsertProjectPermissionOperationTest extends Assertions {
     UpsertProjectPermissionOperation upsertProjectPermissionOperation;
 
     @Inject
-    UpsertProjectOperation upsertProjectOperation;
+    UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
@@ -50,8 +48,8 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
 
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
@@ -63,8 +61,8 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
         upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);

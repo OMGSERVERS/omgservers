@@ -26,8 +26,9 @@ GetProjectMethodImpl implements GetProjectMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
+                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectProjectOperation
-                            .selectProject(sqlConnection, shard.shard(), tenantId, id));
+                            .selectProject(sqlConnection, shard.shard(), tenantId, id, deleted));
                 })
                 .map(GetProjectResponse::new);
     }

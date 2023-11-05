@@ -1,6 +1,5 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.stage.StageConfigModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
@@ -8,7 +7,6 @@ import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.factory.VersionModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -27,7 +25,7 @@ class UpsertVersionOperationTest extends Assertions {
     UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
-    UpsertProjectOperation upsertProjectOperation;
+    UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
     UpsertStageOperation upsertStageOperation;
@@ -58,8 +56,8 @@ class UpsertVersionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
@@ -73,8 +71,8 @@ class UpsertVersionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId(), ProjectConfigModel.create());
-        upsertProjectOperation.upsertProject(TIMEOUT, pgPool, shard, project);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId(), StageConfigModel.create());
         upsertStageOperation.upsertStage(TIMEOUT, pgPool, shard, tenant.getId(), stage);
         final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),

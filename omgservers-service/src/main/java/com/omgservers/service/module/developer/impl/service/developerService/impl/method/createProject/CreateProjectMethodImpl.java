@@ -8,8 +8,6 @@ import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.model.dto.tenant.SyncStageRequest;
-import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.project.ProjectConfigModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
@@ -18,11 +16,12 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.ProjectPermissionModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.StagePermissionModelFactory;
+import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -80,7 +79,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     }
 
     Uni<ProjectModel> syncProject(final Long tenantId, final Long userId) {
-        final var project = projectModelFactory.create(tenantId, ProjectConfigModel.create());
+        final var project = projectModelFactory.create(tenantId);
         final var syncProjectInternalRequest = new SyncProjectRequest(project);
         return tenantModule.getProjectService().syncProject(syncProjectInternalRequest)
                 .flatMap(response -> syncProjectPermission(tenantId, project.getId(), userId))

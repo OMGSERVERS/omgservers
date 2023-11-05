@@ -2,10 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncProjectResponse;
-import com.omgservers.model.project.ProjectModel;
-import com.omgservers.model.shard.ShardModel;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
-import com.omgservers.service.module.tenant.impl.operation.validateProject.ValidateProjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -21,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 class SyncProjectMethodImpl implements SyncProjectMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
-    final ValidateProjectOperation validateProjectOperation;
     final UpsertProjectOperation upsertProjectOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -30,17 +26,16 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
     @Override
     public Uni<SyncProjectResponse> syncProject(SyncProjectRequest request) {
         final var project = request.getProject();
-        validateProjectOperation.validateProject(project);
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, project))
+                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
+                                (changeContext, sqlConnection) -> upsertProjectOperation
+                                        .upsertProject(changeContext,
+                                                sqlConnection,
+                                                shardModel.shard(),
+                                                project))
+                        .map(ChangeContext::getResult))
                 .map(SyncProjectResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, ProjectModel project) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertProjectOperation.upsertProject(changeContext, sqlConnection, shardModel.shard(), project))
-                .map(ChangeContext::getResult);
     }
 }
