@@ -35,6 +35,7 @@ public class MatchmakerCommandModelFactory {
         matchmakerCommand.setModified(now);
         matchmakerCommand.setQualifier(body.getQualifier());
         matchmakerCommand.setBody(body);
+        matchmakerCommand.setDeleted(false);
         return matchmakerCommand;
     }
 }

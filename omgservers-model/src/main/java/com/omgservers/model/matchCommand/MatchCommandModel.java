@@ -34,4 +34,7 @@ public class MatchCommandModel {
 
     @NotNull
     MatchCommandBodyModel body;
+
+    @NotNull
+    Boolean deleted;
 }

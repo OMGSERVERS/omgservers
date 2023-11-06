@@ -6,6 +6,8 @@ import com.omgservers.model.dto.user.DeleteClientRequest;
 import com.omgservers.model.dto.user.DeleteClientResponse;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
+import com.omgservers.model.dto.user.DeleteUserRequest;
+import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
@@ -51,6 +53,12 @@ class UserApiImpl implements UserApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncUser);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteUser);
     }
 
     @Override

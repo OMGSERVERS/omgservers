@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.service.serviceAccountService.impl.method.deleteServiceAccount;
 
 import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
+import com.omgservers.model.dto.system.DeleteServiceAccountResponse;
 import com.omgservers.service.module.system.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -19,12 +20,11 @@ class DeleteServiceAccountMethodImpl implements DeleteServiceAccountMethod {
     final ChangeWithContextOperation changeWithContextOperation;
 
     @Override
-    public Uni<Void> deleteServiceAccount(DeleteServiceAccountRequest request) {
-        final var username = request.getUsername();
+    public Uni<DeleteServiceAccountResponse> deleteServiceAccount(final DeleteServiceAccountRequest request) {
+        final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteServiceAccountOperation.deleteServiceAccount(changeContext, sqlConnection, username))
+                        deleteServiceAccountOperation.deleteServiceAccount(changeContext, sqlConnection, id))
                 .map(ChangeContext::getResult)
-                //TODO: make response with deleted flag
-                .replaceWithVoid();
+                .map(DeleteServiceAccountResponse::new);
     }
 }

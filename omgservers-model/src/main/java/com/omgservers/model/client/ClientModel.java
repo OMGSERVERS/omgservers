@@ -42,4 +42,7 @@ public class ClientModel {
 
     @NotNull
     Long defaultRuntimeId;
+
+    @NotNull
+    Boolean deleted;
 }

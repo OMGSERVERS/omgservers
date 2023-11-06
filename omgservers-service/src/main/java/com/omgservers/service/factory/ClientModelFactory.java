@@ -49,6 +49,7 @@ public class ClientModelFactory {
         client.setVersionId(versionId);
         client.setDefaultMatchmakerId(defaultMatchmakerId);
         client.setDefaultRuntimeId(defaultRuntimeId);
+        client.setDeleted(false);
 
         return client;
     }

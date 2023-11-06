@@ -44,7 +44,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(id)
                 .flatMap(matchmaker -> {
-                    log.info("Matchmaker was created, id={}, tenantId={}, versionId={}",
+                    log.info("Matchmaker was created, id={}, version={}/{}",
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
                             matchmaker.getVersionId());

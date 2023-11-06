@@ -35,8 +35,8 @@ class UpsertMatchCommandOperationImpl implements UpsertMatchCommandOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match_command(
-                            id, matchmaker_id, match_id, created, modified, qualifier, body)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, matchmaker_id, match_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,10 +47,11 @@ class UpsertMatchCommandOperationImpl implements UpsertMatchCommandOperation {
                         matchCommand.getCreated().atOffset(ZoneOffset.UTC),
                         matchCommand.getModified().atOffset(ZoneOffset.UTC),
                         matchCommand.getQualifier(),
-                        getBodyString(matchCommand)
+                        getBodyString(matchCommand),
+                        matchCommand.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Match command was inserted, matchCommand=" + matchCommand)
+                () -> null
         );
     }
 

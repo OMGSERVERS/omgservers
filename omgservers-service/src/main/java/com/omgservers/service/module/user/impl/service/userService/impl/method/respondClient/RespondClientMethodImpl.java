@@ -1,11 +1,11 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.respondClient;
 
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.RespondMessageRequest;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.service.module.gateway.GatewayModule;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -33,8 +33,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
                 .invoke(client -> {
                     if (Objects.isNull(client)) {
                         log.warn("Respond client method failed, client doesn't exist anymore, " +
-                                        "userId={}, " +
-                                        "clientId={}, " +
+                                        "{}/{}, " +
                                         "messageQualifier={}",
                                 userId,
                                 clientId,
@@ -52,7 +51,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

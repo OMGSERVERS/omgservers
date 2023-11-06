@@ -5,8 +5,11 @@ import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.StagePermissionModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.hasStagePermission.HasStagePermissionOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
+import com.omgservers.service.module.tenant.operation.testInterface.HasStagePermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertStageOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertStagePermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,10 +24,10 @@ class HasStagePermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    HasStagePermissionOperation hasStagePermissionOperation;
+    HasStagePermissionOperationTestInterface hasStagePermissionOperation;
 
     @Inject
-    UpsertStagePermissionOperation upsertStagePermissionOperation;
+    UpsertStagePermissionOperationTestInterface upsertStagePermissionOperation;
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
@@ -54,7 +57,7 @@ class HasStagePermissionOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenStagePermission_whenHasStagePermission_thenYes() {
+    void givenStagePermission_whenHasStagePermission_thenTrue() {
         final var shard = 0;
         final var userId = userId();
         final var tenant = tenantModelFactory.create();
@@ -65,18 +68,24 @@ class HasStagePermissionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId,
                 StagePermissionEnum.VERSION_MANAGEMENT);
-        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
+        upsertStagePermissionOperation.upsertStagePermission(shard, permission);
 
-        assertTrue(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenant.getId(), stage.getId(),
-                permission.getUserId(), permission.getPermission()));
+        assertTrue(hasStagePermissionOperation.hasStagePermission(shard,
+                tenant.getId(),
+                stage.getId(),
+                permission.getUserId(),
+                permission.getPermission()));
     }
 
     @Test
     void givenUnknownIds_whenHasStagePermission_thenFalse() {
         final var shard = 0;
 
-        assertFalse(hasStagePermissionOperation.hasStagePermission(TIMEOUT, pgPool, shard, tenantId(), projectId(),
-                userId(), StagePermissionEnum.VERSION_MANAGEMENT));
+        assertFalse(hasStagePermissionOperation.hasStagePermission(shard,
+                tenantId(),
+                projectId(),
+                userId(),
+                StagePermissionEnum.VERSION_MANAGEMENT));
     }
 
     Long userId() {

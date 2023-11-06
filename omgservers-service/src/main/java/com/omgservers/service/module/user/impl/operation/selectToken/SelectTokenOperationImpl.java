@@ -1,9 +1,9 @@
 package com.omgservers.service.module.user.impl.operation.selectToken;
 
 import com.omgservers.model.token.TokenModel;
+import com.omgservers.service.module.user.impl.mapper.TokenModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,31 +18,24 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
 
     final SelectObjectOperation selectObjectOperation;
 
+    final TokenModelMapper tokenModelMapper;
+
     @Override
     public Uni<TokenModel> selectToken(final SqlConnection sqlConnection,
                                        final int shard,
-                                       final Long tokenId) {
+                                       final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, created, expire, hash
+                        select
+                            id, user_id, created, modified, expire, hash, deleted
                         from $schema.tab_user_token
                         where id = $1
                         limit 1
                         """,
-                Collections.singletonList(tokenId),
+                Collections.singletonList(id),
                 "Token",
-                this::createToken);
-    }
-
-    TokenModel createToken(Row row) {
-        TokenModel tokenModel = new TokenModel();
-        tokenModel.setId(row.getLong("id"));
-        tokenModel.setUserId(row.getLong("user_id"));
-        tokenModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        tokenModel.setExpire(row.getOffsetDateTime("expire").toInstant());
-        tokenModel.setHash(row.getString("hash"));
-        return tokenModel;
+                tokenModelMapper::fromRow);
     }
 }

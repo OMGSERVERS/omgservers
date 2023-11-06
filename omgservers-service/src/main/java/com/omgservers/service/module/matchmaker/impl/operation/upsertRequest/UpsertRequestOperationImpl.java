@@ -1,11 +1,11 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.request.RequestModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,8 +34,8 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_request(
-                            id, matchmaker_id, created, modified, user_id, client_id, mode, config)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, matchmaker_id, created, modified, user_id, client_id, mode, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,7 +47,8 @@ class UpsertRequestOperationImpl implements UpsertRequestOperation {
                         request.getUserId(),
                         request.getClientId(),
                         request.getMode(),
-                        getConfigString(request)
+                        getConfigString(request),
+                        request.getDeleted()
                 ),
                 () -> null,
                 () -> logModelFactory.create("Request was inserted, request=" + request)

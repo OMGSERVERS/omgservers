@@ -25,8 +25,14 @@ public class ProjectPermissionModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     Long userId;
 
     @NotNull
     ProjectPermissionEnum permission;
+
+    @NotNull
+    Boolean deleted;
 }

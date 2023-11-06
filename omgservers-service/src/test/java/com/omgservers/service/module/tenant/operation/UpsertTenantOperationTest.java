@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

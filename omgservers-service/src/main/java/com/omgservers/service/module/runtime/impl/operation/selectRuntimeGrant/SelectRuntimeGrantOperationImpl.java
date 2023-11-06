@@ -24,17 +24,22 @@ class SelectRuntimeGrantOperationImpl implements SelectRuntimeGrantOperation {
     public Uni<RuntimeGrantModel> selectRuntimeGrant(final SqlConnection sqlConnection,
                                                      final int shard,
                                                      final Long runtimeId,
-                                                     final Long id) {
+                                                     final Long id,
+                                                     final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, runtime_id, created, modified, shard_key, entity_id, type
+                        select id, runtime_id, created, modified, shard_key, entity_id, type, deleted
                         from $schema.tab_runtime_grant
-                        where runtime_id = $1 and id = $2
+                        where runtime_id = $1 and id = $2 and deleted = $3
                         limit 1
                         """,
-                Arrays.asList(runtimeId, id),
+                Arrays.asList(
+                        runtimeId,
+                        id,
+                        deleted
+                ),
                 "Runtime grant",
                 runtimeGrantModelMapper::fromRow);
     }

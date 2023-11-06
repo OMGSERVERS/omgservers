@@ -31,7 +31,8 @@ class selectJobByShardKeyAndEntityIdAndQualifierOperationImpl
                 sqlConnection,
                 0,
                 """
-                        select id, created, shard_key, entity_id, qualifier
+                        select
+                            id, created, modified, shard_key, entity_id, qualifier, deleted
                         from system.tab_job
                         where shard_key = $1 and entity_id = $2 and qualifier = $3
                         """,

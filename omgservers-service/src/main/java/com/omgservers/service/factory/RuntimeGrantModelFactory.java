@@ -30,7 +30,7 @@ public class RuntimeGrantModelFactory {
                                     final Long shardKey,
                                     final Long entityId,
                                     final RuntimeGrantTypeEnum type) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var runtimeGrant = new RuntimeGrantModel();
         runtimeGrant.setId(id);
@@ -40,6 +40,7 @@ public class RuntimeGrantModelFactory {
         runtimeGrant.setShardKey(shardKey);
         runtimeGrant.setEntityId(entityId);
         runtimeGrant.setType(type);
+        runtimeGrant.setDeleted(false);
         return runtimeGrant;
     }
 }

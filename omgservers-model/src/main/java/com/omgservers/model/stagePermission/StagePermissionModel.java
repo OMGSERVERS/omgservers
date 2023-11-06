@@ -25,8 +25,14 @@ public class StagePermissionModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     Long userId;
 
     @NotNull
     StagePermissionEnum permission;
+
+    @NotNull
+    Boolean deleted;
 }

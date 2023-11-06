@@ -44,12 +44,11 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
         return getVersionRuntime(tenantId, id)
                 .flatMap(versionRuntime -> {
                     log.info("Version runtime was created, " +
-                                    "id={}, " +
-                                    "tenantId={}, " +
+                                    "versionRuntime={}/{}, " +
                                     "versionId={}, " +
                                     "runtimeId={}",
-                            id,
                             tenantId,
+                            id,
                             versionRuntime.getVersionId(),
                             versionRuntime.getRuntimeId());
 

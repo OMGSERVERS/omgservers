@@ -8,7 +8,7 @@ import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import com.omgservers.service.module.user.impl.operation.selectToken.SelectTokenOperation;
 import com.omgservers.service.module.user.impl.operation.upsertToken.UpsertTokenOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -29,7 +29,7 @@ class SelectTokenOperationTest extends Assertions {
     UpsertTokenOperation upsertTokenOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     CreateUserTokenOperation createUserTokenOperation;
@@ -50,7 +50,7 @@ class SelectTokenOperationTest extends Assertions {
     void givenUserToken_whenSelectToken_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
+        upsertUserOperation.upsertUser(shard, user);
         final var tokenContainer = createUserTokenOperation.createUserToken(user);
         final var tokenModel1 = tokenModelFactory.create(tokenContainer);
         assertTrue(upsertTokenOperation.upsertToken(TIMEOUT, pgPool, shard, tokenModel1));

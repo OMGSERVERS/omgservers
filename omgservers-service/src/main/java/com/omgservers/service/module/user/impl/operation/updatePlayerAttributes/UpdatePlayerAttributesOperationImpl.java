@@ -39,7 +39,7 @@ class UpdatePlayerAttributesOperationImpl implements UpdatePlayerAttributesOpera
                 """
                         update $schema.tab_user_player
                         set modified = $3, attributes = $4
-                        where user_id = $1 and id = $2
+                        where user_id = $1 and id = $2 and deleted = false
                         """,
                 Arrays.asList(
                         userId,

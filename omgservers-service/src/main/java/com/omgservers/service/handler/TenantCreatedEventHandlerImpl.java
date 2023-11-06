@@ -33,7 +33,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
         return getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Tenant was created, tenantId={}", tenantId);
+                    log.info("Tenant was created, tenant={}", tenantId);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWith(true);

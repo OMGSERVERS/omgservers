@@ -43,6 +43,7 @@ public class RequestModelFactory {
         request.setClientId(clientId);
         request.setMode(mode);
         request.setConfig(config);
+        request.setDeleted(false);
         return request;
     }
 }

@@ -1,11 +1,10 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,7 +22,7 @@ class UpsertPlayerOperationTest extends Assertions {
     UpsertPlayerOperation upsertPlayerOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UserModelFactory userModelFactory;
@@ -41,9 +40,9 @@ class UpsertPlayerOperationTest extends Assertions {
     void givenUser_whenUpsertPlayer_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
+        upsertUserOperation.upsertUser(shard, user);
 
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         assertTrue(upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player));
     }
 
@@ -51,8 +50,8 @@ class UpsertPlayerOperationTest extends Assertions {
     void givenUserAndPlayer_whenUpsertPlayer_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
         assertFalse(upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player));

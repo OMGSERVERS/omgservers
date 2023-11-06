@@ -7,5 +7,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface DeleteServiceAccountOperation {
     Uni<Boolean> deleteServiceAccount(ChangeContext<?> changeContext,
                                       SqlConnection sqlConnection,
-                                      String username);
+                                      Long id);
 }

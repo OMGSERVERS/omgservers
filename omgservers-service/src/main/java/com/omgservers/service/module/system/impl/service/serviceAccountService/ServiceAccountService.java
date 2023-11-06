@@ -1,20 +1,27 @@
 package com.omgservers.service.module.system.impl.service.serviceAccountService;
 
-import com.omgservers.model.dto.system.ValidateCredentialsResponse;
-import com.omgservers.model.dto.system.ValidateCredentialsRequest;
 import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
+import com.omgservers.model.dto.system.DeleteServiceAccountResponse;
+import com.omgservers.model.dto.system.FindServiceAccountRequest;
+import com.omgservers.model.dto.system.FindServiceAccountResponse;
 import com.omgservers.model.dto.system.GetServiceAccountRequest;
-import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.GetServiceAccountResponse;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountResponse;
+import com.omgservers.model.dto.system.ValidateCredentialsRequest;
+import com.omgservers.model.dto.system.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface ServiceAccountService {
 
-    Uni<GetServiceAccountResponse> getServiceAccount(GetServiceAccountRequest request);
+    Uni<GetServiceAccountResponse> getServiceAccount(@Valid GetServiceAccountRequest request);
 
-    Uni<Void> syncServiceAccount(SyncServiceAccountRequest request);
+    Uni<FindServiceAccountResponse> findServiceAccount(@Valid FindServiceAccountRequest request);
 
-    Uni<Void> deleteServiceAccount(DeleteServiceAccountRequest request);
+    Uni<SyncServiceAccountResponse> syncServiceAccount(@Valid SyncServiceAccountRequest request);
 
-    Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request);
+    Uni<DeleteServiceAccountResponse> deleteServiceAccount(@Valid DeleteServiceAccountRequest request);
+
+    Uni<ValidateCredentialsResponse> validateCredentials(@Valid ValidateCredentialsRequest request);
 }

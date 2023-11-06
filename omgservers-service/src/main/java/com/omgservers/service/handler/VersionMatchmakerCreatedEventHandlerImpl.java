@@ -42,12 +42,11 @@ public class VersionMatchmakerCreatedEventHandlerImpl implements EventHandler {
         return getVersionMatchmaker(tenantId, id)
                 .flatMap(versionMatchmaker -> {
                     log.info("Version matchmaker was created, " +
-                                    "id={}, " +
-                                    "tenantId={}, " +
+                                    "versionMatchmaker={}/{}, " +
                                     "versionId={}, " +
                                     "matchmakerId={}",
-                            id,
                             tenantId,
+                            id,
                             versionMatchmaker.getVersionId(),
                             versionMatchmaker.getMatchmakerId());
 

@@ -2,6 +2,8 @@ package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.module.tenant.operation.testInterface.SelectTenantOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

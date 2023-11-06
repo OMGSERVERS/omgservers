@@ -1,17 +1,18 @@
 package com.omgservers.service.module.matchmaker.impl.operation.deleteRequest;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.RequestDeletedEventBodyModel;
-import com.omgservers.service.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -29,18 +30,20 @@ class DeleteRequestOperationImpl implements DeleteRequestOperation {
                                       final int shard,
                                       final Long matchmakerId,
                                       final Long id) {
-        return selectRequestOperation.selectRequest(sqlConnection, shard, matchmakerId, id)
-                .flatMap(request -> changeObjectOperation.changeObject(
-                        changeContext, sqlConnection, shard,
-                        """
-                                delete from $schema.tab_matchmaker_request
-                                where matchmaker_id = $1 and id = $2
-                                """,
-                        Arrays.asList(matchmakerId, id),
-                        () -> new RequestDeletedEventBodyModel(request),
-                        () -> logModelFactory.create("Request was deleted, request=" + request)
-                ))
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(false);
+        return changeObjectOperation.changeObject(
+                changeContext, sqlConnection, shard,
+                """
+                        update $schema.tab_matchmaker_request
+                        set modified = $3, deleted = true
+                        where matchmaker_id = $1 and id = $2 and deleted = false
+                        """,
+                Arrays.asList(
+                        matchmakerId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
+                () -> new RequestDeletedEventBodyModel(matchmakerId, id),
+                () -> null
+        );
     }
 }

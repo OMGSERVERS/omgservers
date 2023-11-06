@@ -2,7 +2,6 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ServiceAccountDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    ServiceAccountModel serviceAccount;
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -25,6 +24,6 @@ public class ServiceAccountDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return serviceAccount.getId();
+        return 0L;
     }
 }

@@ -1,12 +1,30 @@
 package com.omgservers.service.module.system.impl.service.webService.impl;
 
+import com.omgservers.model.dto.system.DeleteIndexRequest;
+import com.omgservers.model.dto.system.DeleteIndexResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
 import com.omgservers.model.dto.system.DeleteJobResponse;
+import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
+import com.omgservers.model.dto.system.DeleteServiceAccountResponse;
+import com.omgservers.model.dto.system.FindIndexRequest;
+import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.dto.system.FindJobRequest;
+import com.omgservers.model.dto.system.FindJobResponse;
+import com.omgservers.model.dto.system.FindServiceAccountRequest;
+import com.omgservers.model.dto.system.FindServiceAccountResponse;
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
+import com.omgservers.model.dto.system.GetJobRequest;
+import com.omgservers.model.dto.system.GetJobResponse;
+import com.omgservers.model.dto.system.GetServiceAccountRequest;
+import com.omgservers.model.dto.system.GetServiceAccountResponse;
 import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import com.omgservers.model.dto.system.ViewLogRequest;
 import com.omgservers.model.dto.system.ViewLogsResponse;
@@ -34,32 +52,72 @@ class WebServiceImpl implements WebService {
     final LogService logService;
 
     @Override
-    public Uni<Void> syncIndex(SyncIndexRequest request) {
+    public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
+        return indexService.getIndex(request);
+    }
+
+    @Override
+    public Uni<FindIndexResponse> findIndex(final FindIndexRequest request) {
+        return indexService.findIndex(request);
+    }
+
+    @Override
+    public Uni<SyncIndexResponse> syncIndex(final SyncIndexRequest request) {
         return indexService.syncIndex(request);
     }
 
     @Override
-    public Uni<Void> syncServiceAccount(SyncServiceAccountRequest request) {
+    public Uni<DeleteIndexResponse> deleteIndex(final DeleteIndexRequest request) {
+        return indexService.deleteIndex(request);
+    }
+
+    @Override
+    public Uni<GetServiceAccountResponse> getServiceAccount(GetServiceAccountRequest request) {
+        return serviceAccountService.getServiceAccount(request);
+    }
+
+    @Override
+    public Uni<FindServiceAccountResponse> findServiceAccount(FindServiceAccountRequest request) {
+        return serviceAccountService.findServiceAccount(request);
+    }
+
+    @Override
+    public Uni<SyncServiceAccountResponse> syncServiceAccount(final SyncServiceAccountRequest request) {
         return serviceAccountService.syncServiceAccount(request);
     }
 
     @Override
-    public Uni<SyncJobResponse> syncJob(SyncJobRequest request) {
+    public Uni<DeleteServiceAccountResponse> deleteServiceAccount(final DeleteServiceAccountRequest request) {
+        return serviceAccountService.deleteServiceAccount(request);
+    }
+
+    @Override
+    public Uni<GetJobResponse> getJob(final GetJobRequest request) {
+        return jobService.getJob(request);
+    }
+
+    @Override
+    public Uni<FindJobResponse> findJob(final FindJobRequest request) {
+        return jobService.findJob(request);
+    }
+
+    @Override
+    public Uni<SyncJobResponse> syncJob(final SyncJobRequest request) {
         return jobService.syncJob(request);
     }
 
     @Override
-    public Uni<DeleteJobResponse> deleteJob(DeleteJobRequest request) {
+    public Uni<DeleteJobResponse> deleteJob(final DeleteJobRequest request) {
         return jobService.deleteJob(request);
     }
 
     @Override
-    public Uni<Void> scheduleJob(ScheduleJobRequest request) {
+    public Uni<Void> scheduleJob(final ScheduleJobRequest request) {
         return jobService.scheduleJob(request);
     }
 
     @Override
-    public Uni<Void> unscheduleJob(UnscheduleJobRequest request) {
+    public Uni<Void> unscheduleJob(final UnscheduleJobRequest request) {
         return jobService.unscheduleJob(request);
     }
 

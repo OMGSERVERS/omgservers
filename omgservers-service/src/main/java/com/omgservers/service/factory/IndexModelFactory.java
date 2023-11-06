@@ -1,8 +1,8 @@
 package com.omgservers.service.factory;
 
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ public class IndexModelFactory {
                              final IndexConfigModel config) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        IndexModel model = new IndexModel();
-        model.setId(generateIdOperation.generateId());
-        model.setCreated(now);
-        model.setModified(now);
-        model.setName(name);
-        model.setVersion(1L);
-        model.setConfig(config);
-        return model;
+        IndexModel index = new IndexModel();
+        index.setId(generateIdOperation.generateId());
+        index.setCreated(now);
+        index.setModified(now);
+        index.setName(name);
+        index.setConfig(config);
+        index.setDeleted(false);
+        return index;
     }
 }

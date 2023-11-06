@@ -7,20 +7,24 @@ import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
+import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
+import com.omgservers.model.dto.admin.FindIndexAdminRequest;
+import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.GetIndexAdminRequest;
-import com.omgservers.model.dto.admin.GetIndexAdminResponse;
 import com.omgservers.model.dto.admin.GetServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.GetServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
 import com.omgservers.model.dto.admin.SyncServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.SyncServiceAccountAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-
-import java.time.Duration;
 
 @Path("/omgservers/admin-api/v1/request")
 public interface AdminApi {
@@ -29,98 +33,48 @@ public interface AdminApi {
     @Path("/ping-server")
     Uni<PingServerAdminResponse> pingServer();
 
-    default PingServerAdminResponse pingServer(long timeout) {
-        return pingServer()
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
     @PUT
     @Path("/generate-id")
     Uni<GenerateIdAdminResponse> generateId();
 
-    default GenerateIdAdminResponse generateId(long timeout) {
-        return generateId()
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
     @PUT
-    @Path("/get-index")
-    Uni<GetIndexAdminResponse> getIndex(GetIndexAdminRequest request);
-
-    default GetIndexAdminResponse getIndex(long timeout, GetIndexAdminRequest request) {
-        return getIndex(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    @Path("/find-index")
+    Uni<FindIndexAdminResponse> findIndex(FindIndexAdminRequest request);
 
     @PUT
     @Path("/sync-index")
-    Uni<Void> syncIndex(SyncIndexAdminRequest request);
-
-    default void syncIndex(long timeout, SyncIndexAdminRequest request) {
-        syncIndex(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    Uni<SyncIndexAdminResponse> syncIndex(SyncIndexAdminRequest request);
 
     @PUT
     @Path("/delete-index")
-    Uni<Void> deleteIndex(DeleteIndexAdminRequest request);
-
-    default void deleteIndex(long timeout, DeleteIndexAdminRequest request) {
-        deleteIndex(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    Uni<DeleteIndexAdminResponse> deleteIndex(DeleteIndexAdminRequest request);
 
     @PUT
     @Path("/get-service-account")
     Uni<GetServiceAccountAdminResponse> getServiceAccount(GetServiceAccountAdminRequest request);
 
-    default GetServiceAccountAdminResponse getServiceAccount(long timeout, GetServiceAccountAdminRequest request) {
-        return getServiceAccount(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    @PUT
+    @Path("/find-service-account")
+    Uni<FindServiceAccountAdminResponse> findServiceAccount(FindServiceAccountAdminRequest request);
 
     @PUT
     @Path("/sync-service-account")
-    Uni<Void> syncServiceAccount(SyncServiceAccountAdminRequest request);
-
-    default void syncServiceAccount(long timeout, SyncServiceAccountAdminRequest request) {
-        syncServiceAccount(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    Uni<SyncServiceAccountAdminResponse> syncServiceAccount(SyncServiceAccountAdminRequest request);
 
     @PUT
     @Path("/delete-service-account")
-    Uni<Void> deleteServiceAccount(DeleteServiceAccountAdminRequest request);
-
-    default void deleteServiceAccount(long timeout, DeleteServiceAccountAdminRequest request) {
-        deleteServiceAccount(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
+    Uni<DeleteServiceAccountAdminResponse> deleteServiceAccount(DeleteServiceAccountAdminRequest request);
 
     @PUT
     @Path("/create-tenant")
     Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
 
-    default CreateTenantAdminResponse createTenant(long timeout, CreateTenantAdminRequest request) {
-        return createTenant(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
-
     @PUT
     @Path("/create-developer")
     Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
-
-    default CreateDeveloperAdminResponse createDeveloper(long timeout, CreateDeveloperAdminRequest request) {
-        return createDeveloper(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 
     @PUT
     @Path("/collect-logs")
     Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request);
 
-    default CollectLogsAdminResponse collectLogs(long timeout, CollectLogsAdminRequest request) {
-        return collectLogs(request)
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

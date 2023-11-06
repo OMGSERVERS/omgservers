@@ -47,9 +47,9 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
 
         return getVersion(tenantId, id)
                 .flatMap(version -> {
-                    log.info("Version was created, versionId={}, tenantId={}, stageId={}, modes={}, files={}",
-                            id,
+                    log.info("Version was created, version={}/{}, stageId={}, modes={}, files={}",
                             tenantId,
+                            id,
                             version.getStageId(),
                             version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
                             version.getSourceCode().getFiles().size());

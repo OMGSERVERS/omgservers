@@ -3,8 +3,8 @@ package com.omgservers.service.module.runtime.impl.operation.upsertRuntimeGrant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,8 +33,8 @@ class UpsertRuntimeGrantOperationImpl implements UpsertRuntimeGrantOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_grant(
-                            id, runtime_id, created, modified, shard_key, entity_id, type)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, runtime_id, created, modified, shard_key, entity_id, type, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,7 +45,8 @@ class UpsertRuntimeGrantOperationImpl implements UpsertRuntimeGrantOperation {
                         runtimeGrant.getModified().atOffset(ZoneOffset.UTC),
                         runtimeGrant.getShardKey(),
                         runtimeGrant.getEntityId(),
-                        runtimeGrant.getType()
+                        runtimeGrant.getType(),
+                        runtimeGrant.getDeleted()
                 ),
                 () -> null,
                 () -> logModelFactory.create("Runtime grant was inserted, runtimeGrant=" + runtimeGrant)

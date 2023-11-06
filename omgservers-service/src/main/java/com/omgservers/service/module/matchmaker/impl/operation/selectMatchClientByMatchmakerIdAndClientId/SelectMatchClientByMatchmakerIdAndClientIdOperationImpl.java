@@ -30,9 +30,9 @@ class SelectMatchClientByMatchmakerIdAndClientIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, match_id, created, modified, user_id, client_id, group_name, config
+                        select id, matchmaker_id, match_id, created, modified, user_id, client_id, group_name, config, deleted
                         from $schema.tab_matchmaker_match_client
-                        where matchmaker_id = $1 and client_id = $2
+                        where matchmaker_id = $1 and client_id = $2 and deleted = false
                         limit 1
                         """,
                 Arrays.asList(matchmakerId, clientId),

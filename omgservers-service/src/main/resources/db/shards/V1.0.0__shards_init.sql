@@ -5,15 +5,18 @@ create table if not exists tab_user (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     role text not null,
-    password_hash text not null
+    password_hash text not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_user_token (
     id bigint primary key,
     user_id bigint not null references tab_user(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     expire timestamp with time zone not null,
-    hash text not null
+    hash text not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_user_player (
@@ -25,7 +28,7 @@ create table if not exists tab_user_player (
     stage_id bigint not null,
     attributes json not null,
     object json not null,
-    config json not null,
+    deleted boolean not null,
     unique(user_id, stage_id)
 );
 
@@ -40,6 +43,7 @@ create table if not exists tab_user_client (
     version_id bigint not null,
     default_matchmaker_id bigint not null,
     default_runtime_id bigint not null,
+    deleted boolean not null,
     unique(connection_id)
 );
 
@@ -56,8 +60,10 @@ create table if not exists tab_tenant_permission (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
+    deleted boolean not null,
     unique(tenant_id, user_id, permission)
 );
 
@@ -74,8 +80,10 @@ create table if not exists tab_tenant_project_permission (
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
+    deleted boolean not null,
     unique(project_id, user_id, permission)
 );
 
@@ -94,8 +102,10 @@ create table if not exists tab_tenant_stage_permission (
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
+    deleted boolean not null,
     unique(stage_id, user_id, permission)
 );
 
@@ -151,7 +161,8 @@ create table if not exists tab_matchmaker_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null
+    body json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_matchmaker_request (
@@ -162,7 +173,8 @@ create table if not exists tab_matchmaker_request (
     user_id bigint not null,
     client_id bigint not null,
     mode varchar(64) not null,
-    config json not null
+    config json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_matchmaker_match (
@@ -183,7 +195,8 @@ create table if not exists tab_matchmaker_match_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null
+    body json not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_matchmaker_match_client (
@@ -196,6 +209,7 @@ create table if not exists tab_matchmaker_match_client (
     client_id bigint not null,
     group_name varchar(64) not null,
     config json not null,
+    deleted boolean not null,
     unique(match_id, user_id, client_id)
 );
 
@@ -241,5 +255,6 @@ create table if not exists tab_runtime_grant (
     shard_key bigint not null,
     entity_id bigint not null,
     type text not null,
+    deleted boolean not null,
     unique(runtime_id, entity_id, type)
 );

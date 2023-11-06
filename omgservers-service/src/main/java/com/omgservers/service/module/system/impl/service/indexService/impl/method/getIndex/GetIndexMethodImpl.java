@@ -19,9 +19,10 @@ class GetIndexMethodImpl implements GetIndexMethod {
 
     @Override
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
-        final var name = request.getName();
+        final var id = request.getId();
+        final var deleted = request.getDeleted();
         return pgPool.withTransaction(sqlConnection -> getIndexOperation
-                        .getIndex(sqlConnection, name))
+                        .getIndex(sqlConnection, id, deleted))
                 .map(GetIndexResponse::new);
     }
 }

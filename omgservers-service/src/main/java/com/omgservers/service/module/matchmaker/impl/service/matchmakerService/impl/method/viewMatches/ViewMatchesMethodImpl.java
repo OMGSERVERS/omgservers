@@ -25,9 +25,8 @@ class ViewMatchesMethodImpl implements ViewMatchesMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectMatchesByMatchmakerIdOperation
-                            .selectMatchesByMatchmakerId(sqlConnection, shard.shard(), matchmakerId, deleted));
+                            .selectMatchesByMatchmakerId(sqlConnection, shard.shard(), matchmakerId));
                 })
                 .map(ViewMatchesResponse::new);
 

@@ -57,13 +57,13 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }
 
     Uni<PlayerModel> getPlayer(final Long userId, final Long playerId) {
-        final var request = new GetPlayerRequest(userId, playerId);
+        final var request = new GetPlayerRequest(userId, playerId, false);
         return userModule.getPlayerService().getPlayer(request)
                 .map(GetPlayerResponse::getPlayer);
     }

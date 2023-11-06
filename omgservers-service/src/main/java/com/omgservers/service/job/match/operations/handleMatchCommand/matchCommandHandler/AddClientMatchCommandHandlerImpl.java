@@ -1,5 +1,7 @@
 package com.omgservers.service.job.match.operations.handleMatchCommand.matchCommandHandler;
 
+import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.model.dto.gateway.AssignRuntimeResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchRequest;
@@ -12,10 +14,6 @@ import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.job.match.operations.handleMatchCommand.MatchCommandHandler;
-import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
@@ -23,11 +21,13 @@ import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.factory.RuntimeCommandModelFactory;
+import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.job.match.operations.handleMatchCommand.MatchCommandHandler;
 import com.omgservers.service.module.gateway.GatewayModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.factory.RuntimeCommandModelFactory;
-import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -70,7 +70,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                         .invoke(client -> {
                             if (Objects.isNull(client)) {
                                 log.warn("Add client match command failed, client doesn't exist anymore, " +
-                                                "userId={}, clientId={}, matchmakerId={}, matchId={}",
+                                                "{}/{}, matchmakerId={}, matchId={}",
                                         userId, clientId, matchmakerId, matchId);
                             }
                         })
@@ -86,10 +86,10 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                                     .invoke(voidItem -> {
                                         log.info(
                                                 "Client was added into match, " +
-                                                        "clientId={}, " +
-                                                        "matchmakerId={}, " +
-                                                        "matchId={}, " +
+                                                        "client={}/{}, " +
+                                                        "match={}/{}, " +
                                                         "modeName={}",
+                                                userId,
                                                 clientId,
                                                 matchmakerId,
                                                 matchId,
@@ -107,7 +107,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var request = new GetClientRequest(userId, clientId);
+        final var request = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
@@ -126,7 +126,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
     Uni<PlayerModel> getPlayer(final ClientModel client) {
         final var userId = client.getUserId();
         final var playerId = client.getPlayerId();
-        final var request = new GetPlayerRequest(userId, playerId);
+        final var request = new GetPlayerRequest(userId, playerId, false);
         return userModule.getPlayerService().getPlayer(request)
                 .map(GetPlayerResponse::getPlayer);
     }

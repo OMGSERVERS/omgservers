@@ -9,12 +9,12 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
-import com.omgservers.service.module.gateway.GatewayModule;
-import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.factory.MatchCommandModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.module.gateway.GatewayModule;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -47,14 +47,14 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         final var body = (MatchClientCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getMatchId();
-        final var id = body.getId();
+        final var matchClientId = body.getId();
 
-        return getMatchClient(matchmakerId, id)
+        return getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
                     final var userId = matchClient.getUserId();
                     final var clientId = matchClient.getClientId();
 
-                    log.info("Match client was created, matchmakerId={}, matchId={}, userId={}, clientId={}",
+                    log.info("Match client was created, match={}/{}, client={}/{}",
                             matchmakerId, matchId, userId, clientId);
 
                     return syncAddClientMatchCommand(matchmakerId,
@@ -66,7 +66,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<MatchClientModel> getMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchClientRequest(matchmakerId, id);
+        final var request = new GetMatchClientRequest(matchmakerId, id, false);
         return matchmakerModule.getMatchmakerService().getMatchClient(request)
                 .map(GetMatchClientResponse::getMatchClient);
     }

@@ -1,5 +1,7 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.assignedClient.AssignedClientModel;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
 import com.omgservers.model.dto.gateway.RespondMessageRequest;
@@ -19,14 +21,11 @@ import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.assignedClient.AssignedClientModel;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.CredentialsMessageBodyModel;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
@@ -34,17 +33,17 @@ import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
-import com.omgservers.service.module.gateway.GatewayModule;
+import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.factory.UserModelFactory;
+import com.omgservers.service.module.gateway.GatewayModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.factory.ClientModelFactory;
-import com.omgservers.service.factory.PlayerModelFactory;
-import com.omgservers.service.factory.UserModelFactory;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -121,10 +120,8 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
                                                                             .call(client -> assignClient(player, client)
                                                                                     .invoke(voidItem -> {
                                                                                         log.info("User signed up, " +
-                                                                                                        "userId={}, " +
-                                                                                                        "clientId={}, " +
-                                                                                                        "tenantId={}, " +
-                                                                                                        "stageId={}, " +
+                                                                                                        "client={}/{}, " +
+                                                                                                        "stage={}/{}, " +
                                                                                                         "versionId={}",
                                                                                                 userId,
                                                                                                 client.getId(),
@@ -165,7 +162,7 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<PlayerModel> createPlayer(Long userId, Long tenantId, Long stageId) {
-        final var player = playerModelFactory.create(userId, tenantId, stageId, new PlayerConfigModel());
+        final var player = playerModelFactory.create(userId, tenantId, stageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
@@ -217,7 +214,7 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
                 runtimeId,
                 client.getUserId(),
                 client.getId(),
-                RuntimeGrantTypeEnum.CLIENT);
+                RuntimeGrantTypeEnum.USER_CLIENT);
         final var request = new SyncRuntimeGrantRequest(runtimeGrant);
         return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
                 .map(SyncRuntimeGrantResponse::getCreated);

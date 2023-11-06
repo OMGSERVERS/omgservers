@@ -30,15 +30,17 @@ public class StagePermissionModelFactory {
                                        final Long stageId,
                                        final Long userId,
                                        final StagePermissionEnum permission) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        StagePermissionModel model = new StagePermissionModel();
-        model.setId(id);
-        model.setTenantId(tenantId);
-        model.setStageId(stageId);
-        model.setCreated(now);
-        model.setUserId(userId);
-        model.setPermission(permission);
-        return model;
+        final var stagePermission = new StagePermissionModel();
+        stagePermission.setId(id);
+        stagePermission.setTenantId(tenantId);
+        stagePermission.setStageId(stageId);
+        stagePermission.setCreated(now);
+        stagePermission.setModified(now);
+        stagePermission.setUserId(userId);
+        stagePermission.setPermission(permission);
+        stagePermission.setDeleted(false);
+        return stagePermission;
     }
 }

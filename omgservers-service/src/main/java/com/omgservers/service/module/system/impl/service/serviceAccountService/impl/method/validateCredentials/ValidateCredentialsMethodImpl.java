@@ -1,10 +1,11 @@
 package com.omgservers.service.module.system.impl.service.serviceAccountService.impl.method.validateCredentials;
 
-import com.omgservers.model.dto.system.GetServiceAccountRequest;
-import com.omgservers.model.dto.system.GetServiceAccountResponse;
+import com.omgservers.model.dto.system.FindServiceAccountRequest;
+import com.omgservers.model.dto.system.FindServiceAccountResponse;
 import com.omgservers.model.dto.system.ValidateCredentialsRequest;
 import com.omgservers.model.dto.system.ValidateCredentialsResponse;
-import com.omgservers.service.module.system.impl.service.serviceAccountService.ServiceAccountService;
+import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.service.module.system.SystemModule;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,19 +18,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
 
-    final ServiceAccountService serviceAccountService;
+    final SystemModule systemModule;
 
     @Override
-    public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
+    public Uni<ValidateCredentialsResponse> validateCredentials(final ValidateCredentialsRequest request) {
         final var username = request.getUsername();
-        final var getServiceAccountHelpRequest = new GetServiceAccountRequest(username);
-        return serviceAccountService.getServiceAccount(getServiceAccountHelpRequest)
-                .map(GetServiceAccountResponse::getServiceAccount)
+        return findServiceAccount(username)
                 .map(serviceAccount -> {
                     final var password = request.getPassword();
                     final var passwordHash = serviceAccount.getPasswordHash();
                     return BcryptUtil.matches(password, passwordHash);
                 })
                 .map(ValidateCredentialsResponse::new);
+    }
+
+    Uni<ServiceAccountModel> findServiceAccount(final String username) {
+        final var request = new FindServiceAccountRequest(username);
+        return systemModule.getServiceAccountService().findServiceAccount(request)
+                .map(FindServiceAccountResponse::getServiceAccount);
     }
 }

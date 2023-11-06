@@ -15,15 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GetServiceAccountMethodImpl implements GetServiceAccountMethod {
 
-    final SelectServiceAccountOperation getServiceAccountOperation;
+    final SelectServiceAccountOperation selectServiceAccountOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetServiceAccountResponse> getServiceAccount(GetServiceAccountRequest request) {
-        final var username = request.getUsername();
-        return pgPool.withTransaction(sqlConnection -> getServiceAccountOperation
-                        .selectServiceAccount(sqlConnection, username))
+    public Uni<GetServiceAccountResponse> getServiceAccount(final GetServiceAccountRequest request) {
+        final var id = request.getId();
+        final var deleted = request.getDeleted();
+        return pgPool.withTransaction(sqlConnection -> selectServiceAccountOperation
+                        .selectServiceAccount(sqlConnection, id, deleted))
                 .map(GetServiceAccountResponse::new);
     }
 }

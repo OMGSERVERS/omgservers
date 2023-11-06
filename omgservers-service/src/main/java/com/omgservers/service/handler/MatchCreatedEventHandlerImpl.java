@@ -61,8 +61,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
                         .flatMap(match -> {
-                            log.info("Match was created, matchId={}, mode={}, matchmakerId={}",
-                                    matchId, match.getConfig().getModeConfig().getName(), matchmakerId);
+                            log.info("Match was created, match={}/{}, mode={}",
+                                    matchmakerId, matchId, match.getConfig().getModeConfig().getName());
 
                             final var versionId = matchmaker.getVersionId();
                             return syncRuntime(matchmaker, match, versionId)

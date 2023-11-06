@@ -1,8 +1,8 @@
 package com.omgservers.service.factory;
 
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,11 @@ public class JobModelFactory {
         JobModel job = new JobModel();
         job.setId(id);
         job.setCreated(now);
+        job.setModified(now);
         job.setShardKey(shardKey);
         job.setEntityId(entityId);
         job.setQualifier(type);
+        job.setDeleted(false);
         return job;
     }
 }

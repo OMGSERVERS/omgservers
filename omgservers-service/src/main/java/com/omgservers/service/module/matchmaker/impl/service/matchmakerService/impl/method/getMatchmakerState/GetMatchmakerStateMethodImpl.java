@@ -46,8 +46,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                                     .selectMatchesByMatchmakerId(
                                                             sqlConnection,
                                                             shard,
-                                                            matchmakerId,
-                                                            false)
+                                                            matchmakerId)
                                                     .flatMap(matches -> selectMatchClientsByMatchmakerIdOperation
                                                             .selectMatchClientsByMatchmakerId(
                                                                     sqlConnection,

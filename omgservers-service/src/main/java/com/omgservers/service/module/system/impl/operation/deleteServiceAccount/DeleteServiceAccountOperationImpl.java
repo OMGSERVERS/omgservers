@@ -1,44 +1,46 @@
 package com.omgservers.service.module.system.impl.operation.deleteServiceAccount;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
-import com.omgservers.service.module.system.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.module.system.impl.operation.selectServiceAccountByUsername.SelectServiceAccountByUsernameOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Arrays;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation {
 
-    final SelectServiceAccountOperation selectServiceAccountOperation;
+    final SelectServiceAccountByUsernameOperation selectServiceAccountByUsernameOperation;
     final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> deleteServiceAccount(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
-                                             final String username) {
-        return selectServiceAccountOperation.selectServiceAccount(sqlConnection, username)
-                .flatMap(serviceAccount -> changeObjectOperation.changeObject(
-                        changeContext, sqlConnection, 0,
-                        """
-                                delete from system.tab_service_account
-                                where username = $1
-                                """,
-                        Collections.singletonList(username),
-                        () -> new ServiceAccountDeletedEventBodyModel(serviceAccount),
-                        () -> logModelFactory.create("Service account was deleted, serviceAccount=" + serviceAccount)
-                ))
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(false);
+                                             final Long id) {
+        return changeObjectOperation.changeObject(
+                changeContext, sqlConnection, 0,
+                """
+                        update $schema.tab_service_account
+                        set modified = $2, deleted = true
+                        where id = $1 and deleted = false
+                        """,
+                Arrays.asList(
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
+                () -> new ServiceAccountDeletedEventBodyModel(id),
+                () -> logModelFactory.create("Service account was deleted, id=" + id)
+        );
     }
 }

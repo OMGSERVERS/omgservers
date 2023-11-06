@@ -122,7 +122,7 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

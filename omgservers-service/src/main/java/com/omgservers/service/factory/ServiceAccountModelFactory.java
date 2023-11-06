@@ -1,7 +1,7 @@
 package com.omgservers.service.factory;
 
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +22,15 @@ public class ServiceAccountModelFactory {
     }
 
     public ServiceAccountModel create(Long id, String username, String passwordsHash) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        ServiceAccountModel serviceAccountModel = new ServiceAccountModel();
+        final var serviceAccountModel = new ServiceAccountModel();
         serviceAccountModel.setId(id);
         serviceAccountModel.setCreated(now);
         serviceAccountModel.setModified(now);
         serviceAccountModel.setUsername(username);
         serviceAccountModel.setPasswordHash(passwordsHash);
+        serviceAccountModel.setDeleted(false);
         return serviceAccountModel;
     }
 }

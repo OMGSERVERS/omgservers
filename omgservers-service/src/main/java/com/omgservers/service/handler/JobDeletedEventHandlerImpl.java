@@ -1,9 +1,12 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.dto.system.GetJobRequest;
+import com.omgservers.model.dto.system.GetJobResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
+import com.omgservers.model.job.JobModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -27,16 +30,26 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (JobDeletedEventBodyModel) event.getBody();
-        final var job = body.getJob();
-        final var shardKey = job.getShardKey();
-        final var entityId = job.getEntityId();
-        final var qualifier = job.getQualifier();
+        final var jobId = body.getId();
 
-        log.info("Job was deleted, qualifier={}, shardKey={}, entityId={}",
-                qualifier, shardKey, entityId);
+        return getDeletedJob(jobId)
+                .flatMap(job -> {
+                    final var shardKey = job.getShardKey();
+                    final var entityId = job.getEntityId();
+                    final var qualifier = job.getQualifier();
 
-        final var request = new UnscheduleJobRequest(shardKey, entityId, qualifier);
-        return systemModule.getJobService().unscheduleJob(request)
+                    log.info("Job was deleted, qualifier={}, entity={}/{}",
+                            qualifier, shardKey, entityId);
+
+                    final var request = new UnscheduleJobRequest(shardKey, entityId, qualifier);
+                    return systemModule.getJobService().unscheduleJob(request);
+                })
                 .replaceWith(true);
+    }
+
+    Uni<JobModel> getDeletedJob(final Long id) {
+        final var request = new GetJobRequest(id, true);
+        return systemModule.getJobService().getJob(request)
+                .map(GetJobResponse::getJob);
     }
 }

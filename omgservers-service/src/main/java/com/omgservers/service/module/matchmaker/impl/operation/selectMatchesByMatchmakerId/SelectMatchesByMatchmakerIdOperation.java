@@ -9,6 +9,5 @@ import java.util.List;
 public interface SelectMatchesByMatchmakerIdOperation {
     Uni<List<MatchModel>> selectMatchesByMatchmakerId(SqlConnection sqlConnection,
                                                       int shard,
-                                                      Long matchmakerId,
-                                                      Boolean deleted);
+                                                      Long matchmakerId);
 }

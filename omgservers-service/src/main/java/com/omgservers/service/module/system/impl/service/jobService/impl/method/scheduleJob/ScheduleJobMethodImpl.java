@@ -3,11 +3,11 @@ package com.omgservers.service.module.system.impl.service.jobService.impl.method
 import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.dto.system.SyncLogRequest;
 import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.service.module.system.impl.operation.getJobName.GetJobNameOperation;
-import com.omgservers.service.module.system.impl.service.logService.LogService;
-import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.system.impl.service.jobService.impl.JobTask;
+import com.omgservers.service.module.system.impl.service.logService.LogService;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.scheduler.Scheduled;
@@ -101,7 +101,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
             return job.executeTask(shardKey, entityId)
                     .onFailure()
                     .recoverWithUni(t -> {
-                        log.error("Job task failed, shardKey={}, entityId={}, qualifier={}, {}:{}",
+                        log.error("Job task failed, entity={}/{}, qualifier={}, {}:{}",
                                 shardKey, entityId, qualifier, t.getClass().getSimpleName(), t.getMessage());
                         return Uni.createFrom().voidItem();
                     });

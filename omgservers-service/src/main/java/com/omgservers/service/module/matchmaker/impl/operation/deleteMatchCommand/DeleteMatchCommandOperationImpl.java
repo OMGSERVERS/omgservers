@@ -9,6 +9,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -28,13 +30,17 @@ class DeleteMatchCommandOperationImpl implements DeleteMatchCommandOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        delete from $schema.tab_matchmaker_match_command
-                        where matchmaker_id = $1 and id = $2
+                        update $schema.tab_matchmaker_match_command
+                        set modified = $3, deleted = true
+                        where matchmaker_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(matchmakerId, id),
+                Arrays.asList(
+                        matchmakerId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)
+                ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Matchm command was deleted, " +
-                        "matchmakerId=%d, id=%d", matchmakerId, id))
+                () -> null
         );
     }
 }

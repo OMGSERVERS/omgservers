@@ -4,6 +4,8 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -26,12 +26,14 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
     public Uni<PlayerModel> selectPlayer(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long userId,
-                                         final Long id) {
+                                         final Long id,
+                                         final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, created, modified, tenant_id, stage_id, attributes, object, config
+                        select
+                            id, user_id, created, modified, tenant_id, stage_id, attributes, object, deleted
                         from $schema.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1

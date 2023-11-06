@@ -2,7 +2,6 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.player.PlayerModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,10 @@ import lombok.NoArgsConstructor;
 public class PlayerDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    PlayerModel player;
+    Long userId;
+
+    @NotNull
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -25,6 +27,6 @@ public class PlayerDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return player.getUserId();
+        return userId;
     }
 }

@@ -1,13 +1,12 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
 import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.SelectPlayerOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,10 +21,10 @@ class SelectPermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectPlayerOperation selectPlayerOperation;
+    SelectPlayerOperationTestInterface selectPlayerOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UpsertPlayerOperation upsertPlayerOperation;
@@ -47,23 +46,23 @@ class SelectPermissionOperationTest extends Assertions {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         final var userId = user.getId();
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var playerId = player1.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player1);
 
-        final var player2 = selectPlayerOperation.selectPlayer(TIMEOUT, pgPool, shard, userId, playerId);
+        final var player2 = selectPlayerOperation.selectPlayer(shard, userId, playerId, false);
         assertEquals(player1, player2);
     }
 
     @Test
-    void givenUnknownUuids_whenSelectPlayer_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenSelectPlayer_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var playerId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectPlayerOperation
-                .selectPlayer(TIMEOUT, pgPool, shard, userId, playerId));
+                .selectPlayer(shard, userId, playerId, false));
     }
 
     Long tenantId() {

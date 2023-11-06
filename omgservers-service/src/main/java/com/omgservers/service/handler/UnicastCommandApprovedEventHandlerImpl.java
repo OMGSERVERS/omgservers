@@ -47,11 +47,7 @@ public class UnicastCommandApprovedEventHandlerImpl implements EventHandler {
         final var messageBody = new ServerMessageBodyModel(message);
         final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
 
-        final var request = RespondClientRequest.builder()
-                .userId(userId)
-                .clientId(clientId)
-                .message(messageModel)
-                .build();
+        final var request = new RespondClientRequest(userId, clientId, messageModel);
         return userModule.getUserService().respondClient(request);
     }
 }

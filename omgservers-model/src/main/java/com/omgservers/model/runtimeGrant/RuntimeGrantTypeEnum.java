@@ -1,6 +1,6 @@
 package com.omgservers.model.runtimeGrant;
 
 public enum RuntimeGrantTypeEnum {
-    CLIENT,
+    USER_CLIENT,
     MATCH_CLIENT,
 }

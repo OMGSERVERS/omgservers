@@ -34,7 +34,7 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into system.tab_index(id, created, modified, name, version, config)
+                        insert into system.tab_index(id, created, modified, name, config, deleted)
                         values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
@@ -44,8 +44,8 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
                         index.getCreated().atOffset(ZoneOffset.UTC),
                         index.getModified().atOffset(ZoneOffset.UTC),
                         index.getName(),
-                        index.getVersion(),
-                        getConfigString(index)
+                        getConfigString(index),
+                        index.getDeleted()
                 ),
                 () -> new IndexCreatedEventBodyModel(index.getId()),
                 () -> logModelFactory.create("Index was created, index=" + index)

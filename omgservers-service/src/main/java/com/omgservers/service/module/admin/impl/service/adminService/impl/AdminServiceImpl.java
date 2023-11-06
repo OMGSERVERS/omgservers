@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AdminServiceImpl implements AdminService {
 
-    final CreateDeveloperMethod createDeveloperAdminMethod;
-    final CreateTenantMethod createTenantAdminMethod;
+    final CreateDeveloperMethod createDeveloperMethod;
+    final CreateTenantMethod createTenantMethod;
     final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
     final GenerateIdMethod generateIdMethod;
@@ -44,12 +44,12 @@ class AdminServiceImpl implements AdminService {
 
     @Override
     public Uni<CreateTenantAdminResponse> createTenant(@Valid final CreateTenantAdminRequest request) {
-        return createTenantAdminMethod.createTenant(request);
+        return createTenantMethod.createTenant(request);
     }
 
     @Override
     public Uni<CreateDeveloperAdminResponse> createDeveloper(@Valid final CreateDeveloperAdminRequest request) {
-        return createDeveloperAdminMethod.createDeveloper(request);
+        return createDeveloperMethod.createDeveloper(request);
     }
 
     @Override

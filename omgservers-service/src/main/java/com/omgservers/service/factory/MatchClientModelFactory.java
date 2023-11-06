@@ -46,6 +46,7 @@ public class MatchClientModelFactory {
         matchClient.setClientId(clientId);
         matchClient.setGroupName(groupName);
         matchClient.setConfig(config);
+        matchClient.setDeleted(false);
         return matchClient;
     }
 }

@@ -24,14 +24,16 @@ public class TokenModelFactory {
         final var tokenHash = BcryptUtil.bcryptHash(tokenContainer.getRawToken());
         final var tokenObject = tokenContainer.getTokenObject();
 
-        TokenModel tokenModel = new TokenModel();
-        tokenModel.setId(tokenObject.getId());
-        tokenModel.setUserId(tokenObject.getUserId());
-        tokenModel.setCreated(now);
-        tokenModel.setExpire(now.plusSeconds(tokenContainer.getLifetime()));
-        tokenModel.setHash(tokenHash);
+        final var token = new TokenModel();
+        token.setId(tokenObject.getId());
+        token.setUserId(tokenObject.getUserId());
+        token.setCreated(now);
+        token.setModified(now);
+        token.setExpire(now.plusSeconds(tokenContainer.getLifetime()));
+        token.setHash(tokenHash);
+        token.setDeleted(false);
 
-        return tokenModel;
+        return token;
     }
 
 

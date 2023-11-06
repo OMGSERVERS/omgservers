@@ -6,6 +6,8 @@ import com.omgservers.model.dto.user.DeleteClientRequest;
 import com.omgservers.model.dto.user.DeleteClientResponse;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
+import com.omgservers.model.dto.user.DeleteUserRequest;
+import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
@@ -35,6 +37,8 @@ import io.smallrye.mutiny.Uni;
 public interface WebService {
 
     Uni<SyncUserResponse> syncUser(SyncUserRequest request);
+
+    Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
 
     Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request);
 

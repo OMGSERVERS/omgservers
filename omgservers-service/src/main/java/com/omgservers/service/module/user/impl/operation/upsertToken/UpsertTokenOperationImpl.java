@@ -2,8 +2,8 @@ package com.omgservers.service.module.user.impl.operation.upsertToken;
 
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,8 +29,9 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_token(id, user_id, created, expire, hash)
-                        values($1, $2, $3, $4, $5)
+                        insert into $schema.tab_user_token(
+                            id, user_id, created, modified, expire, hash, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -38,8 +39,11 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
                         token.getId(),
                         token.getUserId(),
                         token.getCreated().atOffset(ZoneOffset.UTC),
+                        token.getModified().atOffset(ZoneOffset.UTC),
                         token.getExpire().atOffset(ZoneOffset.UTC),
-                        token.getHash()),
+                        token.getHash(),
+                        token.getDeleted()
+                ),
                 () -> null,
                 () -> logModelFactory.create("Token was inserted, token=" + token)
         );

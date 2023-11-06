@@ -30,7 +30,7 @@ class HasRuntimeGrantOperationImpl implements HasRuntimeGrantOperation {
                 """
                         select id
                         from $schema.tab_runtime_grant
-                        where runtime_id = $1 and shard_key = $2 and entity_id = $3 and type = $4
+                        where runtime_id = $1 and shard_key = $2 and entity_id = $3 and type = $4 and deleted = false
                         limit 1
                         """,
                 Arrays.asList(runtimeId, shardKey, entityId, type),

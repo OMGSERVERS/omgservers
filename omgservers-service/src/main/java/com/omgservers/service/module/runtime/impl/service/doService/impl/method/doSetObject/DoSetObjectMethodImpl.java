@@ -34,7 +34,7 @@ class DoSetObjectMethodImpl implements DoSetObjectMethod {
     public Uni<DoSetObjectResponse> doSetObject(final DoSetObjectRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var grant = RuntimeGrantTypeEnum.CLIENT;
+                    final var grant = RuntimeGrantTypeEnum.USER_CLIENT;
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();

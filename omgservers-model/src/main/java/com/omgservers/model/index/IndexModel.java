@@ -28,9 +28,9 @@ public class IndexModel {
     String name;
 
     @NotNull
-    Long version;
-
-    @NotNull
     @ToString.Exclude
     IndexConfigModel config;
+
+    @NotNull
+    Boolean deleted;
 }

@@ -2,9 +2,10 @@ create table if not exists tab_index (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    name varchar(64) not null unique,
-    version bigint not null,
-    config json not null
+    name varchar(64) not null,
+    config json not null,
+    deleted boolean not null,
+    unique(name)
 );
 
 create table if not exists tab_service_account (
@@ -13,6 +14,7 @@ create table if not exists tab_service_account (
     modified timestamp with time zone not null,
     username varchar(64) not null,
     password_hash varchar(64) not null,
+    deleted boolean not null,
     unique(username)
 );
 
@@ -30,9 +32,11 @@ create table if not exists tab_event (
 create table if not exists tab_job (
     id bigint primary key,
     created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     shard_key bigint not null,
     entity_id bigint not null,
     qualifier text not null,
+    deleted boolean not null,
     unique(shard_key, entity_id, qualifier)
 );
 

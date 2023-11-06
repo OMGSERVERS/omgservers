@@ -24,6 +24,7 @@ public class RuntimeGrantModelMapper {
         runtimeGrant.setShardKey(row.getLong("shard_key"));
         runtimeGrant.setEntityId(row.getLong("entity_id"));
         runtimeGrant.setType(RuntimeGrantTypeEnum.valueOf(row.getString("type")));
+        runtimeGrant.setDeleted(row.getBoolean("deleted"));
         return runtimeGrant;
     }
 }

@@ -1,10 +1,10 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.selectUser.SelectUserOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.SelectUserOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -19,10 +19,10 @@ class SelectUserOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectUserOperation selectUserOperation;
+    SelectUserOperationTestInterface selectUserOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UserModelFactory userModelFactory;
@@ -37,19 +37,19 @@ class SelectUserOperationTest extends Assertions {
     void givenUser_whenSelectUser_thenSelected() {
         final var shard = 0;
         final var user1 = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        final var uuid = user1.getId();
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user1);
+        final var id = user1.getId();
+        upsertUserOperation.upsertUser(shard, user1);
 
-        final var user2 = selectUserOperation.selectUser(TIMEOUT, pgPool, shard, uuid);
+        final var user2 = selectUserOperation.selectUser(shard, id, false);
         assertEquals(user1, user2);
     }
 
     @Test
-    void givenUnknownUuid_whenSelectUser_thenServerSideNotFoundException() {
+    void givenUnknownId_whenSelectUser_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectUserOperation
-                .selectUser(TIMEOUT, pgPool, shard, id));
+                .selectUser(shard, id, false));
     }
 }

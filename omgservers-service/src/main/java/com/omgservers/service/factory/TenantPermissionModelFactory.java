@@ -1,8 +1,8 @@
 package com.omgservers.service.factory;
 
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +29,17 @@ public class TenantPermissionModelFactory {
                                                final Long tenantId,
                                                final Long userId,
                                                final TenantPermissionEnum permission) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        TenantPermissionModel permissionModel = new TenantPermissionModel();
-        permissionModel.setId(id);
-        permissionModel.setTenantId(tenantId);
-        permissionModel.setCreated(now);
-        permissionModel.setUserId(userId);
-        permissionModel.setPermission(permission);
-        return permissionModel;
+        final var tenantPermission = new TenantPermissionModel();
+        tenantPermission.setId(id);
+        tenantPermission.setTenantId(tenantId);
+        tenantPermission.setCreated(now);
+        tenantPermission.setModified(now);
+        tenantPermission.setUserId(userId);
+        tenantPermission.setPermission(permission);
+        tenantPermission.setDeleted(false);
+        return tenantPermission;
     }
 
 }

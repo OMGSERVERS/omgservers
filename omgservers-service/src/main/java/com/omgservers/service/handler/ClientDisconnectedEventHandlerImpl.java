@@ -31,7 +31,7 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var request = new DeleteClientRequest(userId, clientId);
 
-        log.info("Client disconnected, userId={}, clientId={}", userId, clientId);
+        log.info("Client disconnected, client={}/{}", userId, clientId);
 
         return userModule.getClientService().deleteClient(request)
                 .replaceWith(true);

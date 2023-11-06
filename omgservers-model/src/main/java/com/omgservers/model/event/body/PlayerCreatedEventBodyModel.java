@@ -18,9 +18,6 @@ public class PlayerCreatedEventBodyModel extends EventBodyModel {
     Long userId;
 
     @NotNull
-    Long stageId;
-
-    @NotNull
     Long id;
 
     @Override

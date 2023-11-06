@@ -1,11 +1,11 @@
 package com.omgservers.service.operation.calculateShard;
 
+import com.omgservers.model.dto.system.FindIndexRequest;
+import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.shard.ShardModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.model.dto.system.GetIndexResponse;
-import com.omgservers.model.dto.system.GetIndexRequest;
-import com.omgservers.model.shard.ShardModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -38,9 +38,9 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
 
     @Override
     public Uni<ShardModel> calculateShard(String indexName, List<String> keys) {
-        final var getIndexInternalRequest = new GetIndexRequest(indexName);
-        return systemModule.getIndexService().getIndex(getIndexInternalRequest)
-                .map(GetIndexResponse::getIndex)
+        final var request = new FindIndexRequest(indexName);
+        return systemModule.getIndexService().findIndex(request)
+                .map(FindIndexResponse::getIndex)
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);

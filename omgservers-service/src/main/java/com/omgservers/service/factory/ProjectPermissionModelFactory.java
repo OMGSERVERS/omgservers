@@ -30,15 +30,17 @@ public class ProjectPermissionModelFactory {
                                          final Long projectId,
                                          final Long userId,
                                          final ProjectPermissionEnum permission) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        ProjectPermissionModel model = new ProjectPermissionModel();
-        model.setId(id);
-        model.setTenantId(tenantId);
-        model.setProjectId(projectId);
-        model.setCreated(now);
-        model.setUserId(userId);
-        model.setPermission(permission);
-        return model;
+        final var projectPermission = new ProjectPermissionModel();
+        projectPermission.setId(id);
+        projectPermission.setTenantId(tenantId);
+        projectPermission.setProjectId(projectId);
+        projectPermission.setCreated(now);
+        projectPermission.setModified(now);
+        projectPermission.setUserId(userId);
+        projectPermission.setPermission(permission);
+        projectPermission.setDeleted(false);
+        return projectPermission;
     }
 }

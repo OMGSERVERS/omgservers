@@ -6,6 +6,8 @@ import com.omgservers.model.dto.user.DeleteClientRequest;
 import com.omgservers.model.dto.user.DeleteClientResponse;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
+import com.omgservers.model.dto.user.DeleteUserRequest;
+import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
@@ -52,77 +54,82 @@ class WebServiceImpl implements WebService {
     final UserService userService;
 
     @Override
-    public Uni<SyncUserResponse> syncUser(SyncUserRequest request) {
+    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
         return userService.syncUser(request);
     }
 
     @Override
-    public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
+    public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
+        return userService.deleteUser(request);
+    }
+
+    @Override
+    public Uni<ValidateCredentialsResponse> validateCredentials(final ValidateCredentialsRequest request) {
         return userService.validateCredentials(request);
     }
 
     @Override
-    public Uni<CreateTokenResponse> createToken(CreateTokenRequest request) {
+    public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
         return tokenService.createToken(request);
     }
 
     @Override
-    public Uni<IntrospectTokenResponse> introspectToken(IntrospectTokenRequest request) {
+    public Uni<IntrospectTokenResponse> introspectToken(final IntrospectTokenRequest request) {
         return tokenService.introspectToken(request);
     }
 
     @Override
-    public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
+    public Uni<GetPlayerResponse> getPlayer(final GetPlayerRequest request) {
         return playerService.getPlayer(request);
     }
 
     @Override
-    public Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request) {
+    public Uni<GetPlayerAttributesResponse> getPlayerAttributes(final GetPlayerAttributesRequest request) {
         return playerService.getPlayerAttributes(request);
     }
 
     @Override
-    public Uni<GetPlayerObjectResponse> getPlayerObject(GetPlayerObjectRequest request) {
+    public Uni<GetPlayerObjectResponse> getPlayerObject(final GetPlayerObjectRequest request) {
         return playerService.getPlayerObject(request);
     }
 
     @Override
-    public Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request) {
+    public Uni<FindPlayerResponse> findPlayer(final FindPlayerRequest request) {
         return playerService.findPlayer(request);
     }
 
     @Override
-    public Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request) {
+    public Uni<SyncPlayerResponse> syncPlayer(final SyncPlayerRequest request) {
         return playerService.syncPlayer(request);
     }
 
     @Override
-    public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request) {
+    public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(final UpdatePlayerAttributesRequest request) {
         return playerService.updatePlayerAttributes(request);
     }
 
     @Override
-    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(UpdatePlayerObjectRequest request) {
+    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(final UpdatePlayerObjectRequest request) {
         return playerService.updatePlayerObject(request);
     }
 
     @Override
-    public Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request) {
+    public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
         return playerService.deletePlayer(request);
     }
 
     @Override
-    public Uni<SyncClientResponse> syncClient(SyncClientRequest request) {
+    public Uni<SyncClientResponse> syncClient(final SyncClientRequest request) {
         return internalService.syncClient(request);
     }
 
     @Override
-    public Uni<GetClientResponse> getClient(GetClientRequest request) {
+    public Uni<GetClientResponse> getClient(final GetClientRequest request) {
         return internalService.getClient(request);
     }
 
     @Override
-    public Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request) {
+    public Uni<DeleteClientResponse> deleteClient(final DeleteClientRequest request) {
         return internalService.deleteClient(request);
     }
 }

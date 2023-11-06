@@ -9,6 +9,7 @@ import com.omgservers.service.factory.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchClientOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

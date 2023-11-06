@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.service.indexService.impl.method.syncIndex;
 
 import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.service.module.system.impl.operation.upsertIndex.UpsertIndexOperation;
 import com.omgservers.service.module.system.impl.operation.validateIndex.ValidateIndexOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -20,11 +21,11 @@ class SyncIndexMethodImpl implements SyncIndexMethod {
     final UpsertIndexOperation syncIndexOperation;
 
     @Override
-    public Uni<Void> syncIndex(SyncIndexRequest request) {
+    public Uni<SyncIndexResponse> syncIndex(SyncIndexRequest request) {
         final var index = request.getIndex();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         syncIndexOperation.upsertIndex(changeContext, sqlConnection, index))
                 .map(ChangeContext::getResult)
-                .replaceWithVoid();
+                .map(SyncIndexResponse::new);
     }
 }

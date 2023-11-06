@@ -1,16 +1,17 @@
 package com.omgservers.service.module.runtime.impl.operation.deleteRuntimeGrant;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrant.SelectRuntimeGrantOperation;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrant.SelectRuntimeGrantOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @Slf4j
@@ -28,18 +29,19 @@ class DeleteRuntimeGrantOperationImpl implements DeleteRuntimeGrantOperation {
                                            final int shard,
                                            final Long runtimeId,
                                            final Long id) {
-        return selectRuntimeGrantOperation.selectRuntimeGrant(sqlConnection, shard, runtimeId, id)
-                .flatMap(runtimeGrant -> changeObjectOperation.changeObject(
-                        changeContext, sqlConnection, shard,
-                        """
-                                delete from $schema.tab_runtime_grant
-                                where runtime_id = $1 and id = $2
-                                """,
-                        Arrays.asList(runtimeGrant.getRuntimeId(), id),
-                        () -> null,
-                        () -> logModelFactory.create("Runtime grant was deleted, runtimeGrant=" + runtimeGrant)
-                ))
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(false);
+        return changeObjectOperation.changeObject(
+                changeContext, sqlConnection, shard,
+                """
+                        update $schema.tab_runtime_grant
+                        set modified = $3, deleted = true
+                        where runtime_id = $1 and id = $2 and deleted = false
+                        """,
+                Arrays.asList(
+                        runtimeId,
+                        id,
+                        Instant.now().atOffset(ZoneOffset.UTC)),
+                () -> null,
+                () -> null
+        );
     }
 }

@@ -22,8 +22,14 @@ public class TenantPermissionModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     Long userId;
 
     @NotNull
     TenantPermissionEnum permission;
+
+    @NotNull
+    Boolean deleted;
 }

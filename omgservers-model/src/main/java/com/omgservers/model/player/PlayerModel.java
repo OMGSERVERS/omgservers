@@ -49,7 +49,5 @@ public class PlayerModel {
     Object object;
 
     @NotNull
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    PlayerConfigModel config;
+    Boolean deleted;
 }

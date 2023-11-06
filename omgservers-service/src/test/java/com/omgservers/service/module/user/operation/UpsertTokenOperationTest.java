@@ -5,7 +5,7 @@ import com.omgservers.service.factory.TokenModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.user.impl.operation.createUserToken.CreateUserTokenOperation;
 import com.omgservers.service.module.user.impl.operation.upsertToken.UpsertTokenOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
@@ -22,7 +22,7 @@ class UpsertTokenOperationTest extends Assertions {
     UpsertTokenOperation upsertTokenOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     CreateUserTokenOperation createUserTokenOperation;
@@ -40,7 +40,7 @@ class UpsertTokenOperationTest extends Assertions {
     void givenToken_whenUpsertToken_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
+        upsertUserOperation.upsertUser(shard, user);
 
         final var tokenContainer = createUserTokenOperation.createUserToken(user);
         final var tokenModel = tokenModelFactory.create(tokenContainer);

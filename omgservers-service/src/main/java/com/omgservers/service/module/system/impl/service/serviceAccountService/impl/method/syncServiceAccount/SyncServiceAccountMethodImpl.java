@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.service.serviceAccountService.impl.method.syncServiceAccount;
 
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.service.module.system.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -19,12 +20,11 @@ class SyncServiceAccountMethodImpl implements SyncServiceAccountMethod {
     final ChangeWithContextOperation changeWithContextOperation;
 
     @Override
-    public Uni<Void> syncServiceAccount(SyncServiceAccountRequest request) {
+    public Uni<SyncServiceAccountResponse> syncServiceAccount(final SyncServiceAccountRequest request) {
         final var serviceAccount = request.getServiceAccount();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         syncServiceAccountOperation.upsertServiceAccount(changeContext, sqlConnection, serviceAccount))
                 .map(ChangeContext::getResult)
-                //TODO: make response with created flag
-                .replaceWithVoid();
+                .map(SyncServiceAccountResponse::new);
     }
 }

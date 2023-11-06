@@ -1,15 +1,14 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.selectClient.SelectClientOperation;
-import com.omgservers.service.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.SelectClientOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertClientOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,13 +25,13 @@ class SelectClientOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectClientOperation selectClientOperation;
+    SelectClientOperationTestInterface selectClientOperation;
 
     @Inject
-    UpsertClientOperation insertClientOperation;
+    UpsertClientOperationTestInterface upsertClientOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UpsertPlayerOperation upsertPlayerOperation;
@@ -56,26 +55,26 @@ class SelectClientOperationTest extends Assertions {
     void givenUserPlayerClient_whenSelectClient_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client1 = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"),
                 connectionId(), versionId(), defaultMatchmakerId(), defaultRuntimeId());
         final var clientId = client1.getId();
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client1);
+        upsertClientOperation.upsertClient(shard, client1);
 
-        final var client2 = selectClientOperation.selectClient(TIMEOUT, pgPool, shard, user.getId(), clientId);
+        final var client2 = selectClientOperation.selectClient(shard, user.getId(), clientId, false);
         assertEquals(client1, client2);
     }
 
     @Test
-    void givenUnknownIds_whenSelectClient_thenServerSideNotFoundException() {
+    void givenUnknownIds_whenSelectClient_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var clientId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectClientOperation
-                .selectClient(TIMEOUT, pgPool, shard, userId, clientId));
+                .selectClient(shard, userId, clientId, false));
     }
 
     Long tenantId() {

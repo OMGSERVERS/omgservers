@@ -1,10 +1,9 @@
 package com.omgservers.service.module.system.impl.operation.selectServiceAccount;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.service.module.system.impl.mappers.ServiceAccountModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,31 +18,23 @@ class SelectServiceAccountOperationImpl implements SelectServiceAccountOperation
 
     final SelectObjectOperation selectObjectOperation;
 
-    final ObjectMapper objectMapper;
+    final ServiceAccountModelMapper serviceAccountModelMapper;
 
     @Override
-    public Uni<ServiceAccountModel> selectServiceAccount(final SqlConnection sqlConnection, final String username) {
+    public Uni<ServiceAccountModel> selectServiceAccount(final SqlConnection sqlConnection,
+                                                         final Long id,
+                                                         final Boolean deleted) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, username, password_hash
+                        select id, created, modified, username, password_hash, deleted
                         from system.tab_service_account
-                        where username = $1
+                        where id = $1 and deleted = $2
                         limit 1
                         """,
-                Arrays.asList(username),
+                Arrays.asList(id, deleted),
                 "Service account",
-                this::createServiceAccount);
-    }
-
-    ServiceAccountModel createServiceAccount(Row row) {
-        ServiceAccountModel serviceAccount = new ServiceAccountModel();
-        serviceAccount.setId(row.getLong("id"));
-        serviceAccount.setCreated(row.getOffsetDateTime("created").toInstant());
-        serviceAccount.setModified(row.getOffsetDateTime("modified").toInstant());
-        serviceAccount.setUsername(row.getString("username"));
-        serviceAccount.setPasswordHash(row.getString("password_hash"));
-        return serviceAccount;
+                serviceAccountModelMapper::fromRow);
     }
 }

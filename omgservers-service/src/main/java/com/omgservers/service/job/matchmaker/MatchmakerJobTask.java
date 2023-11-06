@@ -52,7 +52,7 @@ public class MatchmakerJobTask implements JobTask {
                 .invoke(runtime -> {
                     if (Objects.isNull(runtime)) {
                         log.warn("Matchmaker was not found, skip job execution, " +
-                                "matchmakerId={}", matchmakerId);
+                                "id={}", matchmakerId);
                     }
                 })
                 .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -78,7 +78,7 @@ public class MatchmakerJobTask implements JobTask {
                         .flatMap(changeOfState -> updateMatchmakerState(matchmakerId, changeOfState)
                                 .invoke(voidItem -> {
                                     if (changeOfState.isNotEmpty()) {
-                                        log.info("Matchmaker was executed, matchmakerId={}, " +
+                                        log.info("Matchmaker was executed, id={}, " +
                                                         "completedMatchmakerCommands={}, " +
                                                         "completedRequests={}, " +
                                                         "createdMatches={}, " +

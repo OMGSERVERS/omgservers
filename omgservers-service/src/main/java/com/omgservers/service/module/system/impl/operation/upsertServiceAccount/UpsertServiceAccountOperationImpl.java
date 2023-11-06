@@ -29,8 +29,9 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into system.tab_service_account(id, created, modified, username, password_hash)
-                        values($1, $2, $3, $4, $5)
+                        insert into system.tab_service_account(
+                            id, created, modified, username, password_hash, deleted)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
@@ -39,7 +40,8 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
                         serviceAccount.getCreated().atOffset(ZoneOffset.UTC),
                         serviceAccount.getModified().atOffset(ZoneOffset.UTC),
                         serviceAccount.getUsername(),
-                        serviceAccount.getPasswordHash()
+                        serviceAccount.getPasswordHash(),
+                        serviceAccount.getDeleted()
                 ),
                 () -> new ServiceAccountCreatedEventBodyModel(serviceAccount.getId(), serviceAccount.getUsername()),
                 () -> logModelFactory.create("Service account was inserted, " +

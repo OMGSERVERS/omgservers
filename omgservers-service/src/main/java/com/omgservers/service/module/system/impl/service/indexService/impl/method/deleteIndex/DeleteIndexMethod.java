@@ -1,8 +1,9 @@
 package com.omgservers.service.module.system.impl.service.indexService.impl.method.deleteIndex;
 
 import com.omgservers.model.dto.system.DeleteIndexRequest;
+import com.omgservers.model.dto.system.DeleteIndexResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteIndexMethod {
-    Uni<Void> deleteIndex(DeleteIndexRequest request);
+    Uni<DeleteIndexResponse> deleteIndex(DeleteIndexRequest request);
 }

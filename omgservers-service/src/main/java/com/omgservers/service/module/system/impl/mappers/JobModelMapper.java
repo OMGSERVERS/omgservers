@@ -19,9 +19,11 @@ public class JobModelMapper {
         JobModel job = new JobModel();
         job.setId(row.getLong("id"));
         job.setCreated(row.getOffsetDateTime("created").toInstant());
+        job.setModified(row.getOffsetDateTime("modified").toInstant());
         job.setShardKey(row.getLong("shard_key"));
         job.setEntityId(row.getLong("entity_id"));
         job.setQualifier(JobQualifierEnum.valueOf(row.getString("qualifier")));
+        job.setDeleted(row.getBoolean("deleted"));
         return job;
     }
 }

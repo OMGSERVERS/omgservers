@@ -1,12 +1,13 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerModelFactory;
 import com.omgservers.service.factory.RequestModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.selectRequest.SelectRequestOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.operation.testInterface.SelectRequestOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertRequestOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,7 +24,7 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
     private static final long TIMEOUT = 1L;
 
     @Inject
-    SelectRequestOperation selectRequestOperation;
+    SelectRequestOperationTestInterface selectRequestOperation;
 
     @Inject
     UpsertMatchmakerOperation insertMatchmakerOperation;
@@ -54,8 +55,10 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
                 matchmakerRequestConfig);
         upsertRequestOperation.upsertRequest(shard, matchmakerRequest1);
 
-        final var matchmakerRequest2 = selectRequestOperation.selectRequest(TIMEOUT, pgPool, shard, matchmaker.getId(),
-                matchmakerRequest1.getId());
+        final var matchmakerRequest2 = selectRequestOperation.selectRequest(shard,
+                matchmaker.getId(),
+                matchmakerRequest1.getId(),
+                false);
         assertEquals(matchmakerRequest1, matchmakerRequest2);
     }
 
@@ -66,7 +69,7 @@ class SelectMatchClientsByMatchmakerIdAndMatchIdOperationTest extends Assertions
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectRequestOperation
-                .selectRequest(TIMEOUT, pgPool, shard, matchmakerId, id));
+                .selectRequest(shard, matchmakerId, id, false));
     }
 
     Long userId() {

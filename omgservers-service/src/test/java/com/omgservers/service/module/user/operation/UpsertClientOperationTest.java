@@ -1,14 +1,14 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.model.player.PlayerConfigModel;
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.UpsertClientOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,10 +25,10 @@ class UpsertClientOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertClientOperation insertClientOperation;
+    UpsertClientOperationTestInterface upsertClientOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UpsertPlayerOperation upsertPlayerOperation;
@@ -49,45 +49,61 @@ class UpsertClientOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenUserPlayer_whenUpsertClient_thenInserted() {
+    void givenClient_whenUpsertClient_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        final var client =
-                clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
+        final var client = clientModelFactory.create(user.getId(),
+                playerId,
+                URI.create("http://localhost:8080"),
+                connectionId(),
+                versionId(),
+                defaultMatchmakerId(),
+                defaultRuntimeId());
+        final var changeContext = upsertClientOperation.upsertClient(shard, client);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.CLIENT_CREATED));
     }
 
     @Test
-    void givenClient_whenUpsertClientAgain_thenUpdated() {
+    void givenClient_whenUpsertClient_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var playerId = player.getId();
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
-        final var client =
-                clientModelFactory.create(user.getId(), playerId, URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
+        final var client = clientModelFactory.create(user.getId(),
+                playerId,
+                URI.create("http://localhost:8080"),
+                connectionId(),
+                versionId(),
+                defaultMatchmakerId(),
+                defaultRuntimeId());
+        upsertClientOperation.upsertClient(shard, client);
 
-        assertFalse(insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
+        final var changeContext = upsertClientOperation.upsertClient(shard, client);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.CLIENT_CREATED));
     }
 
     @Test
     void givenUnknownIds_whenUpsertClient_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
-        final var client =
-                clientModelFactory.create(userId, playerId(), URI.create("http://localhost:8080"), connectionId(),
-                        versionId(), defaultMatchmakerId(), defaultRuntimeId());
-        final var exception = assertThrows(ServerSideConflictException.class, () ->
-                insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client));
+        final var client = clientModelFactory.create(userId,
+                playerId(),
+                URI.create("http://localhost:8080"),
+                connectionId(),
+                versionId(),
+                defaultMatchmakerId(),
+                defaultRuntimeId());
+        assertThrows(ServerSideConflictException.class, () -> upsertClientOperation
+                .upsertClient(shard, client));
     }
 
     Long tenantId() {

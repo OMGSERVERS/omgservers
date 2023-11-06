@@ -1,7 +1,6 @@
 package com.omgservers.service.factory;
 
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,17 +19,15 @@ public class PlayerModelFactory {
 
     public PlayerModel create(final Long userId,
                               final Long tenantId,
-                              final Long stageId,
-                              final PlayerConfigModel config) {
+                              final Long stageId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, tenantId, stageId, config);
+        return create(id, userId, tenantId, stageId);
     }
 
     public PlayerModel create(final Long id,
                               final Long userId,
                               final Long tenantId,
-                              final Long stageId,
-                              final PlayerConfigModel config) {
+                              final Long stageId) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         PlayerModel player = new PlayerModel();
@@ -42,7 +39,7 @@ public class PlayerModelFactory {
         player.setStageId(stageId);
         player.setAttributes(PlayerAttributesModel.create());
         player.setObject(new Object());
-        player.setConfig(config);
+        player.setDeleted(false);
 
         return player;
     }

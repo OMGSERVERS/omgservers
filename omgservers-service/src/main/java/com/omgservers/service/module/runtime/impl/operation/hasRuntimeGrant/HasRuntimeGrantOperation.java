@@ -14,16 +14,4 @@ public interface HasRuntimeGrantOperation {
                                  Long shardKey,
                                  Long entityId,
                                  RuntimeGrantTypeEnum type);
-
-    default Boolean hasRuntimeGrant(long timeout,
-                                    PgPool pgPool,
-                                    int shard,
-                                    Long runtimeId,
-                                    Long shardKey,
-                                    Long entityId,
-                                    RuntimeGrantTypeEnum type) {
-        return pgPool.withTransaction(sqlConnection ->
-                        hasRuntimeGrant(sqlConnection, shard, runtimeId, shardKey, entityId, type))
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

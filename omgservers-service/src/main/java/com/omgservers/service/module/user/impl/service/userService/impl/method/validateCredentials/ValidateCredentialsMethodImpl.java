@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.validateCredentials;
 
-import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
+import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.service.module.user.impl.operation.selectUser.SelectUserOperation;
 import com.omgservers.service.module.user.impl.operation.validateCredentials.ValidateCredentialsOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -29,7 +29,7 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
                     final var userId = request.getUserId();
                     final var password = request.getPassword();
                     return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                                    .selectUser(sqlConnection, shard.shard(), userId)
+                                    .selectUser(sqlConnection, shard.shard(), userId, false)
                                     .flatMap(userModel -> validateCredentialsOperation
                                             .validateCredentials(userModel, password)))
                             .map(ValidateCredentialsResponse::new);

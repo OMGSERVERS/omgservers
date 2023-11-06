@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -35,8 +35,8 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_command(
-                            id, matchmaker_id, created, modified, qualifier, body)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, matchmaker_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -46,7 +46,8 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                         matchmakerCommand.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerCommand.getModified().atOffset(ZoneOffset.UTC),
                         matchmakerCommand.getQualifier(),
-                        getBodyString(matchmakerCommand)
+                        getBodyString(matchmakerCommand),
+                        matchmakerCommand.getDeleted()
                 ),
                 () -> null,
                 () -> logModelFactory.create("Matchmaker command was inserted, matchmakerCommand=" + matchmakerCommand)

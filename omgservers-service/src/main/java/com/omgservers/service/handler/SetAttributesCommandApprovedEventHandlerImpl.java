@@ -46,7 +46,7 @@ public class SetAttributesCommandApprovedEventHandlerImpl implements EventHandle
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

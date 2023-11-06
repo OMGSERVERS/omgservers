@@ -29,9 +29,9 @@ class SelectRequestsByMatchmakerIdOperationImpl implements SelectRequestsByMatch
                 sqlConnection,
                 shard,
                 """
-                        select id, matchmaker_id, created, modified, user_id, client_id, mode, config
+                        select id, matchmaker_id, created, modified, user_id, client_id, mode, config, deleted
                         from $schema.tab_matchmaker_request
-                        where matchmaker_id = $1
+                        where matchmaker_id = $1 and deleted = false
                         """,
                 Collections.singletonList(matchmakerId),
                 "Request",

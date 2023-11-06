@@ -1,19 +1,19 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.factory.RequestModelFactory;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -56,14 +56,12 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     final var matchmakerId = client.getDefaultMatchmakerId();
                     log.info("Matchmaker was requested, " +
+                                    "id={}, " +
                                     "mode={}, " +
-                                    "matchmakerId={}, " +
-                                    "userId={}, " +
-                                    "clientId={}, " +
-                                    "tenantId={}, " +
-                                    "stageId={}",
-                            mode,
+                                    "client={}/{}, " +
+                                    "stage={}/{}",
                             matchmakerId,
+                            mode,
                             userId,
                             clientId,
                             tenantId,
@@ -79,7 +77,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

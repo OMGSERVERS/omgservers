@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.playerService.impl.method.getPlayer;
 
-import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
+import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.service.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -25,8 +25,9 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
                 .flatMap(shard -> {
                     final var userId = request.getUserId();
                     final var id = request.getId();
+                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                            .selectPlayer(sqlConnection, shard.shard(), userId, id));
+                            .selectPlayer(sqlConnection, shard.shard(), userId, id, deleted));
                 })
                 .map(GetPlayerResponse::new);
     }

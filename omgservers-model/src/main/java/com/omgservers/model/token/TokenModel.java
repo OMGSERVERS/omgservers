@@ -25,10 +25,16 @@ public class TokenModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     Instant expire;
 
     @NotBlank
     @Size(max = 1024)
     @ToString.Exclude
     String hash;
+
+    @NotNull
+    Boolean deleted;
 }

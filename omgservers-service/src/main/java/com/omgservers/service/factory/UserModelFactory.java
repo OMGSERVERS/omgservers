@@ -34,6 +34,7 @@ public class UserModelFactory {
         user.setModified(now);
         user.setRole(role);
         user.setPasswordHash(passwordHash);
+        user.setDeleted(false);
         return user;
     }
 }

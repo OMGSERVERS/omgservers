@@ -17,6 +17,9 @@ public class GetMatchClientRequest implements ShardedRequest {
     @NotNull
     Long id;
 
+    @NotNull
+    Boolean deleted;
+
     @Override
     public String getRequestShardKey() {
         return matchmakerId.toString();

@@ -2,8 +2,8 @@ package com.omgservers.service.module.tenant.impl.operation.upsertStagePermissio
 
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,26 +25,28 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
     public Uni<Boolean> upsertStagePermission(final ChangeContext<?> changeContext,
                                               final SqlConnection sqlConnection,
                                               final int shard,
-                                              final StagePermissionModel permission) {
+                                              final StagePermissionModel stagePermission) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_stage_permission(
-                            id, tenant_id, stage_id, created, user_id, permission)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, tenant_id, stage_id, created, modified, user_id, permission, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
-                        permission.getId(),
-                        permission.getTenantId(),
-                        permission.getStageId(),
-                        permission.getCreated().atOffset(ZoneOffset.UTC),
-                        permission.getUserId(),
-                        permission.getPermission()
+                        stagePermission.getId(),
+                        stagePermission.getTenantId(),
+                        stagePermission.getStageId(),
+                        stagePermission.getCreated().atOffset(ZoneOffset.UTC),
+                        stagePermission.getModified().atOffset(ZoneOffset.UTC),
+                        stagePermission.getUserId(),
+                        stagePermission.getPermission(),
+                        stagePermission.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Stage permission was inserted, permission=" + permission)
+                () -> logModelFactory.create("Stage permission was inserted, stagePermission=" + stagePermission)
         );
     }
 }

@@ -6,7 +6,8 @@ import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeGrant.UpsertRuntimeGrantOperation;
+import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeGrantOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeGrantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -27,7 +28,7 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertRuntimeGrantOperation upsertRuntimeGrantOperation;
+    UpsertRuntimeGrantOperationTestInterface upsertRuntimeGrantOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -44,12 +45,13 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     @Test
     void givenRuntimeGrant_whenDeleteRuntimeGrant_thenDeleted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
+        final var runtime =
+                runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory
                 .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
-        upsertRuntimeGrantOperation.upsertRuntimeGrant(TIMEOUT, pgPool, shard, runtimeGrant);
+        upsertRuntimeGrantOperation.upsertRuntimeGrant(shard, runtimeGrant);
 
         final var changeContext = deleteRuntimeGrant.deleteRuntimeGrant(shard, runtime.getId(), runtimeGrant.getId());
         assertTrue(changeContext.getResult());

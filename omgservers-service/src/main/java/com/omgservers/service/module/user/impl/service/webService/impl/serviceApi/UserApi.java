@@ -6,6 +6,8 @@ import com.omgservers.model.dto.user.DeleteClientRequest;
 import com.omgservers.model.dto.user.DeleteClientResponse;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
+import com.omgservers.model.dto.user.DeleteUserRequest;
+import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
@@ -41,6 +43,10 @@ public interface UserApi {
     @PUT
     @Path("/sync-user")
     Uni<SyncUserResponse> syncUser(SyncUserRequest request);
+
+    @PUT
+    @Path("/delete-user")
+    Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
 
     @PUT
     @Path("/validate-credentials")

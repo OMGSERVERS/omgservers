@@ -35,7 +35,7 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
     public Uni<DoSetAttributesResponse> doSetAttributes(final DoSetAttributesRequest request) {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var grant = RuntimeGrantTypeEnum.CLIENT;
+                    final var grant = RuntimeGrantTypeEnum.USER_CLIENT;
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();

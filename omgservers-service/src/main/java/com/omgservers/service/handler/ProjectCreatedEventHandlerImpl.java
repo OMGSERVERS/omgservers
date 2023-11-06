@@ -34,7 +34,7 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
 
         return getProject(tenantId, projectId)
                 .flatMap(project -> {
-                    log.info("Project was created, {}/{}", tenantId, projectId);
+                    log.info("Project was created, project={}/{}", tenantId, projectId);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWith(true);

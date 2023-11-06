@@ -1,6 +1,5 @@
 package com.omgservers.model.event.body;
 
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +15,10 @@ import lombok.NoArgsConstructor;
 public class ClientDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    ClientModel client;
+    Long userId;
+
+    @NotNull
+    Long id;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -25,6 +27,6 @@ public class ClientDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return client.getUserId();
+        return userId;
     }
 }

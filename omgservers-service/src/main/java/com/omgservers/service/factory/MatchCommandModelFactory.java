@@ -38,6 +38,7 @@ public class MatchCommandModelFactory {
         matchCommand.setModified(now);
         matchCommand.setQualifier(body.getQualifier());
         matchCommand.setBody(body);
+        matchCommand.setDeleted(false);
         return matchCommand;
     }
 }

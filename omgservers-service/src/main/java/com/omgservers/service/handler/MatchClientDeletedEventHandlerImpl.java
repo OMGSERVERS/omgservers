@@ -1,13 +1,16 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
+import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.body.DeleteClientMatchCommandBodyModel;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.factory.MatchCommandModelFactory;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,18 +35,28 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(EventModel event) {
         final var body = (MatchClientDeletedEventBodyModel) event.getBody();
-        final var matchClient = body.getMatchClient();
+        final var matchmakerId = body.getMatchmakerId();
+        final var matchClientId = body.getId();
 
-        final var matchmakerId = matchClient.getMatchmakerId();
-        final var matchId = matchClient.getMatchId();
-        final var userId = matchClient.getUserId();
-        final var clientId = matchClient.getClientId();
+        return getDeletedMatchClient(matchmakerId, matchClientId)
+                .flatMap(matchClient -> {
+                    final var clientId = matchClient.getClientId();
+                    final var matchId = matchClient.getMatchId();
+                    final var userId = matchClient.getUserId();
 
-        log.info("Match client was deleted, matchmakerId={}, matchId={}, userId={}, clientId={}",
-                matchmakerId, matchId, userId, clientId);
+                    log.info("Match client was deleted, {}/{}, clientId={}, matchId={}",
+                            matchmakerId, matchClientId, clientId, matchId);
 
-        return syncDeleteClientMatchCommand(matchmakerId, matchId, userId, clientId)
+                    return syncDeleteClientMatchCommand(matchmakerId, matchId, userId, clientId);
+                })
                 .replaceWith(true);
+
+    }
+
+    Uni<MatchClientModel> getDeletedMatchClient(final Long matchmakerId, final Long id) {
+        final var request = new GetMatchClientRequest(matchmakerId, id, true);
+        return matchmakerModule.getMatchmakerService().getMatchClient(request)
+                .map(GetMatchClientResponse::getMatchClient);
     }
 
     Uni<Boolean> syncDeleteClientMatchCommand(final Long matchmakerId,

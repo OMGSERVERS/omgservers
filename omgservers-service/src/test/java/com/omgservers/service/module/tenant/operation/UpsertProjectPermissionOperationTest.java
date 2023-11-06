@@ -5,7 +5,9 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.ProjectPermissionModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectPermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,7 +22,7 @@ class UpsertProjectPermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertProjectPermissionOperation upsertProjectPermissionOperation;
+    UpsertProjectPermissionOperationTestInterface upsertProjectPermissionOperation;
 
     @Inject
     UpsertProjectOperationTestInterface upsertProjectOperation;
@@ -44,7 +46,7 @@ class UpsertProjectPermissionOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenProject_whenUpsertProjectPermission_thenInserted() {
+    void givenProjectPermission_whenUpsertProjectPermission_thenInserted() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -53,11 +55,13 @@ class UpsertProjectPermissionOperationTest extends Assertions {
 
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
-        assertTrue(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
+
+        final var changeContext = upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenPermission_whenUpsertProjectPermission_thenUpdated() {
+    void givenProjectPermission_whenUpsertProjectPermission_thenUpdated() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -65,9 +69,10 @@ class UpsertProjectPermissionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
-        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
+        upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
 
-        assertFalse(upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
+        final var changeContext = upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
+        assertFalse(changeContext.getResult());
     }
 
     @Test
@@ -76,8 +81,8 @@ class UpsertProjectPermissionOperationTest extends Assertions {
 
         final var permission = projectPermissionModelFactory.create(tenantId(), projectId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
-        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertProjectPermissionOperation
-                .upsertProjectPermission(TIMEOUT, pgPool, shard, permission));
+        assertThrows(ServerSideConflictException.class, () -> upsertProjectPermissionOperation
+                .upsertProjectPermission(shard, permission));
     }
 
     Long userId() {

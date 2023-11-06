@@ -35,4 +35,7 @@ public class MatchmakerCommandModel {
     @NotNull
     @EqualsAndHashCode.Exclude
     MatchmakerCommandBodyModel body;
+
+    @NotNull
+    Boolean deleted;
 }

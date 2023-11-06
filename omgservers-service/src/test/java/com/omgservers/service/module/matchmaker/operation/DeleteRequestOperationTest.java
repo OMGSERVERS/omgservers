@@ -6,6 +6,8 @@ import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.service.factory.MatchmakerModelFactory;
 import com.omgservers.service.factory.RequestModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteRequestOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertRequestOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -49,8 +51,11 @@ class DeleteRequestOperationTest extends Assertions {
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
 
         final var requestConfig = RequestConfigModel.create(PlayerAttributesModel.create());
-        final var request =
-                requestModelFactory.create(matchmaker.getId(), userId(), clientId(), modeName(), requestConfig);
+        final var request = requestModelFactory.create(matchmaker.getId(),
+                userId(),
+                clientId(),
+                modeName(),
+                requestConfig);
         upsertRequestOperation.upsertRequest(shard, request);
 
         final var changeContext = deleteRequestOperation.deleteRequest(shard, matchmaker.getId(), request.getId());

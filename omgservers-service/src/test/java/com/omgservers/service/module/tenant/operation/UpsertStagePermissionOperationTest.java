@@ -6,8 +6,10 @@ import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.StagePermissionModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertStageOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertStagePermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,7 +24,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertStagePermissionOperation upsertStagePermissionOperation;
+    UpsertStagePermissionOperationTestInterface upsertStagePermissionOperation;
 
     @Inject
     UpsertStageOperationTestInterface upsertStageOperation;
@@ -63,7 +65,8 @@ class UpsertStagePermissionOperationTest extends Assertions {
 
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
                 StagePermissionEnum.VERSION_MANAGEMENT);
-        assertTrue(upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission));
+        final var changeContext = upsertStagePermissionOperation.upsertStagePermission(shard, permission);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
@@ -77,9 +80,10 @@ class UpsertStagePermissionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var permission = stagePermissionModelFactory.create(tenant.getId(), stage.getId(), userId(),
                 StagePermissionEnum.VERSION_MANAGEMENT);
-        upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission);
+        upsertStagePermissionOperation.upsertStagePermission(shard, permission);
 
-        assertFalse(upsertStagePermissionOperation.upsertStagePermission(TIMEOUT, pgPool, shard, permission));
+        final var changeContext = upsertStagePermissionOperation.upsertStagePermission(shard, permission);
+        assertFalse(changeContext.getResult());
     }
 
     @Test
@@ -90,7 +94,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
                 stagePermissionModelFactory.create(tenantId(), stageId(), userId(),
                         StagePermissionEnum.VERSION_MANAGEMENT);
         assertThrows(ServerSideConflictException.class, () -> upsertStagePermissionOperation
-                .upsertStagePermission(TIMEOUT, pgPool, shard, permission));
+                .upsertStagePermission(shard, permission));
     }
 
     Long userId() {

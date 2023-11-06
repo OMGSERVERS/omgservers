@@ -34,7 +34,7 @@ class SelectPlayerObjectOperationImpl implements SelectPlayerObjectOperation {
                 """
                         select object
                         from $schema.tab_user_player
-                        where user_id = $1 and id = $2
+                        where user_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,
                 Arrays.asList(userId, playerId),

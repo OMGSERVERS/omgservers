@@ -3,6 +3,7 @@ package com.omgservers.service.module.matchmaker.operation;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.operation.testInterface.SelectMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;

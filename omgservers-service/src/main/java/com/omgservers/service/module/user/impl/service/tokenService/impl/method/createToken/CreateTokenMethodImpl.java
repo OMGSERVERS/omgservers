@@ -1,6 +1,5 @@
 package com.omgservers.service.module.user.impl.service.tokenService.impl.method.createToken;
 
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.dto.user.CreateTokenRequest;
 import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.model.user.UserTokenContainerModel;
@@ -9,6 +8,7 @@ import com.omgservers.service.module.user.impl.operation.createUserToken.CreateU
 import com.omgservers.service.module.user.impl.operation.selectUser.SelectUserOperation;
 import com.omgservers.service.module.user.impl.operation.upsertToken.UpsertTokenOperation;
 import com.omgservers.service.module.user.impl.operation.validateCredentials.ValidateCredentialsOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -40,16 +40,21 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var password = request.getPassword();
-                    return changeWithContextOperation.<UserTokenContainerModel>changeWithContext((changeContext, sqlConnection) ->
-                                    selectUserOperation.selectUser(sqlConnection, shard, userId)
-                                            .flatMap(user -> validateCredentialsOperation.validateCredentials(user, password))
-                                            .flatMap(user -> {
-                                                final var tokenContainer = createUserTokenOperation.createUserToken(user);
-                                                final var tokenModel = tokenModelFactory.create(tokenContainer);
-                                                return upsertTokenOperation
-                                                        .upsertToken(changeContext, sqlConnection, shard, tokenModel)
-                                                        .replaceWith(tokenContainer);
-                                            }))
+                    return changeWithContextOperation.<UserTokenContainerModel>changeWithContext(
+                                    (changeContext, sqlConnection) ->
+                                            selectUserOperation.selectUser(sqlConnection, shard, userId, false)
+                                                    .flatMap(user -> validateCredentialsOperation
+                                                            .validateCredentials(user, password))
+                                                    .flatMap(user -> {
+                                                        final var tokenContainer = createUserTokenOperation
+                                                                .createUserToken(user);
+                                                        final var tokenModel = tokenModelFactory.create(tokenContainer);
+                                                        return upsertTokenOperation.upsertToken(changeContext,
+                                                                        sqlConnection,
+                                                                        shard,
+                                                                        tokenModel)
+                                                                .replaceWith(tokenContainer);
+                                                    }))
                             .map(ChangeContext::getResult);
                 })
                 .map(tokenContainer -> new CreateTokenResponse(tokenContainer.getTokenObject(),

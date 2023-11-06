@@ -24,17 +24,16 @@ class SelectMatchesByMatchmakerIdOperationImpl implements SelectMatchesByMatchma
     @Override
     public Uni<List<MatchModel>> selectMatchesByMatchmakerId(final SqlConnection sqlConnection,
                                                              final int shard,
-                                                             final Long matchmakerId,
-                                                             final Boolean deleted) {
+                                                             final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
                         select id, matchmaker_id, created, modified, runtime_id, stopped, config, deleted
                         from $schema.tab_matchmaker_match
-                        where matchmaker_id = $1 and deleted = $2
+                        where matchmaker_id = $1 and deleted = false
                         """,
-                Arrays.asList(matchmakerId, deleted),
+                Arrays.asList(matchmakerId),
                 "Match",
                 matchModelMapper::fromRow);
     }

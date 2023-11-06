@@ -31,4 +31,7 @@ public class UserModel {
     @Size(max = 1024)
     @ToString.Exclude
     String passwordHash;
+
+    @NotNull
+    Boolean deleted;
 }

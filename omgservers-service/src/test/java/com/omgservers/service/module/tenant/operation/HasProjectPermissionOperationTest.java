@@ -4,11 +4,12 @@ import com.omgservers.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.ProjectPermissionModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.impl.operation.hasProjectPermission.HasProjectPermissionOperation;
-import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
+import com.omgservers.service.module.tenant.operation.testInterface.HasProjectPermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectPermissionOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -20,10 +21,10 @@ class HasProjectPermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    HasProjectPermissionOperation hasProjectPermissionOperation;
+    HasProjectPermissionOperationTestInterface hasProjectPermissionOperation;
 
     @Inject
-    UpsertProjectPermissionOperation upsertProjectPermissionOperation;
+    UpsertProjectPermissionOperationTestInterface upsertProjectPermissionOperation;
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
@@ -43,11 +44,8 @@ class HasProjectPermissionOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenProjectPermission_whenHasProjectPermission_thenYes() {
+    void givenProjectPermission_whenHasProjectPermission_thenTrue() {
         final var shard = 0;
         final var userId = userId();
         final var tenant = tenantModelFactory.create();
@@ -56,18 +54,24 @@ class HasProjectPermissionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId,
                 ProjectPermissionEnum.CREATE_STAGE);
-        upsertProjectPermissionOperation.upsertProjectPermission(TIMEOUT, pgPool, shard, permission);
+        upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
 
-        assertTrue(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, tenant.getId(),
-                project.getId(), permission.getUserId(), permission.getPermission()));
+        assertTrue(hasProjectPermissionOperation.hasProjectPermission(shard,
+                tenant.getId(),
+                project.getId(),
+                permission.getUserId(),
+                permission.getPermission()));
     }
 
     @Test
     void givenUnknownIds_whenHasProjectPermission_thenFalse() {
         final var shard = 0;
 
-        assertFalse(hasProjectPermissionOperation.hasProjectPermission(TIMEOUT, pgPool, shard, tenantId(), projectId(),
-                userId(), ProjectPermissionEnum.CREATE_STAGE));
+        assertFalse(hasProjectPermissionOperation.hasProjectPermission(shard,
+                tenantId(),
+                projectId(),
+                userId(),
+                ProjectPermissionEnum.CREATE_STAGE));
     }
 
     Long userId() {

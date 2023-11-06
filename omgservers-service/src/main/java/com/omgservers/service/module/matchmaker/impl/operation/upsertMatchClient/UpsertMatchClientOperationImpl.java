@@ -36,8 +36,9 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match_client(
-                            id, matchmaker_id, match_id, created, modified, user_id, client_id, group_name, config)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, matchmaker_id, match_id, created, modified,
+                            user_id, client_id, group_name, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -50,13 +51,14 @@ class UpsertMatchClientOperationImpl implements UpsertMatchClientOperation {
                         matchClient.getUserId(),
                         matchClient.getClientId(),
                         matchClient.getGroupName(),
-                        getConfigString(matchClient)
+                        getConfigString(matchClient),
+                        matchClient.getDeleted()
                 ),
                 () -> new MatchClientCreatedEventBodyModel(
                         matchClient.getMatchmakerId(),
                         matchClient.getMatchId(),
                         matchClient.getId()),
-                () -> logModelFactory.create("Match client was inserted, matchClient=" + matchClient)
+                () -> null
         );
     }
 

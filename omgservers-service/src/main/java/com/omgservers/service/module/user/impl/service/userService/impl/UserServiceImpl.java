@@ -1,5 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl;
 
+import com.omgservers.model.dto.user.DeleteUserRequest;
+import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
@@ -8,6 +10,7 @@ import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.service.module.user.impl.service.userService.UserService;
+import com.omgservers.service.module.user.impl.service.userService.impl.method.deleteUser.DeleteUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.respondClient.RespondClientMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.syncUser.SyncUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.validateCredentials.ValidateCredentialsMethod;
@@ -31,6 +34,7 @@ class UserServiceImpl implements UserService {
 
     final ValidateCredentialsMethod validateCredentialsMethod;
     final RespondClientMethod respondClientMethod;
+    final DeleteUserMethod deleteUserMethod;
     final SyncUserMethod syncUserMethod;
 
     @Override
@@ -39,6 +43,14 @@ class UserServiceImpl implements UserService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncUser,
                 syncUserMethod::syncUser);
+    }
+
+    @Override
+    public Uni<DeleteUserResponse> deleteUser(@Valid final DeleteUserRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getUserModuleClientOperation::getClient,
+                UserModuleClient::deleteUser,
+                deleteUserMethod::deleteUser);
     }
 
     @Override

@@ -19,6 +19,9 @@ public class JobModel {
     Instant created;
 
     @NotNull
+    Instant modified;
+
+    @NotNull
     Long shardKey;
 
     @NotNull
@@ -26,4 +29,7 @@ public class JobModel {
 
     @NotNull
     JobQualifierEnum qualifier;
+
+    @NotNull
+    Boolean deleted;
 }

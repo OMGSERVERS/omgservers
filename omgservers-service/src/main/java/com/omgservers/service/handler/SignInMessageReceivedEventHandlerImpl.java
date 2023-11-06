@@ -1,6 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignClientRequest;
@@ -25,22 +24,22 @@ import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
-import com.omgservers.service.module.gateway.GatewayModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.factory.ClientModelFactory;
+import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.module.gateway.GatewayModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.factory.ClientModelFactory;
-import com.omgservers.service.factory.PlayerModelFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -156,7 +155,7 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<PlayerModel> syncPlayer(Long userId, Long tenantId, Long stageId) {
-        final var player = playerModelFactory.create(userId, tenantId, stageId, new PlayerConfigModel());
+        final var player = playerModelFactory.create(userId, tenantId, stageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
@@ -208,7 +207,7 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                 runtimeId,
                 client.getUserId(),
                 client.getId(),
-                RuntimeGrantTypeEnum.CLIENT);
+                RuntimeGrantTypeEnum.USER_CLIENT);
         final var request = new SyncRuntimeGrantRequest(runtimeGrant);
         return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
                 .map(SyncRuntimeGrantResponse::getCreated);

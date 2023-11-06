@@ -56,9 +56,9 @@ public class VersionDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedVersion(tenantId, id)
                 .flatMap(version -> {
-                    log.info("Version was deleted, versionId={}, tenantId={}, stageId={}, modes={}, files={}",
-                            id,
+                    log.info("Version was deleted, {}/{}, stageId={}, modes={}, files={}",
                             tenantId,
+                            id,
                             version.getStageId(),
                             version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
                             version.getSourceCode().getFiles().size());

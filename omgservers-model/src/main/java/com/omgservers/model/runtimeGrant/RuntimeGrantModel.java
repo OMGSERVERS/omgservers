@@ -32,4 +32,7 @@ public class RuntimeGrantModel {
 
     @NotNull
     RuntimeGrantTypeEnum type;
+
+    @NotNull
+    Boolean deleted;
 }

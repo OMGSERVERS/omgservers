@@ -27,6 +27,7 @@ public class RequestModelMapper {
         request.setUserId(row.getLong("user_id"));
         request.setClientId(row.getLong("client_id"));
         request.setMode(row.getString("mode"));
+        request.setDeleted(row.getBoolean("deleted"));
         try {
             request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         } catch (IOException e) {

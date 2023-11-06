@@ -1,14 +1,14 @@
 package com.omgservers.service.module.user.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.player.PlayerConfigModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.upsertClient.UpsertClientOperation;
 import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.operation.testInterface.DeleteClientOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertClientOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -28,10 +28,10 @@ class DeleteClientOperationTest extends Assertions {
     DeleteClientOperationTestInterface deleteClientOperation;
 
     @Inject
-    UpsertClientOperation insertClientOperation;
+    UpsertClientOperationTestInterface upsertClientOperation;
 
     @Inject
-    UpsertUserOperation upsertUserOperation;
+    UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
     UpsertPlayerOperation upsertPlayerOperation;
@@ -55,13 +55,13 @@ class DeleteClientOperationTest extends Assertions {
     void givenUserPlayerClient_whenDeleteClient_thenDeleted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
-        upsertUserOperation.upsertUser(TIMEOUT, pgPool, shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId(), PlayerConfigModel.create());
+        upsertUserOperation.upsertUser(shard, user);
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
         final var client = clientModelFactory.create(user.getId(), player.getId(), URI.create("http://localhost:8080"),
                 connectionId(), versionId(), defaultMatchmakerId(), defaultRuntimeId());
         final var clientId = client.getId();
-        insertClientOperation.upsertClient(TIMEOUT, pgPool, shard, client);
+        upsertClientOperation.upsertClient(shard, client);
 
         final var changeContext = deleteClientOperation.deleteClient(shard, user.getId(), clientId);
         assertTrue(changeContext.getResult());

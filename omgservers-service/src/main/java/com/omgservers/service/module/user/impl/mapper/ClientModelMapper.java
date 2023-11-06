@@ -28,6 +28,7 @@ public class ClientModelMapper {
         client.setVersionId(row.getLong("version_id"));
         client.setDefaultMatchmakerId(row.getLong("default_matchmaker_id"));
         client.setDefaultRuntimeId(row.getLong("default_runtime_id"));
+        client.setDeleted(row.getBoolean("deleted"));
         return client;
     }
 }
