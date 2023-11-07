@@ -48,7 +48,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedClient(userId, clientId)
                 .flatMap(client -> {
-                    log.info("Client was deleted, {}/{}", userId, clientId);
+                    log.info("Client was deleted, client={}/{}", userId, clientId);
 
                     final var runtimeId = client.getDefaultRuntimeId();
                     final var matchmakerId = client.getDefaultMatchmakerId();

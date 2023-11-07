@@ -40,7 +40,7 @@ public class VersionRuntimeDeletedEventHandlerImpl implements EventHandler {
         return getDeletedVersionRuntime(tenantId, id)
                 .flatMap(versionRuntime -> {
                     log.info("Version runtime was deleted, " +
-                                    "key={}/{}, " +
+                                    "versionRuntime={}/{}, " +
                                     "versionId={}, " +
                                     "runtimeId={}",
                             tenantId,

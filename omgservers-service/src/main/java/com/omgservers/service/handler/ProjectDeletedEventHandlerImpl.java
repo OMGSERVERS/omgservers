@@ -42,7 +42,7 @@ public class ProjectDeletedEventHandlerImpl implements EventHandler {
 
         return getDeletedProject(tenantId, id)
                 .flatMap(project -> {
-                    log.info("Project was deleted, {}/{}", tenantId, id);
+                    log.info("Project was deleted, project={}/{}", tenantId, id);
 
                     return viewStages(tenantId, id)
                             .flatMap(stages -> Multi.createFrom().iterable(stages)

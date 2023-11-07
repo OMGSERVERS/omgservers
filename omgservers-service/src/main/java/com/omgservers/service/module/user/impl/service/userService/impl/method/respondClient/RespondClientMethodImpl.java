@@ -33,7 +33,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
                 .invoke(client -> {
                     if (Objects.isNull(client)) {
                         log.warn("Respond client method failed, client doesn't exist anymore, " +
-                                        "{}/{}, " +
+                                        "client={}/{}, " +
                                         "messageQualifier={}",
                                 userId,
                                 clientId,

@@ -70,7 +70,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                         .invoke(client -> {
                             if (Objects.isNull(client)) {
                                 log.warn("Add client match command failed, client doesn't exist anymore, " +
-                                                "{}/{}, matchmakerId={}, matchId={}",
+                                                "client={}/{}, matchmakerId={}, matchId={}",
                                         userId, clientId, matchmakerId, matchId);
                             }
                         })

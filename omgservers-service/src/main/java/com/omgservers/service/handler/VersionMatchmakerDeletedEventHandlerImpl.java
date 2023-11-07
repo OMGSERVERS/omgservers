@@ -39,7 +39,7 @@ public class VersionMatchmakerDeletedEventHandlerImpl implements EventHandler {
         return getDeletedVersionMatchmaker(tenantId, id)
                 .flatMap(versionMatchmaker -> {
                     log.info("Version matchmaker was deleted, " +
-                                    "{}/{}, " +
+                                    "versionMatchmaker={}/{}, " +
                                     "versionId={}, " +
                                     "matchmakerId={}",
                             tenantId,
