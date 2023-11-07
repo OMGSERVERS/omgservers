@@ -33,9 +33,9 @@ public class PlayerModelMapper {
             throw new ServerSideConflictException("player attributes can't be parsed, player=" + player, e);
         }
         try {
-            player.setObject(objectMapper.readValue(row.getString("object"), Object.class));
+            player.setProfile(objectMapper.readValue(row.getString("profile"), Object.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("player object can't be parsed, player=" + player, e);
+            throw new ServerSideConflictException("player profile can't be parsed, player=" + player, e);
         }
         return player;
     }

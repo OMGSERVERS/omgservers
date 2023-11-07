@@ -14,8 +14,8 @@ import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
-import com.omgservers.model.dto.user.GetPlayerObjectRequest;
-import com.omgservers.model.dto.user.GetPlayerObjectResponse;
+import com.omgservers.model.dto.user.GetPlayerProfileRequest;
+import com.omgservers.model.dto.user.GetPlayerProfileResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
@@ -28,8 +28,8 @@ import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
-import com.omgservers.model.dto.user.UpdatePlayerObjectRequest;
-import com.omgservers.model.dto.user.UpdatePlayerObjectResponse;
+import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
+import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
@@ -69,8 +69,8 @@ public interface UserApi {
     Uni<GetPlayerAttributesResponse> getPlayerAttributes(GetPlayerAttributesRequest request);
 
     @PUT
-    @Path("/get-player-object")
-    Uni<GetPlayerObjectResponse> getPlayerObject(GetPlayerObjectRequest request);
+    @Path("/get-player-profile")
+    Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request);
 
     @PUT
     @Path("/find-player")
@@ -85,8 +85,8 @@ public interface UserApi {
     Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request);
 
     @PUT
-    @Path("/update-player-object")
-    Uni<UpdatePlayerObjectResponse> updatePlayerObject(@Valid final UpdatePlayerObjectRequest request);
+    @Path("/update-player-profile")
+    Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request);
 
     @PUT
     @Path("/delete-player")

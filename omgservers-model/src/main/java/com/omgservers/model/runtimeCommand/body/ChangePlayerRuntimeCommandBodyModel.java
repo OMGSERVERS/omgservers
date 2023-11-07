@@ -25,7 +25,7 @@ public class ChangePlayerRuntimeCommandBodyModel extends RuntimeCommandBodyModel
     PlayerAttributesModel attributes;
 
     @NotNull
-    Object object;
+    Object profile;
 
     @NotNull
     Object message;

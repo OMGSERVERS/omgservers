@@ -109,7 +109,7 @@ public class TestClient {
     }
 
     public synchronized ServerMessageBodyModel consumeServerMessage() throws InterruptedException, IOException {
-        String messageString = testEndpoint.receive(45);
+        String messageString = testEndpoint.receive(60);
         if (messageString == null) {
             throw new IOException(MessageQualifierEnum.SERVER_MESSAGE + " was not received");
         }

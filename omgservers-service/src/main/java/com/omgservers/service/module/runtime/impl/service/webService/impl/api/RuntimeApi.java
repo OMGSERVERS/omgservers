@@ -22,8 +22,8 @@ import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.runtime.DoSetObjectRequest;
-import com.omgservers.model.dto.runtime.DoSetObjectResponse;
+import com.omgservers.model.dto.runtime.DoSetProfileRequest;
+import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
@@ -118,8 +118,8 @@ public interface RuntimeApi {
     Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request);
 
     @PUT
-    @Path("/do-set-object")
-    Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request);
+    @Path("/do-set-profile")
+    Uni<DoSetProfileResponse> doSetProfile(DoSetProfileRequest request);
 
     @PUT
     @Path("/do-kick-client")

@@ -6,16 +6,16 @@ import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
-import com.omgservers.model.dto.user.GetPlayerObjectRequest;
-import com.omgservers.model.dto.user.GetPlayerObjectResponse;
+import com.omgservers.model.dto.user.GetPlayerProfileRequest;
+import com.omgservers.model.dto.user.GetPlayerProfileResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncPlayerResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
-import com.omgservers.model.dto.user.UpdatePlayerObjectRequest;
-import com.omgservers.model.dto.user.UpdatePlayerObjectResponse;
+import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
+import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.service.module.user.impl.service.playerService.PlayerService;
@@ -23,10 +23,10 @@ import com.omgservers.service.module.user.impl.service.playerService.impl.method
 import com.omgservers.service.module.user.impl.service.playerService.impl.method.findPlayer.FindPlayerMethod;
 import com.omgservers.service.module.user.impl.service.playerService.impl.method.getPlayer.GetPlayerMethod;
 import com.omgservers.service.module.user.impl.service.playerService.impl.method.getPlayerAttributes.GetPlayerAttributesMethod;
-import com.omgservers.service.module.user.impl.service.playerService.impl.method.getPlayerObject.GetPlayerObjectMethod;
+import com.omgservers.service.module.user.impl.service.playerService.impl.method.getPlayerProfile.GetPlayerProfileMethod;
 import com.omgservers.service.module.user.impl.service.playerService.impl.method.syncPlayer.SyncPlayerMethod;
 import com.omgservers.service.module.user.impl.service.playerService.impl.method.updatePlayerAttributes.UpdatePlayerAttributesMethod;
-import com.omgservers.service.module.user.impl.service.playerService.impl.method.updatePlayerObject.UpdatePlayerObjectMethod;
+import com.omgservers.service.module.user.impl.service.playerService.impl.method.updatePlayerProfile.UpdatePlayerProfileMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,8 +42,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     final UpdatePlayerAttributesMethod updatePlayerAttributes;
     final GetPlayerAttributesMethod getPlayerAttributesMethod;
-    final UpdatePlayerObjectMethod updatePlayerObjectMethod;
-    final GetPlayerObjectMethod getPlayerObjectMethod;
+    final UpdatePlayerProfileMethod updatePlayerProfileMethod;
+    final GetPlayerProfileMethod getPlayerProfileMethod;
     final DeletePlayerMethod deletePlayerMethod;
     final SyncPlayerMethod syncPlayerMethod;
     final FindPlayerMethod findPlayerMethod;
@@ -69,11 +69,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Uni<GetPlayerObjectResponse> getPlayerObject(@Valid final GetPlayerObjectRequest request) {
+    public Uni<GetPlayerProfileResponse> getPlayerProfile(@Valid final GetPlayerProfileRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::getPlayerObject,
-                getPlayerObjectMethod::getPlayerObject);
+                UserModuleClient::getPlayerProfile,
+                getPlayerProfileMethod::getPlayerProfile);
     }
 
     @Override
@@ -102,11 +102,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(@Valid final UpdatePlayerObjectRequest request) {
+    public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::updatePlayerObject,
-                updatePlayerObjectMethod::updatePlayerObject);
+                UserModuleClient::updatePlayerProfile,
+                updatePlayerProfileMethod::updatePlayerProfile);
     }
 
     @Override

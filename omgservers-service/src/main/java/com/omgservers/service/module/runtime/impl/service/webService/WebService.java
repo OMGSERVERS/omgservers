@@ -22,8 +22,8 @@ import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.runtime.DoSetObjectRequest;
-import com.omgservers.model.dto.runtime.DoSetObjectResponse;
+import com.omgservers.model.dto.runtime.DoSetProfileRequest;
+import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
@@ -81,7 +81,7 @@ public interface WebService {
 
     Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request);
 
-    Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request);
+    Uni<DoSetProfileResponse> doSetProfile(DoSetProfileRequest request);
 
     Uni<DoKickClientResponse> doKickClient(DoKickClientRequest request);
 

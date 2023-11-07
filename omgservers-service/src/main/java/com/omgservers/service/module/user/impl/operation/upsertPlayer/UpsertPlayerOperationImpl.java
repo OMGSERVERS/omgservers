@@ -36,7 +36,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_player(
-                            id, user_id, created, modified, tenant_id, stage_id, attributes, object, deleted)
+                            id, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
@@ -49,7 +49,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                         player.getTenantId(),
                         player.getStageId(),
                         getAttributesString(player),
-                        getObjectString(player),
+                        getProfileString(player),
                         player.getDeleted()
                 ),
                 () -> new PlayerCreatedEventBodyModel(player.getUserId(), player.getId()),
@@ -65,9 +65,9 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
         }
     }
 
-    String getObjectString(PlayerModel player) {
+    String getProfileString(PlayerModel player) {
         try {
-            return objectMapper.writeValueAsString(player.getObject());
+            return objectMapper.writeValueAsString(player.getProfile());
         } catch (IOException e) {
             throw new ServerSideBadRequestException(e.getMessage(), e);
         }

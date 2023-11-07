@@ -2,10 +2,14 @@ package com.omgservers.service.module.worker.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
 import io.smallrye.mutiny.Uni;
@@ -30,4 +34,12 @@ public interface WorkerApi {
     @PUT
     @Path("/handle-runtime-commands")
     Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(HandleRuntimeCommandsWorkerRequest request);
+
+    @PUT
+    @Path("/get-runtime-state")
+    Uni<GetRuntimeStateWorkerResponse> getRuntimeState(GetRuntimeStateWorkerRequest request);
+
+    @PUT
+    @Path("/update-runtime-state")
+    Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(UpdateRuntimeStateWorkerRequest request);
 }

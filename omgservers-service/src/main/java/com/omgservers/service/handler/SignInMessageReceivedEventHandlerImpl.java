@@ -218,12 +218,12 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                                           final ClientModel client) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var playerAttributes = player.getAttributes();
-        final var playerObject = player.getObject();
+        final var attributes = player.getAttributes();
+        final var profile = player.getProfile();
         final var runtimeCommandBody = new SignInRuntimeCommandBodyModel(userId,
                 clientId,
-                playerAttributes,
-                playerObject);
+                attributes,
+                profile);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

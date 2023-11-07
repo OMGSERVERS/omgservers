@@ -16,7 +16,7 @@ public class ChangePlayerLuaCommand extends LuaCommand {
     public ChangePlayerLuaCommand(final Long userId,
                                   final Long clientId,
                                   final LuaTable attributes,
-                                  final LuaValue object,
+                                  final LuaValue profile,
                                   final LuaValue message) {
         super("change_player", false);
         this.userId = userId;
@@ -25,7 +25,7 @@ public class ChangePlayerLuaCommand extends LuaCommand {
         set("user_id", userId.toString());
         set("client_id", clientId.toString());
         set("attributes", attributes);
-        set("object", object);
+        set("profile", profile);
         set("message", message);
     }
 }

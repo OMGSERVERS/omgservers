@@ -22,8 +22,8 @@ import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.runtime.DoSetObjectRequest;
-import com.omgservers.model.dto.runtime.DoSetObjectResponse;
+import com.omgservers.model.dto.runtime.DoSetProfileRequest;
+import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
@@ -160,8 +160,8 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoSetObjectResponse> doSetObject(DoSetObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::doSetObject);
+    public Uni<DoSetProfileResponse> doSetProfile(DoSetProfileRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::doSetProfile);
     }
 
     @Override

@@ -12,8 +12,8 @@ import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.runtime.DoSetObjectRequest;
-import com.omgservers.model.dto.runtime.DoSetObjectResponse;
+import com.omgservers.model.dto.runtime.DoSetProfileRequest;
+import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
@@ -27,7 +27,7 @@ import com.omgservers.service.module.runtime.impl.service.doService.impl.method.
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doMulticastMessage.DoMulticastMessageMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doRespondClient.DoRespondClientMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes.DoSetAttributesMethod;
-import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetObject.DoSetObjectMethod;
+import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetProfile.DoSetProfileMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doStopRuntime.DoStopRuntimeMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doUnicastMessage.DoUnicastMessageMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -54,7 +54,7 @@ public class DoServiceImpl implements DoService {
     final DoChangePlayerMethod doChangePlayerMethod;
     final DoStopRuntimeMethod doStopRuntimeMethod;
     final DoKickClientMethod doKickClientMethod;
-    final DoSetObjectMethod doSetObjectMethod;
+    final DoSetProfileMethod doSetProfileMethod;
 
     @Override
     public Uni<DoRespondClientResponse> doRespondClient(@Valid final DoRespondClientRequest request) {
@@ -73,11 +73,11 @@ public class DoServiceImpl implements DoService {
     }
 
     @Override
-    public Uni<DoSetObjectResponse> doSetObject(@Valid final DoSetObjectRequest request) {
+    public Uni<DoSetProfileResponse> doSetProfile(@Valid final DoSetProfileRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::doSetObject,
-                doSetObjectMethod::doSetObject);
+                RuntimeModuleClient::doSetProfile,
+                doSetProfileMethod::doSetProfile);
     }
 
     @Override

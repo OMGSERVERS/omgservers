@@ -5,6 +5,7 @@ import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
 import com.omgservers.model.event.EventModel;
+import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.checkRuntimePermission.CheckRuntimePermissionOperation;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.mapDoCommand.MapDoCommandOperation;
@@ -35,7 +36,9 @@ class HandleRuntimeCommandsMethodImpl implements HandleRuntimeCommandsMethod {
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var runtimeId = request.getRuntimeId();
 
-        return checkRuntimePermissionOperation.checkRuntimePermission(runtimeId, userId)
+        return checkRuntimePermissionOperation.checkRuntimePermission(runtimeId,
+                        userId,
+                        RuntimePermissionEnum.HANDLE_RUNTIME)
                 .flatMap(runtimePermission -> {
                     final var runtimeCommandIds = request.getRuntimeCommandIds();
                     final var events = request.getDoCommands().stream()

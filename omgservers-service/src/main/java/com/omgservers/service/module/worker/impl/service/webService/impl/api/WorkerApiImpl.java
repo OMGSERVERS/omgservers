@@ -2,10 +2,14 @@ package com.omgservers.service.module.worker.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
 import com.omgservers.model.user.UserRoleEnum;
@@ -47,5 +51,17 @@ class WorkerApiImpl implements WorkerApi {
     public Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(
             final HandleRuntimeCommandsWorkerRequest request) {
         return webService.handleRuntimeCommands(request);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
+    public Uni<GetRuntimeStateWorkerResponse> getRuntimeState(final GetRuntimeStateWorkerRequest request) {
+        return webService.getRuntimeState(request);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
+    public Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(final UpdateRuntimeStateWorkerRequest request) {
+        return webService.updateRuntimeState(request);
     }
 }

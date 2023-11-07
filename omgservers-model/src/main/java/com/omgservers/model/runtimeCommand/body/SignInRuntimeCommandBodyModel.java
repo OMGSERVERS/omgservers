@@ -25,7 +25,7 @@ public class SignInRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
     PlayerAttributesModel attributes;
 
     @NotNull
-    Object object;
+    Object profile;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {

@@ -2,10 +2,14 @@ package com.omgservers.service.module.worker.impl.service.webService.impl;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
+import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
 import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
 import com.omgservers.service.module.worker.impl.service.webService.WebService;
@@ -41,5 +45,15 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(final HandleRuntimeCommandsWorkerRequest request) {
         return workerService.handleRuntimeCommands(request);
+    }
+
+    @Override
+    public Uni<GetRuntimeStateWorkerResponse> getRuntimeState(final GetRuntimeStateWorkerRequest request) {
+        return workerService.getRuntimeState(request);
+    }
+
+    @Override
+    public Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(final UpdateRuntimeStateWorkerRequest request) {
+        return workerService.updateRuntimeState(request);
     }
 }

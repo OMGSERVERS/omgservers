@@ -6,7 +6,7 @@ import com.omgservers.model.doCommand.body.DoKickCommandBodyModel;
 import com.omgservers.model.doCommand.body.DoMulticastCommandBodyModel;
 import com.omgservers.model.doCommand.body.DoRespondCommandBodyModel;
 import com.omgservers.model.doCommand.body.DoSetAttributesCommandBodyModel;
-import com.omgservers.model.doCommand.body.DoSetObjectCommandBodyModel;
+import com.omgservers.model.doCommand.body.DoSetProfileCommandBodyModel;
 import com.omgservers.model.doCommand.body.DoStopCommandBodyModel;
 import com.omgservers.model.doCommand.body.DoUnicastCommandBodyModel;
 
@@ -14,7 +14,7 @@ public enum DoCommandQualifierEnum {
 
     DO_RESPOND(DoRespondCommandBodyModel.class, false),
     DO_SET_ATTRIBUTES(DoSetAttributesCommandBodyModel.class, true),
-    DO_SET_OBJECT(DoSetObjectCommandBodyModel.class, true),
+    DO_SET_PROFILE(DoSetProfileCommandBodyModel.class, true),
 
     DO_UNICAST(DoUnicastCommandBodyModel.class, false),
     DO_MULTICAST(DoMulticastCommandBodyModel.class, false),

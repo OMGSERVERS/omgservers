@@ -73,12 +73,12 @@ public class ChangeCommandApprovedEventHandlerImpl implements EventHandler {
                                           final Object message) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var playerAttributes = player.getAttributes();
-        final var playerObject = player.getObject();
+        final var attributes = player.getAttributes();
+        final var profile = player.getProfile();
         final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId,
                 clientId,
-                playerAttributes,
-                playerObject,
+                attributes,
+                profile,
                 message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);

@@ -14,12 +14,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class PlayerModel {
 
-    public static void validate(PlayerModel player) {
-        if (player == null) {
-            throw new IllegalArgumentException("player is null");
-        }
-    }
-
     @NotNull
     Long id;
 
@@ -46,7 +40,7 @@ public class PlayerModel {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    Object object;
+    Object profile;
 
     @NotNull
     Boolean deleted;

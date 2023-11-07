@@ -14,8 +14,8 @@ import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
-import com.omgservers.model.dto.user.GetPlayerObjectRequest;
-import com.omgservers.model.dto.user.GetPlayerObjectResponse;
+import com.omgservers.model.dto.user.GetPlayerProfileRequest;
+import com.omgservers.model.dto.user.GetPlayerProfileResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
@@ -28,8 +28,8 @@ import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
-import com.omgservers.model.dto.user.UpdatePlayerObjectRequest;
-import com.omgservers.model.dto.user.UpdatePlayerObjectResponse;
+import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
+import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -105,8 +105,8 @@ class UserApiImpl implements UserApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<UpdatePlayerObjectResponse> updatePlayerObject(UpdatePlayerObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updatePlayerObject);
+    public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(UpdatePlayerProfileRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::updatePlayerProfile);
     }
 
     @Override
@@ -140,7 +140,7 @@ class UserApiImpl implements UserApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetPlayerObjectResponse> getPlayerObject(GetPlayerObjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayerObject);
+    public Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayerProfile);
     }
 }

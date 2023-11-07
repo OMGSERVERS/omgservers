@@ -38,7 +38,7 @@ public class PlayerModelFactory {
         player.setTenantId(tenantId);
         player.setStageId(stageId);
         player.setAttributes(PlayerAttributesModel.create());
-        player.setObject(new Object());
+        player.setProfile(new Object());
         player.setDeleted(false);
 
         return player;

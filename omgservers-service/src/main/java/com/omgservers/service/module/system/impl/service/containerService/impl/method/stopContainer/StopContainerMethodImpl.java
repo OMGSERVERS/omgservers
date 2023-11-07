@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.service.containerService.impl.
 
 import com.omgservers.model.dto.system.StopContainerRequest;
 import com.omgservers.model.dto.system.StopContainerResponse;
-import com.omgservers.service.module.system.impl.component.dockerClientWrapper.DockerClientWrapper;
+import com.omgservers.service.module.system.impl.component.DockerClientWrapper;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

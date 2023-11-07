@@ -3,7 +3,7 @@ package com.omgservers.service.module.system.impl.service.containerService.impl.
 import com.github.dockerjava.api.model.HostConfig;
 import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
-import com.omgservers.service.module.system.impl.component.dockerClientWrapper.DockerClientWrapper;
+import com.omgservers.service.module.system.impl.component.DockerClientWrapper;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

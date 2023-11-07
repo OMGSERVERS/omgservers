@@ -34,7 +34,7 @@ public class ChangeRuntimeCommandMapper implements RuntimeCommandMapper {
                 runtimeCommandBody.getUserId(),
                 runtimeCommandBody.getClientId(),
                 parseAttributes(runtimeCommandBody.getAttributes()),
-                coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getObject()),
+                coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getProfile()),
                 coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getMessage())
         );
     }

@@ -27,7 +27,7 @@ create table if not exists tab_user_player (
     tenant_id bigint not null,
     stage_id bigint not null,
     attributes json not null,
-    object json not null,
+    profile json not null,
     deleted boolean not null,
     unique(user_id, stage_id)
 );

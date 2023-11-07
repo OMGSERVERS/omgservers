@@ -31,7 +31,7 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
                 sqlConnection,
                 shard,
                 """
-                        select id, user_id, created, modified, tenant_id, stage_id, attributes, object, deleted
+                        select id, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted
                         from $schema.tab_user_player
                         where user_id = $1 and stage_id = $2 and deleted = false
                         limit 1

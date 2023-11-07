@@ -49,7 +49,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         return getDeletedRuntime(runtimeId)
                 .flatMap(runtime -> {
                     log.info("Runtime was deleted, " +
-                                    "id={}" +
+                                    "id={}, " +
                                     "type={}, " +
                                     "version={}/{}",
                             runtime.getId(),

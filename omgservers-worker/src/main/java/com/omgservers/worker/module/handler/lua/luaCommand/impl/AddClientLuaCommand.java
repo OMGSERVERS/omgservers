@@ -16,7 +16,7 @@ public class AddClientLuaCommand extends LuaCommand {
     public AddClientLuaCommand(final Long userId,
                                final Long clientId,
                                final LuaTable attributes,
-                               final LuaValue object) {
+                               final LuaValue profile) {
         super("add_client", true);
         this.userId = userId;
         this.clientId = clientId;
@@ -24,6 +24,6 @@ public class AddClientLuaCommand extends LuaCommand {
         set("user_id", userId.toString());
         set("client_id", clientId.toString());
         set("attributes", attributes);
-        set("object", object);
+        set("profile", profile);
     }
 }

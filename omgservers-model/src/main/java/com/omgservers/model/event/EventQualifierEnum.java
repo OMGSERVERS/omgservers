@@ -50,8 +50,8 @@ import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
 import com.omgservers.model.event.body.SetAttributesCommandApprovedEventBodyModel;
 import com.omgservers.model.event.body.SetAttributesCommandReceivedEventBodyModel;
-import com.omgservers.model.event.body.SetObjectCommandApprovedEventBodyModel;
-import com.omgservers.model.event.body.SetObjectCommandReceivedEventBodyModel;
+import com.omgservers.model.event.body.SetProfileCommandApprovedEventBodyModel;
+import com.omgservers.model.event.body.SetProfileCommandReceivedEventBodyModel;
 import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
@@ -145,8 +145,8 @@ public enum EventQualifierEnum {
     RESPOND_COMMAND_APPROVED(RespondCommandApprovedEventBodyModel.class, false),
     SET_ATTRIBUTES_COMMAND_RECEIVED(SetAttributesCommandReceivedEventBodyModel.class, false),
     SET_ATTRIBUTES_COMMAND_APPROVED(SetAttributesCommandApprovedEventBodyModel.class, false),
-    SET_OBJECT_COMMAND_RECEIVED(SetObjectCommandReceivedEventBodyModel.class, false),
-    SET_OBJECT_COMMAND_APPROVED(SetObjectCommandApprovedEventBodyModel.class, false),
+    SET_PROFILE_COMMAND_RECEIVED(SetProfileCommandReceivedEventBodyModel.class, false),
+    SET_PROFILE_COMMAND_APPROVED(SetProfileCommandApprovedEventBodyModel.class, false),
     UNICAST_COMMAND_RECEIVED(UnicastCommandReceivedEventBodyModel.class, false),
     UNICAST_COMMAND_APPROVED(UnicastCommandApprovedEventBodyModel.class, false),
     MULTICAST_COMMAND_RECEIVED(MulticastCommandReceivedEventBodyModel.class, false),

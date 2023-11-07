@@ -32,7 +32,7 @@ public class SignInRuntimeCommandMapper implements RuntimeCommandMapper {
         return new SignInLuaCommand(runtimeCommandBody.getUserId(),
                 runtimeCommandBody.getClientId(),
                 parseAttributes(runtimeCommandBody.getAttributes()),
-                coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getObject()));
+                coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getProfile()));
     }
 
     LuaTable parseAttributes(PlayerAttributesModel attributes) {

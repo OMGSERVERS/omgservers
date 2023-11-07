@@ -12,8 +12,8 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
@@ -74,12 +74,12 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
                                           final Object message) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var playerAttributes = player.getAttributes();
-        final var playerObject = player.getObject();
+        final var attributes = player.getAttributes();
+        final var profile = player.getProfile();
         final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId,
                 clientId,
-                playerAttributes,
-                playerObject,
+                attributes,
+                profile,
                 message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);

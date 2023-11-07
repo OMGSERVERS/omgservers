@@ -139,7 +139,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
         final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId,
                 clientId,
                 player.getAttributes(),
-                player.getObject());
+                player.getProfile());
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

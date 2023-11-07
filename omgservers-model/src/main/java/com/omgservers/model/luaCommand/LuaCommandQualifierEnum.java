@@ -4,7 +4,7 @@ public enum LuaCommandQualifierEnum {
 
     RESPOND("respond"),
     SET_ATTRIBUTES("set_attributes"),
-    SET_OBJECT("set_object"),
+    SET_PROFILE("set_profile"),
 
     UNICAST("unicast"),
     MULTICAST("multicast"),
