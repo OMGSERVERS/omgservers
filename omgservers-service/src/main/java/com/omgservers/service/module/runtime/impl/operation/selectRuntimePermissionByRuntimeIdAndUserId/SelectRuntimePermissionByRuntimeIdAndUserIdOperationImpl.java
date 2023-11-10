@@ -28,18 +28,17 @@ class SelectRuntimePermissionByRuntimeIdAndUserIdOperationImpl implements
                                                                                    final int shard,
                                                                                    final Long runtimeId,
                                                                                    final Long userId,
-                                                                                   final RuntimePermissionEnum permission,
-                                                                                   final Boolean deleted) {
+                                                                                   final RuntimePermissionEnum permission) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, runtime_id, created, modified, user_id, permission, deleted
                         from $schema.tab_runtime_permission
-                        where runtime_id = $1 and user_id = $2 and permission = $3 and deleted = $4
+                        where runtime_id = $1 and user_id = $2 and permission = $3
                         limit 1
                         """,
-                Arrays.asList(runtimeId, userId, permission, deleted),
+                Arrays.asList(runtimeId, userId, permission),
                 "Runtime permission",
                 runtimePermissionModelMapper::fromRow);
     }

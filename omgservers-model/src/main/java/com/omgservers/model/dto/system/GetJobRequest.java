@@ -12,7 +12,4 @@ public class GetJobRequest {
 
     @NotNull
     Long id;
-
-    @NotNull
-    Boolean deleted;
 }

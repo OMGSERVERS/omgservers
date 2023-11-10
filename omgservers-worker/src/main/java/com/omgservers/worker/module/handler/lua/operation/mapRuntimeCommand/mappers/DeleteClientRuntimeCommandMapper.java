@@ -3,7 +3,8 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.luaCommand.impl.DeleteClientLuaCommand;
+import com.omgservers.worker.module.handler.lua.component.luaCommand.impl.DeleteClientLuaCommand;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,8 +22,9 @@ public class DeleteClientRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public DeleteClientLuaCommand map(final RuntimeCommandModel runtimeCommand) {
+    public DeleteClientLuaCommand map(LuaContext luaContext, final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (DeleteClientRuntimeCommandBodyModel) runtimeCommand.getBody();
-        return new DeleteClientLuaCommand(runtimeCommandBody.getUserId(), runtimeCommandBody.getClientId());
+        return new DeleteClientLuaCommand(runtimeCommandBody.getUserId(),
+                runtimeCommandBody.getClientId());
     }
 }

@@ -21,9 +21,6 @@ public class FindRuntimePermissionRequest implements ShardedRequest {
     @NotNull
     RuntimePermissionEnum permission;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return runtimeId.toString();

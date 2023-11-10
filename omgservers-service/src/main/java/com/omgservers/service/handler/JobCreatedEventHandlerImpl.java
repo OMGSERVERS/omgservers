@@ -47,7 +47,7 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> getJob(final Long id) {
-        final var request = new GetJobRequest(id, false);
+        final var request = new GetJobRequest(id);
         return systemModule.getJobService().getJob(request)
                 .map(GetJobResponse::getJob);
     }

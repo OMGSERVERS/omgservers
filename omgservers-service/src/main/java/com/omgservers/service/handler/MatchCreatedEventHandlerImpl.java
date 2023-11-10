@@ -73,13 +73,13 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId, false);
+        final var request = new GetMatchmakerRequest(matchmakerId);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId, false);
+        final var request = new GetMatchRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
     }

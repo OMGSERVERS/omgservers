@@ -1,28 +1,36 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doStopRuntime;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.event.body.StopCommandApprovedEventBodyModel;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.model.dto.runtime.GetRuntimeRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.matchmakerCommand.body.StopMatchMatchmakerCommandBodyModel;
+import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.factory.MatchmakerCommandModelFactory;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class DoStopRuntimeMethodImpl implements DoStopRuntimeMethod {
 
-    final SystemModule systemModule;
+    final MatchmakerModule matchmakerModule;
+    final RuntimeModule runtimeModule;
 
     final CheckShardOperation checkShardOperation;
 
-    final EventModelFactory eventModelFactory;
+    final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
     public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
@@ -30,17 +38,40 @@ class DoStopRuntimeMethodImpl implements DoStopRuntimeMethod {
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();
                     final var reason = request.getReason();
-                    return syncEvent(runtimeId, reason);
+                    return doStopRuntime(runtimeId, reason);
                 })
                 .replaceWith(new DoStopRuntimeResponse());
     }
 
-    Uni<Boolean> syncEvent(final Long runtimeId,
-                           final String reason) {
-        final var eventBody = new StopCommandApprovedEventBodyModel(runtimeId, reason);
-        final var eventModel = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(request)
-                .map(SyncEventResponse::getCreated);
+    Uni<Boolean> doStopRuntime(final Long runtimeId,
+                               final String reason) {
+        return getRuntime(runtimeId)
+                .flatMap(runtime -> {
+                    if (Objects.isNull(runtime.getConfig().getMatchConfig())) {
+                        throw new ServerSideConflictException("Runtime is corrupted, matchConfig is null, " +
+                                "runtimeId=" + runtimeId);
+                    }
+
+                    final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
+                    final var matchId = runtime.getConfig().getMatchConfig().getMatchId();
+                    log.info("Stop was approved, runtimeId={}, matchmakerId={}, matchId={}, reason={}",
+                            runtimeId, matchmakerId, matchId, reason);
+
+                    return syncStopMatchMatchmakerCommand(matchmakerId, matchId);
+                });
+    }
+
+    Uni<RuntimeModel> getRuntime(final Long id) {
+        final var request = new GetRuntimeRequest(id);
+        return runtimeModule.getRuntimeService().getRuntime(request)
+                .map(GetRuntimeResponse::getRuntime);
+    }
+
+    Uni<Boolean> syncStopMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
+        final var commandBody = new StopMatchMatchmakerCommandBodyModel(matchId);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
+        final var request = new SyncMatchmakerCommandRequest(commandModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+                .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

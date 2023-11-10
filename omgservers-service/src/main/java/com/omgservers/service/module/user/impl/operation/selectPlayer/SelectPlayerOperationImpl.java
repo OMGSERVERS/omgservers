@@ -26,8 +26,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
     public Uni<PlayerModel> selectPlayer(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long userId,
-                                         final Long id,
-                                         final Boolean deleted) {
+                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,

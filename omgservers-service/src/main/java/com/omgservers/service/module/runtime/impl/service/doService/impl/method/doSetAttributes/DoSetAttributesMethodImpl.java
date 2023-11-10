@@ -1,16 +1,17 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.SetAttributesCommandApprovedEventBodyModel;
+import com.omgservers.model.dto.user.GetClientRequest;
+import com.omgservers.model.dto.user.GetClientResponse;
+import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
+import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,12 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
 
-    final SystemModule systemModule;
+    final UserModule userModule;
 
     final HasRuntimeGrantOperation hasRuntimeGrantOperation;
     final CheckShardOperation checkShardOperation;
 
-    final EventModelFactory eventModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -49,7 +49,7 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
                                     grant)
                             .flatMap(has -> {
                                 if (has) {
-                                    return syncApprove(runtimeId, userId, clientId, attributes);
+                                    return doSetAttributes(userId, clientId, attributes);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of grant, " +
                                                     "runtimeId=%s, userId=%s, clientId=%s, grant=%s",
@@ -61,14 +61,28 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
                 .replaceWith(new DoSetAttributesResponse(true));
     }
 
-    Uni<Boolean> syncApprove(final Long runtimeId,
-                             final Long userId,
-                             final Long clientId,
-                             final PlayerAttributesModel attributes) {
-        final var eventBody = new SetAttributesCommandApprovedEventBodyModel(runtimeId, userId, clientId, attributes);
-        final var eventModel = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(request)
-                .map(SyncEventResponse::getCreated);
+    Uni<Boolean> doSetAttributes(final Long userId,
+                                 final Long clientId,
+                                 final PlayerAttributesModel attributes) {
+        return getClient(userId, clientId)
+                .flatMap(client -> {
+                    final var playerId = client.getPlayerId();
+                    return updatePlayerAttributes(userId, playerId, attributes);
+                })
+                .replaceWith(true);
+    }
+
+    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        return userModule.getClientService().getClient(getClientServiceRequest)
+                .map(GetClientResponse::getClient);
+    }
+
+    Uni<Boolean> updatePlayerAttributes(final Long userId,
+                                        final Long playerId,
+                                        final PlayerAttributesModel attributes) {
+        final var request = new UpdatePlayerAttributesRequest(userId, playerId, attributes);
+        return userModule.getPlayerService().updatePlayerAttributes(request)
+                .map(UpdatePlayerAttributesResponse::getUpdated);
     }
 }

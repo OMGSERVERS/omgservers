@@ -41,7 +41,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id, false);
+        final var request = new GetStageRequest(tenantId, id);
         return tenantModule.getStageService().getStage(request)
                 .map(GetStageResponse::getStage);
     }

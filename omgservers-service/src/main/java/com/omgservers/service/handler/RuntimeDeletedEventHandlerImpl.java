@@ -64,7 +64,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<RuntimeModel> getDeletedRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id, true);
+        final var request = new GetRuntimeRequest(id);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
@@ -79,7 +79,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ContainerModel> findContainer(final Long runtimeId) {
-        final var request = new FindContainerRequest(runtimeId, ContainerQualifierEnum.RUNTIME, false);
+        final var request = new FindContainerRequest(runtimeId, ContainerQualifierEnum.RUNTIME);
         return systemModule.getContainerService().findContainer(request)
                 .map(FindContainerResponse::getContainer);
     }

@@ -16,7 +16,4 @@ public class FindContainerRequest {
 
     @NotNull
     ContainerQualifierEnum qualifier;
-
-    @NotNull
-    Boolean deleted;
 }

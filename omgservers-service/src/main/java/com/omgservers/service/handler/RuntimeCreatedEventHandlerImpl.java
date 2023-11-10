@@ -73,7 +73,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id, false);
+        final var request = new GetRuntimeRequest(id);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
@@ -93,7 +93,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     Uni<UserModel> createUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.CONTAINER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.WORKER, passwordHash);
         final var request = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(request)
                 .map(SyncUserResponse::getCreated)

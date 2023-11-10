@@ -24,7 +24,7 @@ public class SelectProjectOperationTestInterface {
                                       final Long id,
                                       final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectProjectOperation
-                        .selectProject(sqlConnection, shard, tenantId, id, deleted))
+                        .selectProject(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

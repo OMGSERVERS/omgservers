@@ -24,18 +24,17 @@ class SelectContainerByEntityIdAndQualifierOperationImpl implements SelectContai
     @Override
     public Uni<ContainerModel> selectContainerByEntityIdAndQualifier(final SqlConnection sqlConnection,
                                                                      final Long entityId,
-                                                                     final ContainerQualifierEnum qualifier,
-                                                                     final Boolean deleted) {
+                                                                     final ContainerQualifierEnum qualifier) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """
                         select id, created, modified, entity_id, qualifier, image, config, deleted
                         from system.tab_container
-                        where entity_id = $1 and qualifier = $2 and deleted = $3
+                        where entity_id = $1 and qualifier = $2
                         limit 1
                         """,
-                Arrays.asList(entityId, qualifier, deleted),
+                Arrays.asList(entityId, qualifier),
                 "Container",
                 containerModelMapper::fromRow);
     }

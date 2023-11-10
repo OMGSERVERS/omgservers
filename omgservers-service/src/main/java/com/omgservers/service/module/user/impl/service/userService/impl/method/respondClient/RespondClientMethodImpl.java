@@ -51,7 +51,7 @@ class RespondClientMethodImpl implements RespondClientMethod {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

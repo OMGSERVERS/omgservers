@@ -47,7 +47,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long id) {
-        final var request = new GetMatchmakerRequest(id, false);
+        final var request = new GetMatchmakerRequest(id);
         return matchmakerModule.getMatchmakerService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }

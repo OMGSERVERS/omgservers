@@ -24,7 +24,7 @@ public class SelectPlayerOperationTestInterface {
                                     final Long id,
                                     final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                        .selectPlayer(sqlConnection, shard, userId, id, deleted))
+                        .selectPlayer(sqlConnection, shard, userId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

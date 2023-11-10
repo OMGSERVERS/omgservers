@@ -25,9 +25,8 @@ class GetStageMethodImpl implements GetStageMethod {
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectStageOperation
-                            .selectStage(sqlConnection, shardModel.shard(), tenantId, id, deleted));
+                            .selectStage(sqlConnection, shardModel.shard(), tenantId, id));
                 })
                 .map(GetStageResponse::new);
     }

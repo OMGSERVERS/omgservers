@@ -24,7 +24,7 @@ public class SelectVersionOperationTestInterface {
                                       final Long id,
                                       final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectVersionOperation
-                        .selectVersion(sqlConnection, shard, tenantId, id, deleted))
+                        .selectVersion(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

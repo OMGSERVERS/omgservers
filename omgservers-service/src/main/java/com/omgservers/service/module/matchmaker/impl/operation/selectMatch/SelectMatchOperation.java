@@ -8,6 +8,5 @@ public interface SelectMatchOperation {
     Uni<MatchModel> selectMatch(SqlConnection sqlConnection,
                                 int shard,
                                 Long matchmakerId,
-                                Long id,
-                                Boolean deleted);
+                                Long id);
 }

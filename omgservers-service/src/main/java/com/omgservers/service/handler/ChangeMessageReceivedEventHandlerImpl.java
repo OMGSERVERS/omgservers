@@ -5,12 +5,9 @@ import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
-import com.omgservers.model.dto.user.GetPlayerRequest;
-import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
-import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -47,40 +44,23 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
 
         return getClient(userId, clientId)
                 .flatMap(client -> {
-                    final var playerId = client.getPlayerId();
-                    return getPlayer(userId, playerId)
-                            .flatMap(player -> {
-                                final var runtimeId = client.getDefaultRuntimeId();
-                                return syncChangeRuntimeCommand(runtimeId, player, client, message);
-                            });
+                    final var runtimeId = client.getDefaultRuntimeId();
+                    return syncChangeRuntimeCommand(runtimeId, client, message);
                 });
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<PlayerModel> getPlayer(final Long userId, final Long playerId) {
-        final var request = new GetPlayerRequest(userId, playerId, false);
-        return userModule.getPlayerService().getPlayer(request)
-                .map(GetPlayerResponse::getPlayer);
-    }
-
     Uni<Boolean> syncChangeRuntimeCommand(final Long runtimeId,
-                                          final PlayerModel player,
                                           final ClientModel client,
                                           final Object message) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var attributes = player.getAttributes();
-        final var profile = player.getProfile();
-        final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId,
-                clientId,
-                attributes,
-                profile,
-                message);
+        final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId, clientId, message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

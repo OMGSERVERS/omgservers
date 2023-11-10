@@ -2,16 +2,12 @@ package com.omgservers.service.module.worker.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.module.worker.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -35,33 +31,20 @@ class WorkerApiImpl implements WorkerApi {
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
+    @RolesAllowed({UserRoleEnum.Names.WORKER})
     public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
         return webService.getVersion(request);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
-    public Uni<ViewRuntimeCommandsWorkerResponse> viewRuntimeCommands(final ViewRuntimeCommandsWorkerRequest request) {
-        return webService.viewRuntimeCommands(request);
+    @RolesAllowed({UserRoleEnum.Names.WORKER})
+    public Uni<GetWorkerContextWorkerResponse> getWorkerContext(final GetWorkerContextWorkerRequest request) {
+        return webService.getWorkerContext(request);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
-    public Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(
-            final HandleRuntimeCommandsWorkerRequest request) {
-        return webService.handleRuntimeCommands(request);
-    }
-
-    @Override
-    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
-    public Uni<GetRuntimeStateWorkerResponse> getRuntimeState(final GetRuntimeStateWorkerRequest request) {
-        return webService.getRuntimeState(request);
-    }
-
-    @Override
-    @RolesAllowed({UserRoleEnum.Names.CONTAINER})
-    public Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(final UpdateRuntimeStateWorkerRequest request) {
-        return webService.updateRuntimeState(request);
+    @RolesAllowed({UserRoleEnum.Names.WORKER})
+    public Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(final DoWorkerCommandsWorkerRequest request) {
+        return webService.doWorkerCommands(request);
     }
 }

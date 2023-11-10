@@ -4,6 +4,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoSetProfileCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,10 +23,12 @@ public class SetProfileLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(LuaTable luaCommand) {
+    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
         final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
+
         final var luaProfile = luaCommand.get("profile").checktable();
+        luaContext.updateProfile(userId, luaProfile);
 
         final var doCommandBody = new DoSetProfileCommandBodyModel(userId, clientId, luaProfile);
         final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_SET_PROFILE, doCommandBody);

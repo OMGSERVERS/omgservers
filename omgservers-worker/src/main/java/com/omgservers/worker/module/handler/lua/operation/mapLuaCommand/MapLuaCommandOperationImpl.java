@@ -2,6 +2,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand;
 
 import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,12 @@ class MapLuaCommandOperationImpl implements MapLuaCommandOperation {
     }
 
     @Override
-    public DoCommandModel mapLuaCommand(final LuaTable luaCommand) {
+    public DoCommandModel mapLuaCommand(LuaContext luaContext, final LuaTable luaCommand) {
         try {
             final var luaQualifier = luaCommand.get("qualifier").checkjstring();
             final var qualifier = fromString(luaQualifier);
             final var mapper = luaCommandMappers.get(qualifier);
-            return mapper.map(luaCommand);
+            return mapper.map(luaContext, luaCommand);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage(), e);
         }

@@ -24,8 +24,7 @@ class SelectStageOperationImpl implements SelectStageOperation {
     public Uni<StageModel> selectStage(final SqlConnection sqlConnection,
                                        final int shard,
                                        final Long tenantId,
-                                       final Long id,
-                                       final Boolean deleted) {
+                                       final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -33,13 +32,12 @@ class SelectStageOperationImpl implements SelectStageOperation {
                         select
                             id, tenant_id, project_id, created, modified, secret, deleted
                         from $schema.tab_tenant_stage
-                        where tenant_id = $1 and id = $2 and deleted = $3
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
                 Arrays.asList(
                         tenantId,
-                        id,
-                        deleted
+                        id
                 ),
                 "Stage",
                 stageModelMapper::fromRow);

@@ -5,12 +5,12 @@ import com.omgservers.model.dto.matchmaker.GetMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
-import com.omgservers.service.exception.ServerSideClientExceptionException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.job.match.operations.handleMatchCommand.HandleMatchCommandOperation;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.service.exception.ServerSideClientExceptionException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.job.match.operations.handleMatchCommand.HandleMatchCommandOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.jobService.impl.JobTask;
 import io.smallrye.mutiny.Multi;
@@ -56,7 +56,7 @@ public class MatchJobTask implements JobTask {
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId, false);
+        final var request = new GetMatchRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
     }

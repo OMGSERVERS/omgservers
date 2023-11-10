@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -23,18 +23,17 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
     @Override
     public Uni<RuntimeModel> selectRuntime(final SqlConnection sqlConnection,
                                            final int shard,
-                                           final Long id,
-                                           final Boolean deleted) {
+                                           final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, created, modified, tenant_id, version_id, type, config, deleted
                         from $schema.tab_runtime
-                        where id = $1 and deleted = $2
+                        where id = $1
                         limit 1
                         """,
-                Arrays.asList(id, deleted),
+                Collections.singletonList(id),
                 "Runtime",
                 runtimeModelMapper::fromRow);
     }

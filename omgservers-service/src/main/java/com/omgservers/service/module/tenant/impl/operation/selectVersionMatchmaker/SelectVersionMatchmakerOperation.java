@@ -8,6 +8,5 @@ public interface SelectVersionMatchmakerOperation {
     Uni<VersionMatchmakerModel> selectVersionMatchmaker(SqlConnection sqlConnection,
                                                         int shard,
                                                         Long tenantId,
-                                                        Long id,
-                                                        Boolean deleted);
+                                                        Long id);
 }

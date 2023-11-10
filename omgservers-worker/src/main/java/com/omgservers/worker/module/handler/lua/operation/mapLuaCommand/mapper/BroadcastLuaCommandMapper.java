@@ -4,6 +4,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoBroadcastCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ public class BroadcastLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(final LuaTable luaCommand) {
+    public DoCommandModel map(final LuaContext luaContext, final LuaTable luaCommand) {
         final var luaMessage = luaCommand.get("message").checktable();
 
         final var doCommandBody = new DoBroadcastCommandBodyModel(luaMessage);

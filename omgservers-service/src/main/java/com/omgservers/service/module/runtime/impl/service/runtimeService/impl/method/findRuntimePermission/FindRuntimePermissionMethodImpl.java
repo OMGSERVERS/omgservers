@@ -27,14 +27,12 @@ class FindRuntimePermissionMethodImpl implements FindRuntimePermissionMethod {
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var permission = request.getPermission();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectRuntimeGrantByRuntimeIdAndEntityIdOperation
                             .selectRuntimePermissionByRuntimeIdAndUserId(sqlConnection,
                                     shard.shard(),
                                     runtimeId,
                                     userId,
-                                    permission,
-                                    deleted));
+                                    permission));
                 })
                 .map(FindRuntimePermissionResponse::new);
     }

@@ -17,9 +17,6 @@ public class GetClientRequest implements ShardedRequest {
     @NotNull
     Long clientId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return userId.toString();

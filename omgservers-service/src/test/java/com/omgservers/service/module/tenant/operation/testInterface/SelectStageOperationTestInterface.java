@@ -24,7 +24,7 @@ public class SelectStageOperationTestInterface {
                                   final Long id,
                                   final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectStageOperation
-                        .selectStage(sqlConnection, shard, tenantId, id, deleted))
+                        .selectStage(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

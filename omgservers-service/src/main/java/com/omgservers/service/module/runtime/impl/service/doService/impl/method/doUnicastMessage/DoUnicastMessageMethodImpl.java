@@ -1,15 +1,15 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doUnicastMessage;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
-import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.UnicastCommandApprovedEventBodyModel;
+import com.omgservers.model.dto.user.RespondClientRequest;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
 
-    final SystemModule systemModule;
+    final UserModule userModule;
 
     final HasRuntimeGrantOperation hasRuntimeGrantOperation;
     final CheckShardOperation checkShardOperation;
 
-    final EventModelFactory eventModelFactory;
+    final MessageModelFactory messageModelFactory;
 
     final PgPool pgPool;
 
@@ -50,7 +50,7 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
                                     permission)
                             .flatMap(has -> {
                                 if (has) {
-                                    return syncApprove(runtimeId, userId, clientId, message);
+                                    return respondClient(userId, clientId, message);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of permission, " +
                                                     "runtimeId=%s, client_id=%s, permission=%s",
@@ -62,14 +62,13 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
                 .replaceWith(new DoUnicastMessageResponse());
     }
 
-    Uni<Boolean> syncApprove(final Long runtimeId,
-                             final Long userId,
-                             final Long clientId,
-                             final Object message) {
-        final var eventBody = new UnicastCommandApprovedEventBodyModel(runtimeId, userId, clientId, message);
-        final var eventModel = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(request)
-                .map(SyncEventResponse::getCreated);
+    Uni<Void> respondClient(final Long userId,
+                            final Long clientId,
+                            final Object message) {
+        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
+
+        final var request = new RespondClientRequest(userId, clientId, messageModel);
+        return userModule.getUserService().respondClient(request);
     }
 }

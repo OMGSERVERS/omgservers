@@ -41,7 +41,7 @@ public class ContainerDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ContainerModel> getDeletedContainer(final Long id) {
-        final var request = new GetContainerRequest(id, true);
+        final var request = new GetContainerRequest(id);
         return systemModule.getContainerService().getContainer(request)
                 .map(GetContainerResponse::getContainer);
     }

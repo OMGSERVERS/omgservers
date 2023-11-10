@@ -24,8 +24,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
     public Uni<ClientModel> selectClient(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long userId,
-                                         final Long id,
-                                         final Boolean deleted) {
+                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -34,13 +33,12 @@ class SelectClientOperationImpl implements SelectClientOperation {
                             id, user_id, player_id, created, modified, server, connection_id, 
                             version_id, default_matchmaker_id, default_runtime_id, deleted
                         from $schema.tab_user_client
-                        where user_id = $1 and id = $2 and deleted = $3
+                        where user_id = $1 and id = $2
                         limit 1
                         """,
                 Arrays.asList(
                         userId,
-                        id,
-                        deleted
+                        id
                 ),
                 "Client",
                 clientModelMapper::fromRow);

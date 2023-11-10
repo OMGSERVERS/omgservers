@@ -8,6 +8,5 @@ public interface SelectStageOperation {
     Uni<StageModel> selectStage(SqlConnection sqlConnection,
                                 int shard,
                                 Long tenantId,
-                                Long id,
-                                Boolean deleted);
+                                Long id);
 }

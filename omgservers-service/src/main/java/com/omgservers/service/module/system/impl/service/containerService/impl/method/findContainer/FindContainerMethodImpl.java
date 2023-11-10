@@ -23,9 +23,8 @@ class FindContainerMethodImpl implements FindContainerMethod {
     public Uni<FindContainerResponse> findContainer(final FindContainerRequest request) {
         final var entityId = request.getEntityId();
         final var qualifier = request.getQualifier();
-        final var deleted = request.getDeleted();
         return pgPool.withTransaction(sqlConnection -> selectContainerByEntityIdAndQualifierOperation
-                        .selectContainerByEntityIdAndQualifier(sqlConnection, entityId, qualifier, deleted))
+                        .selectContainerByEntityIdAndQualifier(sqlConnection, entityId, qualifier))
                 .map(FindContainerResponse::new);
     }
 }

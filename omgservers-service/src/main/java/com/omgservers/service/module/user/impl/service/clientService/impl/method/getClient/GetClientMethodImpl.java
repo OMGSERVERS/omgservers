@@ -25,10 +25,9 @@ class GetClientMethodImpl implements GetClientMethod {
                 .flatMap(shardModel -> {
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();
-                    final var deleted = request.getDeleted();
                     final var shard = shardModel.shard();
                     return pgPool.withTransaction(sqlConnection -> selectClientOperation
-                            .selectClient(sqlConnection, shard, userId, clientId, deleted));
+                            .selectClient(sqlConnection, shard, userId, clientId));
                 })
                 .map(GetClientResponse::new);
     }

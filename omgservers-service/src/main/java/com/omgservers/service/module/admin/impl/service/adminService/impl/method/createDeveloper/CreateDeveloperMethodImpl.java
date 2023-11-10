@@ -49,7 +49,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
-        final var getTenantRequest = new GetTenantRequest(tenantId, false);
+        final var getTenantRequest = new GetTenantRequest(tenantId);
         return tenantModule.getTenantService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }

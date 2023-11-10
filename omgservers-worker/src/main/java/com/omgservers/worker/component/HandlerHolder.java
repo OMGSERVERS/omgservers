@@ -1,6 +1,7 @@
 package com.omgservers.worker.component;
 
 import com.omgservers.worker.WorkerApplication;
+import com.omgservers.worker.exception.WorkerStartUpException;
 import com.omgservers.worker.module.handler.HandlerModule;
 import com.omgservers.worker.module.handler.lua.LuaHandlerModuleFactory;
 import com.omgservers.worker.operation.getVersion.GetVersionOperation;
@@ -11,6 +12,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -24,7 +27,12 @@ public class HandlerHolder {
     final HandlerContainer handlerContainer;
 
     public HandlerModule getHandler() {
-        return handlerContainer.get();
+        final var handler = handlerContainer.get();
+        if (Objects.isNull(handler)) {
+            throw new WorkerStartUpException("Handler is not ready yet");
+        }
+
+        return handler;
     }
 
     @WithSpan

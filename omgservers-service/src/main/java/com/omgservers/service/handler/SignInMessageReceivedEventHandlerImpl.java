@@ -104,7 +104,6 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                                                                                 client))
                                                                         .call(client -> syncSignInRuntimeCommand(
                                                                                 runtimeId,
-                                                                                player,
                                                                                 client))
                                                                         .call(client -> assignClient(player, client)
                                                                                 .invoke(voidItem -> {
@@ -214,16 +213,10 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncSignInRuntimeCommand(final Long runtimeId,
-                                          final PlayerModel player,
                                           final ClientModel client) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var attributes = player.getAttributes();
-        final var profile = player.getProfile();
-        final var runtimeCommandBody = new SignInRuntimeCommandBodyModel(userId,
-                clientId,
-                attributes,
-                profile);
+        final var runtimeCommandBody = new SignInRuntimeCommandBodyModel(userId, clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

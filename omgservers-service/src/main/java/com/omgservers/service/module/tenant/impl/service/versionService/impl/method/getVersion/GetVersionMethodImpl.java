@@ -27,9 +27,8 @@ class GetVersionMethodImpl implements GetVersionMethod {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectVersionOperation
-                            .selectVersion(sqlConnection, shard, tenantId, id, deleted));
+                            .selectVersion(sqlConnection, shard, tenantId, id));
                 })
                 .map(GetVersionResponse::new);
     }

@@ -22,9 +22,8 @@ class GetContainerMethodImpl implements GetContainerMethod {
     @Override
     public Uni<GetContainerResponse> getContainer(final GetContainerRequest request) {
         final var id = request.getId();
-        final var deleted = request.getDeleted();
         return pgPool.withTransaction(sqlConnection -> selectContainerOperation
-                        .selectContainer(sqlConnection, id, deleted))
+                        .selectContainer(sqlConnection, id))
                 .map(GetContainerResponse::new);
     }
 }

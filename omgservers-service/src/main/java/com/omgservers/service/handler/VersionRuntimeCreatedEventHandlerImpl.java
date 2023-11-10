@@ -58,7 +58,7 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionRuntimeModel> getVersionRuntime(final Long tenantId, final Long id) {
-        final var request = new GetVersionRuntimeRequest(tenantId, id, false);
+        final var request = new GetVersionRuntimeRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionRuntime(request)
                 .map(GetVersionRuntimeResponse::getVersionRuntime);
     }

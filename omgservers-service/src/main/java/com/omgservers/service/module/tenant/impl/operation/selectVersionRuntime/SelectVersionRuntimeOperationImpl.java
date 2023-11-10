@@ -24,18 +24,17 @@ class SelectVersionRuntimeOperationImpl implements SelectVersionRuntimeOperation
     public Uni<VersionRuntimeModel> selectVersionRuntime(final SqlConnection sqlConnection,
                                                          final int shard,
                                                          final Long tenantId,
-                                                         final Long id,
-                                                         final Boolean deleted) {
+                                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, tenant_id, version_id, created, modified, runtime_id, deleted
                         from $schema.tab_tenant_version_runtime
-                        where tenant_id = $1 and id = $2 and deleted = $3
+                        where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                Arrays.asList(tenantId, id, deleted),
+                Arrays.asList(tenantId, id),
                 "Version runtime",
                 versionRuntimeModelMapper::fromRow);
     }

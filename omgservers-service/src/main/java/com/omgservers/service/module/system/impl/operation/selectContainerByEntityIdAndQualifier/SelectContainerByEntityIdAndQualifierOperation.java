@@ -8,6 +8,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface SelectContainerByEntityIdAndQualifierOperation {
     Uni<ContainerModel> selectContainerByEntityIdAndQualifier(SqlConnection sqlConnection,
                                                               Long entityId,
-                                                              ContainerQualifierEnum qualifier,
-                                                              Boolean deleted);
+                                                              ContainerQualifierEnum qualifier);
 }

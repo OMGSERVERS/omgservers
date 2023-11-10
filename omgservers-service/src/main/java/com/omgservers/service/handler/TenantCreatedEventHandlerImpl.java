@@ -40,7 +40,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<TenantModel> getTenant(final Long id) {
-        final var request = new GetTenantRequest(id, false);
+        final var request = new GetTenantRequest(id);
         return tenantModule.getTenantService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }

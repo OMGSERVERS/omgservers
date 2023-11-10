@@ -12,7 +12,4 @@ public class GetServiceAccountRequest {
 
     @NotNull
     Long id;
-
-    @NotNull
-    Boolean deleted;
 }

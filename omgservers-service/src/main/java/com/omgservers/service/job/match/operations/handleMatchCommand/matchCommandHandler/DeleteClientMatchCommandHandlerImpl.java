@@ -87,7 +87,7 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId, false);
+        final var request = new GetMatchRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
     }
@@ -122,7 +122,7 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     Uni<ClientModel> getClient(Long userId, Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId, false);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

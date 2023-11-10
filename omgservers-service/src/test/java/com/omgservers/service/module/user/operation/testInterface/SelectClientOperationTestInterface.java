@@ -24,7 +24,7 @@ public class SelectClientOperationTestInterface {
                                     final Long id,
                                     final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectClientOperation
-                        .selectClient(sqlConnection, shard, userId, id, deleted))
+                        .selectClient(sqlConnection, shard, userId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

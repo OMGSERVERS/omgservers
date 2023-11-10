@@ -1,6 +1,7 @@
 package com.omgservers.worker.module.handler.lua.operation.createLuaInstance;
 
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.worker.module.handler.lua.component.luaInstance.LuaInstance;
 import com.omgservers.worker.operation.decodeFiles.DecodeFilesOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,7 +20,7 @@ import org.luaj.vm2.lib.jse.JseMathLib;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperation {
+class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperation {
 
     final DecodeFilesOperation decodeFilesOperation;
 

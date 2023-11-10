@@ -21,9 +21,8 @@ class GetJobMethodImpl implements GetJobMethod {
     @Override
     public Uni<GetJobResponse> getJob(final GetJobRequest request) {
         final var id = request.getId();
-        final var deleted = request.getDeleted();
         return pgPool.withTransaction(sqlConnection -> selectJobOperation
-                        .selectJob(sqlConnection, id, deleted))
+                        .selectJob(sqlConnection, id))
                 .map(GetJobResponse::new);
     }
 }

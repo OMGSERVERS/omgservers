@@ -27,9 +27,8 @@ class GetVersionRuntimeMethodImpl implements GetVersionRuntimeMethod {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectVersionRuntimeOperation
-                            .selectVersionRuntime(sqlConnection, shard, tenantId, id, deleted));
+                            .selectVersionRuntime(sqlConnection, shard, tenantId, id));
                 })
                 .map(GetVersionRuntimeResponse::new);
     }

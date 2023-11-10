@@ -10,6 +10,5 @@ public interface SelectRuntimePermissionByRuntimeIdAndUserIdOperation {
                                                                             int shard,
                                                                             Long runtimeId,
                                                                             Long userId,
-                                                                            RuntimePermissionEnum permission,
-                                                                            Boolean deleted);
+                                                                            RuntimePermissionEnum permission);
 }

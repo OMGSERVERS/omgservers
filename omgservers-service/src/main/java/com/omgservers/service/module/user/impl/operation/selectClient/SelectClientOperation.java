@@ -8,6 +8,5 @@ public interface SelectClientOperation {
     Uni<ClientModel> selectClient(SqlConnection sqlConnection,
                                   int shard,
                                   Long userId,
-                                  Long id,
-                                  Boolean deleted);
+                                  Long id);
 }

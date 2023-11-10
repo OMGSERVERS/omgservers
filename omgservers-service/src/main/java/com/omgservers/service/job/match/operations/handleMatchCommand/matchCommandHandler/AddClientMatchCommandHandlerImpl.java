@@ -12,13 +12,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
-import com.omgservers.model.dto.user.GetPlayerRequest;
-import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
-import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -76,12 +73,8 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                         })
                         .onItem().ifNotNull().transformToUni(client -> {
                             final var runtimeId = match.getRuntimeId();
-                            final var playerId = client.getPlayerId();
                             return syncRuntimeGrant(runtimeId, userId, clientId)
-                                    .call(ignored -> getPlayer(client)
-                                            .flatMap(player -> syncAddClientRuntimeCommand(runtimeId,
-                                                    player,
-                                                    client)))
+                                    .call(ignored -> syncAddClientRuntimeCommand(runtimeId, client))
                                     .call(ignored -> assignRuntime(runtimeId, client))
                                     .invoke(voidItem -> {
                                         log.info(
@@ -101,13 +94,13 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId, false);
+        final var request = new GetMatchRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().getMatch(request)
                 .map(GetMatchResponse::getMatch);
     }
 
     Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var request = new GetClientRequest(userId, clientId, false);
+        final var request = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
@@ -123,23 +116,11 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .map(SyncRuntimeGrantResponse::getCreated);
     }
 
-    Uni<PlayerModel> getPlayer(final ClientModel client) {
-        final var userId = client.getUserId();
-        final var playerId = client.getPlayerId();
-        final var request = new GetPlayerRequest(userId, playerId, false);
-        return userModule.getPlayerService().getPlayer(request)
-                .map(GetPlayerResponse::getPlayer);
-    }
-
     Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,
-                                             final PlayerModel player,
                                              final ClientModel client) {
         final var userId = client.getUserId();
         final var clientId = client.getId();
-        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId,
-                clientId,
-                player.getAttributes(),
-                player.getProfile());
+        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId, clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
         final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)

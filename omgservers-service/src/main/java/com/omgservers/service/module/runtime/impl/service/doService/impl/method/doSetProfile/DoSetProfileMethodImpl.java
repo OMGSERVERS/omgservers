@@ -1,15 +1,16 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetProfile;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.model.event.body.SetProfileCommandApprovedEventBodyModel;
+import com.omgservers.model.dto.user.GetClientRequest;
+import com.omgservers.model.dto.user.GetClientResponse;
+import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
+import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,12 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DoSetProfileMethodImpl implements DoSetProfileMethod {
 
-    final SystemModule systemModule;
+    final UserModule userModule;
 
     final HasRuntimeGrantOperation hasRuntimeGrantOperation;
     final CheckShardOperation checkShardOperation;
 
-    final EventModelFactory eventModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -48,7 +48,7 @@ class DoSetProfileMethodImpl implements DoSetProfileMethod {
                                     grant)
                             .flatMap(has -> {
                                 if (has) {
-                                    return syncEvent(runtimeId, userId, clientId, profile);
+                                    return doSetProfile(userId, clientId, profile);
                                 } else {
                                     throw new ServerSideForbiddenException(String.format("lack of grant, " +
                                                     "runtimeId=%s, userId=%s, clientId=%s, grant=%s",
@@ -60,14 +60,27 @@ class DoSetProfileMethodImpl implements DoSetProfileMethod {
                 .replaceWith(new DoSetProfileResponse(true));
     }
 
-    Uni<Boolean> syncEvent(final Long runtimeId,
-                           final Long userId,
-                           final Long clientId,
-                           final Object profile) {
-        final var eventBody = new SetProfileCommandApprovedEventBodyModel(runtimeId, userId, clientId, profile);
-        final var eventModel = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(request)
-                .map(SyncEventResponse::getCreated);
+    Uni<Boolean> doSetProfile(final Long userId,
+                              final Long clientId,
+                              final Object profile) {
+        return getClient(userId, clientId)
+                .flatMap(client -> {
+                    final var playerId = client.getPlayerId();
+                    return updatePlayerProfile(userId, playerId, profile);
+                });
+    }
+
+    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
+        return userModule.getClientService().getClient(getClientServiceRequest)
+                .map(GetClientResponse::getClient);
+    }
+
+    Uni<Boolean> updatePlayerProfile(final Long userId,
+                                     final Long playerId,
+                                     final Object profile) {
+        final var request = new UpdatePlayerProfileRequest(userId, playerId, profile);
+        return userModule.getPlayerService().updatePlayerProfile(request)
+                .map(UpdatePlayerProfileResponse::getUpdated);
     }
 }

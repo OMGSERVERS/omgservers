@@ -23,18 +23,17 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
     @Override
     public Uni<TenantModel> selectTenant(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final Long id,
-                                         final Boolean deleted) {
+                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, created, modified, deleted
                         from $schema.tab_tenant
-                        where id = $1 and deleted = $2
+                        where id = $1
                         limit 1
                         """,
-                Arrays.asList(id, deleted),
+                Arrays.asList(id),
                 "Tenant",
                 tenantModelMapper::fromRow);
     }

@@ -23,7 +23,7 @@
     </properties>
 
     <modules>
-        <module>omgservers-documentation</module>
+        <module>omgservers-documents</module>
         <module>omgservers-service</module>
         <module>omgservers-model</module>
         <module>omgservers-worker</module>

@@ -5,6 +5,7 @@ import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoMulticastCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
 import com.omgservers.model.recipient.Recipient;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,7 +28,7 @@ public class MulticastLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(LuaTable luaCommand) {
+    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
         final var luaRecipients = luaCommand.get("recipients").checktable();
         final var recipients = parseRecipients(luaRecipients);
         final var luaMessage = luaCommand.get("message").checktable();

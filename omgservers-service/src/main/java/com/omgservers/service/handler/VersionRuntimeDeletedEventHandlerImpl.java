@@ -54,7 +54,7 @@ public class VersionRuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionRuntimeModel> getDeletedVersionRuntime(final Long tenantId, final Long id) {
-        final var request = new GetVersionRuntimeRequest(tenantId, id, true);
+        final var request = new GetVersionRuntimeRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionRuntime(request)
                 .map(GetVersionRuntimeResponse::getVersionRuntime);
     }

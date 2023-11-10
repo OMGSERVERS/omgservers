@@ -90,13 +90,14 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<GetServiceAccountAdminResponse> getServiceAccount(@Valid final GetServiceAccountAdminRequest request) {
         final var id = request.getId();
-        return systemModule.getServiceAccountService().getServiceAccount(new GetServiceAccountRequest(id, false))
+        return systemModule.getServiceAccountService().getServiceAccount(new GetServiceAccountRequest(id))
                 .map(GetServiceAccountResponse::getServiceAccount)
                 .map(GetServiceAccountAdminResponse::new);
     }
 
     @Override
-    public Uni<FindServiceAccountAdminResponse> findServiceAccount(@Valid final FindServiceAccountAdminRequest request) {
+    public Uni<FindServiceAccountAdminResponse> findServiceAccount(
+            @Valid final FindServiceAccountAdminRequest request) {
         final var username = request.getUsername();
         return systemModule.getServiceAccountService().findServiceAccount(new FindServiceAccountRequest(username))
                 .map(FindServiceAccountResponse::getServiceAccount)
@@ -104,7 +105,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncServiceAccountAdminResponse> syncServiceAccount(@Valid final SyncServiceAccountAdminRequest request) {
+    public Uni<SyncServiceAccountAdminResponse> syncServiceAccount(
+            @Valid final SyncServiceAccountAdminRequest request) {
         final var serviceAccount = request.getServiceAccount();
         return systemModule.getServiceAccountService().syncServiceAccount(new SyncServiceAccountRequest(serviceAccount))
                 .map(SyncServiceAccountResponse::getCreated)
@@ -112,7 +114,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<DeleteServiceAccountAdminResponse> deleteServiceAccount(@Valid final DeleteServiceAccountAdminRequest request) {
+    public Uni<DeleteServiceAccountAdminResponse> deleteServiceAccount(
+            @Valid final DeleteServiceAccountAdminRequest request) {
         final var id = request.getId();
         return systemModule.getServiceAccountService().deleteServiceAccount(new DeleteServiceAccountRequest(id))
                 .map(DeleteServiceAccountResponse::getDeleted)

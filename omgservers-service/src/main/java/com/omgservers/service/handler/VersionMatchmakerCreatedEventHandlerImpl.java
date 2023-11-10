@@ -56,7 +56,7 @@ public class VersionMatchmakerCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionMatchmakerModel> getVersionMatchmaker(final Long tenantId, final Long id) {
-        final var request = new GetVersionMatchmakerRequest(tenantId, id, false);
+        final var request = new GetVersionMatchmakerRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionMatchmaker(request)
                 .map(GetVersionMatchmakerResponse::getVersionMatchmaker);
     }

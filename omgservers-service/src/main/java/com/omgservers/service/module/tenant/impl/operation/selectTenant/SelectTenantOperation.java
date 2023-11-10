@@ -7,6 +7,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface SelectTenantOperation {
     Uni<TenantModel> selectTenant(SqlConnection sqlConnection,
                                   int shard,
-                                  Long id,
-                                  Boolean deleted);
+                                  Long id);
 }

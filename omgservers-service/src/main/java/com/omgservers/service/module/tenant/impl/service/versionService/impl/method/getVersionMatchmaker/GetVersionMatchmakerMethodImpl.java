@@ -27,9 +27,8 @@ class GetVersionMatchmakerMethodImpl implements GetVersionMatchmakerMethod {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
                     final var id = request.getId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectVersionMatchmakerOperation
-                            .selectVersionMatchmaker(sqlConnection, shard, tenantId, id, deleted));
+                            .selectVersionMatchmaker(sqlConnection, shard, tenantId, id));
                 })
                 .map(GetVersionMatchmakerResponse::new);
     }

@@ -23,7 +23,7 @@ public class SelectTenantOperationTestInterface {
                                     final Long id,
                                     final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectTenantOperation
-                        .selectTenant(sqlConnection, shard, id, deleted))
+                        .selectTenant(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

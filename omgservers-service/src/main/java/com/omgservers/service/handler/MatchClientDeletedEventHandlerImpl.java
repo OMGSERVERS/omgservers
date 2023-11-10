@@ -54,7 +54,7 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<MatchClientModel> getDeletedMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchClientRequest(matchmakerId, id, true);
+        final var request = new GetMatchClientRequest(matchmakerId, id);
         return matchmakerModule.getMatchmakerService().getMatchClient(request)
                 .map(GetMatchClientResponse::getMatchClient);
     }

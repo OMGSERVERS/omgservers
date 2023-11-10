@@ -1,17 +1,19 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doBroadcastMessage;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.event.body.BroadcastCommandApprovedEventBodyModel;
+import com.omgservers.model.dto.user.RespondClientRequest;
+import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrantsByRuntimeId.SelectRuntimeGrantsByRuntimeIdOperation;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,12 +28,12 @@ import java.util.List;
 class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
 
     final SystemModule systemModule;
+    final UserModule userModule;
 
     final SelectRuntimeGrantsByRuntimeIdOperation selectRuntimeGrantsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
-    final EventModelFactory eventModelFactory;
-
+    final MessageModelFactory messageModelFactory;
     final PgPool pgPool;
 
     @Override
@@ -47,7 +49,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
                                     shardModel.shard(),
                                     runtimeId)
                             .map(runtimeGrants -> createRecipientList(runtimeGrants, grant))
-                            .flatMap(recipients -> syncApprove(runtimeId, recipients, message))
+                            .flatMap(recipients -> doBroadcastMessage(recipients, message))
                     );
                 })
                 .replaceWith(new DoBroadcastMessageResponse(true));
@@ -61,13 +63,25 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
                 .toList();
     }
 
-    Uni<Boolean> syncApprove(final Long runtimeId,
-                             final List<Recipient> recipients,
-                             final Object message) {
-        final var eventBody = new BroadcastCommandApprovedEventBodyModel(runtimeId, recipients, message);
-        final var eventModel = eventModelFactory.create(eventBody);
-        final var request = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(request)
-                .map(SyncEventResponse::getCreated);
+    Uni<Void> doBroadcastMessage(final List<Recipient> recipients,
+                                 final Object message) {
+        return Multi.createFrom().iterable(recipients)
+                .onItem().transformToUniAndConcatenate(recipient -> {
+                    final var userId = recipient.userId();
+                    final var clientId = recipient.clientId();
+                    return respondClient(userId, clientId, message);
+                })
+                .collect().asList()
+                .replaceWithVoid();
+    }
+
+    Uni<Void> respondClient(final Long userId,
+                            final Long clientId,
+                            final Object message) {
+        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
+
+        final var request = new RespondClientRequest(userId, clientId, messageModel);
+        return userModule.getUserService().respondClient(request);
     }
 }

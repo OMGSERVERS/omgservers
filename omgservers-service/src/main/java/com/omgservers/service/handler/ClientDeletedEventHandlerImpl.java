@@ -60,7 +60,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ClientModel> getDeletedClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId, true);
+        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
         return userModule.getClientService().getClient(getClientServiceRequest)
                 .map(GetClientResponse::getClient);
     }

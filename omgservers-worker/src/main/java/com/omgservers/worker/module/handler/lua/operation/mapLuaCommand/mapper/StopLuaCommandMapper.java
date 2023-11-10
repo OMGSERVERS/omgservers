@@ -4,6 +4,7 @@ import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
 import com.omgservers.model.doCommand.body.DoStopCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
+import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ public class StopLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(LuaTable luaCommand) {
+    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
         final var reason = luaCommand.get("reason").checkjstring();
 
         final var doCommandBody = new DoStopCommandBodyModel(reason);

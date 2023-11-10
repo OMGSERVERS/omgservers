@@ -53,7 +53,7 @@ public class VersionMatchmakerDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionMatchmakerModel> getDeletedVersionMatchmaker(final Long tenantId, final Long id) {
-        final var request = new GetVersionMatchmakerRequest(tenantId, id, true);
+        final var request = new GetVersionMatchmakerRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionMatchmaker(request)
                 .map(GetVersionMatchmakerResponse::getVersionMatchmaker);
     }

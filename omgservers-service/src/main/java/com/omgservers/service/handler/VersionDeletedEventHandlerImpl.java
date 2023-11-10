@@ -70,7 +70,7 @@ public class VersionDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<VersionModel> getDeletedVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id, true);
+        final var request = new GetVersionRequest(tenantId, id);
         return tenantModule.getVersionService().getVersion(request)
                 .map(GetVersionResponse::getVersion);
     }

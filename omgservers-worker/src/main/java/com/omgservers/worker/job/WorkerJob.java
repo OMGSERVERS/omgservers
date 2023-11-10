@@ -1,11 +1,11 @@
 package com.omgservers.worker.job;
 
 import com.omgservers.model.doCommand.DoCommandModel;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
+import com.omgservers.model.workerContext.WorkerContextModel;
 import com.omgservers.worker.WorkerApplication;
 import com.omgservers.worker.component.HandlerHolder;
 import com.omgservers.worker.component.TokenHolder;
@@ -16,7 +16,6 @@ import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
@@ -49,7 +48,7 @@ class WorkerJob {
                 .setAsyncTask(scheduledExecution -> workerJobTask()
                         .onFailure()
                         .recoverWithItem(t -> {
-                            log.info("Worker job failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
+                            log.warn("Worker job failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
                             return null;
                         }))
                 .schedule();
@@ -57,39 +56,31 @@ class WorkerJob {
     }
 
     Uni<Void> workerJobTask() {
+        final var runtimeId = getConfigOperation.getConfig().runtimeId();
         final var token = tokenHolder.getToken();
-        return viewRuntimeCommands(token)
-                .emitOn(Infrastructure.getDefaultWorkerPool())
-                .flatMap(runtimeCommands -> {
+        return getWorkerContext(runtimeId, token)
+                .invoke(workerContext -> log.info("Worker context, {}", workerContext))
+                .flatMap(workerContext -> {
                     final var handler = handlerHolder.getHandler();
                     return Uni.createFrom().voidItem()
-                            .map(voidItem -> handler.handleCommands(runtimeCommands))
-                            .flatMap(doCommands -> {
-                                final var runtimeCommandsIds = runtimeCommands.stream()
-                                        .map(RuntimeCommandModel::getId)
-                                        .toList();
-                                return handleRuntimeCommands(token, runtimeCommandsIds, doCommands);
-                            })
+                            .map(voidItem -> handler.handleCommands(workerContext))
+                            .flatMap(doCommands -> doWorkerCommand(runtimeId, doCommands, token))
                             .replaceWithVoid();
                 })
                 .replaceWithVoid();
     }
 
-    Uni<List<RuntimeCommandModel>> viewRuntimeCommands(final String token) {
-        final var runtimeId = getConfigOperation.getConfig().runtimeId();
-        final var request = new ViewRuntimeCommandsWorkerRequest(runtimeId);
-        return serviceModule.getWorkerService().viewRuntimeCommands(request, token)
-                .map(ViewRuntimeCommandsWorkerResponse::getRuntimeCommands);
+    Uni<Boolean> doWorkerCommand(final Long runtimeId,
+                                 final List<DoCommandModel> doCommands,
+                                 final String token) {
+        final var request = new DoWorkerCommandsWorkerRequest(runtimeId, doCommands);
+        return serviceModule.getWorkerService().doWorkerCommands(request, token)
+                .map(DoWorkerCommandsWorkerResponse::getDone);
     }
 
-    Uni<Boolean> handleRuntimeCommands(final String token,
-                                       final List<Long> runtimeCommandIds,
-                                       final List<DoCommandModel> doCommands) {
-        final var runtimeId = getConfigOperation.getConfig().runtimeId();
-        final var request = new HandleRuntimeCommandsWorkerRequest(runtimeId,
-                runtimeCommandIds,
-                doCommands);
-        return serviceModule.getWorkerService().handleRuntimeCommands(request, token)
-                .map(HandleRuntimeCommandsWorkerResponse::getHandled);
+    Uni<WorkerContextModel> getWorkerContext(final Long runtimeId, final String token) {
+        final var request = new GetWorkerContextWorkerRequest(runtimeId);
+        return serviceModule.getWorkerService().getWorkerContext(request, token)
+                .map(GetWorkerContextWorkerResponse::getWorkerContext);
     }
 }

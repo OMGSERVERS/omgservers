@@ -2,16 +2,12 @@ package com.omgservers.service.module.worker.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -28,18 +24,10 @@ public interface WorkerApi {
     Uni<GetVersionWorkerResponse> getVersion(GetVersionWorkerRequest request);
 
     @PUT
-    @Path("/view-runtime-commands")
-    Uni<ViewRuntimeCommandsWorkerResponse> viewRuntimeCommands(ViewRuntimeCommandsWorkerRequest request);
+    @Path("/get-worker-context")
+    Uni<GetWorkerContextWorkerResponse> getWorkerContext(GetWorkerContextWorkerRequest request);
 
     @PUT
-    @Path("/handle-runtime-commands")
-    Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(HandleRuntimeCommandsWorkerRequest request);
-
-    @PUT
-    @Path("/get-runtime-state")
-    Uni<GetRuntimeStateWorkerResponse> getRuntimeState(GetRuntimeStateWorkerRequest request);
-
-    @PUT
-    @Path("/update-runtime-state")
-    Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(UpdateRuntimeStateWorkerRequest request);
+    @Path("/do-worker-commands")
+    Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(DoWorkerCommandsWorkerRequest request);
 }

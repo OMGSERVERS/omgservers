@@ -25,9 +25,8 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
                 .flatMap(shard -> {
                     final var userId = request.getUserId();
                     final var id = request.getId();
-                    final var deleted = request.getDeleted();
                     return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                            .selectPlayer(sqlConnection, shard.shard(), userId, id, deleted));
+                            .selectPlayer(sqlConnection, shard.shard(), userId, id));
                 })
                 .map(GetPlayerResponse::new);
     }

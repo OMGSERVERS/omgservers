@@ -41,7 +41,7 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ProjectModel> getProject(final Long tenantId, final Long id) {
-        final var request = new GetProjectRequest(tenantId, id, false);
+        final var request = new GetProjectRequest(tenantId, id);
         return tenantModule.getProjectService().getProject(request)
                 .map(GetProjectResponse::getProject);
     }

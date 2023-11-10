@@ -22,7 +22,7 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();
-        final var getStageServiceRequest = new GetStageRequest(tenantId, stageId, false);
+        final var getStageServiceRequest = new GetStageRequest(tenantId, stageId);
         return stageService.getStage(getStageServiceRequest)
                 .map(response -> {
                     final var stage = response.getStage();

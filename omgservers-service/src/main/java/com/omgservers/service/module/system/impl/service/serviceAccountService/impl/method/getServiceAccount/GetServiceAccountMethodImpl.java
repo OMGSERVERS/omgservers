@@ -22,9 +22,8 @@ class GetServiceAccountMethodImpl implements GetServiceAccountMethod {
     @Override
     public Uni<GetServiceAccountResponse> getServiceAccount(final GetServiceAccountRequest request) {
         final var id = request.getId();
-        final var deleted = request.getDeleted();
         return pgPool.withTransaction(sqlConnection -> selectServiceAccountOperation
-                        .selectServiceAccount(sqlConnection, id, deleted))
+                        .selectServiceAccount(sqlConnection, id))
                 .map(GetServiceAccountResponse::new);
     }
 }

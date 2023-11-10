@@ -7,6 +7,5 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface SelectMatchmakerOperation {
     Uni<MatchmakerModel> selectMatchmaker(SqlConnection sqlConnection,
                                           int shard,
-                                          Long id,
-                                          Boolean deleted);
+                                          Long id);
 }

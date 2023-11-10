@@ -45,7 +45,7 @@ public class ContainerCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<ContainerModel> getContainer(final Long id) {
-        final var request = new GetContainerRequest(id, false);
+        final var request = new GetContainerRequest(id);
         return systemModule.getContainerService().getContainer(request)
                 .map(GetContainerResponse::getContainer);
     }

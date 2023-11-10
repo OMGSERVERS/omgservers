@@ -2,16 +2,12 @@ package com.omgservers.service.module.worker.impl.service.webService.impl;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.GetRuntimeStateWorkerResponse;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
+import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.HandleRuntimeCommandsWorkerResponse;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerRequest;
-import com.omgservers.model.dto.worker.UpdateRuntimeStateWorkerResponse;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.ViewRuntimeCommandsWorkerResponse;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
+import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
 import com.omgservers.service.module.worker.impl.service.webService.WebService;
 import com.omgservers.service.module.worker.impl.service.workerService.WorkerService;
 import io.smallrye.mutiny.Uni;
@@ -38,22 +34,12 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsWorkerResponse> viewRuntimeCommands(final ViewRuntimeCommandsWorkerRequest request) {
-        return workerService.viewRuntimeCommands(request);
+    public Uni<GetWorkerContextWorkerResponse> getWorkerContext(final GetWorkerContextWorkerRequest request) {
+        return workerService.getWorkerContext(request);
     }
 
     @Override
-    public Uni<HandleRuntimeCommandsWorkerResponse> handleRuntimeCommands(final HandleRuntimeCommandsWorkerRequest request) {
-        return workerService.handleRuntimeCommands(request);
-    }
-
-    @Override
-    public Uni<GetRuntimeStateWorkerResponse> getRuntimeState(final GetRuntimeStateWorkerRequest request) {
-        return workerService.getRuntimeState(request);
-    }
-
-    @Override
-    public Uni<UpdateRuntimeStateWorkerResponse> updateRuntimeState(final UpdateRuntimeStateWorkerRequest request) {
-        return workerService.updateRuntimeState(request);
+    public Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(final DoWorkerCommandsWorkerRequest request) {
+        return workerService.doWorkerCommands(request);
     }
 }

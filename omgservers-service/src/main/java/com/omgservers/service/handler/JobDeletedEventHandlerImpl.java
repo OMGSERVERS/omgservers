@@ -48,7 +48,7 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> getDeletedJob(final Long id) {
-        final var request = new GetJobRequest(id, true);
+        final var request = new GetJobRequest(id);
         return systemModule.getJobService().getJob(request)
                 .map(GetJobResponse::getJob);
     }

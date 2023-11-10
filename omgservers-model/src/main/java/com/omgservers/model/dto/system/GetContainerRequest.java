@@ -12,7 +12,4 @@ public class GetContainerRequest {
 
     @NotNull
     Long id;
-
-    @NotNull
-    Boolean deleted;
 }

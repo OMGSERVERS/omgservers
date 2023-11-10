@@ -66,7 +66,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<MatchClientModel> getMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchClientRequest(matchmakerId, id, false);
+        final var request = new GetMatchClientRequest(matchmakerId, id);
         return matchmakerModule.getMatchmakerService().getMatchClient(request)
                 .map(GetMatchClientResponse::getMatchClient);
     }

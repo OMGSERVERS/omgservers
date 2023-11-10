@@ -5,7 +5,5 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface GetIndexOperation {
-    Uni<IndexModel> getIndex(SqlConnection sqlConnection,
-                             Long id,
-                             Boolean deleted);
+    Uni<IndexModel> getIndex(SqlConnection sqlConnection, Long id);
 }

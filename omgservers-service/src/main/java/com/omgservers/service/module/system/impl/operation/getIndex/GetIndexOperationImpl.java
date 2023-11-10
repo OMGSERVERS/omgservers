@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -22,18 +23,17 @@ class GetIndexOperationImpl implements GetIndexOperation {
 
     @Override
     public Uni<IndexModel> getIndex(final SqlConnection sqlConnection,
-                                    final Long id,
-                                    final Boolean deleted) {
+                                    final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 0,
                 """
                         select id, created, modified, name, version, config
                         from system.tab_index
-                        where id = $1 and deleted = $2
+                        where id = $1
                         limit 1
                         """,
-                Arrays.asList(id, deleted),
+                Collections.singletonList(id),
                 "Index",
                 indexModelMapper::fromRow);
     }

@@ -58,7 +58,7 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StageModel> getDeletedStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id, true);
+        final var request = new GetStageRequest(tenantId, id);
         return tenantModule.getStageService().getStage(request)
                 .map(GetStageResponse::getStage);
     }

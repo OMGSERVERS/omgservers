@@ -12,7 +12,4 @@ public class GetIndexRequest {
 
     @NotNull
     Long id;
-
-    @NotNull
-    Boolean deleted;
 }

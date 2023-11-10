@@ -51,7 +51,7 @@ class GetVersionMethodImpl implements GetVersionMethod {
     Uni<RuntimePermissionModel> findRuntimePermission(final Long runtimeId,
                                                       final Long userId) {
         final var permission = RuntimePermissionEnum.HANDLE_RUNTIME;
-        final var request = new FindRuntimePermissionRequest(runtimeId, userId, permission, false);
+        final var request = new FindRuntimePermissionRequest(runtimeId, userId, permission);
         return runtimeModule.getRuntimeService().findRuntimePermission(request)
                 .map(FindRuntimePermissionResponse::getRuntimePermission)
                 .onFailure(ServerSideNotFoundException.class)
@@ -60,13 +60,13 @@ class GetVersionMethodImpl implements GetVersionMethod {
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id, false);
+        final var request = new GetRuntimeRequest(id);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id, false);
+        final var request = new GetVersionRequest(tenantId, id);
         return tenantModule.getVersionService().getVersion(request)
                 .map(GetVersionResponse::getVersion);
     }
