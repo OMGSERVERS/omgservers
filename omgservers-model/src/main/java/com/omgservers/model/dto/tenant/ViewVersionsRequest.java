@@ -17,9 +17,6 @@ public class ViewVersionsRequest implements ShardedRequest {
     @NotNull
     Long stageId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();

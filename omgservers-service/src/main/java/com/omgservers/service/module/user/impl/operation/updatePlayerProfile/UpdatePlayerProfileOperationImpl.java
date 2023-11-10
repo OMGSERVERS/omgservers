@@ -38,7 +38,7 @@ class UpdatePlayerProfileOperationImpl implements UpdatePlayerProfileOperation {
                 """
                         update $schema.tab_user_player
                         set modified = $3, profile = $4
-                        where user_id = $1 and id = $2 and deleted = false
+                        where user_id = $1 and id = $2
                         """,
                 Arrays.asList(
                         userId,

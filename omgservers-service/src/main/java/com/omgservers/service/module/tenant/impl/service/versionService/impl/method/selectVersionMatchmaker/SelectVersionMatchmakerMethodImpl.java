@@ -4,8 +4,8 @@ import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,7 +47,7 @@ class SelectVersionMatchmakerMethodImpl implements SelectVersionMatchmakerMethod
     }
 
     Uni<List<VersionMatchmakerModel>> viewVersionMatchmaker(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionMatchmakersRequest(tenantId, versionId, false);
+        final var request = new ViewVersionMatchmakersRequest(tenantId, versionId);
         return tenantModule.getVersionService().viewVersionMatchmakers(request)
                 .map(ViewVersionMatchmakersResponse::getVersionMatchmakers);
     }

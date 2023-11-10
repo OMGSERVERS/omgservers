@@ -3,10 +3,10 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.model.matchmakerState.MatchmakerState;
+import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchesByMatchmakerId.SelectActiveMatchesByMatchmakerIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchmakerCommandsByMatchmakerId.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.selectMatchClientsByMatchmakerId.SelectMatchClientsByMatchmakerIdOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchesByMatchmakerId.SelectMatchesByMatchmakerIdOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerCommandsByMatchmakerId.SelectMatchmakerCommandsByMatchmakerIdOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.selectRequestsByMatchmakerId.SelectRequestsByMatchmakerIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.selectActiveRequestsByMatchmakerId.SelectActiveRequestsByMatchmakerIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -19,10 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
 
-    final SelectMatchmakerCommandsByMatchmakerIdOperation selectMatchmakerCommandsByMatchmakerIdOperation;
+    final SelectActiveMatchmakerCommandsByMatchmakerIdOperation selectActiveMatchmakerCommandsByMatchmakerIdOperation;
     final SelectMatchClientsByMatchmakerIdOperation selectMatchClientsByMatchmakerIdOperation;
-    final SelectRequestsByMatchmakerIdOperation selectRequestsByMatchmakerIdOperation;
-    final SelectMatchesByMatchmakerIdOperation selectMatchesByMatchmakerIdOperation;
+    final SelectActiveRequestsByMatchmakerIdOperation selectActiveRequestsByMatchmakerIdOperation;
+    final SelectActiveMatchesByMatchmakerIdOperation selectActiveMatchesByMatchmakerIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -34,16 +34,16 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                     final var matchmakerId = request.getMatchmakerId();
                     final var shard = shardModel.shard();
                     return pgPool.withTransaction(sqlConnection ->
-                            selectMatchmakerCommandsByMatchmakerIdOperation
-                                    .selectMatchmakerCommandsByMatchmakerIdAndMatchId(sqlConnection,
+                            selectActiveMatchmakerCommandsByMatchmakerIdOperation
+                                    .selectActiveMatchmakerCommandsByMatchmakerId(sqlConnection,
                                             shard,
                                             matchmakerId)
-                                    .flatMap(matchmakerCommands -> selectRequestsByMatchmakerIdOperation
-                                            .selectRequestsByMatchmakerId(sqlConnection,
+                                    .flatMap(matchmakerCommands -> selectActiveRequestsByMatchmakerIdOperation
+                                            .selectActiveRequestsByMatchmakerId(sqlConnection,
                                                     shard,
                                                     matchmakerId)
-                                            .flatMap(requests -> selectMatchesByMatchmakerIdOperation
-                                                    .selectMatchesByMatchmakerId(
+                                            .flatMap(requests -> selectActiveMatchesByMatchmakerIdOperation
+                                                    .selectActiveMatchesByMatchmakerId(
                                                             sqlConnection,
                                                             shard,
                                                             matchmakerId)

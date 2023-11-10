@@ -17,9 +17,6 @@ public class ViewVersionMatchmakersRequest implements ShardedRequest {
     @NotNull
     Long versionId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();

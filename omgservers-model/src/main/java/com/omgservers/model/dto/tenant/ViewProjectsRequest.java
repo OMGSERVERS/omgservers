@@ -14,9 +14,6 @@ public class ViewProjectsRequest implements ShardedRequest {
     @NotNull
     Long tenantId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();

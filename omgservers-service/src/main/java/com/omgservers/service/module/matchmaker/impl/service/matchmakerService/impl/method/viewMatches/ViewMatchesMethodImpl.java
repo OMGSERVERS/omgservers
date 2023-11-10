@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.ViewMatchesRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchesResponse;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchesByMatchmakerId.SelectMatchesByMatchmakerIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchesByMatchmakerId.SelectActiveMatchesByMatchmakerIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewMatchesMethodImpl implements ViewMatchesMethod {
 
-    final SelectMatchesByMatchmakerIdOperation selectMatchesByMatchmakerIdOperation;
+    final SelectActiveMatchesByMatchmakerIdOperation selectActiveMatchesByMatchmakerIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -25,8 +25,8 @@ class ViewMatchesMethodImpl implements ViewMatchesMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();
-                    return pgPool.withTransaction(sqlConnection -> selectMatchesByMatchmakerIdOperation
-                            .selectMatchesByMatchmakerId(sqlConnection, shard.shard(), matchmakerId));
+                    return pgPool.withTransaction(sqlConnection -> selectActiveMatchesByMatchmakerIdOperation
+                            .selectActiveMatchesByMatchmakerId(sqlConnection, shard.shard(), matchmakerId));
                 })
                 .map(ViewMatchesResponse::new);
 

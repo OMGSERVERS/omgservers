@@ -64,7 +64,7 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<List<VersionModel>> viewVersions(final Long tenantId, final Long stageId) {
-        final var request = new ViewVersionsRequest(tenantId, stageId, false);
+        final var request = new ViewVersionsRequest(tenantId, stageId);
         return tenantModule.getVersionService().viewVersions(request)
                 .map(ViewVersionsResponse::getVersions);
     }

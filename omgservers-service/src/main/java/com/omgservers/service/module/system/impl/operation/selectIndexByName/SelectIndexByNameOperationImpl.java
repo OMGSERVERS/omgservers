@@ -29,7 +29,7 @@ class SelectIndexByNameOperationImpl implements SelectIndexByNameOperation {
                 """
                         select id, created, modified, name, config, deleted
                         from system.tab_index
-                        where name = $1 and deleted = false
+                        where name = $1
                         limit 1
                         """,
                 Collections.singletonList(name),

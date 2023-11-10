@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeCommandsByRuntimeId.SelectRuntimeCommandsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
 
-    final SelectRuntimeCommandsByRuntimeIdOperation selectRuntimeCommandsByRuntimeIdOperation;
+    final SelectActiveRuntimeCommandsByRuntimeIdOperation selectActiveRuntimeCommandsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -25,12 +25,10 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();
-                    final var deleted = request.getDeleted();
-                    return pgPool.withTransaction(sqlConnection -> selectRuntimeCommandsByRuntimeIdOperation
-                            .selectRuntimeCommandsByRuntimeId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeCommandsByRuntimeIdOperation
+                            .selectActiveRuntimeCommandsByRuntimeId(sqlConnection,
                                     shard.shard(),
-                                    runtimeId,
-                                    deleted));
+                                    runtimeId));
                 })
                 .map(ViewRuntimeCommandsResponse::new);
 

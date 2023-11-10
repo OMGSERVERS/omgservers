@@ -43,7 +43,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(tenant -> {
                     log.info("Tenant was deleted, tenantId={}", tenantId);
 
-                    return viewProject(tenantId)
+                    return viewProjects(tenantId)
                             .flatMap(projects -> Multi.createFrom().iterable(projects)
                                     .onItem().transformToUniAndConcatenate(project ->
                                             deleteProject(tenantId, project.getId()))
@@ -60,8 +60,8 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<List<ProjectModel>> viewProject(final Long tenantId) {
-        final var request = new ViewProjectsRequest(tenantId, false);
+    Uni<List<ProjectModel>> viewProjects(final Long tenantId) {
+        final var request = new ViewProjectsRequest(tenantId);
         return tenantModule.getProjectService().viewProjects(request)
                 .map(ViewProjectsResponse::getProjects);
     }

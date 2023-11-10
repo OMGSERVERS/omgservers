@@ -29,7 +29,7 @@ class SelectServiceAccountByUsernameOperationImpl implements SelectServiceAccoun
                 """
                         select id, created, modified, username, password_hash, deleted
                         from system.tab_service_account
-                        where username = $1 and deleted = false
+                        where username = $1
                         limit 1
                         """,
                 Arrays.asList(username),

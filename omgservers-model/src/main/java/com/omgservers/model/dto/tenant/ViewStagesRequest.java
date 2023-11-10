@@ -17,9 +17,6 @@ public class ViewStagesRequest implements ShardedRequest {
     @NotNull
     Long projectId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();

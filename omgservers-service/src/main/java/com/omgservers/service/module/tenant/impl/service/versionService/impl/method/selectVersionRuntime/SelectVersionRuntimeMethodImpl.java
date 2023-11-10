@@ -4,8 +4,8 @@ import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,7 +47,7 @@ class SelectVersionRuntimeMethodImpl implements SelectVersionRuntimeMethod {
     }
 
     Uni<List<VersionRuntimeModel>> viewVersionRuntimes(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionRuntimesRequest(tenantId, versionId, false);
+        final var request = new ViewVersionRuntimesRequest(tenantId, versionId);
         return tenantModule.getVersionService().viewVersionRuntimes(request)
                 .map(ViewVersionRuntimesResponse::getVersionRuntimes);
     }

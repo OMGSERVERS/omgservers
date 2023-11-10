@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchCommandsByMatchmakerIdAndMatchId.SelectMatchCommandsByMatchmakerIdAndMatchIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchCommandsByMatchId.SelectActiveMatchCommandsByMatchIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,26 +15,24 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewMatchCommandsMethodImpl implements ViewMatchCommandsMethod {
 
-    final SelectMatchCommandsByMatchmakerIdAndMatchIdOperation selectMatchCommandsByMatchmakerIdAndMatchIdOperation;
+    final SelectActiveMatchCommandsByMatchIdOperation selectActiveMatchCommandsByMatchIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request) {
+    public Uni<ViewMatchCommandsResponse> viewMatchCommands(final ViewMatchCommandsRequest request) {
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectMatchCommandsByMatchmakerIdAndMatchIdOperation
-                                    .selectMatchCommandsByMatchmakerIdAndMatchId(sqlConnection,
-                                            shard.shard(),
-                                            matchmakerId,
-                                            matchId
-                                    ));
-                })
+                .flatMap(shard -> pgPool.withTransaction(
+                        sqlConnection -> selectActiveMatchCommandsByMatchIdOperation
+                                .selectActiveMatchCommandsByMatchId(sqlConnection,
+                                        shard.shard(),
+                                        matchmakerId,
+                                        matchId
+                                )))
                 .map(ViewMatchCommandsResponse::new);
 
     }

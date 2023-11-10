@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectStagesByProjectId.SelectStagesByProjectIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.selectActiveStagesByProjectId.SelectActiveStagesByProjectIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewStagesMethodImpl implements ViewStagesMethod {
 
-    final SelectStagesByProjectIdOperation selectStagesByProjectIdOperation;
+    final SelectActiveStagesByProjectIdOperation selectActiveStagesByProjectIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -26,13 +26,13 @@ class ViewStagesMethodImpl implements ViewStagesMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     final var projectId = request.getProjectId();
-                    final var deleted = request.getDeleted();
-                    return pgPool.withTransaction(sqlConnection -> selectStagesByProjectIdOperation
-                            .selectStagesByProjectId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveStagesByProjectIdOperation
+                            .selectActiveStagesByProjectId(sqlConnection,
                                     shard.shard(),
                                     tenantId,
-                                    projectId,
-                                    deleted));
+                                    projectId
+                            )
+                    );
                 })
                 .map(ViewStagesResponse::new);
 

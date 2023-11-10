@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectProjectsByTenantId.SelectProjectsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewProjectsMethodImpl implements ViewProjectsMethod {
 
-    final SelectProjectsByTenantIdOperation selectProjectsByTenantIdOperation;
+    final SelectActiveProjectsByTenantIdOperation selectActiveProjectsByTenantIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -25,12 +25,11 @@ class ViewProjectsMethodImpl implements ViewProjectsMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var deleted = request.getDeleted();
-                    return pgPool.withTransaction(sqlConnection -> selectProjectsByTenantIdOperation
-                            .selectProjectsByTenantId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveProjectsByTenantIdOperation
+                            .selectActiveProjectsByTenantId(sqlConnection,
                                     shard.shard(),
-                                    tenantId,
-                                    deleted));
+                                    tenantId
+                            ));
                 })
                 .map(ViewProjectsResponse::new);
 

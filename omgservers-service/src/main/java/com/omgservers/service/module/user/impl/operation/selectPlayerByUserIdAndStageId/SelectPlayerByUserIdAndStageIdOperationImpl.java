@@ -33,7 +33,7 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
                 """
                         select id, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted
                         from $schema.tab_user_player
-                        where user_id = $1 and stage_id = $2 and deleted = false
+                        where user_id = $1 and stage_id = $2
                         limit 1
                         """,
                 Arrays.asList(userId, stageId),

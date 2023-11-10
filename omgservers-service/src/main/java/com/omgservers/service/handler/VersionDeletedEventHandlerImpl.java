@@ -91,30 +91,28 @@ public class VersionDeletedEventHandlerImpl implements EventHandler {
     Uni<List<VersionMatchmakerModel>> viewVersionMatchmakers(final VersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var request = new ViewVersionMatchmakersRequest(tenantId, versionId, false);
+        final var request = new ViewVersionMatchmakersRequest(tenantId, versionId);
         return tenantModule.getVersionService().viewVersionMatchmakers(request)
                 .map(ViewVersionMatchmakersResponse::getVersionMatchmakers);
     }
 
     Uni<Boolean> deleteVersionRuntimes(final VersionModel version) {
         return viewVersionRuntimes(version)
-                .flatMap(versionRuntimes -> {
-                    return Multi.createFrom().iterable(versionRuntimes)
-                            .onItem().transformToUniAndConcatenate(versionRuntime -> {
-                                final var request = new DeleteVersionRuntimeRequest(versionRuntime.getTenantId(),
-                                        versionRuntime.getId());
-                                return tenantModule.getVersionService().deleteVersionRuntime(request)
-                                        .map(DeleteVersionRuntimeResponse::getDeleted);
-                            })
-                            .collect().asList()
-                            .replaceWith(Boolean.TRUE);
-                });
+                .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
+                        .onItem().transformToUniAndConcatenate(versionRuntime -> {
+                            final var request = new DeleteVersionRuntimeRequest(versionRuntime.getTenantId(),
+                                    versionRuntime.getId());
+                            return tenantModule.getVersionService().deleteVersionRuntime(request)
+                                    .map(DeleteVersionRuntimeResponse::getDeleted);
+                        })
+                        .collect().asList()
+                        .replaceWith(Boolean.TRUE));
     }
 
     Uni<List<VersionRuntimeModel>> viewVersionRuntimes(final VersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var request = new ViewVersionRuntimesRequest(tenantId, versionId, false);
+        final var request = new ViewVersionRuntimesRequest(tenantId, versionId);
         return tenantModule.getVersionService().viewVersionRuntimes(request)
                 .map(ViewVersionRuntimesResponse::getVersionRuntimes);
     }

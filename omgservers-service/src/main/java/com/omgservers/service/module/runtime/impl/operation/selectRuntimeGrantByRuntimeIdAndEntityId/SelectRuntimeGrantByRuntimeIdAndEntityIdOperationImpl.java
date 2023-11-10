@@ -32,7 +32,7 @@ class SelectRuntimeGrantByRuntimeIdAndEntityIdOperationImpl implements
                 """
                         select id, runtime_id, created, modified, shard_key, entity_id, type, deleted
                         from $schema.tab_runtime_grant
-                        where runtime_id = $1 and entity_id = $2 and deleted = false
+                        where runtime_id = $1 and entity_id = $2
                         limit 1
                         """,
                 Arrays.asList(runtimeId, entityId),

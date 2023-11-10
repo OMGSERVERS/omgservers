@@ -59,7 +59,7 @@ class GetWorkerContextMethodImpl implements GetWorkerContextMethod {
     }
 
     Uni<List<RuntimeCommandModel>> viewRuntimeCommands(final Long runtimeId) {
-        final var request = new ViewRuntimeCommandsRequest(runtimeId, false);
+        final var request = new ViewRuntimeCommandsRequest(runtimeId);
         return runtimeModule.getRuntimeService().viewRuntimeCommands(request)
                 .map(ViewRuntimeCommandsResponse::getRuntimeCommands);
     }

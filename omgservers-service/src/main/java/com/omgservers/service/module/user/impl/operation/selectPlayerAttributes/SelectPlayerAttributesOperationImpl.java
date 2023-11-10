@@ -35,7 +35,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                 """
                         select attributes
                         from $schema.tab_user_player
-                        where user_id = $1 and id = $2 and deleted = false
+                        where user_id = $1 and id = $2
                         limit 1
                         """,
                 Arrays.asList(userId, playerId),

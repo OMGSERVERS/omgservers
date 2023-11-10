@@ -62,7 +62,7 @@ public class ProjectDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<List<StageModel>> viewStages(final Long tenantId, final Long projectId) {
-        final var request = new ViewStagesRequest(tenantId, projectId, false);
+        final var request = new ViewStagesRequest(tenantId, projectId);
         return tenantModule.getStageService().viewStages(request)
                 .map(ViewStagesResponse::getStages);
     }

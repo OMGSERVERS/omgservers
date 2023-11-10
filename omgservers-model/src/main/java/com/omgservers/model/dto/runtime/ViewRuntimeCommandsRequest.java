@@ -14,9 +14,6 @@ public class ViewRuntimeCommandsRequest implements ShardedRequest {
     @NotNull
     Long runtimeId;
 
-    @NotNull
-    Boolean deleted;
-
     @Override
     public String getRequestShardKey() {
         return runtimeId.toString();

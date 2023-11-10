@@ -31,13 +31,13 @@ import java.util.Collection;
 class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     final DeleteMatchmakerCommandOperation deleteMatchmakerCommandOperation;
+    final UpdateMatchStoppedFlagOperation updateMatchStoppedFlagOperation;
     final UpsertMatchClientOperation upsertMatchClientOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteMatchClientOperation deleteMatchClientOperation;
     final DeleteRequestOperation deleteRequestOperation;
     final UpsertMatchOperation upsertMatchOperation;
     final DeleteMatchOperation deleteMatchOperation;
-    final UpdateMatchStoppedFlagOperation updateMatchStoppedFlagOperation;
     final CheckShardOperation checkShardOperation;
 
     @Override

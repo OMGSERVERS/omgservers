@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectVersionsByStageId.SelectVersionsByStageIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewVersionsMethodImpl implements ViewVersionsMethod {
 
-    final SelectVersionsByStageIdOperation selectVersionsByStageIdOperation;
+    final SelectActiveVersionsByStageIdOperation selectActiveVersionsByStageIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -26,13 +26,13 @@ class ViewVersionsMethodImpl implements ViewVersionsMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     final var stageId = request.getStageId();
-                    final var deleted = request.getDeleted();
-                    return pgPool.withTransaction(sqlConnection -> selectVersionsByStageIdOperation
-                            .selectVersionsByStageId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveVersionsByStageIdOperation
+                            .selectActiveVersionsByStageId(sqlConnection,
                                     shard.shard(),
                                     tenantId,
-                                    stageId,
-                                    deleted));
+                                    stageId
+                            )
+                    );
                 })
                 .map(ViewVersionsResponse::new);
     }
