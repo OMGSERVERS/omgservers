@@ -21,11 +21,10 @@ class DeleteRuntimeGrantMethodImpl implements DeleteRuntimeGrantMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(DeleteRuntimeGrantRequest request) {
+    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) ->
                                         deleteRuntimeGrantOperation.deleteRuntimeGrant(

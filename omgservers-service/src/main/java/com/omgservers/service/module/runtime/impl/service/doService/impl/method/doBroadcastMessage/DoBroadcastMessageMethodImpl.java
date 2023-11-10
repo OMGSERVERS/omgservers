@@ -9,7 +9,7 @@ import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrantsByRuntimeId.SelectRuntimeGrantsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeGrantsByRuntimeId.SelectActiveRuntimeGrantsByRuntimeIdOperation;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -30,7 +30,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
     final SystemModule systemModule;
     final UserModule userModule;
 
-    final SelectRuntimeGrantsByRuntimeIdOperation selectRuntimeGrantsByRuntimeIdOperation;
+    final SelectActiveRuntimeGrantsByRuntimeIdOperation selectActiveRuntimeGrantsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final MessageModelFactory messageModelFactory;
@@ -44,8 +44,8 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var grant = RuntimeGrantTypeEnum.MATCH_CLIENT;
-                    return pgPool.withTransaction(sqlConnection -> selectRuntimeGrantsByRuntimeIdOperation
-                            .selectRuntimeGrantsByRuntimeId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeGrantsByRuntimeIdOperation
+                            .selectActiveRuntimeGrantsByRuntimeId(sqlConnection,
                                     shardModel.shard(),
                                     runtimeId)
                             .map(runtimeGrants -> createRecipientList(runtimeGrants, grant))

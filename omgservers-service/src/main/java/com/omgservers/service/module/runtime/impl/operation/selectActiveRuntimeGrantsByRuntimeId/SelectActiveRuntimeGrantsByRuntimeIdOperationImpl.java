@@ -1,4 +1,4 @@
-package com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrantsByRuntimeId;
+package com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeGrantsByRuntimeId;
 
 import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimeGrantModelMapper;
@@ -15,24 +15,24 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectRuntimeGrantsByRuntimeIdOperationImpl implements
-        SelectRuntimeGrantsByRuntimeIdOperation {
+class SelectActiveRuntimeGrantsByRuntimeIdOperationImpl implements
+        SelectActiveRuntimeGrantsByRuntimeIdOperation {
 
     final SelectListOperation selectListOperation;
 
     final RuntimeGrantModelMapper runtimeGrantModelMapper;
 
     @Override
-    public Uni<List<RuntimeGrantModel>> selectRuntimeGrantsByRuntimeId(final SqlConnection sqlConnection,
-                                                                       final int shard,
-                                                                       final Long runtimeId) {
+    public Uni<List<RuntimeGrantModel>> selectActiveRuntimeGrantsByRuntimeId(final SqlConnection sqlConnection,
+                                                                             final int shard,
+                                                                             final Long runtimeId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
                         select id, runtime_id, created, modified, shard_key, entity_id, type, deleted
                         from $schema.tab_runtime_grant
-                        where runtime_id = $1
+                        where runtime_id = $1 and deleted = false
                         """,
                 Collections.singletonList(runtimeId),
                 "Runtime grant",

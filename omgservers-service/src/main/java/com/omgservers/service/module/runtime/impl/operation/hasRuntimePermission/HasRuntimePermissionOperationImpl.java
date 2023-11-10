@@ -29,7 +29,8 @@ class HasRuntimePermissionOperationImpl implements HasRuntimePermissionOperation
                 """
                         select id
                         from $schema.tab_runtime_permission
-                        where runtime_id = $1 and user_id = $2 and permission = $3 and deleted = false
+                        where
+                            runtime_id = $1 and user_id = $2 and permission = $3 and deleted = false
                         limit 1
                         """,
                 Arrays.asList(runtimeId, userId, permission),
