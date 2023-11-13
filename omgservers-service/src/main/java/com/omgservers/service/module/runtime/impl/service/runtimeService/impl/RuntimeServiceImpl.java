@@ -16,8 +16,6 @@ import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
@@ -28,6 +26,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
@@ -39,12 +41,13 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimeGrant.FindRuntimeGrantMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimePermission.FindRuntimePermissionMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntime.GetRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.handleRuntimeCommands.HandleRuntimeCommandsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeGrant.SyncRuntimeGrantMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimePermission.SyncRuntimePermissionMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeCommands.ViewRuntimeCommandsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeGrants.ViewRuntimeGrantsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimePermissions.ViewRuntimePermissionsMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -59,14 +62,15 @@ import lombok.extern.slf4j.Slf4j;
 public class RuntimeServiceImpl implements RuntimeService {
 
     final DeleteRuntimePermissionMethod deleteRuntimePermissionMethod;
+    final ViewRuntimePermissionsMethod viewRuntimePermissionsMethod;
     final SyncRuntimePermissionMethod syncRuntimePermissionMethod;
     final FindRuntimePermissionMethod findRuntimePermissionMethod;
     final DeleteRuntimeCommandsMethod deleteRuntimeCommandsMethod;
     final DeleteRuntimeCommandMethod deleteRuntimeCommandMethod;
     final ViewRuntimeCommandsMethod viewRuntimeCommandsMethod;
     final SyncRuntimeCommandMethod syncRuntimeCommandMethod;
-    final HandleRuntimeCommandsMethod handleRuntimeCommands;
     final DeleteRuntimeGrantMethod deleteRuntimeGrantMethod;
+    final ViewRuntimeGrantsMethod viewRuntimeGrantsMethod;
     final SyncRuntimeGrantMethod syncRuntimeGrantMethod;
     final FindRuntimeGrantMethod findRuntimeGrant;
     final DeleteRuntimeMethod deleteRuntimeMethod;
@@ -109,6 +113,15 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(
+            @Valid final ViewRuntimePermissionsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::viewRuntimePermissions,
+                viewRuntimePermissionsMethod::viewRuntimePermissions);
+    }
+
+    @Override
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(@Valid final FindRuntimePermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
@@ -142,14 +155,6 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(@Valid final HandleRuntimeCommandsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::handleRuntimeCommands,
-                handleRuntimeCommands::handleRuntimeCommands);
-    }
-
-    @Override
     public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid final DeleteRuntimeCommandRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
@@ -171,6 +176,14 @@ public class RuntimeServiceImpl implements RuntimeService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimeGrant,
                 syncRuntimeGrantMethod::syncRuntimeGrant);
+    }
+
+    @Override
+    public Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(ViewRuntimeGrantsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::viewRuntimeGrants,
+                viewRuntimeGrantsMethod::viewRuntimeGrants);
     }
 
     @Override

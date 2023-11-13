@@ -34,8 +34,6 @@ import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
@@ -46,6 +44,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -74,6 +76,10 @@ public interface RuntimeApi {
     Uni<FindRuntimePermissionResponse> findRuntimePermission(FindRuntimePermissionRequest request);
 
     @PUT
+    @Path("/view-runtime-permissions")
+    Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(ViewRuntimePermissionsRequest request);
+
+    @PUT
     @Path("/delete-runtime-permission")
     Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(DeleteRuntimePermissionRequest request);
 
@@ -90,16 +96,16 @@ public interface RuntimeApi {
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
 
     @PUT
-    @Path("/handle-runtime-commands")
-    Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(HandleRuntimeCommandsRequest request);
-
-    @PUT
     @Path("/delete-runtime-commands")
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
     @PUT
     @Path("/sync-runtime-grant")
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
+
+    @PUT
+    @Path("/view-runtime-grants")
+    Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(ViewRuntimeGrantsRequest request);
 
     @PUT
     @Path("/find-runtime-grant")

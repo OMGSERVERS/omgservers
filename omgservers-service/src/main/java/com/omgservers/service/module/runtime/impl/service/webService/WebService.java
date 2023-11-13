@@ -34,8 +34,6 @@ import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
@@ -46,6 +44,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -57,6 +59,8 @@ public interface WebService {
 
     Uni<SyncRuntimePermissionResponse> syncRuntimePermission(SyncRuntimePermissionRequest request);
 
+    Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(ViewRuntimePermissionsRequest request);
+
     Uni<FindRuntimePermissionResponse> findRuntimePermission(FindRuntimePermissionRequest request);
 
     Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(DeleteRuntimePermissionRequest request);
@@ -65,13 +69,13 @@ public interface WebService {
 
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
 
-    Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(HandleRuntimeCommandsRequest request);
-
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
 
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
     Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(SyncRuntimeGrantRequest request);
+
+    Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(ViewRuntimeGrantsRequest request);
 
     Uni<FindRuntimeGrantResponse> findRuntimeGrant(FindRuntimeGrantRequest request);
 

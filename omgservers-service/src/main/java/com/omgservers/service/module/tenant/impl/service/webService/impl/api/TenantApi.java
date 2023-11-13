@@ -1,9 +1,15 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
@@ -60,10 +66,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
@@ -90,12 +102,20 @@ public interface TenantApi {
     Uni<DeleteTenantResponse> deleteTenant(DeleteTenantRequest request);
 
     @PUT
+    @Path("/view-tenant-permission")
+    Uni<ViewTenantPermissionsResponse> viewTenantPermissions(ViewTenantPermissionsRequest request);
+
+    @PUT
     @Path("/has-tenant-permission")
     Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request);
 
     @PUT
     @Path("/sync-tenant-permission")
     Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request);
+
+    @PUT
+    @Path("/delete-tenant-permission")
+    Uni<DeleteTenantPermissionResponse> deleteTenantPermission(DeleteTenantPermissionRequest request);
 
     @PUT
     @Path("/get-project")
@@ -114,12 +134,20 @@ public interface TenantApi {
     Uni<DeleteProjectResponse> deleteProject(DeleteProjectRequest request);
 
     @PUT
+    @Path("/view-project-permission")
+    Uni<ViewProjectPermissionsResponse> viewProjectPermissions(ViewProjectPermissionsRequest request);
+
+    @PUT
     @Path("/has-project-permission")
     Uni<HasProjectPermissionResponse> hasProjectPermission(HasProjectPermissionRequest request);
 
     @PUT
     @Path("/sync-project-permission")
     Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request);
+
+    @PUT
+    @Path("/delete-project-permission")
+    Uni<DeleteProjectPermissionResponse> deleteProjectPermission(DeleteProjectPermissionRequest request);
 
     @PUT
     @Path("/get-stage")
@@ -138,12 +166,20 @@ public interface TenantApi {
     Uni<DeleteStageResponse> deleteStage(DeleteStageRequest request);
 
     @PUT
+    @Path("/view-stage-permission")
+    Uni<ViewStagePermissionsResponse> viewStagePermissions(ViewStagePermissionsRequest request);
+
+    @PUT
     @Path("/has-stage-permission")
     Uni<HasStagePermissionResponse> hasStagePermission(HasStagePermissionRequest request);
 
     @PUT
     @Path("/sync-stage-permission")
     Uni<SyncStagePermissionResponse> syncStagePermission(SyncStagePermissionRequest request);
+
+    @PUT
+    @Path("/delete-stage-permission")
+    Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request);
 
     @PUT
     @Path("/get-version")

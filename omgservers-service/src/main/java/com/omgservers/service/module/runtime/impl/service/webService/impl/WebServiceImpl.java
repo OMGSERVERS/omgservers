@@ -34,8 +34,6 @@ import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsRequest;
-import com.omgservers.model.dto.runtime.HandleRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
@@ -46,6 +44,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
@@ -84,6 +86,11 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
+        return runtimeService.viewRuntimePermissions(request);
+    }
+
+    @Override
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
         return runtimeService.findRuntimePermission(request);
     }
@@ -96,11 +103,6 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return runtimeService.syncRuntimeCommand(request);
-    }
-
-    @Override
-    public Uni<HandleRuntimeCommandsResponse> handleRuntimeCommands(final HandleRuntimeCommandsRequest request) {
-        return runtimeService.handleRuntimeCommands(request);
     }
 
     @Override
@@ -126,6 +128,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<FindRuntimeGrantResponse> findRuntimeGrant(final FindRuntimeGrantRequest request) {
         return runtimeService.findRuntimeGrant(request);
+    }
+
+    @Override
+    public Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(final ViewRuntimeGrantsRequest request) {
+        return runtimeService.viewRuntimeGrants(request);
     }
 
     @Override

@@ -1,30 +1,24 @@
-package com.omgservers.model.dto.runtime;
+package com.omgservers.model.dto.tenant;
 
 import com.omgservers.model.dto.ShardedRequest;
-import com.omgservers.model.event.EventModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleRuntimeCommandsRequest implements ShardedRequest {
+public class ViewProjectPermissionsRequest implements ShardedRequest {
 
     @NotNull
-    Long runtimeId;
+    Long tenantId;
 
     @NotNull
-    List<Long> ids;
-
-    @NotNull
-    List<EventModel> events;
+    Long projectId;
 
     @Override
     public String getRequestShardKey() {
-        return runtimeId.toString();
+        return tenantId.toString();
     }
 }

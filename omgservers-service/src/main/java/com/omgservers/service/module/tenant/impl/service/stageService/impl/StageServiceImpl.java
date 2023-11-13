@@ -1,5 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.stageService.impl;
 
+import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -12,17 +14,21 @@ import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.dto.tenant.SyncStageResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.deleteStage.DeleteStageMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.deleteStagePermission.DeleteStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.getStage.GetStageMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.hasStagePermission.HasStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.syncStage.SyncStageMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.syncStagePermission.SyncStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.validateStageSecret.ValidateStageSecretMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.viewStagePermissions.ViewStagePermissionsMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.viewStages.ViewStagesMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -38,6 +44,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StageServiceImpl implements StageService {
 
+    final DeleteStagePermissionMethod deleteStagePermissionMethod;
+    final ViewStagePermissionsMethod viewStagePermissionsMethod;
     final SyncStagePermissionMethod syncStagePermissionMethod;
     final ValidateStageSecretMethod validateStageSecretMethod;
     final HasStagePermissionMethod hasStagePermissionMethod;
@@ -83,6 +91,14 @@ public class StageServiceImpl implements StageService {
     }
 
     @Override
+    public Uni<ViewStagePermissionsResponse> viewStagePermissions(@Valid final ViewStagePermissionsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewStagePermissions,
+                viewStagePermissionsMethod::viewStagePermissions);
+    }
+
+    @Override
     public Uni<HasStagePermissionResponse> hasStagePermission(@Valid final HasStagePermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
@@ -96,6 +112,14 @@ public class StageServiceImpl implements StageService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncStagePermission,
                 syncStagePermissionMethod::syncStagePermission);
+    }
+
+    @Override
+    public Uni<DeleteStagePermissionResponse> deleteStagePermission(@Valid final DeleteStagePermissionRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteStagePermission,
+                deleteStagePermissionMethod::deleteStagePermission);
     }
 
     @Override

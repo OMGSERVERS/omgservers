@@ -1,9 +1,15 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
@@ -60,10 +66,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
@@ -108,6 +120,12 @@ class TenantApiImpl implements TenantApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(final ViewTenantPermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantPermissions);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasTenantPermissionResponse> hasTenantPermission(final HasTenantPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasTenantPermission);
     }
@@ -116,6 +134,12 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantPermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(final DeleteTenantPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermission);
     }
 
     @Override
@@ -144,6 +168,12 @@ class TenantApiImpl implements TenantApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewProjectPermissionsResponse> viewProjectPermissions(final ViewProjectPermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewProjectPermissions);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasProjectPermissionResponse> hasProjectPermission(final HasProjectPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasProjectPermission);
     }
@@ -152,6 +182,12 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncProjectPermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(final DeleteProjectPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteProjectPermission);
     }
 
     @Override
@@ -180,6 +216,12 @@ class TenantApiImpl implements TenantApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewStagePermissionsResponse> viewStagePermissions(final ViewStagePermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewStagePermissions);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasStagePermissionResponse> hasStagePermission(final HasStagePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasStagePermission);
     }
@@ -188,6 +230,12 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStagePermission);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteStagePermissionResponse> deleteStagePermission(final DeleteStagePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteStagePermission);
     }
 
     @Override

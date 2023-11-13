@@ -1,5 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.stageService;
 
+import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -12,6 +14,8 @@ import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.dto.tenant.SyncStageResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import io.smallrye.mutiny.Uni;
@@ -27,9 +31,13 @@ public interface StageService {
 
     Uni<DeleteStageResponse> deleteStage(@Valid DeleteStageRequest request);
 
+    Uni<ViewStagePermissionsResponse> viewStagePermissions(@Valid ViewStagePermissionsRequest request);
+
     Uni<HasStagePermissionResponse> hasStagePermission(@Valid HasStagePermissionRequest request);
 
     Uni<SyncStagePermissionResponse> syncStagePermission(@Valid SyncStagePermissionRequest request);
+
+    Uni<DeleteStagePermissionResponse> deleteStagePermission(@Valid DeleteStagePermissionRequest request);
 
     Uni<ValidateStageSecretResponse> validateStageSecret(@Valid ValidateStageSecretRequest request);
 }

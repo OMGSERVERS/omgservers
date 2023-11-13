@@ -1,5 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl;
 
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
@@ -10,17 +12,22 @@ import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncProjectResponse;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.deleteProject.DeleteProjectMethod;
+import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.deleteProjectPermission.DeleteProjectPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.getProject.GetProjectMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.hasProjectPermission.HasProjectPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.syncProject.SyncProjectMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.syncProjectPermission.SyncProjectPermissionMethod;
+import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.viewProjectPermissions.ViewProjectPermissionsMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.viewProjects.ViewProjectsMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.deleteStagePermission.DeleteStagePermissionMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -35,6 +42,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class ProjectServiceImpl implements ProjectService {
 
+    final DeleteProjectPermissionMethod deleteProjectPermissionMethod;
+    final ViewProjectPermissionsMethod viewProjectPermissionsMethod;
+    final DeleteStagePermissionMethod deleteStagePermissionMethod;
     final SyncProjectPermissionMethod syncProjectPermissionMethod;
     final HasProjectPermissionMethod hasProjectPermissionMethod;
     final DeleteProjectMethod deleteProjectMethod;
@@ -79,6 +89,15 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Uni<ViewProjectPermissionsResponse> viewProjectPermissions(
+            @Valid final ViewProjectPermissionsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewProjectPermissions,
+                viewProjectPermissionsMethod::viewProjectPermissions);
+    }
+
+    @Override
     public Uni<HasProjectPermissionResponse> hasProjectPermission(@Valid final HasProjectPermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
@@ -92,5 +111,14 @@ class ProjectServiceImpl implements ProjectService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncProjectPermission,
                 syncProjectPermissionMethod::syncProjectPermission);
+    }
+
+    @Override
+    public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(
+            @Valid final DeleteProjectPermissionRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteProjectPermission,
+                deleteProjectPermissionMethod::deleteProjectPermission);
     }
 }

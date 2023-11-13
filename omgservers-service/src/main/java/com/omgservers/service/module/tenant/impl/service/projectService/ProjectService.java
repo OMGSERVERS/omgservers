@@ -1,5 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService;
 
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
@@ -10,6 +12,8 @@ import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncProjectResponse;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +29,12 @@ public interface ProjectService {
 
     Uni<DeleteProjectResponse> deleteProject(@Valid DeleteProjectRequest request);
 
+    Uni<ViewProjectPermissionsResponse> viewProjectPermissions(@Valid ViewProjectPermissionsRequest request);
+
     Uni<HasProjectPermissionResponse> hasProjectPermission(@Valid HasProjectPermissionRequest request);
 
     Uni<SyncProjectPermissionResponse> syncProjectPermission(@Valid SyncProjectPermissionRequest request);
+
+    Uni<DeleteProjectPermissionResponse> deleteProjectPermission(@Valid DeleteProjectPermissionRequest request);
+
 }

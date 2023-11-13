@@ -1,10 +1,12 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ProjectModelFactory;
+import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
-import com.omgservers.service.module.tenant.operation.testInterface.DeleteProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.SelectStageOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
+import com.omgservers.service.module.tenant.operation.testInterface.UpsertStageOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -16,11 +18,11 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteProjectOperationTest extends Assertions {
+class SelectActiveStagePermissionsByStageIdOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteProjectOperationTestInterface deleteProjectOperation;
+    SelectStageOperationTestInterface selectStageOperation;
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
@@ -29,10 +31,16 @@ class DeleteProjectOperationTest extends Assertions {
     UpsertProjectOperationTestInterface upsertProjectOperation;
 
     @Inject
+    UpsertStageOperationTestInterface upsertStageOperation;
+
+    @Inject
     TenantModelFactory tenantModelFactory;
 
     @Inject
     ProjectModelFactory projectModelFactory;
+
+    @Inject
+    StageModelFactory stageModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -41,27 +49,31 @@ class DeleteProjectOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenProject_whenDeleteProject_thenDeleted() {
+    void givenStage_whenSelectStage_thenSelected() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
+
         final var project = projectModelFactory.create(tenant.getId());
-        final var id = project.getId();
         upsertProjectOperation.upsertProject(shard, project);
 
-        final var changeContext = deleteProjectOperation.deleteProject(shard, tenant.getId(), id);
-        assertTrue(changeContext.getResult());
-        assertTrue(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
+        final var stage1 = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage1);
+
+        final var stage2 = selectStageOperation.selectStage(shard, tenant.getId(), stage1.getId(), false);
+        assertEquals(stage1, stage2);
     }
 
     @Test
-    void givenUnknownIds_whenDeleteProject_thenFalse() {
+    void givenUnknownIds_whenSelectStage_thenException() {
         final var shard = 0;
-        final var tenantId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteProjectOperation.deleteProject(shard, tenantId, id);
-        assertFalse(changeContext.getResult());
-        assertFalse(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
+        assertThrows(ServerSideNotFoundException.class, () -> selectStageOperation
+                .selectStage(shard, tenantId(), id, false));
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
     }
 }

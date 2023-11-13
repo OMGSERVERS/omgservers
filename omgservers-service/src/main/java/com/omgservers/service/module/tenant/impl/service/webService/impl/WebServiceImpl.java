@@ -1,9 +1,15 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl;
 
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
+import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
@@ -60,10 +66,16 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewStagePermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
+import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
 import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
@@ -107,6 +119,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(final ViewTenantPermissionsRequest request) {
+        return tenantService.viewTenantPermissions(request);
+    }
+
+    @Override
     public Uni<HasTenantPermissionResponse> hasTenantPermission(final HasTenantPermissionRequest request) {
         return tenantService.hasTenantPermission(request);
     }
@@ -114,6 +131,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRequest request) {
         return tenantService.syncTenantPermission(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(final DeleteTenantPermissionRequest request) {
+        return tenantService.deleteTenantPermission(request);
     }
 
     @Override
@@ -137,6 +159,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<ViewProjectPermissionsResponse> viewProjectPermissions(final ViewProjectPermissionsRequest request) {
+        return projectService.viewProjectPermissions(request);
+    }
+
+    @Override
     public Uni<HasProjectPermissionResponse> hasProjectPermission(final HasProjectPermissionRequest request) {
         return projectService.hasProjectPermission(request);
     }
@@ -144,6 +171,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
         return projectService.syncProjectPermission(request);
+    }
+
+    @Override
+    public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(final DeleteProjectPermissionRequest request) {
+        return projectService.deleteProjectPermission(request);
     }
 
     @Override
@@ -167,6 +199,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<ViewStagePermissionsResponse> viewStagePermissions(final ViewStagePermissionsRequest request) {
+        return stageService.viewStagePermissions(request);
+    }
+
+    @Override
     public Uni<HasStagePermissionResponse> hasStagePermission(final HasStagePermissionRequest request) {
         return stageService.hasStagePermission(request);
     }
@@ -174,6 +211,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
         return stageService.syncStagePermission(request);
+    }
+
+    @Override
+    public Uni<DeleteStagePermissionResponse> deleteStagePermission(final DeleteStagePermissionRequest request) {
+        return stageService.deleteStagePermission(request);
     }
 
     @Override
