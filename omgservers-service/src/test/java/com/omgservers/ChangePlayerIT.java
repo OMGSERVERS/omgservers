@@ -1,7 +1,7 @@
 package com.omgservers;
 
+import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
-import com.omgservers.utils.operation.deleteVersionOperation.DeleteVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -25,10 +25,10 @@ public class ChangePlayerIT extends Assertions {
     BootstrapVersionOperation bootstrapVersionOperation;
 
     @Inject
-    DeleteVersionOperation deleteVersionOperation;
+    TestClientFactory testClientFactory;
 
     @Inject
-    TestClientFactory testClientFactory;
+    AdminCli adminCli;
 
     @Test
     void changePlayerTest() throws Exception {
@@ -54,23 +54,25 @@ public class ChangePlayerIT extends Assertions {
 
         Thread.sleep(10000);
 
-        final var client = testClientFactory.create(uri);
+        try {
+            final var client = testClientFactory.create(uri);
 
-        client.signUp(version);
-        final var welcome1 = client.consumeWelcomeMessage();
-        assertNotNull(welcome1);
+            client.signUp(version);
+            final var welcome1 = client.consumeWelcomeMessage();
+            assertNotNull(welcome1);
 
-        client.changeRequest(new TestMessage("reset"));
+            client.changeRequest(new TestMessage("reset"));
 
-        final var serverMessage1 = client.consumeServerMessage();
-        assertEquals("{text=changed}", serverMessage1.getMessage().toString());
+            final var serverMessage1 = client.consumeServerMessage();
+            assertEquals("{text=changed}", serverMessage1.getMessage().toString());
 
-        client.close();
+            client.close();
 
-        Thread.sleep(10000);
-
-        deleteVersionOperation.deleteVersion(version);
-        Thread.sleep(10000);
+            Thread.sleep(10000);
+        } finally {
+            adminCli.deleteTenant(version.getTenantId());
+            Thread.sleep(10000);
+        }
     }
 
     @Data

@@ -31,7 +31,7 @@ class SelectActiveRuntimePermissionsByRuntimeIdOperationImpl implements
                 shard,
                 """
                         select id, runtime_id, created, modified, user_id, permission, deleted
-                        from $schema.tab_runtime_permissions
+                        from $schema.tab_runtime_permission
                         where runtime_id = $1 and deleted = false
                         """,
                 Collections.singletonList(runtimeId),

@@ -10,6 +10,8 @@ import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
 import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.FindIndexAdminRequest;
 import com.omgservers.model.dto.admin.FindIndexAdminResponse;
 import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
@@ -125,6 +127,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateTenantAdminResponse> createTenant(final CreateTenantAdminRequest request) {
         return adminService.createTenant(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantAdminResponse> deleteTenant(final DeleteTenantAdminRequest request) {
+        return adminService.deleteTenant(request);
     }
 
     @Override

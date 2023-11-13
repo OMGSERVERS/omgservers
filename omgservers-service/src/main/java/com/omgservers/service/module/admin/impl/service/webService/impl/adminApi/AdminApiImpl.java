@@ -10,6 +10,8 @@ import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
 import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.FindIndexAdminRequest;
 import com.omgservers.model.dto.admin.FindIndexAdminResponse;
 import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
@@ -98,6 +100,12 @@ public class AdminApiImpl implements AdminApi {
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateTenantAdminResponse> createTenant(final CreateTenantAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenant);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
+    public Uni<DeleteTenantAdminResponse> deleteTenant(DeleteTenantAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.omgservers;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
-import com.omgservers.utils.operation.deleteVersionOperation.DeleteVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -29,7 +29,7 @@ public class DoChangeIT extends Assertions {
     BootstrapVersionOperation bootstrapVersionOperation;
 
     @Inject
-    DeleteVersionOperation deleteVersionOperation;
+    AdminCli adminCli;
 
     @Inject
     TestClientFactory testClientFactory;
@@ -77,26 +77,30 @@ public class DoChangeIT extends Assertions {
 
         Thread.sleep(10000);
 
-        final var client1 = testClientFactory.create(uri);
-        client1.signUp(version);
+        try {
 
-        final var welcome1 = client1.consumeWelcomeMessage();
-        assertNotNull(welcome1);
 
-        client1.requestMatchmaking("death-match");
+            final var client1 = testClientFactory.create(uri);
+            client1.signUp(version);
 
-        final var assignment1 = client1.consumeAssignmentMessage();
-        assertNotNull(assignment1);
+            final var welcome1 = client1.consumeWelcomeMessage();
+            assertNotNull(welcome1);
 
-        final var serverMessage1 = client1.consumeServerMessage();
-        assertEquals("{text=changed}", serverMessage1.getMessage().toString());
+            client1.requestMatchmaking("death-match");
 
-        client1.close();
+            final var assignment1 = client1.consumeAssignmentMessage();
+            assertNotNull(assignment1);
 
-        Thread.sleep(10000);
+            final var serverMessage1 = client1.consumeServerMessage();
+            assertEquals("{text=changed}", serverMessage1.getMessage().toString());
 
-        deleteVersionOperation.deleteVersion(version);
-        Thread.sleep(10000);
+            client1.close();
+
+            Thread.sleep(10000);
+        } finally {
+            adminCli.deleteTenant(version.getTenantId());
+            Thread.sleep(10000);
+        }
     }
 
     @Data

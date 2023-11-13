@@ -40,7 +40,7 @@ class DeleteTenantPermissionOperationImpl implements DeleteTenantPermissionOpera
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new ProjectDeletedEventBodyModel(tenantId, id),
+                () -> null,
                 () -> logModelFactory.create(String.format("Tenant permission was deleted, " +
                         "tenantId=%d, id=%d", tenantId, id))
         );

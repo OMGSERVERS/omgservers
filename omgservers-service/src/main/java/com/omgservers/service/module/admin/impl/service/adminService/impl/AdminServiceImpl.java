@@ -6,12 +6,15 @@ import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import com.omgservers.service.module.admin.impl.service.adminService.AdminService;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.collectLogs.CollectLogsMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createDeveloper.CreateDeveloperMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createTenant.CreateTenantMethod;
+import com.omgservers.service.module.admin.impl.service.adminService.impl.method.deleteTenant.DeleteTenantMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.generateId.GenerateIdMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.pingServer.PingServerMethod;
 import io.smallrye.mutiny.Uni;
@@ -28,6 +31,7 @@ class AdminServiceImpl implements AdminService {
 
     final CreateDeveloperMethod createDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
+    final DeleteTenantMethod deleteTenantMethod;
     final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
     final GenerateIdMethod generateIdMethod;
@@ -45,6 +49,11 @@ class AdminServiceImpl implements AdminService {
     @Override
     public Uni<CreateTenantAdminResponse> createTenant(@Valid final CreateTenantAdminRequest request) {
         return createTenantMethod.createTenant(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantAdminResponse> deleteTenant(@Valid final DeleteTenantAdminRequest request) {
+        return deleteTenantMethod.deleteTenant(request);
     }
 
     @Override

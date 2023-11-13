@@ -30,7 +30,7 @@ public class DeveloperCli {
                 .with()
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenDeveloperRequest(userId, password)))
-                .when().put("/omgservers/developer-api/v1/requests/create-token");
+                .when().put("/omgservers/developer-api/v1/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenDeveloperResponse.class);
@@ -43,7 +43,7 @@ public class DeveloperCli {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateProjectDeveloperRequest(tenantId)))
-                .when().put("/omgservers/developer-api/v1/requests/create-project");
+                .when().put("/omgservers/developer-api/v1/request/create-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateProjectDeveloperResponse.class);
@@ -60,7 +60,7 @@ public class DeveloperCli {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
-                .when().put("/omgservers/developer-api/v1/requests/create-version");
+                .when().put("/omgservers/developer-api/v1/request/create-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateVersionDeveloperResponse.class);
@@ -75,7 +75,7 @@ public class DeveloperCli {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteVersionDeveloperRequest(tenantId, id)))
-                .when().put("/omgservers/developer-api/v1/requests/delete-version");
+                .when().put("/omgservers/developer-api/v1/request/delete-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(DeleteVersionDeveloperResponse.class);

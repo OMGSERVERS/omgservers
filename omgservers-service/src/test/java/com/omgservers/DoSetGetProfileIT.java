@@ -1,7 +1,7 @@
 package com.omgservers;
 
+import com.omgservers.utils.AdminCli;
 import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
-import com.omgservers.utils.operation.deleteVersionOperation.DeleteVersionOperation;
 import com.omgservers.utils.testClient.TestClientFactory;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,7 +23,7 @@ public class DoSetGetProfileIT extends Assertions {
     BootstrapVersionOperation bootstrapVersionOperation;
 
     @Inject
-    DeleteVersionOperation deleteVersionOperation;
+    AdminCli adminCli;
 
     @Inject
     TestClientFactory testClientFactory;
@@ -32,7 +32,7 @@ public class DoSetGetProfileIT extends Assertions {
     void setGetAttributeTest() throws Exception {
         final var version = bootstrapVersionOperation.bootstrapVersion("""
                 local var command = ...
-                
+                                
                 if command.qualifier == "sign_up" then
                     return {
                         {
@@ -79,25 +79,27 @@ public class DoSetGetProfileIT extends Assertions {
 
         Thread.sleep(10000);
 
-        final var client = testClientFactory.create(uri);
-        client.signUp(version);
-        final var welcome1 = client.consumeWelcomeMessage();
-        assertNotNull(welcome1);
-        final var message1 = client.consumeServerMessage();
-        assertEquals("{text=signed_up}", message1.getMessage().toString());
+        try {
+            final var client = testClientFactory.create(uri);
+            client.signUp(version);
+            final var welcome1 = client.consumeWelcomeMessage();
+            assertNotNull(welcome1);
+            final var message1 = client.consumeServerMessage();
+            assertEquals("{text=signed_up}", message1.getMessage().toString());
 
-        client.reconnect();
-        client.signIn(version);
-        final var welcome2 = client.consumeWelcomeMessage();
-        assertNotNull(welcome2);
-        var message = client.consumeServerMessage();
-        assertEquals("{text=signed_in}", message.getMessage().toString());
+            client.reconnect();
+            client.signIn(version);
+            final var welcome2 = client.consumeWelcomeMessage();
+            assertNotNull(welcome2);
+            var message = client.consumeServerMessage();
+            assertEquals("{text=signed_in}", message.getMessage().toString());
 
-        client.close();
+            client.close();
 
-        Thread.sleep(10000);
-
-        deleteVersionOperation.deleteVersion(version);
-        Thread.sleep(10000);
+            Thread.sleep(10000);
+        } finally {
+            adminCli.deleteTenant(version.getTenantId());
+            Thread.sleep(10000);
+        }
     }
 }

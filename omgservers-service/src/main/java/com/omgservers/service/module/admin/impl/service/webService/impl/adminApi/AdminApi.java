@@ -10,6 +10,8 @@ import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
 import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.FindIndexAdminRequest;
 import com.omgservers.model.dto.admin.FindIndexAdminResponse;
 import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
@@ -68,6 +70,10 @@ public interface AdminApi {
     @PUT
     @Path("/create-tenant")
     Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
+
+    @PUT
+    @Path("/delete-tenant")
+    Uni<DeleteTenantAdminResponse> deleteTenant(DeleteTenantAdminRequest request);
 
     @PUT
     @Path("/create-developer")

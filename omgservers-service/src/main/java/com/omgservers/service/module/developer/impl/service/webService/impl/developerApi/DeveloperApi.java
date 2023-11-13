@@ -12,7 +12,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
-@Path("/omgservers/developer-api/v1/requests")
+@Path("/omgservers/developer-api/v1/request")
 public interface DeveloperApi {
 
     @PUT

@@ -10,6 +10,8 @@ import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
 import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.FindIndexAdminRequest;
 import com.omgservers.model.dto.admin.FindIndexAdminResponse;
 import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
@@ -46,6 +48,8 @@ public interface WebService {
     Uni<DeleteServiceAccountAdminResponse> deleteServiceAccount(@Valid DeleteServiceAccountAdminRequest request);
 
     Uni<CreateTenantAdminResponse> createTenant(CreateTenantAdminRequest request);
+
+    Uni<DeleteTenantAdminResponse> deleteTenant(DeleteTenantAdminRequest request);
 
     Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
 

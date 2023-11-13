@@ -6,6 +6,8 @@ import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
+import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
+import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import io.smallrye.mutiny.Uni;
@@ -17,6 +19,8 @@ public interface AdminService {
     Uni<GenerateIdAdminResponse> generateId();
 
     Uni<CreateTenantAdminResponse> createTenant(@Valid CreateTenantAdminRequest request);
+
+    Uni<DeleteTenantAdminResponse> deleteTenant(@Valid DeleteTenantAdminRequest request);
 
     Uni<CreateDeveloperAdminResponse> createDeveloper(@Valid CreateDeveloperAdminRequest request);
 
