@@ -97,7 +97,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                               final Long projectId,
                               final Long userId) {
         final var stage = stageModelFactory.create(tenantId, projectId);
-        final var syncStageInternalRequest = new SyncStageRequest(tenantId, stage);
+        final var syncStageInternalRequest = new SyncStageRequest(stage);
         return tenantModule.getStageService().syncStage(syncStageInternalRequest)
                 .flatMap(response -> syncStagePermission(tenantId, stage.getId(), userId))
                 .replaceWith(stage);

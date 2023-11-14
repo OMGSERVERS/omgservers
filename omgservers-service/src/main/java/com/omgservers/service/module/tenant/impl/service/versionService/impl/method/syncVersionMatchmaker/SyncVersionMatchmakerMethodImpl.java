@@ -2,6 +2,8 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.module.tenant.impl.operation.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertVersionMatchmaker.UpsertVersionMatchmakerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -20,24 +22,39 @@ class SyncVersionMatchmakerMethodImpl implements SyncVersionMatchmakerMethod {
     final UpsertVersionMatchmakerOperation upsertVersionMatchmakerOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
+    final HasVersionOperation hasVersionOperation;
 
     final PgPool pgPool;
 
     @Override
     public Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(final SyncVersionMatchmakerRequest request) {
+        final var shardKey = request.getRequestShardKey();
         final var versionMatchmaker = request.getVersionMatchmaker();
+        final var tenantId = versionMatchmaker.getTenantId();
+        final var versionId = versionMatchmaker.getVersionId();
 
         return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) ->
-                                        upsertVersionMatchmakerOperation.upsertVersionMatchmaker(changeContext,
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                versionMatchmaker
-                                        )
-                        )
-                        .map(ChangeContext::getResult))
+                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+                .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
+                    return changeWithContextOperation.<Boolean>changeWithContext(
+                                    (changeContext, sqlConnection) -> hasVersionOperation
+                                            .hasVersion(sqlConnection, shard, tenantId, versionId)
+                                            .flatMap(has -> {
+                                                if (has) {
+                                                    return upsertVersionMatchmakerOperation.upsertVersionMatchmaker(
+                                                            changeContext,
+                                                            sqlConnection,
+                                                            shard,
+                                                            versionMatchmaker);
+                                                } else {
+                                                    throw new ServerSideConflictException(
+                                                            "version does not exist or was deleted, id=" + versionId);
+                                                }
+                                            })
+                            )
+                            .map(ChangeContext::getResult);
+                })
                 .map(SyncVersionMatchmakerResponse::new);
     }
 }

@@ -13,13 +13,10 @@ import lombok.NoArgsConstructor;
 public class SyncVersionRequest implements ShardedRequest {
 
     @NotNull
-    Long tenantId;
-
-    @NotNull
     VersionModel version;
 
     @Override
     public String getRequestShardKey() {
-        return tenantId.toString();
+        return version.getTenantId().toString();
     }
 }

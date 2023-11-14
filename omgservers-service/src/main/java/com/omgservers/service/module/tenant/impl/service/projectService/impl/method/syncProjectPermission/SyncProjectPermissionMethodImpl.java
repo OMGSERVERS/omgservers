@@ -2,8 +2,8 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.module.tenant.impl.operation.hasProject.HasProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -19,28 +19,42 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertProjectPermissionOperation upsertProjectPermissionOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
+    final HasProjectOperation hasProjectOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request) {
+    public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
+        final var shardKey = request.getRequestShardKey();
         final var permission = request.getPermission();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, permission))
-                .map(SyncProjectPermissionResponse::new);
-    }
+        final var tenantId = permission.getTenantId();
+        final var projectId = permission.getProjectId();
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, ProjectPermissionModel permission) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertProjectPermissionOperation.upsertProjectPermission(
-                                changeContext,
-                                sqlConnection,
-                                shardModel.shard(),
-                                permission))
-                .map(ChangeContext::getResult);
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+                .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
+                    return changeWithContextOperation.<Boolean>changeWithContext(
+                                    (changeContext, sqlConnection) -> hasProjectOperation
+                                            .hasProject(sqlConnection, shard, tenantId, projectId)
+                                            .flatMap(has -> {
+                                                if (has) {
+                                                    return upsertProjectPermissionOperation.upsertProjectPermission(
+                                                            changeContext,
+                                                            sqlConnection,
+                                                            shard,
+                                                            permission);
+                                                } else {
+                                                    throw new ServerSideConflictException(
+                                                            "project does not exist or was deleted, id=" + projectId);
+                                                }
+                                            })
+                            )
+                            .map(ChangeContext::getResult);
+                })
+                .map(SyncProjectPermissionResponse::new);
     }
 }

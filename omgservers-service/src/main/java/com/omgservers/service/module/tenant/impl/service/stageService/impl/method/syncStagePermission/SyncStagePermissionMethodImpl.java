@@ -2,8 +2,8 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.model.dto.tenant.SyncStagePermissionResponse;
-import com.omgservers.model.shard.ShardModel;
-import com.omgservers.model.stagePermission.StagePermissionModel;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.module.tenant.impl.operation.hasStage.HasStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -19,28 +19,42 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertStagePermissionOperation upsertStagePermissionOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
+    final HasStageOperation hasStageOperation;
 
     final PgPool pgPool;
 
     @Override
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
+        final var shardKey = request.getRequestShardKey();
         final var permission = request.getPermission();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, permission))
-                .map(SyncStagePermissionResponse::new);
-    }
+        final var tenantId = permission.getTenantId();
+        final var stageId = permission.getStageId();
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, StagePermissionModel permission) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertStagePermissionOperation.upsertStagePermission(
-                                changeContext,
-                                sqlConnection,
-                                shardModel.shard(),
-                                permission))
-                .map(ChangeContext::getResult);
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+                .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
+                    return changeWithContextOperation.<Boolean>changeWithContext(
+                                    (changeContext, sqlConnection) -> hasStageOperation
+                                            .hasStage(sqlConnection, shard, tenantId, stageId)
+                                            .flatMap(has -> {
+                                                if (has) {
+                                                    return upsertStagePermissionOperation.upsertStagePermission(
+                                                            changeContext,
+                                                            sqlConnection,
+                                                            shardModel.shard(),
+                                                            permission);
+                                                } else {
+                                                    throw new ServerSideConflictException(
+                                                            "stage does not exist or was deleted, id=" + stageId);
+                                                }
+                                            })
+                            )
+                            .map(ChangeContext::getResult);
+                })
+                .map(SyncStagePermissionResponse::new);
     }
 }

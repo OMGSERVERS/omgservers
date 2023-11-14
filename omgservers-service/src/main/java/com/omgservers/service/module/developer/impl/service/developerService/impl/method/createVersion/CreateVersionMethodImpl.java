@@ -66,7 +66,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                                     final VersionConfigModel versionConfig,
                                     final VersionSourceCodeModel sourceCode) {
         final var version = versionModelFactory.create(tenantId, stageId, versionConfig, sourceCode);
-        final var request = new SyncVersionRequest(tenantId, version);
+        final var request = new SyncVersionRequest(version);
         return tenantModule.getVersionService().syncVersion(request)
                 .replaceWith(version);
     }

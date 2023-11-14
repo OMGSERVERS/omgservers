@@ -2,8 +2,8 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -19,28 +19,41 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
+    final HasRuntimeOperation hasRuntimeOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request) {
+    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
+        final var shardKey = request.getRequestShardKey();
         final var runtimeCommand = request.getRuntimeCommand();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, runtimeCommand))
-                .map(SyncRuntimeCommandResponse::new);
-    }
+        final var runtimeId = runtimeCommand.getRuntimeId();
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeCommandModel runtimeCommand) {
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertRuntimeCommandOperation.upsertRuntimeCommand(
-                                changeContext,
-                                sqlConnection,
-                                shardModel.shard(),
-                                runtimeCommand))
-                .map(ChangeContext::getResult);
+        return Uni.createFrom().voidItem()
+                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+                .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
+                    return changeWithContextOperation.<Boolean>changeWithContext(
+                                    (changeContext, sqlConnection) -> hasRuntimeOperation
+                                            .hasRuntime(sqlConnection, shard, runtimeId)
+                                            .flatMap(has -> {
+                                                if (has) {
+                                                    return upsertRuntimeCommandOperation.upsertRuntimeCommand(
+                                                            changeContext,
+                                                            sqlConnection,
+                                                            shard,
+                                                            runtimeCommand);
+                                                } else {
+                                                    throw new ServerSideConflictException(
+                                                            "runtime does not exist or was deleted, id=" + runtimeId);
+                                                }
+                                            })
+                            )
+                            .map(ChangeContext::getResult);
+                })
+                .map(SyncRuntimeCommandResponse::new);
     }
 }

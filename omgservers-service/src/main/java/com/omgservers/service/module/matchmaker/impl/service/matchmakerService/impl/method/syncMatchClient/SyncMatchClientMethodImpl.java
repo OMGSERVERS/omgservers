@@ -2,11 +2,9 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.SyncMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchClientResponse;
-import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.module.matchmaker.impl.operation.hasMatch.HasMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
-import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -23,22 +21,36 @@ class SyncMatchClientMethodImpl implements SyncMatchClientMethod {
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchClientOperation upsertMatchClientOperation;
     final CheckShardOperation checkShardOperation;
-
-    final EventModelFactory eventModelFactory;
-    final LogModelFactory logModelFactory;
+    final HasMatchOperation hasMatchOperation;
 
     @Override
-    public Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request) {
+    public Uni<SyncMatchClientResponse> syncMatchClient(final SyncMatchClientRequest request) {
         final var matchClient = request.getMatchClient();
+        final var matchmakerId = matchClient.getMatchmakerId();
+        final var matchId = matchClient.getMatchId();
+
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, matchClient))
+                .flatMap(shardModel -> {
+                    final var shard = shardModel.shard();
+                    return changeWithContextOperation.<Boolean>changeWithContext(
+                                    (context, sqlConnection) -> hasMatchOperation
+                                            .hasMatch(sqlConnection, shard, matchmakerId, matchId)
+                                            .flatMap(has -> {
+                                                if (has) {
+                                                    return upsertMatchClientOperation.upsertMatchClient(context,
+                                                            sqlConnection,
+                                                            shard,
+                                                            matchClient);
+                                                } else {
+                                                    throw new ServerSideConflictException(
+                                                            "match does not exist or was deleted, " +
+                                                                    "id=" + matchId);
+                                                }
+                                            })
+                            )
+                            .map(ChangeContext::getResult);
+                })
                 .map(SyncMatchClientResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, MatchClientModel matchClient) {
-        return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                        upsertMatchClientOperation.upsertMatchClient(context, sqlConnection, shardModel.shard(), matchClient))
-                .map(ChangeContext::getResult);
     }
 }

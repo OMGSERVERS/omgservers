@@ -13,13 +13,10 @@ import lombok.NoArgsConstructor;
 public class SyncStageRequest implements ShardedRequest {
 
     @NotNull
-    Long tenantId;
-
-    @NotNull
     StageModel stage;
 
     @Override
     public String getRequestShardKey() {
-        return tenantId.toString();
+        return stage.getTenantId().toString();
     }
 }
