@@ -69,7 +69,7 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
                 versionRuntime.getRuntimeId(),
                 versionRuntime.getTenantId(),
                 versionRuntime.getVersionId(),
-                RuntimeTypeEnum.VERSION,
+                RuntimeTypeEnum.LOBBY,
                 runtimeConfig);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)

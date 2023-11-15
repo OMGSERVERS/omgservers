@@ -98,7 +98,6 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 runtimeId,
                 tenantId,
                 versionId,
-                // TODO: Detect runtime type
                 RuntimeTypeEnum.MATCH,
                 runtimeConfig);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
