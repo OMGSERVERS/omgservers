@@ -71,10 +71,10 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
         final var versionId = version.getId();
         final var matchmakerId = generateIdOperation.generateId();
 
-        final var stageMatchmaker = versionMatchmakerModelFactory.create(tenantId,
+        final var versionMatchmaker = versionMatchmakerModelFactory.create(tenantId,
                 versionId,
                 matchmakerId);
-        final var request = new SyncVersionMatchmakerRequest(stageMatchmaker);
+        final var request = new SyncVersionMatchmakerRequest(versionMatchmaker);
         return tenantModule.getVersionService().syncVersionMatchmaker(request)
                 .map(SyncVersionMatchmakerResponse::getCreated);
     }
