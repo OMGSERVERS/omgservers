@@ -24,13 +24,9 @@ public class VersionModelFactory {
             final VersionConfigModel versionConfig,
             final VersionSourceCodeModel sourceCode) {
         final var id = generateIdOperation.generateId();
-        final var defaultMatchmakerId = generateIdOperation.generateId();
-        final var defaultRuntimeId = generateIdOperation.generateId();
         return create(id,
                 tenantId,
                 stageId,
-                defaultMatchmakerId,
-                defaultRuntimeId,
                 versionConfig,
                 sourceCode);
     }
@@ -38,8 +34,6 @@ public class VersionModelFactory {
     public VersionModel create(final Long id,
                                final Long tenantId,
                                final Long stageId,
-                               final Long defaultMatchmakerId,
-                               final Long defaultRuntimeId,
                                final VersionConfigModel versionConfig,
                                final VersionSourceCodeModel sourceCode) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -50,8 +44,6 @@ public class VersionModelFactory {
         version.setStageId(stageId);
         version.setCreated(now);
         version.setModified(now);
-        version.setDefaultMatchmakerId(defaultMatchmakerId);
-        version.setDefaultRuntimeId(defaultRuntimeId);
         version.setConfig(versionConfig);
         version.setSourceCode(sourceCode);
         version.setDeleted(false);

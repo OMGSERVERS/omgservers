@@ -26,8 +26,6 @@ public class VersionModelMapper {
         version.setStageId(row.getLong("stage_id"));
         version.setCreated(row.getOffsetDateTime("created").toInstant());
         version.setModified(row.getOffsetDateTime("modified").toInstant());
-        version.setDefaultMatchmakerId(row.getLong("default_matchmaker_id"));
-        version.setDefaultRuntimeId(row.getLong("default_runtime_id"));
         version.setDeleted(row.getBoolean("deleted"));
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));

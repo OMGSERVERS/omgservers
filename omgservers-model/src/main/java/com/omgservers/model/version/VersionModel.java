@@ -30,12 +30,6 @@ public class VersionModel {
     Instant modified;
 
     @NotNull
-    Long defaultMatchmakerId;
-
-    @NotNull
-    Long defaultRuntimeId;
-
-    @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     VersionConfigModel config;

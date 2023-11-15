@@ -115,8 +115,6 @@ create table if not exists tab_tenant_version (
     stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    default_matchmaker_id bigint not null,
-    default_runtime_id bigint not null,
     config json not null,
     source_code json not null,
     deleted boolean not null
