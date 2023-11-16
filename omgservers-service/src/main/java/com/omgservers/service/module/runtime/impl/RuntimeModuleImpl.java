@@ -3,6 +3,7 @@ package com.omgservers.service.module.runtime.impl;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
+import com.omgservers.service.module.runtime.impl.service.shortcutService.ShortcutService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RuntimeModuleImpl implements RuntimeModule {
 
+    final ShortcutService shortcutService;
     final RuntimeService runtimeService;
     final DoService doService;
 
@@ -24,4 +26,11 @@ class RuntimeModuleImpl implements RuntimeModule {
     public DoService getDoService() {
         return doService;
     }
+
+    @Override
+    public ShortcutService getShortcutService() {
+        return shortcutService;
+    }
+
+
 }

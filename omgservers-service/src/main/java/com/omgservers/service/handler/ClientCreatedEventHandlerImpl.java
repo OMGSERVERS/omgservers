@@ -1,8 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
@@ -39,18 +36,12 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
         final var userId = body.getUserId();
         final var clientId = body.getId();
 
-        return getClient(userId, clientId)
+        return userModule.getShortcutService().getClient(userId, clientId)
                 .flatMap(client -> {
                     log.info("Client was created, client={}/{}", userId, clientId);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWith(true);
-    }
-
-    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientResponse::getClient);
     }
 }
 

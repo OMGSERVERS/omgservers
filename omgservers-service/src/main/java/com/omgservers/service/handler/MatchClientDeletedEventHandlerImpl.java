@@ -1,13 +1,10 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
-import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.body.DeleteClientMatchCommandBodyModel;
 import com.omgservers.service.factory.MatchCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -38,7 +35,7 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
         final var matchmakerId = body.getMatchmakerId();
         final var matchClientId = body.getId();
 
-        return getDeletedMatchClient(matchmakerId, matchClientId)
+        return matchmakerModule.getShortcutService().getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
                     final var clientId = matchClient.getClientId();
                     final var matchId = matchClient.getMatchId();
@@ -51,12 +48,6 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
                 })
                 .replaceWith(true);
 
-    }
-
-    Uni<MatchClientModel> getDeletedMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchClient(request)
-                .map(GetMatchClientResponse::getMatchClient);
     }
 
     Uni<Boolean> syncDeleteClientMatchCommand(final Long matchmakerId,

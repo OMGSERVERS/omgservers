@@ -1,14 +1,7 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
@@ -46,7 +39,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var userId = body.getUserId();
         final var clientId = body.getId();
 
-        return getDeletedClient(userId, clientId)
+        return userModule.getShortcutService().getClient(userId, clientId)
                 .flatMap(client -> {
                     log.info("Client was deleted, client={}/{}", userId, clientId);
 
@@ -54,27 +47,15 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                     final var matchmakerId = client.getDefaultMatchmakerId();
                     return deleteRuntimeGrantForClient(runtimeId, clientId)
                             .flatMap(wasGrantDeleted -> syncDeleteClientMatchmakerCommand(matchmakerId, clientId));
-
                 })
                 .replaceWith(true);
     }
 
-    Uni<ClientModel> getDeletedClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientResponse::getClient);
-    }
-
     Uni<Boolean> deleteRuntimeGrantForClient(final Long runtimeId,
                                              final Long clientId) {
-        final var findRuntimeGrantRequest = new FindRuntimeGrantRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeGrant(findRuntimeGrantRequest)
-                .map(FindRuntimeGrantResponse::getRuntimeGrant)
-                .flatMap(runtimeGrant -> {
-                    final var request = new DeleteRuntimeGrantRequest(runtimeId, clientId);
-                    return runtimeModule.getRuntimeService().deleteRuntimeGrant(request)
-                            .map(DeleteRuntimeGrantResponse::getDeleted);
-                });
+        return runtimeModule.getShortcutService().findRuntimeGrant(runtimeId, clientId)
+                .flatMap(runtimeGrant -> runtimeModule.getShortcutService()
+                        .deleteRuntimeGrant(runtimeId, runtimeGrant.getId()));
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

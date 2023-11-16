@@ -1,11 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.event.EventModel;
@@ -58,8 +52,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getId();
 
-        return getMatchmaker(matchmakerId)
-                .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
+        return matchmakerModule.getShortcutService().getMatchmaker(matchmakerId)
+                .flatMap(matchmaker -> matchmakerModule.getShortcutService().getMatch(matchmakerId, matchId)
                         .flatMap(match -> {
                             log.info("Match was created, match={}/{}, mode={}",
                                     matchmakerId, matchId, match.getConfig().getModeConfig().getName());
@@ -70,18 +64,6 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                         })
                 )
                 .replaceWith(true);
-    }
-
-    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
     }
 
     Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
@@ -100,9 +82,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 versionId,
                 RuntimeTypeEnum.MATCH,
                 runtimeConfig);
-        final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
-                .map(SyncRuntimeResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntime(runtime);
     }
 
     Uni<Boolean> syncMatchJob(final MatchModel match) {

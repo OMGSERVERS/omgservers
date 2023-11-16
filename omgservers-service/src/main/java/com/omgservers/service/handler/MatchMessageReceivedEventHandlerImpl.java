@@ -1,12 +1,11 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,8 +39,6 @@ public class MatchMessageReceivedEventHandlerImpl implements EventHandler {
 
         final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(userId, clientId, data);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
-        final var syncRuntimeCommandRequest = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandRequest)
-                .replaceWith(true);
+        return runtimeModule.getShortcutService().syncRuntimeCommand(runtimeCommand);
     }
 }

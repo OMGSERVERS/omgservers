@@ -1,7 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
@@ -45,7 +43,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersion(tenantId, id)
+        return tenantModule.getShortcutService().getVersion(tenantId, id)
                 .flatMap(version -> {
                     log.info("Version was created, version={}/{}, stageId={}, modes={}, files={}",
                             tenantId,
@@ -58,12 +56,6 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                             .flatMap(wasVersionMatchmakerCreated -> syncVersionRuntime(version));
                 })
                 .replaceWith(true);
-    }
-
-    Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
     }
 
     Uni<Boolean> syncVersionMatchmaker(final VersionModel version) {

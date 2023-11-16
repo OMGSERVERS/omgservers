@@ -1,6 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.user.DeleteClientRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
@@ -29,11 +28,10 @@ public class ClientDisconnectedEventHandlerImpl implements EventHandler {
         final var body = (ClientDisconnectedEventBodyModel) event.getBody();
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
-        final var request = new DeleteClientRequest(userId, clientId);
 
         log.info("Client disconnected, client={}/{}", userId, clientId);
 
-        return userModule.getClientService().deleteClient(request)
+        return userModule.getShortcutService().deleteClient(userId, clientId)
                 .replaceWith(true);
     }
 }

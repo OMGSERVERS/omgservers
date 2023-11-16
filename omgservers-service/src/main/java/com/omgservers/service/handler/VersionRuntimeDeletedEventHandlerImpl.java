@@ -2,8 +2,6 @@ package com.omgservers.service.handler;
 
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
@@ -35,28 +33,22 @@ public class VersionRuntimeDeletedEventHandlerImpl implements EventHandler {
     public Uni<Boolean> handle(EventModel event) {
         final var body = (VersionRuntimeDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
-        final var id = body.getId();
+        final var versionRuntimeId = body.getId();
 
-        return getDeletedVersionRuntime(tenantId, id)
+        return tenantModule.getShortcutService().getVersionRuntime(tenantId, versionRuntimeId)
                 .flatMap(versionRuntime -> {
+                    final var runtimeId = versionRuntime.getRuntimeId();
                     log.info("Version runtime was deleted, " +
                                     "versionRuntime={}/{}, " +
                                     "versionId={}, " +
                                     "runtimeId={}",
                             tenantId,
-                            id,
+                            versionRuntimeId,
                             versionRuntime.getVersionId(),
-                            versionRuntime.getRuntimeId());
-
-                    return deleteRuntime(versionRuntime);
+                            runtimeId);
+                    return runtimeModule.getShortcutService().deleteRuntime(runtimeId);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<VersionRuntimeModel> getDeletedVersionRuntime(final Long tenantId, final Long id) {
-        final var request = new GetVersionRuntimeRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersionRuntime(request)
-                .map(GetVersionRuntimeResponse::getVersionRuntime);
     }
 
     Uni<Boolean> deleteRuntime(final VersionRuntimeModel versionRuntime) {

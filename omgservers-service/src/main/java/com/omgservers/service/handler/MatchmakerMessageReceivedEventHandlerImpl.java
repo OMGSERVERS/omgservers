@@ -1,12 +1,7 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
-import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
-import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
@@ -52,7 +47,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var mode = body.getMode();
 
-        return getClient(userId, clientId)
+        return userModule.getShortcutService().getClient(userId, clientId)
                 .flatMap(client -> {
                     final var matchmakerId = client.getDefaultMatchmakerId();
                     log.info("Matchmaker was requested, " +
@@ -67,25 +62,13 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                             tenantId,
                             stageId);
 
-                    return getPlayerAttributes(userId, playerId)
+                    return userModule.getShortcutService().getPlayerAttributes(userId, playerId)
                             .flatMap(attributes -> syncMatchmakerRequest(matchmakerId,
                                     userId,
                                     clientId,
                                     mode,
                                     attributes));
                 });
-    }
-
-    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientResponse::getClient);
-    }
-
-    Uni<PlayerAttributesModel> getPlayerAttributes(Long userId, Long playerId) {
-        final var request = new GetPlayerAttributesRequest(userId, playerId);
-        return userModule.getPlayerService().getPlayerAttributes(request)
-                .map(GetPlayerAttributesResponse::getAttributes);
     }
 
     Uni<Boolean> syncMatchmakerRequest(final Long matchmakerId,

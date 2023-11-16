@@ -2,8 +2,6 @@ package com.omgservers.service.handler;
 
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionMatchmakerCreatedEventBodyModel;
@@ -39,7 +37,7 @@ public class VersionMatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionMatchmaker(tenantId, id)
+        return tenantModule.getShortcutService().getVersionMatchmaker(tenantId, id)
                 .flatMap(versionMatchmaker -> {
                     log.info("Version matchmaker was created, " +
                                     "versionMatchmaker={}/{}, " +
@@ -53,12 +51,6 @@ public class VersionMatchmakerCreatedEventHandlerImpl implements EventHandler {
                     return syncMatchmaker(versionMatchmaker);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<VersionMatchmakerModel> getVersionMatchmaker(final Long tenantId, final Long id) {
-        final var request = new GetVersionMatchmakerRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersionMatchmaker(request)
-                .map(GetVersionMatchmakerResponse::getVersionMatchmaker);
     }
 
     Uni<Boolean> syncMatchmaker(final VersionMatchmakerModel versionMatchmaker) {

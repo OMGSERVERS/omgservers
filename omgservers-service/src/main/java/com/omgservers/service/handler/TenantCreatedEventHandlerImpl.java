@@ -1,11 +1,8 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
-import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -31,17 +28,11 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         final var body = (TenantCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getId();
 
-        return getTenant(tenantId)
+        return tenantModule.getShortcutService().getTenant(tenantId)
                 .flatMap(tenant -> {
                     log.info("Tenant was created, tenant={}", tenantId);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWith(true);
-    }
-
-    Uni<TenantModel> getTenant(final Long id) {
-        final var request = new GetTenantRequest(id);
-        return tenantModule.getTenantService().getTenant(request)
-                .map(GetTenantResponse::getTenant);
     }
 }

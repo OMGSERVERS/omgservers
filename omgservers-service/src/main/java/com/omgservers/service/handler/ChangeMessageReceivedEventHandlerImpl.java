@@ -1,10 +1,6 @@
 package com.omgservers.service.handler;
 
 import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
@@ -42,17 +38,11 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var message = body.getMessage();
 
-        return getClient(userId, clientId)
+        return userModule.getShortcutService().getClient(userId, clientId)
                 .flatMap(client -> {
                     final var runtimeId = client.getDefaultRuntimeId();
                     return syncChangeRuntimeCommand(runtimeId, client, message);
                 });
-    }
-
-    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> syncChangeRuntimeCommand(final Long runtimeId,
@@ -62,8 +52,6 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
         final var clientId = client.getId();
         final var runtimeCommandBody = new ChangePlayerRuntimeCommandBodyModel(userId, clientId, message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
-        final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)
-                .map(SyncRuntimeCommandResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntimeCommand(runtimeCommand);
     }
 }

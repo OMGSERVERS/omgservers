@@ -2,8 +2,6 @@ package com.omgservers.service.handler;
 
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.system.SyncContainerRequest;
@@ -24,7 +22,6 @@ import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -43,7 +40,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final SystemModule systemModule;
-    final TenantModule tenantModule;
     final UserModule userModule;
 
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
@@ -61,7 +57,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 
-        return getRuntime(id)
+        return runtimeModule.getShortcutService().getRuntime(id)
                 .flatMap(runtime -> {
                     log.info("Runtime was created, id={}, type={}",
                             runtime.getId(),
@@ -70,12 +66,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     return createContainer(runtime);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
-                .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Void> createContainer(final RuntimeModel runtime) {

@@ -15,9 +15,6 @@ import lombok.ToString;
 public class ValidateCredentialsRequest implements ShardedRequest {
 
     @NotNull
-    Long tenantId;
-
-    @NotNull
     Long userId;
 
     @NotBlank

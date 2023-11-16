@@ -1,7 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
 import com.omgservers.model.dto.system.DeleteJobResponse;
 import com.omgservers.model.dto.system.FindJobRequest;
@@ -54,7 +52,7 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                             matchmakerId,
                             runtimeId);
 
-                    return deleteRuntime(runtimeId)
+                    return runtimeModule.getShortcutService().deleteRuntime(runtimeId)
                             .flatMap(runtimeWasDeleted -> deleteMatchJob(matchmakerId, matchId))
                             .flatMap(wasMatchJobDeleted -> matchmakerModule.getShortcutService()
                                     .deleteMatchCommands(matchmakerId, matchId))
@@ -62,12 +60,6 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                                     .deleteMatchClients(matchmakerId, matchId));
                 })
                 .replaceWith(true);
-    }
-
-    Uni<Boolean> deleteRuntime(final Long runtimeId) {
-        final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().deleteRuntime(request)
-                .map(DeleteRuntimeResponse::getDeleted);
     }
 
     Uni<Boolean> deleteMatchJob(final Long matchmakerId, final Long matchId) {

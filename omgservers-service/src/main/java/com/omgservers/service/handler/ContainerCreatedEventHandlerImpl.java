@@ -8,10 +8,8 @@ import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ContainerCreatedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
     final SystemModule systemModule;
-    final UserModule userModule;
 
     @Override
     public EventQualifierEnum getQualifier() {

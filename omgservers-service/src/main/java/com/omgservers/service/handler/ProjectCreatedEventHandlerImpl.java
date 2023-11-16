@@ -1,11 +1,8 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.tenant.GetProjectRequest;
-import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
-import com.omgservers.model.project.ProjectModel;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -32,17 +29,11 @@ public class ProjectCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var projectId = body.getId();
 
-        return getProject(tenantId, projectId)
+        return tenantModule.getShortcutService().getProject(tenantId, projectId)
                 .flatMap(project -> {
                     log.info("Project was created, project={}/{}", tenantId, projectId);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWith(true);
-    }
-
-    Uni<ProjectModel> getProject(final Long tenantId, final Long id) {
-        final var request = new GetProjectRequest(tenantId, id);
-        return tenantModule.getProjectService().getProject(request)
-                .map(GetProjectResponse::getProject);
     }
 }

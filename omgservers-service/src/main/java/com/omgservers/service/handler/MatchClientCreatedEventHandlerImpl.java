@@ -1,22 +1,16 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
-import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.service.factory.MatchCommandModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
-import com.omgservers.service.module.gateway.GatewayModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
-import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,9 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchClientCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
-    final GatewayModule gatewayModule;
-    final UserModule userModule;
 
     final MatchCommandModelFactory matchCommandModelFactory;
     final RuntimeGrantModelFactory runtimeGrantModelFactory;
@@ -49,7 +40,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         final var matchId = body.getMatchId();
         final var matchClientId = body.getId();
 
-        return getMatchClient(matchmakerId, matchClientId)
+        return matchmakerModule.getShortcutService().getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
                     final var userId = matchClient.getUserId();
                     final var clientId = matchClient.getClientId();
@@ -63,12 +54,6 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                             clientId);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<MatchClientModel> getMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchClient(request)
-                .map(GetMatchClientResponse::getMatchClient);
     }
 
     Uni<Boolean> syncAddClientMatchCommand(final Long matchmakerId,

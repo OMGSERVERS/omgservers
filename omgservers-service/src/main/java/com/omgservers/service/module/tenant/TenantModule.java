@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant;
 
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
+import com.omgservers.service.module.tenant.impl.service.shortcutService.ShortcutService;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.module.tenant.impl.service.tenantService.TenantService;
 import com.omgservers.service.module.tenant.impl.service.versionService.VersionService;
@@ -14,4 +15,6 @@ public interface TenantModule {
     StageService getStageService();
 
     VersionService getVersionService();
+
+    ShortcutService getShortcutService();
 }

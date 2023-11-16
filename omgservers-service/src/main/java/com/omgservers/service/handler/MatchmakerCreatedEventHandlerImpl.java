@@ -1,13 +1,10 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.factory.VersionMatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -42,7 +39,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 
-        return getMatchmaker(id)
+        return matchmakerModule.getShortcutService().getMatchmaker(id)
                 .flatMap(matchmaker -> {
                     log.info("Matchmaker was created, id={}, version={}/{}",
                             matchmaker.getId(),
@@ -51,12 +48,6 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
                     return syncMatchmakerJob(id);
                 });
-    }
-
-    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId) {

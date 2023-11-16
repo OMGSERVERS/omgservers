@@ -1,9 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
@@ -41,7 +37,7 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionRuntime(tenantId, id)
+        return tenantModule.getShortcutService().getVersionRuntime(tenantId, id)
                 .flatMap(versionRuntime -> {
                     log.info("Version runtime was created, " +
                                     "versionRuntime={}/{}, " +
@@ -57,12 +53,6 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
                 .replaceWith(true);
     }
 
-    Uni<VersionRuntimeModel> getVersionRuntime(final Long tenantId, final Long id) {
-        final var request = new GetVersionRuntimeRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersionRuntime(request)
-                .map(GetVersionRuntimeResponse::getVersionRuntime);
-    }
-
     Uni<Boolean> syncRuntime(final VersionRuntimeModel versionRuntime) {
         final var runtimeConfig = new RuntimeConfigModel();
         final var runtime = runtimeModelFactory.create(
@@ -71,8 +61,6 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
                 versionRuntime.getVersionId(),
                 RuntimeTypeEnum.LOBBY,
                 runtimeConfig);
-        final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
-                .map(SyncRuntimeResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntime(runtime);
     }
 }

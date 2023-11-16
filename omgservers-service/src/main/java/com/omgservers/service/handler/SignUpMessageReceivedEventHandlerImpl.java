@@ -10,14 +10,6 @@ import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncUserRequest;
@@ -31,8 +23,6 @@ import com.omgservers.model.runtimeCommand.body.SignUpRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
-import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
@@ -88,7 +78,7 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
         //TODO: improve it
         final var password = String.valueOf(new SecureRandom().nextLong());
 
-        return validateStageSecret(tenantId, stageId, secret)
+        return tenantModule.getShortcutService().validateStageSecret(tenantId, stageId, secret)
                 .flatMap(validateStageSecretResponse -> syncUser(password))
                 .flatMap(user -> {
                     final var userId = user.getId();
@@ -96,9 +86,11 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
                             .flatMap(respondMessageResponse -> createPlayer(userId, tenantId, stageId))
                             .flatMap(player -> {
                                 final var playerId = player.getId();
-                                return findVersionId(tenantId, stageId)
-                                        .flatMap(versionId -> selectVersionMatchmaker(tenantId, versionId)
-                                                .flatMap(versionMatchmaker -> selectVersionRuntime(tenantId, versionId)
+                                return tenantModule.getShortcutService().findStageVersionId(tenantId, stageId)
+                                        .flatMap(versionId -> tenantModule.getShortcutService()
+                                                .selectVersionMatchmaker(tenantId, versionId)
+                                                .flatMap(versionMatchmaker -> tenantModule.getShortcutService()
+                                                        .selectVersionRuntime(tenantId, versionId)
                                                         .flatMap(versionRuntime -> {
                                                                     final var matchmakerId = versionMatchmaker
                                                                             .getMatchmakerId();
@@ -140,12 +132,6 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
                 .replaceWith(true);
     }
 
-    Uni<ValidateStageSecretResponse> validateStageSecret(final Long tenantId, final Long stageId,
-                                                         final String stageSecret) {
-        final var request = new ValidateStageSecretRequest(tenantId, stageId, stageSecret);
-        return tenantModule.getStageService().validateStageSecret(request);
-    }
-
     Uni<UserModel> syncUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
@@ -166,28 +152,6 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
-    }
-
-    Uni<Long> findVersionId(final Long tenantId, final Long stageId) {
-        final var request = new FindStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().findStageVersionId(request)
-                .map(FindStageVersionIdResponse::getVersionId);
-    }
-
-    Uni<VersionMatchmakerModel> selectVersionMatchmaker(final Long tenantId, final Long versionId) {
-        final var request = new SelectVersionMatchmakerRequest(tenantId,
-                versionId,
-                SelectVersionMatchmakerRequest.Strategy.RANDOM);
-        return tenantModule.getVersionService().selectVersionMatchmaker(request)
-                .map(SelectVersionMatchmakerResponse::getVersionMatchmaker);
-    }
-
-    Uni<VersionRuntimeModel> selectVersionRuntime(final Long tenantId, final Long versionId) {
-        final var request = new SelectVersionRuntimeRequest(tenantId,
-                versionId,
-                SelectVersionRuntimeRequest.Strategy.RANDOM);
-        return tenantModule.getVersionService().selectVersionRuntime(request)
-                .map(SelectVersionRuntimeResponse::getVersionRuntime);
     }
 
     Uni<ClientModel> createClient(final Long userId,
@@ -226,9 +190,7 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
         final var userId = client.getUserId();
         final var runtimeCommandBody = new SignUpRuntimeCommandBodyModel(userId, clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
-        final var syncRuntimeCommandShardedRequest = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getRuntimeService().syncRuntimeCommand(syncRuntimeCommandShardedRequest)
-                .map(SyncRuntimeCommandResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntimeCommand(runtimeCommand);
     }
 
     Uni<Void> assignClient(final PlayerModel player,
