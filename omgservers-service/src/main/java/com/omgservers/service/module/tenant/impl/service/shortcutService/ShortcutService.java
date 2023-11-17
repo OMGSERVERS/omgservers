@@ -6,6 +6,7 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
@@ -73,6 +74,8 @@ public interface ShortcutService {
     Uni<Boolean> deleteVersionMatchmaker(Long tenantId, Long id);
 
     Uni<Boolean> deleteVersionMatchmakers(Long tenantId, Long versionId);
+
+    Uni<VersionConfigModel> getVersionConfig(Long tenantId, Long versionId);
 
     Uni<VersionRuntimeModel> getVersionRuntime(Long tenantId, Long id);
 

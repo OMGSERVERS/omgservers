@@ -1,15 +1,7 @@
 package com.omgservers.service.job.match;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
 import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
-import com.omgservers.service.exception.ServerSideClientExceptionException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.job.match.operations.handleMatchCommand.HandleMatchCommandOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.jobService.impl.JobTask;
@@ -20,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -41,38 +32,40 @@ public class MatchJobTask implements JobTask {
         final var matchmakerId = shardKey;
         final var matchId = entityId;
 
-        return getMatch(matchmakerId, matchId)
-                .onFailure(ServerSideNotFoundException.class).recoverWithNull()
-                .invoke(runtime -> {
-                    if (Objects.isNull(runtime)) {
-                        log.warn("Match was not found, skip job execution, " +
-                                "matchmakerId={}, matchId={}", matchmakerId, matchId);
+        return matchmakerModule.getShortcutService().getMatch(matchmakerId, matchId)
+                .map(match -> {
+                    if (match.getDeleted()) {
+                        log.warn("Match was deleted, skip job execution, match={}/{}", matchmakerId, matchId);
+                        return null;
+                    } else {
+                        return match;
                     }
                 })
-                .onItem().ifNotNull().transformToUni(match -> viewMatchCommands(matchmakerId, matchId)
-                        .call(this::handleMatchCommands)
-                        .call(this::deleteMatchCommands))
+                .onItem().ifNotNull().transformToUni(match ->
+                        matchmakerModule.getShortcutService().viewMatchCommands(matchmakerId, matchId)
+                                .call(this::handleMatchCommands)
+                                .call(this::deleteMatchCommands))
                 .replaceWithVoid();
-    }
-
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
-    }
-
-    Uni<List<MatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchCommandsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchCommands(request)
-                .map(ViewMatchCommandsResponse::getMatchCommands);
     }
 
     Uni<Void> handleMatchCommands(List<MatchCommandModel> matchCommands) {
         return Multi.createFrom().iterable(matchCommands)
                 .onItem().transformToUniAndConcatenate(matchCommand -> handleMatchCommandOperation
                         .handleMatchCommand(matchCommand)
-                        .onFailure(ServerSideClientExceptionException.class)
-                        .recoverWithNull().replaceWithVoid())
+                        .onFailure()
+                        .recoverWithItem(t -> {
+                            log.warn("Handle match command failed, " +
+                                            "matchCommand={}/{}, " +
+                                            "qualifier={}, " +
+                                            "{}:{}",
+                                    matchCommand.getMatchmakerId(), matchCommand.getId(),
+                                    matchCommand.getQualifier(),
+                                    t.getClass().getSimpleName(),
+                                    t.getMessage());
+                            return null;
+                        })
+                        .replaceWithVoid()
+                )
                 .collect().asList()
                 .replaceWithVoid();
     }
@@ -82,8 +75,19 @@ public class MatchJobTask implements JobTask {
                 .onItem().transformToUniAndConcatenate(matchCommand -> {
                     final var matchmakerId = matchCommand.getMatchmakerId();
                     final var id = matchCommand.getId();
-                    final var request = new DeleteMatchCommandRequest(matchmakerId, id);
-                    return matchmakerModule.getMatchmakerService().deleteMatchCommand(request);
+                    return matchmakerModule.getShortcutService().deleteMatchCommand(matchmakerId, id)
+                            .onFailure()
+                            .recoverWithItem(t -> {
+                                log.warn("Delete match command failed, " +
+                                                "matchCommand={}/{}, " +
+                                                "qualifier={}, " +
+                                                "{}:{}",
+                                        matchCommand.getMatchmakerId(), matchCommand.getId(),
+                                        matchCommand.getQualifier(),
+                                        t.getClass().getSimpleName(),
+                                        t.getMessage());
+                                return null;
+                            });
                 })
                 .collect().asList()
                 .replaceWithVoid();

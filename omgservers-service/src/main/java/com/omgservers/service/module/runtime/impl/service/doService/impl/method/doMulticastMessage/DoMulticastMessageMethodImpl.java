@@ -90,7 +90,18 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
                 .onItem().transformToUniAndConcatenate(recipient -> {
                     final var userId = recipient.userId();
                     final var clientId = recipient.clientId();
-                    return respondClient(userId, clientId, message);
+                    return respondClient(userId, clientId, message)
+                            .onFailure()
+                            .recoverWithItem(t -> {
+                                log.warn("Do multicast message failed, " +
+                                                "client={}/{}, " +
+                                                "{}:{}",
+                                        userId,
+                                        clientId,
+                                        t.getClass().getSimpleName(),
+                                        t.getMessage());
+                                return null;
+                            });
                 })
                 .collect().asList()
                 .replaceWithVoid();

@@ -14,6 +14,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
@@ -90,7 +92,20 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewRuntimeCommands(runtimeId)
                 .flatMap(runtimeCommands -> Multi.createFrom().iterable(runtimeCommands)
                         .onItem().transformToUniAndConcatenate(runtimeCommand ->
-                                deleteRuntimeCommand(runtimeId, runtimeCommand.getId()))
+                                deleteRuntimeCommand(runtimeId, runtimeCommand.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete runtime command failed, " +
+                                                            "runtimeId={}, " +
+                                                            "runtimeCommandId={}" +
+                                                            "{}:{}",
+                                                    runtimeId,
+                                                    runtimeCommand.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -115,7 +130,20 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewRuntimePermissions(runtimeId)
                 .flatMap(runtimePermissions -> Multi.createFrom().iterable(runtimePermissions)
                         .onItem().transformToUniAndConcatenate(runtimePermission ->
-                                deleteRuntimePermission(runtimeId, runtimePermission.getId()))
+                                deleteRuntimePermission(runtimeId, runtimePermission.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete runtime permission failed, " +
+                                                            "runtimeId={}, " +
+                                                            "runtimePermissionId={}" +
+                                                            "{}:{}",
+                                                    runtimeId,
+                                                    runtimePermission.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -136,6 +164,13 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
+    public Uni<Boolean> syncRuntimeGrant(final RuntimeGrantModel runtimeGrant) {
+        final var request = new SyncRuntimeGrantRequest(runtimeGrant);
+        return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
+                .map(SyncRuntimeGrantResponse::getCreated);
+    }
+
+    @Override
     public Uni<Boolean> deleteRuntimeGrant(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeGrantRequest(runtimeId, id);
         return runtimeModule.getRuntimeService().deleteRuntimeGrant(request)
@@ -147,7 +182,20 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewRuntimeGrants(runtimeId)
                 .flatMap(runtimeGrants -> Multi.createFrom().iterable(runtimeGrants)
                         .onItem().transformToUniAndConcatenate(runtimeGrant ->
-                                deleteRuntimeGrant(runtimeId, runtimeGrant.getId()))
+                                deleteRuntimeGrant(runtimeId, runtimeGrant.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete runtime grant failed, " +
+                                                            "runtimeId={}, " +
+                                                            "runtimeGrantId={}" +
+                                                            "{}:{}",
+                                                    runtimeId,
+                                                    runtimeGrant.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );

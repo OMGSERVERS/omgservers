@@ -4,7 +4,9 @@ import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.model.request.RequestModel;
 import io.smallrye.mutiny.Uni;
 
@@ -15,6 +17,10 @@ public interface ShortcutService {
     Uni<MatchmakerModel> getMatchmaker(Long matchmakerId);
 
     Uni<Boolean> deleteMatchmaker(Long matchmakerId);
+
+    Uni<MatchmakerState> getMatchmakerState(Long matchmakerId);
+
+    Uni<Boolean> updateMatchmakerState(Long matchmakerId, MatchmakerChangeOfState changeOfState);
 
     Uni<List<MatchmakerCommandModel>> viewMatchmakerCommands(Long matchmakerId);
 
@@ -31,6 +37,8 @@ public interface ShortcutService {
     Uni<Void> deleteMatches(Long matchmakerId);
 
     Uni<List<MatchCommandModel>> viewMatchCommands(Long matchmakerId, Long matchId);
+
+    Uni<Boolean> syncMatchCommand(MatchCommandModel matchCommand);
 
     Uni<Boolean> deleteMatchCommand(Long matchmakerId, Long id);
 

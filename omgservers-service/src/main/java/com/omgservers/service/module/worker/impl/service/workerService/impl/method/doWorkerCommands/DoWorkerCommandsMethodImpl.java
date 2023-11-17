@@ -43,9 +43,11 @@ class DoWorkerCommandsMethodImpl implements DoWorkerCommandsMethod {
                                             .recoverWithItem(t -> {
                                                 log.warn("Do command failed, " +
                                                                 "runtimeId={}, " +
+                                                                "userId={}, " +
                                                                 "qualifier={}, " +
                                                                 "{}:{}",
                                                         runtimeId,
+                                                        userId,
                                                         doCommand.getQualifier(),
                                                         t.getClass().getSimpleName(),
                                                         t.getMessage());

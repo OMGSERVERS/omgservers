@@ -4,21 +4,13 @@ import com.omgservers.model.assignedRuntime.AssignedRuntimeModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.model.dto.gateway.AssignRuntimeResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
-import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.job.match.operations.handleMatchCommand.MatchCommandHandler;
@@ -31,8 +23,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -61,17 +51,9 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
         final var userId = body.getUserId();
         final var clientId = body.getClientId();
 
-        return getMatch(matchmakerId, matchId)
-                .flatMap(match -> getClient(userId, clientId)
-                        .onFailure(ServerSideNotFoundException.class).recoverWithNull()
-                        .invoke(client -> {
-                            if (Objects.isNull(client)) {
-                                log.warn("Add client match command failed, client doesn't exist anymore, " +
-                                                "client={}/{}, matchmakerId={}, matchId={}",
-                                        userId, clientId, matchmakerId, matchId);
-                            }
-                        })
-                        .onItem().ifNotNull().transformToUni(client -> {
+        return matchmakerModule.getShortcutService().getMatch(matchmakerId, matchId)
+                .flatMap(match -> userModule.getShortcutService().getClient(userId, clientId)
+                        .flatMap(client -> {
                             final var runtimeId = match.getRuntimeId();
                             return syncRuntimeGrant(runtimeId, userId, clientId)
                                     .call(ignored -> syncAddClientRuntimeCommand(runtimeId, client))
@@ -93,27 +75,13 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .replaceWithVoid();
     }
 
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
-    }
-
-    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var request = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(request)
-                .map(GetClientResponse::getClient);
-    }
-
     Uni<Boolean> syncRuntimeGrant(Long runtimeId, Long userId, Long clientId) {
         final var runtimeGrant = runtimeGrantModelFactory.create(
                 runtimeId,
                 userId,
                 clientId,
                 RuntimeGrantTypeEnum.MATCH_CLIENT);
-        final var request = new SyncRuntimeGrantRequest(runtimeGrant);
-        return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
-                .map(SyncRuntimeGrantResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntimeGrant(runtimeGrant);
     }
 
     Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,

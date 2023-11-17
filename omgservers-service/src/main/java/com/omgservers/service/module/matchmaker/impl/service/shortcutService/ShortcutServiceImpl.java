@@ -18,6 +18,12 @@ import com.omgservers.model.dto.matchmaker.GetMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
+import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchClientsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchClientsResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
@@ -32,7 +38,9 @@ import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.model.request.RequestModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Multi;
@@ -66,6 +74,21 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
+    public Uni<MatchmakerState> getMatchmakerState(final Long matchmakerId) {
+        final var request = new GetMatchmakerStateRequest(matchmakerId);
+        return matchmakerModule.getMatchmakerService().getMatchmakerState(request)
+                .map(GetMatchmakerStateResponse::getMatchmakerState);
+    }
+
+    @Override
+    public Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
+                                              final MatchmakerChangeOfState changeOfState) {
+        final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
+        return matchmakerModule.getMatchmakerService().updateMatchmakerState(request)
+                .map(UpdateMatchmakerStateResponse::getUpdated);
+    }
+
+    @Override
     public Uni<List<MatchmakerCommandModel>> viewMatchmakerCommands(final Long matchmakerId) {
         final var request = new ViewMatchmakerCommandsRequest(matchmakerId);
         return matchmakerModule.getMatchmakerService().viewMatchmakerCommands(request)
@@ -85,6 +108,18 @@ class ShortcutServiceImpl implements ShortcutService {
                 .flatMap(matchmakerCommands -> Multi.createFrom().iterable(matchmakerCommands)
                         .onItem().transformToUniAndConcatenate(matchmakerCommand ->
                                 deleteMatchmakerCommand(matchmakerId, matchmakerCommand.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete matchmaker command failed, " +
+                                                            "matchmakerId={}, " +
+                                                            "matchmakerCommandId={}" +
+                                                            "{}:{}",
+                                                    matchmakerId,
+                                                    matchmakerCommand.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
                         )
                         .collect().asList()
                         .replaceWithVoid()
@@ -118,6 +153,18 @@ class ShortcutServiceImpl implements ShortcutService {
                 .flatMap(matches -> Multi.createFrom().iterable(matches)
                         .onItem().transformToUniAndConcatenate(match ->
                                 deleteMatch(matchmakerId, match.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete match failed, " +
+                                                            "matchmakerId={}, " +
+                                                            "matchId={}" +
+                                                            "{}:{}",
+                                                    matchmakerId,
+                                                    match.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
                         )
                         .collect().asList()
                         .replaceWithVoid()
@@ -129,6 +176,13 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new ViewMatchCommandsRequest(matchmakerId, matchId);
         return matchmakerModule.getMatchmakerService().viewMatchCommands(request)
                 .map(ViewMatchCommandsResponse::getMatchCommands);
+    }
+
+    @Override
+    public Uni<Boolean> syncMatchCommand(final MatchCommandModel matchCommand) {
+        final var request = new SyncMatchCommandRequest(matchCommand);
+        return matchmakerModule.getMatchmakerService().syncMatchCommand(request)
+                .map(SyncMatchCommandResponse::getCreated);
     }
 
     @Override
@@ -144,6 +198,19 @@ class ShortcutServiceImpl implements ShortcutService {
                 .flatMap(matchCommands -> Multi.createFrom().iterable(matchCommands)
                         .onItem().transformToUniAndConcatenate(matchCommand ->
                                 deleteMatchCommand(matchmakerId, matchCommand.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete match command failed, " +
+                                                            "match={}/{}, " +
+                                                            "matchCommandId={}" +
+                                                            "{}:{}",
+                                                    matchmakerId,
+                                                    matchId,
+                                                    matchCommand.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
                         )
                         .collect().asList()
                         .replaceWithVoid()
@@ -177,6 +244,19 @@ class ShortcutServiceImpl implements ShortcutService {
                 .flatMap(matchClients -> Multi.createFrom().iterable(matchClients)
                         .onItem().transformToUniAndConcatenate(matchClient ->
                                 deleteMatchClient(matchmakerId, matchClient.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete match client failed, " +
+                                                            "match={}/{}, " +
+                                                            "matchClientId={}" +
+                                                            "{}:{}",
+                                                    matchmakerId,
+                                                    matchId,
+                                                    matchClient.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
                         )
                         .collect().asList()
                         .replaceWithVoid()
@@ -203,6 +283,18 @@ class ShortcutServiceImpl implements ShortcutService {
                 .flatMap(requests -> Multi.createFrom().iterable(requests)
                         .onItem().transformToUniAndConcatenate(request ->
                                 deleteRequest(matchmakerId, request.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete request failed, " +
+                                                            "matchmakerId={}, " +
+                                                            "requestId={}" +
+                                                            "{}:{}",
+                                                    matchmakerId,
+                                                    request.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
                         )
                         .collect().asList()
                         .replaceWithVoid()

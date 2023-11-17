@@ -1,7 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
@@ -61,9 +59,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                                            final Long userId,
                                            final Long clientId) {
         final var matchCommandBody = new AddClientMatchCommandBodyModel(userId, clientId);
-        final var matchCommandModel = matchCommandModelFactory.create(matchmakerId, matchId, matchCommandBody);
-        final var syncMatchCommandRequest = new SyncMatchCommandRequest(matchCommandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchCommand(syncMatchCommandRequest)
-                .map(SyncMatchCommandResponse::getCreated);
+        final var matchCommand = matchCommandModelFactory.create(matchmakerId, matchId, matchCommandBody);
+        return matchmakerModule.getShortcutService().syncMatchCommand(matchCommand);
     }
 }

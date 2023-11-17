@@ -1,10 +1,5 @@
 package com.omgservers.service.job.matchmaker.operation.handlerMatchmakerRequests;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
-import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
-import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.model.request.RequestModel;
@@ -34,28 +29,16 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     public Uni<Void> handleMatchmakerRequests(final Long matchmakerId,
                                               final MatchmakerState matchmakerState,
                                               final MatchmakerChangeOfState changeOfState) {
-        return getMatchmaker(matchmakerId)
+        return matchmakerModule.getShortcutService().getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
                     final var tenantId = matchmaker.getTenantId();
                     final var versionId = matchmaker.getVersionId();
-                    return getVersionConfig(tenantId, versionId)
+                    return tenantModule.getShortcutService().getVersionConfig(tenantId, versionId)
                             .flatMap(versionConfig -> executeMatchmaker(matchmakerState,
                                     changeOfState,
                                     versionConfig)
                             );
                 });
-    }
-
-    Uni<MatchmakerModel> getMatchmaker(final Long id) {
-        final var request = new GetMatchmakerRequest(id);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
-    Uni<VersionConfigModel> getVersionConfig(final Long tenantId, final Long versionId) {
-        final var request = new GetVersionConfigRequest(tenantId, versionId);
-        return tenantModule.getVersionService().getVersionConfig(request)
-                .map(GetVersionConfigResponse::getVersionConfig);
     }
 
     Uni<Void> executeMatchmaker(final MatchmakerState matchmakerState,

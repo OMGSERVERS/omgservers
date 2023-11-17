@@ -18,24 +18,26 @@ public interface ShortcutService {
 
     Uni<Boolean> syncRuntimeCommand(RuntimeCommandModel runtimeCommand);
 
-    Uni<List<RuntimeCommandModel>> viewRuntimeCommands(final Long runtimeId);
+    Uni<List<RuntimeCommandModel>> viewRuntimeCommands(Long runtimeId);
 
-    Uni<Boolean> deleteRuntimeCommand(final Long runtimeId, final Long id);
+    Uni<Boolean> deleteRuntimeCommand(Long runtimeId, Long id);
 
-    Uni<Void> deleteRuntimeCommands(final Long runtimeId);
+    Uni<Void> deleteRuntimeCommands(Long runtimeId);
 
-    Uni<List<RuntimePermissionModel>> viewRuntimePermissions(final Long runtimeId);
+    Uni<List<RuntimePermissionModel>> viewRuntimePermissions(Long runtimeId);
 
-    Uni<Boolean> deleteRuntimePermission(final Long runtimeId, final Long id);
+    Uni<Boolean> deleteRuntimePermission(Long runtimeId, Long id);
 
     Uni<Void> deleteRuntimePermissions(Long runtimeId);
 
     Uni<RuntimeGrantModel> findRuntimeGrant(Long runtimeId, Long clientId);
 
-    Uni<List<RuntimeGrantModel>> viewRuntimeGrants(final Long runtimeId);
+    Uni<List<RuntimeGrantModel>> viewRuntimeGrants(Long runtimeId);
+
+    Uni<Boolean> syncRuntimeGrant(RuntimeGrantModel runtimeGrant);
 
     Uni<Boolean> deleteRuntimeGrant(Long runtimeId, Long id);
 
-    Uni<Void> deleteRuntimeGrants(final Long runtimeId);
+    Uni<Void> deleteRuntimeGrants(Long runtimeId);
 
 }

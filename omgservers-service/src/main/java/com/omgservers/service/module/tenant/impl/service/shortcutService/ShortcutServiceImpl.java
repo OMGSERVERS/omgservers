@@ -24,6 +24,8 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
+import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
+import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.GetVersionRequest;
@@ -57,6 +59,7 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
@@ -103,7 +106,20 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewTenantPermissions(tenantId)
                 .flatMap(tenantPermissions -> Multi.createFrom().iterable(tenantPermissions)
                         .onItem().transformToUniAndConcatenate(tenantPermission ->
-                                deleteTenantPermission(tenantId, tenantPermission.getId()))
+                                deleteTenantPermission(tenantId, tenantPermission.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete tenant permission failed, " +
+                                                            "tenantId={}, " +
+                                                            "tenantPermissionId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    tenantPermission.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -135,7 +151,20 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewProjects(tenantId)
                 .flatMap(projects -> Multi.createFrom().iterable(projects)
                         .onItem().transformToUniAndConcatenate(project ->
-                                deleteProject(tenantId, project.getId()))
+                                deleteProject(tenantId, project.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete project failed, " +
+                                                            "tenantId={}, " +
+                                                            "projectId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    project.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -160,7 +189,21 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewProjectPermissions(tenantId, projectId)
                 .flatMap(projectPermissions -> Multi.createFrom().iterable(projectPermissions)
                         .onItem().transformToUniAndConcatenate(projectPermission ->
-                                deleteProjectPermission(tenantId, projectPermission.getId()))
+                                deleteProjectPermission(tenantId, projectPermission.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete project permission failed, " +
+                                                            "project={}/{}, " +
+                                                            "projectPermissionId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    projectId,
+                                                    projectPermission.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -206,7 +249,21 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewStages(tenantId, projectId)
                 .flatMap(stages -> Multi.createFrom().iterable(stages)
                         .onItem().transformToUniAndConcatenate(stage ->
-                                deleteStage(tenantId, stage.getId()))
+                                deleteStage(tenantId, stage.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete stage failed, " +
+                                                            "project={}/{}, " +
+                                                            "stageId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    projectId,
+                                                    stage.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -231,7 +288,21 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewStagePermissions(tenantId, stageId)
                 .flatMap(stagePermissions -> Multi.createFrom().iterable(stagePermissions)
                         .onItem().transformToUniAndConcatenate(stagePermission ->
-                                deleteStagePermission(tenantId, stagePermission.getId()))
+                                deleteStagePermission(tenantId, stagePermission.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete stage permission failed, " +
+                                                            "stage={}/{}, " +
+                                                            "stagePermissionId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    stageId,
+                                                    stagePermission.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -263,7 +334,21 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewVersions(tenantId, stageId)
                 .flatMap(versions -> Multi.createFrom().iterable(versions)
                         .onItem().transformToUniAndConcatenate(version ->
-                                deleteVersion(tenantId, version.getId()))
+                                deleteVersion(tenantId, version.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete version failed, " +
+                                                            "stage={}/{}, " +
+                                                            "versionId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    stageId,
+                                                    version.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWithVoid()
                 );
@@ -313,9 +398,30 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewVersionMatchmakers(tenantId, versionId)
                 .flatMap(versionMatchmakers -> Multi.createFrom().iterable(versionMatchmakers)
                         .onItem().transformToUniAndConcatenate(versionMatchmaker ->
-                                deleteVersionMatchmaker(tenantId, versionMatchmaker.getId()))
+                                deleteVersionMatchmaker(tenantId, versionMatchmaker.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete version matchmaker failed, " +
+                                                            "version={}/{}, " +
+                                                            "versionMatchmakerId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    versionId,
+                                                    versionMatchmaker.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWith(Boolean.TRUE));
+    }
+
+    @Override
+    public Uni<VersionConfigModel> getVersionConfig(final Long tenantId, final Long versionId) {
+        final var request = new GetVersionConfigRequest(tenantId, versionId);
+        return tenantModule.getVersionService().getVersionConfig(request)
+                .map(GetVersionConfigResponse::getVersionConfig);
     }
 
     @Override
@@ -344,7 +450,21 @@ class ShortcutServiceImpl implements ShortcutService {
         return viewVersionRuntimes(tenantId, versionId)
                 .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
                         .onItem().transformToUniAndConcatenate(versionRuntime ->
-                                deleteVersionRuntime(tenantId, versionRuntime.getId()))
+                                deleteVersionRuntime(tenantId, versionRuntime.getId())
+                                        .onFailure()
+                                        .recoverWithItem(t -> {
+                                            log.warn("Delete version runtime failed, " +
+                                                            "version={}/{}, " +
+                                                            "versionRuntimeId={}" +
+                                                            "{}:{}",
+                                                    tenantId,
+                                                    versionId,
+                                                    versionRuntime.getId(),
+                                                    t.getClass().getSimpleName(),
+                                                    t.getMessage());
+                                            return null;
+                                        })
+                        )
                         .collect().asList()
                         .replaceWith(Boolean.TRUE));
     }
