@@ -10,9 +10,7 @@ public interface OmgserversConfig {
 
     long nodeId();
 
-    URI externalServiceUri();
-
-    URI internalServiceUri();
+    URI serviceUri();
 
     String serviceUsername();
 
@@ -42,5 +40,5 @@ public interface OmgserversConfig {
 
     String workerImage();
 
-    String workerNetwork();
+    String dockerNetwork();
 }

@@ -37,7 +37,7 @@ class SignUpMessageHandlerImpl implements MessageHandler {
         final var tenantId = messageBody.getTenantId();
         final var stageId = messageBody.getStageId();
         final var stageSecret = messageBody.getSecret();
-        final var serverUri = getConfigOperation.getConfig().externalServiceUri();
+        final var serverUri = getConfigOperation.getConfig().serviceUri();
 
         final var eventBody = new SignUpMessageReceivedEventBodyModel(serverUri, connectionId, tenantId, stageId, stageSecret);
         final var event = eventModelFactory.create(eventBody);

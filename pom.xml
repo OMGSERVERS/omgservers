@@ -27,6 +27,7 @@
         <module>omgservers-service</module>
         <module>omgservers-model</module>
         <module>omgservers-worker</module>
+        <module>omgservers-tester</module>
     </modules>
 
     <dependencies>

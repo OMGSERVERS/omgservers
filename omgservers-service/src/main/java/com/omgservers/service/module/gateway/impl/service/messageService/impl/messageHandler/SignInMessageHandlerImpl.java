@@ -39,7 +39,7 @@ class SignInMessageHandlerImpl implements MessageHandler {
         final var stageSecret = messageBody.getSecret();
         final var user = messageBody.getUserId();
         final var userPassword = messageBody.getPassword();
-        final var serverUri = getConfigOperation.getConfig().externalServiceUri();
+        final var serverUri = getConfigOperation.getConfig().serviceUri();
 
         final var eventBody = new SignInMessageReceivedEventBodyModel(serverUri, connectionId, tenant, stage, stageSecret, user, userPassword);
         final var event = eventModelFactory.create(eventBody);

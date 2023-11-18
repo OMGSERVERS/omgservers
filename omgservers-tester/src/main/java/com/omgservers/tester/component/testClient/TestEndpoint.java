@@ -1,4 +1,4 @@
-package com.omgservers.utils.testClient;
+package com.omgservers.tester.component.testClient;
 
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Endpoint;

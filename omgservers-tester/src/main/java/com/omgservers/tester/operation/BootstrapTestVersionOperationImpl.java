@@ -1,48 +1,47 @@
-package com.omgservers.utils.operation.bootstrapVersionOperation;
+package com.omgservers.tester.operation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.file.EncodedFileModel;
+import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.utils.AdminCli;
-import com.omgservers.utils.DeveloperCli;
-import com.omgservers.utils.model.VersionParameters;
+import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.component.DeveloperApiTester;
+import com.omgservers.tester.model.TestVersionModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class BootstrapVersionOperationImpl implements BootstrapVersionOperation {
+class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation {
 
     @Inject
-    AdminCli adminCli;
+    AdminApiTester adminApiTester;
 
     @Inject
-    DeveloperCli developerCli;
-
+    DeveloperApiTester developerApiTester;
 
     @Override
-    public VersionParameters bootstrapVersion(String script) throws JsonProcessingException, InterruptedException {
-        return bootstrapVersion(script, VersionConfigModel.create());
+    public TestVersionModel bootstrapTestVersion(String script) throws IOException {
+        return bootstrapTestVersion(script, VersionConfigModel.create());
     }
 
     @Override
-    public VersionParameters bootstrapVersion(String script, VersionConfigModel versionConfig) throws JsonProcessingException, InterruptedException {
-        final var tenantId = adminCli.createTenant();
+    public TestVersionModel bootstrapTestVersion(String script, VersionConfigModel versionConfig) throws IOException {
+        final var tenantId = adminApiTester.createTenant();
 
-        final var createDeveloperAdminResponse = adminCli.createDeveloper(tenantId);
+        final var createDeveloperAdminResponse = adminApiTester.createDeveloper(tenantId);
         final var developerUserId = createDeveloperAdminResponse.getUserId();
         final var developerPassword = createDeveloperAdminResponse.getPassword();
 
-        final var token = developerCli.createDeveloperToken(developerUserId, developerPassword);
-        final var createProjectDeveloperResponse = developerCli.createProject(token, tenantId);
+        final var token = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
+        final var createProjectDeveloperResponse = developerApiTester.createProject(token, tenantId);
         final var projectId = createProjectDeveloperResponse.getProjectId();
         final var stageId = createProjectDeveloperResponse.getStageId();
         final var stageSecret = createProjectDeveloperResponse.getSecret();
@@ -50,10 +49,11 @@ public class BootstrapVersionOperationImpl implements BootstrapVersionOperation 
         final var sourceCode = VersionSourceCodeModel.create();
         sourceCode.getFiles().add(new EncodedFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
-        final var createVersionDeveloperResponse = developerCli.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
+        final var createVersionDeveloperResponse =
+                developerApiTester.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();
 
-        return VersionParameters.builder()
+        return TestVersionModel.builder()
                 .tenantId(tenantId)
                 .developerUserId(developerUserId)
                 .developerPassword(developerPassword)

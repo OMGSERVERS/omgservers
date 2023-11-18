@@ -1,4 +1,4 @@
-package com.omgservers.utils.testClient;
+package com.omgservers.tester.component.testClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.message.MessageModel;
@@ -13,8 +13,7 @@ import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.SignInMessageBodyModel;
 import com.omgservers.model.message.body.SignUpMessageBodyModel;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.utils.model.VersionParameters;
+import com.omgservers.tester.model.TestVersionModel;
 import jakarta.websocket.ClientEndpointConfig;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.DeploymentException;
@@ -23,12 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class TestClient {
 
-    final GenerateIdOperation generateIdOperation;
     final ObjectMapper objectMapper;
+    final AtomicLong idGenerator;
     final URI uri;
 
     TestEndpoint testEndpoint;
@@ -36,12 +36,12 @@ public class TestClient {
     Long userId;
     String password;
 
-    public TestClient(GenerateIdOperation generateIdOperation, ObjectMapper objectMapper, URI uri)
+    public TestClient(ObjectMapper objectMapper, URI uri)
             throws IOException, DeploymentException {
-        this.generateIdOperation = generateIdOperation;
         this.objectMapper = objectMapper;
         this.uri = uri;
 
+        idGenerator = new AtomicLong();
         reconnect();
     }
 
@@ -64,11 +64,11 @@ public class TestClient {
         }
     }
 
-    public synchronized void signUp(VersionParameters versionParameters) throws InterruptedException, IOException {
+    public synchronized void signUp(TestVersionModel testVersion) throws InterruptedException, IOException {
         final var messageModel =
-                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_UP_MESSAGE,
-                        new SignUpMessageBodyModel(versionParameters.getTenantId(),
-                                versionParameters.getStageId(), versionParameters.getStageSecret()));
+                new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.SIGN_UP_MESSAGE,
+                        new SignUpMessageBodyModel(testVersion.getTenantId(),
+                                testVersion.getStageId(), testVersion.getStageSecret()));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
 
@@ -77,9 +77,9 @@ public class TestClient {
         password = credentialsMessageBody.getPassword();
     }
 
-    public synchronized void signIn(VersionParameters versionParameters) throws IOException {
+    public synchronized void signIn(TestVersionModel versionParameters) throws IOException {
         final var messageModel =
-                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.SIGN_IN_MESSAGE,
+                new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.SIGN_IN_MESSAGE,
                         new SignInMessageBodyModel(versionParameters.getTenantId(),
                                 versionParameters.getStageId(), versionParameters.getStageSecret(), userId, password));
         final var messageString = objectMapper.writeValueAsString(messageModel);
@@ -88,21 +88,21 @@ public class TestClient {
 
     public synchronized void requestMatchmaking(String mode) throws IOException {
         final var messageModel =
-                new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCHMAKER_MESSAGE,
+                new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.MATCHMAKER_MESSAGE,
                         new MatchmakerMessageBodyModel(mode));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
 
     public synchronized void changeRequest(Object data) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.CHANGE_MESSAGE,
+        final var messageModel = new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.CHANGE_MESSAGE,
                 new ChangeMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);
     }
 
     public synchronized void sendMatchMessage(Object data) throws IOException {
-        final var messageModel = new MessageModel(generateIdOperation.generateId(), MessageQualifierEnum.MATCH_MESSAGE,
+        final var messageModel = new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.MATCH_MESSAGE,
                 new MatchMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
         send(messageString);

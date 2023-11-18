@@ -1,7 +1,6 @@
 package com.omgservers;
 
-import com.omgservers.utils.AdminCli;
-import com.omgservers.utils.operation.bootstrapVersionOperation.BootstrapVersionOperation;
+import com.omgservers.tester.test.BootstrapVersionTest;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -13,22 +12,10 @@ import org.junit.jupiter.api.Test;
 public class BootstrapVersionIT extends Assertions {
 
     @Inject
-    BootstrapVersionOperation bootstrapVersionOperation;
-
-    @Inject
-    AdminCli adminCli;
+    BootstrapVersionTest bootstrapVersionTest;
 
     @Test
-    void bootstrapVersionTest() throws Exception {
-        final var version = bootstrapVersionOperation.bootstrapVersion("""
-                print("test")
-                """);
-
-        try {
-            Thread.sleep(10000);
-        } finally {
-            adminCli.deleteTenant(version.getTenantId());
-            Thread.sleep(10000);
-        }
+    void bootstrapVersionIT() throws Exception {
+        bootstrapVersionTest.testBootstrapVersion();
     }
 }

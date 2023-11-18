@@ -4,6 +4,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.service.module.system.impl.component.DockerClientWrapper;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RunContainerMethodImpl implements RunContainerMethod {
+
+    final GetConfigOperation getConfigOperation;
 
     final DockerClientWrapper dockerClientWrapper;
 
@@ -31,11 +34,12 @@ class RunContainerMethodImpl implements RunContainerMethod {
                             .toList();
 
                     final var dockerClient = dockerClientWrapper.getDockerClient();
+                    final var dockerNetwork = getConfigOperation.getConfig().dockerNetwork();
 
                     dockerClient.createContainerCmd(image)
                             .withName(name)
                             .withEnv(environment)
-                            .withHostConfig(HostConfig.newHostConfig().withNetworkMode("host"))
+                            .withHostConfig(HostConfig.newHostConfig().withNetworkMode(dockerNetwork))
                             .exec();
 
                     dockerClient.startContainerCmd(name).exec();
