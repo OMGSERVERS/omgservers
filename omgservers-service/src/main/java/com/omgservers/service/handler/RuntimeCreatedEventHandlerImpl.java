@@ -23,6 +23,7 @@ import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,6 +43,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final SystemModule systemModule;
     final UserModule userModule;
 
+    final GetConfigOperation getConfigOperation;
+
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
     final ContainerModelFactory containerModelFactory;
     final UserModelFactory userModelFactory;
@@ -53,7 +56,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 
@@ -81,7 +84,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<UserModel> createUser(String password) {
+    Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.WORKER, passwordHash);
         final var request = new SyncUserRequest(user);
@@ -103,15 +106,17 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                                final String password,
                                final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
+        final var workerImage = getConfigOperation.getConfig().workerImage();
+        final var serviceUrl = getConfigOperation.getConfig().internalServiceUri();
         final var environment = new HashMap<String, String>();
-        environment.put("OMGSERVERS_URL", "http://host.docker.internal:8081");
+        environment.put("OMGSERVERS_URL", serviceUrl.toString());
         environment.put("OMGSERVERS_USER_ID", userId.toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());
         final var config = new ContainerConfigModel(environment);
         final var container = containerModelFactory.create(runtimeId,
                 ContainerQualifierEnum.RUNTIME,
-                "omgservers/omgservers-worker:1.0.0-SNAPSHOT",
+                workerImage,
                 config);
         final var request = new SyncContainerRequest(container);
         return systemModule.getContainerService().syncContainer(request)

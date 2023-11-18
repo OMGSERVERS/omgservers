@@ -10,7 +10,9 @@ public interface OmgserversConfig {
 
     long nodeId();
 
-    URI serverUri();
+    URI externalServiceUri();
+
+    URI internalServiceUri();
 
     String serviceUsername();
 
@@ -36,9 +38,9 @@ public interface OmgserversConfig {
 
     Integer eventHandlerConcurrency();
 
-    int postponeInterval();
-
     boolean standalone();
 
-    boolean verbose();
+    String workerImage();
+
+    String workerNetwork();
 }

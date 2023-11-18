@@ -31,7 +31,7 @@ public class ChangeMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
         final var body = (ChangeMessageReceivedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();

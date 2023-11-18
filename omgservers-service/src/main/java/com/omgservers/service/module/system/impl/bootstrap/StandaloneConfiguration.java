@@ -48,7 +48,7 @@ public class StandaloneConfiguration {
 
     Uni<Boolean> syncIndex() {
         final var indexName = getConfigOperation.getConfig().indexName();
-        final var serverUri = getConfigOperation.getConfig().serverUri();
+        final var serverUri = getConfigOperation.getConfig().externalServiceUri();
         final var indexConfig = IndexConfigModel.create(Collections.singletonList(serverUri));
         final var indexModel = indexModelFactory.create(indexName, indexConfig);
         final var request = new SyncIndexRequest(indexModel);
