@@ -18,6 +18,6 @@ class GetConfigOperationTest extends Assertions {
 
     @Test
     void givenServer_whenServerUri_thenEqual() {
-        assertEquals(URI.create("http://localhost:8080"), getConfigOperation.getConfig().serviceUri());
+        assertEquals(URI.create("http://host.docker.internal:8081"), getConfigOperation.getConfig().serviceUri());
     }
 }
