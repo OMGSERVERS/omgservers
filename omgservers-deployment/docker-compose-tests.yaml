@@ -1,16 +1,23 @@
 version: '2'
 services:
+  omgservers-gateway:
+    image: "devopsfaith/krakend"
+    container_name: "omgservers-gateway"
+    ports:
+      - "10000:8080"
+    volumes:
+      - $PWD/krakend.json:/etc/krakend/krakend.json
+    networks:
+      - omgservers-frontend
   omgservers-service-1:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-1"
     networks:
-      - omgservers-backend
-      - omgservers-server-1
+      - omgservers-frontend
+      - omgservers-backend-1
     depends_on:
       - omgservers-db-1
       - omgservers-mq-1
-    ports:
-      - "10001:8080"
     environment:
       - OMGSERVERS_LOG_LEVEL=INFO
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
@@ -34,7 +41,7 @@ services:
     image: "postgres:16.1"
     container_name: "omgservers-db-1"
     networks:
-      - omgservers-server-1
+      - omgservers-backend-1
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -43,18 +50,16 @@ services:
     image: "rmohr/activemq"
     container_name: "omgservers-mq-1"
     networks:
-      - omgservers-server-1
+      - omgservers-backend-1
   omgservers-service-2:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-2"
     networks:
-      - omgservers-backend
-      - omgservers-server-2
+      - omgservers-frontend
+      - omgservers-backend-2
     depends_on:
       - omgservers-db-2
       - omgservers-mq-2
-    ports:
-      - "10002:8080"
     environment:
       - OMGSERVERS_LOG_LEVEL=INFO
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
@@ -78,7 +83,7 @@ services:
     image: "postgres:16.1"
     container_name: "omgservers-db-2"
     networks:
-      - omgservers-server-2
+      - omgservers-backend-2
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -87,8 +92,8 @@ services:
     image: "rmohr/activemq"
     container_name: "omgservers-mq-2"
     networks:
-      - omgservers-server-2
+      - omgservers-backend-2
 networks:
-  omgservers-backend:
-  omgservers-server-1:
-  omgservers-server-2:
+  omgservers-frontend:
+  omgservers-backend-1:
+  omgservers-backend-2:
