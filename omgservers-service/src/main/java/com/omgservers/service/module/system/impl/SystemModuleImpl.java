@@ -1,11 +1,10 @@
 package com.omgservers.service.module.system.impl;
 
-import com.omgservers.service.module.system.impl.service.indexService.IndexService;
-import com.omgservers.service.module.system.impl.service.syncService.SyncService;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.containerService.ContainerService;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
 import com.omgservers.service.module.system.impl.service.handlerService.HandlerService;
+import com.omgservers.service.module.system.impl.service.indexService.IndexService;
 import com.omgservers.service.module.system.impl.service.jobService.JobService;
 import com.omgservers.service.module.system.impl.service.logService.LogService;
 import com.omgservers.service.module.system.impl.service.serviceAccountService.ServiceAccountService;
@@ -24,7 +23,6 @@ public class SystemModuleImpl implements SystemModule {
     final HandlerService handlerService;
     final EventService eventService;
     final IndexService indexService;
-    final SyncService syncService;
     final JobService jobService;
     final LogService logService;
 
@@ -47,10 +45,6 @@ public class SystemModuleImpl implements SystemModule {
 
     public ServiceAccountService getServiceAccountService() {
         return serviceAccountService;
-    }
-
-    public SyncService getSyncService() {
-        return syncService;
     }
 
     public LogService getLogService() {
