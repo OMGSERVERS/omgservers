@@ -2,6 +2,7 @@ package com.omgservers.model.event.body;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class ServiceAccountCreatedEventBodyModel extends EventBodyModel {
     @NotNull
     Long id;
 
-    @NotNull
+    @NotBlank
     @Size(max = 64)
     String username;
 

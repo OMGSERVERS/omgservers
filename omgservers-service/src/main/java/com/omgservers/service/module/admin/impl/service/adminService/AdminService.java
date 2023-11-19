@@ -4,6 +4,10 @@ import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
+import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
+import com.omgservers.model.dto.admin.CreateIndexAdminResponse;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
@@ -17,6 +21,10 @@ public interface AdminService {
     Uni<PingServerAdminResponse> pingServer();
 
     Uni<GenerateIdAdminResponse> generateId();
+
+    Uni<CreateIndexAdminResponse> createIndex(@Valid CreateIndexAdminRequest request);
+
+    Uni<CreateServiceAccountAdminResponse> createServiceAccount(@Valid CreateServiceAccountAdminRequest request);
 
     Uni<CreateTenantAdminResponse> createTenant(@Valid CreateTenantAdminRequest request);
 

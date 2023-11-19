@@ -5,7 +5,7 @@ import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
-import com.omgservers.tester.operation.BootstrapTestVersionOperation;
+import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

@@ -3,6 +3,8 @@ services:
   omgservers-service-1:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-1"
+    ports:
+      - "10001:8080"
     networks:
       - omgservers-frontend
       - omgservers-backend-1
@@ -45,6 +47,8 @@ services:
   omgservers-service-2:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-2"
+    ports:
+      - "10002:8080"
     networks:
       - omgservers-frontend
       - omgservers-backend-2

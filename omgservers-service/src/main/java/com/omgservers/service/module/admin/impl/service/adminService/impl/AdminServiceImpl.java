@@ -4,6 +4,10 @@ import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
+import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
+import com.omgservers.model.dto.admin.CreateIndexAdminResponse;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
@@ -13,6 +17,8 @@ import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import com.omgservers.service.module.admin.impl.service.adminService.AdminService;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.collectLogs.CollectLogsMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createDeveloper.CreateDeveloperMethod;
+import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createIndex.CreateIndexMethod;
+import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createServiceAccount.CreateServiceAccountMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createTenant.CreateTenantMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.deleteTenant.DeleteTenantMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.generateId.GenerateIdMethod;
@@ -29,9 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AdminServiceImpl implements AdminService {
 
+    final CreateServiceAccountMethod createServiceAccountMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
+    final CreateIndexMethod createIndexMethod;
     final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
     final GenerateIdMethod generateIdMethod;
@@ -44,6 +52,17 @@ class AdminServiceImpl implements AdminService {
     @Override
     public Uni<GenerateIdAdminResponse> generateId() {
         return generateIdMethod.getId();
+    }
+
+    @Override
+    public Uni<CreateIndexAdminResponse> createIndex(@Valid final CreateIndexAdminRequest request) {
+        return createIndexMethod.createIndex(request);
+    }
+
+    @Override
+    public Uni<CreateServiceAccountAdminResponse> createServiceAccount(
+            @Valid final CreateServiceAccountAdminRequest request) {
+        return createServiceAccountMethod.createServiceAccount(request);
     }
 
     @Override

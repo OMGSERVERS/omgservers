@@ -1,4 +1,4 @@
-package com.omgservers.tester.operation;
+package com.omgservers.tester.operation.bootstrapTestVersion;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.tester.model.TestVersionModel;

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -34,13 +33,28 @@ public class IndexConfigModel {
     }
 
     static public IndexConfigModel create(List<URI> addresses) {
-        IndexConfigModel config = new IndexConfigModel();
-        config.setTotalShardCount(addresses.size());
+        return create(addresses, addresses.size());
+    }
 
-        List<IndexServerModel> servers = new ArrayList<>();
-        for (int serverIndex = 0; serverIndex < addresses.size(); serverIndex++) {
-            servers.add(IndexServerModel.create(addresses.get(serverIndex), Collections.singletonList(serverIndex)));
+    static public IndexConfigModel create(final List<URI> addresses, final int shardCount) {
+        final var config = new IndexConfigModel();
+        config.setTotalShardCount(shardCount);
+
+        final var serverCount = addresses.size();
+        final var servers = new ArrayList<IndexServerModel>();
+        for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+            final var serverUri = addresses.get(serverIndex);
+            final var serverShards = new ArrayList<Integer>();
+
+            int shard = serverIndex;
+            while (shard < shardCount) {
+                serverShards.add(shard);
+                shard += serverCount;
+            }
+
+            servers.add(IndexServerModel.create(serverUri, serverShards));
         }
+
         config.setServers(servers);
         config.setLockedShards(new ArrayList<>());
 

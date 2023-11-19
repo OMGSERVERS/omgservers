@@ -2,7 +2,7 @@ package com.omgservers.tester.test;
 
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
-import com.omgservers.tester.operation.BootstrapTestVersionOperation;
+import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;

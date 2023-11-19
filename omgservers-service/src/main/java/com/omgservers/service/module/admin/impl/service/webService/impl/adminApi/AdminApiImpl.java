@@ -4,26 +4,16 @@ import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
+import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
+import com.omgservers.model.dto.admin.CreateIndexAdminResponse;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.CreateServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
-import com.omgservers.model.dto.admin.DeleteIndexAdminRequest;
-import com.omgservers.model.dto.admin.DeleteIndexAdminResponse;
-import com.omgservers.model.dto.admin.DeleteServiceAccountAdminRequest;
-import com.omgservers.model.dto.admin.DeleteServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
-import com.omgservers.model.dto.admin.FindIndexAdminRequest;
-import com.omgservers.model.dto.admin.FindIndexAdminResponse;
-import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
-import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.GetServiceAccountAdminRequest;
-import com.omgservers.model.dto.admin.GetServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
-import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
-import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
-import com.omgservers.model.dto.admin.SyncServiceAccountAdminRequest;
-import com.omgservers.model.dto.admin.SyncServiceAccountAdminResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.admin.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -56,44 +46,14 @@ public class AdminApiImpl implements AdminApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<FindIndexAdminResponse> findIndex(final FindIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findIndex);
+    public Uni<CreateIndexAdminResponse> createIndex(final CreateIndexAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createIndex);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<SyncIndexAdminResponse> syncIndex(final SyncIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncIndex);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<DeleteIndexAdminResponse> deleteIndex(final DeleteIndexAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteIndex);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<GetServiceAccountAdminResponse> getServiceAccount(final GetServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getServiceAccount);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<FindServiceAccountAdminResponse> findServiceAccount(final FindServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findServiceAccount);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<SyncServiceAccountAdminResponse> syncServiceAccount(final SyncServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncServiceAccount);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<DeleteServiceAccountAdminResponse> deleteServiceAccount(final DeleteServiceAccountAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteServiceAccount);
+    public Uni<CreateServiceAccountAdminResponse> createServiceAccount(final CreateServiceAccountAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createServiceAccount);
     }
 
     @Override
