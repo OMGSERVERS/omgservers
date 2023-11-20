@@ -22,12 +22,15 @@ services:
       - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=0
-      - OMGSERVERS_SERVICE_URI=http://omgservers-service-1:8080
-      - OMGSERVERS_SERVICE_USERNAME=omgservers-service-1
-      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service-1
+      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-1:8080
+      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-1:8080
+      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
+      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
+      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080
       - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
       - OMGSERVERS_DOCKER_NETWORK=omgservers-service-1
   omgservers-db-1:
@@ -66,12 +69,15 @@ services:
       - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=1
-      - OMGSERVERS_SERVICE_URI=http://omgservers-service-2:8080
-      - OMGSERVERS_SERVICE_USERNAME=omgservers-service-2
-      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service-2
+      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-2:8080
+      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-2:8080
+      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
+      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
+      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080
       - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
       - OMGSERVERS_DOCKER_NETWORK=omgservers-service-2
   omgservers-db-2:

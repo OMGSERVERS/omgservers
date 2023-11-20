@@ -1,4 +1,4 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -6,17 +6,17 @@ import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Slf4j
-@ApplicationScoped
-public class DeleteClientTest extends Assertions {
+@QuarkusTest
+public class DoKickClientIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -27,48 +27,56 @@ public class DeleteClientTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testDeleteClient(final URI gatewayUri) throws Exception {
+    @Test
+    void doKickClientIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         local var command = ...
-
-                        if command.qualifier == "init_runtime" then
-                            clients = {}
-                        end
                                                
                         if command.qualifier == "add_client" then
-                            clients[command.client_id] = {
-                                user_id = command.user_id,
-                                client_id = command.client_id
-                            }
+                            local var user_id = command.user_id
+                            local var client_id = command.client_id
+                            
+                            if admin then
+                                return {
+                                    {
+                                        qualifier = "kick",
+                                        user_id = command.user_id,
+                                        client_id = command.client_id
+                                    }
+                                }
+                            else
+                                admin = {
+                                    user_id = command.user_id,
+                                    client_id = command.client_id
+                                }
+                            end
                         end
                                                 
                         if command.qualifier == "delete_client" then
-                            local var client = clients[command.client_id]
-                            assert(client.user_id ~= nil, "client.user_id is wrong")
-                            assert(client.client_id ~= nil, "client.client_id is wrong")
-                            
                             return {
                                 {
                                     qualifier = "broadcast",
                                     message = {
-                                        text = "deleted"
+                                        text = "kicked"
                                     }
                                 }
                             }
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
-                    add(VersionModeModel.create("death-match", 2, 16, new ArrayList<>() {{
-                        add(new VersionGroupModel("players", 2, 16));
+                    add(VersionModeModel.create("death-match", 1, 16, new ArrayList<>() {{
+                        add(new VersionGroupModel("players", 1, 16));
                     }}));
                 }}));
 
         Thread.sleep(10000);
 
         try {
-            final var client1 = testClientFactory.create(gatewayUri);
+
+
+            final var client1 = testClientFactory.create();
             client1.signUp(version);
-            final var client2 = testClientFactory.create(gatewayUri);
+            final var client2 = testClientFactory.create();
             client2.signUp(version);
 
             final var welcome1 = client1.consumeWelcomeMessage();
@@ -77,19 +85,22 @@ public class DeleteClientTest extends Assertions {
             assertNotNull(welcome2);
 
             client1.requestMatchmaking("death-match");
-            client2.requestMatchmaking("death-match");
 
             final var assignment1 = client1.consumeAssignmentMessage();
             assertNotNull(assignment1);
+
+            client2.requestMatchmaking("death-match");
+
             final var assignment2 = client2.consumeAssignmentMessage();
             assertNotNull(assignment2);
 
-            Thread.sleep(5000);
+            final var event1 = client2.consumeRevocationMessage();
+            assertNotNull(event1);
+
+            final var event2 = client1.consumeServerMessage();
+            assertEquals("{text=kicked}", event2.getMessage().toString());
 
             client1.close();
-
-            final var event = client2.consumeServerMessage();
-            assertEquals("{text=deleted}", event.getMessage().toString());
             client2.close();
 
             Thread.sleep(10000);

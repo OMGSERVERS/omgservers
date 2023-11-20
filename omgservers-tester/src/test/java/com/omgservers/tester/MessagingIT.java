@@ -1,4 +1,4 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -6,17 +6,17 @@ import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Slf4j
-@ApplicationScoped
-public class MessagingTest extends Assertions {
+@QuarkusTest
+public class MessagingIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -27,7 +27,8 @@ public class MessagingTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testMessaging(final URI gatewayUri) throws Exception {
+    @Test
+    void messagingIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         local var command = ...
                                                 
@@ -96,9 +97,9 @@ public class MessagingTest extends Assertions {
 
         try {
 
-            final var client1 = testClientFactory.create(gatewayUri);
+            final var client1 = testClientFactory.create();
             client1.signUp(version);
-            final var client2 = testClientFactory.create(gatewayUri);
+            final var client2 = testClientFactory.create();
             client2.signUp(version);
 
             final var welcome1 = client1.consumeWelcomeMessage();

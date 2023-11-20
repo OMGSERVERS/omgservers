@@ -1,4 +1,4 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -6,19 +6,19 @@ import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Slf4j
-@ApplicationScoped
-public class DoChangeTest extends Assertions {
+@QuarkusTest
+public class MatchMessagingIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -29,39 +29,23 @@ public class DoChangeTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testDoChange(final URI gatewayUri) throws Exception {
-        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
-                """
+    @Test
+    void matchMessagingIT() throws Exception {
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         local var command = ...
-                                       
-                        if command.qualifier == "add_client" then
-                            return {
-                                {
-                                    qualifier = "change",
-                                    user_id = command.user_id,
-                                    client_id = command.client_id,
-                                    message = {
-                                        text = "hello"
-                                    }
-                                }
-                            }
-                        end
                                                 
-                        if command.qualifier == "change_player" then
-                            local var message = command.message
-                            assert(message.text == "hello", "message.text is wrong")
+                        if command.qualifier == "handle_message" then
                             return {
                                 {
-                                    qualifier = "respond",
+                                    qualifier = "unicast",
                                     user_id = command.user_id,
                                     client_id = command.client_id,
                                     message = {
-                                        text = "changed"
+                                        text = "received"
                                     }
                                 }
                             }
                         end
-                                   
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("death-match", 1, 16, new ArrayList<>() {{
@@ -73,8 +57,7 @@ public class DoChangeTest extends Assertions {
 
         try {
 
-
-            final var client1 = testClientFactory.create(gatewayUri);
+            final var client1 = testClientFactory.create();
             client1.signUp(version);
 
             final var welcome1 = client1.consumeWelcomeMessage();
@@ -85,8 +68,10 @@ public class DoChangeTest extends Assertions {
             final var assignment1 = client1.consumeAssignmentMessage();
             assertNotNull(assignment1);
 
-            final var serverMessage1 = client1.consumeServerMessage();
-            assertEquals("{text=changed}", serverMessage1.getMessage().toString());
+            client1.sendMatchMessage(new TestMessage("request"));
+
+            final var event1 = client1.consumeServerMessage();
+            assertEquals("{text=received}", event1.getMessage().toString());
 
             client1.close();
 
@@ -99,7 +84,7 @@ public class DoChangeTest extends Assertions {
 
     @Data
     @AllArgsConstructor
-    static class TestMessage {
+    class TestMessage {
         String text;
     }
 }

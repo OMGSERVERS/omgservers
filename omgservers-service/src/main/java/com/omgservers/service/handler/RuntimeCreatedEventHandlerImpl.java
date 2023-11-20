@@ -107,9 +107,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                                final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
         final var workerImage = getConfigOperation.getConfig().workerImage();
-        final var serviceUrl = getConfigOperation.getConfig().serviceUri();
+        final var internalUri = getConfigOperation.getConfig().internalUri();
         final var environment = new HashMap<String, String>();
-        environment.put("OMGSERVERS_URL", serviceUrl.toString());
+        environment.put("OMGSERVERS_URL", internalUri.toString());
         environment.put("OMGSERVERS_USER_ID", userId.toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());

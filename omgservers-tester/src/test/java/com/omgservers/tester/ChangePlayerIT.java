@@ -1,20 +1,19 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-
-import java.net.URI;
+import org.junit.jupiter.api.Test;
 
 @Slf4j
-@ApplicationScoped
-public class ChangePlayerTest extends Assertions {
+@QuarkusTest
+public class ChangePlayerIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -25,7 +24,8 @@ public class ChangePlayerTest extends Assertions {
     @Inject
     AdminApiTester adminApiTester;
 
-    public void testChangePlayer(URI gatewayUri) throws Exception {
+    @Test
+    void changePlayerIT() throws Exception {
         final var version = bootstrapTestVersionOperation
                 .bootstrapTestVersion("""                                               
                         local var command = ...
@@ -49,7 +49,7 @@ public class ChangePlayerTest extends Assertions {
         Thread.sleep(10000);
 
         try {
-            final var client = testClientFactory.create(gatewayUri);
+            final var client = testClientFactory.create();
 
             client.signUp(version);
             final var welcome1 = client.consumeWelcomeMessage();

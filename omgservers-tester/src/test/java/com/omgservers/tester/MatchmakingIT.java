@@ -1,4 +1,4 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -6,17 +6,17 @@ import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Slf4j
-@ApplicationScoped
-public class DoKickClientTest extends Assertions {
+@QuarkusTest
+public class MatchmakingIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -27,44 +27,28 @@ public class DoKickClientTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testDoKickClient(final URI gatewayUri) throws Exception {
+    @Test
+    void matchmakingIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         local var command = ...
-                                               
-                        if command.qualifier == "add_client" then
-                            local var user_id = command.user_id
-                            local var client_id = command.client_id
-                            
-                            if admin then
-                                return {
-                                    {
-                                        qualifier = "kick",
-                                        user_id = command.user_id,
-                                        client_id = command.client_id
-                                    }
-                                }
-                            else
-                                admin = {
-                                    user_id = command.user_id,
-                                    client_id = command.client_id
-                                }
-                            end
-                        end
                                                 
-                        if command.qualifier == "delete_client" then
+                        if command.qualifier == "add_client" then
+                                                
                             return {
                                 {
-                                    qualifier = "broadcast",
+                                    qualifier = "unicast",
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
                                     message = {
-                                        text = "kicked"
+                                        text = "added"
                                     }
                                 }
                             }
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
-                    add(VersionModeModel.create("death-match", 1, 16, new ArrayList<>() {{
-                        add(new VersionGroupModel("players", 1, 16));
+                    add(VersionModeModel.create("death-match", 2, 16, new ArrayList<>() {{
+                        add(new VersionGroupModel("players", 2, 16));
                     }}));
                 }}));
 
@@ -72,10 +56,9 @@ public class DoKickClientTest extends Assertions {
 
         try {
 
-
-            final var client1 = testClientFactory.create(gatewayUri);
+            final var client1 = testClientFactory.create();
             client1.signUp(version);
-            final var client2 = testClientFactory.create(gatewayUri);
+            final var client2 = testClientFactory.create();
             client2.signUp(version);
 
             final var welcome1 = client1.consumeWelcomeMessage();
@@ -84,20 +67,18 @@ public class DoKickClientTest extends Assertions {
             assertNotNull(welcome2);
 
             client1.requestMatchmaking("death-match");
+            client2.requestMatchmaking("death-match");
 
             final var assignment1 = client1.consumeAssignmentMessage();
             assertNotNull(assignment1);
-
-            client2.requestMatchmaking("death-match");
-
             final var assignment2 = client2.consumeAssignmentMessage();
             assertNotNull(assignment2);
 
-            final var event1 = client2.consumeRevocationMessage();
-            assertNotNull(event1);
+            final var event12 = client1.consumeServerMessage();
+            assertEquals("{text=added}", event12.getMessage().toString());
 
-            final var event2 = client1.consumeServerMessage();
-            assertEquals("{text=kicked}", event2.getMessage().toString());
+            final var event21 = client2.consumeServerMessage();
+            assertEquals("{text=added}", event21.getMessage().toString());
 
             client1.close();
             client2.close();

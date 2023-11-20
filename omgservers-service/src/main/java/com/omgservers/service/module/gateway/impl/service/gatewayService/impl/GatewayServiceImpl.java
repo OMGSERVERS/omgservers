@@ -36,7 +36,7 @@ class GatewayServiceImpl implements GatewayService {
 
     @Override
     public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
-        final var currentServer = getConfigOperation.getConfig().serviceUri();
+        final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
             return respondMessageMethod.respondMessage(request);
@@ -48,7 +48,7 @@ class GatewayServiceImpl implements GatewayService {
 
     @Override
     public Uni<AssignClientResponse> assignClient(AssignClientRequest request) {
-        final var currentServer = getConfigOperation.getConfig().serviceUri();
+        final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
             return assignClientMethod.assignClient(request);
@@ -60,7 +60,7 @@ class GatewayServiceImpl implements GatewayService {
 
     @Override
     public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
-        final var currentServer = getConfigOperation.getConfig().serviceUri();
+        final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
             return assignRuntimeMethod.assignRuntime(request);
@@ -72,7 +72,7 @@ class GatewayServiceImpl implements GatewayService {
 
     @Override
     public Uni<RevokeRuntimeResponse> revokeRuntime(RevokeRuntimeRequest request) {
-        final var currentServer = getConfigOperation.getConfig().serviceUri();
+        final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
             return revokeRuntimeMethod.revokeRuntime(request);

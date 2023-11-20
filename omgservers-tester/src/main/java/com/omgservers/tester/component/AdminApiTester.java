@@ -14,6 +14,7 @@ import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
+import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,17 +29,18 @@ import java.util.List;
 @ApplicationScoped
 @AllArgsConstructor
 public class AdminApiTester {
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin";
+
+    final GetConfigOperation getConfigOperation;
 
     final ObjectMapper objectMapper;
 
-    public IndexModel createIndex(String baseUri, List<URI> addresses) throws IOException {
+    public IndexModel createIndex(final List<URI> addresses) throws IOException {
         final var responseSpecification = RestAssured
                 .with()
-                .baseUri(baseUri)
+                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
-                .auth().basic(ADMIN_USERNAME, ADMIN_PASSWORD)
+                .auth()
+                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(addresses)))
                 .log().all(false)
                 .when()
@@ -53,13 +55,15 @@ public class AdminApiTester {
         }
     }
 
-    public ServiceAccountModel createServiceAccount(String baseUri, String username, String password)
+    public ServiceAccountModel createServiceAccount(final String username,
+                                                    final String password)
             throws IOException {
         final var responseSpecification = RestAssured
                 .with()
-                .baseUri(baseUri)
+                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
-                .auth().basic(ADMIN_USERNAME, ADMIN_PASSWORD)
+                .auth()
+                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateServiceAccountAdminRequest(username, password)))
                 .log().all(false)
                 .when()
@@ -77,11 +81,14 @@ public class AdminApiTester {
     public Long createTenant() throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
-                .auth().basic(ADMIN_USERNAME, ADMIN_PASSWORD)
+                .auth()
+                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateTenantAdminRequest()))
+                .log().all(false)
                 .when().put("/omgservers/admin-api/v1/request/create-tenant");
-        responseSpecification.then().statusCode(200);
+        responseSpecification.then().log().all(false).statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantAdminResponse.class);
         return response.getId();
@@ -90,8 +97,10 @@ public class AdminApiTester {
     public Boolean deleteTenant(final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
-                .auth().basic(ADMIN_USERNAME, ADMIN_PASSWORD)
+                .auth()
+                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantAdminRequest(tenantId)))
                 .when().put("/omgservers/admin-api/v1/request/delete-tenant");
@@ -101,11 +110,13 @@ public class AdminApiTester {
         return response.getDeleted();
     }
 
-    public CreateDeveloperAdminResponse createDeveloper(Long tenantId) throws JsonProcessingException {
+    public CreateDeveloperAdminResponse createDeveloper(final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
-                .auth().basic(ADMIN_USERNAME, ADMIN_PASSWORD)
+                .auth()
+                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateDeveloperAdminRequest(tenantId)))
                 .when().put("/omgservers/admin-api/v1/request/create-developer");
         responseSpecification.then().statusCode(200);

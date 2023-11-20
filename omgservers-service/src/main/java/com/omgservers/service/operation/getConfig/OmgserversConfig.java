@@ -3,6 +3,7 @@ package com.omgservers.service.operation.getConfig;
 import io.smallrye.config.ConfigMapping;
 
 import java.net.URI;
+import java.util.List;
 
 @ConfigMapping(prefix = "omgservers")
 public interface OmgserversConfig {
@@ -10,7 +11,9 @@ public interface OmgserversConfig {
 
     long nodeId();
 
-    URI serviceUri();
+    URI externalUri();
+
+    URI internalUri();
 
     String serviceUsername();
 
@@ -22,7 +25,11 @@ public interface OmgserversConfig {
 
     String indexName();
 
+    List<URI> addresses();
+
     int shardCount();
+
+    boolean bootstrapService();
 
     Integer migrationConcurrency();
 
@@ -35,8 +42,6 @@ public interface OmgserversConfig {
     boolean disableEventHandler();
 
     Integer eventHandlerConcurrency();
-
-    boolean standalone();
 
     String workerImage();
 

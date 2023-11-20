@@ -1,18 +1,17 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-
-import java.net.URI;
+import org.junit.jupiter.api.Test;
 
 @Slf4j
-@ApplicationScoped
-public class SignInSignUpTest extends Assertions {
+@QuarkusTest
+public class DoSetGetAttributesIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -23,12 +22,24 @@ public class SignInSignUpTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testSignInSignUp(final URI gatewayUri) throws Exception {
+    @Test
+    void doSetGetAttributesIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                 local var command = ...
                                 
                 if command.qualifier == "sign_up" then
                     return {
+                        {
+                            qualifier = "set_attributes",
+                            user_id = command.user_id,
+                            client_id = command.client_id,
+                            attributes = {
+                                a1 = 1,
+                                a2 = "string",
+                                a3 = 3.14,
+                                a4 = true
+                            }
+                        },
                         {
                             qualifier = "respond",
                             user_id = command.user_id,
@@ -41,6 +52,12 @@ public class SignInSignUpTest extends Assertions {
                 end
                                 
                 if command.qualifier == "sign_in" then
+                    local attributes = command.attributes
+                    assert(type(attributes.a1) == "number", "a1 is wrong")
+                    assert(type(attributes.a2) == "string", "a2 is wrong")
+                    assert(type(attributes.a3) == "number", "a3 is wrong")
+                    assert(type(attributes.a4) == "boolean", "a4 is wrong")
+                    
                     return {
                         {
                             qualifier = "respond",
@@ -52,28 +69,25 @@ public class SignInSignUpTest extends Assertions {
                         }
                     }
                 end
-                                
                 """);
 
         Thread.sleep(10000);
 
-
         try {
-
-            final var client = testClientFactory.create(gatewayUri);
-
+            final var client = testClientFactory.create();
             client.signUp(version);
             final var welcome1 = client.consumeWelcomeMessage();
             assertNotNull(welcome1);
-            final var serverMessage1 = client.consumeServerMessage();
-            assertEquals("{text=signed_up}", serverMessage1.getMessage().toString());
+            final var message1 = client.consumeServerMessage();
+            assertEquals("{text=signed_up}", message1.getMessage().toString());
 
             client.reconnect();
             client.signIn(version);
             final var welcome2 = client.consumeWelcomeMessage();
             assertNotNull(welcome2);
-            final var serverMessage2 = client.consumeServerMessage();
-            assertEquals("{text=signed_in}", serverMessage2.getMessage().toString());
+            var message = client.consumeServerMessage();
+            assertEquals("{text=signed_in}", message.getMessage().toString());
+
             client.close();
 
             Thread.sleep(10000);

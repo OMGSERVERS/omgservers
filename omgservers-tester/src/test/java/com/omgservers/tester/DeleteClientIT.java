@@ -1,4 +1,4 @@
-package com.omgservers.tester.test;
+package com.omgservers.tester;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -6,17 +6,17 @@ import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.testClient.TestClientFactory;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import jakarta.enterprise.context.ApplicationScoped;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Slf4j
-@ApplicationScoped
-public class MatchmakingTest extends Assertions {
+@QuarkusTest
+public class DeleteClientIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -27,19 +27,32 @@ public class MatchmakingTest extends Assertions {
     @Inject
     TestClientFactory testClientFactory;
 
-    public void testMatchmaking(final URI gatewayUri) throws Exception {
+    @Test
+    void deleteClientIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         local var command = ...
-                                                
+
+                        if command.qualifier == "init_runtime" then
+                            clients = {}
+                        end
+                                               
                         if command.qualifier == "add_client" then
+                            clients[command.client_id] = {
+                                user_id = command.user_id,
+                                client_id = command.client_id
+                            }
+                        end
                                                 
+                        if command.qualifier == "delete_client" then
+                            local var client = clients[command.client_id]
+                            assert(client.user_id ~= nil, "client.user_id is wrong")
+                            assert(client.client_id ~= nil, "client.client_id is wrong")
+                            
                             return {
                                 {
-                                    qualifier = "unicast",
-                                    user_id = command.user_id,
-                                    client_id = command.client_id,
+                                    qualifier = "broadcast",
                                     message = {
-                                        text = "added"
+                                        text = "deleted"
                                     }
                                 }
                             }
@@ -54,10 +67,9 @@ public class MatchmakingTest extends Assertions {
         Thread.sleep(10000);
 
         try {
-
-            final var client1 = testClientFactory.create(gatewayUri);
+            final var client1 = testClientFactory.create();
             client1.signUp(version);
-            final var client2 = testClientFactory.create(gatewayUri);
+            final var client2 = testClientFactory.create();
             client2.signUp(version);
 
             final var welcome1 = client1.consumeWelcomeMessage();
@@ -73,13 +85,12 @@ public class MatchmakingTest extends Assertions {
             final var assignment2 = client2.consumeAssignmentMessage();
             assertNotNull(assignment2);
 
-            final var event12 = client1.consumeServerMessage();
-            assertEquals("{text=added}", event12.getMessage().toString());
-
-            final var event21 = client2.consumeServerMessage();
-            assertEquals("{text=added}", event21.getMessage().toString());
+            Thread.sleep(5000);
 
             client1.close();
+
+            final var event = client2.consumeServerMessage();
+            assertEquals("{text=deleted}", event.getMessage().toString());
             client2.close();
 
             Thread.sleep(10000);
