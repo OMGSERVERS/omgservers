@@ -35,6 +35,7 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenDeveloperRequest(userId, password)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/developer-api/v1/request/create-token");
         responseSpecification.then().statusCode(200);
 
@@ -49,6 +50,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateProjectDeveloperRequest(tenantId)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/developer-api/v1/request/create-project");
         responseSpecification.then().statusCode(200);
 
@@ -67,6 +69,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/developer-api/v1/request/create-version");
         responseSpecification.then().statusCode(200);
 
@@ -83,6 +86,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteVersionDeveloperRequest(tenantId, id)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/developer-api/v1/request/delete-version");
         responseSpecification.then().statusCode(200);
 

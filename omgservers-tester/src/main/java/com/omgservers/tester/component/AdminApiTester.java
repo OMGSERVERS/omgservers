@@ -86,7 +86,7 @@ public class AdminApiTester {
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateTenantAdminRequest()))
-                .log().all(false)
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/create-tenant");
         responseSpecification.then().log().all(false).statusCode(200);
 
@@ -103,6 +103,7 @@ public class AdminApiTester {
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantAdminRequest(tenantId)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
@@ -118,6 +119,7 @@ public class AdminApiTester {
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateDeveloperAdminRequest(tenantId)))
+                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/create-developer");
         responseSpecification.then().statusCode(200);
 

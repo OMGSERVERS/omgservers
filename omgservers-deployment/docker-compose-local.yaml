@@ -12,7 +12,7 @@ services:
       - omgservers-db-1
       - omgservers-mq-1
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_LOG_LEVEL=DEBUG
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -45,6 +45,8 @@ services:
   omgservers-mq-1:
     image: "rmohr/activemq"
     container_name: "omgservers-mq-1"
+    ports:
+      - 18161:8161
     networks:
       - omgservers-backend-1
   omgservers-service-2:
@@ -59,7 +61,7 @@ services:
       - omgservers-db-2
       - omgservers-mq-2
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_LOG_LEVEL=DEBUG
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
