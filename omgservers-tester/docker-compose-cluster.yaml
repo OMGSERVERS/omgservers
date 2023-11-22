@@ -1,5 +1,13 @@
 version: '2'
 services:
+  omgservers-docker:
+    image: "alpine/socat"
+    container_name: "omgservers-docker"
+    networks:
+      - omgservers-frontend
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   omgservers-service-1:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-1"
@@ -12,7 +20,8 @@ services:
       - omgservers-db-1
       - omgservers-mq-1
     environment:
-      - OMGSERVERS_LOG_LEVEL=DEBUG
+      - DOCKER_HOST=tcp://omgservers-docker:2375
+      - OMGSERVERS_LOG_LEVEL=INFO
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -28,11 +37,11 @@ services:
       - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
-      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080
+      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_DOCKER_NETWORK=omgservers-service-1
+      - OMGSERVERS_DOCKER_NETWORK=omgservers-backend-1
   omgservers-db-1:
     image: "postgres:16.1"
     container_name: "omgservers-db-1"
@@ -61,7 +70,8 @@ services:
       - omgservers-db-2
       - omgservers-mq-2
     environment:
-      - OMGSERVERS_LOG_LEVEL=DEBUG
+      - DOCKER_HOST=tcp://omgservers-docker:2375
+      - OMGSERVERS_LOG_LEVEL=INFO
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -77,11 +87,11 @@ services:
       - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
-      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080
+      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_DOCKER_NETWORK=omgservers-service-2
+      - OMGSERVERS_DOCKER_NETWORK=omgservers-backend-2
   omgservers-db-2:
     image: "postgres:16.1"
     container_name: "omgservers-db-2"
@@ -96,7 +106,60 @@ services:
     container_name: "omgservers-mq-2"
     networks:
       - omgservers-backend-2
+  omgservers-service-3:
+    image: "omgservers/omgservers-service"
+    container_name: "omgservers-service-3"
+    ports:
+      - "10003:8080"
+    networks:
+      - omgservers-frontend
+      - omgservers-backend-3
+    depends_on:
+      - omgservers-db-3
+      - omgservers-mq-3
+    environment:
+      - DOCKER_HOST=tcp://omgservers-docker:2375
+      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-3:5432/root
+      - OMGSERVERS_DATASOURCE_USERNAME=root
+      - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=omgservers-mq-3
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_DATACENTER_ID=0
+      - OMGSERVERS_NODE_ID=2
+      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-3:8080
+      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-3:8080
+      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
+      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
+      - OMGSERVERS_ADMIN_USERNAME=admin
+      - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
+      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
+      - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_BOOTSTRAP_SERVICE=true
+      - OMGSERVERS_TOKEN_LIFETIME=3600
+      - OMGSERVERS_DOCKER_NETWORK=omgservers-backend-3
+  omgservers-db-3:
+    image: "postgres:16.1"
+    container_name: "omgservers-db-3"
+    networks:
+      - omgservers-backend-3
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
+  omgservers-mq-3:
+    image: "rmohr/activemq"
+    container_name: "omgservers-mq-3"
+    networks:
+      - omgservers-backend-3
 networks:
   omgservers-frontend:
+    name: omgservers-frontend
   omgservers-backend-1:
+    name: omgservers-backend-1
   omgservers-backend-2:
+    name: omgservers-backend-2
+  omgservers-backend-3:
+    name: omgservers-backend-3

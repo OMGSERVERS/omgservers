@@ -4,12 +4,13 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.Duration;
 
 @Slf4j
 @ApplicationScoped
@@ -24,12 +25,19 @@ class DockerClientWrapperImpl implements DockerClientWrapper {
         final var httpClient = new ZerodepDockerHttpClient.Builder()
                 .dockerHost(config.getDockerHost())
                 .sslConfig(config.getSSLConfig())
-                .maxConnections(4)
-                .connectionTimeout(Duration.ofSeconds(4))
-                .responseTimeout(Duration.ofSeconds(8))
                 .build();
 
         dockerClient = DockerClientImpl.getInstance(config, httpClient);
+
+        final var pong = dockerClient.pingCmd().exec();
+        log.info("Ping docker, pong={}", pong);
+
+        final var networks = dockerClient.listNetworksCmd().exec();
+        log.info("Docker networks, networks={}", networks);
+    }
+
+    void startup(@Observes @Priority(1000) StartupEvent event) {
+        log.info("Docker client was initialized");
     }
 
     @Override
