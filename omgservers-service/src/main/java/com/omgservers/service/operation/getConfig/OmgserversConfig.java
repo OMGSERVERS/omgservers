@@ -45,5 +45,7 @@ public interface OmgserversConfig {
 
     String workerImage();
 
-    String dockerNetwork();
+    String workerNetwork();
+
+    String dockerHost();
 }

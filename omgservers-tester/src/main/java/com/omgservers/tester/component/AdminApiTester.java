@@ -37,15 +37,14 @@ public class AdminApiTester {
     public IndexModel createIndex(final List<URI> addresses) throws IOException {
         final var responseSpecification = RestAssured
                 .with()
+                .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(addresses)))
-                .log().all(false)
                 .when()
                 .put("/omgservers/admin-api/v1/request/create-index");
-        responseSpecification.then().log().all(false);
 
         if (responseSpecification.getStatusCode() == 200) {
             final var response = responseSpecification.getBody().as(CreateIndexAdminResponse.class);
@@ -60,15 +59,14 @@ public class AdminApiTester {
             throws IOException {
         final var responseSpecification = RestAssured
                 .with()
+                .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateServiceAccountAdminRequest(username, password)))
-                .log().all(false)
                 .when()
                 .put("/omgservers/admin-api/v1/request/create-service-account");
-        responseSpecification.then().log().all(false);
 
         if (responseSpecification.getStatusCode() == 200) {
             final var response = responseSpecification.getBody().as(CreateServiceAccountAdminResponse.class);
@@ -81,14 +79,14 @@ public class AdminApiTester {
     public Long createTenant() throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateTenantAdminRequest()))
-                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/create-tenant");
-        responseSpecification.then().log().all(false).statusCode(200);
+        responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantAdminResponse.class);
         return response.getId();
@@ -97,13 +95,13 @@ public class AdminApiTester {
     public Boolean deleteTenant(final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantAdminRequest(tenantId)))
-                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
@@ -114,12 +112,12 @@ public class AdminApiTester {
     public CreateDeveloperAdminResponse createDeveloper(final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
+                .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateDeveloperAdminRequest(tenantId)))
-                .log().method().log().uri().log().headers().log().body(false)
                 .when().put("/omgservers/admin-api/v1/request/create-developer");
         responseSpecification.then().statusCode(200);
 

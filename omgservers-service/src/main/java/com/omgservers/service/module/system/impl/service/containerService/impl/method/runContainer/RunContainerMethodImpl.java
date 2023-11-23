@@ -1,9 +1,11 @@
 package com.omgservers.service.module.system.impl.service.containerService.impl.method.runContainer;
 
+import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.PortBinding;
 import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
-import com.omgservers.service.module.system.impl.component.DockerClientWrapper;
+import com.omgservers.service.module.system.impl.component.DockerClientHolder;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -19,7 +21,7 @@ class RunContainerMethodImpl implements RunContainerMethod {
 
     final GetConfigOperation getConfigOperation;
 
-    final DockerClientWrapper dockerClientWrapper;
+    final DockerClientHolder dockerClientHolder;
 
     @Override
     public Uni<RunContainerResponse> runContainer(final RunContainerRequest request) {
@@ -33,16 +35,26 @@ class RunContainerMethodImpl implements RunContainerMethod {
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
                             .toList();
 
-                    final var dockerClient = dockerClientWrapper.getDockerClient();
-                    final var dockerNetwork = getConfigOperation.getConfig().dockerNetwork();
+                    final var dockerClient = dockerClientHolder.getDockerClient();
+                    final var dockerNetwork = getConfigOperation.getConfig().workerNetwork();
 
-                    dockerClient.createContainerCmd(image)
+                    final var createContainerResponse = dockerClient.createContainerCmd(image)
                             .withName(name)
                             .withEnv(environment)
-                            .withHostConfig(HostConfig.newHostConfig().withNetworkMode(dockerNetwork))
+                            .withExposedPorts(ExposedPort.parse("8080/tcp"))
+                            .withHostConfig(HostConfig.newHostConfig()
+                                    .withNetworkMode(dockerNetwork)
+                                    .withPortBindings(PortBinding.parse(":8080")))
                             .exec();
+                    log.info("Create container, response={}", createContainerResponse);
 
-                    dockerClient.startContainerCmd(name).exec();
+                    final var inspectContainerResponse = dockerClient.inspectContainerCmd(name)
+                            .exec();
+                    log.info("Inspect container, response={}", inspectContainerResponse);
+
+                    final var startContainerResponse = dockerClient.startContainerCmd(name)
+                            .exec();
+                    log.info("Start container, response={}", startContainerResponse);
                 })
                 .replaceWith(RunContainerResponse::new);
     }

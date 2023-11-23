@@ -26,10 +26,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class TestClient {
+    static final AtomicLong idGenerator = new AtomicLong();
 
     final ObjectMapper objectMapper;
-    final AtomicLong idGenerator;
     final URI uri;
+    final String clientId;
 
     TestEndpoint testEndpoint;
     Session session;
@@ -40,12 +41,13 @@ public class TestClient {
             throws IOException, DeploymentException {
         this.objectMapper = objectMapper;
         this.uri = uri;
+        clientId = "WebSocket" + idGenerator.getAndIncrement();
 
-        idGenerator = new AtomicLong();
         reconnect();
     }
 
     public synchronized void reconnect() throws IOException, DeploymentException {
+        log.info("{}: Reconnect", clientId);
         close();
 
         testEndpoint = new TestEndpoint();
@@ -55,6 +57,8 @@ public class TestClient {
     }
 
     public synchronized boolean close() throws IOException {
+        log.info("{}: Close", clientId);
+
         if (session != null) {
             session.close();
             session = null;
@@ -70,6 +74,7 @@ public class TestClient {
                         new SignUpMessageBodyModel(testVersion.getTenantId(),
                                 testVersion.getStageId(), testVersion.getStageSecret()));
         final var messageString = objectMapper.writeValueAsString(messageModel);
+        log.info("{}: Sign up request, {}", clientId, messageString);
         send(messageString);
 
         final var credentialsMessageBody = consumeCredentialsMessage();
@@ -83,6 +88,7 @@ public class TestClient {
                         new SignInMessageBodyModel(versionParameters.getTenantId(),
                                 versionParameters.getStageId(), versionParameters.getStageSecret(), userId, password));
         final var messageString = objectMapper.writeValueAsString(messageModel);
+        log.info("{}: Sign in request, {}", clientId, messageString);
         send(messageString);
     }
 
@@ -91,6 +97,7 @@ public class TestClient {
                 new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.MATCHMAKER_MESSAGE,
                         new MatchmakerMessageBodyModel(mode));
         final var messageString = objectMapper.writeValueAsString(messageModel);
+        log.info("{}: Matchmaker request, {}", clientId, messageString);
         send(messageString);
     }
 
@@ -98,6 +105,7 @@ public class TestClient {
         final var messageModel = new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.CHANGE_MESSAGE,
                 new ChangeMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
+        log.info("{}: Change request, {}", clientId, messageString);
         send(messageString);
     }
 
@@ -105,6 +113,7 @@ public class TestClient {
         final var messageModel = new MessageModel(idGenerator.getAndIncrement(), MessageQualifierEnum.MATCH_MESSAGE,
                 new MatchMessageBodyModel(data));
         final var messageString = objectMapper.writeValueAsString(messageModel);
+        log.info("{}: Match request, {}", clientId, messageString);
         send(messageString);
     }
 
@@ -114,6 +123,7 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.SERVER_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("{}: Server message received, {}", clientId, messageModel.getBody());
         return (ServerMessageBodyModel) messageModel.getBody();
     }
 
@@ -124,6 +134,7 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.CREDENTIALS_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("{}: Credentials message received, {}", clientId, messageModel.getBody());
         return (CredentialsMessageBodyModel) messageModel.getBody();
     }
 
@@ -133,6 +144,7 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.WELCOME_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("{}: Welcome message received, {}", clientId, messageModel.getBody());
         return (WelcomeMessageBodyModel) messageModel.getBody();
     }
 
@@ -142,6 +154,7 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.ASSIGNMENT_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("{}: Assignment message received, {}", clientId, messageModel.getBody());
         return (AssignmentMessageBodyModel) messageModel.getBody();
     }
 
@@ -151,6 +164,7 @@ public class TestClient {
             throw new IOException(MessageQualifierEnum.REVOCATION_MESSAGE + " was not received");
         }
         MessageModel messageModel = objectMapper.readValue(messageString, MessageModel.class);
+        log.info("{}: Revocation message received, {}", clientId, messageModel.getBody());
         return (RevocationMessageBodyModel) messageModel.getBody();
     }
 
