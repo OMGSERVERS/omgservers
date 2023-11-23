@@ -68,6 +68,11 @@ public class RuntimeCommandDeserializer extends StdDeserializer<RuntimeCommandMo
             }
         }
 
+        final var deletedNode = root.get("deleted");
+        if (deletedNode != null) {
+            commandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
+        }
+
         return commandModel;
     }
 }

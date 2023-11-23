@@ -73,6 +73,11 @@ public class MatchCommandDeserializer extends StdDeserializer<MatchCommandModel>
             }
         }
 
+        final var deletedNode = root.get("deleted");
+        if (deletedNode != null) {
+            commandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
+        }
+
         return commandModel;
     }
 }

@@ -68,6 +68,11 @@ public class MatchmakerCommandDeserializer extends StdDeserializer<MatchmakerCom
             }
         }
 
+        final var deletedNode = root.get("deleted");
+        if (deletedNode != null) {
+            commandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
+        }
+
         return commandModel;
     }
 }
