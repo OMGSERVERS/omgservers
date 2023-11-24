@@ -32,6 +32,8 @@ class DoRespondClientMethodImpl implements DoRespondClientMethod {
 
     @Override
     public Uni<DoRespondClientResponse> doRespondClient(final DoRespondClientRequest request) {
+        log.debug("Do respond client, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var grant = RuntimeGrantTypeEnum.USER_CLIENT;

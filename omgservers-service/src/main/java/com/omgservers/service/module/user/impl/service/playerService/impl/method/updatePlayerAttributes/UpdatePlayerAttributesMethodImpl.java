@@ -22,6 +22,8 @@ class UpdatePlayerAttributesMethodImpl implements UpdatePlayerAttributesMethod {
 
     @Override
     public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(UpdatePlayerAttributesRequest request) {
+        log.debug("Update player attributes, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var userId = request.getUserId();

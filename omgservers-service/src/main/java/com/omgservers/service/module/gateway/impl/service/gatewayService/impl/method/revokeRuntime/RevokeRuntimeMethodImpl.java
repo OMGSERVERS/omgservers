@@ -8,10 +8,10 @@ import com.omgservers.model.dto.system.SyncLogRequest;
 import com.omgservers.model.dto.system.SyncLogResponse;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.RevocationMessageBodyModel;
-import com.omgservers.service.module.gateway.GatewayModule;
-import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.MessageModelFactory;
+import com.omgservers.service.module.gateway.GatewayModule;
+import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -33,6 +33,8 @@ class RevokeRuntimeMethodImpl implements RevokeRuntimeMethod {
 
     @Override
     public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
+        log.debug("Revoke runtime, request={}", request);
+
         final var server = request.getServer();
         final var connectionId = request.getConnectionId();
         final var runtimeId = request.getRuntimeId();
@@ -40,9 +42,6 @@ class RevokeRuntimeMethodImpl implements RevokeRuntimeMethod {
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().revokeRuntime(request))
                 .call(revokeRuntimeResponse -> {
-
-                    log.info("Runtime was revoked, runtimeId={}, connectionId={}", runtimeId, connectionId);
-
                     if (revokeRuntimeResponse.getRevoked()) {
                         return respondRevocationMessage(runtimeId, server, connectionId)
                                 .flatMap(response -> syncLog(request));

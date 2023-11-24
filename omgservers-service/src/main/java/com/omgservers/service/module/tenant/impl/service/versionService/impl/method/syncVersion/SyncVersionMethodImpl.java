@@ -28,6 +28,8 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
 
     @Override
     public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
+        log.debug("Sync version, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var version = request.getVersion();
         final var tenantId = version.getTenantId();

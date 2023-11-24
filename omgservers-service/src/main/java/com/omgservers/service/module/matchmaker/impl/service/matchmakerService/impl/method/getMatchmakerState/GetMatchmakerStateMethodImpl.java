@@ -29,6 +29,8 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
 
     @Override
     public Uni<GetMatchmakerStateResponse> getMatchmakerState(final GetMatchmakerStateRequest request) {
+        log.debug("Get matchmaker state, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var matchmakerId = request.getMatchmakerId();

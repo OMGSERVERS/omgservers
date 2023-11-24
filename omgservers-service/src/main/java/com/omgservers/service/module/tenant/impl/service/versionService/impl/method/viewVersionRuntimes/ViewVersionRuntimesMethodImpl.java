@@ -22,6 +22,8 @@ class ViewVersionRuntimesMethodImpl implements ViewVersionRuntimesMethod {
 
     @Override
     public Uni<ViewVersionRuntimesResponse> viewVersionRuntimes(final ViewVersionRuntimesRequest request) {
+        log.debug("View version runtimes, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

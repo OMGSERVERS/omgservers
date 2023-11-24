@@ -22,6 +22,8 @@ class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
 
     @Override
     public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
+        log.debug("View matchmaker commands, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())

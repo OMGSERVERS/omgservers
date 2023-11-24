@@ -22,6 +22,8 @@ class ViewStagePermissionsMethodImpl implements ViewStagePermissionsMethod {
 
     @Override
     public Uni<ViewStagePermissionsResponse> viewStagePermissions(final ViewStagePermissionsRequest request) {
+        log.debug("View stage permissions, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

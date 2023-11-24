@@ -22,6 +22,8 @@ class GetVersionRuntimeMethodImpl implements GetVersionRuntimeMethod {
 
     @Override
     public Uni<GetVersionRuntimeResponse> getVersionRuntime(final GetVersionRuntimeRequest request) {
+        log.debug("Get version runtime, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

@@ -24,6 +24,8 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
 
     @Override
     public Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request) {
+        log.debug("Validate credentials, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var userId = request.getUserId();

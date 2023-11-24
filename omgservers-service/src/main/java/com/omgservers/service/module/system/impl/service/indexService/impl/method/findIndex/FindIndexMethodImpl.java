@@ -20,6 +20,8 @@ class FindIndexMethodImpl implements FindIndexMethod {
 
     @Override
     public Uni<FindIndexResponse> findIndex(final FindIndexRequest request) {
+        log.debug("Find index, request={}", request);
+
         final var name = request.getName();
         return pgPool.withTransaction(sqlConnection -> selectIndexByNameOperation
                         .selectIndexByName(sqlConnection, name))

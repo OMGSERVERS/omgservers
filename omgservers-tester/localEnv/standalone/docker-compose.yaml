@@ -21,7 +21,10 @@ services:
       - omgservers-db
       - omgservers-mq
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -44,7 +47,7 @@ services:
       - OMGSERVERS_WORKER_NETWORK=omgservers-workers
       - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
   omgservers-db:
-    image: "postgres:16.1"
+    image: "postgres:15.1"
     container_name: "omgservers-db"
     networks:
       - omgservers-backend

@@ -20,6 +20,8 @@ class DeleteIndexMethodImpl implements DeleteIndexMethod {
 
     @Override
     public Uni<DeleteIndexResponse> deleteIndex(final DeleteIndexRequest request) {
+        log.debug("Delete index, request={}", request);
+
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteIndexOperation.deleteIndex(changeContext, sqlConnection, id))

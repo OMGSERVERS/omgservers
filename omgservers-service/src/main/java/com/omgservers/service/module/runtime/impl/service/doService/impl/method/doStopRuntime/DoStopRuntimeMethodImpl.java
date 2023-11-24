@@ -34,6 +34,8 @@ class DoStopRuntimeMethodImpl implements DoStopRuntimeMethod {
 
     @Override
     public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
+        log.debug("Do stop runtime, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

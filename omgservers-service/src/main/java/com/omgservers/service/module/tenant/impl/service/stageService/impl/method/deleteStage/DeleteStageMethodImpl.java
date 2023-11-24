@@ -29,6 +29,8 @@ class DeleteStageMethodImpl implements DeleteStageMethod {
 
     @Override
     public Uni<DeleteStageResponse> deleteStage(final DeleteStageRequest request) {
+        log.debug("Delete stage, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

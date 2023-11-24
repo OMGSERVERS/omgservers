@@ -22,6 +22,8 @@ class ViewMatchClientsMethodImpl implements ViewMatchClientsMethod {
 
     @Override
     public Uni<ViewMatchClientsResponse> viewMatchClients(final ViewMatchClientsRequest request) {
+        log.debug("View match clients, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();

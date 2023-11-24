@@ -33,15 +33,13 @@ class AssignClientMethodImpl implements AssignClientMethod {
 
     @Override
     public Uni<AssignClientResponse> assignClient(final AssignClientRequest request) {
+        log.debug("Assign client, request={}", request);
+
         final var server = request.getServer();
         final var connectionId = request.getConnectionId();
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().assignClient(request))
                 .call(assignClientResponse -> {
-
-                    log.info("Client was assigned, connectionId={}, client={}", connectionId,
-                            request.getAssignedClient());
-
                     if (assignClientResponse.getAssigned()) {
                         return respondWelcomeMessage(server, connectionId)
                                 .flatMap(response -> syncLog(request));

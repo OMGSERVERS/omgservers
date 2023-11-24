@@ -22,6 +22,8 @@ class GetVersionConfigMethodImpl implements GetVersionConfigMethod {
 
     @Override
     public Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request) {
+        log.debug("Get version config, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

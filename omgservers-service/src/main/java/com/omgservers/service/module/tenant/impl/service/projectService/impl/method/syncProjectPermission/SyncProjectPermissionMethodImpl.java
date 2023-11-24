@@ -28,6 +28,8 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
 
     @Override
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
+        log.debug("Sync project permission, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var permission = request.getPermission();
         final var tenantId = permission.getTenantId();

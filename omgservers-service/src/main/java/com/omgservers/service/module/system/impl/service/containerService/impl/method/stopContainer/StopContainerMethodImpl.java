@@ -19,6 +19,8 @@ class StopContainerMethodImpl implements StopContainerMethod {
 
     @Override
     public Uni<StopContainerResponse> stopContainer(final StopContainerRequest request) {
+        log.debug("Stop container, request={}", request);
+
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {

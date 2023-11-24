@@ -24,22 +24,22 @@ class WebServiceImpl implements WebService {
     final GatewayService gatewayService;
 
     @Override
-    public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
+    public Uni<RespondMessageResponse> respondMessage(final RespondMessageRequest request) {
         return gatewayService.respondMessage(request);
     }
 
     @Override
-    public Uni<AssignClientResponse> assignClient(AssignClientRequest request) {
+    public Uni<AssignClientResponse> assignClient(final AssignClientRequest request) {
         return gatewayService.assignClient(request);
     }
 
     @Override
-    public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
+    public Uni<AssignRuntimeResponse> assignRuntime(final AssignRuntimeRequest request) {
         return gatewayService.assignRuntime(request);
     }
 
     @Override
-    public Uni<RevokeRuntimeResponse> revokeRuntime(RevokeRuntimeRequest request) {
+    public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
         return gatewayService.revokeRuntime(request);
     }
 }

@@ -24,6 +24,8 @@ class SelectVersionRuntimeMethodImpl implements SelectVersionRuntimeMethod {
 
     @Override
     public Uni<SelectVersionRuntimeResponse> selectVersionRuntime(final SelectVersionRuntimeRequest request) {
+        log.debug("Select version runtime, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var versionId = request.getVersionId();
         return Uni.createFrom().voidItem()

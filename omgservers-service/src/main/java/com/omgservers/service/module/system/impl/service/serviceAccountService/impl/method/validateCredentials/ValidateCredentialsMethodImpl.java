@@ -22,6 +22,8 @@ class ValidateCredentialsMethodImpl implements ValidateCredentialsMethod {
 
     @Override
     public Uni<ValidateCredentialsResponse> validateCredentials(final ValidateCredentialsRequest request) {
+        log.debug("Validate credentials, request={}", request);
+
         final var username = request.getUsername();
         return findServiceAccount(username)
                 .map(serviceAccount -> {

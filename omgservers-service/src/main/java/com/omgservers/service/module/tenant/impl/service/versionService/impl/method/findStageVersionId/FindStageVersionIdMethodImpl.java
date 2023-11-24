@@ -22,6 +22,8 @@ class FindStageVersionIdMethodImpl implements FindStageVersionIdMethod {
 
     @Override
     public Uni<FindStageVersionIdResponse> findStageVersionId(FindStageVersionIdRequest request) {
+        log.debug("Find stage version id, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();

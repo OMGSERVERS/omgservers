@@ -32,6 +32,8 @@ class DoSetProfileMethodImpl implements DoSetProfileMethod {
 
     @Override
     public Uni<DoSetProfileResponse> doSetProfile(final DoSetProfileRequest request) {
+        log.debug("Do set profile, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var grant = RuntimeGrantTypeEnum.USER_CLIENT;

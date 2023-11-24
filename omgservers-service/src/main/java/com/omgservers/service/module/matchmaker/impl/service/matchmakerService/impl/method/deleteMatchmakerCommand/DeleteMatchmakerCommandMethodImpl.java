@@ -22,6 +22,8 @@ class DeleteMatchmakerCommandMethodImpl implements DeleteMatchmakerCommandMethod
 
     @Override
     public Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request) {
+        log.debug("Delete matchmaker command, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
 

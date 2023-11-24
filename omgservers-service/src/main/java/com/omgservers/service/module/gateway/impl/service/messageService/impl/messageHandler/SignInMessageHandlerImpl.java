@@ -33,6 +33,8 @@ class SignInMessageHandlerImpl implements MessageHandler {
 
     @Override
     public Uni<Void> handle(Long connectionId, MessageModel message) {
+        log.debug("Handle sign in message, connectionId={}, message={}", connectionId, message);
+
         final var messageBody = (SignInMessageBodyModel) message.getBody();
         final var tenant = messageBody.getTenantId();
         final var stage = messageBody.getStageId();

@@ -21,6 +21,8 @@ class DeleteContainerMethodImpl implements DeleteContainerMethod {
 
     @Override
     public Uni<DeleteContainerResponse> deleteContainer(final DeleteContainerRequest request) {
+        log.debug("Delete container, request={}", request);
+
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteContainerOperation.deleteContainer(changeContext,

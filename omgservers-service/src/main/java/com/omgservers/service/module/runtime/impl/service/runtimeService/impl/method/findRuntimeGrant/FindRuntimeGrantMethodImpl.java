@@ -22,6 +22,8 @@ class FindRuntimeGrantMethodImpl implements FindRuntimeGrantMethod {
 
     @Override
     public Uni<FindRuntimeGrantResponse> findRuntimeGrant(final FindRuntimeGrantRequest request) {
+        log.debug("Find runtime grant, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

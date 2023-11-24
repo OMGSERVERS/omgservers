@@ -40,6 +40,8 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
 
     @Override
     public Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request) {
+        log.debug("Do kick client, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var permission = RuntimeGrantTypeEnum.MATCH_CLIENT;

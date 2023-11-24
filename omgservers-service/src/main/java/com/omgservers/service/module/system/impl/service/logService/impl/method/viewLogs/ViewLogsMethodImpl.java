@@ -20,6 +20,8 @@ class ViewLogsMethodImpl implements ViewLogsMethod {
 
     @Override
     public Uni<ViewLogsResponse> viewLogs(ViewLogRequest request) {
+        log.debug("View logs, request={}", request);
+
         return pgPool.withTransaction(selectAllLogsOperation::selectAllLogs)
                 .map(ViewLogsResponse::new);
     }

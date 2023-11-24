@@ -27,6 +27,8 @@ class CollectLogsMethodImpl implements CollectLogsMethod {
 
     @Override
     public Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request) {
+        log.debug("Collect logs, request={}", request);
+
         return getServersOperation.getServers()
                 .flatMap(this::collectLogs)
                 .map(collectedLogs -> new CollectLogsAdminResponse(collectedLogs.size(), collectedLogs));

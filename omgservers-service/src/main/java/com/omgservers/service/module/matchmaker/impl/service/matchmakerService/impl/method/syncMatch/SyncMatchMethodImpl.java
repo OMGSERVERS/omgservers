@@ -25,6 +25,8 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
 
     @Override
     public Uni<SyncMatchResponse> syncMatch(final SyncMatchRequest request) {
+        log.debug("Sync match, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var match = request.getMatch();
         final var matchmakerId = match.getMatchmakerId();

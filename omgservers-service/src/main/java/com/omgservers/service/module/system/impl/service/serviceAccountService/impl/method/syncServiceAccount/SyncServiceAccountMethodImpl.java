@@ -21,6 +21,8 @@ class SyncServiceAccountMethodImpl implements SyncServiceAccountMethod {
 
     @Override
     public Uni<SyncServiceAccountResponse> syncServiceAccount(final SyncServiceAccountRequest request) {
+        log.debug("Sync service account, request={}", request);
+
         final var serviceAccount = request.getServiceAccount();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         syncServiceAccountOperation.upsertServiceAccount(changeContext, sqlConnection, serviceAccount))

@@ -25,6 +25,8 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
 
     @Override
     public Uni<SyncTenantResponse> syncTenant(final SyncTenantRequest request) {
+        log.debug("Sync tenant, request={}", request);
+
         final var tenant = request.getTenant();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

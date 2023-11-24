@@ -22,6 +22,8 @@ class ViewRuntimePermissionsMethodImpl implements ViewRuntimePermissionsMethod {
 
     @Override
     public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
+        log.debug("View runtime permissions, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

@@ -19,6 +19,8 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
 
     @Override
     public Uni<ValidateStageSecretResponse> validateStageSecret(final ValidateStageSecretRequest request) {
+        log.debug("Validate stage secret, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var secret = request.getSecret();

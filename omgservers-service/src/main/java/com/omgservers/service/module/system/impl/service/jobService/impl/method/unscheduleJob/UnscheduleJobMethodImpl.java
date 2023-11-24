@@ -27,6 +27,8 @@ class UnscheduleJobMethodImpl implements UnscheduleJobMethod {
 
     @Override
     public Uni<Void> unscheduleJob(final UnscheduleJobRequest request) {
+        log.debug("Unschedule job, request={}", request);
+
         final var shardKey = request.getShardKey();
         final var entityId = request.getEntityId();
         return Uni.createFrom().voidItem()

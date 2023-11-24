@@ -22,6 +22,8 @@ class FindMatchClientMethodImpl implements FindMatchClientMethod {
 
     @Override
     public Uni<FindMatchClientResponse> findMatchClient(final FindMatchClientRequest request) {
+        log.debug("Find match client, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();

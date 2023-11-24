@@ -21,6 +21,8 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
 
     @Override
     public Uni<GetPlayerResponse> getPlayer(final GetPlayerRequest request) {
+        log.debug("Get player, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var userId = request.getUserId();

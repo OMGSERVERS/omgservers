@@ -21,6 +21,8 @@ class FindServiceAccountMethodImpl implements FindServiceAccountMethod {
 
     @Override
     public Uni<FindServiceAccountResponse> findServiceAccount(final FindServiceAccountRequest request) {
+        log.debug("Find service account, request={}", request);
+
         final var username = request.getUsername();
         return pgPool.withTransaction(sqlConnection -> selectServiceAccountByUsernameOperation
                         .selectServiceAccountByUsername(sqlConnection, username))

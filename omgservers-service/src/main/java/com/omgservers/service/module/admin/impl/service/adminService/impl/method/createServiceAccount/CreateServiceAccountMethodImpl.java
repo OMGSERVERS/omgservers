@@ -27,6 +27,8 @@ class CreateServiceAccountMethodImpl implements CreateServiceAccountMethod {
 
     @Override
     public Uni<CreateServiceAccountAdminResponse> createServiceAccount(final CreateServiceAccountAdminRequest request) {
+        log.debug("Create service account, request={}", request);
+
         final var username = request.getUsername();
         final var password = request.getPassword();
 

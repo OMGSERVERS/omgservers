@@ -22,6 +22,8 @@ class DeleteStagePermissionMethodImpl implements DeleteStagePermissionMethod {
 
     @Override
     public Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request) {
+        log.debug("Delete stage permission, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

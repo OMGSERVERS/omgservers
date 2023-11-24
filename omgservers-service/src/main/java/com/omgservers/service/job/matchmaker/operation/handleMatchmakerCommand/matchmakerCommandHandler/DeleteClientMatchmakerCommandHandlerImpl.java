@@ -32,6 +32,8 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
     public Uni<Void> handle(final MatchmakerState matchmakerState,
                             final MatchmakerChangeOfState changeOfState,
                             final MatchmakerCommandModel matchmakerCommand) {
+        log.debug("Handle matchmaker command, {}", matchmakerCommand);
+
         final var body = (DeleteClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
         final var clientId = body.getId();
 

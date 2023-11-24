@@ -21,6 +21,8 @@ class DeleteServiceAccountMethodImpl implements DeleteServiceAccountMethod {
 
     @Override
     public Uni<DeleteServiceAccountResponse> deleteServiceAccount(final DeleteServiceAccountRequest request) {
+        log.debug("Delete service account, request={}", request);
+
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteServiceAccountOperation.deleteServiceAccount(changeContext, sqlConnection, id))

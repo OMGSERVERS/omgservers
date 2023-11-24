@@ -38,6 +38,8 @@ class MatchmakerMessageHandlerImpl implements MessageHandler {
 
     @Override
     public Uni<Void> handle(Long connectionId, MessageModel message) {
+        log.debug("Handle matchmaker message, connectionId={}, message={}", connectionId, message);
+
         final var assignedClient = getAssignedClient(connectionId);
         final var tenantId = assignedClient.getTenantId();
         final var stageId = assignedClient.getStageId();

@@ -28,6 +28,8 @@ class SyncStageMethodImpl implements SyncStageMethod {
 
     @Override
     public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
+        log.debug("Sync stage, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var stage = request.getStage();
         final var tenantId = stage.getTenantId();

@@ -22,6 +22,8 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
 
     @Override
     public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request) {
+        log.debug("View runtime commands, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

@@ -11,6 +11,7 @@ class PingServerMethodImpl implements PingServerMethod {
 
     @Override
     public Uni<PingServerAdminResponse> pingServer() {
+        log.debug("Ping server");
         return Uni.createFrom().item(new PingServerAdminResponse("PONG"));
     }
 }

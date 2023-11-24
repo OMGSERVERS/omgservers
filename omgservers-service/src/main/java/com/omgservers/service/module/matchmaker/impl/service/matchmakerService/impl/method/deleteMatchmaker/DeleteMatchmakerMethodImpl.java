@@ -23,6 +23,8 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     @Override
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request) {
+        log.debug("Delete matchmaker, request={}", request);
+
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

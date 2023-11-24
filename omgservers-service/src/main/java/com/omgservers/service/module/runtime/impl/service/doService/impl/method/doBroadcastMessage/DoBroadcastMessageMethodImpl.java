@@ -38,6 +38,8 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
 
     @Override
     public Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request) {
+        log.debug("Do broadcast message, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var message = request.getMessage();
 

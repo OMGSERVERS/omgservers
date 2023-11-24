@@ -22,6 +22,8 @@ class DeleteUserMethodImpl implements DeleteUserMethod {
 
     @Override
     public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
+        log.debug("Delete user, request={}", request);
+
         final var id = request.getId();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

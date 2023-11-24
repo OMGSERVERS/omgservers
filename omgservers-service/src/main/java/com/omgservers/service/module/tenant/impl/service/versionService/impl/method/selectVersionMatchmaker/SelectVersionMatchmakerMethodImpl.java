@@ -24,6 +24,8 @@ class SelectVersionMatchmakerMethodImpl implements SelectVersionMatchmakerMethod
 
     @Override
     public Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(final SelectVersionMatchmakerRequest request) {
+        log.debug("Select version matchmaker, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var versionId = request.getVersionId();
         return Uni.createFrom().voidItem()

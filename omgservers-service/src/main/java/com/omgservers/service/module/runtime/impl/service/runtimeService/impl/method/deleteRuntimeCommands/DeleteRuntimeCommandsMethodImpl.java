@@ -22,6 +22,8 @@ class DeleteRuntimeCommandsMethodImpl implements DeleteRuntimeCommandsMethod {
 
     @Override
     public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
+        log.debug("Delete runtime commands, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var runtimeId = request.getRuntimeId();

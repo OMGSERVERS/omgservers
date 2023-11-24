@@ -33,6 +33,8 @@ class DoUnicastMessageMethodImpl implements DoUnicastMessageMethod {
 
     @Override
     public Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request) {
+        log.debug("Do unicast message, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var userId = request.getUserId();
         final var clientId = request.getClientId();

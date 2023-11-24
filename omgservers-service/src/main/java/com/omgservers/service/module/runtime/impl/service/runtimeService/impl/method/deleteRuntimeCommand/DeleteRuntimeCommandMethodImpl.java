@@ -23,6 +23,8 @@ class DeleteRuntimeCommandMethodImpl implements DeleteRuntimeCommandMethod {
 
     @Override
     public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request) {
+        log.debug("Do runtime command, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();
         return Uni.createFrom().voidItem()

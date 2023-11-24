@@ -58,6 +58,8 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     @Override
     public Uni<Void> scheduleJob(ScheduleJobRequest request) {
+        log.debug("Scheduler job, request={}", request);
+
         final var shardKey = request.getShardKey();
         final var entityId = request.getEntityId();
         final var type = request.getType();

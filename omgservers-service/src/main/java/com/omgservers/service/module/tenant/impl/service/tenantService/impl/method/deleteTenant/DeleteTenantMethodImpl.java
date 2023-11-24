@@ -25,6 +25,8 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
     @Override
     public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
+        log.debug("Delete tenant, request={}", request);
+
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

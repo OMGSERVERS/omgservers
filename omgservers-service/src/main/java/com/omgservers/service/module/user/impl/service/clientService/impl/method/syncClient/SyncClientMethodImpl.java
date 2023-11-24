@@ -22,6 +22,8 @@ class SyncClientMethodImpl implements SyncClientMethod {
 
     @Override
     public Uni<SyncClientResponse> syncClient(final SyncClientRequest request) {
+        log.debug("Sync client, request={}", request);
+
         final var client = request.getClient();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

@@ -22,6 +22,8 @@ class DeleteProjectPermissionMethodImpl implements DeleteProjectPermissionMethod
 
     @Override
     public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(final DeleteProjectPermissionRequest request) {
+        log.debug("Delete project permission, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

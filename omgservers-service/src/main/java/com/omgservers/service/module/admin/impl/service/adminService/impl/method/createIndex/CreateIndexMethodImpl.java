@@ -27,6 +27,8 @@ class CreateIndexMethodImpl implements CreateIndexMethod {
 
     @Override
     public Uni<CreateIndexAdminResponse> createIndex(final CreateIndexAdminRequest request) {
+        log.debug("Create index, request={}", request);
+
         final var indexName = getConfigOperation.getConfig().indexName();
         final var shardCount = getConfigOperation.getConfig().shardCount();
         final var addresses = request.getAddresses();

@@ -22,6 +22,8 @@ class ViewStagesMethodImpl implements ViewStagesMethod {
 
     @Override
     public Uni<ViewStagesResponse> viewStages(final ViewStagesRequest request) {
+        log.debug("View stages, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

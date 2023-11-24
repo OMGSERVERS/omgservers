@@ -22,6 +22,8 @@ class DeleteMatchClientMethodImpl implements DeleteMatchClientMethod {
 
     @Override
     public Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request) {
+        log.debug("Delete match client, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
         return Uni.createFrom().voidItem()

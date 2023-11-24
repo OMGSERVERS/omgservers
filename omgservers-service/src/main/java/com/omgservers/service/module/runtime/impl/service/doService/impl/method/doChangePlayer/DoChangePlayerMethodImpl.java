@@ -39,6 +39,8 @@ class DoChangePlayerMethodImpl implements DoChangePlayerMethod {
 
     @Override
     public Uni<DoChangePlayerResponse> doChangePlayer(final DoChangePlayerRequest request) {
+        log.debug("Do change player, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var userId = request.getUserId();
         final var clientId = request.getClientId();

@@ -28,6 +28,8 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
 
     @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
+        log.debug("Sync runtime command, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var runtimeCommand = request.getRuntimeCommand();
         final var runtimeId = runtimeCommand.getRuntimeId();

@@ -33,6 +33,8 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
 
     @Override
     public Uni<DoSetAttributesResponse> doSetAttributes(final DoSetAttributesRequest request) {
+        log.debug("Do set attributes, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var grant = RuntimeGrantTypeEnum.USER_CLIENT;

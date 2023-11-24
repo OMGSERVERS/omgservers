@@ -21,6 +21,8 @@ class FindVersionMatchmakerMethodImpl implements FindVersionMatchmakerMethod {
 
     @Override
     public Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(final FindVersionMatchmakerRequest request) {
+        log.debug("Find version matchmaker, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();

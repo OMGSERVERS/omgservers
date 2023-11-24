@@ -125,6 +125,7 @@ public class MatchmakerApiImpl implements MatchmakerApi {
     }
 
     @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewRequestsResponse> viewRequests(final ViewRequestsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRequests);
     }

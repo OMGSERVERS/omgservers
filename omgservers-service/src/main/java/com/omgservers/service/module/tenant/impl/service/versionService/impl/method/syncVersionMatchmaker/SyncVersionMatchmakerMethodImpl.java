@@ -28,6 +28,7 @@ class SyncVersionMatchmakerMethodImpl implements SyncVersionMatchmakerMethod {
 
     @Override
     public Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(final SyncVersionMatchmakerRequest request) {
+        log.debug("Sync version matchmaker, request={}", request);
         final var shardKey = request.getRequestShardKey();
         final var versionMatchmaker = request.getVersionMatchmaker();
         final var tenantId = versionMatchmaker.getTenantId();

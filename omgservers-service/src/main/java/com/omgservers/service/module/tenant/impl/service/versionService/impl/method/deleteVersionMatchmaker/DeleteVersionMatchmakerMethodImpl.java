@@ -25,6 +25,8 @@ class DeleteVersionMatchmakerMethodImpl implements DeleteVersionMatchmakerMethod
 
     @Override
     public Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(final DeleteVersionMatchmakerRequest request) {
+        log.debug("Delete version matchmaker, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

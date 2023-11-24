@@ -22,6 +22,8 @@ class GetTenantMethodImpl implements GetTenantMethod {
 
     @Override
     public Uni<GetTenantResponse> getTenant(final GetTenantRequest request) {
+        log.debug("Get tenant, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var id = request.getId();

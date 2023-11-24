@@ -22,6 +22,8 @@ class FindRuntimePermissionMethodImpl implements FindRuntimePermissionMethod {
 
     @Override
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
+        log.debug("Find runtime permission, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

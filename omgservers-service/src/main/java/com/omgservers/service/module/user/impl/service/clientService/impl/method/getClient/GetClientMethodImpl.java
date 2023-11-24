@@ -21,6 +21,7 @@ class GetClientMethodImpl implements GetClientMethod {
 
     @Override
     public Uni<GetClientResponse> getClient(final GetClientRequest request) {
+        log.debug("Get client, request={}", request);
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var userId = request.getUserId();

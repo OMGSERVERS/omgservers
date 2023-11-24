@@ -22,6 +22,8 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
 
     @Override
     public Uni<DeleteClientResponse> deleteClient(final DeleteClientRequest request) {
+        log.debug("Delete client, request={}", request);
+
         final var userId = request.getUserId();
         final var clientId = request.getClientId();
         return checkShardOperation.checkShard(request.getRequestShardKey())

@@ -22,6 +22,8 @@ class GetVersionMatchmakerMethodImpl implements GetVersionMatchmakerMethod {
 
     @Override
     public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(final GetVersionMatchmakerRequest request) {
+        log.debug("Get version matchmaker, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();

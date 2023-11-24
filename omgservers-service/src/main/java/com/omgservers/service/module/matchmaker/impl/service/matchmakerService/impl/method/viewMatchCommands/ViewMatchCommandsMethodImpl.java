@@ -22,6 +22,8 @@ class ViewMatchCommandsMethodImpl implements ViewMatchCommandsMethod {
 
     @Override
     public Uni<ViewMatchCommandsResponse> viewMatchCommands(final ViewMatchCommandsRequest request) {
+        log.debug("View match commands, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();
 

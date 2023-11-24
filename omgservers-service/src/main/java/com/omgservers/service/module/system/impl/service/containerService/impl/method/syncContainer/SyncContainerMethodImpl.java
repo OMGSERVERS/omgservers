@@ -21,6 +21,8 @@ class SyncContainerMethodImpl implements SyncContainerMethod {
 
     @Override
     public Uni<SyncContainerResponse> syncContainer(final SyncContainerRequest request) {
+        log.debug("Sync container, request={}", request);
+
         final var container = request.getContainer();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertContainerOperation.upsertContainer(changeContext,

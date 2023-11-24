@@ -21,6 +21,8 @@ class FindVersionRuntimeMethodImpl implements FindVersionRuntimeMethod {
 
     @Override
     public Uni<FindVersionRuntimeResponse> findVersionRuntime(final FindVersionRuntimeRequest request) {
+        log.debug("Find version runtime, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();

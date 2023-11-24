@@ -45,6 +45,7 @@ class GatewayApiImpl implements GatewayApi {
     }
 
     @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::revokeRuntime);
     }

@@ -22,6 +22,8 @@ class ViewVersionsMethodImpl implements ViewVersionsMethod {
 
     @Override
     public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
+        log.debug("View versions, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

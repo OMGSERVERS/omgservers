@@ -35,6 +35,8 @@ class GetVersionMethodImpl implements GetVersionMethod {
 
     @Override
     public Uni<GetVersionWorkerResponse> getVersion(GetVersionWorkerRequest request) {
+        log.debug("Get version, request={}", request);
+
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var runtimeId = request.getRuntimeId();
 

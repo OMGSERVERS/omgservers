@@ -25,6 +25,8 @@ class SyncRuntimeGrantMethodImpl implements SyncRuntimeGrantMethod {
 
     @Override
     public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
+        log.debug("Sync runtime grant, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var runtimeGrant = request.getRuntimeGrant();
         final var runtimeId = runtimeGrant.getRuntimeId();

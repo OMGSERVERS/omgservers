@@ -22,6 +22,8 @@ GetProjectMethodImpl implements GetProjectMethod {
 
     @Override
     public Uni<GetProjectResponse> getProject(final GetProjectRequest request) {
+        log.debug("Get project, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

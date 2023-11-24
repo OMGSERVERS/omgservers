@@ -35,24 +35,28 @@ class GatewayServiceImpl implements GatewayService {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<RespondMessageResponse> respondMessage(RespondMessageRequest request) {
+    public Uni<RespondMessageResponse> respondMessage(final RespondMessageRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
+            log.debug("Handle request, request={}", request);
             return respondMessageMethod.respondMessage(request);
         } else {
+            log.debug("Route request, request={}", request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .respondMessage(request);
         }
     }
 
     @Override
-    public Uni<AssignClientResponse> assignClient(AssignClientRequest request) {
+    public Uni<AssignClientResponse> assignClient(final AssignClientRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
+            log.debug("Handle request, request={}", request);
             return assignClientMethod.assignClient(request);
         } else {
+            log.debug("Route request, request={}", request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .assignClient(request);
         }
@@ -63,20 +67,24 @@ class GatewayServiceImpl implements GatewayService {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
+            log.debug("Handle request, request={}", request);
             return assignRuntimeMethod.assignRuntime(request);
         } else {
+            log.debug("Route request, request={}", request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .assignRuntime(request);
         }
     }
 
     @Override
-    public Uni<RevokeRuntimeResponse> revokeRuntime(RevokeRuntimeRequest request) {
+    public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
+            log.debug("Handle request, request={}", request);
             return revokeRuntimeMethod.revokeRuntime(request);
         } else {
+            log.debug("Route request, request={}", request);
             return getGatewayModuleClientOperation.getClient(targetServer)
                     .revokeRuntime(request);
         }

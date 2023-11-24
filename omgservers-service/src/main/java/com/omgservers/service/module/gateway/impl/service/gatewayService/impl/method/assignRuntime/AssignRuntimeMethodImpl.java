@@ -33,6 +33,8 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
 
     @Override
     public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
+        log.debug("Assign runtime, request={}", request);
+
         final var server = request.getServer();
         final var connectionId = request.getConnectionId();
         final var runtimeId = request.getAssignedRuntime().getRuntimeId();
@@ -40,9 +42,6 @@ class AssignRuntimeMethodImpl implements AssignRuntimeMethod {
         return Uni.createFrom().voidItem()
                 .map(voidItem -> gatewayModule.getConnectionService().assignRuntime(request))
                 .call(assignRuntimeResponse -> {
-
-                    log.info("Runtime was assigned, id={}, connectionId={}", runtimeId, connectionId);
-
                     if (assignRuntimeResponse.getAssigned()) {
                         return respondAssignmentMessage(runtimeId, server, connectionId)
                                 .flatMap(response -> syncLog(request));

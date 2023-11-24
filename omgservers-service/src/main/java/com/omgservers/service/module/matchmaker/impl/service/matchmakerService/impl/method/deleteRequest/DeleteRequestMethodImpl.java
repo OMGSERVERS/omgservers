@@ -23,6 +23,8 @@ class DeleteRequestMethodImpl implements DeleteRequestMethod {
 
     @Override
     public Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request) {
+        log.debug("Delete request, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
         return Uni.createFrom().voidItem()

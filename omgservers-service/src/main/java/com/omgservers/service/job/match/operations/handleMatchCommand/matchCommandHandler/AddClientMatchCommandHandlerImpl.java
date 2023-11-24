@@ -44,6 +44,8 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
 
     @Override
     public Uni<Void> handle(MatchCommandModel matchCommand) {
+        log.debug("Handle match command, {}", matchCommand);
+
         final var matchmakerId = matchCommand.getMatchmakerId();
         final var matchId = matchCommand.getMatchId();
 
@@ -55,6 +57,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .flatMap(match -> userModule.getShortcutService().getClient(userId, clientId)
                         .flatMap(client -> {
                             final var runtimeId = match.getRuntimeId();
+                            log.info("Test0, {}, {}", match, client);
                             return syncRuntimeGrant(runtimeId, userId, clientId)
                                     .call(ignored -> syncAddClientRuntimeCommand(runtimeId, client))
                                     .call(ignored -> assignRuntime(runtimeId, client))

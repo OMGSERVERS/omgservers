@@ -22,6 +22,8 @@ class ViewVersionMatchmakersMethodImpl implements ViewVersionMatchmakersMethod {
 
     @Override
     public Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(final ViewVersionMatchmakersRequest request) {
+        log.debug("View version matchmaker, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

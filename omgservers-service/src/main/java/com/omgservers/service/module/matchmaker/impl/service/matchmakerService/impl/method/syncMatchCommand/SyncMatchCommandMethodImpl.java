@@ -25,6 +25,8 @@ class SyncMatchCommandMethodImpl implements SyncMatchCommandMethod {
 
     @Override
     public Uni<SyncMatchCommandResponse> syncMatchCommand(final SyncMatchCommandRequest request) {
+        log.debug("Sync match command, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var matchCommand = request.getMatchCommand();
         final var matchmakerId = matchCommand.getMatchmakerId();

@@ -28,6 +28,8 @@ class SyncVersionRuntimeMethodImpl implements SyncVersionRuntimeMethod {
 
     @Override
     public Uni<SyncVersionRuntimeResponse> syncVersionRuntime(final SyncVersionRuntimeRequest request) {
+        log.debug("Sync version runtime, request={}", request);
+
         final var shardKey = request.getRequestShardKey();
         final var versionRuntime = request.getVersionRuntime();
         final var tenantId = versionRuntime.getTenantId();

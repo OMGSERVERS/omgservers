@@ -21,7 +21,10 @@ services:
       - omgservers-db-1
       - omgservers-mq-1
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -44,7 +47,7 @@ services:
       - OMGSERVERS_WORKER_NETWORK=omgservers-workers-1
       - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
   omgservers-db-1:
-    image: "postgres:16.1"
+    image: "postgres:15.1"
     container_name: "omgservers-db-1"
     networks:
       - omgservers-backend-1
@@ -72,7 +75,10 @@ services:
       - omgservers-db-2
       - omgservers-mq-2
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -95,7 +101,7 @@ services:
       - OMGSERVERS_WORKER_NETWORK=omgservers-workers-2
       - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
   omgservers-db-2:
-    image: "postgres:16.1"
+    image: "postgres:15.1"
     container_name: "omgservers-db-2"
     networks:
       - omgservers-backend-2
@@ -121,7 +127,10 @@ services:
       - omgservers-db-3
       - omgservers-mq-3
     environment:
-      - OMGSERVERS_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-3:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
@@ -141,10 +150,10 @@ services:
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers-backend-3
+      - OMGSERVERS_WORKER_NETWORK=omgservers-workers-3
       - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
   omgservers-db-3:
-    image: "postgres:16.1"
+    image: "postgres:15.1"
     container_name: "omgservers-db-3"
     networks:
       - omgservers-backend-3

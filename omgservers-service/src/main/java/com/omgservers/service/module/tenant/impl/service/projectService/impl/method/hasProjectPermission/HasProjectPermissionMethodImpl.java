@@ -21,6 +21,8 @@ class HasProjectPermissionMethodImpl implements HasProjectPermissionMethod {
 
     @Override
     public Uni<HasProjectPermissionResponse> hasProjectPermission(HasProjectPermissionRequest request) {
+        log.debug("Has project permission, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

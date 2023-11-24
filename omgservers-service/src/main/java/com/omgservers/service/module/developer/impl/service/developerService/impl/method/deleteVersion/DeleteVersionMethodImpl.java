@@ -33,6 +33,8 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
     @Override
     public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
+        log.debug("Delete version, request={}", request);
+
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
         final var versionId = request.getId();

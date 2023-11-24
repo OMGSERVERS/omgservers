@@ -49,6 +49,8 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     @Override
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
+        log.debug("Create project, request={}", request);
+
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
         return checkCreateProjectPermission(tenantId, userId)

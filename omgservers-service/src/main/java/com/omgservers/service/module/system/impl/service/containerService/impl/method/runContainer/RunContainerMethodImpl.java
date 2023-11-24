@@ -25,6 +25,8 @@ class RunContainerMethodImpl implements RunContainerMethod {
 
     @Override
     public Uni<RunContainerResponse> runContainer(final RunContainerRequest request) {
+        log.debug("Run container, request={}", request);
+
         final var container = request.getContainer();
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -52,9 +54,13 @@ class RunContainerMethodImpl implements RunContainerMethod {
                             .exec();
                     log.info("Inspect container, response={}", inspectContainerResponse);
 
+                    log.info("Start container, id={}, qualifier={}, entity={}",
+                            container.getId(),
+                            container.getQualifier(),
+                            container.getEntityId());
+
                     final var startContainerResponse = dockerClient.startContainerCmd(name)
                             .exec();
-                    log.info("Start container, response={}", startContainerResponse);
                 })
                 .replaceWith(RunContainerResponse::new);
     }

@@ -40,6 +40,8 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
 
     @Override
     public Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request) {
+        log.debug("Do multicast message, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var recipients = request.getRecipients();
         final var message = request.getMessage();

@@ -16,6 +16,7 @@ class GenerateIdMethodImpl implements GenerateIdMethod {
 
     @Override
     public Uni<GenerateIdAdminResponse> getId() {
+        log.debug("Generate id");
         return Uni.createFrom().item(new GenerateIdAdminResponse(generateIdOperation.generateId()));
     }
 }

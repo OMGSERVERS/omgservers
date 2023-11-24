@@ -22,6 +22,8 @@ class ViewProjectsMethodImpl implements ViewProjectsMethod {
 
     @Override
     public Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request) {
+        log.debug("View projects, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

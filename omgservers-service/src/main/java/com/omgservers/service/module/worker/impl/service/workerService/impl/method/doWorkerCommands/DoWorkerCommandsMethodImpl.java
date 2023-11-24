@@ -28,6 +28,8 @@ class DoWorkerCommandsMethodImpl implements DoWorkerCommandsMethod {
 
     @Override
     public Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(final DoWorkerCommandsWorkerRequest request) {
+        log.debug("Do worker commands, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var userId = securityIdentity.<Long>getAttribute("userId");
 

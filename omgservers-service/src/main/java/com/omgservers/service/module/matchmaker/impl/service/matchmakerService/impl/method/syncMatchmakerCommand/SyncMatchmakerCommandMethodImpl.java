@@ -25,6 +25,8 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
 
     @Override
     public Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(final SyncMatchmakerCommandRequest request) {
+        log.debug("Sync matchmaker command, request={}", request);
+
         final var matchmakerCommand = request.getMatchmakerCommand();
         final var matchmakerId = matchmakerCommand.getMatchmakerId();
 

@@ -22,6 +22,8 @@ class DeleteRuntimeGrantMethodImpl implements DeleteRuntimeGrantMethod {
 
     @Override
     public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
+        log.debug("Delete runtime grant, request={}", request);
+
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();
         return checkShardOperation.checkShard(request.getRequestShardKey())

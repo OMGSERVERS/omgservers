@@ -39,6 +39,8 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
 
     @Override
     public Uni<Void> handle(MatchCommandModel matchCommand) {
+        log.debug("Handle match command, {}", matchCommand);
+
         final var matchmakerId = matchCommand.getMatchmakerId();
         final var matchId = matchCommand.getMatchId();
 

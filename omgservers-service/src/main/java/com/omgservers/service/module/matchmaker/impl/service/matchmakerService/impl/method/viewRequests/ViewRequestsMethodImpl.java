@@ -22,6 +22,8 @@ class ViewRequestsMethodImpl implements ViewRequestsMethod {
 
     @Override
     public Uni<ViewRequestsResponse> viewRequests(ViewRequestsRequest request) {
+        log.debug("View requests, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var matchmakerId = request.getMatchmakerId();

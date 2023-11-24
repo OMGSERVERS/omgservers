@@ -21,6 +21,8 @@ class RespondMessageMethodImpl implements RespondMessageMethod {
 
     @Override
     public Uni<RespondMessageResponse> respondMessage(final RespondMessageRequest request) {
+        log.debug("Respond message, request={}", request);
+
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> {
                     final var connectionId = request.getConnectionId();

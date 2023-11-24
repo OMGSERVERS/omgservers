@@ -22,6 +22,8 @@ class HasTenantPermissionMethodImpl implements HasTenantPermissionMethod {
 
     @Override
     public Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request) {
+        log.debug("Has tenant permission, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();

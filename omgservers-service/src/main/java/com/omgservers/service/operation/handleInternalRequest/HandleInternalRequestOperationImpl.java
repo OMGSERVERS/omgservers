@@ -33,8 +33,10 @@ class HandleInternalRequestOperationImpl implements HandleInternalRequestOperati
                     if (shard.foreign()) {
                         var serverUri = shard.serverUri();
                         final var client = api.apply(serverUri);
+                        log.debug("Route request, targetServer={}, request={}", serverUri, request);
                         return route.apply(client, request);
                     } else {
+                        log.debug("Handle request, request={}", request);
                         return handle.apply(request);
                     }
                 });

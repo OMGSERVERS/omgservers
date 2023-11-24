@@ -23,6 +23,8 @@ class SyncLogMethodImpl implements SyncLogMethod {
 
     @Override
     public Uni<SyncLogResponse> syncLog(SyncLogRequest request) {
+        log.debug("Sync log, request={}", request);
+
         final var logModel = request.getLog();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertLogOperation.upsertLog(changeContext, sqlConnection, logModel))

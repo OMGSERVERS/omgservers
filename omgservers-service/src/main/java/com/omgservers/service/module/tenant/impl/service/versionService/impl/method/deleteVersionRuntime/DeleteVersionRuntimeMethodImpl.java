@@ -25,6 +25,8 @@ class DeleteVersionRuntimeMethodImpl implements DeleteVersionRuntimeMethod {
 
     @Override
     public Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(final DeleteVersionRuntimeRequest request) {
+        log.debug("Delete version runtime, request={}", request);
+
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 

@@ -22,6 +22,8 @@ class UpdatePlayerProfileMethodImpl implements UpdatePlayerProfileMethod {
 
     @Override
     public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(UpdatePlayerProfileRequest request) {
+        log.debug("Update player profile, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var userId = request.getUserId();

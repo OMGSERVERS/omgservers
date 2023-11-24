@@ -22,6 +22,8 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
 
     @Override
     public Uni<SyncPlayerResponse> syncPlayer(final SyncPlayerRequest request) {
+        log.debug("Sync player, request={}", request);
+
         final var player = request.getPlayer();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(

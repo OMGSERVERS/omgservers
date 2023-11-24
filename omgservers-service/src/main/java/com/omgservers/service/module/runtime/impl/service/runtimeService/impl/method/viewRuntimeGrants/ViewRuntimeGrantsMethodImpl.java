@@ -22,6 +22,8 @@ class ViewRuntimeGrantsMethodImpl implements ViewRuntimeGrantsMethod {
 
     @Override
     public Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(final ViewRuntimeGrantsRequest request) {
+        log.debug("View runtime grants, request={}", request);
+
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var runtimeId = request.getRuntimeId();

@@ -26,6 +26,8 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
 
     @Override
     public Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request) {
+        log.debug("Delete runtime, request={}", request);
+
         final var id = request.getId();
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))

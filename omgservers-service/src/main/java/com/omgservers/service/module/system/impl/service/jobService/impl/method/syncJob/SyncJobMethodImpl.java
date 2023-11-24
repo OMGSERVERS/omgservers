@@ -20,6 +20,8 @@ class SyncJobMethodImpl implements SyncJobMethod {
 
     @Override
     public Uni<SyncJobResponse> syncJob(SyncJobRequest request) {
+        log.debug("Sync job, request={}", request);
+
         final var job = request.getJob();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertJobOperation.upsertJob(changeContext, sqlConnection, job))

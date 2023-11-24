@@ -22,6 +22,8 @@ class DeleteMatchCommandMethodImpl implements DeleteMatchCommandMethod {
 
     @Override
     public Uni<DeleteMatchCommandResponse> deleteMatchCommand(final DeleteMatchCommandRequest request) {
+        log.debug("Delete match command, request={}", request);
+
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
 
