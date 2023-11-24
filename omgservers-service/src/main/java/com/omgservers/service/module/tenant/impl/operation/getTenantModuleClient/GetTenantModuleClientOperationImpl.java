@@ -29,6 +29,9 @@ class GetTenantModuleClientOperationImpl implements GetTenantModuleClientOperati
             TenantModuleClient restClient = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(TenantModuleClient.class);
+
+            log.debug("Client was created, uri={}", uri);
+            
             cache.put(uri, restClient);
         }
         return cache.get(uri);

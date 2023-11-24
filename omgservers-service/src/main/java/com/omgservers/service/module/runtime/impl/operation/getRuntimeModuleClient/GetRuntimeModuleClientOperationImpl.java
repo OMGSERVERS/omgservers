@@ -29,6 +29,9 @@ class GetRuntimeModuleClientOperationImpl implements GetRuntimeModuleClientOpera
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(RuntimeModuleClient.class);
+
+            log.debug("Client was created, uri={}", uri);
+
             cache.put(uri, client);
         }
         return cache.get(uri);

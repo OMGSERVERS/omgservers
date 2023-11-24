@@ -29,6 +29,9 @@ class GetMatchmakerModuleClientOperationImpl implements GetMatchmakerModuleClien
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(MatchmakerModuleClient.class);
+
+            log.debug("Client was created, uri={}", uri);
+
             cache.put(uri, client);
         }
         return cache.get(uri);

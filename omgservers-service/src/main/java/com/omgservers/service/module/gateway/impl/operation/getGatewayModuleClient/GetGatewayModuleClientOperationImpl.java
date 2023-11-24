@@ -29,6 +29,9 @@ class GetGatewayModuleClientOperationImpl implements GetGatewayModuleClientOpera
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(GatewayModuleClient.class);
+
+            log.debug("Client was created, uri={}", uri);
+
             cache.put(uri, client);
         }
         return cache.get(uri);
