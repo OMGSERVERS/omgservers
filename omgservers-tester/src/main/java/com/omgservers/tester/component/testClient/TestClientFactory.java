@@ -18,7 +18,7 @@ public class TestClientFactory {
     final ObjectMapper objectMapper;
 
     public TestClient create() throws IOException, DeploymentException {
-        final var uri = getConfigOperation.getConfig().gatewayUri().resolve("/omgservers/gateway");
+        final var uri = getConfigOperation.getConfig().gatewayUri().resolve("/omgservers/ws-gateway/v1/connection");
         return new TestClient(objectMapper, uri);
     }
 }

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@ServerEndpoint("/omgservers/gateway")
+@ServerEndpoint("/omgservers/ws-gateway/v1/connection")
 public class WebsocketEndpoint {
 
     final WebsocketService websocketService;
