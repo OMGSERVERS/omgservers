@@ -8,6 +8,7 @@ import com.omgservers.service.module.system.impl.service.indexService.IndexServi
 import com.omgservers.service.module.system.impl.service.jobService.JobService;
 import com.omgservers.service.module.system.impl.service.logService.LogService;
 import com.omgservers.service.module.system.impl.service.serviceAccountService.ServiceAccountService;
+import com.omgservers.service.module.system.impl.service.shortcutService.ShortcutService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class SystemModuleImpl implements SystemModule {
 
     final ServiceAccountService serviceAccountService;
     final ContainerService containerService;
+    final ShortcutService shortcutService;
     final HandlerService handlerService;
     final EventService eventService;
     final IndexService indexService;
@@ -54,5 +56,10 @@ public class SystemModuleImpl implements SystemModule {
     @Override
     public ContainerService getContainerService() {
         return containerService;
+    }
+
+    @Override
+    public ShortcutService getShortcutService() {
+        return shortcutService;
     }
 }

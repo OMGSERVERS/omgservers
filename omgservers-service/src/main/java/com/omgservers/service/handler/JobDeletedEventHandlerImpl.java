@@ -1,12 +1,9 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.GetJobRequest;
-import com.omgservers.model.dto.system.GetJobResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
-import com.omgservers.model.job.JobModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -32,7 +29,7 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var jobId = body.getId();
 
-        return getDeletedJob(jobId)
+        return systemModule.getShortcutService().getJob(jobId)
                 .flatMap(job -> {
                     final var shardKey = job.getShardKey();
                     final var entityId = job.getEntityId();
@@ -45,11 +42,5 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
                     return systemModule.getJobService().unscheduleJob(request);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<JobModel> getDeletedJob(final Long id) {
-        final var request = new GetJobRequest(id);
-        return systemModule.getJobService().getJob(request)
-                .map(GetJobResponse::getJob);
     }
 }

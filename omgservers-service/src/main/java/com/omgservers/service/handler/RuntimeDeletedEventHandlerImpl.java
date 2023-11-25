@@ -1,11 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.container.ContainerModel;
-import com.omgservers.model.container.ContainerQualifierEnum;
-import com.omgservers.model.dto.system.DeleteContainerRequest;
-import com.omgservers.model.dto.system.DeleteContainerResponse;
-import com.omgservers.model.dto.system.FindContainerRequest;
-import com.omgservers.model.dto.system.FindContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
@@ -67,17 +61,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> deleteContainer(final Long runtimeId) {
-        return findContainer(runtimeId)
-                .flatMap(container -> {
-                    final var request = new DeleteContainerRequest(container.getId());
-                    return systemModule.getContainerService().deleteContainer(request)
-                            .map(DeleteContainerResponse::getDeleted);
-                });
-    }
-
-    Uni<ContainerModel> findContainer(final Long runtimeId) {
-        final var request = new FindContainerRequest(runtimeId, ContainerQualifierEnum.RUNTIME);
-        return systemModule.getContainerService().findContainer(request)
-                .map(FindContainerResponse::getContainer);
+        return systemModule.getShortcutService().findRuntimeContainer(runtimeId)
+                .flatMap(container -> systemModule.getShortcutService().deleteContainer(container.getId()));
     }
 }

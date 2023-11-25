@@ -26,6 +26,8 @@ public interface ShortcutService {
 
     Uni<List<RuntimePermissionModel>> viewRuntimePermissions(Long runtimeId);
 
+    Uni<Boolean> syncRuntimePermission(RuntimePermissionModel runtimePermission);
+
     Uni<Boolean> deleteRuntimePermission(Long runtimeId, Long id);
 
     Uni<Void> deleteRuntimePermissions(Long runtimeId);

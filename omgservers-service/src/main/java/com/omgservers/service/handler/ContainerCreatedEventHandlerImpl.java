@@ -1,10 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.container.ContainerModel;
-import com.omgservers.model.dto.system.GetContainerRequest;
-import com.omgservers.model.dto.system.GetContainerResponse;
-import com.omgservers.model.dto.system.RunContainerRequest;
-import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
@@ -35,20 +30,8 @@ public class ContainerCreatedEventHandlerImpl implements EventHandler {
 
         log.info("Container was created, id={}", id);
 
-        return getContainer(id)
-                .flatMap(this::runContainer)
+        return systemModule.getShortcutService().getContainer(id)
+                .flatMap(container -> systemModule.getShortcutService().runContainer(container))
                 .replaceWith(true);
-    }
-
-    Uni<ContainerModel> getContainer(final Long id) {
-        final var request = new GetContainerRequest(id);
-        return systemModule.getContainerService().getContainer(request)
-                .map(GetContainerResponse::getContainer);
-    }
-
-    Uni<Boolean> runContainer(final ContainerModel container) {
-        final var request = new RunContainerRequest(container);
-        return systemModule.getContainerService().runContainer(request)
-                .map(RunContainerResponse::getRan);
     }
 }

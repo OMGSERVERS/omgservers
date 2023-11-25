@@ -2,10 +2,6 @@ package com.omgservers.service.handler;
 
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
-import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
-import com.omgservers.model.dto.system.SyncContainerRequest;
-import com.omgservers.model.dto.system.SyncContainerResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.event.EventModel;
@@ -78,7 +74,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> {
                     final var runtimeId = runtime.getId();
                     final var userId = user.getId();
-                    return syncRuntimePermission(runtimeId, userId)
+                    return createRuntimePermission(runtimeId, userId)
                             .flatMap(wasRuntimePermissionCreated -> syncContainer(userId, password, runtime)
                                     .replaceWithVoid());
                 });
@@ -93,13 +89,11 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .replaceWith(user);
     }
 
-    Uni<Boolean> syncRuntimePermission(final Long runtimeId, final Long userId) {
+    Uni<Boolean> createRuntimePermission(final Long runtimeId, final Long userId) {
         final var runtimePermission = runtimePermissionModelFactory.create(runtimeId,
                 userId,
                 RuntimePermissionEnum.HANDLE_RUNTIME);
-        final var request = new SyncRuntimePermissionRequest(runtimePermission);
-        return runtimeModule.getRuntimeService().syncRuntimePermission(request)
-                .map(SyncRuntimePermissionResponse::getCreated);
+        return runtimeModule.getShortcutService().syncRuntimePermission(runtimePermission);
     }
 
     Uni<Boolean> syncContainer(final Long userId,
@@ -118,8 +112,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 ContainerQualifierEnum.RUNTIME,
                 workerImage,
                 config);
-        final var request = new SyncContainerRequest(container);
-        return systemModule.getContainerService().syncContainer(request)
-                .map(SyncContainerResponse::getCreated);
+        return systemModule.getShortcutService().syncContainer(container);
     }
 }

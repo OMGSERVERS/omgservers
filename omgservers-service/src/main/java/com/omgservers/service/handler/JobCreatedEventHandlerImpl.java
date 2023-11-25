@@ -1,12 +1,8 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.GetJobRequest;
-import com.omgservers.model.dto.system.GetJobResponse;
-import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
-import com.omgservers.model.job.JobModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -32,7 +28,7 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
         final var body = (JobCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 
-        return getJob(id)
+        return systemModule.getShortcutService().getJob(id)
                 .flatMap(job -> {
                     final var shardKey = job.getShardKey();
                     final var entityId = job.getEntityId();
@@ -40,15 +36,8 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
                     log.info("Job was created, id={}, qualifier={}, entity={}/{}",
                             id, qualifier, shardKey, entityId);
 
-                    final var request = new ScheduleJobRequest(shardKey, entityId, qualifier);
-                    return systemModule.getJobService().scheduleJob(request);
+                    return systemModule.getShortcutService().scheduleJob(shardKey, entityId, qualifier);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<JobModel> getJob(final Long id) {
-        final var request = new GetJobRequest(id);
-        return systemModule.getJobService().getJob(request)
-                .map(GetJobResponse::getJob);
     }
 }

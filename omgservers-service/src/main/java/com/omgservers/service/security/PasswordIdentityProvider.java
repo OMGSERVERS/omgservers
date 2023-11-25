@@ -1,7 +1,5 @@
 package com.omgservers.service.security;
 
-import com.omgservers.model.dto.system.ValidateCredentialsRequest;
-import com.omgservers.model.dto.system.ValidateCredentialsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -52,9 +50,7 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
                 throw new AuthenticationFailedException();
             }
         } else {
-            final var validateCredentialsRequest = new ValidateCredentialsRequest(username, password);
-            return systemModule.getServiceAccountService().validateCredentials(validateCredentialsRequest)
-                    .map(ValidateCredentialsResponse::getValid)
+            return systemModule.getShortcutService().validateCredentials(username, password)
                     .map(valid -> {
                         if (valid) {
                             final var principal = "sa/" + username;

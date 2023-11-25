@@ -1,7 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.SyncJobRequest;
-import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -88,8 +86,6 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var shardKey = match.getMatchmakerId();
         final var entityId = match.getId();
         final var job = jobModelFactory.create(shardKey, entityId, JobQualifierEnum.MATCH);
-        final var request = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJob(request)
-                .map(SyncJobResponse::getCreated);
+        return systemModule.getShortcutService().syncJob(job);
     }
 }

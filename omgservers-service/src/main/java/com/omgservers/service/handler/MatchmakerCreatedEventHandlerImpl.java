@@ -1,6 +1,5 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.system.SyncJobRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
@@ -52,8 +51,6 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId) {
         final var job = jobModelFactory.create(matchmakerId, matchmakerId, JobQualifierEnum.MATCHMAKER);
-        final var request = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJob(request)
-                .replaceWith(true);
+        return systemModule.getShortcutService().syncJob(job);
     }
 }

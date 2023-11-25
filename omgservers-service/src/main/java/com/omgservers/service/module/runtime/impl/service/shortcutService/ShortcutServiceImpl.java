@@ -16,6 +16,8 @@ import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
@@ -116,6 +118,13 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new ViewRuntimePermissionsRequest(runtimeId);
         return runtimeModule.getRuntimeService().viewRuntimePermissions(request)
                 .map(ViewRuntimePermissionsResponse::getRuntimePermissions);
+    }
+
+    @Override
+    public Uni<Boolean> syncRuntimePermission(final RuntimePermissionModel runtimePermission) {
+        final var request = new SyncRuntimePermissionRequest(runtimePermission);
+        return runtimeModule.getRuntimeService().syncRuntimePermission(request)
+                .map(SyncRuntimePermissionResponse::getCreated);
     }
 
     @Override

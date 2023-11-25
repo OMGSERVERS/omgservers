@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RunContainerResponse {
 
-    Boolean ran;
+    Boolean wasRun;
 }
