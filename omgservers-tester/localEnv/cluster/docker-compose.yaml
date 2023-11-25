@@ -1,5 +1,15 @@
 version: '2'
 services:
+  omgservers-gateway:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "omgservers-gateway"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+    networks:
+      - omgservers-frontend
+    volumes:
+      - ${PWD}/envoy.yaml:/etc/envoy/envoy.yaml
   omgservers-docker:
     image: "alpine/socat"
     container_name: "omgservers-docker"
@@ -11,8 +21,6 @@ services:
   omgservers-service-1:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-1"
-    ports:
-      - "10001:8080"
     networks:
       - omgservers-frontend
       - omgservers-backend-1
@@ -21,9 +29,9 @@ services:
       - omgservers-db-1
       - omgservers-mq-1
     environment:
-      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
-      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
@@ -65,8 +73,6 @@ services:
   omgservers-service-2:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-2"
-    ports:
-      - "10002:8080"
     networks:
       - omgservers-frontend
       - omgservers-backend-2
@@ -75,8 +81,8 @@ services:
       - omgservers-db-2
       - omgservers-mq-2
     environment:
-      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
@@ -117,8 +123,6 @@ services:
   omgservers-service-3:
     image: "omgservers/omgservers-service"
     container_name: "omgservers-service-3"
-    ports:
-      - "10003:8080"
     networks:
       - omgservers-frontend
       - omgservers-backend-3
@@ -127,8 +131,8 @@ services:
       - omgservers-db-3
       - omgservers-mq-3
     environment:
-      - OMGSERVERS_ROOT_LOG_LEVEL=DEBUG
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-3:5432/root
