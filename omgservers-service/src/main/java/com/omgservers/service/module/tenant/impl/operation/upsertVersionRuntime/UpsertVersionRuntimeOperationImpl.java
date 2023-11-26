@@ -26,9 +26,9 @@ class UpsertVersionRuntimeOperationImpl implements UpsertVersionRuntimeOperation
     public Uni<Boolean> upsertVersionRuntime(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
                                              final int shard,
-                                             final VersionRuntimeModel stageRuntime) {
-        final var tenantId = stageRuntime.getTenantId();
-        final var id = stageRuntime.getId();
+                                             final VersionRuntimeModel versionRuntime) {
+        final var tenantId = versionRuntime.getTenantId();
+        final var id = versionRuntime.getId();
 
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
@@ -42,11 +42,11 @@ class UpsertVersionRuntimeOperationImpl implements UpsertVersionRuntimeOperation
                 Arrays.asList(
                         id,
                         tenantId,
-                        stageRuntime.getVersionId(),
-                        stageRuntime.getCreated().atOffset(ZoneOffset.UTC),
-                        stageRuntime.getModified().atOffset(ZoneOffset.UTC),
-                        stageRuntime.getRuntimeId(),
-                        stageRuntime.getDeleted()
+                        versionRuntime.getVersionId(),
+                        versionRuntime.getCreated().atOffset(ZoneOffset.UTC),
+                        versionRuntime.getModified().atOffset(ZoneOffset.UTC),
+                        versionRuntime.getRuntimeId(),
+                        versionRuntime.getDeleted()
                 ),
                 () -> new VersionRuntimeCreatedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version runtime was created, " +

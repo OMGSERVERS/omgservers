@@ -9,5 +9,5 @@ public interface UpsertVersionRuntimeOperation {
     Uni<Boolean> upsertVersionRuntime(ChangeContext<?> changeContext,
                                       SqlConnection sqlConnection,
                                       int shard,
-                                      VersionRuntimeModel stageRuntime);
+                                      VersionRuntimeModel versionRuntime);
 }

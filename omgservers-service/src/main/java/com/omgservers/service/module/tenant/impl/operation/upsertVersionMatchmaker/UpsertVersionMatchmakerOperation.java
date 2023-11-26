@@ -9,5 +9,5 @@ public interface UpsertVersionMatchmakerOperation {
     Uni<Boolean> upsertVersionMatchmaker(ChangeContext<?> changeContext,
                                          SqlConnection sqlConnection,
                                          int shard,
-                                         VersionMatchmakerModel stageMatchmaker);
+                                         VersionMatchmakerModel versionMatchmaker);
 }

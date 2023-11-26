@@ -28,9 +28,9 @@ class UpsertVersionMatchmakerOperationImpl implements UpsertVersionMatchmakerOpe
     public Uni<Boolean> upsertVersionMatchmaker(final ChangeContext<?> changeContext,
                                                 final SqlConnection sqlConnection,
                                                 final int shard,
-                                                final VersionMatchmakerModel stageMatchmaker) {
-        final var tenantId = stageMatchmaker.getTenantId();
-        final var id = stageMatchmaker.getId();
+                                                final VersionMatchmakerModel versionMatchmaker) {
+        final var tenantId = versionMatchmaker.getTenantId();
+        final var id = versionMatchmaker.getId();
 
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
@@ -44,11 +44,11 @@ class UpsertVersionMatchmakerOperationImpl implements UpsertVersionMatchmakerOpe
                 Arrays.asList(
                         id,
                         tenantId,
-                        stageMatchmaker.getVersionId(),
-                        stageMatchmaker.getCreated().atOffset(ZoneOffset.UTC),
-                        stageMatchmaker.getModified().atOffset(ZoneOffset.UTC),
-                        stageMatchmaker.getMatchmakerId(),
-                        stageMatchmaker.getDeleted()
+                        versionMatchmaker.getVersionId(),
+                        versionMatchmaker.getCreated().atOffset(ZoneOffset.UTC),
+                        versionMatchmaker.getModified().atOffset(ZoneOffset.UTC),
+                        versionMatchmaker.getMatchmakerId(),
+                        versionMatchmaker.getDeleted()
                 ),
                 () -> new VersionMatchmakerCreatedEventBodyModel(tenantId, id),
                 () -> logModelFactory.create(String.format("Version matchmaker was created, " +
