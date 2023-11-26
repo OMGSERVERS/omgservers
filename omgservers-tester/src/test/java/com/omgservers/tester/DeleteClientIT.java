@@ -29,7 +29,10 @@ public class DeleteClientIT extends Assertions {
 
     @Test
     void deleteClientIT() throws Exception {
-        final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """
+                        """,
+                """
                         local var command = ...
 
                         if command.qualifier == "init_runtime" then

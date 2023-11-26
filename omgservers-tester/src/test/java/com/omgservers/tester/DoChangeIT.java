@@ -34,20 +34,6 @@ public class DoChangeIT extends Assertions {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
                         local var command = ...
-                                       
-                        if command.qualifier == "add_client" then
-                            return {
-                                {
-                                    qualifier = "change",
-                                    user_id = command.user_id,
-                                    client_id = command.client_id,
-                                    message = {
-                                        text = "hello"
-                                    }
-                                }
-                            }
-                        end
-                                                
                         if command.qualifier == "change_player" then
                             local var message = command.message
                             assert(message.text == "hello", "message.text is wrong")
@@ -62,7 +48,22 @@ public class DoChangeIT extends Assertions {
                                 }
                             }
                         end
-                                   
+                        """,
+                """
+                        local var command = ...
+                                       
+                        if command.qualifier == "add_client" then
+                            return {
+                                {
+                                    qualifier = "change",
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
+                                    message = {
+                                        text = "hello"
+                                    }
+                                }
+                            }
+                        end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("death-match", 1, 16, new ArrayList<>() {{
@@ -73,8 +74,6 @@ public class DoChangeIT extends Assertions {
         Thread.sleep(10000);
 
         try {
-
-
             final var client1 = testClientFactory.create();
             client1.signUp(version);
 

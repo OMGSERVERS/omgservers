@@ -25,40 +25,40 @@ public class SignInSignUpIT extends Assertions {
     @Test
     void signInSignUpIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                local var command = ...
-                                
-                if command.qualifier == "sign_up" then
-                    return {
-                        {
-                            qualifier = "respond",
-                            user_id = command.user_id,
-                            client_id = command.client_id,
-                            message = {
-                                text = "signed_up"
+                        local var command = ...
+                                        
+                        if command.qualifier == "sign_up" then
+                            return {
+                                {
+                                    qualifier = "respond",
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
+                                    message = {
+                                        text = "signed_up"
+                                    }
+                                }
                             }
-                        }
-                    }
-                end
-                                
-                if command.qualifier == "sign_in" then
-                    return {
-                        {
-                            qualifier = "respond",
-                            user_id = command.user_id,
-                            client_id = command.client_id,
-                            message = {
-                                text = "signed_in"
+                        end
+                                        
+                        if command.qualifier == "sign_in" then
+                            return {
+                                {
+                                    qualifier = "respond",
+                                    user_id = command.user_id,
+                                    client_id = command.client_id,
+                                    message = {
+                                        text = "signed_in"
+                                    }
+                                }
                             }
-                        }
-                    }
-                end
-                                
-                """);
+                        end
+                        """,
+                """
+                        """);
 
         Thread.sleep(10000);
 
         try {
-
             final var client = testClientFactory.create();
 
             client.signUp(version);

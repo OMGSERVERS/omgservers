@@ -28,7 +28,7 @@ public class RuntimeModel {
     Long versionId;
 
     @NotNull
-    RuntimeTypeEnum type;
+    RuntimeQualifierEnum qualifier;
 
     @NotNull
     RuntimeConfigModel config;

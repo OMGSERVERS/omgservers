@@ -28,12 +28,15 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     DeveloperApiTester developerApiTester;
 
     @Override
-    public TestVersionModel bootstrapTestVersion(String script) throws IOException {
-        return bootstrapTestVersion(script, VersionConfigModel.create());
+    public TestVersionModel bootstrapTestVersion(final String lobby,
+                                                 final String match) throws IOException {
+        return bootstrapTestVersion(lobby, match, VersionConfigModel.create());
     }
 
     @Override
-    public TestVersionModel bootstrapTestVersion(String script, VersionConfigModel versionConfig) throws IOException {
+    public TestVersionModel bootstrapTestVersion(final String lobby,
+                                                 final String match,
+                                                 final VersionConfigModel versionConfig) throws IOException {
         final var tenantId = adminApiTester.createTenant();
 
         final var createDeveloperAdminResponse = adminApiTester.createDeveloper(tenantId);
@@ -47,8 +50,10 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var stageSecret = createProjectDeveloperResponse.getSecret();
 
         final var sourceCode = VersionSourceCodeModel.create();
-        sourceCode.getFiles().add(new EncodedFileModel("main.lua", Base64.getEncoder()
-                .encodeToString(script.getBytes(StandardCharsets.UTF_8))));
+        sourceCode.getFiles().add(new EncodedFileModel("lobby.lua", Base64.getEncoder()
+                .encodeToString(lobby.getBytes(StandardCharsets.UTF_8))));
+        sourceCode.getFiles().add(new EncodedFileModel("match.lua", Base64.getEncoder()
+                .encodeToString(match.getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse =
                 developerApiTester.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();

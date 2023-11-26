@@ -32,7 +32,9 @@ public class DoStopMatchIT extends Assertions {
     @Test
     void doStopMatchIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
-                """                                                                                              
+                """
+                        """,
+                """
                         local var command = ...
                                                 
                         if command.qualifier == "add_client" then

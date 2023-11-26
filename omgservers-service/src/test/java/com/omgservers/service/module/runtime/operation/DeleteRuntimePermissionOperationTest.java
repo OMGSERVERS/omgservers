@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
@@ -46,7 +46,7 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     void givenRuntimeGrant_whenDeleteRuntimeGrant_thenDeleted() {
         final var shard = 0;
         final var runtime =
-                runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
+                runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeGrant = runtimeGrantModelFactory

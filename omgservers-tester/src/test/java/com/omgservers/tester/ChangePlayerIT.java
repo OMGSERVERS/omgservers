@@ -26,8 +26,8 @@ public class ChangePlayerIT extends Assertions {
 
     @Test
     void changePlayerIT() throws Exception {
-        final var version = bootstrapTestVersionOperation
-                .bootstrapTestVersion("""                                               
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """                                               
                         local var command = ...
 
                         if command.qualifier == "change_player" then
@@ -44,6 +44,8 @@ public class ChangePlayerIT extends Assertions {
                                 }
                             }
                         end
+                        """,
+                """
                         """);
 
         Thread.sleep(10000);

@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeOperationTestInterface;
@@ -37,7 +37,7 @@ class DeleteRuntimeOperationTest extends Assertions {
     @Test
     void givenRuntime_whenRuntimeTenant_thenDeleted() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(), versionId(), RuntimeTypeEnum.MATCH, new RuntimeConfigModel());
+        final var runtime1 = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH, new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 
         final var changeContext = deleteRuntimeOperation.deleteRuntime(shard, runtime1.getId());

@@ -20,9 +20,13 @@ public class BootstrapVersionIT extends Assertions {
 
     @Test
     public void bootstrapVersionIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                print("test")
-                """);
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """
+                        print("lobby")
+                        """,
+                """
+                        print("match")
+                        """);
 
         try {
             Thread.sleep(10000);

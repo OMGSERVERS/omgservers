@@ -1,6 +1,6 @@
 package com.omgservers.model.runtime;
 
-public enum RuntimeTypeEnum {
+public enum RuntimeQualifierEnum {
     LOBBY,
     MATCH,
 }

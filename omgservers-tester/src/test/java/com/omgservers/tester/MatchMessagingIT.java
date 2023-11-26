@@ -31,7 +31,10 @@ public class MatchMessagingIT extends Assertions {
 
     @Test
     void matchMessagingIT() throws Exception {
-        final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """
+                        """,
+                """
                         local var command = ...
                                                 
                         if command.qualifier == "handle_message" then

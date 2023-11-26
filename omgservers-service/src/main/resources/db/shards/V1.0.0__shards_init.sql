@@ -219,7 +219,7 @@ create table if not exists tab_runtime (
     modified timestamp with time zone not null,
     tenant_id bigint not null,
     version_id bigint not null,
-    type text not null,
+    qualifier text not null,
     config json not null,
     deleted boolean not null
 );

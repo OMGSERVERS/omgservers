@@ -28,7 +28,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, created, modified, tenant_id, version_id, type, config, deleted
+                        select id, created, modified, tenant_id, version_id, qualifier, config, deleted
                         from $schema.tab_runtime
                         where id = $1
                         limit 1

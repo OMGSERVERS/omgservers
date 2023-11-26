@@ -7,7 +7,7 @@ import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.match.MatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.factory.MatchClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
@@ -77,7 +77,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 runtimeId,
                 tenantId,
                 versionId,
-                RuntimeTypeEnum.MATCH,
+                RuntimeQualifierEnum.MATCH,
                 runtimeConfig);
         return runtimeModule.getShortcutService().syncRuntime(runtime);
     }

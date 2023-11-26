@@ -29,7 +29,10 @@ public class MessagingIT extends Assertions {
 
     @Test
     void messagingIT() throws Exception {
-        final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """
+                        """,
+                """
                         local var command = ...
                                                 
                         if command.qualifier == "init_runtime" then

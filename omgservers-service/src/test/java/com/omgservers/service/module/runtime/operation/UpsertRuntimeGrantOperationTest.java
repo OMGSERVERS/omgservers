@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeGrantModelFactory;
@@ -44,7 +44,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
-                RuntimeTypeEnum.MATCH,
+                RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
@@ -62,7 +62,7 @@ class UpsertRuntimeGrantOperationTest extends Assertions {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
-                RuntimeTypeEnum.MATCH,
+                RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 

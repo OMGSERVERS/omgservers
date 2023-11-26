@@ -44,7 +44,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                                     "type={}, " +
                                     "version={}/{}",
                             runtime.getId(),
-                            runtime.getType(),
+                            runtime.getQualifier(),
                             runtime.getTenantId(),
                             runtime.getVersionId());
 

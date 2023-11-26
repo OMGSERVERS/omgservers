@@ -4,7 +4,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -59,7 +59,7 @@ public class VersionRuntimeCreatedEventHandlerImpl implements EventHandler {
                 versionRuntime.getRuntimeId(),
                 versionRuntime.getTenantId(),
                 versionRuntime.getVersionId(),
-                RuntimeTypeEnum.LOBBY,
+                RuntimeQualifierEnum.LOBBY,
                 runtimeConfig);
         return runtimeModule.getShortcutService().syncRuntime(runtime);
     }

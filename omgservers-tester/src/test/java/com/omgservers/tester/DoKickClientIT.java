@@ -29,7 +29,10 @@ public class DoKickClientIT extends Assertions {
 
     @Test
     void doKickClientIT() throws Exception {
-        final var version = bootstrapTestVersionOperation.bootstrapTestVersion("""
+        final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
+                """
+                        """,
+                """
                         local var command = ...
                                                
                         if command.qualifier == "add_client" then

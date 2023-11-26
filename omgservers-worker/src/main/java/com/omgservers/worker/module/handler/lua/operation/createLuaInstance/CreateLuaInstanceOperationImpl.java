@@ -3,6 +3,7 @@ package com.omgservers.worker.module.handler.lua.operation.createLuaInstance;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.worker.module.handler.lua.component.luaInstance.LuaInstance;
 import com.omgservers.worker.operation.decodeFiles.DecodeFilesOperation;
+import com.omgservers.worker.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import org.luaj.vm2.lib.jse.JseMathLib;
 class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperation {
 
     final DecodeFilesOperation decodeFilesOperation;
+    final GetConfigOperation getConfigOperation;
 
     @Override
     public LuaInstance createLuaInstance(final VersionSourceCodeModel versionSourceCode) {
@@ -43,6 +45,11 @@ class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperation {
         globals.finder = new LuaResourceFinder(decodedFiles);
         globals.set("print", new LuaPrintFunction(globals));
         // TODO: determine filename
-        return new LuaInstance(globals, "main.lua");
+        final var runtimeQualifier = getConfigOperation.getConfig().runtimeQualifier();
+        log.info("Lua instance was created, runtimeQualifier={}", runtimeQualifier);
+        return switch (runtimeQualifier) {
+            case LOBBY -> new LuaInstance(globals, "lobby.lua");
+            case MATCH -> new LuaInstance(globals, "match.lua");
+        };
     }
 }

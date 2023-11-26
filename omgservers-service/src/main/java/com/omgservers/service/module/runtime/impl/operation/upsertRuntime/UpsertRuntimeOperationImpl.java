@@ -36,7 +36,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime(
-                            id, created, modified, tenant_id, version_id, type, config, deleted)
+                            id, created, modified, tenant_id, version_id, qualifier, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
@@ -47,7 +47,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getModified().atOffset(ZoneOffset.UTC),
                         runtime.getTenantId(),
                         runtime.getVersionId(),
-                        runtime.getType(),
+                        runtime.getQualifier(),
                         getConfigString(runtime),
                         runtime.getDeleted()
                 ),

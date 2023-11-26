@@ -60,7 +60,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(runtime -> {
                     log.info("Runtime was created, id={}, type={}",
                             runtime.getId(),
-                            runtime.getType());
+                            runtime.getQualifier());
 
                     return createContainer(runtime);
                 })
@@ -107,6 +107,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         environment.put("OMGSERVERS_USER_ID", userId.toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());
+        environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
         final var config = new ContainerConfigModel(environment);
         final var container = containerModelFactory.create(runtimeId,
                 ContainerQualifierEnum.RUNTIME,

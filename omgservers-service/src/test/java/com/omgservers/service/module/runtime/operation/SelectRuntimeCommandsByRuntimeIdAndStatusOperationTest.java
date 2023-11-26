@@ -42,14 +42,14 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions 
 //    void givenRuntimeCommands_whenSelectNewRuntimeCommands_thenSelected() {
 //        final var shard = 0;
 //
-//        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
+//        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeQualifierEnum.SCRIPT, RuntimeConfigModel.create());
 //        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 //        final var runtimeCommand11 = runtimeCommandModelFactory.create(runtime1.getId(), new InitMatchCommandBodyModel());
 //        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand11);
 //        final var runtimeCommand12 = runtimeCommandModelFactory.create(runtime1.getId(), new StopMatchMatchmakerCommandBodyModel());
 //        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand12);
 //
-//        final var runtime21 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeTypeEnum.SCRIPT, RuntimeConfigModel.create());
+//        final var runtime21 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeQualifierEnum.SCRIPT, RuntimeConfigModel.create());
 //        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime21);
 //
 //        final var runtimeCommand21 = runtimeCommandModelFactory.create(runtime21.getId(), new InitMatchCommandBodyModel());

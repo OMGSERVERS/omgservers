@@ -2,7 +2,7 @@ package com.omgservers.service.factory;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeTypeEnum;
+import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,16 +20,16 @@ public class RuntimeModelFactory {
 
     public RuntimeModel create(final Long tenantId,
                                final Long versionId,
-                               final RuntimeTypeEnum type,
+                               final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, type, config);
+        return create(id, tenantId, versionId, qualifier, config);
     }
 
     public RuntimeModel create(final Long id,
                                final Long tenantId,
                                final Long versionId,
-                               final RuntimeTypeEnum type,
+                               final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigModel config) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -39,7 +39,7 @@ public class RuntimeModelFactory {
         runtime.setModified(now);
         runtime.setTenantId(tenantId);
         runtime.setVersionId(versionId);
-        runtime.setType(type);
+        runtime.setQualifier(qualifier);
         runtime.setConfig(config);
         runtime.setDeleted(Boolean.FALSE);
         return runtime;

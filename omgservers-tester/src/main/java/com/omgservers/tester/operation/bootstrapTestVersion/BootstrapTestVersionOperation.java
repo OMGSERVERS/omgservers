@@ -7,7 +7,9 @@ import java.io.IOException;
 
 public interface BootstrapTestVersionOperation {
 
-    TestVersionModel bootstrapTestVersion(String script) throws IOException;
+    TestVersionModel bootstrapTestVersion(String lobby, String match) throws IOException;
 
-    TestVersionModel bootstrapTestVersion(String script, VersionConfigModel versionConfig) throws IOException;
+    TestVersionModel bootstrapTestVersion(String lobby,
+                                          String match,
+                                          VersionConfigModel versionConfig) throws IOException;
 }
