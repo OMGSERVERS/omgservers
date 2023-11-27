@@ -30,5 +30,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage -Dsonar.projectKey=OMGSERVERS_omgservers
+      - name: Start containers
+        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml up -d && sleep 30
       - name: Integration testing
         run: mvn -B -Dquarkus.test.profile=local -DskipITs=false -DdockerCompose.skip=false -f omgservers-tester/pom.xml verify
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml down
+      - name: Log into Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Push omgservers-service
+        run: docker push crionuke/omgservers-service:1.0.0-SNAPSHOT
+      - name: Push omgservers-worker
+        run: docker push crionuke/omgservers-worker:1.0.0-SNAPSHOT

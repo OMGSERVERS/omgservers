@@ -10,11 +10,6 @@
 
     <artifactId>omgservers-tester</artifactId>
 
-    <properties>
-        <dockerCompose.workDir>localEnv/cluster</dockerCompose.workDir>
-        <dockerCompose.skip>true</dockerCompose.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
@@ -38,33 +33,5 @@
             <artifactId>rest-assured</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.brachu</groupId>
-                <artifactId>docker-compose-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>up</goal>
-                            <goal>down</goal>
-                        </goals>
-                        <configuration>
-                            <projectName>${project.artifactId}</projectName>
-                            <workDir>${dockerCompose.workDir}</workDir>
-                            <file>${dockerCompose.workDir}/docker-compose.yaml</file>
-                            <wait>
-                                <value>60</value>
-                                <unit>SECONDS</unit>
-                            </wait>
-                            <removeOrphans>true</removeOrphans>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

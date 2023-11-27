@@ -1,223 +1,166 @@
 version: '3.8'
 services:
-  omgservers-gateway:
+  gw:
     image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "omgservers-gateway"
+    container_name: "gw"
     ports:
-      - "10000:10000"
-      - "10001:10001"
+      - "8080:8080"
     networks:
-      - omgservers-network
+      - omgservers
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-  omgservers-docker:
+  docker:
     image: "alpine/socat"
-    container_name: "omgservers-docker"
+    container_name: "docker"
     networks:
-      - omgservers-network
+      - omgservers
     command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  omgservers-service-1:
-    image: "omgservers/omgservers-service"
-    container_name: "omgservers-service-1"
+  svc1:
+    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    container_name: "svc-1"
     networks:
-      - omgservers-network
+      - omgservers
     depends_on:
-      - omgservers-db-1
-      - omgservers-mq-1
-    healthcheck:
-      test: curl -f http://localhost:9000/q/health/ready || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      - db-1
+      - mq-1
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
-      - OMGSERVERS_ACCESS_LOG_ENABLED=true
-      - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-1:5432/root
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
+      - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=omgservers-mq-1
+      - OMGSERVERS_AMQP_HOST=mq-1
       - OMGSERVERS_AMQP_PORT=5672
       - OMGSERVERS_AMQP_USERNAME=admin
       - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=0
-      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-1:8080
-      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-1:8080
-      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
-      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
+      - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
+      - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
+      - OMGSERVERS_SERVICE_USERNAME=service
+      - OMGSERVERS_SERVICE_PASSWORD=service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
-      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
+      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers-network
-      - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
-  omgservers-db-1:
+      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
+  db-1:
     image: "postgres:15.1"
-    container_name: "omgservers-db-1"
+    container_name: "db-1"
     networks:
-      - omgservers-network
+      - omgservers
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-    healthcheck:
-      test: pg_isready || exit 1
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  omgservers-mq-1:
+  mq-1:
     image: "rmohr/activemq"
-    container_name: "omgservers-mq-1"
-    ports:
-      - 18161:8161
+    container_name: "mq-1"
     networks:
-      - omgservers-network
-    healthcheck:
-      test: curl http://localhost:8161/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/healthStatus -u admin:admin
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  omgservers-service-2:
-    image: "omgservers/omgservers-service"
-    container_name: "omgservers-service-2"
+      - omgservers
+  svc-2:
+    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    container_name: "svc-2"
     networks:
-      - omgservers-network
+      - omgservers
     depends_on:
-      - omgservers-db-2
-      - omgservers-mq-2
-    healthcheck:
-      test: curl -f http://localhost:9000/q/health/ready || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      - db-2
+      - mq-2
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
-      - OMGSERVERS_ACCESS_LOG_ENABLED=true
-      - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-2:5432/root
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
+      - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=omgservers-mq-2
+      - OMGSERVERS_AMQP_HOST=mq-2
       - OMGSERVERS_AMQP_PORT=5672
       - OMGSERVERS_AMQP_USERNAME=admin
       - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=1
-      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-2:8080
-      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-2:8080
-      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
-      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
+      - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
+      - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
+      - OMGSERVERS_SERVICE_USERNAME=service
+      - OMGSERVERS_SERVICE_PASSWORD=service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
-      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
+      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers-network
-      - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
-  omgservers-db-2:
+      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
+  db-2:
     image: "postgres:15.1"
-    container_name: "omgservers-db-2"
+    container_name: "db-2"
     networks:
-      - omgservers-network
+      - omgservers
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-    healthcheck:
-      test: pg_isready || exit 1
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  omgservers-mq-2:
+  mq-2:
     image: "rmohr/activemq"
-    container_name: "omgservers-mq-2"
+    container_name: "mq-2"
     networks:
-      - omgservers-network
-    healthcheck:
-      test: curl http://localhost:8161/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/healthStatus -u admin:admin
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  omgservers-service-3:
-    image: "omgservers/omgservers-service"
-    container_name: "omgservers-service-3"
+      - omgservers
+  svc-3:
+    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    container_name: "svc-3"
     networks:
-      - omgservers-network
+      - omgservers
     depends_on:
-      - omgservers-db-3
-      - omgservers-mq-3
-    healthcheck:
-      test: curl -f http://localhost:9000/q/health/ready || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      - db-3
+      - mq-3
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
-      - OMGSERVERS_ACCESS_LOG_ENABLED=true
-      - OMGSERVERS_DATASOURCE_URL=postgresql://omgservers-db-3:5432/root
+      - OMGSERVERS_ACCESS_LOG_ENABLED=false
+      - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=omgservers-mq-3
+      - OMGSERVERS_AMQP_HOST=mq-3
       - OMGSERVERS_AMQP_PORT=5672
       - OMGSERVERS_AMQP_USERNAME=admin
       - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=2
-      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-3:8080
-      - OMGSERVERS_INTERNAL_URI=http://omgservers-service-3:8080
-      - OMGSERVERS_SERVICE_USERNAME=omgservers-service
-      - OMGSERVERS_SERVICE_PASSWORD=omgservers-service
+      - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
+      - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
+      - OMGSERVERS_SERVICE_USERNAME=service
+      - OMGSERVERS_SERVICE_PASSWORD=service
       - OMGSERVERS_ADMIN_USERNAME=admin
       - OMGSERVERS_ADMIN_PASSWORD_HASH=$$2a$$10$$gK.CQHaj3R/eilNFooNzZOkmiidAEKxKF67qoL6rUPI5.6f9U3Mwi
-      - OMGSERVERS_ADDRESSES=http://omgservers-service-1:8080,http://omgservers-service-2:8080,http://omgservers-service-3:8080
+      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers-network
-      - OMGSERVERS_DOCKER_HOST=tcp://omgservers-docker:2375
-  omgservers-db-3:
+      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
+  db-3:
     image: "postgres:15.1"
-    container_name: "omgservers-db-3"
+    container_name: "db-3"
     networks:
-      - omgservers-network
+      - omgservers
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-    healthcheck:
-      test: pg_isready || exit 1
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  omgservers-mq-3:
+  mq-3:
     image: "rmohr/activemq"
-    container_name: "omgservers-mq-3"
+    container_name: "mq-3"
     networks:
-      - omgservers-network
-    healthcheck:
-      test: curl http://localhost:8161/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/healthStatus -u admin:admin
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      - omgservers
 networks:
-  omgservers-network:
-    name: omgservers-network
+  omgservers:
+    name: omgservers
