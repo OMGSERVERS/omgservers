@@ -7,7 +7,9 @@ import java.net.URI;
 @ConfigMapping(prefix = "omgservers.tester")
 public interface TesterConfig {
 
-    URI gatewayUri();
+    URI externalUri();
+
+    URI adminUri();
 
     String adminUsername();
 

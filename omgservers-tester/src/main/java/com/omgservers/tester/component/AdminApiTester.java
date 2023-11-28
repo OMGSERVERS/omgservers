@@ -38,7 +38,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
@@ -60,7 +60,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
@@ -80,7 +80,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
@@ -96,7 +96,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
@@ -113,7 +113,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())

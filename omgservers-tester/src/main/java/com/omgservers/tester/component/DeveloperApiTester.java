@@ -33,7 +33,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenDeveloperRequest(userId, password)))
                 .when().put("/omgservers/developer-api/v1/request/create-token");
@@ -47,7 +47,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateProjectDeveloperRequest(tenantId)))
@@ -65,7 +65,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
@@ -82,7 +82,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().gatewayUri().toString())
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(

@@ -5,7 +5,7 @@ services:
     container_name: "egw"
     restart: always
     ports:
-      - "${GW_NETWORK}:10000-10002:10000-10002"
+      - "${GW_NETWORK}:10000-10004:10000-10004"
     networks:
       - frontend
     volumes:
@@ -52,14 +52,14 @@ services:
       - OMGSERVERS_AMQP_PASSWORD=${MQ_PASSWORD}
       - OMGSERVERS_DATACENTER_ID=${SVC_DATACENTER_ID}
       - OMGSERVERS_NODE_ID=${SVC_NODE_ID}
-      - OMGSERVERS_EXTERNAL_URI=http://omgservers-service-1:10001
-      - OMGSERVERS_INTERNAL_URI=http://igw:10001
+      - OMGSERVERS_EXTERNAL_URI=${SVC_EXTERNAL_URI}
+      - OMGSERVERS_INTERNAL_URI=${SVC_INTERNAL_URI}
       - OMGSERVERS_SERVICE_USERNAME=${SVC_SERVICE_USERNAME}
       - OMGSERVERS_SERVICE_PASSWORD=${SVC_SERVICE_PASSWORD}
       - OMGSERVERS_ADMIN_USERNAME=${SVC_ADMIN_USERNAME}
       - OMGSERVERS_ADMIN_PASSWORD_HASH=${SVC_ADMIN_PASSWORD_HASH}
-      - OMGSERVERS_ADDRESSES=${SVC_ADDRESS}
-      - OMGSERVERS_SHARD_COUNT=32768
+      - OMGSERVERS_ADDRESSES=${SVC_ADDRESSES}
+      - OMGSERVERS_SHARD_COUNT=128
       - OMGSERVERS_BOOTSTRAP_SERVICE=${SVC_BOOTSTRAP_SERVICE}
       - OMGSERVERS_TOKEN_LIFETIME=3600
       - OMGSERVERS_WORKER_NETWORK=workers
@@ -74,6 +74,8 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=omgservers
+    volumes:
+      - db:/var/lib/postgresql/data
   mq:
     image: "apache/activemq-artemis:latest-alpine"
     container_name: "mq"
@@ -83,6 +85,8 @@ services:
     environment:
       - ARTEMIS_USER=${MQ_USERNAME}
       - ARTEMIS_PASSWORD=${MQ_PASSWORD}
+    volumes:
+      - mq:/var/lib/artemis-instance
 networks:
   frontend:
     name: frontend
@@ -90,3 +94,10 @@ networks:
     name: backend
   workers:
     name: workers
+volumes:
+  db:
+    name: db
+    driver: local
+  mq:
+    name: mq
+    driver: local

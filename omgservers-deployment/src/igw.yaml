@@ -1,9 +1,9 @@
 static_resources:
   listeners:
-    - name: "worker"
+    - name: "worker-api"
       address:
         socket_address:
-          address: localhost
+          address: 0.0.0.0
           port_value: 10001
       filter_chains:
         - filters:
@@ -49,5 +49,5 @@ static_resources:
 admin:
   address:
     socket_address:
-      address: localhost
+      address: 0.0.0.0
       port_value: 10000
