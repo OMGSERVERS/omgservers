@@ -25,8 +25,11 @@ services:
     depends_on:
       - db-1
       - mq-1
+    tmpfs:
+      - /var/log/omgservers
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_CONSOLE_LOG_ENABLED=true
       - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
@@ -79,8 +82,11 @@ services:
     depends_on:
       - db-2
       - mq-2
+    tmpfs:
+      - /var/log/omgservers
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_CONSOLE_LOG_ENABLED=true
       - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
@@ -133,8 +139,11 @@ services:
     depends_on:
       - db-3
       - mq-3
+    tmpfs:
+      - /var/log/omgservers
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_CONSOLE_LOG_ENABLED=true
       - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false

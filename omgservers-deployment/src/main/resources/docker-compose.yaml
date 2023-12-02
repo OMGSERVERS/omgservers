@@ -38,8 +38,11 @@ services:
     depends_on:
       - db
       - mq
+    volumes:
+      - log:/var/log/omgservers
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
+      - OMGSERVERS_CONSOLE_LOG_ENABLED=false
       - OMGSERVERS_APP_LOG_LEVEL=INFO
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
@@ -102,4 +105,7 @@ volumes:
     driver: local
   mq:
     name: mq
+    driver: local
+  log:
+    name: log
     driver: local
