@@ -2,6 +2,7 @@ package com.omgservers.service.module.gateway.impl.service.websocketService.impl
 
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
+import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.service.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
 import com.omgservers.service.module.gateway.impl.service.connectionService.ConnectionService;
@@ -13,7 +14,6 @@ import com.omgservers.service.module.gateway.impl.service.websocketService.Webso
 import com.omgservers.service.module.gateway.impl.service.websocketService.request.CleanUpRequest;
 import com.omgservers.service.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -49,10 +49,13 @@ class WebsocketServiceImpl implements WebsocketService {
         final var deleteConnectionHelpRequest = new DeleteConnectionRequest(session);
         final var response = connectionService.deleteConnection(deleteConnectionHelpRequest);
 
-        if (response.getConnectionId().isPresent()) {
-            final var connection = response.getConnectionId().get();
-            if (response.getAssignedClient().isPresent()) {
-                final var assignedClient = response.getAssignedClient().get();
+        final var connectionIdOptional = response.getConnectionId();
+        if (connectionIdOptional.isPresent()) {
+            final var connection = connectionIdOptional.get();
+
+            final var assignedClientOptional = response.getAssignedClient();
+            if (assignedClientOptional.isPresent()) {
+                final var assignedClient = assignedClientOptional.get();
 
                 final var userId = assignedClient.getUserId();
                 final var clientId = assignedClient.getClientId();

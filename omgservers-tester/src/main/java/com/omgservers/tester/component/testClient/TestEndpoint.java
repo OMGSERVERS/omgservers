@@ -35,6 +35,7 @@ class TestEndpoint extends Endpoint {
             try {
                 messages.put(message);
             } catch (InterruptedException e) {
+                log.error(e.getMessage(), e);
             }
         });
     }
