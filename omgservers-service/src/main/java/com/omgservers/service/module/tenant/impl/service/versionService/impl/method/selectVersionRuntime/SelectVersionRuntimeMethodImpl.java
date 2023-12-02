@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -42,7 +42,7 @@ class SelectVersionRuntimeMethodImpl implements SelectVersionRuntimeMethod {
                         throw new ServerSideConflictException("Version runtime were not selected, " +
                                 "versionId=" + versionId);
                     } else {
-                        final var randomIndex = (new Random()).nextInt(versionRuntimes.size());
+                        final var randomIndex = ThreadLocalRandom.current().nextInt(versionRuntimes.size());
                         return versionRuntimes.get(randomIndex);
                     }
                 });

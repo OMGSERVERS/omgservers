@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -42,7 +42,7 @@ class SelectVersionMatchmakerMethodImpl implements SelectVersionMatchmakerMethod
                         throw new ServerSideConflictException("Version matchmakers were not selected, " +
                                 "versionId=" + versionId);
                     } else {
-                        final var randomIndex = (new Random()).nextInt(versionMatchmakers.size());
+                        final var randomIndex = ThreadLocalRandom.current().nextInt(versionMatchmakers.size());
                         return versionMatchmakers.get(randomIndex);
                     }
                 });
