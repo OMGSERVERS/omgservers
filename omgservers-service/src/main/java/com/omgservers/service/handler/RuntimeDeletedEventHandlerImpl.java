@@ -33,7 +33,9 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+        
         final var body = (RuntimeDeletedEventBodyModel) event.getBody();
         final var runtimeId = body.getId();
 

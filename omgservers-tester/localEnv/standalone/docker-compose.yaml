@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   docker:
     image: "alpine/socat"
@@ -20,7 +20,7 @@ services:
       - mq
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://db:5432/root
@@ -42,7 +42,8 @@ services:
       - OMGSERVERS_SHARD_COUNT=1
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_WORKERS_NETWORK=omgservers
+      - OMGSERVERS_DISABLE_DOCKER=false
       - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
   db:
     image: "postgres:15.1"
@@ -54,8 +55,13 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
   mq:
-    image: "rmohr/activemq"
+    image: "apache/activemq-artemis:2.31.2-alpine"
     container_name: "mq"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
 networks:

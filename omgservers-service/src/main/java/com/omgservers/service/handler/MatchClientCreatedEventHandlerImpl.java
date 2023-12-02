@@ -33,6 +33,8 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (MatchClientCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getMatchId();

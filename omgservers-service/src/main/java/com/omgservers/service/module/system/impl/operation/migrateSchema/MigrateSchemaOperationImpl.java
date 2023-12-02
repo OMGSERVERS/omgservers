@@ -1,4 +1,4 @@
-package com.omgservers.service.module.migration.impl.operation.migrate;
+package com.omgservers.service.module.system.impl.operation.migrateSchema;
 
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -14,14 +14,15 @@ import java.util.stream.IntStream;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class MigrateOperationImpl implements MigrateOperation {
+class MigrateSchemaOperationImpl implements MigrateSchemaOperation {
 
     final GetConfigOperation getConfigOperation;
+
     final DataSource dataSource;
 
     @Override
-    public void migrateSystemSchema(String location) {
-        Flyway flyway = Flyway.configure()
+    public void migrateSystemSchema(final String location) {
+        final var flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations(location)
                 .createSchemas(true)
@@ -31,7 +32,7 @@ class MigrateOperationImpl implements MigrateOperation {
     }
 
     @Override
-    public void migrateShardsSchema(String location) {
+    public void migrateShardsSchema(final String location) {
         final var shardCount = getConfigOperation.getConfig().shardCount();
         final var migrationConcurrency = getConfigOperation.getConfig().migrationConcurrency();
         final var migrationTasks = IntStream.range(0, shardCount)

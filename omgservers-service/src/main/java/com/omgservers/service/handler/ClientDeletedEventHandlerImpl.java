@@ -35,6 +35,8 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (ClientDeletedEventBodyModel) event.getBody();
         final var userId = body.getUserId();
         final var clientId = body.getId();

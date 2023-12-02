@@ -38,7 +38,9 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (MatchmakerMessageReceivedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var stageId = body.getStageId();

@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.bootstrap;
 
 import com.omgservers.model.index.IndexConfigModel;
+import com.omgservers.service.ServiceApplication;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.IndexModelFactory;
 import com.omgservers.service.factory.ServiceAccountModelFactory;
@@ -30,7 +31,7 @@ public class BootstrapService {
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
     @WithSpan
-    void startup(@Observes @Priority(2000) StartupEvent event) {
+    void startup(@Observes @Priority(ServiceApplication.START_UP_SERVICE_PRIORITY) StartupEvent event) {
         if (getConfigOperation.getConfig().bootstrapService()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> createIndex())

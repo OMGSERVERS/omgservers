@@ -39,13 +39,11 @@ public interface OmgserversConfig {
 
     boolean disableRelay();
 
-    boolean disableEventHandler();
+    String workersImage();
 
-    Integer eventHandlerConcurrency();
+    String workersNetwork();
 
-    String workerImage();
-
-    String workerNetwork();
+    boolean disableDocker();
 
     String dockerHost();
 }

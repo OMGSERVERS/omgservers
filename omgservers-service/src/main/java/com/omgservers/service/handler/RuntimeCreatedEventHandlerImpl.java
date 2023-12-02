@@ -53,6 +53,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 
@@ -100,7 +102,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                                final String password,
                                final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
-        final var workerImage = getConfigOperation.getConfig().workerImage();
+        final var workerImage = getConfigOperation.getConfig().workersImage();
         final var internalUri = getConfigOperation.getConfig().internalUri();
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_URL", internalUri.toString());

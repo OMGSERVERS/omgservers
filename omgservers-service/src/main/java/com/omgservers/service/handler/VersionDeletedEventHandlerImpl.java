@@ -33,7 +33,9 @@ public class VersionDeletedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (VersionDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var versionId = body.getId();

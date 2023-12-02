@@ -34,7 +34,9 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 

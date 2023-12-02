@@ -29,7 +29,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   svc:
-    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    image: "crionuke/omgservers-service:${SVC_VERSION}"
     container_name: "svc"
     restart: always
     networks:
@@ -59,10 +59,11 @@ services:
       - OMGSERVERS_ADMIN_USERNAME=${SVC_ADMIN_USERNAME}
       - OMGSERVERS_ADMIN_PASSWORD_HASH=${SVC_ADMIN_PASSWORD_HASH}
       - OMGSERVERS_ADDRESSES=${SVC_ADDRESSES}
-      - OMGSERVERS_SHARD_COUNT=128
+      - OMGSERVERS_SHARD_COUNT=1024
       - OMGSERVERS_BOOTSTRAP_SERVICE=${SVC_BOOTSTRAP_SERVICE}
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=workers
+      - OMGSERVERS_WORKERS_NETWORK=workers
+      - OMGSERVERS_DISABLE_DOCKER=false
       - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
   db:
     image: "postgres:15.1"
@@ -77,7 +78,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
   mq:
-    image: "apache/activemq-artemis:latest-alpine"
+    image: "apache/activemq-artemis:2.31.2-alpine"
     container_name: "mq"
     restart: always
     networks:
@@ -86,6 +87,7 @@ services:
       - ARTEMIS_USER=${MQ_USERNAME}
       - ARTEMIS_PASSWORD=${MQ_PASSWORD}
     volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
       - mq:/var/lib/artemis-instance
 networks:
   frontend:

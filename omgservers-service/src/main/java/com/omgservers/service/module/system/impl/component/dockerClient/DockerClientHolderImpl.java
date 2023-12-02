@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.component;
+package com.omgservers.service.module.system.impl.component.dockerClient;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Network;
@@ -34,30 +34,5 @@ class DockerClientHolderImpl implements DockerClientHolder {
         }
 
         return dockerClient;
-    }
-
-    @WithSpan
-    void startup(@Observes @Priority(1000) StartupEvent event) {
-        final var dockerHost = getConfigOperation.getConfig().dockerHost();
-        final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost(dockerHost)
-                .build();
-
-        final var httpClient = new ZerodepDockerHttpClient.Builder()
-                .dockerHost(config.getDockerHost())
-                .sslConfig(config.getSSLConfig())
-                .build();
-
-        final var dockerClient = DockerClientImpl.getInstance(config, httpClient);
-        dockerClientContainer.set(dockerClient);
-
-        final var pong = dockerClient.pingCmd().exec();
-        log.info("Ping docker, pong={}", pong);
-
-        final var networks = dockerClient.listNetworksCmd().exec().stream()
-                .map(Network::getName).toList();
-        log.info("Docker networks, networks={}", networks);
-
-        // TODO: check network list
     }
 }

@@ -24,7 +24,9 @@ public class ContainerCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (ContainerCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 

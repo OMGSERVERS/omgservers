@@ -28,7 +28,9 @@ public class MatchMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (MatchMessageReceivedEventBodyModel) event.getBody();
 
         final var userId = body.getUserId();

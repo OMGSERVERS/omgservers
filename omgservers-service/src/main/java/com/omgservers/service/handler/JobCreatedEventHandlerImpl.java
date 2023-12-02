@@ -24,7 +24,9 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (JobCreatedEventBodyModel) event.getBody();
         final var id = body.getId();
 

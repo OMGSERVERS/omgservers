@@ -5,7 +5,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
-import com.omgservers.service.module.system.impl.component.DockerClientHolder;
+import com.omgservers.service.module.system.impl.component.dockerClient.DockerClientHolder;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -38,7 +38,7 @@ class RunContainerMethodImpl implements RunContainerMethod {
                             .toList();
 
                     final var dockerClient = dockerClientHolder.getDockerClient();
-                    final var dockerNetwork = getConfigOperation.getConfig().workerNetwork();
+                    final var dockerNetwork = getConfigOperation.getConfig().workersNetwork();
 
                     final var createContainerResponse = dockerClient.createContainerCmd(image)
                             .withName(name)

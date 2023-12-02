@@ -24,7 +24,9 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (TenantCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getId();
 

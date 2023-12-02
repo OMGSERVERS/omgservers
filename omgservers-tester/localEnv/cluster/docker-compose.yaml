@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   gw:
     image: "envoyproxy/envoy:v1.28-latest"
@@ -27,7 +27,7 @@ services:
       - mq-1
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
@@ -49,7 +49,8 @@ services:
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_WORKERS_NETWORK=omgservers
+      - OMGSERVERS_DISABLE_DOCKER=false
       - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
   db-1:
     image: "postgres:15.1"
@@ -61,8 +62,13 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
   mq-1:
-    image: "rmohr/activemq"
+    image: "apache/activemq-artemis:2.31.2-alpine"
     container_name: "mq-1"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
   svc-2:
@@ -75,8 +81,8 @@ services:
       - mq-2
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
-      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
@@ -97,7 +103,8 @@ services:
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_WORKERS_NETWORK=omgservers
+      - OMGSERVERS_DISABLE_DOCKER=false
       - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
   db-2:
     image: "postgres:15.1"
@@ -109,8 +116,13 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
   mq-2:
-    image: "rmohr/activemq"
+    image: "apache/activemq-artemis:2.31.2-alpine"
     container_name: "mq-2"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
   svc-3:
@@ -123,8 +135,8 @@ services:
       - mq-3
     environment:
       - OMGSERVERS_ROOT_LOG_LEVEL=INFO
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
-      - OMGSERVERS_TRAFFIC_LOG_LEVEL=DEBUG
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
       - OMGSERVERS_ACCESS_LOG_ENABLED=false
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
@@ -145,7 +157,8 @@ services:
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=true
       - OMGSERVERS_TOKEN_LIFETIME=3600
-      - OMGSERVERS_WORKER_NETWORK=omgservers
+      - OMGSERVERS_WORKERS_NETWORK=omgservers
+      - OMGSERVERS_DISABLE_DOCKER=false
       - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
   db-3:
     image: "postgres:15.1"
@@ -157,8 +170,13 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
   mq-3:
-    image: "rmohr/activemq"
+    image: "apache/activemq-artemis:2.31.2-alpine"
     container_name: "mq-3"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
 networks:

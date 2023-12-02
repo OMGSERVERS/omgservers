@@ -32,7 +32,9 @@ public class VersionMatchmakerCreatedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (VersionMatchmakerCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var id = body.getId();

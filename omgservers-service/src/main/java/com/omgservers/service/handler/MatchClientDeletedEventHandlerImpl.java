@@ -30,7 +30,9 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (MatchClientDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchClientId = body.getId();

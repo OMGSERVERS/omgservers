@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.component;
+package com.omgservers.service.module.system.impl.component.dockerClient;
 
 import com.github.dockerjava.api.DockerClient;
 import jakarta.enterprise.context.ApplicationScoped;

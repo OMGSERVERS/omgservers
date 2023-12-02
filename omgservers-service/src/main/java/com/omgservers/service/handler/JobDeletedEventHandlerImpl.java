@@ -25,7 +25,9 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var jobId = body.getId();
 

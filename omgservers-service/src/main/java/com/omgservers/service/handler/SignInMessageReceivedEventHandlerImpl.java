@@ -53,7 +53,9 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     @Override
-    public Uni<Boolean> handle(EventModel event) {
+    public Uni<Boolean> handle(final EventModel event) {
+        log.debug("Handle event, {}", event);
+
         final var body = (SignInMessageReceivedEventBodyModel) event.getBody();
         final var server = body.getServer();
         final var connectionId = body.getConnectionId();
