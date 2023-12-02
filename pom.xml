@@ -28,7 +28,6 @@
         <module>omgservers-model</module>
         <module>omgservers-worker</module>
         <module>omgservers-tester</module>
-        <module>omgservers-deployment</module>
     </modules>
 
     <dependencies>
