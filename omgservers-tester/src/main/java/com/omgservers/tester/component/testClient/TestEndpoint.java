@@ -36,7 +36,7 @@ class TestEndpoint extends Endpoint {
                 messages.put(message);
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
-                throw new RuntimeException("Thread was interrupted", e);
+                Thread.currentThread().interrupt();
             }
         });
     }
