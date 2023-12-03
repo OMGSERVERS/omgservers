@@ -43,6 +43,6 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Push omgservers-service
-        run: docker push crionuke/omgservers-service:1.0.0-SNAPSHOT
+        run: docker push omgservers/omgservers-service:1.0.0-SNAPSHOT
       - name: Push omgservers-worker
-        run: docker push crionuke/omgservers-worker:1.0.0-SNAPSHOT
+        run: docker push omgservers/omgservers-worker:1.0.0-SNAPSHOT

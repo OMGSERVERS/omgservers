@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   svc:
-    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc"
     ports:
       - "8080:8080"

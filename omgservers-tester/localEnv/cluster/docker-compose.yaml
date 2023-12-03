@@ -18,7 +18,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   svc1:
-    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-1"
     networks:
       - omgservers
@@ -76,7 +76,7 @@ services:
     networks:
       - omgservers
   svc-2:
-    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-2"
     networks:
       - omgservers
@@ -134,7 +134,7 @@ services:
     networks:
       - omgservers
   svc-3:
-    image: "crionuke/omgservers-service:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-3"
     networks:
       - omgservers
