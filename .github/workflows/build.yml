@@ -31,7 +31,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage -Dsonar.projectKey=OMGSERVERS_omgservers
       - name: Start containers
-        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml up -d && sleep 60
+        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml up -d && sleep 90
+      - name: Check status
+        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml ps
       - name: Integration testing
         run: mvn -B -Dquarkus.test.profile=local -DskipITs=false -DdockerCompose.skip=false -f omgservers-tester/pom.xml verify
       - name: Stop containers
