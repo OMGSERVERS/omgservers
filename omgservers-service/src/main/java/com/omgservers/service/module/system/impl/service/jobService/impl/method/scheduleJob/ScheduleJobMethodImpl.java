@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -81,7 +82,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         } else {
             final var jobIntervalInSeconds = getJobIntervalOperation.getJobIntervalInSeconds(type);
             // Distribute jobs overs timeline
-            final var jobDelayInSeconds = (int) (Math.random() * jobIntervalInSeconds);
+            final var jobDelayInSeconds = ThreadLocalRandom.current().nextInt(jobIntervalInSeconds);
             scheduler.newJob(jobName)
                     .setInterval(jobIntervalInSeconds + "s")
                     .setDelayed(jobDelayInSeconds + "s")
