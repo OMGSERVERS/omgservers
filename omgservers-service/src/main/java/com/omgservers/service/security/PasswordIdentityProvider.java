@@ -38,7 +38,7 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
         final var password = new String(request.getPassword().getPassword());
 
         if (username.equals(getConfigOperation.getConfig().adminUsername())) {
-            if (BcryptUtil.matches(password, getConfigOperation.getConfig().adminPasswordHash())) {
+            if (password.equals(getConfigOperation.getConfig().adminPassword())) {
                 final var principal = "admin/" + username;
                 return Uni.createFrom().item(QuarkusSecurityIdentity.builder()
                         .setPrincipal(new QuarkusPrincipal(principal))

@@ -21,7 +21,7 @@ public interface OmgserversConfig {
 
     String adminUsername();
 
-    String adminPasswordHash();
+    String adminPassword();
 
     String indexName();
 
