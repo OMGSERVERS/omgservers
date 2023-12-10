@@ -35,7 +35,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
-        
+
         final var body = (RuntimeDeletedEventBodyModel) event.getBody();
         final var runtimeId = body.getId();
 
@@ -57,7 +57,9 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> runtimeModule.getShortcutService()
                                     .deleteRuntimeCommands(runtimeId))
                             .flatMap(voidItem -> runtimeModule.getShortcutService()
-                                    .deleteRuntimeGrants(runtimeId));
+                                    .deleteRuntimeGrants(runtimeId))
+                            .flatMap(voidItem -> systemModule.getShortcutService()
+                                    .deleteEntity(runtimeId));
                 })
                 .replaceWith(true);
     }

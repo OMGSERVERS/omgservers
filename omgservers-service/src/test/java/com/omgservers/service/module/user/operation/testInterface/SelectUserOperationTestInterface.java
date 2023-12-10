@@ -20,10 +20,9 @@ public class SelectUserOperationTestInterface {
     final PgPool pgPool;
 
     public UserModel selectUser(final int shard,
-                                final Long id,
-                                final Boolean deleted) {
+                                final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                        .selectUser(sqlConnection, shard, id, deleted))
+                        .selectUser(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

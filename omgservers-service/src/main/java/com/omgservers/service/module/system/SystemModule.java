@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system;
 
 import com.omgservers.service.module.system.impl.service.containerService.ContainerService;
+import com.omgservers.service.module.system.impl.service.entityService.EntityService;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
 import com.omgservers.service.module.system.impl.service.handlerService.HandlerService;
 import com.omgservers.service.module.system.impl.service.indexService.IndexService;
@@ -18,6 +19,8 @@ public interface SystemModule {
     ShortcutService getShortcutService();
 
     HandlerService getHandlerService();
+
+    EntityService getEntityService();
 
     EventService getEventService();
 

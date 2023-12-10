@@ -40,7 +40,7 @@ class SelectUserOperationTest extends Assertions {
         final var id = user1.getId();
         upsertUserOperation.upsertUser(shard, user1);
 
-        final var user2 = selectUserOperation.selectUser(shard, id, false);
+        final var user2 = selectUserOperation.selectUser(shard, id);
         assertEquals(user1, user2);
     }
 
@@ -50,6 +50,6 @@ class SelectUserOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectUserOperation
-                .selectUser(shard, id, false));
+                .selectUser(shard, id));
     }
 }

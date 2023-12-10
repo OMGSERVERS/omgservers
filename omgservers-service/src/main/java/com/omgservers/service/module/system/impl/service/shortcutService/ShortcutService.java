@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.service.shortcutService;
 
 import com.omgservers.model.container.ContainerModel;
+import com.omgservers.model.entitiy.EntityModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.model.index.IndexModel;
@@ -52,4 +53,12 @@ public interface ShortcutService {
     Uni<Boolean> handleEvent(EventModel event);
 
     Uni<Boolean> updateEventStatus(Long id, EventStatusEnum status);
+
+    Uni<EntityModel> findEntity(Long entityId);
+
+    Uni<Boolean> syncEntity(EntityModel entity);
+
+    Uni<Boolean> deleteEntity(Long id);
+
+    Uni<Boolean> findAndDeleteEntity(final Long entityId);
 }

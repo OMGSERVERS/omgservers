@@ -1,8 +1,11 @@
 package com.omgservers.service.handler;
 
+import com.omgservers.model.entitiy.EntityQualifierEnum;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
+import com.omgservers.service.factory.EntityModelFactory;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -17,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
+    final SystemModule systemModule;
+
+    final EntityModelFactory entityModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -33,7 +39,9 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         return tenantModule.getShortcutService().getTenant(tenantId)
                 .flatMap(tenant -> {
                     log.info("Tenant was created, tenant={}", tenantId);
-                    return Uni.createFrom().voidItem();
+
+                    final var entity = entityModelFactory.create(tenantId, EntityQualifierEnum.TENANT);
+                    return systemModule.getShortcutService().syncEntity(entity);
                 })
                 .replaceWith(true);
     }

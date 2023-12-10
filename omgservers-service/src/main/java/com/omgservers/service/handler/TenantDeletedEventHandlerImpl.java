@@ -3,6 +3,7 @@ package com.omgservers.service.handler;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
+    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -32,10 +34,13 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
         return tenantModule.getShortcutService().getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Tenant was deleted, tenantId={}", tenantId);
+                    log.info("Tenant was deleted, tenant={}", tenantId);
 
                     return tenantModule.getShortcutService().deleteTenantPermissions(tenantId)
-                            .flatMap(voidItem -> tenantModule.getShortcutService().deleteProjects(tenantId));
+                            .flatMap(voidItem -> tenantModule.getShortcutService()
+                                    .deleteProjects(tenantId))
+                            .flatMap(voidItem -> systemModule.getShortcutService()
+                                    .findAndDeleteEntity(tenantId));
                 })
                 .replaceWith(true);
     }

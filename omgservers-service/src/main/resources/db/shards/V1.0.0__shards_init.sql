@@ -114,7 +114,6 @@ create table if not exists tab_tenant_stage (
 create index if not exists idx_tenant_stage_tenant_id on tab_tenant_stage(tenant_id);
 create index if not exists idx_tenant_stage_project_id on tab_tenant_stage(project_id);
 
-
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,

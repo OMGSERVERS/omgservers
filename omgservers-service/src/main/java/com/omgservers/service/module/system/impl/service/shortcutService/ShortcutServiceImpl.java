@@ -4,10 +4,14 @@ import com.omgservers.model.container.ContainerModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.system.DeleteContainerRequest;
 import com.omgservers.model.dto.system.DeleteContainerResponse;
+import com.omgservers.model.dto.system.DeleteEntityRequest;
+import com.omgservers.model.dto.system.DeleteEntityResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
 import com.omgservers.model.dto.system.DeleteJobResponse;
 import com.omgservers.model.dto.system.FindContainerRequest;
 import com.omgservers.model.dto.system.FindContainerResponse;
+import com.omgservers.model.dto.system.FindEntityRequest;
+import com.omgservers.model.dto.system.FindEntityResponse;
 import com.omgservers.model.dto.system.FindIndexRequest;
 import com.omgservers.model.dto.system.FindIndexResponse;
 import com.omgservers.model.dto.system.FindJobRequest;
@@ -29,6 +33,8 @@ import com.omgservers.model.dto.system.StopContainerRequest;
 import com.omgservers.model.dto.system.StopContainerResponse;
 import com.omgservers.model.dto.system.SyncContainerRequest;
 import com.omgservers.model.dto.system.SyncContainerResponse;
+import com.omgservers.model.dto.system.SyncEntityRequest;
+import com.omgservers.model.dto.system.SyncEntityResponse;
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
@@ -40,6 +46,7 @@ import com.omgservers.model.dto.system.UpdateEventsStatusRequest;
 import com.omgservers.model.dto.system.UpdateEventsStatusResponse;
 import com.omgservers.model.dto.system.ValidateCredentialsRequest;
 import com.omgservers.model.dto.system.ValidateCredentialsResponse;
+import com.omgservers.model.entitiy.EntityModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.model.index.IndexModel;
@@ -209,5 +216,32 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new UpdateEventsStatusRequest(Collections.singletonList(id), status);
         return systemModule.getEventService().updateEventsStatus(request)
                 .map(UpdateEventsStatusResponse::getUpdated);
+    }
+
+    @Override
+    public Uni<EntityModel> findEntity(final Long entityId) {
+        final var request = new FindEntityRequest(entityId);
+        return systemModule.getEntityService().findEntity(request)
+                .map(FindEntityResponse::getEntity);
+    }
+
+    @Override
+    public Uni<Boolean> syncEntity(final EntityModel entity) {
+        final var request = new SyncEntityRequest(entity);
+        return systemModule.getEntityService().syncEntity(request)
+                .map(SyncEntityResponse::getCreated);
+    }
+
+    @Override
+    public Uni<Boolean> deleteEntity(final Long id) {
+        final var request = new DeleteEntityRequest(id);
+        return systemModule.getEntityService().deleteEntity(request)
+                .map(DeleteEntityResponse::getDeleted);
+    }
+
+    @Override
+    public Uni<Boolean> findAndDeleteEntity(final Long entityId) {
+        return findEntity(entityId)
+                .flatMap(entity -> deleteEntity(entity.getId()));
     }
 }

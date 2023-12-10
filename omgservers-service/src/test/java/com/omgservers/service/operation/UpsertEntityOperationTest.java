@@ -1,9 +1,9 @@
 package com.omgservers.service.operation;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.service.operation.testInterface.DeleteJobOperationTestInterface;
 import com.omgservers.service.operation.testInterface.UpsertJobOperationTestInterface;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -13,11 +13,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteJobOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
-
-    @Inject
-    DeleteJobOperationTestInterface deleteJobOperation;
+class UpsertEntityOperationTest extends Assertions {
 
     @Inject
     UpsertJobOperationTestInterface upsertJobOperation;
@@ -29,21 +25,21 @@ class DeleteJobOperationTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenJob_whenDeleteJob_thenTrue() {
-        final var job = jobModelFactory.create(shardKey(),
-                entityId(),
-                JobQualifierEnum.TENANT);
-        upsertJobOperation.upsertJob(job);
-
-        final var changeContext = deleteJobOperation.deleteJob(job.getId());
+    void givenJob_whenUpsertJob_thenTrue() {
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.TENANT);
+        final var changeContext = upsertJobOperation.upsertJob(job);
         assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.JOB_CREATED));
     }
 
     @Test
-    void givenUnknownId_whenDeleteJob_thenFalse() {
-        final var unknownId = generateIdOperation.generateId();
-        final var changeContext = deleteJobOperation.deleteJob(unknownId);
+    void givenJob_whenUpsertJob_thenFalse() {
+        final var job = jobModelFactory.create(shardKey(), entityId(), JobQualifierEnum.TENANT);
+        upsertJobOperation.upsertJob(job);
+
+        final var changeContext = upsertJobOperation.upsertJob(job);
         assertFalse(changeContext.getResult());
+        assertTrue(changeContext.getChangeEvents().isEmpty());
     }
 
     Long shardKey() {

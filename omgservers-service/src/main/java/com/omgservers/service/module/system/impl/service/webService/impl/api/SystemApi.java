@@ -1,11 +1,15 @@
 package com.omgservers.service.module.system.impl.service.webService.impl.api;
 
+import com.omgservers.model.dto.system.DeleteEntityRequest;
+import com.omgservers.model.dto.system.DeleteEntityResponse;
 import com.omgservers.model.dto.system.DeleteIndexRequest;
 import com.omgservers.model.dto.system.DeleteIndexResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
 import com.omgservers.model.dto.system.DeleteJobResponse;
 import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
 import com.omgservers.model.dto.system.DeleteServiceAccountResponse;
+import com.omgservers.model.dto.system.FindEntityRequest;
+import com.omgservers.model.dto.system.FindEntityResponse;
 import com.omgservers.model.dto.system.FindIndexRequest;
 import com.omgservers.model.dto.system.FindIndexResponse;
 import com.omgservers.model.dto.system.FindJobRequest;
@@ -19,6 +23,8 @@ import com.omgservers.model.dto.system.GetJobResponse;
 import com.omgservers.model.dto.system.GetServiceAccountRequest;
 import com.omgservers.model.dto.system.GetServiceAccountResponse;
 import com.omgservers.model.dto.system.ScheduleJobRequest;
+import com.omgservers.model.dto.system.SyncEntityRequest;
+import com.omgservers.model.dto.system.SyncEntityResponse;
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
@@ -94,4 +100,16 @@ public interface SystemApi {
     @PUT
     @Path("/view-logs")
     Uni<ViewLogsResponse> viewLogs(ViewLogRequest request);
+
+    @PUT
+    @Path("/find-entity")
+    Uni<FindEntityResponse> findEntity(FindEntityRequest request);
+
+    @PUT
+    @Path("/sync-entity")
+    Uni<SyncEntityResponse> syncEntity(SyncEntityRequest request);
+
+    @PUT
+    @Path("/delete-entity")
+    Uni<DeleteEntityResponse> deleteEntity(DeleteEntityRequest request);
 }

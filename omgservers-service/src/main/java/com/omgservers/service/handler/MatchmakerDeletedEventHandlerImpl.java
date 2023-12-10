@@ -44,7 +44,9 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> matchmakerModule.getShortcutService()
                                     .deleteRequests(matchmakerId))
                             .flatMap(voidItem -> matchmakerModule.getShortcutService()
-                                    .deleteMatches(matchmakerId));
+                                    .deleteMatches(matchmakerId))
+                            .flatMap(voidItem -> systemModule.getShortcutService()
+                                    .findAndDeleteEntity(matchmakerId));
                 })
                 .replaceWith(true);
     }

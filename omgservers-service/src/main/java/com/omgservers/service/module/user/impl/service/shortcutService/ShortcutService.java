@@ -10,6 +10,8 @@ public interface ShortcutService {
 
     Uni<UserModel> validateCredentials(Long userId, String password);
 
+    Uni<UserModel> getUser(Long id);
+
     Uni<PlayerModel> getPlayer(Long userId, Long id);
 
     Uni<PlayerModel> findPlayer(Long userId, Long stageId);

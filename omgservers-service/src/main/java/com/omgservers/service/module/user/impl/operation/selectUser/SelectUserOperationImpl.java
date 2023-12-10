@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -23,21 +23,17 @@ class SelectUserOperationImpl implements SelectUserOperation {
     @Override
     public Uni<UserModel> selectUser(final SqlConnection sqlConnection,
                                      final int shard,
-                                     final Long id,
-                                     final Boolean deleted) {
+                                     final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
                         select id, created, modified, role, password_hash, deleted
                         from $schema.tab_user
-                        where id = $1 and deleted = $2
+                        where id = $1
                         limit 1
                         """,
-                Arrays.asList(
-                        id,
-                        deleted
-                ),
+                Collections.singletonList(id),
                 "User",
                 userModelMapper::fromRow);
     }

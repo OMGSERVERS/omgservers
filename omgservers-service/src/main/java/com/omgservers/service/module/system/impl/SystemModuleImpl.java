@@ -2,6 +2,7 @@ package com.omgservers.service.module.system.impl;
 
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.containerService.ContainerService;
+import com.omgservers.service.module.system.impl.service.entityService.EntityService;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
 import com.omgservers.service.module.system.impl.service.handlerService.HandlerService;
 import com.omgservers.service.module.system.impl.service.indexService.IndexService;
@@ -23,6 +24,7 @@ public class SystemModuleImpl implements SystemModule {
     final ContainerService containerService;
     final ShortcutService shortcutService;
     final HandlerService handlerService;
+    final EntityService entityService;
     final EventService eventService;
     final IndexService indexService;
     final JobService jobService;
@@ -56,6 +58,11 @@ public class SystemModuleImpl implements SystemModule {
     @Override
     public ContainerService getContainerService() {
         return containerService;
+    }
+
+    @Override
+    public EntityService getEntityService() {
+        return entityService;
     }
 
     @Override

@@ -44,7 +44,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                     final var password = request.getPassword();
                     return changeWithContextOperation.<UserTokenContainerModel>changeWithContext(
                                     (changeContext, sqlConnection) ->
-                                            selectUserOperation.selectUser(sqlConnection, shard, userId, false)
+                                            selectUserOperation.selectUser(sqlConnection, shard, userId)
                                                     .flatMap(user -> validateCredentialsOperation
                                                             .validateCredentials(user, password))
                                                     .flatMap(user -> {

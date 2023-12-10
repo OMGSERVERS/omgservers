@@ -37,8 +37,10 @@ create table if not exists tab_job (
     entity_id bigint not null,
     qualifier text not null,
     deleted boolean not null,
-    unique(shard_key, entity_id, qualifier)
+    unique(entity_id)
 );
+
+create index if not exists idx_job_entity_id on tab_job(entity_id);
 
 create table if not exists tab_container (
     id bigint primary key,
@@ -48,11 +50,26 @@ create table if not exists tab_container (
     qualifier text not null,
     image text not null,
     config json not null,
-    deleted boolean not null
+    deleted boolean not null,
+    unique(entity_id)
 );
+
+create index if not exists idx_container_entity_id on tab_container(entity_id);
 
 create table if not exists tab_log (
     id bigint primary key,
     created timestamp with time zone not null,
     message text not null
 );
+
+create table if not exists tab_entity (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    entity_id bigint not null,
+    qualifier text not null,
+    deleted boolean not null,
+    unique(entity_id)
+);
+
+create index if not exists idx_entity_entity_id on tab_entity(entity_id);

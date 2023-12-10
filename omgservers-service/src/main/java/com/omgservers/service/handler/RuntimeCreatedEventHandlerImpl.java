@@ -4,6 +4,7 @@ import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
+import com.omgservers.model.entitiy.EntityQualifierEnum;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
@@ -12,6 +13,7 @@ import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.ContainerModelFactory;
+import com.omgservers.service.factory.EntityModelFactory;
 import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.factory.RuntimePermissionModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
@@ -43,6 +45,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
     final ContainerModelFactory containerModelFactory;
+    final EntityModelFactory entityModelFactory;
     final UserModelFactory userModelFactory;
     final JobModelFactory jobModelFactory;
 
@@ -56,15 +59,20 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         log.debug("Handle event, {}", event);
 
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
-        final var id = body.getId();
+        final var runtimeId = body.getId();
 
-        return runtimeModule.getShortcutService().getRuntime(id)
+        return runtimeModule.getShortcutService().getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     log.info("Runtime was created, id={}, type={}",
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    return createContainer(runtime);
+                    return createContainer(runtime)
+                            .flatMap(voidItem -> {
+                                final var entity = entityModelFactory
+                                        .create(runtimeId, EntityQualifierEnum.RUNTIME);
+                                return systemModule.getShortcutService().syncEntity(entity);
+                            });
                 })
                 .replaceWith(true);
     }

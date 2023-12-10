@@ -11,6 +11,8 @@ import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
+import com.omgservers.model.dto.user.GetUserRequest;
+import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import com.omgservers.model.player.PlayerAttributesModel;
@@ -35,6 +37,13 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new ValidateCredentialsRequest(userId, password);
         return userModule.getUserService().validateCredentials(request)
                 .map(ValidateCredentialsResponse::getUser);
+    }
+
+    @Override
+    public Uni<UserModel> getUser(final Long id) {
+        final var request = new GetUserRequest(id);
+        return userModule.getUserService().getUser(request)
+                .map(GetUserResponse::getUser);
     }
 
     @Override

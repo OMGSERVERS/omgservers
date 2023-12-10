@@ -1,11 +1,8 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
-import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -32,7 +29,7 @@ public class VersionRuntimeDeletedEventHandlerImpl implements EventHandler {
     @Override
     public Uni<Boolean> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
-        
+
         final var body = (VersionRuntimeDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var versionRuntimeId = body.getId();
@@ -51,12 +48,5 @@ public class VersionRuntimeDeletedEventHandlerImpl implements EventHandler {
                     return runtimeModule.getShortcutService().deleteRuntime(runtimeId);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<Boolean> deleteRuntime(final VersionRuntimeModel versionRuntime) {
-        final var runtimeId = versionRuntime.getRuntimeId();
-        final var deleteRuntimeRequest = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().deleteRuntime(deleteRuntimeRequest)
-                .map(DeleteRuntimeResponse::getDeleted);
     }
 }

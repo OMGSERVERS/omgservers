@@ -18,6 +18,8 @@ import com.omgservers.model.dto.user.GetPlayerProfileRequest;
 import com.omgservers.model.dto.user.GetPlayerProfileResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
+import com.omgservers.model.dto.user.GetUserRequest;
+import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
 import com.omgservers.model.dto.user.IntrospectTokenResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
@@ -39,6 +41,10 @@ import jakarta.ws.rs.Path;
 
 @Path("/omgservers/user-api/v1/request")
 public interface UserApi {
+
+    @PUT
+    @Path("/get-user")
+    Uni<GetUserResponse> getUser(GetUserRequest request);
 
     @PUT
     @Path("/sync-user")

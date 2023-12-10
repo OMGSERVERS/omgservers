@@ -18,6 +18,8 @@ import com.omgservers.model.dto.user.GetPlayerProfileRequest;
 import com.omgservers.model.dto.user.GetPlayerProfileResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
+import com.omgservers.model.dto.user.GetUserRequest;
+import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
 import com.omgservers.model.dto.user.IntrospectTokenResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
@@ -48,6 +50,12 @@ class UserApiImpl implements UserApi {
 
     final HandleApiRequestOperation handleApiRequestOperation;
     final WebService webService;
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetUserResponse> getUser(final GetUserRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getUser);
+    }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
