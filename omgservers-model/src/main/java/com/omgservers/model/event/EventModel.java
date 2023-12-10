@@ -15,12 +15,6 @@ import java.time.Instant;
 @JsonDeserialize(using = EventDeserializer.class)
 public class EventModel {
 
-    public static void validate(EventModel event) {
-        if (event == null) {
-            throw new IllegalArgumentException("event is null");
-        }
-    }
-
     @NotNull
     Long id;
 

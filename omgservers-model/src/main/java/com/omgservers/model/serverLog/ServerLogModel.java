@@ -13,12 +13,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ServerLogModel {
 
-    public static void validate(ServerLogModel log) {
-        if (log == null) {
-            throw new IllegalArgumentException("log is null");
-        }
-    }
-
     @NotNull
     Long id;
 
