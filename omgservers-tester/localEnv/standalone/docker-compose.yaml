@@ -13,6 +13,7 @@ services:
     container_name: "svc"
     ports:
       - "8080:8080"
+      - "9000:9000"
     networks:
       - omgservers
     depends_on:
