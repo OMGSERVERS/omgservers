@@ -1,5 +1,7 @@
 package com.omgservers.service.module.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
+import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
 import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
@@ -12,8 +14,16 @@ import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
+import com.omgservers.model.dto.admin.FindIndexAdminRequest;
+import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
+import com.omgservers.model.dto.admin.SyncServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.SyncServiceAccountAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -30,12 +40,32 @@ public interface AdminApi {
     Uni<GenerateIdAdminResponse> generateId();
 
     @PUT
+    @Path("/bcrypt-hash")
+    Uni<BcryptHashAdminResponse> bcryptHash(BcryptHashAdminRequest request);
+
+    @PUT
+    @Path("/find-index")
+    Uni<FindIndexAdminResponse> findIndex(FindIndexAdminRequest request);
+
+    @PUT
     @Path("/create-index")
     Uni<CreateIndexAdminResponse> createIndex(CreateIndexAdminRequest request);
 
     @PUT
+    @Path("/sync-index")
+    Uni<SyncIndexAdminResponse> syncIndex(SyncIndexAdminRequest request);
+
+    @PUT
+    @Path("/find-service-account")
+    Uni<FindServiceAccountAdminResponse> findServiceAccount(FindServiceAccountAdminRequest request);
+
+    @PUT
     @Path("/create-service-account")
     Uni<CreateServiceAccountAdminResponse> createServiceAccount(CreateServiceAccountAdminRequest request);
+
+    @PUT
+    @Path("/sync-service-account")
+    Uni<SyncServiceAccountAdminResponse> syncServiceAccount(SyncServiceAccountAdminRequest request);
 
     @PUT
     @Path("/create-tenant")

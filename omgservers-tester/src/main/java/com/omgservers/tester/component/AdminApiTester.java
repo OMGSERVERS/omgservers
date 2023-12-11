@@ -34,7 +34,9 @@ public class AdminApiTester {
 
     final ObjectMapper objectMapper;
 
-    public IndexModel createIndex(final List<URI> addresses) throws IOException {
+    public IndexModel createIndex(final String name,
+                                  final Integer shards,
+                                  final List<URI> addresses) throws IOException {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
@@ -42,7 +44,7 @@ public class AdminApiTester {
                 .contentType(ContentType.JSON)
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
-                .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(addresses)))
+                .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(name, shards, addresses)))
                 .when()
                 .put("/omgservers/admin-api/v1/request/create-index");
 

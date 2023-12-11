@@ -1,5 +1,7 @@
 package com.omgservers.service.module.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
+import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
 import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
@@ -12,8 +14,16 @@ import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
+import com.omgservers.model.dto.admin.FindIndexAdminRequest;
+import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
+import com.omgservers.model.dto.admin.SyncServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.SyncServiceAccountAdminResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.admin.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -46,14 +56,42 @@ public class AdminApiImpl implements AdminApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
+    public Uni<BcryptHashAdminResponse> bcryptHash(BcryptHashAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::bcryptHash);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
+    public Uni<FindIndexAdminResponse> findIndex(final FindIndexAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findIndex);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateIndexAdminResponse> createIndex(final CreateIndexAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createIndex);
+    }
+
+    @Override
+    public Uni<SyncIndexAdminResponse> syncIndex(final SyncIndexAdminRequest request) {
+        return null;
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
+    public Uni<FindServiceAccountAdminResponse> findServiceAccount(final FindServiceAccountAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findServiceAccount);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateServiceAccountAdminResponse> createServiceAccount(final CreateServiceAccountAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createServiceAccount);
+    }
+
+    @Override
+    public Uni<SyncServiceAccountAdminResponse> syncServiceAccount(SyncServiceAccountAdminRequest request) {
+        return null;
     }
 
     @Override

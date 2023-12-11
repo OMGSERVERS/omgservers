@@ -8,6 +8,8 @@ create table if not exists tab_index (
     unique(name)
 );
 
+create index if not exists idx_index_name on tab_index(name);
+
 create table if not exists tab_service_account (
     id bigint primary key,
     created timestamp with time zone not null,
@@ -17,6 +19,8 @@ create table if not exists tab_service_account (
     deleted boolean not null,
     unique(username)
 );
+
+create index if not exists idx_service_account on tab_service_account(username);
 
 create table if not exists tab_event (
     id bigint primary key,

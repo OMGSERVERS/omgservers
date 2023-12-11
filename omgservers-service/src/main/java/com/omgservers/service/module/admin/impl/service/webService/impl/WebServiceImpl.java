@@ -1,5 +1,7 @@
 package com.omgservers.service.module.admin.impl.service.webService.impl;
 
+import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
+import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
 import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
@@ -12,8 +14,14 @@ import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
+import com.omgservers.model.dto.admin.FindIndexAdminRequest;
+import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
 import com.omgservers.service.module.admin.impl.service.adminService.AdminService;
 import com.omgservers.service.module.admin.impl.service.webService.WebService;
 import com.omgservers.service.module.system.SystemModule;
@@ -41,8 +49,28 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<BcryptHashAdminResponse> bcryptHash(final BcryptHashAdminRequest request) {
+        return adminService.bcryptHash(request);
+    }
+
+    @Override
+    public Uni<FindIndexAdminResponse> findIndex(final FindIndexAdminRequest request) {
+        return adminService.findIndex(request);
+    }
+
+    @Override
     public Uni<CreateIndexAdminResponse> createIndex(final CreateIndexAdminRequest request) {
         return adminService.createIndex(request);
+    }
+
+    @Override
+    public Uni<SyncIndexAdminResponse> syncIndex(final SyncIndexAdminRequest request) {
+        return adminService.syncIndex(request);
+    }
+
+    @Override
+    public Uni<FindServiceAccountAdminResponse> findServiceAccount(final FindServiceAccountAdminRequest request) {
+        return adminService.findServiceAccount(request);
     }
 
     @Override

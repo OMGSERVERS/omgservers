@@ -1,5 +1,7 @@
 package com.omgservers.service.module.admin.impl.service.webService;
 
+import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
+import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
 import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
 import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
@@ -12,8 +14,14 @@ import com.omgservers.model.dto.admin.CreateTenantAdminRequest;
 import com.omgservers.model.dto.admin.CreateTenantAdminResponse;
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
+import com.omgservers.model.dto.admin.FindIndexAdminRequest;
+import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
+import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
+import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -22,7 +30,15 @@ public interface WebService {
 
     Uni<GenerateIdAdminResponse> generateId();
 
+    Uni<BcryptHashAdminResponse> bcryptHash(BcryptHashAdminRequest request0);
+
+    Uni<FindIndexAdminResponse> findIndex(FindIndexAdminRequest request);
+
     Uni<CreateIndexAdminResponse> createIndex(CreateIndexAdminRequest request);
+
+    Uni<SyncIndexAdminResponse> syncIndex(SyncIndexAdminRequest request);
+
+    Uni<FindServiceAccountAdminResponse> findServiceAccount(FindServiceAccountAdminRequest request);
 
     Uni<CreateServiceAccountAdminResponse> createServiceAccount(CreateServiceAccountAdminRequest request);
 
