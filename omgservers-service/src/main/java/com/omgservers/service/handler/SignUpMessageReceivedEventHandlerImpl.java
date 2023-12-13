@@ -83,7 +83,7 @@ class SignUpMessageReceivedEventHandlerImpl implements EventHandler {
                             .flatMap(respondMessageResponse -> createPlayer(userId, tenantId, stageId))
                             .flatMap(player -> {
                                 final var playerId = player.getId();
-                                return tenantModule.getShortcutService().selectLastStageVersion(tenantId, stageId)
+                                return tenantModule.getShortcutService().selectLatestStageVersion(tenantId, stageId)
                                         .flatMap(version -> {
                                                     final var versionId = version.getId();
                                                     return tenantModule.getShortcutService()

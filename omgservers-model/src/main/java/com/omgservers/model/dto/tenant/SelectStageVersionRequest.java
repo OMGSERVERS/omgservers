@@ -26,6 +26,6 @@ public class SelectStageVersionRequest implements ShardedRequest {
     }
 
     public enum Strategy {
-        LAST,
+        LATEST,
     }
 }

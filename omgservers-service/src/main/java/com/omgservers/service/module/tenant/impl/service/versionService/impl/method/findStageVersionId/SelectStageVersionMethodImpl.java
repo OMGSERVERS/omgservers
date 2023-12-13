@@ -40,7 +40,7 @@ class SelectStageVersionMethodImpl implements SelectStageVersionMethod {
 
                                 final var strategy = request.getStrategy();
                                 return switch (strategy) {
-                                    case LAST -> versions.get(versions.size() - 1);
+                                    case LATEST -> versions.get(versions.size() - 1);
                                 };
                             }));
                 })

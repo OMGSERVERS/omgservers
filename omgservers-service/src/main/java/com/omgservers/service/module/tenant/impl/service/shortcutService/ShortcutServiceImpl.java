@@ -223,11 +223,11 @@ class ShortcutServiceImpl implements ShortcutService {
                 .map(GetStageResponse::getStage);
     }
 
-    public Uni<VersionModel> selectLastStageVersion(final Long tenantId,
+    public Uni<VersionModel> selectLatestStageVersion(final Long tenantId,
                                                       final Long stageId) {
         final var request = new SelectStageVersionRequest(tenantId,
                 stageId,
-                SelectStageVersionRequest.Strategy.LAST);
+                SelectStageVersionRequest.Strategy.LATEST);
         return tenantModule.getVersionService().selectStageVersion(request)
                 .map(SelectStageVersionResponse::getVersion);
     }
