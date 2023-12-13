@@ -4,8 +4,6 @@ import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.event.EventModel;
@@ -69,47 +67,50 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> findOrSyncPlayer(userId, tenantId, stageId)
                         .flatMap(player -> {
                             final var playerId = player.getId();
-                            return tenantModule.getShortcutService().findStageVersionId(tenantId, stageId)
-                                    .flatMap(versionId -> tenantModule.getShortcutService()
-                                            .selectVersionMatchmaker(tenantId, versionId)
-                                            .flatMap(versionMatchmaker -> tenantModule.getShortcutService()
-                                                    .selectVersionRuntime(tenantId, versionId)
-                                                    .flatMap(versionRuntime -> {
-                                                                final var matchmakerId = versionMatchmaker
-                                                                        .getMatchmakerId();
-                                                                final var runtimeId = versionRuntime
-                                                                        .getRuntimeId();
-                                                                return createClient(userId,
-                                                                        playerId,
-                                                                        server,
-                                                                        connectionId,
-                                                                        versionId,
-                                                                        matchmakerId,
-                                                                        runtimeId)
-                                                                        .call(client -> syncRuntimeClient(
-                                                                                runtimeId,
-                                                                                client))
-                                                                        .call(client -> syncSignInRuntimeCommand(
-                                                                                runtimeId,
-                                                                                client))
-                                                                        .call(client -> assignClient(player, client)
-                                                                                .invoke(voidItem -> {
-                                                                                    log.info("User signed in, " +
-                                                                                                    "userId={}, " +
-                                                                                                    "clientId={}, " +
-                                                                                                    "tenantId={}, " +
-                                                                                                    "stageId={}, " +
-                                                                                                    "versionId={}",
-                                                                                            userId,
-                                                                                            client.getId(),
-                                                                                            tenantId,
-                                                                                            stageId,
-                                                                                            client.getVersionId());
-                                                                                })
-                                                                        );
-                                                            }
-                                                    )
-                                            )
+                            return tenantModule.getShortcutService().selectLastStageVersion(tenantId, stageId)
+                                    .flatMap(version -> {
+                                                final var versionId = version.getId();
+                                                return tenantModule.getShortcutService()
+                                                        .selectVersionMatchmaker(tenantId, versionId)
+                                                        .flatMap(versionMatchmaker -> tenantModule.getShortcutService()
+                                                                .selectVersionRuntime(tenantId, versionId)
+                                                                .flatMap(versionRuntime -> {
+                                                                            final var matchmakerId = versionMatchmaker
+                                                                                    .getMatchmakerId();
+                                                                            final var runtimeId = versionRuntime
+                                                                                    .getRuntimeId();
+                                                                            return createClient(userId,
+                                                                                    playerId,
+                                                                                    server,
+                                                                                    connectionId,
+                                                                                    versionId,
+                                                                                    matchmakerId,
+                                                                                    runtimeId)
+                                                                                    .call(client -> syncRuntimeClient(
+                                                                                            runtimeId,
+                                                                                            client))
+                                                                                    .call(client -> syncSignInRuntimeCommand(
+                                                                                            runtimeId,
+                                                                                            client))
+                                                                                    .call(client -> assignClient(player, client)
+                                                                                            .invoke(voidItem -> {
+                                                                                                log.info("User signed in, " +
+                                                                                                                "userId={}, " +
+                                                                                                                "clientId={}, " +
+                                                                                                                "tenantId={}, " +
+                                                                                                                "stageId={}, " +
+                                                                                                                "versionId={}",
+                                                                                                        userId,
+                                                                                                        client.getId(),
+                                                                                                        tenantId,
+                                                                                                        stageId,
+                                                                                                        client.getVersionId());
+                                                                                            })
+                                                                                    );
+                                                                        }
+                                                                )
+                                                        );
+                                            }
                                     );
                         })
                 )

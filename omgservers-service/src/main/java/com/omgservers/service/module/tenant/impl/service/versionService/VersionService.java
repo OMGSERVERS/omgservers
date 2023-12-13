@@ -6,8 +6,8 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -75,5 +75,5 @@ public interface VersionService {
 
     Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(@Valid DeleteVersionRuntimeRequest request);
 
-    Uni<FindStageVersionIdResponse> findStageVersionId(@Valid FindStageVersionIdRequest request);
+    Uni<SelectStageVersionResponse> selectStageVersion(@Valid SelectStageVersionRequest request);
 }

@@ -18,8 +18,8 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -132,6 +132,8 @@ public interface WebService {
 
     Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request);
 
+    Uni<SelectStageVersionResponse> selectStageVersion(SelectStageVersionRequest request);
+
     Uni<GetVersionResponse> getVersion(GetVersionRequest request);
 
     Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
@@ -165,6 +167,4 @@ public interface WebService {
     Uni<ViewVersionRuntimesResponse> viewVersionRuntimes(ViewVersionRuntimesRequest request);
 
     Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(DeleteVersionRuntimeRequest request);
-
-    Uni<FindStageVersionIdResponse> findStageVersionId(FindStageVersionIdRequest request);
 }

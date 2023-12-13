@@ -16,8 +16,6 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -32,6 +30,8 @@ import com.omgservers.model.dto.tenant.GetVersionRequest;
 import com.omgservers.model.dto.tenant.GetVersionResponse;
 import com.omgservers.model.dto.tenant.GetVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.GetVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
@@ -223,11 +223,13 @@ class ShortcutServiceImpl implements ShortcutService {
                 .map(GetStageResponse::getStage);
     }
 
-    @Override
-    public Uni<Long> findStageVersionId(final Long tenantId, final Long stageId) {
-        final var request = new FindStageVersionIdRequest(tenantId, stageId);
-        return tenantModule.getVersionService().findStageVersionId(request)
-                .map(FindStageVersionIdResponse::getVersionId);
+    public Uni<VersionModel> selectLastStageVersion(final Long tenantId,
+                                                      final Long stageId) {
+        final var request = new SelectStageVersionRequest(tenantId,
+                stageId,
+                SelectStageVersionRequest.Strategy.LAST);
+        return tenantModule.getVersionService().selectStageVersion(request)
+                .map(SelectStageVersionResponse::getVersion);
     }
 
     @Override

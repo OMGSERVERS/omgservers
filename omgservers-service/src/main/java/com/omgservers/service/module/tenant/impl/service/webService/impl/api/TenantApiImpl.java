@@ -18,8 +18,8 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -240,6 +240,12 @@ class TenantApiImpl implements TenantApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectStageVersion);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionResponse> getVersion(final GetVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersion);
     }
@@ -338,11 +344,5 @@ class TenantApiImpl implements TenantApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(final DeleteVersionRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionRuntime);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindStageVersionIdResponse> findStageVersionId(final FindStageVersionIdRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findStageVersionId);
     }
 }

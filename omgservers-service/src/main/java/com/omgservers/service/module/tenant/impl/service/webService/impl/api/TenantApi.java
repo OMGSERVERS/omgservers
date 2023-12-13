@@ -18,8 +18,8 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -182,6 +182,10 @@ public interface TenantApi {
     Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request);
 
     @PUT
+    @Path("/select-stage-version")
+    Uni<SelectStageVersionResponse> selectStageVersion(SelectStageVersionRequest request);
+
+    @PUT
     @Path("/get-version")
     Uni<GetVersionResponse> getVersion(GetVersionRequest request);
 
@@ -248,8 +252,4 @@ public interface TenantApi {
     @PUT
     @Path("/delete-version-runtime")
     Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(DeleteVersionRuntimeRequest request);
-
-    @PUT
-    @Path("/find-stage-version-id")
-    Uni<FindStageVersionIdResponse> findStageVersionId(FindStageVersionIdRequest request);
 }

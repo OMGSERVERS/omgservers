@@ -1,5 +1,6 @@
 package com.omgservers.model.dto.tenant;
 
+import com.omgservers.model.version.VersionModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindStageVersionIdResponse {
+public class SelectStageVersionResponse {
 
-    Long versionId;
+    VersionModel version;
 }

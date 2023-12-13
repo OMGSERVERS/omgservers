@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindStageVersionIdRequest implements ShardedRequest {
+public class SelectStageVersionRequest implements ShardedRequest {
 
     @NotNull
     Long tenantId;
@@ -17,8 +17,15 @@ public class FindStageVersionIdRequest implements ShardedRequest {
     @NotNull
     Long stageId;
 
+    @NotNull
+    Strategy strategy;
+
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();
+    }
+
+    public enum Strategy {
+        LAST,
     }
 }

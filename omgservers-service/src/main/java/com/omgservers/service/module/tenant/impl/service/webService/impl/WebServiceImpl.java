@@ -18,8 +18,8 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindStageVersionIdRequest;
-import com.omgservers.model.dto.tenant.FindStageVersionIdResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -219,6 +219,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
+        return versionService.selectStageVersion(request);
+    }
+
+    @Override
     public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(final GetVersionMatchmakerRequest request) {
         return versionService.getVersionMatchmaker(request);
     }
@@ -301,10 +306,5 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<GetVersionConfigResponse> getVersionConfig(final GetVersionConfigRequest request) {
         return versionService.getVersionConfig(request);
-    }
-
-    @Override
-    public Uni<FindStageVersionIdResponse> findStageVersionId(final FindStageVersionIdRequest request) {
-        return versionService.findStageVersionId(request);
     }
 }

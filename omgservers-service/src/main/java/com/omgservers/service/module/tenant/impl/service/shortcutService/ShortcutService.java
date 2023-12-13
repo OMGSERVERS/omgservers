@@ -41,7 +41,7 @@ public interface ShortcutService {
 
     Uni<StageModel> getStage(Long tenantId, Long id);
 
-    Uni<Long> findStageVersionId(Long tenantId, Long stageId);
+    Uni<VersionModel> selectLastStageVersion(Long tenantId, Long stageId);
 
     Uni<List<StageModel>> viewStages(Long tenantId, Long projectId);
 
