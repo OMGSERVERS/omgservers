@@ -51,8 +51,8 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
         return matchmakerModule.getShortcutService().getMatch(matchmakerId, matchId)
                 .flatMap(match -> {
                     final var runtimeId = match.getRuntimeId();
-                    return deleteRuntimeGrant(runtimeId, clientId)
-                            .flatMap(runtimeGrantWasDeleted -> syncDeleteClientRuntimeCommand(runtimeId,
+                    return runtimeModule.getShortcutService().findAndDeleteRuntimeClient(runtimeId, clientId)
+                            .flatMap(wasRuntimeClientDeleted -> syncDeleteClientRuntimeCommand(runtimeId,
                                     userId,
                                     clientId)
                                     .flatMap(runtimeCommandWasCreated -> revokeIfClientExists(userId,
@@ -77,11 +77,6 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> deleteRuntimeGrant(final Long runtimeId, final Long clientId) {
-        return runtimeModule.getShortcutService().findRuntimeGrant(runtimeId, clientId)
-                .flatMap(runtimeGrant -> runtimeModule.getShortcutService()
-                        .deleteRuntimeGrant(runtimeId, runtimeGrant.getId()));
-    }
 
     Uni<Boolean> syncDeleteClientRuntimeCommand(final Long runtimeId,
                                                 final Long userId,

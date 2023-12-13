@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.impl.service.shortcutService;
 
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import io.smallrye.mutiny.Uni;
 
@@ -32,14 +32,16 @@ public interface ShortcutService {
 
     Uni<Void> deleteRuntimePermissions(Long runtimeId);
 
-    Uni<RuntimeGrantModel> findRuntimeGrant(Long runtimeId, Long clientId);
+    Uni<RuntimeClientModel> findRuntimeClient(Long runtimeId, Long clientId);
 
-    Uni<List<RuntimeGrantModel>> viewRuntimeGrants(Long runtimeId);
+    Uni<Boolean> findAndDeleteRuntimeClient(Long runtimeId, Long clientId);
 
-    Uni<Boolean> syncRuntimeGrant(RuntimeGrantModel runtimeGrant);
+    Uni<List<RuntimeClientModel>> viewRuntimeClients(Long runtimeId);
 
-    Uni<Boolean> deleteRuntimeGrant(Long runtimeId, Long id);
+    Uni<Boolean> syncRuntimeClient(RuntimeClientModel runtimeClient);
 
-    Uni<Void> deleteRuntimeGrants(Long runtimeId);
+    Uni<Boolean> deleteRuntimeClient(Long runtimeId, Long id);
+
+    Uni<Void> deleteRuntimeClients(Long runtimeId);
 
 }

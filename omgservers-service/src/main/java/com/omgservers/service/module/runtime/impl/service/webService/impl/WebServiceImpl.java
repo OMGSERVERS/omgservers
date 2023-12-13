@@ -4,8 +4,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
@@ -28,24 +28,24 @@ import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
 import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
@@ -121,23 +121,23 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncRuntimeGrantResponse> syncRuntimeGrant(final SyncRuntimeGrantRequest request) {
-        return runtimeService.syncRuntimeGrant(request);
+    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
+        return runtimeService.syncRuntimeClient(request);
     }
 
     @Override
-    public Uni<FindRuntimeGrantResponse> findRuntimeGrant(final FindRuntimeGrantRequest request) {
-        return runtimeService.findRuntimeGrant(request);
+    public Uni<FindRuntimeClientResponse> findRuntimeClient(final FindRuntimeClientRequest request) {
+        return runtimeService.findRuntimeClient(request);
     }
 
     @Override
-    public Uni<ViewRuntimeGrantsResponse> viewRuntimeGrants(final ViewRuntimeGrantsRequest request) {
-        return runtimeService.viewRuntimeGrants(request);
+    public Uni<ViewRuntimeClientsResponse> viewRuntimeClients(final ViewRuntimeClientsRequest request) {
+        return runtimeService.viewRuntimeClients(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeGrantResponse> deleteRuntimeGrant(final DeleteRuntimeGrantRequest request) {
-        return runtimeService.deleteRuntimeGrant(request);
+    public Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(final DeleteRuntimeClientRequest request) {
+        return runtimeService.deleteRuntimeClient(request);
     }
 
     @Override

@@ -8,13 +8,12 @@ import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -32,7 +31,7 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
 
-    final HasRuntimeGrantOperation hasRuntimeGrantOperation;
+    final HasRuntimeClientOperation hasRuntimeClientOperation;
     final CheckShardOperation checkShardOperation;
 
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
@@ -44,24 +43,23 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var permission = RuntimeGrantTypeEnum.MATCH_CLIENT;
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();
-                    return pgPool.withTransaction(sqlConnection -> hasRuntimeGrantOperation.hasRuntimeGrant(
+                    return pgPool.withTransaction(sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
                                     sqlConnection,
                                     shardModel.shard(),
                                     runtimeId,
                                     userId,
-                                    clientId,
-                                    permission)
+                                    clientId)
                             .flatMap(has -> {
                                 if (has) {
                                     return doKickClient(runtimeId, userId, clientId);
                                 } else {
-                                    throw new ServerSideForbiddenException(String.format("lack of permission, " +
-                                                    "runtimeId=%s, client_id=%s, permission=%s",
-                                            runtimeId, clientId, permission));
+                                    throw new ServerSideForbiddenException(
+                                            String.format("runtime client was not found, " +
+                                                            "runtimeId=%s, user_id=%s, client_id=%s",
+                                                    runtimeId, userId, clientId));
                                 }
                             })
                     );

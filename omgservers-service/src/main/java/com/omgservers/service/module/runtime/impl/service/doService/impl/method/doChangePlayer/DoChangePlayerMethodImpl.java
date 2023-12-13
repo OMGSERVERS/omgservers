@@ -8,11 +8,10 @@ import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.user.GetClientRequest;
 import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -31,7 +30,7 @@ class DoChangePlayerMethodImpl implements DoChangePlayerMethod {
     final SystemModule systemModule;
     final UserModule userModule;
 
-    final HasRuntimeGrantOperation hasRuntimeGrantOperation;
+    final HasRuntimeClientOperation hasRuntimeClientOperation;
     final CheckShardOperation checkShardOperation;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
@@ -47,26 +46,24 @@ class DoChangePlayerMethodImpl implements DoChangePlayerMethod {
         final var message = request.getMessage();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var permission = RuntimeGrantTypeEnum.MATCH_CLIENT;
-                    return pgPool.withTransaction(sqlConnection -> hasRuntimeGrantOperation.hasRuntimeGrant(
-                                    sqlConnection,
-                                    shardModel.shard(),
-                                    runtimeId,
-                                    userId,
-                                    clientId,
-                                    permission)
-                            .flatMap(has -> {
-                                if (has) {
-                                    return changePlayer(userId, clientId, message);
-                                } else {
-                                    throw new ServerSideForbiddenException(String.format("lack of permission, " +
-                                                    "runtimeId=%s, client_id=%s, permission=%s",
-                                            runtimeId, clientId, permission));
-                                }
-                            })
-                    );
-                })
+                .flatMap(shardModel -> pgPool.withTransaction(
+                        sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        runtimeId,
+                                        userId,
+                                        clientId)
+                                .flatMap(has -> {
+                                    if (has) {
+                                        return changePlayer(userId, clientId, message);
+                                    } else {
+                                        throw new ServerSideForbiddenException(
+                                                String.format("runtime client was not found, " +
+                                                                "runtimeId=%s, user_id=%s, client_id=%s",
+                                                        runtimeId, userId, clientId));
+                                    }
+                                })
+                ))
                 .replaceWith(new DoChangePlayerResponse(true));
     }
 

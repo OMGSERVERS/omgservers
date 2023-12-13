@@ -290,16 +290,15 @@ create table if not exists tab_runtime_command (
 
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 
-create table if not exists tab_runtime_grant (
+create table if not exists tab_runtime_client (
     id bigint primary key,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    shard_key bigint not null,
-    entity_id bigint not null,
-    type text not null,
+    user_id bigint not null,
+    client_id bigint not null,
     deleted boolean not null,
-    unique(runtime_id, entity_id, type)
+    unique(runtime_id, user_id, client_id)
 );
 
-create index if not exists idx_runtime_grant_runtime_id on tab_runtime_grant(runtime_id);
+create index if not exists idx_runtime_client_runtime_id on tab_runtime_client(runtime_id);

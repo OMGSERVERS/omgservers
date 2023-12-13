@@ -2,12 +2,11 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
-import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeGrantOperationTestInterface;
-import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeGrantOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeClientOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeClientOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,19 +21,19 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteRuntimeGrantOperationTestInterface deleteRuntimeGrant;
+    DeleteRuntimeClientOperationTestInterface deleteRuntimeClientOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertRuntimeGrantOperationTestInterface upsertRuntimeGrantOperation;
+    UpsertRuntimeClientOperationTestInterface upsertRuntimeClientOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    RuntimeGrantModelFactory runtimeGrantModelFactory;
+    RuntimeClientModelFactory runtimeClientModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -43,27 +42,28 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenRuntimeGrant_whenDeleteRuntimeGrant_thenDeleted() {
+    void givenRuntimeClient_whenDeleteRuntimeClient_thenDeleted() {
         final var shard = 0;
         final var runtime =
-                runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH, new RuntimeConfigModel());
+                runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
+                        new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var runtimeGrant = runtimeGrantModelFactory
-                .create(runtime.getId(), shardKey(), entityId(), RuntimeGrantTypeEnum.MATCH_CLIENT);
-        upsertRuntimeGrantOperation.upsertRuntimeGrant(shard, runtimeGrant);
+        final var runtimeClient = runtimeClientModelFactory
+                .create(runtime.getId(), shardKey(), entityId());
+        upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
 
-        final var changeContext = deleteRuntimeGrant.deleteRuntimeGrant(shard, runtime.getId(), runtimeGrant.getId());
+        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard, runtime.getId(), runtimeClient.getId());
         assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenUnknownIds_whenDeleteRuntimeGrant_thenFalse() {
+    void givenUnknownIds_whenDeleteRuntimeClient_thenFalse() {
         final var shard = 0;
         final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteRuntimeGrant.deleteRuntimeGrant(shard, runtimeId, id);
+        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard, runtimeId, id);
         assertFalse(changeContext.getResult());
     }
 

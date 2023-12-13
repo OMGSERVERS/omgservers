@@ -1,34 +1,34 @@
 package com.omgservers.service.module.runtime.impl.service.shortcutService;
 
+import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeGrantResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeGrantsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeGrantsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Multi;
@@ -159,47 +159,53 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
-    public Uni<RuntimeGrantModel> findRuntimeGrant(final Long runtimeId, final Long clientId) {
-        final var request = new FindRuntimeGrantRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeGrant(request)
-                .map(FindRuntimeGrantResponse::getRuntimeGrant);
+    public Uni<RuntimeClientModel> findRuntimeClient(final Long runtimeId, final Long clientId) {
+        final var request = new FindRuntimeClientRequest(runtimeId, clientId);
+        return runtimeModule.getRuntimeService().findRuntimeClient(request)
+                .map(FindRuntimeClientResponse::getRuntimeClient);
     }
 
     @Override
-    public Uni<List<RuntimeGrantModel>> viewRuntimeGrants(final Long runtimeId) {
-        final var request = new ViewRuntimeGrantsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeGrants(request)
-                .map(ViewRuntimeGrantsResponse::getRuntimeGrants);
+    public Uni<Boolean> findAndDeleteRuntimeClient(final Long runtimeId, final  Long clientId) {
+        return findRuntimeClient(runtimeId, clientId)
+                .flatMap(runtimeClient -> deleteRuntimeClient(runtimeId, runtimeClient.getId()));
     }
 
     @Override
-    public Uni<Boolean> syncRuntimeGrant(final RuntimeGrantModel runtimeGrant) {
-        final var request = new SyncRuntimeGrantRequest(runtimeGrant);
-        return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
-                .map(SyncRuntimeGrantResponse::getCreated);
+    public Uni<List<RuntimeClientModel>> viewRuntimeClients(final Long runtimeId) {
+        final var request = new ViewRuntimeClientsRequest(runtimeId);
+        return runtimeModule.getRuntimeService().viewRuntimeClients(request)
+                .map(ViewRuntimeClientsResponse::getRuntimeClients);
     }
 
     @Override
-    public Uni<Boolean> deleteRuntimeGrant(final Long runtimeId, final Long id) {
-        final var request = new DeleteRuntimeGrantRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeGrant(request)
-                .map(DeleteRuntimeGrantResponse::getDeleted);
+    public Uni<Boolean> syncRuntimeClient(final RuntimeClientModel runtimeClient) {
+        final var request = new SyncRuntimeClientRequest(runtimeClient);
+        return runtimeModule.getRuntimeService().syncRuntimeClient(request)
+                .map(SyncRuntimeClientResponse::getCreated);
     }
 
     @Override
-    public Uni<Void> deleteRuntimeGrants(final Long runtimeId) {
-        return viewRuntimeGrants(runtimeId)
-                .flatMap(runtimeGrants -> Multi.createFrom().iterable(runtimeGrants)
-                        .onItem().transformToUniAndConcatenate(runtimeGrant ->
-                                deleteRuntimeGrant(runtimeId, runtimeGrant.getId())
+    public Uni<Boolean> deleteRuntimeClient(final Long runtimeId, final Long id) {
+        final var request = new DeleteRuntimeClientRequest(runtimeId, id);
+        return runtimeModule.getRuntimeService().deleteRuntimeClient(request)
+                .map(DeleteRuntimeClientResponse::getDeleted);
+    }
+
+    @Override
+    public Uni<Void> deleteRuntimeClients(final Long runtimeId) {
+        return viewRuntimeClients(runtimeId)
+                .flatMap(runtimeClients -> Multi.createFrom().iterable(runtimeClients)
+                        .onItem().transformToUniAndConcatenate(runtimeClient ->
+                                deleteRuntimeClient(runtimeId, runtimeClient.getId())
                                         .onFailure()
                                         .recoverWithItem(t -> {
-                                            log.warn("Delete runtime grant failed, " +
+                                            log.warn("Delete runtime client failed, " +
                                                             "runtimeId={}, " +
-                                                            "runtimeGrantId={}" +
+                                                            "runtimeClientId={}" +
                                                             "{}:{}",
                                                     runtimeId,
-                                                    runtimeGrant.getId(),
+                                                    runtimeClient.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;

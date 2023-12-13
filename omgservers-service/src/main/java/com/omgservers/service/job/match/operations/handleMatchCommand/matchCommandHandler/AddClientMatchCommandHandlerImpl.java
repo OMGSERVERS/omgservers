@@ -10,9 +10,8 @@ import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
-import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.job.match.operations.handleMatchCommand.MatchCommandHandler;
 import com.omgservers.service.module.gateway.GatewayModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -35,7 +34,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
     final UserModule userModule;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
-    final RuntimeGrantModelFactory runtimeGrantModelFactory;
+    final RuntimeClientModelFactory runtimeClientModelFactory;
 
     @Override
     public MatchCommandQualifierEnum getQualifier() {
@@ -58,7 +57,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                         .flatMap(client -> {
                             final var runtimeId = match.getRuntimeId();
                             log.info("Test0, {}, {}", match, client);
-                            return syncRuntimeGrant(runtimeId, userId, clientId)
+                            return syncRuntimeClient(runtimeId, userId, clientId)
                                     .call(ignored -> syncAddClientRuntimeCommand(runtimeId, client))
                                     .call(ignored -> assignRuntime(runtimeId, client))
                                     .invoke(voidItem -> {
@@ -78,13 +77,12 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> syncRuntimeGrant(Long runtimeId, Long userId, Long clientId) {
-        final var runtimeGrant = runtimeGrantModelFactory.create(
+    Uni<Boolean> syncRuntimeClient(Long runtimeId, Long userId, Long clientId) {
+        final var runtimeClient = runtimeClientModelFactory.create(
                 runtimeId,
                 userId,
-                clientId,
-                RuntimeGrantTypeEnum.MATCH_CLIENT);
-        return runtimeModule.getShortcutService().syncRuntimeGrant(runtimeGrant);
+                clientId);
+        return runtimeModule.getShortcutService().syncRuntimeClient(runtimeClient);
     }
 
     Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,

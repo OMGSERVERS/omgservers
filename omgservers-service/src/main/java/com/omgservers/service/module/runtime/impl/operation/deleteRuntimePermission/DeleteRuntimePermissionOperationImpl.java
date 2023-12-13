@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.deleteRuntimePermission;
 
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeGrant.SelectRuntimeGrantOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectRuntimeClient.SelectRuntimeClientOperation;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 class DeleteRuntimePermissionOperationImpl implements DeleteRuntimePermissionOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final SelectRuntimeGrantOperation selectRuntimeGrantOperation;
+    final SelectRuntimeClientOperation selectRuntimeClientOperation;
     final LogModelFactory logModelFactory;
 
     @Override

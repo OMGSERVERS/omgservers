@@ -4,8 +4,8 @@ import com.omgservers.model.assignedClient.AssignedClientModel;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeGrantResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.user.SyncClientRequest;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.event.EventModel;
@@ -13,12 +13,11 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
+import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
-import com.omgservers.service.factory.RuntimeGrantModelFactory;
 import com.omgservers.service.module.gateway.GatewayModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
@@ -43,7 +42,7 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
-    final RuntimeGrantModelFactory runtimeGrantModelFactory;
+    final RuntimeClientModelFactory runtimeClientModelFactory;
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 
@@ -87,7 +86,7 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                                                                         versionId,
                                                                         matchmakerId,
                                                                         runtimeId)
-                                                                        .call(client -> syncRuntimeGrantForClient(
+                                                                        .call(client -> syncRuntimeClient(
                                                                                 runtimeId,
                                                                                 client))
                                                                         .call(client -> syncSignInRuntimeCommand(
@@ -149,15 +148,12 @@ class SignInMessageReceivedEventHandlerImpl implements EventHandler {
                 .replaceWith(client);
     }
 
-    Uni<Boolean> syncRuntimeGrantForClient(Long runtimeId, ClientModel client) {
-        final var runtimeGrant = runtimeGrantModelFactory.create(
+    Uni<Boolean> syncRuntimeClient(Long runtimeId, ClientModel client) {
+        final var runtimeClient = runtimeClientModelFactory.create(
                 runtimeId,
                 client.getUserId(),
-                client.getId(),
-                RuntimeGrantTypeEnum.USER_CLIENT);
-        final var request = new SyncRuntimeGrantRequest(runtimeGrant);
-        return runtimeModule.getRuntimeService().syncRuntimeGrant(request)
-                .map(SyncRuntimeGrantResponse::getCreated);
+                client.getId());
+        return runtimeModule.getShortcutService().syncRuntimeClient(runtimeClient);
     }
 
     Uni<Boolean> syncSignInRuntimeCommand(final Long runtimeId,

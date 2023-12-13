@@ -6,7 +6,7 @@ import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.service.factory.MatchCommandModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.factory.RuntimeGrantModelFactory;
+import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +23,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
     final MatchmakerModule matchmakerModule;
 
     final MatchCommandModelFactory matchCommandModelFactory;
-    final RuntimeGrantModelFactory runtimeGrantModelFactory;
+    final RuntimeClientModelFactory runtimeClientModelFactory;
     final MessageModelFactory messageModelFactory;
 
     @Override

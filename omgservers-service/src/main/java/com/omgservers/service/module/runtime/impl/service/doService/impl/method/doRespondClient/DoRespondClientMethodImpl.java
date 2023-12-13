@@ -5,10 +5,9 @@ import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.hasRuntimeGrant.HasRuntimeGrantOperation;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +23,7 @@ class DoRespondClientMethodImpl implements DoRespondClientMethod {
 
     final UserModule userModule;
 
-    final HasRuntimeGrantOperation hasRuntimeGrantOperation;
+    final HasRuntimeClientOperation hasRuntimeClientOperation;
     final CheckShardOperation checkShardOperation;
 
     final MessageModelFactory messageModelFactory;
@@ -36,25 +35,24 @@ class DoRespondClientMethodImpl implements DoRespondClientMethod {
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    final var grant = RuntimeGrantTypeEnum.USER_CLIENT;
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var clientId = request.getClientId();
                     final var message = request.getMessage();
-                    return pgPool.withTransaction(sqlConnection -> hasRuntimeGrantOperation.hasRuntimeGrant(
+                    return pgPool.withTransaction(sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
                                     sqlConnection,
                                     shardModel.shard(),
                                     runtimeId,
                                     userId,
-                                    clientId,
-                                    grant)
+                                    clientId)
                             .flatMap(has -> {
                                 if (has) {
                                     return respondClient(userId, clientId, message);
                                 } else {
-                                    throw new ServerSideForbiddenException(String.format("lack of grant, " +
-                                                    "runtimeId=%s, userId=%s, clientId=%s, grant=%s",
-                                            runtimeId, userId, clientId, grant));
+                                    throw new ServerSideForbiddenException(
+                                            String.format("runtime client was not found, " +
+                                                            "runtimeId=%s, userId=%s, clientId=%s",
+                                                    runtimeId, userId, clientId));
                                 }
                             })
                     );

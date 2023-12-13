@@ -47,17 +47,11 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
                     final var runtimeId = client.getDefaultRuntimeId();
                     final var matchmakerId = client.getDefaultMatchmakerId();
-                    return deleteRuntimeGrantForClient(runtimeId, clientId)
-                            .flatMap(wasGrantDeleted -> syncDeleteClientMatchmakerCommand(matchmakerId, clientId));
+                    return runtimeModule.getShortcutService().findAndDeleteRuntimeClient(runtimeId, clientId)
+                            .flatMap(wasRuntimeClientDeleted ->
+                                    syncDeleteClientMatchmakerCommand(matchmakerId, clientId));
                 })
                 .replaceWith(true);
-    }
-
-    Uni<Boolean> deleteRuntimeGrantForClient(final Long runtimeId,
-                                             final Long clientId) {
-        return runtimeModule.getShortcutService().findRuntimeGrant(runtimeId, clientId)
-                .flatMap(runtimeGrant -> runtimeModule.getShortcutService()
-                        .deleteRuntimeGrant(runtimeId, runtimeGrant.getId()));
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

@@ -57,7 +57,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> runtimeModule.getShortcutService()
                                     .deleteRuntimeCommands(runtimeId))
                             .flatMap(voidItem -> runtimeModule.getShortcutService()
-                                    .deleteRuntimeGrants(runtimeId))
+                                    .deleteRuntimeClients(runtimeId))
                             .flatMap(voidItem -> systemModule.getShortcutService()
                                     .deleteEntity(runtimeId));
                 })

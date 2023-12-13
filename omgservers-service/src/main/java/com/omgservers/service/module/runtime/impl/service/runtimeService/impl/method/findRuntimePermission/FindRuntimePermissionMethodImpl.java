@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class FindRuntimePermissionMethodImpl implements FindRuntimePermissionMethod {
 
-    final SelectRuntimePermissionByRuntimeIdAndUserIdOperation selectRuntimeGrantByRuntimeIdAndEntityIdOperation;
+    final SelectRuntimePermissionByRuntimeIdAndUserIdOperation selectRuntimePermissionByRuntimeIdAndUserIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -29,7 +29,7 @@ class FindRuntimePermissionMethodImpl implements FindRuntimePermissionMethod {
                     final var runtimeId = request.getRuntimeId();
                     final var userId = request.getUserId();
                     final var permission = request.getPermission();
-                    return pgPool.withTransaction(sqlConnection -> selectRuntimeGrantByRuntimeIdAndEntityIdOperation
+                    return pgPool.withTransaction(sqlConnection -> selectRuntimePermissionByRuntimeIdAndUserIdOperation
                             .selectRuntimePermissionByRuntimeIdAndUserId(sqlConnection,
                                     shard.shard(),
                                     runtimeId,

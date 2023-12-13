@@ -6,10 +6,9 @@ import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
-import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeGrantsByRuntimeId.SelectActiveRuntimeGrantsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeClientsByRuntimeId.SelectActiveRuntimeClientsByRuntimeIdOperation;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -30,7 +29,7 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
     final SystemModule systemModule;
     final UserModule userModule;
 
-    final SelectActiveRuntimeGrantsByRuntimeIdOperation selectActiveRuntimeGrantsByRuntimeIdOperation;
+    final SelectActiveRuntimeClientsByRuntimeIdOperation selectActiveRuntimeClientsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final MessageModelFactory messageModelFactory;
@@ -44,24 +43,20 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
         final var message = request.getMessage();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var grant = RuntimeGrantTypeEnum.MATCH_CLIENT;
-                    return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeGrantsByRuntimeIdOperation
-                            .selectActiveRuntimeGrantsByRuntimeId(sqlConnection,
-                                    shardModel.shard(),
-                                    runtimeId)
-                            .map(runtimeGrants -> createRecipientList(runtimeGrants, grant))
-                            .flatMap(recipients -> doBroadcastMessage(recipients, message))
-                    );
-                })
+                .flatMap(shardModel -> pgPool.withTransaction(
+                        sqlConnection -> selectActiveRuntimeClientsByRuntimeIdOperation
+                                .selectActiveRuntimeClientsByRuntimeId(sqlConnection,
+                                        shardModel.shard(),
+                                        runtimeId)
+                                .map(this::createRecipientList)
+                                .flatMap(recipients -> doBroadcastMessage(recipients, message))
+                ))
                 .replaceWith(new DoBroadcastMessageResponse(true));
     }
 
-    List<Recipient> createRecipientList(final List<RuntimeGrantModel> runtimeGrants,
-                                        final RuntimeGrantTypeEnum grantType) {
-        return runtimeGrants.stream()
-                .filter(runtimeGrant -> runtimeGrant.getType().equals(grantType))
-                .map(runtimeGrant -> new Recipient(runtimeGrant.getShardKey(), runtimeGrant.getEntityId()))
+    List<Recipient> createRecipientList(final List<RuntimeClientModel> runtimeClients) {
+        return runtimeClients.stream()
+                .map(runtimeClient -> new Recipient(runtimeClient.getUserId(), runtimeClient.getClientId()))
                 .toList();
     }
 

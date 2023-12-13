@@ -6,11 +6,10 @@ import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.recipient.Recipient;
-import com.omgservers.model.runtimeGrant.RuntimeGrantModel;
-import com.omgservers.model.runtimeGrant.RuntimeGrantTypeEnum;
+import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeGrantsByRuntimeIdAndEntityIds.SelectActiveRuntimeGrantsByRuntimeIdAndEntityIdsOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeClientsByRuntimeId.SelectActiveRuntimeClientsByRuntimeIdOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
@@ -30,12 +29,10 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
 
     final UserModule userModule;
 
-    final SelectActiveRuntimeGrantsByRuntimeIdAndEntityIdsOperation
-            selectActiveRuntimeGrantsByRuntimeIdAndEntityIdsOperation;
+    final SelectActiveRuntimeClientsByRuntimeIdOperation selectActiveRuntimeClientsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final MessageModelFactory messageModelFactory;
-
     final PgPool pgPool;
 
     @Override
@@ -47,43 +44,36 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
         final var message = request.getMessage();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var grant = RuntimeGrantTypeEnum.MATCH_CLIENT;
-                    final var clientIds = recipients.stream().map(Recipient::clientId).toList();
-
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectActiveRuntimeGrantsByRuntimeIdAndEntityIdsOperation
-                                    .selectActiveRuntimeGrantsByRuntimeIdAndEntityIds(
-                                            sqlConnection,
-                                            shardModel.shard(),
-                                            runtimeId,
-                                            clientIds)
-                                    .flatMap(runtimeGrants -> {
-                                        if (checkGrants(recipients, runtimeGrants, grant)) {
-                                            return doMulticastMessage(recipients, message);
-                                        } else {
-                                            throw new ServerSideForbiddenException(
-                                                    String.format("grants were not found, " +
-                                                                    "runtimeId=%s, recipients=%s, grant=%s",
-                                                            runtimeId, recipients, grant));
-                                        }
-                                    })
-                    );
-                })
+                .flatMap(shardModel -> pgPool.withTransaction(
+                        sqlConnection -> selectActiveRuntimeClientsByRuntimeIdOperation
+                                .selectActiveRuntimeClientsByRuntimeId(
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        runtimeId)
+                                .flatMap(runtimeClients -> {
+                                    if (checkRecipients(recipients, runtimeClients)) {
+                                        return doMulticastMessage(recipients, message);
+                                    } else {
+                                        throw new ServerSideForbiddenException(
+                                                String.format(
+                                                        "not all runtime clients for recipients were found, " +
+                                                                "runtimeId=%s, recipients=%s",
+                                                        runtimeId, recipients));
+                                    }
+                                })
+                ))
                 .replaceWith(new DoMulticastMessageResponse(true));
     }
 
 
-    boolean checkGrants(final List<Recipient> recipients,
-                        final List<RuntimeGrantModel> runtimeGrants,
-                        final RuntimeGrantTypeEnum grant) {
-        final var grantSet = runtimeGrants.stream()
-                .filter(runtimeGrant -> runtimeGrant.getType().equals(grant))
-                .map(RuntimeGrantModel::getEntityId)
+    boolean checkRecipients(final List<Recipient> recipients,
+                            final List<RuntimeClientModel> runtimeClients) {
+        final var runtimeClientSet = runtimeClients.stream()
+                .map(RuntimeClientModel::getClientId)
                 .collect(Collectors.toSet());
 
         return recipients.stream()
-                .allMatch(recipient -> grantSet.contains(recipient.clientId()));
+                .allMatch(recipient -> runtimeClientSet.contains(recipient.clientId()));
     }
 
     Uni<Void> doMulticastMessage(final List<Recipient> recipients,
