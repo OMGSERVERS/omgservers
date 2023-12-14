@@ -8,6 +8,8 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.module.developer.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -31,6 +33,12 @@ class DeveloperApiImpl implements DeveloperApi {
     @PermitAll
     public Uni<CreateTokenDeveloperResponse> createToken(final CreateTokenDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
+    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(final GetTenantDashboardDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
     }
 
     @Override

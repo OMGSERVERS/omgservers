@@ -8,12 +8,16 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface DeveloperService {
 
     Uni<CreateTokenDeveloperResponse> createToken(@Valid CreateTokenDeveloperRequest request);
+
+    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(@Valid GetTenantDashboardDeveloperRequest request);
 
     Uni<CreateProjectDeveloperResponse> createProject(@Valid CreateProjectDeveloperRequest request);
 

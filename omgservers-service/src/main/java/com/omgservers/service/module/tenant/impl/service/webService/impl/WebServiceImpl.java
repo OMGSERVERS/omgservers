@@ -18,8 +18,6 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
-import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -28,6 +26,8 @@ import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
+import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
+import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
@@ -44,6 +44,8 @@ import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
@@ -106,6 +108,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<GetTenantResponse> getTenant(final GetTenantRequest request) {
         return tenantService.getTenant(request);
+    }
+
+    @Override
+    public Uni<GetTenantDashboardResponse> getTenantDashboard(final GetTenantDashboardRequest request) {
+        return tenantService.getTenantDashboard(request);
     }
 
     @Override

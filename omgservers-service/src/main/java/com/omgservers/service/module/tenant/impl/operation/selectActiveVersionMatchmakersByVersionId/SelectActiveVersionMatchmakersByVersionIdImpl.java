@@ -1,4 +1,4 @@
-package com.omgservers.service.module.tenant.impl.operation.selectActiveVersionMatchmakers;
+package com.omgservers.service.module.tenant.impl.operation.selectActiveVersionMatchmakersByVersionId;
 
 import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionMatchmakerModelMapper;
@@ -15,17 +15,17 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectActiveVersionMatchmakersImpl implements SelectActiveVersionMatchmakers {
+class SelectActiveVersionMatchmakersByVersionIdImpl implements SelectActiveVersionMatchmakersByVersionId {
 
     final SelectListOperation selectListOperation;
 
     final VersionMatchmakerModelMapper versionMatchmakerModelMapper;
 
     @Override
-    public Uni<List<VersionMatchmakerModel>> selectActiveVersionMatchmakers(final SqlConnection sqlConnection,
-                                                                            final int shard,
-                                                                            final Long tenantId,
-                                                                            final Long versionId) {
+    public Uni<List<VersionMatchmakerModel>> selectActiveVersionMatchmakersByVersionId(final SqlConnection sqlConnection,
+                                                                                       final int shard,
+                                                                                       final Long tenantId,
+                                                                                       final Long versionId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,

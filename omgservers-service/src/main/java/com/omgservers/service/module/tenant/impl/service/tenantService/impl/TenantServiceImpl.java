@@ -4,6 +4,8 @@ import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
+import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
+import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
@@ -20,6 +22,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.TenantSer
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.deleteTenant.DeleteTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.deleteTenantPermission.DeleteTenantPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.getTenant.GetTenantMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.getTenantDashboard.GetTenantDashboardMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.hasTenantPermission.HasTenantPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.syncTenant.SyncTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.syncTenantPermission.SyncTenantPermissionMethod;
@@ -42,6 +45,7 @@ public class TenantServiceImpl implements TenantService {
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final HasTenantPermissionMethod hasTenantPermissionMethod;
+    final GetTenantDashboardMethod getTenantDashboard;
     final DeleteTenantMethod deleteTenantMethod;
     final SyncTenantMethod syncTenantMethod;
     final GetTenantMethod getTenantMethod;
@@ -56,6 +60,14 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenant,
                 getTenantMethod::getTenant);
+    }
+
+    @Override
+    public Uni<GetTenantDashboardResponse> getTenantDashboard(@Valid final GetTenantDashboardRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getTenantDashboard,
+                getTenantDashboard::getTenantDashboard);
     }
 
     @Override

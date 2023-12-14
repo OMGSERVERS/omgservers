@@ -8,11 +8,15 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
     Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
+
+    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(GetTenantDashboardDeveloperRequest request);
 
     Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
 

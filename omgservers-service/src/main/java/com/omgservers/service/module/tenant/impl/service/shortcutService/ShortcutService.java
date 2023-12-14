@@ -5,6 +5,7 @@ import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
@@ -16,6 +17,10 @@ import java.util.List;
 
 public interface ShortcutService {
     Uni<TenantModel> getTenant(Long id);
+
+    Uni<TenantDashboardModel> getTenantDashboard(Long id);
+
+    Uni<Boolean> syncTenantPermission(TenantPermissionModel tenantPermission);
 
     Uni<List<TenantPermissionModel>> viewTenantPermissions(Long tenantId);
 

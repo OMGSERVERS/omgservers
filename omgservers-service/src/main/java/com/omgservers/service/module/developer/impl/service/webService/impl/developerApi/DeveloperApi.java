@@ -8,6 +8,8 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -18,6 +20,10 @@ public interface DeveloperApi {
     @PUT
     @Path("/create-token")
     Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
+
+    @PUT
+    @Path("/get-tenant-dashboard")
+    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(GetTenantDashboardDeveloperRequest request);
 
     @PUT
     @Path("/create-project")

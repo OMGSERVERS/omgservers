@@ -20,6 +20,8 @@ import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
+import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
+import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
@@ -36,6 +38,8 @@ import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
+import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
@@ -58,6 +62,7 @@ import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
@@ -85,6 +90,20 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new GetTenantRequest(id);
         return tenantModule.getTenantService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
+    }
+
+    @Override
+    public Uni<TenantDashboardModel> getTenantDashboard(Long id) {
+        final var request = new GetTenantDashboardRequest(id);
+        return tenantModule.getTenantService().getTenantDashboard(request)
+                .map(GetTenantDashboardResponse::getTenantDashboard);
+    }
+
+    @Override
+    public Uni<Boolean> syncTenantPermission(TenantPermissionModel tenantPermission) {
+        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
+        return tenantModule.getTenantService().syncTenantPermission(syncTenantPermissionServiceRequest)
+                .map(SyncTenantPermissionResponse::getCreated);
     }
 
     @Override

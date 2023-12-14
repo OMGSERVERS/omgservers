@@ -8,11 +8,14 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.service.module.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createProject.CreateProjectMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.deleteVersion.DeleteVersionMethod;
+import com.omgservers.service.module.developer.impl.service.developerService.impl.method.getTenantDashboard.GetTenantDashboardMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -25,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeveloperServiceImpl implements DeveloperService {
 
+    final GetTenantDashboardMethod getTenantDashboardMethod;
     final CreateProjectMethod createProjectMethod;
     final CreateVersionMethod createVersionMethod;
     final DeleteVersionMethod deleteVersionMethod;
@@ -33,6 +37,12 @@ class DeveloperServiceImpl implements DeveloperService {
     @Override
     public Uni<CreateTokenDeveloperResponse> createToken(@Valid final CreateTokenDeveloperRequest request) {
         return createTokenMethod.createToken(request);
+    }
+
+    @Override
+    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
+            @Valid final GetTenantDashboardDeveloperRequest request) {
+        return getTenantDashboardMethod.getTenantDashboard(request);
     }
 
     @Override

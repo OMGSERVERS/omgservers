@@ -10,6 +10,9 @@ import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
@@ -41,6 +44,22 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody().as(CreateTokenDeveloperResponse.class);
         return response.getRawToken();
+    }
+
+    public TenantDashboardModel getTenantDashboard(String token, Long tenantId)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId)))
+                .when().put("/omgservers/developer-api/v1/request/get-tenant-dashboard");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(GetTenantDashboardDeveloperResponse.class);
+        return response.getTenantDashboard();
     }
 
     public CreateProjectDeveloperResponse createProject(String token, Long tenantId) throws JsonProcessingException {

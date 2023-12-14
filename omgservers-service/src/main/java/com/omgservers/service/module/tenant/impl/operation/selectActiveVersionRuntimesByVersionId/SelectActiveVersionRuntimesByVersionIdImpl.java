@@ -1,4 +1,4 @@
-package com.omgservers.service.module.tenant.impl.operation.selectActiveVersionRuntimes;
+package com.omgservers.service.module.tenant.impl.operation.selectActiveVersionRuntimesByVersionId;
 
 import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionRuntimeModelMapper;
@@ -15,17 +15,17 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectActiveVersionRuntimesImpl implements SelectActiveVersionRuntimes {
+class SelectActiveVersionRuntimesByVersionIdImpl implements SelectActiveVersionRuntimesByVersionId {
 
     final SelectListOperation selectListOperation;
 
     final VersionRuntimeModelMapper versionRuntimeModelMapper;
 
     @Override
-    public Uni<List<VersionRuntimeModel>> selectActiveVersionRuntimes(final SqlConnection sqlConnection,
-                                                                      final int shard,
-                                                                      final Long tenantId,
-                                                                      final Long versionId) {
+    public Uni<List<VersionRuntimeModel>> selectActiveVersionRuntimesByVersionId(final SqlConnection sqlConnection,
+                                                                                 final int shard,
+                                                                                 final Long tenantId,
+                                                                                 final Long versionId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,

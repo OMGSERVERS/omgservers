@@ -18,8 +18,6 @@ import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
-import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
@@ -28,6 +26,8 @@ import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
+import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
+import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
@@ -44,6 +44,8 @@ import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
+import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
 import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
 import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
@@ -94,6 +96,10 @@ public interface TenantApi {
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
 
     @PUT
+    @Path("/get-tenant-dashboard")
+    Uni<GetTenantDashboardResponse> getTenantDashboard(GetTenantDashboardRequest request);
+
+    @PUT
     @Path("/sync-tenant")
     Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request);
 
@@ -102,7 +108,7 @@ public interface TenantApi {
     Uni<DeleteTenantResponse> deleteTenant(DeleteTenantRequest request);
 
     @PUT
-    @Path("/view-tenant-permission")
+    @Path("/view-tenant-permissions")
     Uni<ViewTenantPermissionsResponse> viewTenantPermissions(ViewTenantPermissionsRequest request);
 
     @PUT
@@ -134,7 +140,7 @@ public interface TenantApi {
     Uni<DeleteProjectResponse> deleteProject(DeleteProjectRequest request);
 
     @PUT
-    @Path("/view-project-permission")
+    @Path("/view-project-permissions")
     Uni<ViewProjectPermissionsResponse> viewProjectPermissions(ViewProjectPermissionsRequest request);
 
     @PUT
@@ -166,7 +172,7 @@ public interface TenantApi {
     Uni<DeleteStageResponse> deleteStage(DeleteStageRequest request);
 
     @PUT
-    @Path("/view-stage-permission")
+    @Path("/view-stage-permissions")
     Uni<ViewStagePermissionsResponse> viewStagePermissions(ViewStagePermissionsRequest request);
 
     @PUT
