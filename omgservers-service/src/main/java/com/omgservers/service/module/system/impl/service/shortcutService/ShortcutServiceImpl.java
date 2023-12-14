@@ -154,6 +154,13 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
+    public Uni<JobModel> findStageJob(final Long tenantId, final Long stageId) {
+        final var request = new FindJobRequest(tenantId, stageId, JobQualifierEnum.STAGE);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    @Override
     public Uni<JobModel> findMatchmakerJob(final Long matchmakerId) {
         final var request = new FindJobRequest(matchmakerId, matchmakerId, JobQualifierEnum.MATCHMAKER);
         return systemModule.getJobService().findJob(request)

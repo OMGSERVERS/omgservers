@@ -1,5 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.shortcutService;
 
+import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
@@ -166,7 +168,14 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
-    public Uni<Boolean> findAndDeleteRuntimeClient(final Long runtimeId, final  Long clientId) {
+    public Uni<Integer> countRuntimeClients(Long runtimeId) {
+        final var request = new CountRuntimeClientsRequest(runtimeId);
+        return runtimeModule.getRuntimeService().countRuntimeClients(request)
+                .map(CountRuntimeClientsResponse::getCount);
+    }
+
+    @Override
+    public Uni<Boolean> findAndDeleteRuntimeClient(final Long runtimeId, final Long clientId) {
         return findRuntimeClient(runtimeId, clientId)
                 .flatMap(runtimeClient -> deleteRuntimeClient(runtimeId, runtimeClient.getId()));
     }

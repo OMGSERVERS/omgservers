@@ -4,6 +4,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -19,6 +20,7 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
+    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -39,8 +41,14 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
 
                     return tenantModule.getShortcutService().deleteStagePermissions(tenantId, stageId)
                             .flatMap(voidItem -> tenantModule.getShortcutService()
-                                    .deleteVersions(tenantId, stageId));
+                                    .deleteVersions(tenantId, stageId))
+                            .flatMap(voidItem -> deleteStageJob(tenantId, stageId));
                 })
                 .replaceWith(true);
+    }
+
+    Uni<Boolean> deleteStageJob(final Long tenantId, final Long stageId) {
+        return systemModule.getShortcutService().findStageJob(tenantId, stageId)
+                .flatMap(job -> systemModule.getShortcutService().deleteJob(job.getId()));
     }
 }

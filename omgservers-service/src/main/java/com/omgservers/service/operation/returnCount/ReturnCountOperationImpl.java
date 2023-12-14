@@ -2,10 +2,10 @@ package com.omgservers.service.operation.returnCount;
 
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
 import com.omgservers.service.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.SqlResult;
@@ -34,8 +34,7 @@ class ReturnCountOperationImpl implements ReturnCountOperation {
     public Uni<Integer> returnCount(final SqlConnection sqlConnection,
                                     final int shard,
                                     final String sql,
-                                    final List<?> parameters,
-                                    final String objectName) {
+                                    final List<?> parameters) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))

@@ -34,6 +34,8 @@ public interface ShortcutService {
 
     Uni<RuntimeClientModel> findRuntimeClient(Long runtimeId, Long clientId);
 
+    Uni<Integer> countRuntimeClients(Long runtimeId);
+
     Uni<Boolean> findAndDeleteRuntimeClient(Long runtimeId, Long clientId);
 
     Uni<List<RuntimeClientModel>> viewRuntimeClients(Long runtimeId);

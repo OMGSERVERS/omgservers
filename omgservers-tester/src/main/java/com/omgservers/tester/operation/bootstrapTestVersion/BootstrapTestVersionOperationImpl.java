@@ -43,8 +43,8 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var developerUserId = createDeveloperAdminResponse.getUserId();
         final var developerPassword = createDeveloperAdminResponse.getPassword();
 
-        final var token = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
-        final var createProjectDeveloperResponse = developerApiTester.createProject(token, tenantId);
+        final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
+        final var createProjectDeveloperResponse = developerApiTester.createProject(developerToken, tenantId);
         final var projectId = createProjectDeveloperResponse.getProjectId();
         final var stageId = createProjectDeveloperResponse.getStageId();
         final var stageSecret = createProjectDeveloperResponse.getSecret();
@@ -55,13 +55,14 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         sourceCode.getFiles().add(new EncodedFileModel("match.lua", Base64.getEncoder()
                 .encodeToString(match.getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse =
-                developerApiTester.createVersion(token, tenantId, stageId, versionConfig, sourceCode);
+                developerApiTester.createVersion(developerToken, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();
 
         return TestVersionModel.builder()
                 .tenantId(tenantId)
                 .developerUserId(developerUserId)
                 .developerPassword(developerPassword)
+                .developerToken(developerToken)
                 .projectId(projectId)
                 .stageId(stageId)
                 .stageSecret(stageSecret)

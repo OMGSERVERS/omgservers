@@ -1,5 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.webService.impl;
 
+import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
@@ -133,6 +135,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<ViewRuntimeClientsResponse> viewRuntimeClients(final ViewRuntimeClientsRequest request) {
         return runtimeService.viewRuntimeClients(request);
+    }
+
+    @Override
+    public Uni<CountRuntimeClientsResponse> countRuntimeClients(final CountRuntimeClientsRequest request) {
+        return runtimeService.countRuntimeClients(request);
     }
 
     @Override

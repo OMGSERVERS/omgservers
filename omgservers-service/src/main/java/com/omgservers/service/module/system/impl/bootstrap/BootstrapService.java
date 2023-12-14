@@ -31,7 +31,7 @@ public class BootstrapService {
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
     @WithSpan
-    void startup(@Observes @Priority(ServiceApplication.START_UP_SERVICE_PRIORITY) StartupEvent event) {
+    void startup(@Observes @Priority(ServiceApplication.START_UP_BOOTSTRAP_SERVICE_PRIORITY) StartupEvent event) {
         if (getConfigOperation.getConfig().bootstrapService()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> createIndex())

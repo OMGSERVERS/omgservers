@@ -1,5 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService;
 
+import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
@@ -60,6 +62,8 @@ public interface RuntimeService {
     Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid SyncRuntimeClientRequest request);
 
     Uni<ViewRuntimeClientsResponse> viewRuntimeClients(@Valid ViewRuntimeClientsRequest request);
+
+    Uni<CountRuntimeClientsResponse> countRuntimeClients(@Valid CountRuntimeClientsRequest request);
 
     Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid FindRuntimeClientRequest request);
 

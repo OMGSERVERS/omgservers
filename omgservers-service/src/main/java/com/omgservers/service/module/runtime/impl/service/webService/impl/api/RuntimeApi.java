@@ -1,5 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.webService.impl.api;
 
+import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
@@ -106,6 +108,10 @@ public interface RuntimeApi {
     @PUT
     @Path("/view-runtime-clients")
     Uni<ViewRuntimeClientsResponse> viewRuntimeClients(ViewRuntimeClientsRequest request);
+
+    @PUT
+    @Path("/count-runtime-clients")
+    Uni<CountRuntimeClientsResponse> countRuntimeClients(CountRuntimeClientsRequest request);
 
     @PUT
     @Path("/find-runtime-client")

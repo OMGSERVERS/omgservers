@@ -10,6 +10,7 @@ public class TestVersionModel {
     Long tenantId;
     Long developerUserId;
     String developerPassword;
+    String developerToken;
     Long projectId;
     Long stageId;
     String stageSecret;

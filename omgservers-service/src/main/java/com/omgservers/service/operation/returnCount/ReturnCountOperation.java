@@ -10,6 +10,5 @@ public interface ReturnCountOperation {
     Uni<Integer> returnCount(SqlConnection sqlConnection,
                              int shard,
                              String sql,
-                             List<?> parameters,
-                             String objectName);
+                             List<?> parameters);
 }
