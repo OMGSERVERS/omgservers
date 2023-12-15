@@ -1,10 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testOperation;
 
-import com.omgservers.model.project.ProjectModel;
-import com.omgservers.model.stage.StageModel;
-import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
@@ -44,13 +40,9 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
                 VersionSourceCodeModel.create());
         upsertVersionOperation.upsertVersion(shard, version);
 
-        return new TestVersionHolder(tenant, project, stage, version);
-    }
-
-    public record TestVersionHolder(
-            TenantModel tenant,
-            ProjectModel project,
-            StageModel stage,
-            VersionModel version) {
+        return new TestVersionHolder(tenant,
+                project,
+                stage,
+                version);
     }
 }

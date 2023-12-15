@@ -6,7 +6,6 @@ import com.omgservers.service.module.matchmaker.operation.testOperation.CreateTe
 import com.omgservers.service.module.runtime.operation.testOperation.CreateTestRuntimeOperation;
 import com.omgservers.service.module.tenant.operation.testOperation.CreateTestVersionOperation;
 import com.omgservers.service.module.user.operation.testOperation.CreateTestClientOperation;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -35,27 +34,24 @@ class ChangeMessageReceivedEventHandlerImplTest extends Assertions {
     CreateTestClientOperation createTestClientOperation;
 
     @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
     EventModelFactory eventModelFactory;
 
     @Test
     void givenTestClient_whenHandleChangeMessageReceivedEventAgain_thenOk() {
         final var testVersionHolder = createTestVersionOperation.createTestVersion();
 
-        final var testMatchmakerHolder = createTestMatchmakerOperation
+        final var testMatchmaker = createTestMatchmakerOperation
                 .createTestMatchmaker(testVersionHolder.tenant().getId(), testVersionHolder.version().getId());
 
-        final var testRuntimeHolder = createTestRuntimeOperation
-                .createTestLobby(testVersionHolder.tenant().getId(), testVersionHolder.version().getId());
+        final var testRuntime = createTestRuntimeOperation
+                .createTestRuntime(testVersionHolder.tenant().getId(), testVersionHolder.version().getId());
 
         final var testClientHolder = createTestClientOperation.createTestClient(
                 testVersionHolder.tenant().getId(),
                 testVersionHolder.stage().getId(),
                 testVersionHolder.version().getId(),
-                testMatchmakerHolder.matchmaker().getId(),
-                testRuntimeHolder.runtime().getId());
+                testMatchmaker.getId(),
+                testRuntime.getId());
 
         final var eventBody = new ChangeMessageReceivedEventBodyModel(
                 testVersionHolder.tenant().getId(),

@@ -1,6 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation.testOperation;
 
+import com.omgservers.model.matchmaker.MatchmakerModel;
+
 public interface CreateTestMatchmakerOperation {
 
-    CreateTestMatchmakerOperationImpl.TestMatchmakerHolder createTestMatchmaker(Long tenantId, Long versionId);
+    MatchmakerModel createTestMatchmaker(Long tenantId, Long versionId);
 }

@@ -1,6 +1,8 @@
 package com.omgservers.service.module.runtime.operation.testOperation;
 
+import com.omgservers.model.runtime.RuntimeModel;
+
 public interface CreateTestRuntimeOperation {
 
-    CreateTestRuntimeOperationImpl.TestRuntimeHolder createTestLobby(Long tenantId, Long versionId);
+    RuntimeModel createTestRuntime(Long tenantId, Long versionId);
 }

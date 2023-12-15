@@ -1,8 +1,5 @@
 package com.omgservers.service.module.user.operation.testOperation;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
@@ -54,11 +51,5 @@ class CreateTestClientOperationImpl implements CreateTestClientOperation {
 
     Long connectionId() {
         return generateIdOperation.generateId();
-    }
-
-    public record TestClientHolder(
-            UserModel user,
-            PlayerModel player,
-            ClientModel client) {
     }
 }
