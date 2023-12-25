@@ -4,6 +4,8 @@ import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
 import com.omgservers.model.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.model.dto.gateway.AssignRuntimeResponse;
+import com.omgservers.model.dto.gateway.CloseConnectionRequest;
+import com.omgservers.model.dto.gateway.CloseConnectionResponse;
 import com.omgservers.model.dto.gateway.RespondMessageRequest;
 import com.omgservers.model.dto.gateway.RespondMessageResponse;
 import com.omgservers.model.dto.gateway.RevokeRuntimeRequest;
@@ -25,6 +27,12 @@ class GatewayApiImpl implements GatewayApi {
     final WebService webService;
 
     final HandleApiRequestOperation handleApiRequestOperation;
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<CloseConnectionResponse> closeConnection(final CloseConnectionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::closeConnection);
+    }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})

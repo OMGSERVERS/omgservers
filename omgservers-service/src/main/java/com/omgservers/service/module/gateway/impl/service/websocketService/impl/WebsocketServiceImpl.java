@@ -3,22 +3,19 @@ package com.omgservers.service.module.gateway.impl.service.websocketService.impl
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
 import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.module.gateway.impl.operation.getGatewayModuleClient.GetGatewayModuleClientOperation;
 import com.omgservers.service.module.gateway.impl.operation.processMessage.ProcessMessageOperation;
 import com.omgservers.service.module.gateway.impl.service.connectionService.ConnectionService;
 import com.omgservers.service.module.gateway.impl.service.connectionService.request.CreateConnectionRequest;
 import com.omgservers.service.module.gateway.impl.service.connectionService.request.DeleteConnectionRequest;
 import com.omgservers.service.module.gateway.impl.service.connectionService.request.GetConnectionRequest;
-import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.respondMessage.RespondMessageMethod;
 import com.omgservers.service.module.gateway.impl.service.websocketService.WebsocketService;
 import com.omgservers.service.module.gateway.impl.service.websocketService.request.CleanUpRequest;
+import com.omgservers.service.module.gateway.impl.service.websocketService.request.CloseSessionRequest;
 import com.omgservers.service.module.gateway.impl.service.websocketService.request.ReceiveTextMessageRequest;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import jakarta.websocket.CloseReason;
-import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,11 +32,7 @@ class WebsocketServiceImpl implements WebsocketService {
 
     final ConnectionService connectionService;
 
-    final RespondMessageMethod respondMessageMethod;
-
-    final GetGatewayModuleClientOperation getGatewayModuleClientOperation;
     final ProcessMessageOperation processMessageOperation;
-    final GetConfigOperation getConfigOperation;
 
     final EventModelFactory eventModelFactory;
 
@@ -82,14 +75,18 @@ class WebsocketServiceImpl implements WebsocketService {
             processMessageOperation.processMessage(connectionId, messageString)
                     .await().atMost(Duration.ofSeconds(TIMEOUT));
         } catch (Exception e) {
-            closeSession(session, e.getMessage());
+            closeSession(new CloseSessionRequest(session, e.getMessage()));
         }
     }
 
-    void closeSession(Session session, String reason) {
+    @Override
+    public void closeSession(@Valid final CloseSessionRequest request) {
+        final var session = request.getSession();
+        final var reason = request.getReason();
+
         try {
-            log.error("Session will be closed, {}", reason);
-            session.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, reason));
+            log.error("Session will be closed, sessionId={}, {}", session.getId(), reason);
+            session.close(new CloseReason(CloseReason.CloseCodes.NO_STATUS_CODE, reason));
         } catch (IOException e) {
             log.error("Session wasn't closed properly, {}", e.getMessage());
         }

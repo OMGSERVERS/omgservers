@@ -4,6 +4,8 @@ import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
 import com.omgservers.model.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.model.dto.gateway.AssignRuntimeResponse;
+import com.omgservers.model.dto.gateway.CloseConnectionRequest;
+import com.omgservers.model.dto.gateway.CloseConnectionResponse;
 import com.omgservers.model.dto.gateway.RespondMessageRequest;
 import com.omgservers.model.dto.gateway.RespondMessageResponse;
 import com.omgservers.model.dto.gateway.RevokeRuntimeRequest;
@@ -22,6 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final GatewayService gatewayService;
+
+    @Override
+    public Uni<CloseConnectionResponse> closeConnection(final CloseConnectionRequest request) {
+        return gatewayService.closeConnection(request);
+    }
 
     @Override
     public Uni<RespondMessageResponse> respondMessage(final RespondMessageRequest request) {

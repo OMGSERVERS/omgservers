@@ -4,6 +4,8 @@ import com.omgservers.model.dto.gateway.AssignClientRequest;
 import com.omgservers.model.dto.gateway.AssignClientResponse;
 import com.omgservers.model.dto.gateway.AssignRuntimeRequest;
 import com.omgservers.model.dto.gateway.AssignRuntimeResponse;
+import com.omgservers.model.dto.gateway.CloseConnectionRequest;
+import com.omgservers.model.dto.gateway.CloseConnectionResponse;
 import com.omgservers.model.dto.gateway.RespondMessageRequest;
 import com.omgservers.model.dto.gateway.RespondMessageResponse;
 import com.omgservers.model.dto.gateway.RevokeRuntimeRequest;
@@ -12,11 +14,13 @@ import com.omgservers.service.module.gateway.impl.operation.getGatewayModuleClie
 import com.omgservers.service.module.gateway.impl.service.gatewayService.GatewayService;
 import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.assignClient.AssignClientMethod;
 import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.assignRuntime.AssignRuntimeMethod;
+import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.closeConnection.CloseConnectionMethod;
 import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.respondMessage.RespondMessageMethod;
 import com.omgservers.service.module.gateway.impl.service.gatewayService.impl.method.revokeRuntime.RevokeRuntimeMethod;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GatewayServiceImpl implements GatewayService {
 
+    final CloseConnectionMethod closeConnectionMethod;
     final RespondMessageMethod respondMessageMethod;
     final AssignRuntimeMethod assignRuntimeMethod;
     final RevokeRuntimeMethod revokeRuntimeMethod;
@@ -35,7 +40,21 @@ class GatewayServiceImpl implements GatewayService {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<RespondMessageResponse> respondMessage(final RespondMessageRequest request) {
+    public Uni<CloseConnectionResponse> closeConnection(@Valid final CloseConnectionRequest request) {
+        final var currentServer = getConfigOperation.getConfig().externalUri();
+        final var targetServer = request.getServer();
+        if (currentServer.equals(targetServer)) {
+            log.debug("Handle request, request={}", request);
+            return closeConnectionMethod.closeConnection(request);
+        } else {
+            log.debug("Route request, request={}", request);
+            return getGatewayModuleClientOperation.getClient(targetServer)
+                    .closeConnection(request);
+        }
+    }
+
+    @Override
+    public Uni<RespondMessageResponse> respondMessage(@Valid final RespondMessageRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -49,7 +68,7 @@ class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public Uni<AssignClientResponse> assignClient(final AssignClientRequest request) {
+    public Uni<AssignClientResponse> assignClient(@Valid final AssignClientRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -63,7 +82,7 @@ class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public Uni<AssignRuntimeResponse> assignRuntime(AssignRuntimeRequest request) {
+    public Uni<AssignRuntimeResponse> assignRuntime(@Valid final AssignRuntimeRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
@@ -77,7 +96,7 @@ class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public Uni<RevokeRuntimeResponse> revokeRuntime(final RevokeRuntimeRequest request) {
+    public Uni<RevokeRuntimeResponse> revokeRuntime(@Valid final RevokeRuntimeRequest request) {
         final var currentServer = getConfigOperation.getConfig().externalUri();
         final var targetServer = request.getServer();
         if (currentServer.equals(targetServer)) {
