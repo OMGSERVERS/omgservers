@@ -14,8 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetIndexMethodImpl implements GetIndexMethod {
 
-    final PgPool pgPool;
     final GetIndexOperation getIndexOperation;
+
+    final PgPool pgPool;
 
     @Override
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {

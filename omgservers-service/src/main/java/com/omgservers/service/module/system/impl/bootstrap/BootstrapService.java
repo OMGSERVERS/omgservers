@@ -52,6 +52,12 @@ public class BootstrapService {
                     final var shardCount = getConfigOperation.getConfig().shardCount();
                     final var indexConfig = IndexConfigModel.create(addresses, shardCount);
                     final var indexModel = indexModelFactory.create(indexName, indexConfig);
+
+                    log.info("Bootstrap index, name={}, addressed={}, shards={}",
+                            indexName,
+                            addresses.size(),
+                            shardCount);
+
                     return systemModule.getShortcutService().syncIndex(indexModel)
                             .replaceWith(indexModel);
                 })
@@ -67,6 +73,9 @@ public class BootstrapService {
                     final var servicePassword = getConfigOperation.getConfig().servicePassword();
                     final var passwordHash = BcryptUtil.bcryptHash(servicePassword);
                     final var serviceAccount = serviceAccountModelFactory.create(serviceUsername, passwordHash);
+
+                    log.info("Bootstrap service account, username={}", serviceUsername);
+
                     return systemModule.getShortcutService().syncServiceAccount(serviceAccount)
                             .replaceWith(serviceAccount);
                 })
