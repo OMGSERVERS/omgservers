@@ -4,7 +4,7 @@ import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
-import com.omgservers.service.ServiceApplication;
+import com.omgservers.service.ServiceConfiguration;
 import com.omgservers.service.module.system.impl.component.dockerClient.DockerClientContainer;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -26,7 +26,7 @@ public class BootstrapDockerClient {
     final DockerClientContainer dockerClientContainer;
 
     @WithSpan
-    void startup(@Observes @Priority(ServiceApplication.START_UP_DOCKER_CLIENT_PRIORITY) StartupEvent event) {
+    void startup(@Observes @Priority(ServiceConfiguration.START_UP_DOCKER_CLIENT_PRIORITY) StartupEvent event) {
         final var disableDocker = getConfigOperation.getConfig().disableDocker();
         if (disableDocker) {
             log.warn("Docker integration was disabled, skip operation");

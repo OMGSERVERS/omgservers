@@ -10,6 +10,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-documents</artifactId>
+    <artifactId>omgservers-document</artifactId>
 
 </project>

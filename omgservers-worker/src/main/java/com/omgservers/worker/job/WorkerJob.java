@@ -6,7 +6,7 @@ import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
 import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
 import com.omgservers.model.workerContext.WorkerContextModel;
-import com.omgservers.worker.WorkerApplication;
+import com.omgservers.worker.WorkerConfiguration;
 import com.omgservers.worker.component.HandlerHolder;
 import com.omgservers.worker.component.TokenHolder;
 import com.omgservers.worker.module.service.ServiceModule;
@@ -41,7 +41,7 @@ class WorkerJob {
     final Scheduler scheduler;
 
     @WithSpan
-    void startUp(@Observes @Priority(WorkerApplication.START_UP_WORKER_JOB_PRIORITY) StartupEvent event) {
+    void startUp(@Observes @Priority(WorkerConfiguration.START_UP_WORKER_JOB_PRIORITY) StartupEvent event) {
         final var trigger = scheduler.newJob(JOB_NAME)
                 .setInterval(JOB_INTERVAL)
                 .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)

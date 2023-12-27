@@ -1,6 +1,6 @@
 package com.omgservers.worker.component;
 
-import com.omgservers.worker.WorkerApplication;
+import com.omgservers.worker.WorkerConfiguration;
 import com.omgservers.worker.exception.WorkerStartUpException;
 import com.omgservers.worker.module.handler.HandlerModule;
 import com.omgservers.worker.module.handler.lua.LuaHandlerModuleFactory;
@@ -36,7 +36,7 @@ public class HandlerHolder {
     }
 
     @WithSpan
-    void startUp(@Observes @Priority(WorkerApplication.START_UP_HANDLER_HOLDER_PRIORITY) StartupEvent event) {
+    void startUp(@Observes @Priority(WorkerConfiguration.START_UP_HANDLER_HOLDER_PRIORITY) StartupEvent event) {
         getVersionOperation.getVersion()
                 .invoke(version -> {
                     // TODO: detect type of worker by version fields

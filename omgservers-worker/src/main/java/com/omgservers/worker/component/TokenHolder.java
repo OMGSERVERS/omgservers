@@ -2,7 +2,7 @@ package com.omgservers.worker.component;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.worker.WorkerApplication;
+import com.omgservers.worker.WorkerConfiguration;
 import com.omgservers.worker.exception.WorkerStartUpException;
 import com.omgservers.worker.module.service.ServiceModule;
 import com.omgservers.worker.operation.getConfig.GetConfigOperation;
@@ -43,7 +43,7 @@ public class TokenHolder {
     }
 
     @WithSpan
-    void startUp(@Observes @Priority(WorkerApplication.START_UP_TOKEN_HOLDER_PRIORITY) StartupEvent event) {
+    void startUp(@Observes @Priority(WorkerConfiguration.START_UP_TOKEN_HOLDER_PRIORITY) StartupEvent event) {
         refreshToken().await().indefinitely();
         final var trigger = scheduler.newJob(JOB_NAME)
                 .setInterval(JOB_INTERVAL)
