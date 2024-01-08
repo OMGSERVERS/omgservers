@@ -1,6 +1,6 @@
 package com.omgservers.model.version;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +19,6 @@ public class VersionConfigModel {
         return config;
     }
 
-    @NotEmpty
+    @NotNull
     List<VersionModeModel> modes;
 }

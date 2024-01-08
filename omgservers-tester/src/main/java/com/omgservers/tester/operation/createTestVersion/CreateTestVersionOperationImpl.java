@@ -1,9 +1,8 @@
-package com.omgservers.tester.operation.updateTestVersion;
+package com.omgservers.tester.operation.createTestVersion;
 
 import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.model.TestVersionModel;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,26 +18,23 @@ import java.util.Base64;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class UpdateTestVersionOperationImpl implements UpdateTestVersionOperation {
-
-    @Inject
-    AdminApiTester adminApiTester;
+class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
 
     @Inject
     DeveloperApiTester developerApiTester;
 
     @Override
-    public Long updateTestVersion(final TestVersionModel testVersion,
+    public Long createTestVersion(final TestVersionModel testVersion,
                                   final String newLobbyScript,
                                   final String newMatchScript) throws IOException {
-        return updateTestVersion(testVersion,
+        return createTestVersion(testVersion,
                 newLobbyScript,
                 newMatchScript,
                 VersionConfigModel.create());
     }
 
     @Override
-    public Long updateTestVersion(final TestVersionModel testVersion,
+    public Long createTestVersion(final TestVersionModel testVersion,
                                   final String newLobbyScript,
                                   final String newMatchScript,
                                   final VersionConfigModel newVersionConfig) throws IOException {

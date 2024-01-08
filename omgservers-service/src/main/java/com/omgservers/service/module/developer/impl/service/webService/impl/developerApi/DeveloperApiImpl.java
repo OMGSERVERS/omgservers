@@ -10,6 +10,8 @@ import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.module.developer.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -19,6 +21,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -37,7 +42,8 @@ class DeveloperApiImpl implements DeveloperApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
-    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(final GetTenantDashboardDeveloperRequest request) {
+    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
+            final GetTenantDashboardDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
     }
 
@@ -51,6 +57,15 @@ class DeveloperApiImpl implements DeveloperApi {
     @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
+    }
+
+    @Override
+    @PermitAll
+    public Uni<UploadVersionDeveloperResponse> uploadVersion(final Long tenantId,
+                                                             final Long stageId,
+                                                             final List<FileUpload> files) {
+        final var request = new UploadVersionDeveloperRequest(tenantId, stageId, files);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::uploadVersion);
     }
 
     @Override

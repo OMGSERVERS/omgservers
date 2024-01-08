@@ -10,6 +10,8 @@ import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -21,6 +23,8 @@ public interface WebService {
     Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
 
     Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
+
+    Uni<UploadVersionDeveloperResponse> uploadVersion(UploadVersionDeveloperRequest request);
 
     Uni<DeleteVersionDeveloperResponse> deleteVersion(DeleteVersionDeveloperRequest request);
 }

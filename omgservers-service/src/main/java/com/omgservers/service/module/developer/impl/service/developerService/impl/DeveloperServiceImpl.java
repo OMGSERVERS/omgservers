@@ -10,12 +10,15 @@ import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.module.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createProject.CreateProjectMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.deleteVersion.DeleteVersionMethod;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.getTenantDashboard.GetTenantDashboardMethod;
+import com.omgservers.service.module.developer.impl.service.developerService.impl.method.uploadVersion.UploadVersionMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -31,6 +34,7 @@ class DeveloperServiceImpl implements DeveloperService {
     final GetTenantDashboardMethod getTenantDashboardMethod;
     final CreateProjectMethod createProjectMethod;
     final CreateVersionMethod createVersionMethod;
+    final UploadVersionMethod uploadVersionMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final CreateTokenMethod createTokenMethod;
 
@@ -53,6 +57,11 @@ class DeveloperServiceImpl implements DeveloperService {
     @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(@Valid final CreateVersionDeveloperRequest request) {
         return createVersionMethod.createVersion(request);
+    }
+
+    @Override
+    public Uni<UploadVersionDeveloperResponse> uploadVersion(@Valid final UploadVersionDeveloperRequest request) {
+        return uploadVersionMethod.uploadVersion(request);
     }
 
     @Override

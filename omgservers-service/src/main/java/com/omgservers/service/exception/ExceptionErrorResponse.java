@@ -11,11 +11,9 @@ public class ExceptionErrorResponse {
 
     String id;
     String message;
-    String exception;
 
     public ExceptionErrorResponse(Throwable t) {
         id = t.getClass().getSimpleName();
         message = t.getMessage();
-        exception = t.getClass().getName();
     }
 }

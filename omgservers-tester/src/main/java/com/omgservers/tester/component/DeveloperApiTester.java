@@ -12,6 +12,7 @@ import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
@@ -95,6 +96,35 @@ public class DeveloperApiTester {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateVersionDeveloperResponse.class);
+        return response;
+    }
+
+    public UploadVersionDeveloperResponse uploadVersion(final String token,
+                                                        final Long tenantId,
+                                                        final Long stageId,
+                                                        final VersionConfigModel versionConfig,
+                                                        final String lobbyScript,
+                                                        final String matchScript)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .auth().oauth2(token)
+                .contentType(ContentType.MULTIPART)
+                .formParam("tenantId", tenantId)
+                .formParam("stageId", stageId)
+                .multiPart("config.json", "config.json",
+                        objectMapper.writeValueAsString(versionConfig).getBytes(),
+                        "application/octet-stream")
+                .multiPart("lobby.lua", "lobby.lua", lobbyScript.getBytes(),
+                        "application/octet-stream")
+                .multiPart("match.lua", "match.lua", matchScript.getBytes(),
+                        "application/octet-stream")
+                .when().put("/omgservers/developer-api/v1/request/upload-version");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(UploadVersionDeveloperResponse.class);
         return response;
     }
 

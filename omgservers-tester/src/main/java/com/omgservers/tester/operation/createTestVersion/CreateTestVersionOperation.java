@@ -1,17 +1,17 @@
-package com.omgservers.tester.operation.updateTestVersion;
+package com.omgservers.tester.operation.createTestVersion;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.tester.model.TestVersionModel;
 
 import java.io.IOException;
 
-public interface UpdateTestVersionOperation {
+public interface CreateTestVersionOperation {
 
-    Long updateTestVersion(TestVersionModel testVersion,
+    Long createTestVersion(TestVersionModel testVersion,
                            String newLobbyScript,
                            String newMatchScript) throws IOException;
 
-    Long updateTestVersion(TestVersionModel testVersion,
+    Long createTestVersion(TestVersionModel testVersion,
                            String newLobbyScript,
                            String newMatchScript,
                            VersionConfigModel newVersionConfig) throws IOException;

@@ -10,6 +10,8 @@ import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.module.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.module.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -44,6 +46,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return developerService.createVersion(request);
+    }
+
+    @Override
+    public Uni<UploadVersionDeveloperResponse> uploadVersion(final UploadVersionDeveloperRequest request) {
+        return developerService.uploadVersion(request);
     }
 
     @Override
