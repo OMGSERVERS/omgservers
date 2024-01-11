@@ -60,7 +60,7 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    @PermitAll
+    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<UploadVersionDeveloperResponse> uploadVersion(final Long tenantId,
                                                              final Long stageId,
                                                              final List<FileUpload> files) {
