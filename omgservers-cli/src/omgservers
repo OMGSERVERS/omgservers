@@ -46,7 +46,7 @@ env_useLocal() {
   echo "export OMGSERVERS_ADMIN_USERNAME=admin" >> ~/.omgservers/environment.local
   echo "export OMGSERVERS_ADMIN_PASSWORD=admin" >> ~/.omgservers/environment.local
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Environment was selected, ENVIRONMENT=$OMGSERVERS_ENVIRONMENT"
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Environment was selected, ENVIRONMENT=local"
 
   exit 0
 }
@@ -78,6 +78,12 @@ admin_createTenant() {
 
 admin_createDeveloper() {
   TENANT_ID=$OMGSERVERS_TENANT_ID
+
+  if [ -z "${TENANT_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Tenant was not found"
+    exit 1
+  fi
+
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
 
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-developer" \
@@ -215,10 +221,14 @@ internal_useEnv() {
 
 internal_useEnv
 
-if [ "$1" = "help" ]; then
+# Help
+if [ -z "$1" -o "$1" = "help" ]; then
   help
+  exit 0
+fi
+
 # Env
-elif [ "$1" = "env" ]; then
+if [ "$1" = "env" ]; then
   if [ "$2" = "print" ]; then
     env_print
   elif [ "$2" = "useLocal" ]; then
@@ -226,8 +236,15 @@ elif [ "$1" = "env" ]; then
   else
     help env
   fi
+fi
+
+if [ -z "${OMGSERVERS_ENVIRONMENT}" ]; then
+  echo "$(date) $(echo unknown) ERROR: Environment was not selected"
+  exit 1
+fi
+
 # Admin
-elif [ "$1" = "admin" ]; then
+if [ "$1" = "admin" ]; then
   if [ "$2" = "createTenant" ]; then
     admin_createTenant
   elif [ "$2" = "createDeveloper" ]; then
