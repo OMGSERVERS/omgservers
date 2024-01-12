@@ -1,0 +1,459 @@
+#!/bin/bash
+set -e
+
+# HELP
+
+help() {
+  echo "OMGSERVERS ctl, v1.0.0"
+  echo "Usage:"
+  if [ -z "$1" -o "$1" = "help" ]; then
+    echo " omgserversctl help"
+  fi
+  if [ -z "$1" -o "$1" = "logs" ]; then
+    echo " omgserversctl logs"
+  fi
+  # Env
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env print" ]; then
+    echo " omgserversctl env print"
+  fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env useLocal" ]; then
+    echo " omgserversctl env useLocal"
+  fi
+  # Admin
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingServer" ]; then
+    echo " omgserversctl admin pingServer"
+  fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin generateId" ]; then
+    echo " omgserversctl admin generateId"
+  fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createTenant" ]; then
+    echo " omgserversctl admin createTenant"
+  fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createDeveloper" ]; then
+    echo " omgserversctl admin createDeveloper"
+  fi
+  # Developer
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
+    echo " omgserversctl developer createToken"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
+    echo " omgserversctl developer createProject"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
+    echo " omgserversctl developer getTenantDashboard"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadVersion" ]; then
+    echo " omgserversctl developer uploadVersion <scripts_path>"
+  fi
+}
+
+logs() {
+  cat ~/.omgservers/logs
+}
+
+# ENV
+
+env_print() {
+  env | grep OMGSERVERS_
+  exit 0
+}
+
+env_useLocal() {
+  ENVIRONMENT=local
+
+  echo "export OMGSERVERS_ENVIRONMENT=$ENVIRONMENT" >> ~/.omgservers/environment
+  echo "export OMGSERVERS_URL=http://localhost:8080" >> ~/.omgservers/environment.local
+  echo "export OMGSERVERS_ADMIN_USERNAME=admin" >> ~/.omgservers/environment.local
+  echo "export OMGSERVERS_ADMIN_PASSWORD=admin" >> ~/.omgservers/environment.local
+
+  echo "$(date) $(echo $ENVIRONMENT) Environment was selected, ENVIRONMENT=$ENVIRONMENT"
+
+  exit 0
+}
+
+# ADMIN
+
+admin_pingServer() {
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/ping-server" \
+      >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+      "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/ping-server" \
+      -H "Content-type: application/json" \
+      -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
+      -o ~/.omgservers/tmp/admin-ping-server
+
+  cat ~/.omgservers/tmp/admin-ping-server >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  MESSAGE=$(cat ~/.omgservers/tmp/admin-ping-server | jq .message)
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Server respond, MESSAGE=$MESSAGE"
+
+  exit 0
+}
+
+admin_generateId() {
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/generate-id" \
+      >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+      "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/generate-id" \
+      -H "Content-type: application/json" \
+      -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
+      -o ~/.omgservers/tmp/admin-generate-id
+
+  cat ~/.omgservers/tmp/admin-generate-id >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  ID=$(cat ~/.omgservers/tmp/admin-generate-id | jq .id)
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Unique id was generated, ID=$ID"
+
+  exit 0
+}
+
+admin_createTenant() {
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-tenant" \
+    >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+    "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-tenant" \
+    -H "Content-type: application/json" \
+    -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
+    -o ~/.omgservers/tmp/admin-create-tenant
+
+  cat ~/.omgservers/tmp/admin-create-tenant >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  TENANT_ID=$(cat ~/.omgservers/tmp/admin-create-tenant | jq .id)
+  if [ -z "$TENANT_ID" -o "$TENANT_ID" == "null" ]; then
+    echo "ERROR: TENANT_ID was not received"
+    exit 1
+  fi
+
+  echo "export OMGSERVERS_TENANT_ID=$TENANT_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  # Reset dependent vars
+  echo "export OMGSERVERS_DEVELOPER_USER_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_DEVELOPER_PASSWORD=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_DEVELOPER_TOKEN=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_PROJECT_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_STAGE_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_STAGE_SECRET=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_VERSION_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Tenant was created, TENANT_ID=$TENANT_ID"
+
+  exit 0
+}
+
+admin_createDeveloper() {
+  TENANT_ID=$OMGSERVERS_TENANT_ID
+
+  if [ -z "${TENANT_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Tenant was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-developer" \
+    >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+    "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-developer" \
+    -H "Content-type: application/json" \
+    -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
+    -d "{ \"tenantId\": $TENANT_ID }" \
+    -o ~/.omgservers/tmp/admin-create-developer
+
+  cat ~/.omgservers/tmp/admin-create-developer >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  USER_ID=$(cat ~/.omgservers/tmp/admin-create-developer | jq .userId)
+  if [ -z "$USER_ID" -o "$USER_ID" == "null" ]; then
+    echo "ERROR: USER_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  PASSWORD=$(cat ~/.omgservers/tmp/admin-create-developer | jq .password)
+  if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
+    echo "ERROR: PASSWORD was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_DEVELOPER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  # Reset dependent vars
+  echo "export OMGSERVERS_PROJECT_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_STAGE_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_STAGE_SECRET=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  echo "export OMGSERVERS_VERSION_ID=" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Developer was created, USER_ID=$USER_ID, PASSWORD=$PASSWORD"
+
+  exit 0
+}
+
+# DEVELOPER
+
+developer_createToken() {
+  DEVELOPER_USER_ID=$OMGSERVERS_DEVELOPER_USER_ID
+  DEVELOPER_PASSWORD=$OMGSERVERS_DEVELOPER_PASSWORD
+
+  if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Developer was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using developer, USER_ID=$DEVELOPER_USER_ID"
+
+  curl -s -S -X PUT --fail-with-body \
+    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-token" \
+    -H "Content-type: application/json" \
+    -d "{ \"userId\": ${DEVELOPER_USER_ID}, \"password\": \"${DEVELOPER_PASSWORD}\" }" \
+    -o ~/.omgservers/tmp/developer-create-token
+
+  cat ~/.omgservers/tmp/developer-create-token >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  TOKEN=$(cat ~/.omgservers/tmp/developer-create-token | jq .rawToken)
+  if [ -z "$TOKEN" -o "$TOKEN" == "null" ]; then
+    echo "ERROR: TOKEN was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_DEVELOPER_TOKEN=$TOKEN" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Token was created, USER_ID=$DEVELOPER_USER_ID"
+
+  exit 0
+}
+
+developer_createProject() {
+  TENANT_ID=$OMGSERVERS_TENANT_ID
+
+  if [ -z "${TENANT_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Tenant was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
+
+  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Developer token was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-project" \
+    >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-project" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "{ \"tenantId\": ${TENANT_ID} }" \
+    -o ~/.omgservers/tmp/developer-create-project
+
+  cat ~/.omgservers/tmp/developer-create-project >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  PROJECT_ID=$(cat ~/.omgservers/tmp/developer-create-project | jq .projectId)
+  if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
+    echo "ERROR: PROJECT_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  STAGE_ID=$(cat ~/.omgservers/tmp/developer-create-project | jq .stageId)
+  if [ -z "$STAGE_ID" -o "$STAGE_ID" == "null" ]; then
+    echo "ERROR: STAGE_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_STAGE_ID=$STAGE_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  STAGE_SECRET=$(cat ~/.omgservers/tmp/developer-create-project | jq .secret)
+  if [ -z "$STAGE_SECRET" -o "$STAGE_SECRET" == "null" ]; then
+    echo "ERROR: STAGE_SECRET was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Project was created, PROJECT_ID=$PROJECT_ID, STAGE_ID=$STAGE_ID"
+
+  exit 0
+}
+
+developer_getTenantDashboard() {
+  TENANT_ID=$OMGSERVERS_TENANT_ID
+
+  if [ -z "${TENANT_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Tenant was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
+
+  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Developer token was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+    >> ~/.omgservers/logs
+
+  curl -s -S -X PUT --fail-with-body \
+    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "{ \"tenantId\": ${TENANT_ID} }" \
+    -o ~/.omgservers/tmp/developer-get-tenant-dashboard
+
+  cat ~/.omgservers/tmp/developer-get-tenant-dashboard | jq .
+}
+
+developer_uploadVersion() {
+  SCRIPTS_PATH=$1
+
+  if [ -z "${SCRIPTS_PATH}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Scripts path was not received"
+    help "developer uploadVersion"
+    exit 1
+  fi
+
+  TENANT_ID=$OMGSERVERS_TENANT_ID
+
+  if [ -z "${TENANT_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Tenant was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
+
+  STAGE_ID=$OMGSERVERS_STAGE_ID
+
+  if [ -z "${STAGE_ID}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Stage was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using stage, STAGE_ID=$STAGE_ID"
+
+  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) ERROR: Developer token was not found"
+    exit 1
+  fi
+
+  pushd ${SCRIPTS_PATH} >> /dev/null
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+    >> ~/.omgservers/logs
+
+  MULTIPART_FILES_PARAMS=$(find . -type f -name "*.lua" | sed "s/\(\.\/\)\(.*\)/-F \"\2=@\1\2\"/g" | tr -s '\n' ' ')
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Version files, $MULTIPART_FILES_PARAMS"
+
+  CURL_CMD="curl -s -S -X PUT --fail-with-body \
+    \"${OMGSERVERS_URL}/omgservers/developer-api/v1/request/upload-version\" \
+    -H \"Content-type: multipart/form-data\" \
+    -H \"Authorization: Bearer ${DEVELOPER_TOKEN}\" \
+    -F \"tenantId=${TENANT_ID}\" \
+    -F \"stageId=${STAGE_ID}\" \
+    -F \"config.json=@./config.json\" \
+    $MULTIPART_FILES_PARAMS \
+    -o ~/.omgservers/tmp/developer-upload-version"
+
+  eval "$CURL_CMD"
+
+  VERSION_ID=$(cat ~/.omgservers/tmp/developer-upload-version | jq .id)
+  if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
+    echo "ERROR: VERSION_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERS_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Version was uploaded, VERSION_ID=$VERSION_ID"
+
+  popd >> /dev/null
+}
+
+# INTERNAL
+
+internal_useEnv() {
+  if [ ! -d "~/.omgservers/tmp" ]; then
+    mkdir -p ~/.omgservers/tmp
+  fi
+  if [ ! -f "~/.omgservers/environment" ]; then
+    touch ~/.omgservers/environment
+  fi
+  if [ ! -f "~/.omgservers/logs" ]; then
+    touch ~/.omgservers/logs
+  fi
+  source ~/.omgservers/environment
+  if [ -n "${OMGSERVERS_ENVIRONMENT}" ]; then
+    source ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT}
+  fi
+}
+
+# MAIN
+
+internal_useEnv
+
+if [ -z "$1" -o "$1" = "help" ]; then
+  help
+  exit 0
+fi
+
+if [ -z "$1" -o "$1" = "logs" ]; then
+  logs
+  exit 0
+fi
+
+# Env
+if [ "$1" = "env" ]; then
+  if [ "$2" = "print" ]; then
+    env_print
+  elif [ "$2" = "useLocal" ]; then
+    env_useLocal
+  else
+    help "env"
+  fi
+fi
+
+if [ -z "${OMGSERVERS_ENVIRONMENT}" ]; then
+  echo "$(date) $(echo unknown) ERROR: Environment was not selected"
+  exit 1
+fi
+
+# Admin
+if [ "$1" = "admin" ]; then
+  if [ "$2" = "generateId" ]; then
+      admin_generateId
+  elif [ "$2" = "pingServer" ]; then
+      admin_pingServer
+  elif [ "$2" = "createTenant" ]; then
+    admin_createTenant
+  elif [ "$2" = "createDeveloper" ]; then
+    admin_createDeveloper
+  else
+    help "admin"
+  fi
+# Developer
+elif [ "$1" = "developer" ]; then
+  if [ "$2" = "createToken" ]; then
+    developer_createToken
+  elif [ "$2" = "createProject" ]; then
+    developer_createProject
+  elif [ "$2" = "getTenantDashboard" ]; then
+    developer_getTenantDashboard
+  elif [ "$2" = "uploadVersion" ]; then
+    developer_uploadVersion $3
+  else
+    help "developer"
+  fi
+else
+  help
+fi

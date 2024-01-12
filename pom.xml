@@ -31,7 +31,7 @@
         <module>omgservers-model</module>
         <module>omgservers-worker</module>
         <module>omgservers-tester</module>
-        <module>omgservers-cli</module>
+        <module>omgservers-ctl</module>
     </modules>
 
     <dependencies>

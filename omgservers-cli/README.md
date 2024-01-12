@@ -1,1 +1,0 @@
-# omgservers-cli

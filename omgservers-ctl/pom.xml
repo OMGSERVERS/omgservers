@@ -7,6 +7,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-cli</artifactId>
+    <artifactId>omgservers-ctl</artifactId>
 
 </project>
