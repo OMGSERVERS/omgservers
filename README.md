@@ -9,7 +9,7 @@
 
 ```
 {
-    qualifier = "sign_in"
+    qualifier = "sign_in",
     user_id = <user_id>,
     client_id = <client_id>,
     attributes = {},
@@ -19,7 +19,7 @@
 
 ```
 {
-    qualifier = "sign_up"
+    qualifier = "sign_up",
     user_id = <user_id>,
     client_id = <client_id>    
 }
@@ -27,7 +27,7 @@
 
 ```
 {
-    qualifier = "change_player"
+    qualifier = "change_player",
     user_id = <user_id>,
     client_id = <client_id>,
     attributes = {},
@@ -40,21 +40,21 @@
 
 ```
 {
-    qualifier = "init_runtime"
+    qualifier = "init_runtime",
     config = {}
 }
 ```
 
 ```
 {
-    qualifier = "update_runtime"
+    qualifier = "update_runtime",
     time = <time>    
 }
 ```
 
 ```
 {
-    qualifier = "add_client"
+    qualifier = "add_client",
     user_id = <user_id>,
     client_id = <client_id>,
     attributes = {},
@@ -64,7 +64,7 @@
 
 ```
 {
-    qualifier = "delete_client"
+    qualifier = "delete_client",
     user_id = <user_id>,
     client_id = <client_id>    
 }
@@ -72,7 +72,7 @@
 
 ```
 {
-    qualifier = "handle_message"
+    qualifier = "handle_message",
     user_id = <user_id>,
     client_id = <client_id>,    
     message = {}
@@ -135,13 +135,13 @@
     qualifier = "multicast",
     recipients = {
         {
-            user_id = <user_id_1>,
-            client_id = <client_id_1>
+            user_id = <user_1_id>,
+            client_id = <client_1_id>
         },
         ...
         {
-            user_id = <user_id_N>,
-            client_id = <client_id_N>
+            user_id = <user_N_id>,
+            client_id = <client_N_id>
         }
     }
     message = {}
@@ -177,13 +177,19 @@
   "modes": [
     {
       "name": "<mode_1_name>",
-      "minPlayers": <mode_min_players>,
-      "maxPlayers": <mode_max_players>,
+      "minPlayers": <mode_1_min_players>,
+      "maxPlayers": <mode_1_max_players>,
       "groups": [
         {
-          "name": "<group_name>",
-          "minPlayers": <group_min_players>,
-          "maxPlayers": <group_max_players>
+          "name": "<group_1_name>",
+          "minPlayers": <group_1_min_players>,
+          "maxPlayers": <group_1_max_players>
+        }
+        ...
+        {
+          "name": "<group_N_name>",
+          "minPlayers": <group_N_min_players>,
+          "maxPlayers": <group_N_max_players>
         }
       ]
     },
