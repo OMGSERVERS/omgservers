@@ -43,9 +43,9 @@
 
 ### Game project structure
 ```
-    config.json - game configuration
-    lobby.lua - entrypoint and handler for lobby commands
-    match.lua - entrypoint and handler for match commands
+config.json - game configuration
+lobby.lua - entrypoint and handler for lobby commands
+match.lua - entrypoint and handler for match commands
 ```
 
 ### Command line tool
