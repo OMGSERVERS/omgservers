@@ -20,6 +20,7 @@
         <skipITs>true</skipITs>
         <sonar.organization>omgservers</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!--suppress UnresolvedMavenProperty -->
         <sonar.coverage.jacoco.xmlReportPaths>
             ${maven.multiModuleProjectDirectory}/target/coverage/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
