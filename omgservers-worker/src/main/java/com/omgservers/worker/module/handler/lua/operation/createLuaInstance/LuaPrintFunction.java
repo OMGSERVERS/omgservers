@@ -25,7 +25,7 @@ class LuaPrintFunction extends VarArgFunction {
             LuaString s = tostring.call(args.arg(i)).strvalue();
             result.append(s.tojstring());
         }
-//        log.info("Lua print, {}", result);
+        log.info("Lua print, {}", result);
         return NONE;
     }
 }

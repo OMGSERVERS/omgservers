@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class AddClientRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @Override

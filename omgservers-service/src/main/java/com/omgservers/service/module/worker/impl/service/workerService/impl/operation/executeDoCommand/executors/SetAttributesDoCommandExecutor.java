@@ -27,11 +27,10 @@ public class SetAttributesDoCommandExecutor implements DoCommandExecutor {
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
         final var commandBody = (DoSetAttributesCommandBodyModel) doCommand.getBody();
-        final var userId = commandBody.getUserId();
         final var clientId = commandBody.getClientId();
         final var attributes = commandBody.getAttributes();
 
-        final var request = new DoSetAttributesRequest(runtimeId, userId, clientId, attributes);
+        final var request = new DoSetAttributesRequest(runtimeId, clientId, attributes);
         return runtimeModule.getDoService().doSetAttributes(request)
                 .replaceWithVoid();
     }

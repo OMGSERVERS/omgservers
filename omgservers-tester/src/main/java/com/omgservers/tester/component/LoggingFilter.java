@@ -18,10 +18,11 @@ public class LoggingFilter implements Filter {
     public Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec,
                            FilterContext ctx) {
         final var response = ctx.next(requestSpec, responseSpec);
-        log.info("{}: {} {} -> {} {}",
+        log.info("{}: {} {} -> {} {}, {}",
                 apiName,
                 requestSpec.getMethod(),
                 requestSpec.getURI().substring(requestSpec.getURI().lastIndexOf("/")),
+                requestSpec.getBody(),
                 response.getStatusCode(),
                 response.getBody().asString());
         return response;

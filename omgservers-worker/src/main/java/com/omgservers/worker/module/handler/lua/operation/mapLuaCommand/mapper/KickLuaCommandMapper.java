@@ -24,10 +24,9 @@ public class KickLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
-        final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
 
-        final var doCommandBody = new DoKickCommandBodyModel(userId, clientId);
+        final var doCommandBody = new DoKickCommandBodyModel(clientId);
         final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_KICK, doCommandBody);
         return doCommandModel;
     }

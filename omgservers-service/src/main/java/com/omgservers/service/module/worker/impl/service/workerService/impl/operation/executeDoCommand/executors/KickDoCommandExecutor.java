@@ -27,10 +27,9 @@ public class KickDoCommandExecutor implements DoCommandExecutor {
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
         final var commandBody = (DoKickCommandBodyModel) doCommand.getBody();
-        final var userId = commandBody.getUserId();
         final var clientId = commandBody.getClientId();
 
-        final var request = new DoKickClientRequest(runtimeId, userId, clientId);
+        final var request = new DoKickClientRequest(runtimeId, clientId);
         return runtimeModule.getDoService().doKickClient(request)
                 .replaceWithVoid();
     }

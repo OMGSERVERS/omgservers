@@ -7,6 +7,5 @@ public interface HasRuntimeClientOperation {
     Uni<Boolean> hasRuntimeClient(SqlConnection sqlConnection,
                                   int shard,
                                   Long runtimeId,
-                                  Long userId,
                                   Long clientId);
 }

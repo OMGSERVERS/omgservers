@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -14,5 +15,5 @@ import java.util.List;
 public class WorkerContextModel {
 
     List<RuntimeCommandModel> runtimeCommands;
-    List<PlayerModel> players;
+    Map<Long, PlayerModel> players;
 }

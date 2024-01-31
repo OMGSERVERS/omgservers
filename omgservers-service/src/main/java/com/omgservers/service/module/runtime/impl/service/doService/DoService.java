@@ -2,8 +2,6 @@ package com.omgservers.service.module.runtime.impl.service.doService;
 
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
-import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -16,8 +14,6 @@ import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
-import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -32,10 +28,6 @@ public interface DoService {
     Uni<DoKickClientResponse> doKickClient(@Valid DoKickClientRequest request);
 
     Uni<DoStopRuntimeResponse> doStopRuntime(@Valid DoStopRuntimeRequest request);
-
-    Uni<DoChangePlayerResponse> doChangePlayer(@Valid DoChangePlayerRequest request);
-
-    Uni<DoUnicastMessageResponse> doUnicastMessage(@Valid DoUnicastMessageRequest request);
 
     Uni<DoMulticastMessageResponse> doMulticastMessage(@Valid DoMulticastMessageRequest request);
 

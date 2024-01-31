@@ -6,7 +6,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -19,36 +18,30 @@ public class ClientModelFactory {
 
     public ClientModel create(final Long userId,
                               final Long playerId,
-                              final URI server,
-                              final Long connectionId,
+                              final Long tenantId,
                               final Long versionId,
-                              final Long defaultMatchmakerId,
-                              final Long defaultRuntimeId) {
+                              final Long matchmakerId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, server, connectionId, versionId, defaultMatchmakerId, defaultRuntimeId);
+        return create(id, userId, playerId, tenantId, versionId, matchmakerId);
     }
 
     public ClientModel create(final Long id,
                               final Long userId,
                               final Long playerId,
-                              final URI server,
-                              final Long connectionId,
+                              final Long tenantId,
                               final Long versionId,
-                              final Long defaultMatchmakerId,
-                              final Long defaultRuntimeId) {
+                              final Long matchmakerId) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        ClientModel client = new ClientModel();
+        final var client = new ClientModel();
         client.setId(id);
-        client.setUserId(userId);
-        client.setPlayerId(playerId);
         client.setCreated(now);
         client.setModified(now);
-        client.setServer(server);
-        client.setConnectionId(connectionId);
+        client.setUserId(userId);
+        client.setPlayerId(playerId);
+        client.setTenantId(tenantId);
         client.setVersionId(versionId);
-        client.setDefaultMatchmakerId(defaultMatchmakerId);
-        client.setDefaultRuntimeId(defaultRuntimeId);
+        client.setMatchmakerId(matchmakerId);
         client.setDeleted(false);
 
         return client;

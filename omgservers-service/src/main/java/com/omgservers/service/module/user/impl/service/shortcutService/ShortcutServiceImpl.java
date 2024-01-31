@@ -1,12 +1,9 @@
 package com.omgservers.service.module.user.impl.service.shortcutService;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.user.DeleteClientRequest;
-import com.omgservers.model.dto.user.DeleteClientResponse;
+import com.omgservers.model.dto.user.CreateTokenRequest;
+import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
@@ -31,6 +28,13 @@ import lombok.extern.slf4j.Slf4j;
 class ShortcutServiceImpl implements ShortcutService {
 
     final UserModule userModule;
+
+    @Override
+    public Uni<String> createToken(final Long userId, final String password) {
+        final var createTokenRequest = new CreateTokenRequest(userId, password);
+        return userModule.getTokenService().createToken(createTokenRequest)
+                .map(CreateTokenResponse::getRawToken);
+    }
 
     @Override
     public Uni<UserModel> validateCredentials(final Long userId, final String password) {
@@ -58,20 +62,6 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new FindPlayerRequest(userId, stageId);
         return userModule.getPlayerService().findPlayer(request)
                 .map(FindPlayerResponse::getPlayer);
-    }
-
-    @Override
-    public Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var request = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(request)
-                .map(GetClientResponse::getClient);
-    }
-
-    @Override
-    public Uni<Boolean> deleteClient(final Long userId, final Long clientId) {
-        final var request = new DeleteClientRequest(userId, clientId);
-        return userModule.getClientService().deleteClient(request)
-                .map(DeleteClientResponse::getDeleted);
     }
 
     @Override

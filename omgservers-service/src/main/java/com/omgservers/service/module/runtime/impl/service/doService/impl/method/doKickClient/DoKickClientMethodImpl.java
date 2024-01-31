@@ -4,10 +4,7 @@ import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
-import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
@@ -44,22 +41,20 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var runtimeId = request.getRuntimeId();
-                    final var userId = request.getUserId();
                     final var clientId = request.getClientId();
                     return pgPool.withTransaction(sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
                                     sqlConnection,
                                     shardModel.shard(),
                                     runtimeId,
-                                    userId,
                                     clientId)
                             .flatMap(has -> {
                                 if (has) {
-                                    return doKickClient(runtimeId, userId, clientId);
+                                    return doKickClient(runtimeId, clientId);
                                 } else {
                                     throw new ServerSideForbiddenException(
                                             String.format("runtime client was not found, " +
-                                                            "runtimeId=%s, user_id=%s, client_id=%s",
-                                                    runtimeId, userId, clientId));
+                                                            "runtimeId=%s, clientId=%s",
+                                                    runtimeId, clientId));
                                 }
                             })
                     );
@@ -68,12 +63,11 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
     }
 
     Uni<Boolean> doKickClient(final Long runtimeId,
-                              final Long userId,
                               final Long clientId) {
-        log.info("Do kick client, userId={}, clientId={}, runtimeId={}",
-                userId, clientId, runtimeId);
+        log.info("Do kick client, clientId={}, runtimeId={}",
+                clientId, runtimeId);
 
-        return getRuntime(runtimeId)
+        return runtimeModule.getShortcutService().getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     if (Objects.isNull(runtime.getConfig().getMatchConfig())) {
                         throw new ServerSideConflictException("Runtime is corrupted, matchConfig is null, " +
@@ -85,12 +79,6 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                             .replaceWithVoid();
                 })
                 .replaceWith(true);
-    }
-
-    Uni<RuntimeModel> getRuntime(final Long id) {
-        final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
-                .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

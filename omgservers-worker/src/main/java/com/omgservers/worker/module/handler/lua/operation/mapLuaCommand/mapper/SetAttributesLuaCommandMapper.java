@@ -29,15 +29,14 @@ public class SetAttributesLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
-        final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
 
         final var luaAttributes = luaCommand.get("attributes").checktable();
-        luaContext.updateAttributes(userId, luaAttributes);
+        luaContext.updateAttributes(clientId, luaAttributes);
 
         final var attributes = parseAttributes(luaAttributes);
 
-        final var doCommandBody = new DoSetAttributesCommandBodyModel(userId, clientId, attributes);
+        final var doCommandBody = new DoSetAttributesCommandBodyModel(clientId, attributes);
         final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_SET_ATTRIBUTES, doCommandBody);
         return doCommandModel;
     }

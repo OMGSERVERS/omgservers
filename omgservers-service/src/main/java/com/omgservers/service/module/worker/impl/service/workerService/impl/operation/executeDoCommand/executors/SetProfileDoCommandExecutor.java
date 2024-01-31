@@ -27,11 +27,10 @@ public class SetProfileDoCommandExecutor implements DoCommandExecutor {
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
         final var commandBody = (DoSetProfileCommandBodyModel) doCommand.getBody();
-        final var userId = commandBody.getUserId();
         final var clientId = commandBody.getClientId();
         final var profile = commandBody.getProfile();
 
-        final var request = new DoSetProfileRequest(runtimeId, userId, clientId, profile);
+        final var request = new DoSetProfileRequest(runtimeId, clientId, profile);
         return runtimeModule.getDoService().doSetProfile(request)
                 .replaceWithVoid();
     }

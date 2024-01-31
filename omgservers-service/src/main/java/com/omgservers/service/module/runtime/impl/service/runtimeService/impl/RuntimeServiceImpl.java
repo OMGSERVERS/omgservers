@@ -16,6 +16,8 @@ import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -44,6 +46,7 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimeClient.FindRuntimeClientMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimePermission.FindRuntimePermissionMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntime.GetRuntimeMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntimeClient.GetRuntimeClientMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeClient.SyncRuntimeClientMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
@@ -76,7 +79,8 @@ public class RuntimeServiceImpl implements RuntimeService {
     final SyncRuntimeCommandMethod syncRuntimeCommandMethod;
     final ViewRuntimeClientsMethod viewRuntimeClientsMethod;
     final SyncRuntimeClientMethod syncRuntimeClientMethod;
-    final FindRuntimeClientMethod findRuntimeClient;
+    final FindRuntimeClientMethod findRuntimeClientMethod;
+    final GetRuntimeClientMethod getRuntimeClientMethod;
     final DeleteRuntimeMethod deleteRuntimeMethod;
     final SyncRuntimeMethod syncRuntimeMethod;
     final GetRuntimeMethod getRuntimeMethod;
@@ -199,11 +203,19 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid final GetRuntimeClientRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::getRuntimeClient,
+                getRuntimeClientMethod::getRuntimeClient);
+    }
+
+    @Override
     public Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid final FindRuntimeClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::findRuntimeClient,
-                findRuntimeClient::findRuntimeClient);
+                findRuntimeClientMethod::findRuntimeClient);
     }
 
     @Override

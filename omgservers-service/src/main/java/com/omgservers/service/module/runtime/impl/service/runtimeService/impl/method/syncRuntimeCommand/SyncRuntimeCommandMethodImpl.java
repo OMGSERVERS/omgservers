@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -49,7 +49,7 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
                                                             shard,
                                                             runtimeCommand);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "runtime does not exist or was deleted, id=" + runtimeId);
                                                 }
                                             })

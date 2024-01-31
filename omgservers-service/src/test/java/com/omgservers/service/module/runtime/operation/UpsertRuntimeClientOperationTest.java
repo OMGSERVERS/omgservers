@@ -47,9 +47,7 @@ class UpsertRuntimeClientOperationTest extends Assertions {
                 new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var runtimeClient = runtimeClientModelFactory.create(runtime.getId(),
-                shardKey(),
-                entityId());
+        final var runtimeClient = runtimeClientModelFactory.create(runtime.getId(), clientId());
 
         final var changeContext = upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
         assertTrue(changeContext.getResult());
@@ -65,8 +63,7 @@ class UpsertRuntimeClientOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeClient = runtimeClientModelFactory.create(runtime.getId(),
-                shardKey(),
-                entityId());
+                clientId());
         upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
 
         final var changeContext = upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
@@ -100,6 +97,10 @@ class UpsertRuntimeClientOperationTest extends Assertions {
     }
 
     Long entityId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long clientId() {
         return generateIdOperation.generateId();
     }
 }

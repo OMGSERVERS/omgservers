@@ -23,16 +23,15 @@ class CreateLuaContextOperationImpl implements CreateLuaContextOperation {
 
     @Override
     public LuaContext createLuaContext(WorkerContextModel workerContext) {
-        final var lauAttributesByUserId = new HashMap<Long, LuaValue>();
-        final var luaProfileByUserId = new HashMap<Long, LuaValue>();
+        final var lauAttributesByClientId = new HashMap<Long, LuaValue>();
+        final var luaProfileByClientId = new HashMap<Long, LuaValue>();
 
-        workerContext.getPlayers().forEach(player -> {
-            final var userId = player.getUserId();
-            lauAttributesByUserId.put(userId, parseAttributes(player.getAttributes()));
-            luaProfileByUserId.put(userId, coerceJavaObjectOperation.coerceJavaObject(player.getProfile()));
+        workerContext.getPlayers().forEach((clientId, player) -> {
+            lauAttributesByClientId.put(clientId, parseAttributes(player.getAttributes()));
+            luaProfileByClientId.put(clientId, coerceJavaObjectOperation.coerceJavaObject(player.getProfile()));
         });
 
-        final var luaContext = new LuaContext(lauAttributesByUserId, luaProfileByUserId);
+        final var luaContext = new LuaContext(lauAttributesByClientId, luaProfileByClientId);
         return luaContext;
     }
 

@@ -14,8 +14,6 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
-import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -28,12 +26,12 @@ import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
-import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -152,6 +150,12 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetRuntimeClientResponse> getRuntimeClient(final GetRuntimeClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindRuntimeClientResponse> findRuntimeClient(final FindRuntimeClientRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeClient);
     }
@@ -190,18 +194,6 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::doStopRuntime);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoChangePlayerResponse> doChangePlayer(final DoChangePlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::doChangePlayer);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DoUnicastMessageResponse> doUnicastMessage(final DoUnicastMessageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::doUnicastMessage);
     }
 
     @Override

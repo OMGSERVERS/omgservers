@@ -33,12 +33,12 @@ public class PlayerModel {
     Long stageId;
 
     @NotNull
-//    @ToString.Exclude
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     PlayerAttributesModel attributes;
 
     @NotNull
-//    @ToString.Exclude
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Object profile;
 

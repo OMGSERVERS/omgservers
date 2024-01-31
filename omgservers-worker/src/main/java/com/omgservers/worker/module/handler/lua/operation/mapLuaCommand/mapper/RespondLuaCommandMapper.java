@@ -24,11 +24,10 @@ public class RespondLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
-        final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
         final var luaMessage = luaCommand.get("message").checktable();
 
-        final var doCommandBody = new DoRespondCommandBodyModel(userId, clientId, luaMessage);
+        final var doCommandBody = new DoRespondCommandBodyModel(clientId, luaMessage);
         final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_RESPOND, doCommandBody);
         return doCommandModel;
     }

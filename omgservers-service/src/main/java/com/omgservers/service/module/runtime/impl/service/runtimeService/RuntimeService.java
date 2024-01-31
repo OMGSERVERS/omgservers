@@ -16,6 +16,8 @@ import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -64,6 +66,8 @@ public interface RuntimeService {
     Uni<ViewRuntimeClientsResponse> viewRuntimeClients(@Valid ViewRuntimeClientsRequest request);
 
     Uni<CountRuntimeClientsResponse> countRuntimeClients(@Valid CountRuntimeClientsRequest request);
+
+    Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid GetRuntimeClientRequest request);
 
     Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid FindRuntimeClientRequest request);
 

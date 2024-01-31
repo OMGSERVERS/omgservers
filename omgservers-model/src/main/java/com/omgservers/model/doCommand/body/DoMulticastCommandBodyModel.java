@@ -2,7 +2,6 @@ package com.omgservers.model.doCommand.body;
 
 import com.omgservers.model.doCommand.DoCommandBodyModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.recipient.Recipient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 public class DoMulticastCommandBodyModel extends DoCommandBodyModel {
 
     @NotBlank
-    List<Recipient> recipients;
+    List<Long> clients;
 
     @NotNull
     @ToString.Exclude

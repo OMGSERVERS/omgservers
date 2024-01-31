@@ -7,28 +7,28 @@ import java.util.Optional;
 
 public class LuaContext {
 
-    final Map<Long, LuaValue> attributesByUserId;
-    final Map<Long, LuaValue> profileByUserId;
+    final Map<Long, LuaValue> attributesByClientId;
+    final Map<Long, LuaValue> profileByClientId;
 
-    public LuaContext(final Map<Long, LuaValue> attributesByUserId,
-                      final Map<Long, LuaValue> profileByUserId) {
-        this.attributesByUserId = attributesByUserId;
-        this.profileByUserId = profileByUserId;
+    public LuaContext(final Map<Long, LuaValue> attributesByClientId,
+                      final Map<Long, LuaValue> profileByClientId) {
+        this.attributesByClientId = attributesByClientId;
+        this.profileByClientId = profileByClientId;
     }
 
-    public Optional<LuaValue> getAttributes(final Long userId) {
-        return Optional.ofNullable(attributesByUserId.get(userId));
+    public Optional<LuaValue> getAttributes(final Long clientId) {
+        return Optional.ofNullable(attributesByClientId.get(clientId));
     }
 
-    public void updateAttributes(final Long userId, final LuaValue luaAttributes) {
-        attributesByUserId.put(userId, luaAttributes);
+    public void updateAttributes(final Long clientId, final LuaValue luaAttributes) {
+        attributesByClientId.put(clientId, luaAttributes);
     }
 
-    public Optional<LuaValue> getProfile(final Long userId) {
-        return Optional.ofNullable(profileByUserId.get(userId));
+    public Optional<LuaValue> getProfile(final Long clientId) {
+        return Optional.ofNullable(profileByClientId.get(clientId));
     }
 
-    public void updateProfile(final Long userId, final LuaValue luaProfile) {
-        attributesByUserId.put(userId, luaProfile);
+    public void updateProfile(final Long clientId, final LuaValue luaProfile) {
+        attributesByClientId.put(clientId, luaProfile);
     }
 }

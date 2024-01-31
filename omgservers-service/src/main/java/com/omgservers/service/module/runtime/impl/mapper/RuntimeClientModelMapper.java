@@ -20,7 +20,6 @@ public class RuntimeClientModelMapper {
         runtimeClient.setRuntimeId(row.getLong("runtime_id"));
         runtimeClient.setCreated(row.getOffsetDateTime("created").toInstant());
         runtimeClient.setModified(row.getOffsetDateTime("modified").toInstant());
-        runtimeClient.setUserId(row.getLong("user_id"));
         runtimeClient.setClientId(row.getLong("client_id"));
         runtimeClient.setDeleted(row.getBoolean("deleted"));
         return runtimeClient;

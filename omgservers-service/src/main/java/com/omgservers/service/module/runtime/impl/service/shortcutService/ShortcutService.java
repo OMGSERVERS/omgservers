@@ -32,6 +32,8 @@ public interface ShortcutService {
 
     Uni<Void> deleteRuntimePermissions(Long runtimeId);
 
+    Uni<RuntimeClientModel> getRuntimeClient(Long runtimeId, Long id);
+
     Uni<RuntimeClientModel> findRuntimeClient(Long runtimeId, Long clientId);
 
     Uni<Integer> countRuntimeClients(Long runtimeId);

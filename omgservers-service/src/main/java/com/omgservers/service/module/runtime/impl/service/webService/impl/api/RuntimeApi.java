@@ -14,8 +14,6 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
-import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -28,12 +26,12 @@ import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
-import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -114,6 +112,10 @@ public interface RuntimeApi {
     Uni<CountRuntimeClientsResponse> countRuntimeClients(CountRuntimeClientsRequest request);
 
     @PUT
+    @Path("/get-runtime-client")
+    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
+
+    @PUT
     @Path("/find-runtime-client")
     Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
 
@@ -140,14 +142,6 @@ public interface RuntimeApi {
     @PUT
     @Path("/do-stop-runtime")
     Uni<DoStopRuntimeResponse> doStopRuntime(DoStopRuntimeRequest request);
-
-    @PUT
-    @Path("/do-change-player")
-    Uni<DoChangePlayerResponse> doChangePlayer(DoChangePlayerRequest request);
-
-    @PUT
-    @Path("/do-unicast-message")
-    Uni<DoUnicastMessageResponse> doUnicastMessage(DoUnicastMessageRequest request);
 
     @PUT
     @Path("/do-multicast-message")

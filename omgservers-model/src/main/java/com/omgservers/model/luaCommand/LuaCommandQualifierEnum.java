@@ -3,14 +3,11 @@ package com.omgservers.model.luaCommand;
 public enum LuaCommandQualifierEnum {
 
     RESPOND("respond"),
-    SET_ATTRIBUTES("set_attributes"),
-    SET_PROFILE("set_profile"),
-
-    UNICAST("unicast"),
     MULTICAST("multicast"),
     BROADCAST("broadcast"),
 
-    CHANGE("change"),
+    SET_ATTRIBUTES("set_attributes"),
+    SET_PROFILE("set_profile"),
 
     KICK("kick"),
     STOP("stop");

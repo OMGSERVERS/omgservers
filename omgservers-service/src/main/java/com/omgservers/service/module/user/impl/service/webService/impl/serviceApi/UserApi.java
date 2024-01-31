@@ -2,16 +2,12 @@ package com.omgservers.service.module.user.impl.service.webService.impl.serviceA
 
 import com.omgservers.model.dto.user.CreateTokenRequest;
 import com.omgservers.model.dto.user.CreateTokenResponse;
-import com.omgservers.model.dto.user.DeleteClientRequest;
-import com.omgservers.model.dto.user.DeleteClientResponse;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
 import com.omgservers.model.dto.user.DeleteUserRequest;
 import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
 import com.omgservers.model.dto.user.FindPlayerResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.dto.user.GetPlayerProfileRequest;
@@ -22,8 +18,6 @@ import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
 import com.omgservers.model.dto.user.IntrospectTokenResponse;
-import com.omgservers.model.dto.user.SyncClientRequest;
-import com.omgservers.model.dto.user.SyncClientResponse;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncPlayerResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
@@ -97,16 +91,4 @@ public interface UserApi {
     @PUT
     @Path("/delete-player")
     Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
-
-    @PUT
-    @Path("/sync-client")
-    Uni<SyncClientResponse> syncClient(SyncClientRequest request);
-
-    @PUT
-    @Path("/get-client")
-    Uni<GetClientResponse> getClient(GetClientRequest request);
-
-    @PUT
-    @Path("/delete-client")
-    Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
 }

@@ -44,16 +44,19 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     @Test
     void givenRuntimeClient_whenDeleteRuntimeClient_thenDeleted() {
         final var shard = 0;
-        final var runtime =
-                runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
-                        new RuntimeConfigModel());
+        final var runtime = runtimeModelFactory.create(tenantId(),
+                versionId(),
+                RuntimeQualifierEnum.MATCH,
+                new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
         final var runtimeClient = runtimeClientModelFactory
-                .create(runtime.getId(), shardKey(), entityId());
+                .create(runtime.getId(), clientId());
         upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
 
-        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard, runtime.getId(), runtimeClient.getId());
+        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard,
+                runtime.getId(),
+                runtimeClient.getId());
         assertTrue(changeContext.getResult());
     }
 
@@ -92,6 +95,14 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     }
 
     Long entityId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long runtimeId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long clientId() {
         return generateIdOperation.generateId();
     }
 }

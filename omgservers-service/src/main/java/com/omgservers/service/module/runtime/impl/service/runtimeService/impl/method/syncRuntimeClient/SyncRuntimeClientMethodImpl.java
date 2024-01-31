@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeClient.UpsertRuntimeClientOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -46,7 +46,7 @@ class SyncRuntimeClientMethodImpl implements SyncRuntimeClientMethod {
                                                             shardModel.shard(),
                                                             runtimeClient);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "runtime does not exist or was deleted, id=" + runtimeId);
                                                 }
                                             })

@@ -1,14 +1,12 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes;
 
-import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.user.GetClientRequest;
-import com.omgservers.model.dto.user.GetClientResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -23,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
 
+    final ClientModule clientModule;
     final UserModule userModule;
 
     final HasRuntimeClientOperation hasRuntimeClientOperation;
@@ -37,23 +36,21 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var runtimeId = request.getRuntimeId();
-                    final var userId = request.getUserId();
                     final var clientId = request.getClientId();
                     final var attributes = request.getAttributes();
                     return pgPool.withTransaction(sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
                                     sqlConnection,
                                     shardModel.shard(),
                                     runtimeId,
-                                    userId,
                                     clientId)
                             .flatMap(has -> {
                                 if (has) {
-                                    return doSetAttributes(userId, clientId, attributes);
+                                    return doSetAttributes(clientId, attributes);
                                 } else {
                                     throw new ServerSideForbiddenException(
                                             String.format("runtime client was not found, " +
-                                                            "runtimeId=%s, userId=%s, clientId=%s",
-                                                    runtimeId, userId, clientId));
+                                                            "runtimeId=%s, clientId=%s",
+                                                    runtimeId, clientId));
                                 }
                             })
                     );
@@ -61,21 +58,15 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
                 .replaceWith(new DoSetAttributesResponse(true));
     }
 
-    Uni<Boolean> doSetAttributes(final Long userId,
-                                 final Long clientId,
+    Uni<Boolean> doSetAttributes(final Long clientId,
                                  final PlayerAttributesModel attributes) {
-        return getClient(userId, clientId)
+        return clientModule.getShortcutService().getClient(clientId)
                 .flatMap(client -> {
+                    final var userId = client.getUserId();
                     final var playerId = client.getPlayerId();
                     return updatePlayerAttributes(userId, playerId, attributes);
                 })
                 .replaceWith(true);
-    }
-
-    Uni<ClientModel> getClient(final Long userId, final Long clientId) {
-        final var getClientServiceRequest = new GetClientRequest(userId, clientId);
-        return userModule.getClientService().getClient(getClientServiceRequest)
-                .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> updatePlayerAttributes(final Long userId,

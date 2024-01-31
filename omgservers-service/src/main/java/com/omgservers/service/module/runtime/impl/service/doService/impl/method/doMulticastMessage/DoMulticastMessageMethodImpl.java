@@ -2,13 +2,13 @@ package com.omgservers.service.module.runtime.impl.service.doService.impl.method
 
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
 import com.omgservers.model.dto.runtime.DoMulticastMessageResponse;
-import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
-import com.omgservers.model.recipient.Recipient;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
+import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeClientsByRuntimeId.SelectActiveRuntimeClientsByRuntimeIdOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -27,12 +27,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
 
+    final ClientModule clientModule;
     final UserModule userModule;
 
     final SelectActiveRuntimeClientsByRuntimeIdOperation selectActiveRuntimeClientsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
+    final ClientMessageModelFactory clientMessageModelFactory;
     final MessageModelFactory messageModelFactory;
+
     final PgPool pgPool;
 
     @Override
@@ -40,7 +43,7 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
         log.debug("Do multicast message, request={}", request);
 
         final var runtimeId = request.getRuntimeId();
-        final var recipients = request.getRecipients();
+        final var clients = request.getClients();
         final var message = request.getMessage();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -51,14 +54,14 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
                                         shardModel.shard(),
                                         runtimeId)
                                 .flatMap(runtimeClients -> {
-                                    if (checkRecipients(recipients, runtimeClients)) {
-                                        return doMulticastMessage(recipients, message);
+                                    if (checkClients(clients, runtimeClients)) {
+                                        return doMulticastMessage(clients, message);
                                     } else {
                                         throw new ServerSideForbiddenException(
                                                 String.format(
-                                                        "not all runtime clients for recipients were found, " +
-                                                                "runtimeId=%s, recipients=%s",
-                                                        runtimeId, recipients));
+                                                        "not all runtime clients for clients were found, " +
+                                                                "runtimeId=%s, clients=%s",
+                                                        runtimeId, clients));
                                     }
                                 })
                 ))
@@ -66,46 +69,39 @@ class DoMulticastMessageMethodImpl implements DoMulticastMessageMethod {
     }
 
 
-    boolean checkRecipients(final List<Recipient> recipients,
-                            final List<RuntimeClientModel> runtimeClients) {
+    boolean checkClients(final List<Long> clients,
+                         final List<RuntimeClientModel> runtimeClients) {
         final var runtimeClientSet = runtimeClients.stream()
                 .map(RuntimeClientModel::getClientId)
                 .collect(Collectors.toSet());
 
-        return recipients.stream()
-                .allMatch(recipient -> runtimeClientSet.contains(recipient.clientId()));
+        return runtimeClientSet.containsAll(clients);
     }
 
-    Uni<Void> doMulticastMessage(final List<Recipient> recipients,
+    Uni<Void> doMulticastMessage(final List<Long> clients,
                                  final Object message) {
-        return Multi.createFrom().iterable(recipients)
-                .onItem().transformToUniAndConcatenate(recipient -> {
-                    final var userId = recipient.userId();
-                    final var clientId = recipient.clientId();
-                    return respondClient(userId, clientId, message)
-                            .onFailure()
-                            .recoverWithItem(t -> {
-                                log.warn("Do multicast message failed, " +
-                                                "client={}/{}, " +
-                                                "{}:{}",
-                                        userId,
-                                        clientId,
-                                        t.getClass().getSimpleName(),
-                                        t.getMessage());
-                                return null;
-                            });
-                })
+        return Multi.createFrom().iterable(clients)
+                .onItem().transformToUniAndConcatenate(clientId -> syncClientMessage(clientId, message)
+                        .onFailure()
+                        .recoverWithItem(t -> {
+                            log.warn("Do multicast message failed, " +
+                                            "clientId={}, " +
+                                            "{}:{}",
+                                    clientId,
+                                    t.getClass().getSimpleName(),
+                                    t.getMessage());
+                            return null;
+                        }))
                 .collect().asList()
                 .replaceWithVoid();
     }
 
-    Uni<Void> respondClient(final Long userId,
-                            final Long clientId,
-                            final Object message) {
+    Uni<Boolean> syncClientMessage(final Long clientId,
+                                   final Object message) {
         final var messageBody = new ServerMessageBodyModel(message);
-        final var messageModel = messageModelFactory.create(MessageQualifierEnum.SERVER_MESSAGE, messageBody);
-
-        final var request = new RespondClientRequest(userId, clientId, messageModel);
-        return userModule.getUserService().respondClient(request);
+        final var clientMessage = clientMessageModelFactory.create(clientId,
+                MessageQualifierEnum.SERVER_MESSAGE,
+                messageBody);
+        return clientModule.getShortcutService().syncClientMessage(clientMessage);
     }
 }

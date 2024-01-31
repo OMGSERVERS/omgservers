@@ -1,6 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.upsertRuntimeClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.model.event.body.RuntimeClientCreatedEventBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -33,8 +34,8 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_client(
-                            id, runtime_id, created, modified, user_id, client_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, runtime_id, created, modified, client_id, deleted)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
@@ -43,11 +44,11 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                         runtimeClient.getRuntimeId(),
                         runtimeClient.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeClient.getModified().atOffset(ZoneOffset.UTC),
-                        runtimeClient.getUserId(),
                         runtimeClient.getClientId(),
                         runtimeClient.getDeleted()
                 ),
-                () -> null,
+                () -> new RuntimeClientCreatedEventBodyModel(runtimeClient.getRuntimeId(),
+                        runtimeClient.getId()),
                 () -> null
         );
     }

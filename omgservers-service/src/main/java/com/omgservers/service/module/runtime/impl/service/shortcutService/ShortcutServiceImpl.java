@@ -12,6 +12,8 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -158,6 +160,13 @@ class ShortcutServiceImpl implements ShortcutService {
                         .collect().asList()
                         .replaceWithVoid()
                 );
+    }
+
+    @Override
+    public Uni<RuntimeClientModel> getRuntimeClient(final Long runtimeId, final Long id) {
+        final var request = new GetRuntimeClientRequest(runtimeId, id);
+        return runtimeModule.getRuntimeService().getRuntimeClient(request)
+                .map(GetRuntimeClientResponse::getRuntimeClient);
     }
 
     @Override

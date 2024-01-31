@@ -4,9 +4,10 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.ChangePlayerRuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.body.SignInRuntimeCommandBodyModel;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
+import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Multi;
@@ -16,8 +17,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
@@ -25,53 +28,52 @@ import java.util.Set;
 class CollectPlayersOperationImpl implements CollectPlayersOperation {
 
     static final Set<RuntimeCommandQualifierEnum> CLIENT_RELATED_COMMANDS = Set.of(
-            RuntimeCommandQualifierEnum.SIGN_IN,
-            RuntimeCommandQualifierEnum.CHANGE_PLAYER,
-            RuntimeCommandQualifierEnum.ADD_CLIENT
+            RuntimeCommandQualifierEnum.ADD_CLIENT,
+            RuntimeCommandQualifierEnum.DELETE_CLIENT,
+            RuntimeCommandQualifierEnum.HANDLE_MESSAGE
     );
 
     final RuntimeModule runtimeModule;
+    final ClientModule clientModule;
     final UserModule userModule;
 
     @Override
-    public Uni<List<PlayerModel>> collectPlayers(List<RuntimeCommandModel> runtimeCommands) {
-        final var clientKeys = runtimeCommands.stream()
+    public Uni<Map<Long, PlayerModel>> collectPlayers(List<RuntimeCommandModel> runtimeCommands) {
+        final var clients = runtimeCommands.stream()
                 .filter(runtimeCommand -> CLIENT_RELATED_COMMANDS.contains(runtimeCommand.getQualifier()))
                 .map(runtimeCommand -> switch (runtimeCommand.getQualifier()) {
-                    case SIGN_IN -> {
-                        final var body = (SignInRuntimeCommandBodyModel) runtimeCommand.getBody();
-                        yield new ClientKey(body.getUserId(), body.getClientId());
-                    }
-                    case CHANGE_PLAYER -> {
-                        final var body = (ChangePlayerRuntimeCommandBodyModel) runtimeCommand.getBody();
-                        yield new ClientKey(body.getUserId(), body.getClientId());
-                    }
                     case ADD_CLIENT -> {
                         final var body = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
-                        yield new ClientKey(body.getUserId(), body.getClientId());
+                        yield body.getClientId();
                     }
-                    default -> throw new ServerSideConflictException("internal mismatch for " +
-                            "qualifier=" + runtimeCommand.getQualifier());
+                    case DELETE_CLIENT -> {
+                        final var body = (DeleteClientRuntimeCommandBodyModel) runtimeCommand.getBody();
+                        yield body.getClientId();
+                    }
+                    case HANDLE_MESSAGE -> {
+                        final var body = (HandleMessageRuntimeCommandBodyModel) runtimeCommand.getBody();
+                        yield body.getClientId();
+                    }
+                    default -> throw new ServerSideInternalException("runtime command qualifier mismatch");
                 })
                 .distinct()
                 .toList();
 
-        return Multi.createFrom().iterable(clientKeys)
-                .onItem().transformToUniAndMerge(clientKey -> {
-                    final var userId = clientKey.userId();
-                    final var clientId = clientKey.clientId();
+        return Multi.createFrom().iterable(clients)
+                .onItem().transformToUniAndMerge(clientId -> {
                     // TODO: do getClient and getPlayer in one request
-                    return userModule.getShortcutService().getClient(userId, clientId)
+                    return clientModule.getShortcutService().getClient(clientId)
                             .flatMap(client -> {
+                                final var userId = client.getUserId();
                                 final var playerId = client.getPlayerId();
-                                return userModule.getShortcutService().getPlayer(userId, playerId);
+                                return userModule.getShortcutService().getPlayer(userId, playerId)
+                                        .map(player -> new ClientPlayer(client.getId(), player));
                             })
                             .onFailure()
                             .recoverWithItem(t -> {
                                 log.warn("Collect player failed, " +
-                                                "client={}/{}, " +
+                                                "clientId={}, " +
                                                 "{}:{}",
-                                        userId,
                                         clientId,
                                         t.getClass().getSimpleName(),
                                         t.getMessage());
@@ -79,9 +81,11 @@ class CollectPlayersOperationImpl implements CollectPlayersOperation {
                             });
                 })
                 .select().where(Objects::nonNull)
-                .collect().asList();
+                .collect().asList()
+                .map(list -> list.stream()
+                        .collect(Collectors.toMap(ClientPlayer::clientId, ClientPlayer::player)));
     }
 
-    record ClientKey(Long userId, Long clientId) {
+    record ClientPlayer(Long clientId, PlayerModel player) {
     }
 }

@@ -4,7 +4,6 @@ import com.omgservers.model.dto.user.DeleteUserRequest;
 import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
@@ -21,6 +20,4 @@ public interface UserService {
     Uni<DeleteUserResponse> deleteUser(@Valid DeleteUserRequest request);
 
     Uni<ValidateCredentialsResponse> validateCredentials(@Valid ValidateCredentialsRequest request);
-
-    Uni<Void> respondClient(@Valid RespondClientRequest request);
 }

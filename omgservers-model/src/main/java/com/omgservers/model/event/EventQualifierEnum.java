@@ -1,141 +1,101 @@
 package com.omgservers.model.event;
 
-import com.omgservers.model.event.body.ChangeMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.ClientDisconnectedEventBodyModel;
-import com.omgservers.model.event.body.ClientUpdatedEventBodyModel;
+import com.omgservers.model.event.body.ClientMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.ClientRuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.ClientRuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
-import com.omgservers.model.event.body.ContainerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
-import com.omgservers.model.event.body.IndexUpdatedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
-import com.omgservers.model.event.body.JobUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchClientUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.MatchMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.MatchmakerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
-import com.omgservers.model.event.body.ProjectUpdatedEventBodyModel;
 import com.omgservers.model.event.body.RequestCreatedEventBodyModel;
-import com.omgservers.model.event.body.RequestUpdatedEventBodyModel;
+import com.omgservers.model.event.body.RuntimeClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.RuntimeClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.RuntimeUpdatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
-import com.omgservers.model.event.body.ServiceAccountUpdatedEventBodyModel;
-import com.omgservers.model.event.body.SignInMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.SignUpMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
-import com.omgservers.model.event.body.StageUpdatedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.UserDeletedEventBodyModel;
-import com.omgservers.model.event.body.UserUpdatedEventBodyModel;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionDeletedEventBodyModel;
 import com.omgservers.model.event.body.VersionMatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionMatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.VersionMatchmakerUpdatedEventBodyModel;
 import com.omgservers.model.event.body.VersionRuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.VersionRuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.VersionRuntimeUpdatedEventBodyModel;
-import com.omgservers.model.event.body.VersionUpdatedEventBodyModel;
 
 public enum EventQualifierEnum {
     // System
-    INDEX_CREATED(IndexCreatedEventBodyModel.class, true),
-    INDEX_UPDATED(IndexUpdatedEventBodyModel.class, true),
-    INDEX_DELETED(IndexDeletedEventBodyModel.class, true),
-    SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class, true),
-    SERVICE_ACCOUNT_UPDATED(ServiceAccountUpdatedEventBodyModel.class, true),
-    SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class, true),
-    JOB_CREATED(JobCreatedEventBodyModel.class, true),
-    JOB_UPDATED(JobUpdatedEventBodyModel.class, true),
-    JOB_DELETED(JobDeletedEventBodyModel.class, true),
-    CONTAINER_CREATED(ContainerCreatedEventBodyModel.class, true),
-    CONTAINER_UPDATED(ContainerUpdatedEventBodyModel.class, true),
-    CONTAINER_DELETED(ContainerDeletedEventBodyModel.class, true),
+    INDEX_CREATED(IndexCreatedEventBodyModel.class),
+    INDEX_DELETED(IndexDeletedEventBodyModel.class),
+    SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class),
+    SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class),
+    JOB_CREATED(JobCreatedEventBodyModel.class),
+    JOB_DELETED(JobDeletedEventBodyModel.class),
+    CONTAINER_CREATED(ContainerCreatedEventBodyModel.class),
+    CONTAINER_DELETED(ContainerDeletedEventBodyModel.class),
     // Shard
-    TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
-    TENANT_UPDATED(TenantCreatedEventBodyModel.class, true),
-    TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
-    PROJECT_CREATED(ProjectCreatedEventBodyModel.class, true),
-    PROJECT_UPDATED(ProjectUpdatedEventBodyModel.class, true),
-    PROJECT_DELETED(ProjectDeletedEventBodyModel.class, true),
-    STAGE_CREATED(StageCreatedEventBodyModel.class, true),
-    STAGE_UPDATED(StageUpdatedEventBodyModel.class, true),
-    STAGE_DELETED(StageDeletedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_CREATED(VersionMatchmakerCreatedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_UPDATED(VersionMatchmakerUpdatedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_DELETED(VersionMatchmakerDeletedEventBodyModel.class, true),
-    VERSION_RUNTIME_CREATED(VersionRuntimeCreatedEventBodyModel.class, true),
-    VERSION_RUNTIME_UPDATED(VersionRuntimeUpdatedEventBodyModel.class, true),
-    VERSION_RUNTIME_DELETED(VersionRuntimeDeletedEventBodyModel.class, true),
-    VERSION_CREATED(VersionCreatedEventBodyModel.class, true),
-    VERSION_UPDATED(VersionUpdatedEventBodyModel.class, true),
-    VERSION_DELETED(VersionDeletedEventBodyModel.class, true),
-    USER_CREATED(UserCreatedEventBodyModel.class, true),
-    USER_UPDATED(UserUpdatedEventBodyModel.class, true),
-    USER_DELETED(UserDeletedEventBodyModel.class, true),
-    PLAYER_CREATED(PlayerCreatedEventBodyModel.class, true),
-    PLAYER_UPDATED(PlayerCreatedEventBodyModel.class, true),
-    PLAYER_DELETED(PlayerDeletedEventBodyModel.class, true),
-    CLIENT_CREATED(ClientCreatedEventBodyModel.class, true),
-    CLIENT_UPDATED(ClientUpdatedEventBodyModel.class, true),
-    CLIENT_DELETED(ClientDeletedEventBodyModel.class, true),
-    CLIENT_DISCONNECTED(ClientDisconnectedEventBodyModel.class, true),
-    MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class, true),
-    MATCHMAKER_UPDATED(MatchmakerUpdatedEventBodyModel.class, true),
-    MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class, true),
-    MATCH_CREATED(MatchCreatedEventBodyModel.class, true),
-    MATCH_UPDATED(MatchUpdatedEventBodyModel.class, true),
-    MATCH_DELETED(MatchDeletedEventBodyModel.class, true),
-    MATCH_CLIENT_CREATED(MatchClientCreatedEventBodyModel.class, true),
-    MATCH_CLIENT_UPDATED(MatchClientUpdatedEventBodyModel.class, true),
-    MATCH_CLIENT_DELETED(MatchClientDeletedEventBodyModel.class, true),
-    REQUEST_CREATED(RequestCreatedEventBodyModel.class, true),
-    REQUEST_UPDATED(RequestUpdatedEventBodyModel.class, true),
-    REQUEST_DELETED(MatchDeletedEventBodyModel.class, true),
-    RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class, true),
-    RUNTIME_UPDATED(RuntimeUpdatedEventBodyModel.class, true),
-    RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
-    // Gateway
-    SIGN_UP_MESSAGE_RECEIVED(SignUpMessageReceivedEventBodyModel.class, true),
-    SIGN_IN_MESSAGE_RECEIVED(SignInMessageReceivedEventBodyModel.class, true),
-    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class, true),
-    MATCH_MESSAGE_RECEIVED(MatchMessageReceivedEventBodyModel.class, true),
-    CHANGE_MESSAGE_RECEIVED(ChangeMessageReceivedEventBodyModel.class, false);
+    TENANT_CREATED(TenantCreatedEventBodyModel.class),
+    TENANT_DELETED(TenantDeletedEventBodyModel.class),
+    PROJECT_CREATED(ProjectCreatedEventBodyModel.class),
+    PROJECT_DELETED(ProjectDeletedEventBodyModel.class),
+    STAGE_CREATED(StageCreatedEventBodyModel.class),
+    STAGE_DELETED(StageDeletedEventBodyModel.class),
+    VERSION_MATCHMAKER_CREATED(VersionMatchmakerCreatedEventBodyModel.class),
+    VERSION_MATCHMAKER_DELETED(VersionMatchmakerDeletedEventBodyModel.class),
+    VERSION_RUNTIME_CREATED(VersionRuntimeCreatedEventBodyModel.class),
+    VERSION_RUNTIME_DELETED(VersionRuntimeDeletedEventBodyModel.class),
+    VERSION_CREATED(VersionCreatedEventBodyModel.class),
+    VERSION_DELETED(VersionDeletedEventBodyModel.class),
+    USER_CREATED(UserCreatedEventBodyModel.class),
+    USER_DELETED(UserDeletedEventBodyModel.class),
+    PLAYER_CREATED(PlayerCreatedEventBodyModel.class),
+    PLAYER_DELETED(PlayerDeletedEventBodyModel.class),
+    CLIENT_CREATED(ClientCreatedEventBodyModel.class),
+    CLIENT_DELETED(ClientDeletedEventBodyModel.class),
+    CLIENT_RUNTIME_CREATED(ClientRuntimeCreatedEventBodyModel.class),
+    CLIENT_RUNTIME_DELETED(ClientRuntimeDeletedEventBodyModel.class),
+    MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class),
+    MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class),
+    MATCH_CREATED(MatchCreatedEventBodyModel.class),
+    MATCH_DELETED(MatchDeletedEventBodyModel.class),
+    MATCH_CLIENT_CREATED(MatchClientCreatedEventBodyModel.class),
+    MATCH_CLIENT_DELETED(MatchClientDeletedEventBodyModel.class),
+    REQUEST_CREATED(RequestCreatedEventBodyModel.class),
+    REQUEST_DELETED(MatchDeletedEventBodyModel.class),
+    RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class),
+    RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
+    RUNTIME_CLIENT_CREATED(RuntimeClientCreatedEventBodyModel.class),
+    RUNTIME_CLIENT_DELETED(RuntimeClientDeletedEventBodyModel.class),
+    // Player
+    CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class),
+    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class);
 
     final Class<? extends EventBodyModel> bodyClass;
-    final Boolean infoLogging;
 
-    EventQualifierEnum(Class<? extends EventBodyModel> bodyClass, Boolean infoLogging) {
+    EventQualifierEnum(Class<? extends EventBodyModel> bodyClass) {
         this.bodyClass = bodyClass;
-        this.infoLogging = infoLogging;
     }
 
     public Class<? extends EventBodyModel> getBodyClass() {
         return bodyClass;
-    }
-
-    public Boolean getInfoLogging() {
-        return infoLogging;
     }
 }

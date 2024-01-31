@@ -24,13 +24,12 @@ public class SetProfileLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
-        final var userId = Long.valueOf(luaCommand.get("user_id").checkjstring());
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
 
         final var luaProfile = luaCommand.get("profile").checktable();
-        luaContext.updateProfile(userId, luaProfile);
+        luaContext.updateProfile(clientId, luaProfile);
 
-        final var doCommandBody = new DoSetProfileCommandBodyModel(userId, clientId, luaProfile);
+        final var doCommandBody = new DoSetProfileCommandBodyModel(clientId, luaProfile);
         final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_SET_PROFILE, doCommandBody);
         return doCommandModel;
     }

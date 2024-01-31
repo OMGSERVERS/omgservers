@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class DoKickCommandBodyModel extends DoCommandBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @Override

@@ -17,15 +17,13 @@ public class RuntimeClientModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public RuntimeClientModel create(final Long runtimeId,
-                                     final Long userId,
                                      final Long clientId) {
         final var id = generateIdOperation.generateId();
-        return create(id, runtimeId, userId, clientId);
+        return create(id, runtimeId, clientId);
     }
 
     public RuntimeClientModel create(final Long id,
                                      final Long runtimeId,
-                                     final Long userId,
                                      final Long clientId) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -34,7 +32,6 @@ public class RuntimeClientModelFactory {
         runtimeClient.setRuntimeId(runtimeId);
         runtimeClient.setCreated(now);
         runtimeClient.setModified(now);
-        runtimeClient.setUserId(userId);
         runtimeClient.setClientId(clientId);
         runtimeClient.setDeleted(false);
         return runtimeClient;

@@ -1,7 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.updateMatchStoppedFlag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.MatchUpdatedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -45,9 +44,8 @@ class UpdateMatchStoppedFlagOperationImpl implements UpdateMatchStoppedFlagOpera
                         Instant.now().atOffset(ZoneOffset.UTC),
                         stopped
                 ),
-                () -> new MatchUpdatedEventBodyModel(matchmakerId, matchId),
-                () -> logModelFactory.create(String.format("Match was marked as stopped, " +
-                        "matchmakerId=%d, matchId=%d", matchmakerId, matchId))
+                () -> null,
+                () -> null
         );
     }
 }

@@ -19,8 +19,6 @@ create table if not exists tab_user_token (
     deleted boolean not null
 );
 
-create index if not exists idx_user_token_user_id on tab_user_token(user_id);
-
 create table if not exists tab_user_player (
     id bigint primary key,
     user_id bigint not null references tab_user(id) on delete restrict on update restrict,
@@ -34,25 +32,44 @@ create table if not exists tab_user_player (
     unique(user_id, stage_id)
 );
 
+create index if not exists idx_user_token_user_id on tab_user_token(user_id);
 create index if not exists idx_user_player_user_id on tab_user_player(user_id);
 
-create table if not exists tab_user_client (
+-- client module
+
+create table if not exists tab_client (
     id bigint primary key,
-    user_id bigint not null references tab_user(id) on delete restrict on update restrict,
-    player_id bigint not null references tab_user_player(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    server text not null,
-    connection_id bigint not null,
+    user_id bigint not null,
+    player_id bigint not null,
+    tenant_id bigint not null,
     version_id bigint not null,
-    default_matchmaker_id bigint not null,
-    default_runtime_id bigint not null,
-    deleted boolean not null,
-    unique(connection_id)
+    matchmaker_id bigint not null,
+    deleted boolean not null
 );
 
-create index if not exists idx_user_client_user_id on tab_user_client(user_id);
-create index if not exists idx_user_client_player_id on tab_user_client(player_id);
+create table if not exists tab_client_message (
+    id bigint primary key,
+    client_id bigint not null references tab_client(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    body json not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_client_runtime (
+    id bigint primary key,
+    client_id bigint not null references tab_client(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    deleted boolean not null
+);
+
+create index if not exists idx_client_message_client_id on tab_client_message(client_id);
+create index if not exists idx_client_runtime_client_id on tab_client_runtime(client_id);
 
 -- tenant module
 
@@ -74,8 +91,6 @@ create table if not exists tab_tenant_permission (
     unique(tenant_id, user_id, permission)
 );
 
-create index if not exists idx_tenant_permission_tenant_id on tab_tenant_permission(tenant_id);
-
 create table if not exists tab_tenant_project (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -83,8 +98,6 @@ create table if not exists tab_tenant_project (
     modified timestamp with time zone not null,
     deleted boolean not null
 );
-
-create index if not exists idx_tenant_project_tenant_id on tab_tenant_project(tenant_id);
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
@@ -98,9 +111,6 @@ create table if not exists tab_tenant_project_permission (
     unique(project_id, user_id, permission)
 );
 
-create index if not exists idx_tenant_project_permission_tenant_id on tab_tenant_project_permission(tenant_id);
-create index if not exists idx_tenant_project_permission_project_id on tab_tenant_project_permission(project_id);
-
 create table if not exists tab_tenant_stage (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -110,9 +120,6 @@ create table if not exists tab_tenant_stage (
     secret text not null,
     deleted boolean not null
 );
-
-create index if not exists idx_tenant_stage_tenant_id on tab_tenant_stage(tenant_id);
-create index if not exists idx_tenant_stage_project_id on tab_tenant_stage(project_id);
 
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
@@ -126,9 +133,6 @@ create table if not exists tab_tenant_stage_permission (
     unique(stage_id, user_id, permission)
 );
 
-create index if not exists idx_tenant_stage_permission_tenant_id on tab_tenant_stage_permission(tenant_id);
-create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_stage_permission(stage_id);
-
 create table if not exists tab_tenant_version (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -139,23 +143,6 @@ create table if not exists tab_tenant_version (
     source_code json not null,
     deleted boolean not null
 );
-
-create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
-create index if not exists idx_tenant_version_stage_id on tab_tenant_version(stage_id);
-
-create table if not exists tab_tenant_version_matchmaker (
-    id bigint primary key,
-    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    matchmaker_id bigint not null,
-    deleted boolean not null,
-    unique(matchmaker_id)
-);
-
-create index if not exists idx_tenant_version_matchmaker_tenant_id on tab_tenant_version_matchmaker(tenant_id);
-create index if not exists idx_tenant_version_matchmaker_version_id on tab_tenant_version_matchmaker(version_id);
 
 create table if not exists tab_tenant_version_runtime (
     id bigint primary key,
@@ -168,8 +155,31 @@ create table if not exists tab_tenant_version_runtime (
     unique(runtime_id)
 );
 
+create table if not exists tab_tenant_version_matchmaker (
+    id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    matchmaker_id bigint not null,
+    deleted boolean not null,
+    unique(matchmaker_id)
+);
+
+create index if not exists idx_tenant_permission_tenant_id on tab_tenant_permission(tenant_id);
+create index if not exists idx_tenant_project_tenant_id on tab_tenant_project(tenant_id);
+create index if not exists idx_tenant_project_permission_tenant_id on tab_tenant_project_permission(tenant_id);
+create index if not exists idx_tenant_project_permission_project_id on tab_tenant_project_permission(project_id);
+create index if not exists idx_tenant_stage_tenant_id on tab_tenant_stage(tenant_id);
+create index if not exists idx_tenant_stage_project_id on tab_tenant_stage(project_id);
+create index if not exists idx_tenant_stage_permission_tenant_id on tab_tenant_stage_permission(tenant_id);
+create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_stage_permission(stage_id);
+create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
+create index if not exists idx_tenant_version_stage_id on tab_tenant_version(stage_id);
 create index if not exists idx_tenant_version_runtime_tenant_id on tab_tenant_version_runtime(tenant_id);
 create index if not exists idx_tenant_version_runtime_version_id on tab_tenant_version_runtime(version_id);
+create index if not exists idx_tenant_version_matchmaker_tenant_id on tab_tenant_version_matchmaker(tenant_id);
+create index if not exists idx_tenant_version_matchmaker_version_id on tab_tenant_version_matchmaker(version_id);
 
 -- matchmaker module
 
@@ -192,8 +202,6 @@ create table if not exists tab_matchmaker_command (
     deleted boolean not null
 );
 
-create index if not exists idx_matchmaker_command_matchmaker_id on tab_matchmaker_command(matchmaker_id);
-
 create table if not exists tab_matchmaker_request (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -206,8 +214,6 @@ create table if not exists tab_matchmaker_request (
     deleted boolean not null
 );
 
-create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmaker_request(matchmaker_id);
-
 create table if not exists tab_matchmaker_match (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -219,8 +225,6 @@ create table if not exists tab_matchmaker_match (
     deleted boolean not null
 );
 
-create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);
-
 create table if not exists tab_matchmaker_match_command (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -231,9 +235,6 @@ create table if not exists tab_matchmaker_match_command (
     body json not null,
     deleted boolean not null
 );
-
-create index if not exists idx_matchmaker_match_command_matchmaker_id on tab_matchmaker_match_command(matchmaker_id);
-create index if not exists idx_matchmaker_match_command_match_id on tab_matchmaker_match_command(match_id);
 
 create table if not exists tab_matchmaker_match_client (
     id bigint primary key,
@@ -249,6 +250,11 @@ create table if not exists tab_matchmaker_match_client (
     unique(match_id, user_id, client_id)
 );
 
+create index if not exists idx_matchmaker_command_matchmaker_id on tab_matchmaker_command(matchmaker_id);
+create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmaker_request(matchmaker_id);
+create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);
+create index if not exists idx_matchmaker_match_command_matchmaker_id on tab_matchmaker_match_command(matchmaker_id);
+create index if not exists idx_matchmaker_match_command_match_id on tab_matchmaker_match_command(match_id);
 create index if not exists idx_matchmaker_match_client_matchmaker_id on tab_matchmaker_match_client(matchmaker_id);
 create index if not exists idx_matchmaker_match_client_match_id on tab_matchmaker_match_client(match_id);
 
@@ -276,8 +282,6 @@ create table if not exists tab_runtime_permission (
     unique(runtime_id, user_id, permission)
 );
 
-create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
-
 create table if not exists tab_runtime_command (
     id bigint primary key,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
@@ -288,17 +292,16 @@ create table if not exists tab_runtime_command (
     deleted boolean not null
 );
 
-create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
-
 create table if not exists tab_runtime_client (
     id bigint primary key,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    user_id bigint not null,
     client_id bigint not null,
     deleted boolean not null,
-    unique(runtime_id, user_id, client_id)
+    unique(runtime_id, client_id)
 );
 
+create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
+create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_client_runtime_id on tab_runtime_client(runtime_id);

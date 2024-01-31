@@ -5,7 +5,8 @@ import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import io.smallrye.mutiny.Uni;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CollectPlayersOperation {
-    Uni<List<PlayerModel>> collectPlayers(List<RuntimeCommandModel> runtimeCommands);
+    Uni<Map<Long, PlayerModel>> collectPlayers(List<RuntimeCommandModel> runtimeCommands);
 }

@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class HandleMessageRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @NotNull

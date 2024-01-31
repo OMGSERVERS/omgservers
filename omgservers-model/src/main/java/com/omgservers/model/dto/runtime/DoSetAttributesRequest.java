@@ -16,9 +16,6 @@ public class DoSetAttributesRequest implements ShardedRequest {
     Long runtimeId;
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @NotNull

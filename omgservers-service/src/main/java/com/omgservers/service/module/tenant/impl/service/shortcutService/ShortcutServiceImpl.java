@@ -41,6 +41,7 @@ import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
+import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
@@ -229,10 +230,10 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
-    public Uni<Void> validateStageSecret(final Long tenantId, final Long stageId, final String secret) {
+    public Uni<StageModel> validateStageSecret(final Long tenantId, final Long stageId, final String secret) {
         final var validateStageSecretHelpRequest = new ValidateStageSecretRequest(tenantId, stageId, secret);
         return tenantModule.getStageService().validateStageSecret(validateStageSecretHelpRequest)
-                .replaceWithVoid();
+                .map(ValidateStageSecretResponse::getStage);
     }
 
     @Override
@@ -385,7 +386,7 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
-    public Uni<VersionRuntimeModel> selectVersionRuntime(final Long tenantId, final Long versionId) {
+    public Uni<VersionRuntimeModel> selectRandomVersionRuntime(final Long tenantId, final Long versionId) {
         final var request = new SelectVersionRuntimeRequest(tenantId,
                 versionId,
                 SelectVersionRuntimeRequest.Strategy.RANDOM);

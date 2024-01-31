@@ -61,6 +61,8 @@ class RunContainerMethodImpl implements RunContainerMethod {
 
                     final var startContainerResponse = dockerClient.startContainerCmd(name)
                             .exec();
+
+                    log.info("Start container, response={}", startContainerResponse);
                 })
                 .replaceWith(RunContainerResponse::new);
     }

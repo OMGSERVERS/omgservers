@@ -4,7 +4,6 @@ import com.omgservers.model.dto.user.DeleteUserRequest;
 import com.omgservers.model.dto.user.DeleteUserResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.dto.user.RespondClientRequest;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
@@ -14,7 +13,6 @@ import com.omgservers.service.module.user.impl.operation.getUserModuleClient.Use
 import com.omgservers.service.module.user.impl.service.userService.UserService;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.deleteUser.DeleteUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.getUser.GetUserMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.respondClient.RespondClientMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.syncUser.SyncUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.validateCredentials.ValidateCredentialsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
@@ -36,7 +34,6 @@ class UserServiceImpl implements UserService {
     final CalculateShardOperation calculateShardOperation;
 
     final ValidateCredentialsMethod validateCredentialsMethod;
-    final RespondClientMethod respondClientMethod;
     final DeleteUserMethod deleteUserMethod;
     final SyncUserMethod syncUserMethod;
     final GetUserMethod getUserMethod;
@@ -71,10 +68,5 @@ class UserServiceImpl implements UserService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::validateCredentials,
                 validateCredentialsMethod::validateCredentials);
-    }
-
-    @Override
-    public Uni<Void> respondClient(@Valid final RespondClientRequest request) {
-        return respondClientMethod.respondClient(request);
     }
 }

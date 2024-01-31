@@ -27,10 +27,10 @@ public class MulticastDoCommandExecutor implements DoCommandExecutor {
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
         final var commandBody = (DoMulticastCommandBodyModel) doCommand.getBody();
-        final var recipients = commandBody.getRecipients();
+        final var clients = commandBody.getClients();
         final var message = commandBody.getMessage();
 
-        final var request = new DoMulticastMessageRequest(runtimeId, recipients, message);
+        final var request = new DoMulticastMessageRequest(runtimeId, clients, message);
         return runtimeModule.getDoService().doMulticastMessage(request)
                 .replaceWithVoid();
     }

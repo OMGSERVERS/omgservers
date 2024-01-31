@@ -42,7 +42,7 @@ public interface ShortcutService {
 
     Uni<Void> deleteProjectPermissions(Long tenantId, Long projectId);
 
-    Uni<Void> validateStageSecret(Long tenantId, Long stageId, String secret);
+    Uni<StageModel> validateStageSecret(Long tenantId, Long stageId, String secret);
 
     Uni<StageModel> getStage(Long tenantId, Long id);
 
@@ -70,7 +70,7 @@ public interface ShortcutService {
 
     Uni<VersionMatchmakerModel> selectVersionMatchmaker(Long tenantId, Long versionId);
 
-    Uni<VersionRuntimeModel> selectVersionRuntime(Long tenantId, Long versionId);
+    Uni<VersionRuntimeModel> selectRandomVersionRuntime(Long tenantId, Long versionId);
 
     Uni<VersionMatchmakerModel> getVersionMatchmaker(Long tenantId, Long id);
 

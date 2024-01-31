@@ -28,20 +28,18 @@ public class AddClientRuntimeCommandMapper implements RuntimeCommandMapper {
     public AddClientLuaCommand map(LuaContext luaContext, final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
 
-        final var userId = runtimeCommandBody.getUserId();
-        final var luaProfileOptional = luaContext.getProfile(userId);
-        final var luaAttributesOptional = luaContext.getAttributes(userId);
+        final var clientId = runtimeCommandBody.getClientId();
+        final var luaProfileOptional = luaContext.getProfile(clientId);
+        final var luaAttributesOptional = luaContext.getAttributes(clientId);
 
         if (luaAttributesOptional.isPresent() && luaProfileOptional.isPresent()) {
-            return new AddClientLuaCommand(
-                    runtimeCommandBody.getUserId(),
-                    runtimeCommandBody.getClientId(),
+            return new AddClientLuaCommand(clientId,
                     luaAttributesOptional.get(),
                     luaProfileOptional.get());
         } else {
             throw new IllegalArgumentException(
                     String.format("profiles or attributes were not found for runtime command, " +
-                            "qualifier=%s, userId=%d", runtimeCommand.getQualifier(), userId));
+                            "qualifier=%s, clientId=%d", runtimeCommand.getQualifier(), clientId));
         }
     }
 }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
 import java.time.Instant;
 
 @Data
@@ -17,31 +16,25 @@ public class ClientModel {
     Long id;
 
     @NotNull
-    Long userId;
-
-    @NotNull
-    Long playerId;
-
-    @NotNull
     Instant created;
 
     @NotNull
     Instant modified;
 
     @NotNull
-    URI server;
+    Long userId;
 
     @NotNull
-    Long connectionId;
+    Long playerId;
+
+    @NotNull
+    Long tenantId;
 
     @NotNull
     Long versionId;
 
     @NotNull
-    Long defaultMatchmakerId;
-
-    @NotNull
-    Long defaultRuntimeId;
+    Long matchmakerId;
 
     @NotNull
     Boolean deleted;

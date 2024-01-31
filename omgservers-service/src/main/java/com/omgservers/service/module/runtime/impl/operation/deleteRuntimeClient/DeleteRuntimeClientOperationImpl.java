@@ -1,5 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.deleteRuntimeClient;
 
+import com.omgservers.model.event.body.RuntimeClientDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -38,7 +39,7 @@ class DeleteRuntimeClientOperationImpl implements DeleteRuntimeClientOperation {
                         runtimeId,
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)),
-                () -> null,
+                () -> new RuntimeClientDeletedEventBodyModel(runtimeId, id),
                 () -> null
         );
     }

@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class ClientDeletedEventBodyModel extends EventBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long id;
 
     @Override
@@ -27,6 +24,6 @@ public class ClientDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public Long getGroupId() {
-        return userId;
+        return id;
     }
 }

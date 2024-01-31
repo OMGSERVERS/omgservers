@@ -25,9 +25,6 @@ public class RuntimeClientModel {
     Instant modified;
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @NotNull

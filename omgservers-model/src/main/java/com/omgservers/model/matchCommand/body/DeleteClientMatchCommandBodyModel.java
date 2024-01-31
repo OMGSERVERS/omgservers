@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class DeleteClientMatchCommandBodyModel extends MatchCommandBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @Override

@@ -17,9 +17,6 @@ import lombok.ToString;
 public class DoSetAttributesCommandBodyModel extends DoCommandBodyModel {
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @NotNull

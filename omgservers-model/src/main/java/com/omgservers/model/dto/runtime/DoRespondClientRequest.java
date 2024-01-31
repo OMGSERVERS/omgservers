@@ -15,9 +15,6 @@ public class DoRespondClientRequest implements ShardedRequest {
     Long runtimeId;
 
     @NotNull
-    Long userId;
-
-    @NotNull
     Long clientId;
 
     @NotNull

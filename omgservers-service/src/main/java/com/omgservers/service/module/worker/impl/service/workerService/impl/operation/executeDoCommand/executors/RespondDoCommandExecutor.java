@@ -27,11 +27,10 @@ public class RespondDoCommandExecutor implements DoCommandExecutor {
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
         final var commandBody = (DoRespondCommandBodyModel) doCommand.getBody();
-        final var userId = commandBody.getUserId();
         final var clientId = commandBody.getClientId();
         final var message = commandBody.getMessage();
 
-        final var request = new DoRespondClientRequest(runtimeId, userId, clientId, message);
+        final var request = new DoRespondClientRequest(runtimeId, clientId, message);
         return runtimeModule.getDoService().doRespondClient(request)
                 .replaceWithVoid();
     }

@@ -20,7 +20,6 @@ class HasRuntimeClientOperationImpl implements HasRuntimeClientOperation {
     public Uni<Boolean> hasRuntimeClient(final SqlConnection sqlConnection,
                                          final int shard,
                                          final Long runtimeId,
-                                         final Long userId,
                                          final Long clientId) {
         return hasObjectOperation.hasObject(
                 sqlConnection,
@@ -29,10 +28,10 @@ class HasRuntimeClientOperationImpl implements HasRuntimeClientOperation {
                         select id
                         from $schema.tab_runtime_client
                         where
-                            runtime_id = $1 and user_id = $2 and client_id = $3 and deleted = false
+                            runtime_id = $1 and client_id = $2 and deleted = false
                         limit 1
                         """,
-                Arrays.asList(runtimeId, userId, clientId),
+                Arrays.asList(runtimeId, clientId),
                 "Runtime client");
     }
 }

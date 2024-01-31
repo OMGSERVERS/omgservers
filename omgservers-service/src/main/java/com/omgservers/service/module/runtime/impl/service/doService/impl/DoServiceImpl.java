@@ -2,8 +2,6 @@ package com.omgservers.service.module.runtime.impl.service.doService.impl;
 
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.dto.runtime.DoChangePlayerRequest;
-import com.omgservers.model.dto.runtime.DoChangePlayerResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
 import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
@@ -16,20 +14,16 @@ import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
 import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
-import com.omgservers.model.dto.runtime.DoUnicastMessageRequest;
-import com.omgservers.model.dto.runtime.DoUnicastMessageResponse;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doBroadcastMessage.DoBroadcastMessageMethod;
-import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doChangePlayer.DoChangePlayerMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doKickClient.DoKickClientMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doMulticastMessage.DoMulticastMessageMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doRespondClient.DoRespondClientMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes.DoSetAttributesMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetProfile.DoSetProfileMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doStopRuntime.DoStopRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doUnicastMessage.DoUnicastMessageMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,10 +42,8 @@ public class DoServiceImpl implements DoService {
 
     final DoMulticastMessageMethod doMulticastMessageMethod;
     final DoBroadcastMessageMethod doBroadcastMessageMethod;
-    final DoUnicastMessageMethod doUnicastMessageMethod;
     final DoRespondClientMethod doRespondClientMethod;
     final DoSetAttributesMethod doSetAttributesMethod;
-    final DoChangePlayerMethod doChangePlayerMethod;
     final DoStopRuntimeMethod doStopRuntimeMethod;
     final DoKickClientMethod doKickClientMethod;
     final DoSetProfileMethod doSetProfileMethod;
@@ -94,22 +86,6 @@ public class DoServiceImpl implements DoService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::doStopRuntime,
                 doStopRuntimeMethod::doStopRuntime);
-    }
-
-    @Override
-    public Uni<DoChangePlayerResponse> doChangePlayer(@Valid final DoChangePlayerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::doChangePlayer,
-                doChangePlayerMethod::doChangePlayer);
-    }
-
-    @Override
-    public Uni<DoUnicastMessageResponse> doUnicastMessage(@Valid final DoUnicastMessageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::doUnicastMessage,
-                doUnicastMessageMethod::doUnicastMessage);
     }
 
     @Override
