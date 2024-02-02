@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.client;
 
+import com.omgservers.model.clientRuntime.ClientRuntimeModel;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientRuntimeCreatedEventBodyModel;
@@ -7,6 +8,7 @@ import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.EventHandler;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -43,9 +45,29 @@ public class ClientRuntimeCreatedEventHandlerImpl implements EventHandler {
                     log.info("Client runtime was created, clientRuntime={}/{}, runtimeId={}",
                             clientId, id, runtimeId);
 
-                    return syncRuntimeClient(runtimeId, clientId);
+                    return deletePreviousClientRuntimes(clientRuntime)
+                            .flatMap(voidItem -> syncRuntimeClient(runtimeId, clientId));
                 })
                 .replaceWith(true);
+    }
+
+    Uni<Void> deletePreviousClientRuntimes(final ClientRuntimeModel currentClientRuntime) {
+        final var clientId = currentClientRuntime.getClientId();
+        final var id = currentClientRuntime.getId();
+        return clientModule.getShortcutService().viewClientRuntimes(clientId)
+                .flatMap(clientRuntimes -> Multi.createFrom().iterable(clientRuntimes)
+                        .onItem().transformToUniAndConcatenate(clientRuntime -> {
+                            if (clientRuntime.getId().equals(id)) {
+                                return Uni.createFrom().item(false);
+                            } else {
+                                return clientModule.getShortcutService()
+                                        .deleteClientRuntime(clientRuntime.getClientId(),
+                                                clientRuntime.getId());
+                            }
+                        })
+                        .collect().asList()
+                        .replaceWithVoid()
+                );
     }
 
     Uni<Boolean> syncRuntimeClient(final Long runtimeId, final Long clientId) {

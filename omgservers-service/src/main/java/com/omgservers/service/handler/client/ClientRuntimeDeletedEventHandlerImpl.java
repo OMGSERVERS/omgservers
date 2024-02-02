@@ -3,6 +3,7 @@ package com.omgservers.service.handler.client;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientRuntimeDeletedEventBodyModel;
+import com.omgservers.service.factory.ClientRuntimeModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -22,6 +23,7 @@ public class ClientRuntimeDeletedEventHandlerImpl implements EventHandler {
     final ClientModule clientModule;
 
     final RuntimeClientModelFactory runtimeClientModelFactory;
+    final ClientRuntimeModelFactory clientRuntimeModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -43,8 +45,7 @@ public class ClientRuntimeDeletedEventHandlerImpl implements EventHandler {
                     log.info("Client runtime was deleted, clientRuntime={}/{}, runtimeId={}",
                             clientId, id, runtimeId);
 
-                    return runtimeModule.getShortcutService()
-                            .findAndDeleteRuntimeClient(runtimeId, clientId);
+                    return runtimeModule.getShortcutService().findAndDeleteRuntimeClient(runtimeId, clientId);
                 })
                 .replaceWith(true);
     }
