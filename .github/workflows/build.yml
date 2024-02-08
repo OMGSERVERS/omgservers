@@ -36,6 +36,9 @@ jobs:
         run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml ps
       - name: Integration testing
         run: mvn -B -Dquarkus.test.profile=local -DskipITs=false -DdockerCompose.skip=false -f omgservers-tester/pom.xml verify
+      - name: Log containers
+        if: always()
+        run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml logs
       - name: Stop containers
         if: always()
         run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml down
