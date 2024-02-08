@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleMessageRequest implements ShardedRequest {
+public class InterchangeRequest implements ShardedRequest {
 
     @NotNull
     Long fromUserId;
@@ -19,7 +21,10 @@ public class HandleMessageRequest implements ShardedRequest {
     Long clientId;
 
     @NotNull
-    MessageModel message;
+    List<MessageModel> outgoingMessages;
+
+    @NotNull
+    List<Long> consumedMessages;
 
     @Override
     public String getRequestShardKey() {

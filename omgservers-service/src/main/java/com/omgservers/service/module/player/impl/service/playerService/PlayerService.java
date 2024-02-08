@@ -6,10 +6,8 @@ import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
 import com.omgservers.model.dto.player.CreateUserPlayerRequest;
 import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.player.HandleMessagePlayerRequest;
-import com.omgservers.model.dto.player.HandleMessagePlayerResponse;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerRequest;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerResponse;
+import com.omgservers.model.dto.player.InterchangePlayerRequest;
+import com.omgservers.model.dto.player.InterchangePlayerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -21,7 +19,5 @@ public interface PlayerService {
 
     Uni<CreateClientPlayerResponse> createClient(@Valid CreateClientPlayerRequest request);
 
-    Uni<HandleMessagePlayerResponse> handleMessage(@Valid HandleMessagePlayerRequest request);
-
-    Uni<ReceiveMessagesPlayerResponse> receiveMessages(@Valid ReceiveMessagesPlayerRequest request);
+    Uni<InterchangePlayerResponse> interchange(@Valid InterchangePlayerRequest request);
 }

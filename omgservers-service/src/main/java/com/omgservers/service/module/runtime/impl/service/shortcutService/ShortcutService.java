@@ -18,6 +18,8 @@ public interface ShortcutService {
 
     Uni<Boolean> syncRuntimeCommand(RuntimeCommandModel runtimeCommand);
 
+    Uni<Boolean> syncClientCommand(Long clientId, RuntimeCommandModel runtimeCommand);
+
     Uni<List<RuntimeCommandModel>> viewRuntimeCommands(Long runtimeId);
 
     Uni<Boolean> deleteRuntimeCommand(Long runtimeId, Long id);

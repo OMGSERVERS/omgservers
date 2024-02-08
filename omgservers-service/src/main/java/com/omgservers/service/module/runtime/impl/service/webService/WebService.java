@@ -34,6 +34,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
+import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -68,6 +70,8 @@ public interface WebService {
     Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(ViewRuntimeCommandsRequest request);
 
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
+
+    Uni<SyncClientCommandResponse> syncClientCommand(SyncClientCommandRequest request);
 
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(DeleteRuntimeCommandRequest request);
 

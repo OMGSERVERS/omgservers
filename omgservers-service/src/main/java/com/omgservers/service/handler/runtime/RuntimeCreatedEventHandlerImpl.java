@@ -8,6 +8,7 @@ import com.omgservers.model.entitiy.EntityQualifierEnum;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.user.UserModel;
@@ -67,7 +68,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    return createContainer(runtime)
+                    return syncRuntimeJob(runtimeId)
+                            .flatMap(wasJobCreated -> createContainer(runtime))
                             .flatMap(voidItem -> {
                                 final var entity = entityModelFactory
                                         .create(runtimeId, EntityQualifierEnum.RUNTIME);
@@ -75,6 +77,11 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             });
                 })
                 .replaceWith(true);
+    }
+
+    Uni<Boolean> syncRuntimeJob(final Long runtimeId) {
+        final var job = jobModelFactory.create(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
+        return systemModule.getShortcutService().syncJob(job);
     }
 
     Uni<Void> createContainer(final RuntimeModel runtime) {

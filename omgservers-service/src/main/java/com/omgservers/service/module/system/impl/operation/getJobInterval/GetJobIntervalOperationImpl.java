@@ -15,7 +15,7 @@ class GetJobIntervalOperationImpl implements GetJobIntervalOperation {
         // TODO: move to settings/properties?
         return switch (type) {
             case TENANT, PROJECT, STAGE -> 60;
-            case RELAY, MATCHMAKER, MATCH -> 1;
+            case RELAY, MATCHMAKER, MATCH, RUNTIME -> 1;
         };
     }
 }

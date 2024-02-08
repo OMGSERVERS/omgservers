@@ -16,6 +16,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
+import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -77,6 +79,13 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(request)
                 .map(SyncRuntimeCommandResponse::getCreated);
+    }
+
+    @Override
+    public Uni<Boolean> syncClientCommand(final Long clientId, final RuntimeCommandModel runtimeCommand) {
+        final var request = new SyncClientCommandRequest(clientId, runtimeCommand);
+        return runtimeModule.getRuntimeService().syncClientCommand(request)
+                .map(SyncClientCommandResponse::getCreated);
     }
 
     @Override

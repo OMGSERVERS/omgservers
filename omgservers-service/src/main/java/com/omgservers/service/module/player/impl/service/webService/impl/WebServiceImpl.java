@@ -6,10 +6,8 @@ import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
 import com.omgservers.model.dto.player.CreateUserPlayerRequest;
 import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.player.HandleMessagePlayerRequest;
-import com.omgservers.model.dto.player.HandleMessagePlayerResponse;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerRequest;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerResponse;
+import com.omgservers.model.dto.player.InterchangePlayerRequest;
+import com.omgservers.model.dto.player.InterchangePlayerResponse;
 import com.omgservers.service.module.player.impl.service.playerService.PlayerService;
 import com.omgservers.service.module.player.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -41,12 +39,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<HandleMessagePlayerResponse> handleMessage(final HandleMessagePlayerRequest request) {
-        return playerService.handleMessage(request);
-    }
-
-    @Override
-    public Uni<ReceiveMessagesPlayerResponse> receiveMessages(final ReceiveMessagesPlayerRequest request) {
-        return playerService.receiveMessages(request);
+    public Uni<InterchangePlayerResponse> interchange(final InterchangePlayerRequest request) {
+        return playerService.interchange(request);
     }
 }

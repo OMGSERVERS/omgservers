@@ -12,10 +12,8 @@ import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.GetClientRuntimeRequest;
 import com.omgservers.model.dto.client.GetClientRuntimeResponse;
-import com.omgservers.model.dto.client.HandleMessageRequest;
-import com.omgservers.model.dto.client.HandleMessageResponse;
-import com.omgservers.model.dto.client.ReceiveMessagesRequest;
-import com.omgservers.model.dto.client.ReceiveMessagesResponse;
+import com.omgservers.model.dto.client.InterchangeRequest;
+import com.omgservers.model.dto.client.InterchangeResponse;
 import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
 import com.omgservers.model.dto.client.SelectClientRuntimeResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
@@ -37,8 +35,7 @@ import com.omgservers.service.module.client.impl.service.clientService.impl.meth
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.findClientRuntime.FindClientRuntimeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClient.GetClientMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClientRuntime.GetClientRuntimeMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.handleMessage.HandleMessageMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.receiveMessages.ReceiveMessagesMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.interchange.InterchangeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.selectClientRuntime.SelectClientRuntimeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClient.SyncClientMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientMessage.SyncClientMessageMethod;
@@ -68,9 +65,8 @@ public class ClientServiceImpl implements ClientService {
     final SyncClientRuntimeMethod syncClientRuntimeMethod;
     final FindClientRuntimeMethod findClientRuntimeMethod;
     final GetClientRuntimeMethod getClientRuntimeMethod;
-    final ReceiveMessagesMethod receiveMessagesMethod;
     final DeleteClientMethod deleteClientMethod;
-    final HandleMessageMethod handleMessage;
+    final InterchangeMethod interchangeMethod;
     final SyncClientMethod syncClientMethod;
     final GetClientMethod getClientMethod;
 
@@ -103,19 +99,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Uni<HandleMessageResponse> handleMessage(@Valid final HandleMessageRequest request) {
+    public Uni<InterchangeResponse> interchange(@Valid final InterchangeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::handleMessage,
-                handleMessage::handleMessage);
-    }
-
-    @Override
-    public Uni<ReceiveMessagesResponse> receiveMessages(@Valid final ReceiveMessagesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getClientModuleClientOperation::getClient,
-                ClientModuleClient::receiveMessages,
-                receiveMessagesMethod::receiveMessages);
+                ClientModuleClient::interchange,
+                interchangeMethod::interchange);
     }
 
     @Override

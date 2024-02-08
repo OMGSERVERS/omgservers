@@ -28,5 +28,8 @@ public class RuntimeClientModel {
     Long clientId;
 
     @NotNull
+    Instant lastActivity;
+
+    @NotNull
     Boolean deleted;
 }

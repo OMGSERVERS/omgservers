@@ -1,29 +1,25 @@
-package com.omgservers.model.dto.client;
+package com.omgservers.model.dto.runtime;
 
 import com.omgservers.model.dto.ShardedRequest;
+import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiveMessagesRequest implements ShardedRequest {
-
-    @NotNull
-    Long forUserId;
+public class SyncClientCommandRequest implements ShardedRequest {
 
     @NotNull
     Long clientId;
 
     @NotNull
-    List<Long> consumedMessages;
+    RuntimeCommandModel runtimeCommand;
 
     @Override
     public String getRequestShardKey() {
-        return clientId.toString();
+        return runtimeCommand.getRuntimeId().toString();
     }
 }

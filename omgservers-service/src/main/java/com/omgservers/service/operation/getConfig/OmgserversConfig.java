@@ -37,6 +37,8 @@ public interface OmgserversConfig {
 
     long tokenLifetime();
 
+    long inactiveInterval();
+
     boolean disableRelay();
 
     String workersImage();

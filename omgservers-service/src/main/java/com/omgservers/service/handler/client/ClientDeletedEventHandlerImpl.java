@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.model.clientMessage.ClientMessageModel;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.event.EventModel;
@@ -52,28 +51,17 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     log.info("Client was deleted, clientId={}", clientId);
 
-                    return systemModule.getShortcutService().findAndDeleteEntity(clientId)
-                            .flatMap(entityDeleted -> deleteClientMessages(clientId)
-                                    .flatMap(voidItem -> deleteClientRuntimes(clientId))
-                                    .flatMap(voidItem -> {
-                                        final var matchmakerId = client.getMatchmakerId();
-                                        return syncDeleteClientMatchmakerCommand(matchmakerId, clientId);
+                    // Do not delete client's messages -> user can retrieve them anyway
 
-                                    }));
+                    return systemModule.getShortcutService().findAndDeleteEntity(clientId)
+                            .flatMap(entityDeleted -> deleteClientRuntimes(clientId))
+                            .flatMap(voidItem -> {
+                                final var matchmakerId = client.getMatchmakerId();
+                                return syncDeleteClientMatchmakerCommand(matchmakerId, clientId);
+
+                            });
                 })
                 .replaceWith(true);
-    }
-
-    Uni<Void> deleteClientMessages(final Long clientId) {
-        return clientModule.getShortcutService().viewClientMessages(clientId)
-                .flatMap(clientMessages -> {
-                            final var clientMessageIds = clientMessages.stream()
-                                    .map(ClientMessageModel::getId)
-                                    .toList();
-                            return clientModule.getShortcutService().deleteClientMessages(clientId, clientMessageIds)
-                                    .replaceWithVoid();
-                        }
-                );
     }
 
     Uni<Void> deleteClientRuntimes(final Long clientId) {

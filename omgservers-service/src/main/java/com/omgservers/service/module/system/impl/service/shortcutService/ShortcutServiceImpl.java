@@ -175,6 +175,13 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
+    public Uni<JobModel> findRuntimeJob(final Long runtimeId) {
+        final var request = new FindJobRequest(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    @Override
     public Uni<Boolean> syncJob(final JobModel job) {
         final var request = new SyncJobRequest(job);
         return systemModule.getJobService().syncJob(request)

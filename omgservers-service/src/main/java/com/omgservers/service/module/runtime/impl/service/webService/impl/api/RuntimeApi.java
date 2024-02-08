@@ -34,6 +34,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
+import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -90,6 +92,10 @@ public interface RuntimeApi {
     @PUT
     @Path("/sync-runtime-command")
     Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(SyncRuntimeCommandRequest request);
+
+    @PUT
+    @Path("/sync-client-command")
+    Uni<SyncClientCommandResponse> syncClientCommand(SyncClientCommandRequest request);
 
     @PUT
     @Path("/delete-runtime-command")

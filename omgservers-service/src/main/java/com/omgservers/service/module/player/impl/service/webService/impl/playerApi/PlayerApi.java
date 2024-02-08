@@ -6,10 +6,8 @@ import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
 import com.omgservers.model.dto.player.CreateUserPlayerRequest;
 import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.player.HandleMessagePlayerRequest;
-import com.omgservers.model.dto.player.HandleMessagePlayerResponse;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerRequest;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerResponse;
+import com.omgservers.model.dto.player.InterchangePlayerRequest;
+import com.omgservers.model.dto.player.InterchangePlayerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -30,10 +28,6 @@ public interface PlayerApi {
     Uni<CreateClientPlayerResponse> createClient(CreateClientPlayerRequest request);
 
     @PUT
-    @Path("/handle-message")
-    Uni<HandleMessagePlayerResponse> handleMessage(HandleMessagePlayerRequest request);
-
-    @PUT
-    @Path("/receive-messages")
-    Uni<ReceiveMessagesPlayerResponse> receiveMessages(ReceiveMessagesPlayerRequest request);
+    @Path("/interchange")
+    Uni<InterchangePlayerResponse> interchange(InterchangePlayerRequest request);
 }

@@ -34,6 +34,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
+import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -103,6 +105,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return runtimeService.syncRuntimeCommand(request);
+    }
+
+    @Override
+    public Uni<SyncClientCommandResponse> syncClientCommand(final SyncClientCommandRequest request) {
+        return runtimeService.syncClientCommand(request);
     }
 
     @Override

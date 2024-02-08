@@ -46,8 +46,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
         if (message.getBody() instanceof final ClientMessageBodyModel messageBody) {
             return clientModule.getShortcutService().selectLatestClientRuntime(clientId)
                     .flatMap(clientRuntime -> syncHandleMessageRuntimeCommand(clientRuntime,
-                            messageBody.getData())
-                    );
+                            messageBody.getData()));
         } else {
             throw new ServerSideBadRequestException("message body type mismatch, " +
                     message.getBody().getClass().getSimpleName());
@@ -60,6 +59,6 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
         final var runtimeId = clientRuntime.getRuntimeId();
         final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(clientId, message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
-        return runtimeModule.getShortcutService().syncRuntimeCommand(runtimeCommand);
+        return runtimeModule.getShortcutService().syncClientCommand(clientId, runtimeCommand);
     }
 }

@@ -34,6 +34,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
+import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
@@ -117,6 +119,11 @@ public class RuntimeApiImpl implements RuntimeApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
+    }
+
+    @Override
+    public Uni<SyncClientCommandResponse> syncClientCommand(final SyncClientCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientCommand);
     }
 
     @Override

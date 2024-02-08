@@ -298,6 +298,7 @@ create table if not exists tab_runtime_client (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     client_id bigint not null,
+    last_activity timestamp with time zone not null,
     deleted boolean not null,
     unique(runtime_id, client_id)
 );

@@ -33,6 +33,7 @@ public class RuntimeClientModelFactory {
         runtimeClient.setCreated(now);
         runtimeClient.setModified(now);
         runtimeClient.setClientId(clientId);
+        runtimeClient.setLastActivity(now);
         runtimeClient.setDeleted(false);
         return runtimeClient;
     }

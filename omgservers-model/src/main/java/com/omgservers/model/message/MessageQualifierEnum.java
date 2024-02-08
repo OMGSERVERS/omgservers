@@ -2,6 +2,7 @@ package com.omgservers.model.message;
 
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.message.body.ClientMessageBodyModel;
+import com.omgservers.model.message.body.DisconnectionMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
@@ -13,6 +14,7 @@ public enum MessageQualifierEnum {
     // Server messages
     WELCOME_MESSAGE(WelcomeMessageBodyModel.class),
     ASSIGNMENT_MESSAGE(AssignmentMessageBodyModel.class),
+    DISCONNECTION_MESSAGE(DisconnectionMessageBodyModel.class),
     SERVER_MESSAGE(ServerMessageBodyModel.class);
 
     final Class<? extends MessageBodyModel> bodyClass;

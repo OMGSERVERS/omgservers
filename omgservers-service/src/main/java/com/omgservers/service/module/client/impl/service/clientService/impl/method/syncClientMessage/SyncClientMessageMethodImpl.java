@@ -3,6 +3,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.hasClient.HasClientOperation;
 import com.omgservers.service.module.client.impl.operation.upsertClientMessage.UpsertClientMessageOperation;
@@ -50,7 +51,7 @@ class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
                                                         shardModel.shard(),
                                                         clientMessage);
                                             } else {
-                                                throw new ServerSideConflictException(
+                                                throw new ServerSideNotFoundException(
                                                         "client does not exist or was deleted, id=" + clientId);
                                             }
                                         })

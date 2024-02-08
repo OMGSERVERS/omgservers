@@ -7,6 +7,7 @@ import com.omgservers.model.event.body.ClientRuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientRuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
@@ -87,7 +88,9 @@ public enum EventQualifierEnum {
     RUNTIME_CLIENT_DELETED(RuntimeClientDeletedEventBodyModel.class),
     // Player
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class),
-    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class);
+    MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class),
+    // Internal
+    INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class);
 
     final Class<? extends EventBodyModel> bodyClass;
 

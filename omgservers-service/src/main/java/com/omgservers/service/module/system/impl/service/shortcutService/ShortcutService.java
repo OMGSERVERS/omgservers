@@ -42,6 +42,8 @@ public interface ShortcutService {
 
     Uni<JobModel> findMatchJob(Long matchmakerId, Long matchId);
 
+    Uni<JobModel> findRuntimeJob(Long runtimeId);
+
     Uni<Boolean> syncJob(JobModel job);
 
     Uni<Boolean> deleteJob(Long id);

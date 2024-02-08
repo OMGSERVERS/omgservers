@@ -34,8 +34,8 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_client(
-                            id, runtime_id, created, modified, client_id, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, runtime_id, created, modified, client_id, last_activity, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,6 +45,7 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                         runtimeClient.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeClient.getModified().atOffset(ZoneOffset.UTC),
                         runtimeClient.getClientId(),
+                        runtimeClient.getLastActivity().atOffset(ZoneOffset.UTC),
                         runtimeClient.getDeleted()
                 ),
                 () -> new RuntimeClientCreatedEventBodyModel(runtimeClient.getRuntimeId(),

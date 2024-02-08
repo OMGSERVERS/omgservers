@@ -12,10 +12,8 @@ import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.GetClientRuntimeRequest;
 import com.omgservers.model.dto.client.GetClientRuntimeResponse;
-import com.omgservers.model.dto.client.HandleMessageRequest;
-import com.omgservers.model.dto.client.HandleMessageResponse;
-import com.omgservers.model.dto.client.ReceiveMessagesRequest;
-import com.omgservers.model.dto.client.ReceiveMessagesResponse;
+import com.omgservers.model.dto.client.InterchangeRequest;
+import com.omgservers.model.dto.client.InterchangeResponse;
 import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
 import com.omgservers.model.dto.client.SelectClientRuntimeResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
@@ -38,9 +36,7 @@ public interface WebService {
 
     Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
 
-    Uni<HandleMessageResponse> handleMessage(HandleMessageRequest request);
-
-    Uni<ReceiveMessagesResponse> receiveMessages(ReceiveMessagesRequest request);
+    Uni<InterchangeResponse> interchange(InterchangeRequest request);
 
     Uni<ViewClientMessagesResponse> viewClientMessages(ViewClientMessagesRequest request);
 

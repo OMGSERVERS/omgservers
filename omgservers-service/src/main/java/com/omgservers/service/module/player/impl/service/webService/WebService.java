@@ -6,10 +6,8 @@ import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
 import com.omgservers.model.dto.player.CreateUserPlayerRequest;
 import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.player.HandleMessagePlayerRequest;
-import com.omgservers.model.dto.player.HandleMessagePlayerResponse;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerRequest;
-import com.omgservers.model.dto.player.ReceiveMessagesPlayerResponse;
+import com.omgservers.model.dto.player.InterchangePlayerRequest;
+import com.omgservers.model.dto.player.InterchangePlayerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -20,7 +18,5 @@ public interface WebService {
 
     Uni<CreateClientPlayerResponse> createClient(CreateClientPlayerRequest request);
 
-    Uni<HandleMessagePlayerResponse> handleMessage(HandleMessagePlayerRequest request);
-
-    Uni<ReceiveMessagesPlayerResponse> receiveMessages(ReceiveMessagesPlayerRequest request);
+    Uni<InterchangePlayerResponse> interchange(InterchangePlayerRequest request);
 }

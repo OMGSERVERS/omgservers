@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiveMessagesResponse {
+public class InterchangeResponse {
 
-    List<MessageModel> messages;
+    List<MessageModel> incomingMessages;
 }

@@ -29,7 +29,7 @@ class SelectRuntimeClientOperationImpl implements SelectRuntimeClientOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, runtime_id, created, modified, client_id, deleted
+                        select id, runtime_id, created, modified, client_id, last_activity, deleted
                         from $schema.tab_runtime_client
                         where runtime_id = $1 and id = $2
                         limit 1
