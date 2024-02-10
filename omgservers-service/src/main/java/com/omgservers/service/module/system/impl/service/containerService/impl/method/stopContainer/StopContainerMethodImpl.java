@@ -1,5 +1,6 @@
 package com.omgservers.service.module.system.impl.service.containerService.impl.method.stopContainer;
 
+import com.github.dockerjava.api.exception.NotModifiedException;
 import com.omgservers.model.dto.system.StopContainerRequest;
 import com.omgservers.model.dto.system.StopContainerResponse;
 import com.omgservers.service.module.system.impl.component.dockerClient.DockerClientHolder;
@@ -27,7 +28,12 @@ class StopContainerMethodImpl implements StopContainerMethod {
                     final var containerName = request.getId().toString();
                     final var dockerClient = dockerClientHolder.getDockerClient();
 
-                    dockerClient.stopContainerCmd(containerName).exec();
+                    try {
+                        dockerClient.stopContainerCmd(containerName).exec();
+                    } catch (NotModifiedException e) {
+                        log.info("Stop container failed, {}", e.getMessage());
+                    }
+
                     if (request.getRemove()) {
                         dockerClient.removeContainerCmd(containerName).exec();
                     }
