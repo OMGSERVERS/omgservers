@@ -36,20 +36,20 @@ public class LobbyHandleMessageIT extends Assertions {
     void lobbyHandleMessage() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        local var command = ...
-
-                        if command.qualifier == "handle_message" then
-                            local var message = command.message
-                            assert(message.text == "helloworld", "message.text is wrong")
-                            return {
-                                {
-                                    qualifier = "respond",
-                                    client_id = command.client_id,
-                                    message = {
-                                        text = "message_was_handled"
+                        function handle_command(self, command)
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
+                                assert(message.text == "helloworld", "message.text is wrong")
+                                return {
+                                    {
+                                        qualifier = "respond",
+                                        client_id = command.client_id,
+                                        message = {
+                                            text = "message_was_handled"
+                                        }
                                     }
                                 }
-                            }
+                            end
                         end
                         """,
                 """

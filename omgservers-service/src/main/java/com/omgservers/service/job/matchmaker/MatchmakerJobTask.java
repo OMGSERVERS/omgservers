@@ -39,7 +39,7 @@ public class MatchmakerJobTask implements JobTask {
         return matchmakerModule.getShortcutService().getMatchmaker(matchmakerId)
                 .map(matchmaker -> {
                     if (matchmaker.getDeleted()) {
-                        log.warn("Matchmaker was deleted, skip job execution, id={}", matchmakerId);
+                        log.info("Matchmaker was deleted, skip job execution, id={}", matchmakerId);
                         return null;
                     } else {
                         return matchmaker;

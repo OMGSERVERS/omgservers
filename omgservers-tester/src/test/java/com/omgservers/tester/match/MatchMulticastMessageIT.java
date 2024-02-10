@@ -41,30 +41,28 @@ public class MatchMulticastMessageIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
-                                                
-                        print(command.qualifier)
-                                                
-                        if command.qualifier == "init_runtime" then
-                            clients = {}
-                        end
+                        function handle_command(self, command)
+                            if command.qualifier == "init_runtime" then
+                                self.clients = {}
+                            end
                                                
-                        if command.qualifier == "add_client" then
-                            table.insert(clients, command.client_id)
-                        end
-                                                
-                        if command.qualifier == "handle_message" then
-                            local var message = command.message
-                            assert(message.text == "multicast_request", "message.text is wrong")
-                            return {
-                                {
-                                    qualifier = "multicast",
-                                    clients = clients,
-                                    message = {
-                                        text = "hello_client_1_and_client_2"
+                            if command.qualifier == "add_client" then
+                                table.insert(self.clients, command.client_id)
+                            end
+                            
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
+                                assert(message.text == "multicast_request", "message.text is wrong")
+                                return {
+                                    {
+                                        qualifier = "multicast",
+                                        clients = self.clients,
+                                        message = {
+                                            text = "hello_client_1_and_client_2"
+                                        }
                                     }
                                 }
-                            }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

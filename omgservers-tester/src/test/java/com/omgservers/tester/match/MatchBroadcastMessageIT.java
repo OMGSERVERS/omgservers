@@ -41,19 +41,20 @@ public class MatchBroadcastMessageIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
+                        function handle_command(self, command)
                                                 
-                        if command.qualifier == "handle_message" then
-                            local var message = command.message
-                            assert(message.text == "broadcast_request", "message.text is wrong")
-                            return {
-                                {
-                                    qualifier = "broadcast",
-                                    message = {
-                                        text = "hello_all"
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
+                                assert(message.text == "broadcast_request", "message.text is wrong")
+                                return {
+                                    {
+                                        qualifier = "broadcast",
+                                        message = {
+                                            text = "hello_all"
+                                        }
                                     }
                                 }
-                            }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

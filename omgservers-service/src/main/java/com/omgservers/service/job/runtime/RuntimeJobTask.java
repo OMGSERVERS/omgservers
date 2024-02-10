@@ -44,7 +44,7 @@ public class RuntimeJobTask implements JobTask {
         return runtimeModule.getShortcutService().getRuntime(runtimeId)
                 .map(runtime -> {
                     if (runtime.getDeleted()) {
-                        log.warn("Runtime was deleted, skip job execution, runtimeId={}", runtimeId);
+                        log.info("Runtime was deleted, skip job execution, runtimeId={}", runtimeId);
                         return null;
                     } else {
                         return runtime;

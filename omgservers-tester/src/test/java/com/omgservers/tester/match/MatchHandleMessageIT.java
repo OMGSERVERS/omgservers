@@ -41,20 +41,21 @@ public class MatchHandleMessageIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
+                        function handle_command(self, command)
                                             
-                        if command.qualifier == "handle_message" then
-                            local var message = command.message
-                            assert(message.text == "helloworld", "message.text is wrong")
-                            return {
-                                {
-                                    qualifier = "respond",
-                                    client_id = command.client_id,
-                                    message = {
-                                        text = "match_message_was_handled"
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
+                                assert(message.text == "helloworld", "message.text is wrong")
+                                return {
+                                    {
+                                        qualifier = "respond",
+                                        client_id = command.client_id,
+                                        message = {
+                                            text = "match_message_was_handled"
+                                        }
                                     }
                                 }
-                            }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

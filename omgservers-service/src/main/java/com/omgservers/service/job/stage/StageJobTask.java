@@ -33,7 +33,7 @@ public class StageJobTask implements JobTask {
         return tenantModule.getShortcutService().getStage(tenantId, stageId)
                 .map(stage -> {
                     if (stage.getDeleted()) {
-                        log.warn("Stage was deleted, skip job execution, stage={}/{}", tenantId, stage);
+                        log.info("Stage was deleted, skip job execution, stage={}/{}", tenantId, stage);
                         return null;
                     } else {
                         return stage;

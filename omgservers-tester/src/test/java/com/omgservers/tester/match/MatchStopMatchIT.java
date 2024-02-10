@@ -38,15 +38,16 @@ public class MatchStopMatchIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
+                        function handle_command(self, command)
                                                 
-                        if command.qualifier == "add_client" then
-                            return {
-                                {
-                                    qualifier = "stop",
-                                    reason = "why not?"
+                            if command.qualifier == "add_client" then
+                                return {
+                                    {
+                                        qualifier = "stop",
+                                        reason = "why not?"
+                                    }
                                 }
-                            }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

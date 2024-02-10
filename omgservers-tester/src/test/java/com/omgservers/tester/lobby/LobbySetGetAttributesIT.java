@@ -36,49 +36,50 @@ public class LobbySetGetAttributesIT extends Assertions {
     void lobbySetGetAttributesIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        local var command = ...
+                        function handle_command(self, command)
 
-                        if command.qualifier == "handle_message" then
-                            local var text = command.message.text
-                            
-                            if text == "init_attributes" then
-                                return {
-                                    {
-                                        qualifier = "set_attributes",
-                                        client_id = command.client_id,
-                                        attributes = {
-                                            a1 = 1,
-                                            a2 = "string",
-                                            a3 = 3.14,
-                                            a4 = true
-                                        }
-                                    },
-                                    {
-                                        qualifier = "respond",
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "attributes_was_init"
-                                        }
-                                    }
-                                }
-                            elseif text == "check_attributes" then
-                                local attributes = command.attributes
-                                assert(type(attributes.a1) == "number", "a1 is wrong")
-                                assert(type(attributes.a2) == "string", "a2 is wrong")
-                                assert(type(attributes.a3) == "number", "a3 is wrong")
-                                assert(type(attributes.a4) == "boolean", "a4 is wrong")
+                            if command.qualifier == "handle_message" then
+                                local var text = command.message.text
                                 
-                                return {
-                                    {
-                                        qualifier = "respond",
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "attributes_was_checked"
+                                if text == "init_attributes" then
+                                    return {
+                                        {
+                                            qualifier = "set_attributes",
+                                            client_id = command.client_id,
+                                            attributes = {
+                                                a1 = 1,
+                                                a2 = "string",
+                                                a3 = 3.14,
+                                                a4 = true
+                                            }
+                                        },
+                                        {
+                                            qualifier = "respond",
+                                            client_id = command.client_id,
+                                            message = {
+                                                text = "attributes_was_init"
+                                            }
                                         }
                                     }
-                                }
+                                elseif text == "check_attributes" then
+                                    local attributes = command.attributes
+                                    assert(type(attributes.a1) == "number", "a1 is wrong")
+                                    assert(type(attributes.a2) == "string", "a2 is wrong")
+                                    assert(type(attributes.a3) == "number", "a3 is wrong")
+                                    assert(type(attributes.a4) == "boolean", "a4 is wrong")
+                                    
+                                    return {
+                                        {
+                                            qualifier = "respond",
+                                            client_id = command.client_id,
+                                            message = {
+                                                text = "attributes_was_checked"
+                                            }
+                                        }
+                                    }
+                                end
+                                
                             end
-                            
                         end
                         """,
                 """

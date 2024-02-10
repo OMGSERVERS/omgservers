@@ -39,18 +39,19 @@ public class MatchAddClientIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
-                        
-                        if command.qualifier == "add_client" then
-                            return {
-                                {
-                                    qualifier = "respond",
-                                    client_id = command.client_id,
-                                    message = {
-                                        text = "match_client_was_added"
+                        function handle_command(self, command)
+                                               
+                            if command.qualifier == "add_client" then
+                                return {
+                                    {
+                                        qualifier = "respond",
+                                        client_id = command.client_id,
+                                        message = {
+                                            text = "match_client_was_added"
+                                        }
                                     }
                                 }
-                            }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{

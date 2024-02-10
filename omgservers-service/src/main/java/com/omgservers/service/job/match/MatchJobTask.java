@@ -35,7 +35,7 @@ public class MatchJobTask implements JobTask {
         return matchmakerModule.getShortcutService().getMatch(matchmakerId, matchId)
                 .map(match -> {
                     if (match.getDeleted()) {
-                        log.warn("Match was deleted, skip job execution, match={}/{}", matchmakerId, matchId);
+                        log.info("Match was deleted, skip job execution, match={}/{}", matchmakerId, matchId);
                         return null;
                     } else {
                         return match;

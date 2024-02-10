@@ -42,28 +42,29 @@ public class MatchKickClientIT extends Assertions {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
                         """,
                 """
-                        local var command = ...
-                                                             
-                        if command.qualifier == "handle_message" then
-                            local var message = command.message
-                            
-                            return {
-                                {
-                                    qualifier = "kick",
-                                    client_id = command.message.client_id
-                                }
-                            }
-                        end
-                                                
-                        if command.qualifier == "delete_client" then
-                            return {
-                                {
-                                    qualifier = "broadcast",
-                                    message = {
-                                        text = "client_was_deleted"
+                        function handle_command(self, command)
+                                                                                     
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
+                                
+                                return {
+                                    {
+                                        qualifier = "kick",
+                                        client_id = command.message.client_id
                                     }
                                 }
-                            }
+                            end
+                                                
+                            if command.qualifier == "delete_client" then
+                                return {
+                                    {
+                                        qualifier = "broadcast",
+                                        message = {
+                                            text = "client_was_deleted"
+                                        }
+                                    }
+                                }
+                            end
                         end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
