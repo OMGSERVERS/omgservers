@@ -24,9 +24,4 @@ public class RuntimeClientDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.RUNTIME_CLIENT_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return runtimeId;
-    }
 }

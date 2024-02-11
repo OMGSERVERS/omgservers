@@ -3,7 +3,6 @@ package com.omgservers.service.security;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.IdentityProvider;
@@ -37,8 +36,8 @@ class PasswordIdentityProvider implements IdentityProvider<UsernamePasswordAuthe
         final var username = request.getUsername();
         final var password = new String(request.getPassword().getPassword());
 
-        if (username.equals(getConfigOperation.getConfig().adminUsername())) {
-            if (password.equals(getConfigOperation.getConfig().adminPassword())) {
+        if (username.equals(getConfigOperation.getServiceConfig().adminUsername())) {
+            if (password.equals(getConfigOperation.getServiceConfig().adminPassword())) {
                 final var principal = "admin/" + username;
                 return Uni.createFrom().item(QuarkusSecurityIdentity.builder()
                         .setPrincipal(new QuarkusPrincipal(principal))

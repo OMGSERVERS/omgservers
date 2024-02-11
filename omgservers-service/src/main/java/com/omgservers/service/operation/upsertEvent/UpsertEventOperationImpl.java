@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.upsertEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.EventModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -34,22 +34,22 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                         changeContext, sqlConnection, 0,
                         """
                                 insert into system.tab_event(
-                                    id, created, modified, group_id, qualifier, relayed, body, status)
+                                    id, created, modified, qualifier, body, available, attempts, deleted)
                                 values($1, $2, $3, $4, $5, $6, $7, $8)
                                 on conflict (id) do
                                 nothing
                                 """,
-                        Arrays.asList(
+                        List.of(
                                 event.getId(),
                                 event.getCreated().atOffset(ZoneOffset.UTC),
                                 event.getModified().atOffset(ZoneOffset.UTC),
-                                event.getGroupId(),
                                 event.getQualifier(),
-                                event.getRelayed(),
                                 getBodyString(event),
-                                event.getStatus()),
+                                event.getAvailable().atOffset(ZoneOffset.UTC),
+                                event.getAttempts(),
+                                event.getDeleted()),
                         () -> null,
-                        () -> logModelFactory.create("Event was inserted, event=" + event)
+                        () -> null
                 )
                 .invoke(eventWasInserted -> {
                     if (eventWasInserted) {

@@ -51,11 +51,6 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             eventModel.setModified(Instant.parse(modifiedNode.asText()));
         }
 
-        final var groupIdNode = root.get("groupId");
-        if (groupIdNode != null) {
-            eventModel.setGroupId(Long.valueOf(groupIdNode.asText()));
-        }
-
         final var qualifierNode = root.get("qualifier");
         if (qualifierNode != null) {
             final var qualifier = EventQualifierEnum.valueOf(qualifierNode.asText());
@@ -68,10 +63,20 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             }
         }
 
-        final var statusNode = root.get("status");
-        if (statusNode != null) {
-            final var status = EventStatusEnum.valueOf(statusNode.asText());
-            eventModel.setStatus(status);
+        final var availableNode = root.get("available");
+        if (availableNode != null) {
+            eventModel.setAvailable(Instant.parse(availableNode.asText()));
+        }
+
+        final var attemptsNode = root.get("attempts");
+        if (attemptsNode != null) {
+            eventModel.setAttempts(Integer.valueOf(attemptsNode.asText()));
+        }
+
+        final var deletedNode = root.get("deleted");
+        if (deletedNode != null) {
+            final var deleted = Boolean.parseBoolean(deletedNode.asText());
+            eventModel.setDeleted(deleted);
         }
 
         return eventModel;

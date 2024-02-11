@@ -20,12 +20,10 @@ import com.omgservers.model.dto.system.FindServiceAccountRequest;
 import com.omgservers.model.dto.system.FindServiceAccountResponse;
 import com.omgservers.model.dto.system.GetContainerRequest;
 import com.omgservers.model.dto.system.GetContainerResponse;
-import com.omgservers.model.dto.system.GetEventRequest;
-import com.omgservers.model.dto.system.GetEventResponse;
+import com.omgservers.model.dto.system.GetHandlerRequest;
+import com.omgservers.model.dto.system.GetHandlerResponse;
 import com.omgservers.model.dto.system.GetJobRequest;
 import com.omgservers.model.dto.system.GetJobResponse;
-import com.omgservers.model.dto.system.HandleEventRequest;
-import com.omgservers.model.dto.system.HandleEventResponse;
 import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.model.dto.system.ScheduleJobRequest;
@@ -42,13 +40,10 @@ import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
-import com.omgservers.model.dto.system.UpdateEventsStatusRequest;
-import com.omgservers.model.dto.system.UpdateEventsStatusResponse;
 import com.omgservers.model.dto.system.ValidateCredentialsRequest;
 import com.omgservers.model.dto.system.ValidateCredentialsResponse;
 import com.omgservers.model.entitiy.EntityModel;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.model.handler.HandlerModel;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobQualifierEnum;
@@ -59,8 +54,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Collections;
 
 @Slf4j
 @ApplicationScoped
@@ -102,6 +95,13 @@ class ShortcutServiceImpl implements ShortcutService {
         final var request = new ValidateCredentialsRequest(username, password);
         return systemModule.getServiceAccountService().validateCredentials(request)
                 .map(ValidateCredentialsResponse::getValid);
+    }
+
+    @Override
+    public Uni<HandlerModel> getHandler(final Long id) {
+        final var request = new GetHandlerRequest(id);
+        return systemModule.getHandlerService().getHandler(request)
+                .map(GetHandlerResponse::getHandler);
     }
 
     @Override
@@ -182,6 +182,13 @@ class ShortcutServiceImpl implements ShortcutService {
     }
 
     @Override
+    public Uni<JobModel> findHandlerJob(final Long handlerId) {
+        final var request = new FindJobRequest(handlerId, handlerId, JobQualifierEnum.HANDLER);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    @Override
     public Uni<Boolean> syncJob(final JobModel job) {
         final var request = new SyncJobRequest(job);
         return systemModule.getJobService().syncJob(request)
@@ -209,27 +216,6 @@ class ShortcutServiceImpl implements ShortcutService {
                                    final JobQualifierEnum qualifier) {
         final var request = new UnscheduleJobRequest(shardKey, entityId, qualifier);
         return systemModule.getJobService().unscheduleJob(request);
-    }
-
-    @Override
-    public Uni<EventModel> getEvent(final Long id) {
-        final var request = new GetEventRequest(id);
-        return systemModule.getEventService().getEvent(request)
-                .map(GetEventResponse::getEvent);
-    }
-
-    @Override
-    public Uni<Boolean> handleEvent(final EventModel event) {
-        final var request = new HandleEventRequest(event);
-        return systemModule.getHandlerService().handleEvent(request)
-                .map(HandleEventResponse::getResult);
-    }
-
-    @Override
-    public Uni<Boolean> updateEventStatus(final Long id, final EventStatusEnum status) {
-        final var request = new UpdateEventsStatusRequest(Collections.singletonList(id), status);
-        return systemModule.getEventService().updateEventsStatus(request)
-                .map(UpdateEventsStatusResponse::getUpdated);
     }
 
     @Override

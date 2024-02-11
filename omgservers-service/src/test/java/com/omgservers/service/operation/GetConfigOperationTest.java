@@ -16,6 +16,6 @@ class GetConfigOperationTest extends Assertions {
 
     @Test
     void givenNotNullConfig() {
-        assertNotNull(getConfigOperation.getConfig());
+        assertNotNull(getConfigOperation.getServiceConfig());
     }
 }

@@ -24,9 +24,4 @@ public class PlayerDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.PLAYER_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return userId;
-    }
 }

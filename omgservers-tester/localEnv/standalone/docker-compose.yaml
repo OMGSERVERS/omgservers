@@ -18,7 +18,6 @@ services:
       - omgservers
     depends_on:
       - db
-      - mq
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -30,14 +29,11 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_INDEX_NAME=main
       - OMGSERVERS_MIGRATION_CONCURRENCY=1
       - OMGSERVERS_DISABLE_MIGRATION=false
-      - OMGSERVERS_DISABLE_RELAY=false
+      - OMGSERVERS_HANDLER_COUNT=4
+      - OMGSERVERS_HANDLER_LIMIT=2
       - OMGSERVERS_SCHEDULER_ENABLED=true
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_NODE_ID=0
@@ -63,16 +59,6 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-    networks:
-      - omgservers
-  mq:
-    image: "apache/activemq-artemis:2.31.2-alpine"
-    container_name: "mq"
-    environment:
-      - ARTEMIS_USER=admin
-      - ARTEMIS_PASSWORD=admin
-    volumes:
-      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
 networks:

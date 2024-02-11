@@ -30,7 +30,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
 
     @Override
     public Uni<ShardModel> calculateShard(List<String> keys) {
-        final var indexName = getConfigOperation.getConfig().indexName();
+        final var indexName = getConfigOperation.getServiceConfig().indexName();
         return calculateShard(indexName, keys);
     }
 
@@ -40,7 +40,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);
-                    final var thisServerUri = getConfigOperation.getConfig().externalUri();
+                    final var thisServerUri = getConfigOperation.getServiceConfig().externalUri();
                     final var foreign = !shardServerUri.equals(thisServerUri);
                     final var locked = index.getConfig().getLockedShards().contains(shardIndex);
 

@@ -27,9 +27,4 @@ public class ServiceAccountCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.SERVICE_ACCOUNT_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

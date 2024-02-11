@@ -21,9 +21,4 @@ public class MatchmakerDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.MATCHMAKER_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

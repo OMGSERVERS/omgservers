@@ -21,9 +21,4 @@ public class TenantDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.TENANT_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

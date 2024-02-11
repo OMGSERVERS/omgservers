@@ -21,9 +21,4 @@ public class JobDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.JOB_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return 0L;
-    }
 }

@@ -2,8 +2,7 @@ package com.omgservers.service.module.system.impl.service.shortcutService;
 
 import com.omgservers.model.container.ContainerModel;
 import com.omgservers.model.entitiy.EntityModel;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.model.handler.HandlerModel;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.job.JobModel;
 import com.omgservers.model.job.JobQualifierEnum;
@@ -21,6 +20,8 @@ public interface ShortcutService {
     Uni<Boolean> syncServiceAccount(ServiceAccountModel serviceAccount);
 
     Uni<Boolean> validateCredentials(String username, String password);
+
+    Uni<HandlerModel> getHandler(Long id);
 
     Uni<ContainerModel> getContainer(Long id);
 
@@ -44,6 +45,8 @@ public interface ShortcutService {
 
     Uni<JobModel> findRuntimeJob(Long runtimeId);
 
+    Uni<JobModel> findHandlerJob(Long handlerId);
+
     Uni<Boolean> syncJob(JobModel job);
 
     Uni<Boolean> deleteJob(Long id);
@@ -51,12 +54,6 @@ public interface ShortcutService {
     Uni<Void> scheduleJob(Long shardKey, Long entityId, JobQualifierEnum qualifier);
 
     Uni<Void> unscheduleJob(Long shardKey, Long entityId, JobQualifierEnum qualifier);
-
-    Uni<EventModel> getEvent(Long id);
-
-    Uni<Boolean> handleEvent(EventModel event);
-
-    Uni<Boolean> updateEventStatus(Long id, EventStatusEnum status);
 
     Uni<EntityModel> findEntity(Long entityId);
 

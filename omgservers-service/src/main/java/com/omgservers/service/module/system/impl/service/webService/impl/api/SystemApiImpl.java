@@ -2,6 +2,8 @@ package com.omgservers.service.module.system.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.system.DeleteEntityRequest;
 import com.omgservers.model.dto.system.DeleteEntityResponse;
+import com.omgservers.model.dto.system.DeleteHandlerRequest;
+import com.omgservers.model.dto.system.DeleteHandlerResponse;
 import com.omgservers.model.dto.system.DeleteIndexRequest;
 import com.omgservers.model.dto.system.DeleteIndexResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
@@ -16,6 +18,8 @@ import com.omgservers.model.dto.system.FindJobRequest;
 import com.omgservers.model.dto.system.FindJobResponse;
 import com.omgservers.model.dto.system.FindServiceAccountRequest;
 import com.omgservers.model.dto.system.FindServiceAccountResponse;
+import com.omgservers.model.dto.system.GetHandlerRequest;
+import com.omgservers.model.dto.system.GetHandlerResponse;
 import com.omgservers.model.dto.system.GetIndexRequest;
 import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.model.dto.system.GetJobRequest;
@@ -25,6 +29,8 @@ import com.omgservers.model.dto.system.GetServiceAccountResponse;
 import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.dto.system.SyncEntityRequest;
 import com.omgservers.model.dto.system.SyncEntityResponse;
+import com.omgservers.model.dto.system.SyncHandlerRequest;
+import com.omgservers.model.dto.system.SyncHandlerResponse;
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
@@ -32,6 +38,8 @@ import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
+import com.omgservers.model.dto.system.ViewHandlersRequest;
+import com.omgservers.model.dto.system.ViewHandlersResponse;
 import com.omgservers.model.dto.system.ViewLogRequest;
 import com.omgservers.model.dto.system.ViewLogsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
@@ -97,6 +105,30 @@ class SystemApiImpl implements SystemApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteServiceAccountResponse> deleteServiceAccount(DeleteServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteServiceAccount);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetHandlerResponse> getHandler(GetHandlerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getHandler);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewHandlersResponse> viewHandlers(ViewHandlersRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewHandlers);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncHandlerResponse> syncHandler(SyncHandlerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncHandler);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteHandlerResponse> deleteHandler(DeleteHandlerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteHandler);
     }
 
     @Override

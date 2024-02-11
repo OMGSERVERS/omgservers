@@ -24,9 +24,4 @@ public class VersionMatchmakerCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.VERSION_MATCHMAKER_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

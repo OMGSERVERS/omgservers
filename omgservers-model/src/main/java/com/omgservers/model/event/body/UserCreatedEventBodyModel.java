@@ -21,9 +21,4 @@ public class UserCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.USER_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

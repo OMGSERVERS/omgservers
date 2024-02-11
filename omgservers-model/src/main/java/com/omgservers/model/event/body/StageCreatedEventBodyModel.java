@@ -24,9 +24,4 @@ public class StageCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.STAGE_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

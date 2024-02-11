@@ -18,17 +18,6 @@ create table if not exists tab_service_account (
     unique(username)
 );
 
-create table if not exists tab_event (
-    id bigint primary key,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    group_id bigint not null,
-    qualifier text not null,
-    relayed boolean not null,
-    body json not null,
-    status text not null
-);
-
 create table if not exists tab_job (
     id bigint primary key,
     created timestamp with time zone not null,
@@ -50,6 +39,24 @@ create table if not exists tab_container (
     config json not null,
     deleted boolean not null,
     unique(entity_id)
+);
+
+create table if not exists tab_handler (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_event (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    available timestamp with time zone not null,
+    qualifier text not null,
+    body json not null,
+    attempts bigint not null,
+    deleted boolean not null
 );
 
 create table if not exists tab_log (

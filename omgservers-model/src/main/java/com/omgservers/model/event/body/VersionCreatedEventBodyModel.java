@@ -24,9 +24,4 @@ public class VersionCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.VERSION_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

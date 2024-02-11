@@ -35,7 +35,7 @@ jobs:
       - name: Check status
         run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml ps
       - name: Integration testing
-        run: mvn -B -Dquarkus.test.profile=local -DskipITs=false -DdockerCompose.skip=false -f omgservers-tester/pom.xml verify
+        run: mvn -B -Dquarkus.test.profile=test -DskipITs=false -DdockerCompose.skip=false -f omgservers-tester/pom.xml verify
       - name: Log containers
         if: always()
         run: docker-compose -f omgservers-tester/localEnv/cluster/docker-compose.yaml logs

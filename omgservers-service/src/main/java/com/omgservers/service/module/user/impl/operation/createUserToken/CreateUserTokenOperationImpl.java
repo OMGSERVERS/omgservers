@@ -28,7 +28,7 @@ class CreateUserTokenOperationImpl implements CreateUserTokenOperation {
             throw new ServerSideBadRequestException("user is null");
         }
 
-        final var lifetime = getConfigOperation.getConfig().tokenLifetime();
+        final var lifetime = getConfigOperation.getServiceConfig().tokenLifetime();
         final var userId = user.getId();
 
         var tokenObject = new UserTokenModel();

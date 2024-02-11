@@ -25,20 +25,18 @@ public class EventModel {
     Instant modified;
 
     @NotNull
-    Long groupId;
-
-    @NotNull
     EventQualifierEnum qualifier;
-
-    @NotNull
-    @EqualsAndHashCode.Exclude
-    Boolean relayed;
 
     @NotNull
     @EqualsAndHashCode.Exclude
     EventBodyModel body;
 
     @NotNull
-    @EqualsAndHashCode.Exclude
-    EventStatusEnum status;
+    Instant available;
+
+    @NotNull
+    Integer attempts;
+
+    @NotNull
+    Boolean deleted;
 }

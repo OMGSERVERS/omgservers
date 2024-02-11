@@ -21,9 +21,4 @@ public class JobCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.JOB_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return 0L;
-    }
 }

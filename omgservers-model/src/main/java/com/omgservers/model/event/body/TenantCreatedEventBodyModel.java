@@ -21,9 +21,4 @@ public class TenantCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.TENANT_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

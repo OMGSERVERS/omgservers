@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetConfigOperationImpl implements GetConfigOperation {
 
-    final OmgserversConfig omgserversConfig;
+    final ServiceConfig serviceConfig;
 
-    public OmgserversConfig getConfig() {
-        return omgserversConfig;
+    public ServiceConfig getServiceConfig() {
+        return serviceConfig;
     }
 }

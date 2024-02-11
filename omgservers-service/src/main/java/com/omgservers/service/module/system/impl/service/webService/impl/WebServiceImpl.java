@@ -2,6 +2,8 @@ package com.omgservers.service.module.system.impl.service.webService.impl;
 
 import com.omgservers.model.dto.system.DeleteEntityRequest;
 import com.omgservers.model.dto.system.DeleteEntityResponse;
+import com.omgservers.model.dto.system.DeleteHandlerRequest;
+import com.omgservers.model.dto.system.DeleteHandlerResponse;
 import com.omgservers.model.dto.system.DeleteIndexRequest;
 import com.omgservers.model.dto.system.DeleteIndexResponse;
 import com.omgservers.model.dto.system.DeleteJobRequest;
@@ -16,6 +18,8 @@ import com.omgservers.model.dto.system.FindJobRequest;
 import com.omgservers.model.dto.system.FindJobResponse;
 import com.omgservers.model.dto.system.FindServiceAccountRequest;
 import com.omgservers.model.dto.system.FindServiceAccountResponse;
+import com.omgservers.model.dto.system.GetHandlerRequest;
+import com.omgservers.model.dto.system.GetHandlerResponse;
 import com.omgservers.model.dto.system.GetIndexRequest;
 import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.model.dto.system.GetJobRequest;
@@ -25,6 +29,8 @@ import com.omgservers.model.dto.system.GetServiceAccountResponse;
 import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.dto.system.SyncEntityRequest;
 import com.omgservers.model.dto.system.SyncEntityResponse;
+import com.omgservers.model.dto.system.SyncHandlerRequest;
+import com.omgservers.model.dto.system.SyncHandlerResponse;
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncJobRequest;
@@ -32,10 +38,13 @@ import com.omgservers.model.dto.system.SyncJobResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.dto.system.UnscheduleJobRequest;
+import com.omgservers.model.dto.system.ViewHandlersRequest;
+import com.omgservers.model.dto.system.ViewHandlersResponse;
 import com.omgservers.model.dto.system.ViewLogRequest;
 import com.omgservers.model.dto.system.ViewLogsResponse;
 import com.omgservers.service.module.system.impl.service.entityService.EntityService;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
+import com.omgservers.service.module.system.impl.service.handlerService.HandlerService;
 import com.omgservers.service.module.system.impl.service.indexService.IndexService;
 import com.omgservers.service.module.system.impl.service.jobService.JobService;
 import com.omgservers.service.module.system.impl.service.logService.LogService;
@@ -53,6 +62,7 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final ServiceAccountService serviceAccountService;
+    final HandlerService handlerService;
     final EntityService entityService;
     final EventService eventService;
     final IndexService indexService;
@@ -97,6 +107,26 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteServiceAccountResponse> deleteServiceAccount(final DeleteServiceAccountRequest request) {
         return serviceAccountService.deleteServiceAccount(request);
+    }
+
+    @Override
+    public Uni<GetHandlerResponse> getHandler(GetHandlerRequest request) {
+        return handlerService.getHandler(request);
+    }
+
+    @Override
+    public Uni<ViewHandlersResponse> viewHandlers(ViewHandlersRequest request) {
+        return handlerService.viewHandlers(request);
+    }
+
+    @Override
+    public Uni<SyncHandlerResponse> syncHandler(SyncHandlerRequest request) {
+        return handlerService.syncHandler(request);
+    }
+
+    @Override
+    public Uni<DeleteHandlerResponse> deleteHandler(DeleteHandlerRequest request) {
+        return handlerService.deleteHandler(request);
     }
 
     @Override

@@ -24,9 +24,4 @@ public class ProjectCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.PROJECT_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

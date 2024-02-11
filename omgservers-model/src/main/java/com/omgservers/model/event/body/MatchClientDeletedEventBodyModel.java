@@ -24,9 +24,4 @@ public class MatchClientDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.MATCH_CLIENT_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

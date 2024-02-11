@@ -66,7 +66,7 @@ public class RuntimeJobTask implements JobTask {
     }
 
     List<RuntimeClientModel> filterInactiveClients(List<RuntimeClientModel> runtimeClients) {
-        final var inactiveInterval = getConfigOperation.getConfig().inactiveInterval();
+        final var inactiveInterval = getConfigOperation.getServiceConfig().inactiveInterval();
         final var now = Instant.now();
 
         return runtimeClients.stream()

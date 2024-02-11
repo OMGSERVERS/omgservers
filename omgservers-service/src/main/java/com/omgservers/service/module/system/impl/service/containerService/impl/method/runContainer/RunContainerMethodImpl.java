@@ -38,7 +38,7 @@ class RunContainerMethodImpl implements RunContainerMethod {
                             .toList();
 
                     final var dockerClient = dockerClientHolder.getDockerClient();
-                    final var dockerNetwork = getConfigOperation.getConfig().workersNetwork();
+                    final var dockerNetwork = getConfigOperation.getServiceConfig().workersNetwork();
 
                     final var createContainerResponse = dockerClient.createContainerCmd(image)
                             .withName(name)

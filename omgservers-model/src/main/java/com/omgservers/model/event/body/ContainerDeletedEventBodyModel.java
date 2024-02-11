@@ -21,9 +21,4 @@ public class ContainerDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.CONTAINER_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return 0L;
-    }
 }

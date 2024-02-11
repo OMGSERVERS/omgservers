@@ -2,7 +2,6 @@ package com.omgservers.service.factory;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,17 +23,17 @@ public class EventModelFactory {
     }
 
     public EventModel create(Long id, EventBodyModel body) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var event = new EventModel();
         event.setId(id);
         event.setCreated(now);
         event.setModified(now);
-        event.setGroupId(body.getGroupId());
         event.setQualifier(body.getQualifier());
-        event.setRelayed(false);
         event.setBody(body);
-        event.setStatus(EventStatusEnum.NEW);
+        event.setAvailable(now);
+        event.setAttempts(0);
+        event.setDeleted(false);
         return event;
     }
 }

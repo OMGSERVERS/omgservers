@@ -27,9 +27,4 @@ public class ClientMessageReceivedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.CLIENT_MESSAGE_RECEIVED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return clientId;
-    }
 }

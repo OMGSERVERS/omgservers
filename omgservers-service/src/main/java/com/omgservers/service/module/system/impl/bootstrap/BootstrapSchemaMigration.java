@@ -22,7 +22,7 @@ public class BootstrapSchemaMigration {
 
     @WithSpan
     void startup(@Observes @Priority(ServiceConfiguration.START_UP_SCHEMA_MIGRATION_PRIORITY) StartupEvent event) {
-        if (getConfigOperation.getConfig().disableMigration()) {
+        if (getConfigOperation.getServiceConfig().disableMigration()) {
             log.warn("Schema migration was disabled, skip operation");
         } else {
             migrateSchemaOperation.migrateSystemSchema("db/system");

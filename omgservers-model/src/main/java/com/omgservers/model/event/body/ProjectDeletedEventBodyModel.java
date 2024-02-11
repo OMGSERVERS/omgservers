@@ -24,9 +24,4 @@ public class ProjectDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.PROJECT_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

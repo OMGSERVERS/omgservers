@@ -32,7 +32,7 @@ public class BootstrapService {
 
     @WithSpan
     void startup(@Observes @Priority(ServiceConfiguration.START_UP_BOOTSTRAP_SERVICE_PRIORITY) StartupEvent event) {
-        if (getConfigOperation.getConfig().bootstrapService()) {
+        if (getConfigOperation.getServiceConfig().bootstrapService()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> createIndex())
                     .flatMap(wasIndexCreated -> createServiceAccount())
@@ -43,13 +43,13 @@ public class BootstrapService {
     }
 
     Uni<Void> createIndex() {
-        final var indexName = getConfigOperation.getConfig().indexName();
+        final var indexName = getConfigOperation.getServiceConfig().indexName();
 
         return systemModule.getShortcutService().findIndex(indexName)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    final var addresses = getConfigOperation.getConfig().addresses();
-                    final var shardCount = getConfigOperation.getConfig().shardCount();
+                    final var addresses = getConfigOperation.getServiceConfig().addresses();
+                    final var shardCount = getConfigOperation.getServiceConfig().shardCount();
                     final var indexConfig = IndexConfigModel.create(addresses, shardCount);
                     final var indexModel = indexModelFactory.create(indexName, indexConfig);
 
@@ -65,12 +65,12 @@ public class BootstrapService {
     }
 
     Uni<Void> createServiceAccount() {
-        final var serviceUsername = getConfigOperation.getConfig().serviceUsername();
+        final var serviceUsername = getConfigOperation.getServiceConfig().serviceUsername();
 
         return systemModule.getShortcutService().findServiceAccount(serviceUsername)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    final var servicePassword = getConfigOperation.getConfig().servicePassword();
+                    final var servicePassword = getConfigOperation.getServiceConfig().servicePassword();
                     final var passwordHash = BcryptUtil.bcryptHash(servicePassword);
                     final var serviceAccount = serviceAccountModelFactory.create(serviceUsername, passwordHash);
 

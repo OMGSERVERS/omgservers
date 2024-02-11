@@ -21,9 +21,4 @@ public class MatchmakerCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.MATCHMAKER_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

@@ -33,8 +33,8 @@ class MigrateSchemaOperationImpl implements MigrateSchemaOperation {
 
     @Override
     public void migrateShardsSchema(final String location) {
-        final var shardCount = getConfigOperation.getConfig().shardCount();
-        final var migrationConcurrency = getConfigOperation.getConfig().migrationConcurrency();
+        final var shardCount = getConfigOperation.getServiceConfig().shardCount();
+        final var migrationConcurrency = getConfigOperation.getServiceConfig().migrationConcurrency();
         final var migrationTasks = IntStream.range(0, shardCount)
                 .mapToObj(shard -> migrateShard(location, shard)).toList();
         Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)

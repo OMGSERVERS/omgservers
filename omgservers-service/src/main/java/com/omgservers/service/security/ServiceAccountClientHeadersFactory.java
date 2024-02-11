@@ -18,8 +18,8 @@ public class ServiceAccountClientHeadersFactory extends ReactiveClientHeadersFac
     final String authorizationHeaderValue;
 
     public ServiceAccountClientHeadersFactory(GetConfigOperation getConfigOperation) {
-        var username = getConfigOperation.getConfig().serviceUsername();
-        var password = getConfigOperation.getConfig().servicePassword();
+        var username = getConfigOperation.getServiceConfig().serviceUsername();
+        var password = getConfigOperation.getServiceConfig().servicePassword();
         var credential = username + ":" + password;
         authorizationHeaderValue = "Basic " + Base64.getUrlEncoder()
                 .encodeToString(credential.getBytes(StandardCharsets.UTF_8));

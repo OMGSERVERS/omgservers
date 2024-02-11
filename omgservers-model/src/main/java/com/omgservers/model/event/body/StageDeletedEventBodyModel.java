@@ -24,9 +24,4 @@ public class StageDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.STAGE_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

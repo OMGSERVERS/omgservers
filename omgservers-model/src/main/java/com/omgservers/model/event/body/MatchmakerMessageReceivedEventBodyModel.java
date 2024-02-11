@@ -26,9 +26,4 @@ public class MatchmakerMessageReceivedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.MATCHMAKER_MESSAGE_RECEIVED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return clientId;
-    }
 }

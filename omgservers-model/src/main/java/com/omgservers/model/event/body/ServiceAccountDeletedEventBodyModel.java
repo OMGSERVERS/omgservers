@@ -21,9 +21,4 @@ public class ServiceAccountDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.SERVICE_ACCOUNT_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return 0L;
-    }
 }

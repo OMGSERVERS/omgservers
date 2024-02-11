@@ -27,12 +27,12 @@ public class BootstrapDockerClient {
 
     @WithSpan
     void startup(@Observes @Priority(ServiceConfiguration.START_UP_DOCKER_CLIENT_PRIORITY) StartupEvent event) {
-        final var disableDocker = getConfigOperation.getConfig().disableDocker();
+        final var disableDocker = getConfigOperation.getServiceConfig().disableDocker();
         if (disableDocker) {
             log.warn("Docker integration was disabled, skip operation");
         } else {
 
-            final var dockerHost = getConfigOperation.getConfig().dockerHost();
+            final var dockerHost = getConfigOperation.getServiceConfig().dockerHost();
             final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
                     .withDockerHost(dockerHost)
                     .build();

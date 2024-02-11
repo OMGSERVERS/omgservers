@@ -21,9 +21,4 @@ public class InactiveClientDetectedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.INACTIVE_CLIENT_DETECTED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return id;
-    }
 }

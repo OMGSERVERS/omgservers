@@ -24,9 +24,4 @@ public class VersionMatchmakerDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.VERSION_MATCHMAKER_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

@@ -24,9 +24,4 @@ public class RuntimeClientCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.RUNTIME_CLIENT_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return runtimeId;
-    }
 }

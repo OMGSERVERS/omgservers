@@ -24,9 +24,4 @@ public class VersionRuntimeDeletedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.VERSION_RUNTIME_DELETED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return tenantId;
-    }
 }

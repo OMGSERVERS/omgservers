@@ -21,9 +21,4 @@ public class IndexCreatedEventBodyModel extends EventBodyModel {
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.INDEX_CREATED;
     }
-
-    @Override
-    public Long getGroupId() {
-        return 0L;
-    }
 }
