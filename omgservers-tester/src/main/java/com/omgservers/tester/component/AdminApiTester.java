@@ -52,7 +52,7 @@ public class AdminApiTester {
             final var response = responseSpecification.getBody().as(CreateIndexAdminResponse.class);
             return response.getIndex();
         } else {
-            throw new RuntimeException("Create index failed");
+            throw new RuntimeException("create index failed");
         }
     }
 
@@ -74,7 +74,7 @@ public class AdminApiTester {
             final var response = responseSpecification.getBody().as(CreateServiceAccountAdminResponse.class);
             return response.getServiceAccount();
         } else {
-            throw new RuntimeException("Create service account failed");
+            throw new RuntimeException("create service account failed");
         }
     }
 

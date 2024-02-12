@@ -38,9 +38,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(matchmaker -> {
                     log.info("Matchmaker was deleted, id={}", matchmakerId);
 
-                    return deleteMatchmakerJob(matchmakerId)
-                            .flatMap(wasJobDeleted -> matchmakerModule.getShortcutService()
-                                    .deleteMatchmakerCommands((matchmakerId)))
+                    return matchmakerModule.getShortcutService().deleteMatchmakerCommands((matchmakerId))
                             .flatMap(voidItem -> matchmakerModule.getShortcutService()
                                     .deleteRequests(matchmakerId))
                             .flatMap(voidItem -> matchmakerModule.getShortcutService()
@@ -49,10 +47,5 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                     .findAndDeleteEntity(matchmakerId));
                 })
                 .replaceWithVoid();
-    }
-
-    Uni<Boolean> deleteMatchmakerJob(final Long matchmakerId) {
-        return systemModule.getShortcutService().findMatchmakerJob(matchmakerId)
-                .flatMap(job -> systemModule.getShortcutService().deleteJob(job.getId()));
     }
 }

@@ -4,7 +4,6 @@ import com.omgservers.model.dto.system.ScheduleJobRequest;
 import com.omgservers.model.dto.system.SyncLogRequest;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.module.system.impl.operation.getJobInterval.GetJobIntervalOperation;
 import com.omgservers.service.module.system.impl.operation.getJobName.GetJobNameOperation;
 import com.omgservers.service.module.system.impl.service.jobService.impl.JobTask;
 import com.omgservers.service.module.system.impl.service.logService.LogService;
@@ -28,7 +27,6 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
 
     final LogService logService;
 
-    final GetJobIntervalOperation getJobIntervalOperation;
     final CheckShardOperation checkShardOperation;
     final GetJobNameOperation getJobNameOperation;
 
@@ -40,14 +38,12 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
     public ScheduleJobMethodImpl(LogService logService,
                                  CheckShardOperation checkShardOperation,
                                  GetJobNameOperation getJobNameOperation,
-                                 GetJobIntervalOperation getJobIntervalOperation,
                                  LogModelFactory logModelFactory,
                                  Instance<JobTask> jobTaskBeans,
                                  Scheduler scheduler) {
         this.logService = logService;
         this.checkShardOperation = checkShardOperation;
         this.getJobNameOperation = getJobNameOperation;
-        this.getJobIntervalOperation = getJobIntervalOperation;
         this.logModelFactory = logModelFactory;
         this.jobTasks = new ConcurrentHashMap<>();
         jobTaskBeans.stream().forEach(jobTask -> {
@@ -80,7 +76,7 @@ class ScheduleJobMethodImpl implements ScheduleJobMethod {
         if (scheduler.getScheduledJob(jobName) != null) {
             log.warn("Job task was already scheduled, job={}", jobName);
         } else {
-            final var jobIntervalInSeconds = getJobIntervalOperation.getJobIntervalInSeconds(type);
+            final var jobIntervalInSeconds = 1;
             // Distribute jobs overs timeline
             final var jobDelayInSeconds = ThreadLocalRandom.current().nextInt(jobIntervalInSeconds);
             scheduler.newJob(jobName)

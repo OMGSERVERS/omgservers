@@ -37,14 +37,6 @@ public interface ShortcutService {
 
     Uni<JobModel> getJob(Long id);
 
-    Uni<JobModel> findStageJob(Long tenantId, Long stageId);
-
-    Uni<JobModel> findMatchmakerJob(Long matchmakerId);
-
-    Uni<JobModel> findMatchJob(Long matchmakerId, Long matchId);
-
-    Uni<JobModel> findRuntimeJob(Long runtimeId);
-
     Uni<JobModel> findHandlerJob(Long handlerId);
 
     Uni<Boolean> syncJob(JobModel job);

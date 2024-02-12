@@ -18,8 +18,10 @@ import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.PlayerDeletedEventBodyModel;
@@ -99,6 +101,8 @@ public enum EventQualifierEnum {
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class),
     // Job
     STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class),
+    MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED(MatchmakerJobTaskExecutionRequestedEventBodyModel.class),
+    MATCH_JOB_TASK_EXECUTION_REQUESTED(MatchJobTaskExecutionRequestedEventBodyModel.class),
     RUNTIME_JOB_TASK_EXECUTION_REQUESTED(RuntimeJobTaskExecutionRequestedEventBodyModel.class);
 
     final Class<? extends EventBodyModel> bodyClass;

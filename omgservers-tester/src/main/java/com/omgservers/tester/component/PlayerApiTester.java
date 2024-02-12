@@ -142,7 +142,7 @@ public class PlayerApiTester {
             attempt++;
         }
 
-        throw new IllegalStateException("Message was not consumed");
+        throw new IllegalStateException("message was not consumed");
     }
 
     public List<MessageModel> interchange(final TestClientModel testClient,

@@ -50,8 +50,8 @@ public class RuntimeJobTaskImpl {
                 .map(this::filterInactiveClients)
                 .flatMap(inactiveClients -> Multi.createFrom().iterable(inactiveClients)
                         .onItem().transformToUniAndConcatenate(this::syncInactiveClientDetectedEvent)
-                        .collect().asList()
-                        .replaceWithVoid());
+                        .collect().asList())
+                .replaceWithVoid();
     }
 
     List<RuntimeClientModel> filterInactiveClients(List<RuntimeClientModel> runtimeClients) {

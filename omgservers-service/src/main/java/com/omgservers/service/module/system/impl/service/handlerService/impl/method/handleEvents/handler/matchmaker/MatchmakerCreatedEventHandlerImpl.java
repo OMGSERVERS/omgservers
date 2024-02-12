@@ -1,12 +1,14 @@
 package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.matchmaker;
 
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.entitiy.EntityQualifierEnum;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
-import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.model.event.body.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.service.factory.EntityModelFactory;
-import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.VersionMatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.SystemModule;
@@ -29,7 +31,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final VersionMatchmakerModelFactory versionMatchmakerModelFactory;
     final EntityModelFactory entityModelFactory;
-    final JobModelFactory jobModelFactory;
+    final EventModelFactory eventModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -50,8 +52,8 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                             matchmaker.getTenantId(),
                             matchmaker.getVersionId());
 
-                    return syncMatchmakerJob(matchmakerId)
-                            .flatMap(wasJobCreated -> {
+                    return requestJobExecution(matchmakerId)
+                            .flatMap(jobRequested -> {
                                 final var entity = entityModelFactory.create(matchmakerId,
                                         EntityQualifierEnum.MATCHMAKER);
                                 return systemModule.getShortcutService().syncEntity(entity);
@@ -60,8 +62,12 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> syncMatchmakerJob(final Long matchmakerId) {
-        final var job = jobModelFactory.create(matchmakerId, matchmakerId, JobQualifierEnum.MATCHMAKER);
-        return systemModule.getShortcutService().syncJob(job);
+    Uni<Boolean> requestJobExecution(final Long matchmakerId) {
+        final var eventBody = new MatchmakerJobTaskExecutionRequestedEventBodyModel(matchmakerId);
+        final var eventModel = eventModelFactory.create(eventBody);
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }

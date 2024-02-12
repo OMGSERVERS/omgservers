@@ -48,17 +48,11 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                             runtimeId);
 
                     return runtimeModule.getShortcutService().deleteRuntime(runtimeId)
-                            .flatMap(runtimeWasDeleted -> deleteMatchJob(matchmakerId, matchId))
-                            .flatMap(wasMatchJobDeleted -> matchmakerModule.getShortcutService()
+                            .flatMap(deleted -> matchmakerModule.getShortcutService()
                                     .deleteMatchCommands(matchmakerId, matchId))
                             .flatMap(voidItem -> matchmakerModule.getShortcutService()
                                     .deleteMatchClients(matchmakerId, matchId));
                 })
                 .replaceWithVoid();
-    }
-
-    Uni<Boolean> deleteMatchJob(final Long matchmakerId, final Long matchId) {
-        return systemModule.getShortcutService().findMatchJob(matchmakerId, matchId)
-                .flatMap(job -> systemModule.getShortcutService().deleteJob(job.getId()));
     }
 }
