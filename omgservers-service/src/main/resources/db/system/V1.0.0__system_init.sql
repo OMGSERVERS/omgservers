@@ -52,9 +52,9 @@ create table if not exists tab_event (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    available timestamp with time zone not null,
     qualifier text not null,
     body json not null,
+    delayed timestamp with time zone not null,
     attempts bigint not null,
     deleted boolean not null
 );

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 
 @Slf4j
 @ApplicationScoped
@@ -101,11 +102,24 @@ public class PlayerApiTester {
     public MessageModel waitMessage(final TestClientModel testClient,
                                     final MessageQualifierEnum messageQualifier)
             throws InterruptedException, JsonProcessingException {
-        return waitMessage(testClient, messageQualifier, new ArrayList<>());
+        return waitMessage(testClient, message -> message.getQualifier().equals(messageQualifier), new ArrayList<>());
+    }
+
+    public MessageModel waitMessage(final TestClientModel testClient,
+                                    final Predicate<MessageModel> filter)
+            throws InterruptedException, JsonProcessingException {
+        return waitMessage(testClient, filter, new ArrayList<>());
     }
 
     public MessageModel waitMessage(final TestClientModel testClient,
                                     final MessageQualifierEnum messageQualifier,
+                                    final List<Long> consumedMessages)
+            throws InterruptedException, JsonProcessingException {
+        return waitMessage(testClient, message -> message.getQualifier().equals(messageQualifier), consumedMessages);
+    }
+
+    public MessageModel waitMessage(final TestClientModel testClient,
+                                    final Predicate<MessageModel> filter,
                                     final List<Long> consumedMessages)
             throws InterruptedException, JsonProcessingException {
         final var maxAttempts = 10;
@@ -117,7 +131,7 @@ public class PlayerApiTester {
                     : interchange(testClient, new ArrayList<>(), new ArrayList<>());
 
             final var messageOptional = receivedMessages.stream()
-                    .filter(message -> message.getQualifier().equals(messageQualifier))
+                    .filter(filter)
                     .findFirst();
 
             if (messageOptional.isPresent()) {
@@ -128,7 +142,7 @@ public class PlayerApiTester {
             attempt++;
         }
 
-        throw new IllegalStateException(messageQualifier + " was not consumed");
+        throw new IllegalStateException("Message was not consumed");
     }
 
     public List<MessageModel> interchange(final TestClientModel testClient,

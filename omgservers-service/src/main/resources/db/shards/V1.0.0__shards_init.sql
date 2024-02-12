@@ -246,8 +246,7 @@ create table if not exists tab_matchmaker_match_client (
     client_id bigint not null,
     group_name varchar(64) not null,
     config json not null,
-    deleted boolean not null,
-    unique(match_id, user_id, client_id)
+    deleted boolean not null
 );
 
 create index if not exists idx_matchmaker_command_matchmaker_id on tab_matchmaker_command(matchmaker_id);
@@ -299,8 +298,7 @@ create table if not exists tab_runtime_client (
     modified timestamp with time zone not null,
     client_id bigint not null,
     last_activity timestamp with time zone not null,
-    deleted boolean not null,
-    unique(runtime_id, client_id)
+    deleted boolean not null
 );
 
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);

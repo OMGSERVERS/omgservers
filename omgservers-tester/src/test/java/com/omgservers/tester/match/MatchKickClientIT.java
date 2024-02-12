@@ -80,40 +80,54 @@ public class MatchKickClientIT extends Assertions {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
+            // Welcome messages
+
             final var welcomeMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.WELCOME_MESSAGE);
             final var welcomeMessage2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.WELCOME_MESSAGE);
 
-            final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
+            // Lobby assignments
+
+            final var lobbyAssignment11 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
-            final var lobbyAssignment2 = playerApiTester.waitMessage(testClient2,
+            final var lobbyAssignment21 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage2.getId()));
+
+            // Matchmaking requests
 
             playerApiTester.requestMatchmaking(testClient1, "test");
             playerApiTester.requestMatchmaking(testClient2, "test");
 
+            // Match assignments
+
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment1.getId()));
+                    Collections.singletonList(lobbyAssignment11.getId()));
             final var matchAssignment2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment2.getId()));
+                    Collections.singletonList(lobbyAssignment21.getId()));
 
             playerApiTester.sendMessage(testClient1, new TestMessage(testClient2.getClientId()));
 
-            final var serverMessage = playerApiTester.waitMessage(testClient1,
+            // Match message for client1
+
+            final var serverMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.SERVER_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
             assertEquals("{text=client_was_deleted}",
-                    ((ServerMessageBodyModel) serverMessage.getBody()).getMessage().toString());
+                    ((ServerMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
 
-            Thread.sleep(10_000);
+            // Lobby assignment for client2
+
+            final var lobbyAssignment22 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchAssignment2.getId()));
+
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 
