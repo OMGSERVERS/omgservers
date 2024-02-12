@@ -40,15 +40,8 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
                     log.info("Stage was deleted, {}/{}", tenantId, stageId);
 
                     return tenantModule.getShortcutService().deleteStagePermissions(tenantId, stageId)
-                            .flatMap(voidItem -> tenantModule.getShortcutService()
-                                    .deleteVersions(tenantId, stageId))
-                            .flatMap(voidItem -> deleteStageJob(tenantId, stageId));
+                            .flatMap(voidItem -> tenantModule.getShortcutService().deleteVersions(tenantId, stageId));
                 })
                 .replaceWithVoid();
-    }
-
-    Uni<Boolean> deleteStageJob(final Long tenantId, final Long stageId) {
-        return systemModule.getShortcutService().findStageJob(tenantId, stageId)
-                .flatMap(job -> systemModule.getShortcutService().deleteJob(job.getId()));
     }
 }

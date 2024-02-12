@@ -31,7 +31,7 @@ public class EventModelMapper {
         } catch (IOException e) {
             throw new ServerSideConflictException("event body can't be parsed, event=" + event, e);
         }
-        event.setAvailable(row.getOffsetDateTime("available").toInstant());
+        event.setDelayed(row.getOffsetDateTime("delayed").toInstant());
         event.setAttempts(row.getInteger("attempts"));
         event.setDeleted(row.getBoolean("deleted"));
         return event;

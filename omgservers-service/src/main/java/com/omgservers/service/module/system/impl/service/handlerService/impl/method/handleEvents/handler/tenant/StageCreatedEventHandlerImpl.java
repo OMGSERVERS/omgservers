@@ -1,10 +1,12 @@
 package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.tenant;
 
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
-import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -22,7 +24,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final SystemModule systemModule;
 
-    final JobModelFactory jobModelFactory;
+    final EventModelFactory eventModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -40,13 +42,18 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
         return tenantModule.getShortcutService().getStage(tenantId, stageId)
                 .flatMap(stage -> {
                     log.info("Stage was created, stage={}/{}", tenantId, stageId);
-                    return syncStageJob(tenantId, stageId);
+
+                    return requestJobExecution(tenantId, stageId);
                 })
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> syncStageJob(final Long tenantId, final Long stageId) {
-        final var job = jobModelFactory.create(tenantId, stageId, JobQualifierEnum.STAGE);
-        return systemModule.getShortcutService().syncJob(job);
+    Uni<Boolean> requestJobExecution(final Long tenantId, final Long stageId) {
+        final var eventBody = new StageJobTaskExecutionRequestedEventBodyModel(tenantId, stageId);
+        final var eventModel = eventModelFactory.create(eventBody);
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }

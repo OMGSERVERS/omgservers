@@ -30,10 +30,12 @@ import com.omgservers.model.event.body.RuntimeClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageDeletedEventBodyModel;
+import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.TenantDeletedEventBodyModel;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
@@ -94,7 +96,10 @@ public enum EventQualifierEnum {
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class),
     // Internal
-    INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class);
+    INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class),
+    // Job
+    STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class),
+    RUNTIME_JOB_TASK_EXECUTION_REQUESTED(RuntimeJobTaskExecutionRequestedEventBodyModel.class);
 
     final Class<? extends EventBodyModel> bodyClass;
 

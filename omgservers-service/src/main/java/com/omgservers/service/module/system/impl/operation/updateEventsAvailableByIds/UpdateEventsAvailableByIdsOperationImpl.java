@@ -32,7 +32,7 @@ class UpdateEventsAvailableByIdsOperationImpl implements UpdateEventsAvailableBy
                         update system.tab_event
                         set
                             modified = $2,
-                            available = $2 + attempts * INTERVAL '1 minute',
+                            delayed = $2 + attempts * INTERVAL '1 minute',
                             attempts = attempts + 1
                         where id = any($1)
                         """,

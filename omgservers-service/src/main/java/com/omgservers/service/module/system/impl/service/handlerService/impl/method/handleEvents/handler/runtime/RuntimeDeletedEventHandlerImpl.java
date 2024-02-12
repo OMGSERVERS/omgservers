@@ -51,8 +51,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getVersionId());
 
                     // TODO: cleanup container user
-                    return deleteRuntimeJob(runtimeId)
-                            .flatMap(wasJobDeleted -> deleteContainer(runtimeId))
+                    return deleteContainer(runtimeId)
                             .flatMap(wasContainerDeleted -> runtimeModule.getShortcutService()
                                     .deleteRuntimePermissions(runtimeId))
                             .flatMap(voidItem -> runtimeModule.getShortcutService()
@@ -63,11 +62,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                                     .deleteEntity(runtimeId));
                 })
                 .replaceWithVoid();
-    }
-
-    Uni<Boolean> deleteRuntimeJob(final Long runtimeId) {
-        return systemModule.getShortcutService().findRuntimeJob(runtimeId)
-                .flatMap(job -> systemModule.getShortcutService().deleteJob(job.getId()));
     }
 
     Uni<Boolean> deleteContainer(final Long runtimeId) {

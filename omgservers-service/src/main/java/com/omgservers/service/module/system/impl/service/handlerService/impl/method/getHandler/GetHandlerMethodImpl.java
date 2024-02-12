@@ -21,7 +21,7 @@ class GetHandlerMethodImpl implements GetHandlerMethod {
 
     @Override
     public Uni<GetHandlerResponse> getHandler(final GetHandlerRequest request) {
-        log.debug("Get handler, request={}", request);
+        log.trace("Get handler, request={}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectHandlerOperation

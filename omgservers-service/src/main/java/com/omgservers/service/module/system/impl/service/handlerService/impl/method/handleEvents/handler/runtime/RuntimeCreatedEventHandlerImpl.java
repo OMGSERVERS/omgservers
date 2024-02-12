@@ -2,20 +2,22 @@ package com.omgservers.service.module.system.impl.service.handlerService.impl.me
 
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.entitiy.EntityQualifierEnum;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
-import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.ContainerModelFactory;
 import com.omgservers.service.factory.EntityModelFactory;
-import com.omgservers.service.factory.JobModelFactory;
+import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.RuntimePermissionModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -47,8 +49,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
     final ContainerModelFactory containerModelFactory;
     final EntityModelFactory entityModelFactory;
+    final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
-    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -68,7 +70,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    return syncRuntimeJob(runtimeId)
+                    return requestJobExecution(runtimeId)
                             .flatMap(wasJobCreated -> createContainer(runtime))
                             .flatMap(voidItem -> {
                                 final var entity = entityModelFactory
@@ -79,9 +81,13 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Boolean> syncRuntimeJob(final Long runtimeId) {
-        final var job = jobModelFactory.create(runtimeId, runtimeId, JobQualifierEnum.RUNTIME);
-        return systemModule.getShortcutService().syncJob(job);
+    Uni<Boolean> requestJobExecution(final Long runtimeId) {
+        final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
+        final var eventModel = eventModelFactory.create(eventBody);
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 
     Uni<Void> createContainer(final RuntimeModel runtime) {

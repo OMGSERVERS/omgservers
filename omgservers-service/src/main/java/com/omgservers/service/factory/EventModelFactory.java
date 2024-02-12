@@ -31,7 +31,7 @@ public class EventModelFactory {
         event.setModified(now);
         event.setQualifier(body.getQualifier());
         event.setBody(body);
-        event.setAvailable(now);
+        event.setDelayed(now);
         event.setAttempts(0);
         event.setDeleted(false);
         return event;

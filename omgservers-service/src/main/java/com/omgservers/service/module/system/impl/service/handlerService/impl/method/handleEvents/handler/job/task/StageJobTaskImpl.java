@@ -1,10 +1,8 @@
-package com.omgservers.service.job.stage;
+package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task;
 
-import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.system.impl.service.jobService.impl.JobTask;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -15,32 +13,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class StageJobTask implements JobTask {
+public class StageJobTaskImpl {
 
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    @Override
-    public JobQualifierEnum getJobQualifier() {
-        return JobQualifierEnum.STAGE;
-    }
-
-    @Override
-    public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
-        final var tenantId = shardKey;
-        final var stageId = entityId;
-
+    public Uni<Boolean> executeTask(final Long tenantId, final Long stageId) {
         return tenantModule.getShortcutService().getStage(tenantId, stageId)
-                .map(stage -> {
+                .flatMap(stage -> {
                     if (stage.getDeleted()) {
-                        log.info("Stage was deleted, skip job execution, stage={}/{}", tenantId, stage);
-                        return null;
+                        log.info("Stage was deleted, cancel job execution, stage={}/{}", tenantId, stage);
+                        return Uni.createFrom().item(false);
                     } else {
-                        return stage;
+                        return handleStage(stage)
+                                .replaceWith(true);
                     }
-                })
-                .onItem().ifNotNull().transformToUni(this::handleStage)
-                .replaceWithVoid();
+                });
     }
 
     Uni<Void> handleStage(final StageModel stage) {

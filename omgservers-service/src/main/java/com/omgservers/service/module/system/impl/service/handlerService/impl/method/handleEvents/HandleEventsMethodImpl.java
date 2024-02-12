@@ -56,7 +56,7 @@ public class HandleEventsMethodImpl implements HandleEventsMethod {
 
     @Override
     public Uni<HandleEventsResponse> handleEvents(final HandleEventsRequest request) {
-        log.debug("Handle events, request={}", request);
+        log.trace("Handle events, request={}", request);
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) -> {
                     final var limit = request.getLimit();

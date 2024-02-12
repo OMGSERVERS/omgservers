@@ -154,7 +154,7 @@ public class PlayerApiTester {
 
         final var responseSpecification = RestAssured
                 .with()
-                .filter(new LoggingFilter("Player" + testClient.getId()))
+                .filter(new LoggingFilter("Client" + testClient.getId()))
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)

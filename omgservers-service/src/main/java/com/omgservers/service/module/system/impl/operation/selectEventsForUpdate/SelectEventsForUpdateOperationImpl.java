@@ -28,9 +28,9 @@ class SelectEventsForUpdateOperationImpl implements SelectEventsForUpdateOperati
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, qualifier, body, available, attempts, deleted
+                        select id, created, modified, qualifier, body, delayed, attempts, deleted
                         from system.tab_event
-                        where deleted = false and available <= $2
+                        where deleted = false and delayed <= $2
                         order by id asc
                         limit $1
                         for update

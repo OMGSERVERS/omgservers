@@ -65,7 +65,7 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
 
         final var availableNode = root.get("available");
         if (availableNode != null) {
-            eventModel.setAvailable(Instant.parse(availableNode.asText()));
+            eventModel.setDelayed(Instant.parse(availableNode.asText()));
         }
 
         final var attemptsNode = root.get("attempts");

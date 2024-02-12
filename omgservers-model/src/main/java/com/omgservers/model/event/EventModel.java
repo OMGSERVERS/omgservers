@@ -32,7 +32,7 @@ public class EventModel {
     EventBodyModel body;
 
     @NotNull
-    Instant available;
+    Instant delayed;
 
     @NotNull
     Integer attempts;
