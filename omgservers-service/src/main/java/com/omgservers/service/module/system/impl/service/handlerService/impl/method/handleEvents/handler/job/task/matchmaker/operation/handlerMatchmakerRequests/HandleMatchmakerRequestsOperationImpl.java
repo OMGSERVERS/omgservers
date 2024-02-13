@@ -87,6 +87,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                                     modeRequests,
                                     modeMatches,
                                     modeMatchClients);
+                            changeOfState.getCompletedRequests()
+                                    .addAll(greedyMatchmakingResult.matchedRequests());
                             changeOfState.getCreatedMatches()
                                     .addAll(greedyMatchmakingResult.createdMatches());
                             changeOfState.getCreatedMatchClients()
@@ -95,8 +97,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                             log.warn("Matchmaker requests with unknown mode were found, mode={}, requests={}",
                                     modeName, modeRequests.size());
                         }
-
-                        changeOfState.getCompletedRequests().addAll(modeRequests);
                     });
                 });
     }

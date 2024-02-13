@@ -59,7 +59,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
                             if (client.getUserId().equals(fromUserId)) {
                                 if (client.getDeleted()) {
-                                    log.warn("Client was already deleted, " +
+                                    log.info("Client was already deleted, " +
                                             "skip message handling, clientId={}", clientId);
                                     return receiveMessages(shard, clientId, consumedMessages);
                                 }

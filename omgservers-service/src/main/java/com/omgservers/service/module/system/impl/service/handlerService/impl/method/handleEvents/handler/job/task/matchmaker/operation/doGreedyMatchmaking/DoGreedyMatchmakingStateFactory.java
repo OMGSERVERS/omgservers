@@ -83,11 +83,13 @@ public class DoGreedyMatchmakingStateFactory {
         }
 
         DoGreedyMatchmakingResult getResult() {
-            final var preparedMatches = createdMatches.stream()
+            final var resultRequests = currentMatches.stream()
                     .filter(MatchmakingMatch::getReadiness)
+                    .flatMap(match -> match.getMatchedRequests().stream())
                     .toList();
 
-            final var resultMatches = preparedMatches.stream()
+            final var resultMatches = createdMatches.stream()
+                    .filter(MatchmakingMatch::getReadiness)
                     .map(MatchmakingMatch::getMatch)
                     .toList();
 
@@ -96,7 +98,7 @@ public class DoGreedyMatchmakingStateFactory {
                     .flatMap(match -> match.getCreatedMatchClients().stream())
                     .toList();
 
-            return new DoGreedyMatchmakingResult(resultMatches, resultMatchClients);
+            return new DoGreedyMatchmakingResult(resultRequests, resultMatches, resultMatchClients);
         }
 
         MatchmakingMatch createMatch(final Long matchmakerId) {
@@ -111,6 +113,7 @@ public class DoGreedyMatchmakingStateFactory {
 
     class MatchmakingMatch {
 
+        List<RequestModel> matchedRequests;
         List<MatchClientModel> createdMatchClients;
         Map<String, MatchmakingGroup> groups;
         VersionModeModel config;
@@ -123,6 +126,7 @@ public class DoGreedyMatchmakingStateFactory {
             groups = config.getGroups().stream()
                     .map(groupConfig -> new MatchmakingGroup(match.getId(), groupConfig))
                     .collect(Collectors.toMap(MatchmakingGroup::getName, Function.identity()));
+            matchedRequests = new ArrayList<>();
             createdMatchClients = new ArrayList<>();
             size = 0;
         }
@@ -141,6 +145,10 @@ public class DoGreedyMatchmakingStateFactory {
 
         public List<MatchClientModel> getCreatedMatchClients() {
             return createdMatchClients;
+        }
+
+        public List<RequestModel> getMatchedRequests() {
+            return matchedRequests;
         }
 
         void addMatchClient(final MatchClientModel matchClient) {
@@ -165,6 +173,7 @@ public class DoGreedyMatchmakingStateFactory {
             for (var group : sortedGroups) {
                 final var matchClient = group.matchRequest(request);
                 if (matchClient != null) {
+                    matchedRequests.add(request);
                     createdMatchClients.add(matchClient);
                     size += 1;
                     return true;

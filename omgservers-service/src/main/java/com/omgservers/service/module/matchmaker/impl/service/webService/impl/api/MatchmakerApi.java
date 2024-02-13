@@ -54,12 +54,12 @@ import jakarta.ws.rs.Path;
 public interface MatchmakerApi {
 
     @PUT
-    @Path("/sync-matchmaker")
-    Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request);
-
-    @PUT
     @Path("/get-matchmaker")
     Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request);
+
+    @PUT
+    @Path("/sync-matchmaker")
+    Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request);
 
     @PUT
     @Path("/delete-matchmaker")
@@ -78,28 +78,32 @@ public interface MatchmakerApi {
     Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(SyncMatchmakerCommandRequest request);
 
     @PUT
-    @Path("/delete-matchmaker-command")
-    Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request);
-
-    @PUT
     @Path("/view-matchmaker-commands")
     Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(ViewMatchmakerCommandsRequest request);
+
+    @PUT
+    @Path("/delete-matchmaker-command")
+    Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request);
 
     @PUT
     @Path("/sync-request")
     Uni<SyncRequestResponse> syncRequest(SyncRequestRequest request);
 
     @PUT
-    @Path("/delete-request")
-    Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request);
-
-    @PUT
     @Path("/view-requests")
     Uni<ViewRequestsResponse> viewRequests(ViewRequestsRequest request);
 
     @PUT
+    @Path("/delete-request")
+    Uni<DeleteRequestResponse> deleteRequest(DeleteRequestRequest request);
+
+    @PUT
     @Path("/get-match")
     Uni<GetMatchResponse> getMatch(GetMatchRequest request);
+
+    @PUT
+    @Path("/view-matches")
+    Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
 
     @PUT
     @Path("/sync-match")
@@ -110,8 +114,8 @@ public interface MatchmakerApi {
     Uni<DeleteMatchResponse> deleteMatch(DeleteMatchRequest request);
 
     @PUT
-    @Path("/view-matches")
-    Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
+    @Path("/view-match-commands")
+    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
 
     @PUT
     @Path("/sync-match-command")
@@ -122,20 +126,8 @@ public interface MatchmakerApi {
     Uni<DeleteMatchCommandResponse> deleteMatchCommand(DeleteMatchCommandRequest request);
 
     @PUT
-    @Path("/view-match-commands")
-    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
-
-    @PUT
     @Path("/get-match-client")
     Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
-
-    @PUT
-    @Path("/sync-match-client")
-    Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request);
-
-    @PUT
-    @Path("/delete-match-client")
-    Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
 
     @PUT
     @Path("/find-match-client")
@@ -144,4 +136,12 @@ public interface MatchmakerApi {
     @PUT
     @Path("/view-match-clients")
     Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request);
+
+    @PUT
+    @Path("/sync-match-client")
+    Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request);
+
+    @PUT
+    @Path("/delete-match-client")
+    Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
 }

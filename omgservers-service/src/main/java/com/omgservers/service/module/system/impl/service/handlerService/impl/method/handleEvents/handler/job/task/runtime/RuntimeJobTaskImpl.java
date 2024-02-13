@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task;
+package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.runtime;
 
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;

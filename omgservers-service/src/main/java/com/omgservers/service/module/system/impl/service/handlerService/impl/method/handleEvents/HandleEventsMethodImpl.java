@@ -155,7 +155,7 @@ public class HandleEventsMethodImpl implements HandleEventsMethod {
                 return Uni.createFrom().item(Tuple2.of(event, Boolean.TRUE));
             }
         } else {
-            log.warn("Handler wasn't found, event={}", event);
+            log.info("Handler wasn't found, event={}", event);
             return Uni.createFrom().item(Tuple2.of(event, Boolean.TRUE));
         }
     }

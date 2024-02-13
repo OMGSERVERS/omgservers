@@ -7,7 +7,7 @@ import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyMo
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.EventHandler;
-import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.StageJobTaskImpl;
+import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.stage.StageJobTaskImpl;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

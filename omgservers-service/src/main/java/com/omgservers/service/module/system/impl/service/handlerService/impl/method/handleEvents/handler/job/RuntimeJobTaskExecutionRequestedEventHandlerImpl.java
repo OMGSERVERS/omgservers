@@ -7,7 +7,7 @@ import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBody
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.EventHandler;
-import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.RuntimeJobTaskImpl;
+import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.runtime.RuntimeJobTaskImpl;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task;
+package com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.stage;
 
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionModel;
