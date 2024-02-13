@@ -75,10 +75,8 @@ public class MatchStopMatchIT extends Assertions {
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
 
-            Thread.sleep(10_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 }

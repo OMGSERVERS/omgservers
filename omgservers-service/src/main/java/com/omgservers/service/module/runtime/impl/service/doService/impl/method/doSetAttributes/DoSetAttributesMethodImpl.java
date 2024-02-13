@@ -5,7 +5,7 @@ import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
 import com.omgservers.service.module.user.UserModule;
@@ -47,7 +47,7 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
                                 if (has) {
                                     return doSetAttributes(clientId, attributes);
                                 } else {
-                                    throw new ServerSideForbiddenException(
+                                    throw new ServerSideBadRequestException(
                                             String.format("runtime client was not found, " +
                                                             "runtimeId=%s, clientId=%s",
                                                     runtimeId, clientId));

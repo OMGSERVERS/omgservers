@@ -90,10 +90,8 @@ public class MatchHandleMessageIT extends Assertions {
             assertEquals("{text=match_message_was_handled}",
                     ((ServerMessageBodyModel) serverMessage.getBody()).getMessage().toString());
 
-            Thread.sleep(10_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 

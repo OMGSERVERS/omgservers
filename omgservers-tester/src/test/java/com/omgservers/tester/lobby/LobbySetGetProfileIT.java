@@ -114,7 +114,6 @@ public class LobbySetGetProfileIT extends Assertions {
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 

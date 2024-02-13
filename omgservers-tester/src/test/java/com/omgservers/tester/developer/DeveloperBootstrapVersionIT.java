@@ -30,7 +30,6 @@ public class DeveloperBootstrapVersionIT extends Assertions {
             Thread.sleep(10000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10000);
         }
     }
 }

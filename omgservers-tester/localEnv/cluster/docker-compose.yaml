@@ -8,7 +8,7 @@ services:
     networks:
       - omgservers
     volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./envoy-gw.yaml:/etc/envoy/envoy.yaml
   docker:
     image: "alpine/socat"
     container_name: "docker"
@@ -17,9 +17,16 @@ services:
     command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  svc1:
-    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
+  svc-1:
+    image: "envoyproxy/envoy:v1.28-latest"
     container_name: "svc-1"
+    networks:
+      - omgservers
+    volumes:
+      - ./envoy-svc-1.yaml:/etc/envoy/envoy.yaml
+  svc-1-a:
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
+    container_name: "svc-1-a"
     networks:
       - omgservers
     depends_on:

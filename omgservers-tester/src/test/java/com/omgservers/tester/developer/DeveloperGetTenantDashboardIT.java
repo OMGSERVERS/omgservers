@@ -45,7 +45,6 @@ public class DeveloperGetTenantDashboardIT extends Assertions {
             assertEquals(1, tenantDashboard.getVersionMatchmakers().size());
         } finally {
             adminApiTester.deleteTenant(version.getTenantId());
-            Thread.sleep(10000);
         }
     }
 }

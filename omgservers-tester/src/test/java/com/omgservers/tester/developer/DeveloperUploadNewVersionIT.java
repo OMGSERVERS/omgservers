@@ -41,7 +41,6 @@ public class DeveloperUploadNewVersionIT extends Assertions {
             Thread.sleep(120_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 }

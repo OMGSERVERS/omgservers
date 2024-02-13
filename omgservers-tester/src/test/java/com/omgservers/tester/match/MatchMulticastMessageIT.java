@@ -114,10 +114,8 @@ public class MatchMulticastMessageIT extends Assertions {
             assertEquals("{text=hello_client_1_and_client_2}",
                     ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
-            Thread.sleep(10_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 

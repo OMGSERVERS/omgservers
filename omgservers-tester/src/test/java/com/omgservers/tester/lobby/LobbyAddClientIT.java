@@ -68,7 +68,6 @@ public class LobbyAddClientIT extends Assertions {
                     ((ServerMessageBodyModel) serverMessage.getBody()).getMessage().toString());
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 }

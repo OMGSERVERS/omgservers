@@ -39,10 +39,8 @@ public class PlayerCreateClientIT extends Assertions {
             assertNotNull(testClient.getRawToken());
             assertNotNull(testClient.getClientId());
 
-            Thread.sleep(10000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10000);
         }
     }
 }

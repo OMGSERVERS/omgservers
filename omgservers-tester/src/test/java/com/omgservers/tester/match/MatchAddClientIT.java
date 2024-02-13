@@ -101,10 +101,8 @@ public class MatchAddClientIT extends Assertions {
             assertEquals("{text=match_client_was_added}",
                     ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
-            Thread.sleep(10_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 }

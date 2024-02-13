@@ -22,7 +22,7 @@ public class StageJobTaskImpl {
         return tenantModule.getShortcutService().getStage(tenantId, stageId)
                 .flatMap(stage -> {
                     if (stage.getDeleted()) {
-                        log.info("Stage was deleted, cancel job execution, stage={}/{}", tenantId, stage);
+                        log.info("Stage was deleted, cancel job execution, stage={}/{}", tenantId, stageId);
                         return Uni.createFrom().item(false);
                     } else {
                         return handleStage(stage)

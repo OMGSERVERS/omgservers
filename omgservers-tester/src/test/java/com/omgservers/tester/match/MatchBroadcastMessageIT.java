@@ -106,10 +106,8 @@ public class MatchBroadcastMessageIT extends Assertions {
             assertEquals("{text=hello_all}",
                     ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
-            Thread.sleep(10_000);
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
-            Thread.sleep(10_000);
         }
     }
 
