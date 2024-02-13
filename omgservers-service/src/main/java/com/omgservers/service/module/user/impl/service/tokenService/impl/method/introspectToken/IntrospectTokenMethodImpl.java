@@ -30,7 +30,7 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
 
     @Override
     public Uni<IntrospectTokenResponse> introspectToken(final IntrospectTokenRequest request) {
-        log.debug("Introspect token, request={}", request);
+        log.trace("Introspect token, request={}", request);
 
         final var rawToken = request.getRawToken();
         final var tokenObject = decodeTokenOperation.decodeToken(rawToken);
