@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 class GenerateIdOperationImpl implements GenerateIdOperation {
 
     final long datacenterId;
-    final long nodeId;
+    final long instanceId;
 
     long lastTimestamp;
     long sequence;
@@ -22,16 +22,16 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
             throw new ServerSideConflictException("wrong datacenterId, value=" + datacenterId);
         }
 
-        nodeId = getConfigOperation.getServiceConfig().nodeId();
-        if (nodeId < 0 || nodeId >= 1 << NODE_ID_BITS) {
-            throw new ServerSideConflictException("wrong nodeId, value=" + nodeId);
+        instanceId = getConfigOperation.getServiceConfig().instanceId();
+        if (instanceId < 0 || instanceId >= 1 << INSTANCE_ID_BITS) {
+            throw new ServerSideConflictException("wrong instanceId, value=" + instanceId);
         }
 
         log.info("Generator was initialized, " +
-                        "(timestampBits={}, datacenterIdBits={}, nodeIdBits={}, sequenceBits={}) " +
-                        "datacenterId={}, nodeId={}",
-                TIMESTAMP_BITS, DATACENTER_ID_BITS, NODE_ID_BITS, SEQUENCE_BITS,
-                datacenterId, nodeId);
+                        "(timestampBits={}, datacenterIdBits={}, instanceIdBits={}, sequenceBits={}) " +
+                        "datacenterId={}, instanceId={}",
+                TIMESTAMP_BITS, DATACENTER_ID_BITS, INSTANCE_ID_BITS, SEQUENCE_BITS,
+                datacenterId, instanceId);
 
         lastTimestamp = 0;
         sequence = 0;
@@ -61,7 +61,7 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
 
         var id = timestamp << TIMESTAMP_OFFSET |
                 datacenterId << DATACENTER_ID_OFFSET |
-                nodeId << NODE_ID_OFFSET |
+                instanceId << INSTANCE_ID_OFFSET |
                 sequence;
         return id;
     }

@@ -44,12 +44,12 @@ class GenerateIdOperationTest extends Assertions {
         long id = generateIdOperation.generateId();
 
         long sequence = id & GenerateIdOperation.SEQUENCE_MASK;
-        long nodeId = (id >> GenerateIdOperation.NODE_ID_OFFSET) & GenerateIdOperation.NODE_ID_MASK;
+        long instanceId = (id >> GenerateIdOperation.INSTANCE_ID_OFFSET) & GenerateIdOperation.INSTANCE_ID_MASK;
         long datacenterId = (id >> GenerateIdOperation.DATACENTER_ID_OFFSET) & GenerateIdOperation.DATACENTER_ID_MASK;
         long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
 
         assertEquals(1, sequence);
-        assertEquals(getConfigOperation.getServiceConfig().nodeId(), nodeId);
+        assertEquals(getConfigOperation.getServiceConfig().instanceId(), instanceId);
         assertEquals(getConfigOperation.getServiceConfig().datacenterId(), datacenterId);
         assertTrue(timestamp > 0);
     }

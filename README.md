@@ -4,6 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=OMGSERVERS_omgservers)
 
 ### Installation
+
 - [Docker](https://hub.docker.com/r/omgservers/omgservers-service)
 
 ### Environment variables
@@ -32,7 +33,7 @@
 - OMGSERVERS_HANDLER_COUNT:4
 - OMGSERVERS_HANDLER_LIMIT:16
 - OMGSERVERS_DATACENTER_ID:0
-- OMGSERVERS_NODE_ID:0
+- OMGSERVERS_INSTANCE_ID:0
 - OMGSERVERS_SERVICE_USERNAME:service
 - OMGSERVERS_SERVICE_PASSWORD:service
 - OMGSERVERS_ADMIN_USERNAME:admin
@@ -45,6 +46,7 @@
 - OMGSERVERS_DOCKER_HOST:tcp://docker:2375
 
 ### Game project structure
+
 ```
 config.json - game configuration
 lobby.lua - entrypoint and handler for lobby commands
@@ -179,6 +181,7 @@ match.lua - entrypoint and handler for match commands
 ```
 
 ### Command line tool
+
 ```
 ./omgserversctl
 OMGSERVERS ctl, v1.0.0

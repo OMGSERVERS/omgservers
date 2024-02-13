@@ -9,7 +9,7 @@ import java.util.List;
 public interface ServiceConfig {
     long datacenterId();
 
-    long nodeId();
+    long instanceId();
 
     URI externalUri();
 
