@@ -25,16 +25,16 @@ public class ClientRuntimeModelFactory {
     public ClientRuntimeModel create(final Long id,
                                      final Long clientId,
                                      final Long runtimeId) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        final var clientMatch = new ClientRuntimeModel();
-        clientMatch.setId(id);
-        clientMatch.setClientId(clientId);
-        clientMatch.setCreated(now);
-        clientMatch.setModified(now);
-        clientMatch.setRuntimeId(runtimeId);
-        clientMatch.setDeleted(false);
+        final var clientRuntime = new ClientRuntimeModel();
+        clientRuntime.setId(id);
+        clientRuntime.setClientId(clientId);
+        clientRuntime.setCreated(now);
+        clientRuntime.setModified(now);
+        clientRuntime.setRuntimeId(runtimeId);
+        clientRuntime.setDeleted(false);
 
-        return clientMatch;
+        return clientRuntime;
     }
 }
