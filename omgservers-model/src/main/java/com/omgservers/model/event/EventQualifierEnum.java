@@ -14,6 +14,10 @@ import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
 import com.omgservers.model.event.body.JobCreatedEventBodyModel;
 import com.omgservers.model.event.body.JobDeletedEventBodyModel;
+import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
+import com.omgservers.model.event.body.LobbyDeletedEventBodyModel;
+import com.omgservers.model.event.body.LobbyRuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.LobbyRuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
@@ -82,6 +86,10 @@ public enum EventQualifierEnum {
     CLIENT_DELETED(ClientDeletedEventBodyModel.class),
     CLIENT_RUNTIME_CREATED(ClientRuntimeCreatedEventBodyModel.class),
     CLIENT_RUNTIME_DELETED(ClientRuntimeDeletedEventBodyModel.class),
+    LOBBY_CREATED(LobbyCreatedEventBodyModel.class),
+    LOBBY_DELETED(LobbyDeletedEventBodyModel.class),
+    LOBBY_RUNTIME_CREATED(LobbyRuntimeCreatedEventBodyModel.class),
+    LOBBY_RUNTIME_DELETED(LobbyRuntimeDeletedEventBodyModel.class),
     MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class),
     MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class),
     MATCH_CREATED(MatchCreatedEventBodyModel.class),

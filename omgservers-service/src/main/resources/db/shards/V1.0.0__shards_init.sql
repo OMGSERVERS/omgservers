@@ -181,6 +181,26 @@ create index if not exists idx_tenant_version_runtime_version_id on tab_tenant_v
 create index if not exists idx_tenant_version_matchmaker_tenant_id on tab_tenant_version_matchmaker(tenant_id);
 create index if not exists idx_tenant_version_matchmaker_version_id on tab_tenant_version_matchmaker(version_id);
 
+-- lobby module
+
+create table if not exists tab_lobby (
+    id bigint primary key,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_lobby_runtime (
+    id bigint primary key,
+    lobby_id bigint not null references tab_lobby(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    deleted boolean not null
+);
+
+create index if not exists idx_lobby_runtime_lobby_id on tab_lobby_runtime(lobby_id);
+
 -- matchmaker module
 
 create table if not exists tab_matchmaker (
