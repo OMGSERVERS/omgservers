@@ -1,5 +1,7 @@
 package com.omgservers.service.module.system.impl.service.jobService.impl.task;
 
+import com.omgservers.model.dto.system.GetHandlerRequest;
+import com.omgservers.model.dto.system.GetHandlerResponse;
 import com.omgservers.model.dto.system.HandleEventsRequest;
 import com.omgservers.model.dto.system.HandleEventsResponse;
 import com.omgservers.model.handler.HandlerModel;
@@ -34,7 +36,7 @@ public class HandlerJobTask implements JobTask {
     public Uni<Void> executeTask(final Long shardKey, final Long entityId) {
         final var handlerId = entityId;
 
-        return systemModule.getShortcutService().getHandler(handlerId)
+        return getHandler(handlerId)
                 .map(handler -> {
                     if (handler.getDeleted()) {
                         log.info("Handler was deleted, skip job execution, handlerId={}", handlerId);
@@ -45,6 +47,12 @@ public class HandlerJobTask implements JobTask {
                 })
                 .onItem().ifNotNull().transformToUni(this::handleHandler)
                 .replaceWithVoid();
+    }
+
+    Uni<HandlerModel> getHandler(final Long id) {
+        final var request = new GetHandlerRequest(id);
+        return systemModule.getHandlerService().getHandler(request)
+                .map(GetHandlerResponse::getHandler);
     }
 
     Uni<Void> handleHandler(final HandlerModel handler) {

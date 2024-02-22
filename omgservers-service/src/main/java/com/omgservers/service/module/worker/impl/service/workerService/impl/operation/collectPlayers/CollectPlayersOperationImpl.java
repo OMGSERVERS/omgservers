@@ -1,5 +1,10 @@
 package com.omgservers.service.module.worker.impl.service.workerService.impl.operation.collectPlayers;
 
+import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.dto.client.GetClientRequest;
+import com.omgservers.model.dto.client.GetClientResponse;
+import com.omgservers.model.dto.user.GetPlayerRequest;
+import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
@@ -62,11 +67,11 @@ class CollectPlayersOperationImpl implements CollectPlayersOperation {
         return Multi.createFrom().iterable(clients)
                 .onItem().transformToUniAndMerge(clientId -> {
                     // TODO: do getClient and getPlayer in one request
-                    return clientModule.getShortcutService().getClient(clientId)
+                    return getClient(clientId)
                             .flatMap(client -> {
                                 final var userId = client.getUserId();
                                 final var playerId = client.getPlayerId();
-                                return userModule.getShortcutService().getPlayer(userId, playerId)
+                                return getPlayer(userId, playerId)
                                         .map(player -> new ClientPlayer(client.getId(), player));
                             })
                             .onFailure()
@@ -84,6 +89,18 @@ class CollectPlayersOperationImpl implements CollectPlayersOperation {
                 .collect().asList()
                 .map(list -> list.stream()
                         .collect(Collectors.toMap(ClientPlayer::clientId, ClientPlayer::player)));
+    }
+
+    Uni<ClientModel> getClient(final Long clientId) {
+        final var request = new GetClientRequest(clientId);
+        return clientModule.getClientService().getClient(request)
+                .map(GetClientResponse::getClient);
+    }
+
+    Uni<PlayerModel> getPlayer(final Long userId, final Long id) {
+        final var request = new GetPlayerRequest(userId, id);
+        return userModule.getPlayerService().getPlayer(request)
+                .map(GetPlayerResponse::getPlayer);
     }
 
     record ClientPlayer(Long clientId, PlayerModel player) {

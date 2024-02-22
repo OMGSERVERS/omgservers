@@ -2,6 +2,9 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl.metho
 
 import com.omgservers.model.dto.admin.CreateServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.CreateServiceAccountAdminResponse;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountResponse;
+import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.service.factory.ServiceAccountModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -32,7 +35,13 @@ class CreateServiceAccountMethodImpl implements CreateServiceAccountMethod {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var serviceAccount = serviceAccountModelFactory.create(username, passwordHash);
 
-        return systemModule.getShortcutService().syncServiceAccount(serviceAccount)
+        return syncServiceAccount(serviceAccount)
                 .replaceWith(new CreateServiceAccountAdminResponse(serviceAccount));
+    }
+
+    Uni<Boolean> syncServiceAccount(final ServiceAccountModel serviceAccount) {
+        final var request = new SyncServiceAccountRequest(serviceAccount);
+        return systemModule.getServiceAccountService().syncServiceAccount(request)
+                .map(SyncServiceAccountResponse::getCreated);
     }
 }

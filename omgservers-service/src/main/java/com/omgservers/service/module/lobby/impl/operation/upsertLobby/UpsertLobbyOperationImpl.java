@@ -1,7 +1,6 @@
 package com.omgservers.service.module.lobby.impl.operation.upsertLobby;
 
 import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
-import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -12,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -30,15 +29,18 @@ class UpsertLobbyOperationImpl implements UpsertLobbyOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_lobby(
-                            id, created, modified, deleted)
-                        values($1, $2, $3, $4)
+                            id, created, modified, tenant_id, version_id, runtime_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         lobby.getId(),
                         lobby.getCreated().atOffset(ZoneOffset.UTC),
                         lobby.getModified().atOffset(ZoneOffset.UTC),
+                        lobby.getTenantId(),
+                        lobby.getVersionId(),
+                        lobby.getRuntimeId(),
                         lobby.getDeleted()
                 ),
                 () -> new LobbyCreatedEventBodyModel(lobby.getId()),

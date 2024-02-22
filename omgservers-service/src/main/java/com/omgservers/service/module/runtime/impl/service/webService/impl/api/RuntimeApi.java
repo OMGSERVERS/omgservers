@@ -63,7 +63,7 @@ public interface RuntimeApi {
 
     @PUT
     @Path("/sync-runtime")
-    Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request);
+    Uni<SyncRuntimeResponse> syncLobbyRuntime(SyncRuntimeRequest request);
 
     @PUT
     @Path("/delete-runtime")
@@ -106,8 +106,12 @@ public interface RuntimeApi {
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
     @PUT
-    @Path("/sync-runtime-client")
-    Uni<SyncRuntimeClientResponse> syncRuntimeClient(SyncRuntimeClientRequest request);
+    @Path("/get-runtime-client")
+    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
+
+    @PUT
+    @Path("/find-runtime-client")
+    Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
 
     @PUT
     @Path("/view-runtime-clients")
@@ -118,12 +122,8 @@ public interface RuntimeApi {
     Uni<CountRuntimeClientsResponse> countRuntimeClients(CountRuntimeClientsRequest request);
 
     @PUT
-    @Path("/get-runtime-client")
-    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
-
-    @PUT
-    @Path("/find-runtime-client")
-    Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
+    @Path("/sync-runtime-client")
+    Uni<SyncRuntimeClientResponse> syncRuntimeClient(SyncRuntimeClientRequest request);
 
     @PUT
     @Path("/delete-runtime-client")

@@ -1,6 +1,6 @@
 package com.omgservers.model.dto.client;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeModel;
+import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SelectClientRuntimeResponse {
 
-    ClientRuntimeModel clientRuntime;
+    ClientRuntimeRefModel clientRuntime;
 }

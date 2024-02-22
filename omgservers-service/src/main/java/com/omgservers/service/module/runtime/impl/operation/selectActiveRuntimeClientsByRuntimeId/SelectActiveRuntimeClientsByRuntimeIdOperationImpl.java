@@ -33,6 +33,7 @@ class SelectActiveRuntimeClientsByRuntimeIdOperationImpl implements
                         select id, runtime_id, created, modified, client_id, last_activity, deleted
                         from $schema.tab_runtime_client
                         where runtime_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Collections.singletonList(runtimeId),
                 "Runtime client",

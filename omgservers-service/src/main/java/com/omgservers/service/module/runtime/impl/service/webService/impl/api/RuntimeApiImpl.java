@@ -70,8 +70,8 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeResponse> syncRuntime(final SyncRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntime);
+    public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntime);
     }
 
     @Override
@@ -139,8 +139,14 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeClient);
+    public Uni<GetRuntimeClientResponse> getRuntimeClient(final GetRuntimeClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeClient);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<FindRuntimeClientResponse> findRuntimeClient(final FindRuntimeClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeClient);
     }
 
     @Override
@@ -157,14 +163,8 @@ public class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetRuntimeClientResponse> getRuntimeClient(final GetRuntimeClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeClient);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindRuntimeClientResponse> findRuntimeClient(final FindRuntimeClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeClient);
+    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeClient);
     }
 
     @Override

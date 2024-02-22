@@ -4,28 +4,26 @@ import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
-import com.omgservers.model.dto.client.DeleteClientRuntimeRequest;
-import com.omgservers.model.dto.client.DeleteClientRuntimeResponse;
-import com.omgservers.model.dto.client.FindClientRuntimeRequest;
-import com.omgservers.model.dto.client.FindClientRuntimeResponse;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.FindClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.GetClientRuntimeRequest;
-import com.omgservers.model.dto.client.GetClientRuntimeResponse;
+import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
-import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
-import com.omgservers.model.dto.client.SelectClientRuntimeResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.dto.client.SyncClientResponse;
-import com.omgservers.model.dto.client.SyncClientRuntimeRequest;
-import com.omgservers.model.dto.client.SyncClientRuntimeResponse;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
-import com.omgservers.model.dto.client.ViewClientRuntimesRequest;
-import com.omgservers.model.dto.client.ViewClientRuntimesResponse;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -62,26 +60,22 @@ public interface ClientApi {
     Uni<DeleteClientMessagesResponse> deleteClientMessages(DeleteClientMessagesRequest request);
 
     @PUT
-    @Path("/get-client-runtime")
-    Uni<GetClientRuntimeResponse> getClientRuntime(GetClientRuntimeRequest request);
+    @Path("/get-client-runtime-ref")
+    Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(GetClientRuntimeRefRequest request);
 
     @PUT
-    @Path("/find-client-runtime")
-    Uni<FindClientRuntimeResponse> findClientRuntime(FindClientRuntimeRequest request);
+    @Path("/find-client-runtime-ref")
+    Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(FindClientRuntimeRefRequest request);
 
     @PUT
-    @Path("/view-client-runtimes")
-    Uni<ViewClientRuntimesResponse> viewClientRuntimes(ViewClientRuntimesRequest request);
+    @Path("/view-client-runtime-refs")
+    Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(ViewClientRuntimeRefsRequest request);
 
     @PUT
-    @Path("/select-client-runtime")
-    Uni<SelectClientRuntimeResponse> selectClientRuntime(SelectClientRuntimeRequest request);
+    @Path("/sync-client-runtime-ref")
+    Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(SyncClientRuntimeRefRequest request);
 
     @PUT
-    @Path("/sync-client-runtime")
-    Uni<SyncClientRuntimeResponse> syncClientRuntime(SyncClientRuntimeRequest request);
-
-    @PUT
-    @Path("/delete-client-runtime")
-    Uni<DeleteClientRuntimeResponse> deleteClientRuntime(DeleteClientRuntimeRequest request);
+    @Path("/delete-client-runtime-ref")
+    Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(DeleteClientRuntimeRefRequest request);
 }

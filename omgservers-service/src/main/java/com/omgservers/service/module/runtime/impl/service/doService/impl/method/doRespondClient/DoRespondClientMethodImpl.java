@@ -1,11 +1,13 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doRespondClient;
 
+import com.omgservers.model.clientMessage.ClientMessageModel;
+import com.omgservers.model.dto.client.SyncClientMessageRequest;
+import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.model.dto.runtime.DoRespondClientResponse;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
@@ -68,6 +70,12 @@ class DoRespondClientMethodImpl implements DoRespondClientMethod {
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_MESSAGE,
                 messageBody);
-        return clientModule.getShortcutService().syncClientMessage(clientMessage);
+        return syncClientMessage(clientMessage);
+    }
+
+    Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
+        final var request = new SyncClientMessageRequest(clientMessage);
+        return clientModule.getClientService().syncClientMessage(request)
+                .map(SyncClientMessageResponse::getCreated);
     }
 }

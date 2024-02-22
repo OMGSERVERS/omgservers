@@ -32,6 +32,7 @@ class SelectActiveRequestsByMatchmakerIdOperationImpl implements SelectActiveReq
                         select id, matchmaker_id, created, modified, user_id, client_id, mode, config, deleted
                         from $schema.tab_matchmaker_request
                         where matchmaker_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
                 "Request",

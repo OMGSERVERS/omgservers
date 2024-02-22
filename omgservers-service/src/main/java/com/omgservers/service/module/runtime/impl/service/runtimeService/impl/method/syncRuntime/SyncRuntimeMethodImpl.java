@@ -30,7 +30,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request) {
-        log.debug("Sync runtime, request={}", request);
+        log.debug("Sync lobby runtime, request={}", request);
 
         final var runtime = request.getRuntime();
         return Uni.createFrom().voidItem()
@@ -39,7 +39,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                 .map(SyncRuntimeResponse::new);
     }
 
-    Uni<Boolean> changeFunction(ShardModel shardModel, RuntimeModel runtime) {
+    Uni<Boolean> changeFunction(final ShardModel shardModel, final RuntimeModel runtime) {
         final int shard = shardModel.shard();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         upsertRuntimeOperation.upsertRuntime(
@@ -47,8 +47,8 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                                         sqlConnection,
                                         shard,
                                         runtime)
-                                .call(runtimeWasInserted -> {
-                                    if (runtimeWasInserted) {
+                                .call(inserted -> {
+                                    if (inserted) {
                                         // InitRuntime is always first command of runtime
                                         final var commandBody = InitRuntimeCommandBodyModel.builder()
                                                 .config(runtime.getConfig())

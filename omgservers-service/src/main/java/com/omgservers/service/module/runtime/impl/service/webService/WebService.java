@@ -55,7 +55,7 @@ import io.smallrye.mutiny.Uni;
 public interface WebService {
     Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request);
 
-    Uni<SyncRuntimeResponse> syncRuntime(SyncRuntimeRequest request);
+    Uni<SyncRuntimeResponse> syncLobbyRuntime(SyncRuntimeRequest request);
 
     Uni<DeleteRuntimeResponse> deleteRuntime(DeleteRuntimeRequest request);
 
@@ -77,15 +77,15 @@ public interface WebService {
 
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
-    Uni<SyncRuntimeClientResponse> syncRuntimeClient(SyncRuntimeClientRequest request);
+    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
+
+    Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
 
     Uni<ViewRuntimeClientsResponse> viewRuntimeClients(ViewRuntimeClientsRequest request);
 
     Uni<CountRuntimeClientsResponse> countRuntimeClients(CountRuntimeClientsRequest request);
 
-    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
-
-    Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
+    Uni<SyncRuntimeClientResponse> syncRuntimeClient(SyncRuntimeClientRequest request);
 
     Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(DeleteRuntimeClientRequest request);
 

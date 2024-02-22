@@ -2,7 +2,10 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl.metho
 
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
 import com.omgservers.model.dto.admin.CreateIndexAdminResponse;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.index.IndexConfigModel;
+import com.omgservers.model.index.IndexModel;
 import com.omgservers.service.factory.IndexModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -33,7 +36,13 @@ class CreateIndexMethodImpl implements CreateIndexMethod {
         final var indexConfig = IndexConfigModel.create(addresses, shardCount);
         final var index = indexModelFactory.create(indexName, indexConfig);
 
-        return systemModule.getShortcutService().syncIndex(index)
+        return syncIndex(index)
                 .replaceWith(new CreateIndexAdminResponse(index));
+    }
+
+    Uni<Boolean> syncIndex(final IndexModel index) {
+        final var request = new SyncIndexRequest(index);
+        return systemModule.getIndexService().syncIndex(request)
+                .map(SyncIndexResponse::getCreated);
     }
 }

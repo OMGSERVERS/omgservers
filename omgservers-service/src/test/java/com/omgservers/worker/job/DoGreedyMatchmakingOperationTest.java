@@ -1,6 +1,6 @@
 package com.omgservers.worker.job;
 
-import com.omgservers.service.module.system.impl.service.handlerService.impl.method.handleEvents.handler.job.task.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
+import com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.factory.RequestModelFactory;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

@@ -1,5 +1,8 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doBroadcastMessage;
 
+import com.omgservers.model.clientMessage.ClientMessageModel;
+import com.omgservers.model.dto.client.SyncClientMessageRequest;
+import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
 import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
 import com.omgservers.model.message.MessageQualifierEnum;
@@ -88,6 +91,12 @@ class DoBroadcastMessageMethodImpl implements DoBroadcastMessageMethod {
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_MESSAGE,
                 messageBody);
-        return clientModule.getShortcutService().syncClientMessage(clientMessage);
+        return syncClientMessage(clientMessage);
+    }
+
+    Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
+        final var request = new SyncClientMessageRequest(clientMessage);
+        return clientModule.getClientService().syncClientMessage(request)
+                .map(SyncClientMessageResponse::getCreated);
     }
 }

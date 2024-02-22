@@ -4,7 +4,10 @@ import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
+import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
@@ -67,7 +70,7 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
         log.info("Do kick client, clientId={}, runtimeId={}",
                 clientId, runtimeId);
 
-        return runtimeModule.getShortcutService().getRuntime(runtimeId)
+        return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     if (Objects.isNull(runtime.getConfig().getMatchConfig())) {
                         throw new ServerSideConflictException("Runtime is corrupted, matchConfig is null, " +
@@ -79,6 +82,12 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                             .replaceWithVoid();
                 })
                 .replaceWith(true);
+    }
+
+    Uni<RuntimeModel> getRuntime(final Long id) {
+        final var request = new GetRuntimeRequest(id);
+        return runtimeModule.getRuntimeService().getRuntime(request)
+                .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,

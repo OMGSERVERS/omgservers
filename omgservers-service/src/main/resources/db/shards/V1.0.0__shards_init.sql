@@ -28,8 +28,7 @@ create table if not exists tab_user_player (
     stage_id bigint not null,
     attributes json not null,
     profile json not null,
-    deleted boolean not null,
-    unique(user_id, stage_id)
+    deleted boolean not null
 );
 
 create index if not exists idx_user_token_user_id on tab_user_token(user_id);
@@ -59,7 +58,7 @@ create table if not exists tab_client_message (
     deleted boolean not null
 );
 
-create table if not exists tab_client_runtime (
+create table if not exists tab_client_runtime_ref (
     id bigint primary key,
     client_id bigint not null references tab_client(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -69,7 +68,7 @@ create table if not exists tab_client_runtime (
 );
 
 create index if not exists idx_client_message_client_id on tab_client_message(client_id);
-create index if not exists idx_client_runtime_client_id on tab_client_runtime(client_id);
+create index if not exists idx_client_runtime_ref_client_id on tab_client_runtime_ref(client_id);
 
 -- tenant module
 
@@ -87,8 +86,7 @@ create table if not exists tab_tenant_permission (
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(tenant_id, user_id, permission)
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_project (
@@ -107,8 +105,7 @@ create table if not exists tab_tenant_project_permission (
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(project_id, user_id, permission)
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_stage (
@@ -129,8 +126,7 @@ create table if not exists tab_tenant_stage_permission (
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(stage_id, user_id, permission)
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_version (
@@ -144,26 +140,44 @@ create table if not exists tab_tenant_version (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_runtime (
+create table if not exists tab_tenant_version_lobby_request (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    runtime_id bigint not null,
-    deleted boolean not null,
-    unique(runtime_id)
+    lobby_id bigint not null,
+    deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_matchmaker (
+create table if not exists tab_tenant_version_lobby_ref (
+    id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    lobby_id bigint not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_tenant_version_matchmaker_request (
     id bigint primary key,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
-    deleted boolean not null,
-    unique(matchmaker_id)
+    deleted boolean not null
+);
+
+create table if not exists tab_tenant_version_matchmaker_ref (
+    id bigint primary key,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    matchmaker_id bigint not null,
+    deleted boolean not null
 );
 
 create index if not exists idx_tenant_permission_tenant_id on tab_tenant_permission(tenant_id);
@@ -176,10 +190,14 @@ create index if not exists idx_tenant_stage_permission_tenant_id on tab_tenant_s
 create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_stage_permission(stage_id);
 create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
 create index if not exists idx_tenant_version_stage_id on tab_tenant_version(stage_id);
-create index if not exists idx_tenant_version_runtime_tenant_id on tab_tenant_version_runtime(tenant_id);
-create index if not exists idx_tenant_version_runtime_version_id on tab_tenant_version_runtime(version_id);
-create index if not exists idx_tenant_version_matchmaker_tenant_id on tab_tenant_version_matchmaker(tenant_id);
-create index if not exists idx_tenant_version_matchmaker_version_id on tab_tenant_version_matchmaker(version_id);
+create index if not exists idx_tenant_version_lobby_request_tenant_id on tab_tenant_version_lobby_request(tenant_id);
+create index if not exists idx_tenant_version_lobby_request_version_id on tab_tenant_version_lobby_request(version_id);
+create index if not exists idx_tenant_version_lobby_ref_tenant_id on tab_tenant_version_lobby_ref(tenant_id);
+create index if not exists idx_tenant_version_lobby_ref_version_id on tab_tenant_version_lobby_ref(version_id);
+create index if not exists idx_tenant_version_matchmaker_request_tenant_id on tab_tenant_version_matchmaker_request(tenant_id);
+create index if not exists idx_tenant_version_matchmaker_request_version_id on tab_tenant_version_matchmaker_request(version_id);
+create index if not exists idx_tenant_version_matchmaker_ref_tenant_id on tab_tenant_version_matchmaker_ref(tenant_id);
+create index if not exists idx_tenant_version_matchmaker_ref_version_id on tab_tenant_version_matchmaker_ref(version_id);
 
 -- lobby module
 
@@ -187,10 +205,13 @@ create table if not exists tab_lobby (
     id bigint primary key,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    tenant_id bigint not null,
+    version_id bigint not null,
+    runtime_id bigint not null,
     deleted boolean not null
 );
 
-create table if not exists tab_lobby_runtime (
+create table if not exists tab_lobby_runtime_ref (
     id bigint primary key,
     lobby_id bigint not null references tab_lobby(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -199,7 +220,7 @@ create table if not exists tab_lobby_runtime (
     deleted boolean not null
 );
 
-create index if not exists idx_lobby_runtime_lobby_id on tab_lobby_runtime(lobby_id);
+create index if not exists idx_lobby_runtime_ref_lobby_id on tab_lobby_runtime_ref(lobby_id);
 
 -- matchmaker module
 
@@ -245,6 +266,16 @@ create table if not exists tab_matchmaker_match (
     deleted boolean not null
 );
 
+create table if not exists tab_matchmaker_match_runtime_ref (
+    id bigint primary key,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
+    match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    deleted boolean not null
+);
+
 create table if not exists tab_matchmaker_match_command (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -272,6 +303,8 @@ create table if not exists tab_matchmaker_match_client (
 create index if not exists idx_matchmaker_command_matchmaker_id on tab_matchmaker_command(matchmaker_id);
 create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmaker_request(matchmaker_id);
 create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);
+create index if not exists idx_matchmaker_match_runtime_ref_matchmaker_id on tab_matchmaker_match_runtime_ref(matchmaker_id);
+create index if not exists idx_matchmaker_match_runtime_ref_match_id on tab_matchmaker_match_runtime_ref(match_id);
 create index if not exists idx_matchmaker_match_command_matchmaker_id on tab_matchmaker_match_command(matchmaker_id);
 create index if not exists idx_matchmaker_match_command_match_id on tab_matchmaker_match_command(match_id);
 create index if not exists idx_matchmaker_match_client_matchmaker_id on tab_matchmaker_match_client(matchmaker_id);
@@ -297,8 +330,7 @@ create table if not exists tab_runtime_permission (
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(runtime_id, user_id, permission)
+    deleted boolean not null
 );
 
 create table if not exists tab_runtime_command (
@@ -321,6 +353,27 @@ create table if not exists tab_runtime_client (
     deleted boolean not null
 );
 
+create table if not exists tab_runtime_lobby (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    lobby_id bigint not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_runtime_match (
+    id bigint primary key,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    matchmaker_id bigint not null,
+    match_id bigint not null,
+    deleted boolean not null
+);
+
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_client_runtime_id on tab_runtime_client(runtime_id);
+create index if not exists idx_runtime_lobby_runtime_id on tab_runtime_lobby(runtime_id);
+create index if not exists idx_runtime_match_runtime_id on tab_runtime_match(runtime_id);

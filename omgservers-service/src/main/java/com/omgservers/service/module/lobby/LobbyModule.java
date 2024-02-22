@@ -1,11 +1,8 @@
 package com.omgservers.service.module.lobby;
 
-import com.omgservers.service.module.lobby.impl.service.matchmakerService.LobbyService;
-import com.omgservers.service.module.lobby.impl.service.shortcutService.ShortcutService;
+import com.omgservers.service.module.lobby.impl.service.lobbyService.LobbyService;
 
 public interface LobbyModule {
 
     LobbyService getLobbyService();
-
-    ShortcutService getShortcutService();
 }

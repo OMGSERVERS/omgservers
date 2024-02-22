@@ -5,9 +5,9 @@ import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.service.module.tenant.impl.operation.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.selectActiveStagesByTenantId.SelectActiveStagesByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionMatchmakersByTenantId.SelectActiveVersionMatchmakersByTenantId;
+import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionMatchmakerRefsByTenantId.SelectActiveVersionMatchmakerRefsByTenantId;
 import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionProjectionsByTenantId.SelectActiveVersionProjectionsByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionRuntimesByTenantId.SelectActiveVersionRuntimesByTenantId;
+import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionLobbyRefsByTenantId.SelectActiveVersionLobbyRefsByTenantId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -23,8 +23,8 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
 
     final SelectActiveVersionProjectionsByTenantIdOperation selectActiveVersionProjectionsByTenantIdOperation;
     final SelectActiveProjectsByTenantIdOperation selectActiveProjectsByTenantIdOperation;
-    final SelectActiveVersionMatchmakersByTenantId selectActiveVersionMatchmakersByTenantId;
-    final SelectActiveVersionRuntimesByTenantId selectActiveVersionRuntimesByTenantId;
+    final SelectActiveVersionMatchmakerRefsByTenantId selectActiveVersionMatchmakerRefsByTenantId;
+    final SelectActiveVersionLobbyRefsByTenantId selectActiveVersionLobbyRefsByTenantId;
     final SelectActiveStagesByTenantIdOperation selectActiveStagesByTenantIdOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -95,10 +95,10 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                                     final int shard,
                                     final Long tenantId,
                                     final TenantDashboardModel tenantDashboard) {
-        return selectActiveVersionRuntimesByTenantId.selectActiveVersionRuntimesByTenantId(sqlConnection,
+        return selectActiveVersionLobbyRefsByTenantId.selectActiveVersionLobbyRefsByTenantId(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantDashboard::setVersionRuntimes)
+                .invoke(tenantDashboard::setVersionLobbyRefs)
                 .replaceWithVoid();
     }
 
@@ -106,10 +106,10 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                                        final int shard,
                                        final Long tenantId,
                                        final TenantDashboardModel tenantDashboard) {
-        return selectActiveVersionMatchmakersByTenantId.selectActiveVersionMatchmakersTenantId(sqlConnection,
+        return selectActiveVersionMatchmakerRefsByTenantId.selectActiveVersionMatchmakerRefsByTenantId(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantDashboard::setVersionMatchmakers)
+                .invoke(tenantDashboard::setVersionMatchmakerLobbyRefs)
                 .replaceWithVoid();
     }
 }

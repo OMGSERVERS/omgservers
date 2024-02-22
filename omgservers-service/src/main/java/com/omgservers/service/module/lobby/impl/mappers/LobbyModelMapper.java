@@ -16,6 +16,9 @@ public class LobbyModelMapper {
         lobbyModel.setId(row.getLong("id"));
         lobbyModel.setCreated(row.getOffsetDateTime("created").toInstant());
         lobbyModel.setModified(row.getOffsetDateTime("modified").toInstant());
+        lobbyModel.setTenantId(row.getLong("tenant_id"));
+        lobbyModel.setVersionId(row.getLong("version_id"));
+        lobbyModel.setRuntimeId(row.getLong("runtime_id"));
         lobbyModel.setDeleted(row.getBoolean("deleted"));
         return lobbyModel;
     }

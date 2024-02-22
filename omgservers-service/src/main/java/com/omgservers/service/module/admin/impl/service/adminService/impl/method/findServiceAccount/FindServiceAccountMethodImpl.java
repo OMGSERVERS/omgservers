@@ -2,6 +2,9 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl.metho
 
 import com.omgservers.model.dto.admin.FindServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.FindServiceAccountAdminResponse;
+import com.omgservers.model.dto.system.FindServiceAccountRequest;
+import com.omgservers.model.dto.system.FindServiceAccountResponse;
+import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.service.factory.ServiceAccountModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -26,7 +29,13 @@ class FindServiceAccountMethodImpl implements FindServiceAccountMethod {
         log.debug("Find service account, request={}", request);
 
         final var username = request.getUsername();
-        return systemModule.getShortcutService().findServiceAccount(username)
+        return findServiceAccount(username)
                 .map(FindServiceAccountAdminResponse::new);
+    }
+
+    Uni<ServiceAccountModel> findServiceAccount(final String username) {
+        final var request = new FindServiceAccountRequest(username);
+        return systemModule.getServiceAccountService().findServiceAccount(request)
+                .map(FindServiceAccountResponse::getServiceAccount);
     }
 }

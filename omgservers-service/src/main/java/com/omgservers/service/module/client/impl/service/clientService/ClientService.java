@@ -4,14 +4,14 @@ import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
-import com.omgservers.model.dto.client.DeleteClientRuntimeRequest;
-import com.omgservers.model.dto.client.DeleteClientRuntimeResponse;
-import com.omgservers.model.dto.client.FindClientRuntimeRequest;
-import com.omgservers.model.dto.client.FindClientRuntimeResponse;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.FindClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.GetClientRuntimeRequest;
-import com.omgservers.model.dto.client.GetClientRuntimeResponse;
+import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
 import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
@@ -20,12 +20,12 @@ import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.dto.client.SyncClientResponse;
-import com.omgservers.model.dto.client.SyncClientRuntimeRequest;
-import com.omgservers.model.dto.client.SyncClientRuntimeResponse;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
-import com.omgservers.model.dto.client.ViewClientRuntimesRequest;
-import com.omgservers.model.dto.client.ViewClientRuntimesResponse;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -45,15 +45,13 @@ public interface ClientService {
 
     Uni<DeleteClientMessagesResponse> deleteClientMessages(@Valid DeleteClientMessagesRequest request);
 
-    Uni<GetClientRuntimeResponse> getClientRuntime(@Valid GetClientRuntimeRequest request);
+    Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(@Valid GetClientRuntimeRefRequest request);
 
-    Uni<FindClientRuntimeResponse> findClientRuntime(@Valid FindClientRuntimeRequest request);
+    Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(@Valid FindClientRuntimeRefRequest request);
 
-    Uni<ViewClientRuntimesResponse> viewClientRuntimes(@Valid ViewClientRuntimesRequest request);
+    Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(@Valid ViewClientRuntimeRefsRequest request);
 
-    Uni<SelectClientRuntimeResponse> selectClientRuntime(@Valid SelectClientRuntimeRequest request);
+    Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(@Valid SyncClientRuntimeRefRequest request);
 
-    Uni<SyncClientRuntimeResponse> syncClientRuntime(@Valid SyncClientRuntimeRequest request);
-
-    Uni<DeleteClientRuntimeResponse> deleteClientRuntime(@Valid DeleteClientRuntimeRequest request);
+    Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(@Valid DeleteClientRuntimeRefRequest request);
 }

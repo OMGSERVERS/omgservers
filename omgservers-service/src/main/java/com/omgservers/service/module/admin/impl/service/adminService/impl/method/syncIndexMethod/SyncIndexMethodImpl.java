@@ -2,6 +2,9 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl.metho
 
 import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexResponse;
+import com.omgservers.model.index.IndexModel;
 import com.omgservers.service.factory.IndexModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -27,7 +30,13 @@ class SyncIndexMethodImpl implements SyncIndexMethod {
 
         final var index = request.getIndex();
 
-        return systemModule.getShortcutService().syncIndex(index)
+        return syncIndex(index)
                 .map(SyncIndexAdminResponse::new);
+    }
+
+    Uni<Boolean> syncIndex(final IndexModel index) {
+        final var request = new SyncIndexRequest(index);
+        return systemModule.getIndexService().syncIndex(request)
+                .map(SyncIndexResponse::getCreated);
     }
 }

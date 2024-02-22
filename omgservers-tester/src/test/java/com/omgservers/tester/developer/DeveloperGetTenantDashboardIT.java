@@ -41,8 +41,8 @@ public class DeveloperGetTenantDashboardIT extends Assertions {
             assertEquals(1, tenantDashboard.getProjects().size());
             assertEquals(1, tenantDashboard.getStages().size());
             assertEquals(1, tenantDashboard.getVersions().size());
-            assertEquals(1, tenantDashboard.getVersionRuntimes().size());
-            assertEquals(1, tenantDashboard.getVersionMatchmakers().size());
+            assertEquals(1, tenantDashboard.getVersionLobbyRefs().size());
+            assertEquals(1, tenantDashboard.getVersionMatchmakerLobbyRefs().size());
         } finally {
             adminApiTester.deleteTenant(version.getTenantId());
         }

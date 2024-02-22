@@ -68,7 +68,7 @@ class WebServiceImpl implements WebService {
     final DoService doService;
 
     @Override
-    public Uni<SyncRuntimeResponse> syncRuntime(final SyncRuntimeRequest request) {
+    public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
         return runtimeService.syncRuntime(request);
     }
 
@@ -128,11 +128,6 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
-        return runtimeService.syncRuntimeClient(request);
-    }
-
-    @Override
     public Uni<GetRuntimeClientResponse> getRuntimeClient(final GetRuntimeClientRequest request) {
         return runtimeService.getRuntimeClient(request);
     }
@@ -153,22 +148,27 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
+        return runtimeService.syncRuntimeClient(request);
+    }
+
+    @Override
     public Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(final DeleteRuntimeClientRequest request) {
         return runtimeService.deleteRuntimeClient(request);
     }
 
     @Override
-    public Uni<DoRespondClientResponse> doRespondClient(DoRespondClientRequest request) {
+    public Uni<DoRespondClientResponse> doRespondClient(final DoRespondClientRequest request) {
         return doService.doRespondClient(request);
     }
 
     @Override
-    public Uni<DoSetAttributesResponse> doSetAttributes(DoSetAttributesRequest request) {
+    public Uni<DoSetAttributesResponse> doSetAttributes(final DoSetAttributesRequest request) {
         return doService.doSetAttributes(request);
     }
 
     @Override
-    public Uni<DoSetProfileResponse> doSetProfile(DoSetProfileRequest request) {
+    public Uni<DoSetProfileResponse> doSetProfile(final DoSetProfileRequest request) {
         return doService.doSetProfile(request);
     }
 

@@ -96,7 +96,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     public Uni<SyncRuntimeResponse> syncRuntime(@Valid final SyncRuntimeRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntime,
+                RuntimeModuleClient::syncLobbyRuntime,
                 syncRuntimeMethod::syncRuntime);
     }
 
@@ -191,11 +191,19 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid final SyncRuntimeClientRequest request) {
+    public Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid final GetRuntimeClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimeClient,
-                syncRuntimeClientMethod::syncRuntimeClient);
+                RuntimeModuleClient::getRuntimeClient,
+                getRuntimeClientMethod::getRuntimeClient);
+    }
+
+    @Override
+    public Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid final FindRuntimeClientRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::findRuntimeClient,
+                findRuntimeClientMethod::findRuntimeClient);
     }
 
     @Override
@@ -215,19 +223,11 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid final GetRuntimeClientRequest request) {
+    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid final SyncRuntimeClientRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::getRuntimeClient,
-                getRuntimeClientMethod::getRuntimeClient);
-    }
-
-    @Override
-    public Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid final FindRuntimeClientRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::findRuntimeClient,
-                findRuntimeClientMethod::findRuntimeClient);
+                RuntimeModuleClient::syncRuntimeClient,
+                syncRuntimeClientMethod::syncRuntimeClient);
     }
 
     @Override

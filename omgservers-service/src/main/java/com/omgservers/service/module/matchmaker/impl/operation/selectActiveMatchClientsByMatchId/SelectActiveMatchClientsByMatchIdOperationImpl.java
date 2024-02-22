@@ -36,6 +36,7 @@ class SelectActiveMatchClientsByMatchIdOperationImpl
                             user_id, client_id, group_name, config, deleted
                         from $schema.tab_matchmaker_match_client
                         where matchmaker_id = $1 and match_id = $2 and deleted = false
+                        order by id asc
                         """,
                 Arrays.asList(matchmakerId, matchId),
                 "Match client",

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.operation.testOperation;
 
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 
 public interface CreateTestVersionMatchmakerOperation {
 
-    VersionMatchmakerModel createTestVersionMatchmaker(Long tenantId, Long versionId, Long matchmakerId);
+    VersionMatchmakerRefModel createTestVersionMatchmaker(Long tenantId, Long versionId, Long matchmakerId);
 }

@@ -1,5 +1,8 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetProfile;
 
+import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.dto.client.GetClientRequest;
+import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
 import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
@@ -59,12 +62,18 @@ class DoSetProfileMethodImpl implements DoSetProfileMethod {
 
     Uni<Boolean> doSetProfile(final Long clientId,
                               final Object profile) {
-        return clientModule.getShortcutService().getClient(clientId)
+        return getClient(clientId)
                 .flatMap(client -> {
                     final var userId = client.getUserId();
                     final var playerId = client.getPlayerId();
                     return updatePlayerProfile(userId, playerId, profile);
                 });
+    }
+
+    Uni<ClientModel> getClient(final Long clientId) {
+        final var request = new GetClientRequest(clientId);
+        return clientModule.getClientService().getClient(request)
+                .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> updatePlayerProfile(final Long userId,

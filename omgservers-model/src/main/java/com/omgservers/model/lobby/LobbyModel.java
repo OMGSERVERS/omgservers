@@ -22,5 +22,14 @@ public class LobbyModel {
     Instant modified;
 
     @NotNull
+    Long tenantId;
+
+    @NotNull
+    Long versionId;
+
+    @NotNull
+    Long runtimeId;
+
+    @NotNull
     Boolean deleted;
 }

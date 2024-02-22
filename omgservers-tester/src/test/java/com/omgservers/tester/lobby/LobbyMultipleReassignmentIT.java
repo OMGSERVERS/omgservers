@@ -109,6 +109,8 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment2.getId()));
 
+            Thread.sleep(10_000);
+
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
         }

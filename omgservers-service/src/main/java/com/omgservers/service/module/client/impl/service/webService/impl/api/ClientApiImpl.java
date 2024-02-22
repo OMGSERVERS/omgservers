@@ -4,28 +4,26 @@ import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
-import com.omgservers.model.dto.client.DeleteClientRuntimeRequest;
-import com.omgservers.model.dto.client.DeleteClientRuntimeResponse;
-import com.omgservers.model.dto.client.FindClientRuntimeRequest;
-import com.omgservers.model.dto.client.FindClientRuntimeResponse;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.FindClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.GetClientRuntimeRequest;
-import com.omgservers.model.dto.client.GetClientRuntimeResponse;
+import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
-import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
-import com.omgservers.model.dto.client.SelectClientRuntimeResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.dto.client.SyncClientResponse;
-import com.omgservers.model.dto.client.SyncClientRuntimeRequest;
-import com.omgservers.model.dto.client.SyncClientRuntimeResponse;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
-import com.omgservers.model.dto.client.ViewClientRuntimesRequest;
-import com.omgservers.model.dto.client.ViewClientRuntimesResponse;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.client.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -88,37 +86,31 @@ class ClientApiImpl implements ClientApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetClientRuntimeResponse> getClientRuntime(final GetClientRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getClientRuntime);
+    public Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(final GetClientRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getClientRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindClientRuntimeResponse> findClientRuntime(final FindClientRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findClientRuntime);
+    public Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(final FindClientRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findClientRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<ViewClientRuntimesResponse> viewClientRuntimes(final ViewClientRuntimesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewClientRuntimes);
+    public Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(final ViewClientRuntimeRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewClientRuntimeRefs);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SelectClientRuntimeResponse> selectClientRuntime(final SelectClientRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectClientRuntime);
+    public Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(final SyncClientRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncClientRuntimeResponse> syncClientRuntime(final SyncClientRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientRuntime);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteClientRuntimeResponse> deleteClientRuntime(final DeleteClientRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClientRuntime);
+    public Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(final DeleteClientRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClientRuntimeRef);
     }
 }

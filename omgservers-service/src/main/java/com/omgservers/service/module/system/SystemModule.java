@@ -8,15 +8,12 @@ import com.omgservers.service.module.system.impl.service.indexService.IndexServi
 import com.omgservers.service.module.system.impl.service.jobService.JobService;
 import com.omgservers.service.module.system.impl.service.logService.LogService;
 import com.omgservers.service.module.system.impl.service.serviceAccountService.ServiceAccountService;
-import com.omgservers.service.module.system.impl.service.shortcutService.ShortcutService;
 
 public interface SystemModule {
 
     ServiceAccountService getServiceAccountService();
 
     ContainerService getContainerService();
-
-    ShortcutService getShortcutService();
 
     HandlerService getHandlerService();
 

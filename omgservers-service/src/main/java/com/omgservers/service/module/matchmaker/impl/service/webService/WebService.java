@@ -6,6 +6,8 @@ import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
@@ -14,10 +16,14 @@ import com.omgservers.model.dto.matchmaker.DeleteRequestRequest;
 import com.omgservers.model.dto.matchmaker.DeleteRequestResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
@@ -28,6 +34,8 @@ import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
@@ -56,6 +64,10 @@ public interface WebService {
 
     Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request);
 
+    Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request);
+
+    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(UpdateMatchmakerStateRequest request);
+
     Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(SyncMatchmakerCommandRequest request);
 
     Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request);
@@ -76,23 +88,27 @@ public interface WebService {
 
     Uni<ViewMatchesResponse> viewMatches(ViewMatchesRequest request);
 
+    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
+
     Uni<SyncMatchCommandResponse> syncMatchCommand(SyncMatchCommandRequest request);
 
     Uni<DeleteMatchCommandResponse> deleteMatchCommand(DeleteMatchCommandRequest request);
 
-    Uni<ViewMatchCommandsResponse> viewMatchCommands(ViewMatchCommandsRequest request);
-
     Uni<GetMatchClientResponse> getMatchClient(GetMatchClientRequest request);
-
-    Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request);
-
-    Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
 
     Uni<FindMatchClientResponse> findMatchClient(FindMatchClientRequest request);
 
     Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request);
 
-    Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request);
+    Uni<SyncMatchClientResponse> syncMatchClient(SyncMatchClientRequest request);
 
-    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(UpdateMatchmakerStateRequest request);
+    Uni<DeleteMatchClientResponse> deleteMatchClient(DeleteMatchClientRequest request);
+
+    Uni<GetMatchRuntimeRefResponse> getMatchRuntimeRef(GetMatchRuntimeRefRequest request);
+
+    Uni<FindMatchRuntimeRefResponse> findMatchRuntimeRef(FindMatchRuntimeRefRequest request);
+
+    Uni<SyncMatchRuntimeRefResponse> syncMatchRuntimeRef(SyncMatchRuntimeRefRequest request);
+
+    Uni<DeleteMatchRuntimeRefResponse> deleteMatchRuntimeRef(DeleteMatchRuntimeRefRequest request);
 }

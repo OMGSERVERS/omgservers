@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
-import com.omgservers.service.module.tenant.impl.operation.upsertVersionMatchmaker.UpsertVersionMatchmakerOperation;
+import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.service.module.tenant.impl.operation.upsertVersionMatchmakerRef.UpsertVersionMatchmakerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertVersionMatchmakerOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertVersionMatchmakerOperation upsertVersionMatchmakerOperation;
+    final UpsertVersionMatchmakerRefOperation upsertVersionMatchmakerRefOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertVersionMatchmaker(final int shard,
-                                                          final VersionMatchmakerModel versionMatchmaker) {
+                                                          final VersionMatchmakerRefModel versionMatchmaker) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertVersionMatchmakerOperation
-                                    .upsertVersionMatchmaker(changeContext, sqlConnection, shard, versionMatchmaker))
+                    return pgPool.withTransaction(sqlConnection -> upsertVersionMatchmakerRefOperation
+                                    .upsertVersionMatchmakerRef(changeContext, sqlConnection, shard, versionMatchmaker))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

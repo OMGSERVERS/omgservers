@@ -32,6 +32,7 @@ class SelectActiveMatchesByMatchmakerIdOperationImpl implements SelectActiveMatc
                         select id, matchmaker_id, created, modified, runtime_id, stopped, config, deleted
                         from $schema.tab_matchmaker_match
                         where matchmaker_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Arrays.asList(matchmakerId),
                 "Match",

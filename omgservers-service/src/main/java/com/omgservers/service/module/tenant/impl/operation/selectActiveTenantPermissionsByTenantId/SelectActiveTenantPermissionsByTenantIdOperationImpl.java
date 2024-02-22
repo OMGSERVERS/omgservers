@@ -33,6 +33,7 @@ class SelectActiveTenantPermissionsByTenantIdOperationImpl implements SelectActi
                             id, tenant_id, created, modified, user_id, permission, deleted
                         from $schema.tab_tenant_permission
                         where tenant_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Collections.singletonList(tenantId),
                 "Tenant permission",

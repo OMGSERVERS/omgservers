@@ -1,7 +1,7 @@
 package com.omgservers.model.runtime;
 
-import com.omgservers.model.version.VersionModeModel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,15 +15,23 @@ public class RuntimeConfigModel {
         return runtimeConfig;
     }
 
+    LobbyConfig lobbyConfig;
     MatchConfig matchConfig;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LobbyConfig {
+        Long lobbyId;
+    }
+
+    @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MatchConfig {
         Long matchmakerId;
         Long matchId;
-
-        VersionModeModel modeConfig;
     }
 }

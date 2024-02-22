@@ -12,16 +12,24 @@ import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -32,12 +40,16 @@ import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.GetVersionRequest;
 import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
@@ -46,10 +58,6 @@ import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
 import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
@@ -62,12 +70,16 @@ import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncTenantRequest;
 import com.omgservers.model.dto.tenant.SyncTenantResponse;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
@@ -78,10 +90,14 @@ import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
-import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
-import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
@@ -151,13 +167,13 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncProjectResponse> syncProject(final SyncProjectRequest request) {
-        return projectService.syncProject(request);
+    public Uni<ViewProjectsResponse> viewProjects(final ViewProjectsRequest request) {
+        return projectService.viewProjects(request);
     }
 
     @Override
-    public Uni<ViewProjectsResponse> viewProjects(final ViewProjectsRequest request) {
-        return projectService.viewProjects(request);
+    public Uni<SyncProjectResponse> syncProject(final SyncProjectRequest request) {
+        return projectService.syncProject(request);
     }
 
     @Override
@@ -191,13 +207,13 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
-        return stageService.syncStage(request);
+    public Uni<ViewStagesResponse> viewStages(final ViewStagesRequest request) {
+        return stageService.viewStages(request);
     }
 
     @Override
-    public Uni<ViewStagesResponse> viewStages(final ViewStagesRequest request) {
-        return stageService.viewStages(request);
+    public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
+        return stageService.syncStage(request);
     }
 
     @Override
@@ -226,83 +242,23 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
-        return versionService.selectStageVersion(request);
-    }
-
-    @Override
-    public Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(final GetVersionMatchmakerRequest request) {
-        return versionService.getVersionMatchmaker(request);
-    }
-
-    @Override
-    public Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(final SyncVersionMatchmakerRequest request) {
-        return versionService.syncVersionMatchmaker(request);
-    }
-
-    @Override
-    public Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(final FindVersionMatchmakerRequest request) {
-        return versionService.findVersionMatchmaker(request);
-    }
-
-    @Override
-    public Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(final SelectVersionMatchmakerRequest request) {
-        return versionService.selectVersionMatchmaker(request);
-    }
-
-    @Override
-    public Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(final ViewVersionMatchmakersRequest request) {
-        return versionService.viewVersionMatchmakers(request);
-    }
-
-    @Override
-    public Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(final DeleteVersionMatchmakerRequest request) {
-        return versionService.deleteVersionMatchmaker(request);
-    }
-
-    @Override
-    public Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request) {
-        return versionService.getVersionRuntime(request);
-    }
-
-    @Override
-    public Uni<SyncVersionRuntimeResponse> syncVersionRuntime(final SyncVersionRuntimeRequest request) {
-        return versionService.syncVersionRuntime(request);
-    }
-
-    @Override
-    public Uni<FindVersionRuntimeResponse> findVersionRuntime(final FindVersionRuntimeRequest request) {
-        return versionService.findVersionRuntime(request);
-    }
-
-    @Override
-    public Uni<SelectVersionRuntimeResponse> selectVersionRuntime(final SelectVersionRuntimeRequest request) {
-        return versionService.selectVersionRuntime(request);
-    }
-
-    @Override
-    public Uni<ViewVersionRuntimesResponse> viewVersionRuntimes(final ViewVersionRuntimesRequest request) {
-        return versionService.viewVersionRuntimes(request);
-    }
-
-    @Override
-    public Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(final DeleteVersionRuntimeRequest request) {
-        return versionService.deleteVersionRuntime(request);
-    }
-
-    @Override
     public Uni<GetVersionResponse> getVersion(final GetVersionRequest request) {
         return versionService.getVersion(request);
     }
 
     @Override
-    public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
-        return versionService.syncVersion(request);
+    public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
+        return versionService.viewVersions(request);
     }
 
     @Override
-    public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
-        return versionService.viewVersions(request);
+    public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
+        return versionService.selectStageVersion(request);
+    }
+
+    @Override
+    public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
+        return versionService.syncVersion(request);
     }
 
     @Override
@@ -313,5 +269,114 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<GetVersionConfigResponse> getVersionConfig(final GetVersionConfigRequest request) {
         return versionService.getVersionConfig(request);
+    }
+
+    @Override
+    public Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(GetVersionLobbyRequestRequest request) {
+        return versionService.getVersionLobbyRequest(request);
+    }
+
+    @Override
+    public Uni<FindVersionLobbyRequestResponse> findVersionLobbyRequest(FindVersionLobbyRequestRequest request) {
+        return versionService.findVersionLobbyRequest(request);
+    }
+
+    @Override
+    public Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(ViewVersionLobbyRequestsRequest request) {
+        return versionService.viewVersionLobbyRequests(request);
+    }
+
+    @Override
+    public Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(SyncVersionLobbyRequestRequest request) {
+        return versionService.syncVersionLobbyRequest(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(DeleteVersionLobbyRequestRequest request) {
+        return versionService.deleteVersionLobbyRequest(request);
+    }
+
+    @Override
+    public Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(GetVersionLobbyRefRequest request) {
+        return versionService.getVersionLobbyRef(request);
+    }
+
+    @Override
+    public Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(final FindVersionLobbyRefRequest request) {
+        return versionService.findVersionLobbyRef(request);
+    }
+
+    @Override
+    public Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(final ViewVersionLobbyRefsRequest request) {
+        return versionService.viewVersionLobbyRefs(request);
+    }
+
+    @Override
+    public Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(final SyncVersionLobbyRefRequest request) {
+        return versionService.syncVersionLobbyRef(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(final DeleteVersionLobbyRefRequest request) {
+        return versionService.deleteVersionLobbyRef(request);
+    }
+
+    @Override
+    public Uni<GetVersionMatchmakerRequestResponse> getVersionMatchmakerRequest(
+            final GetVersionMatchmakerRequestRequest request) {
+        return versionService.getVersionMatchmakerRequest(request);
+    }
+
+    @Override
+    public Uni<FindVersionMatchmakerRequestResponse> findVersionMatchmakerRequest(
+            final FindVersionMatchmakerRequestRequest request) {
+        return versionService.findVersionMatchmakerRequest(request);
+    }
+
+    @Override
+    public Uni<ViewVersionMatchmakerRequestsResponse> viewVersionMatchmakerRequests(
+            final ViewVersionMatchmakerRequestsRequest request) {
+        return versionService.viewVersionMatchmakerRequests(request);
+    }
+
+    @Override
+    public Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(
+            final SyncVersionMatchmakerRequestRequest request) {
+        return versionService.syncVersionMatchmakerRequest(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(
+            final DeleteVersionMatchmakerRequestRequest request) {
+        return versionService.deleteVersionMatchmakerRequest(request);
+    }
+
+    @Override
+    public Uni<GetVersionMatchmakerRefResponse> getVersionMatchmakerRef(final GetVersionMatchmakerRefRequest request) {
+        return versionService.getVersionMatchmakerRef(request);
+    }
+
+    @Override
+    public Uni<SyncVersionMatchmakerRefResponse> syncVersionMatchmakerRef(
+            final SyncVersionMatchmakerRefRequest request) {
+        return versionService.syncVersionMatchmakerRef(request);
+    }
+
+    @Override
+    public Uni<FindVersionMatchmakerRefResponse> findVersionMatchmakerRef(
+            final FindVersionMatchmakerRefRequest request) {
+        return versionService.findVersionMatchmakerRef(request);
+    }
+
+    @Override
+    public Uni<ViewVersionMatchmakerRefsResponse> viewVersionMatchmakerRefs(
+            final ViewVersionMatchmakerRefsRequest request) {
+        return versionService.viewVersionMatchmakerRefs(request);
+    }
+
+    @Override
+    public Uni<DeleteVersionMatchmakerRefResponse> deleteVersionMatchmakerRef(
+            final DeleteVersionMatchmakerRefRequest request) {
+        return versionService.deleteVersionMatchmakerRef(request);
     }
 }

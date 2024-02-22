@@ -65,15 +65,15 @@ public interface RuntimeService {
 
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid DeleteRuntimeCommandsRequest request);
 
-    Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid SyncRuntimeClientRequest request);
+    Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid GetRuntimeClientRequest request);
+
+    Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid FindRuntimeClientRequest request);
 
     Uni<ViewRuntimeClientsResponse> viewRuntimeClients(@Valid ViewRuntimeClientsRequest request);
 
     Uni<CountRuntimeClientsResponse> countRuntimeClients(@Valid CountRuntimeClientsRequest request);
 
-    Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid GetRuntimeClientRequest request);
-
-    Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid FindRuntimeClientRequest request);
+    Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid SyncRuntimeClientRequest request);
 
     Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(@Valid DeleteRuntimeClientRequest request);
 }

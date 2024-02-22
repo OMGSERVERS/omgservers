@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testOperation;
 
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
-import com.omgservers.service.factory.VersionMatchmakerModelFactory;
+import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.service.factory.VersionMatchmakerRefModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertVersionMatchmakerOperationTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,15 @@ class CreateTestVersionMatchmakerOperationImpl implements CreateTestVersionMatch
 
     final UpsertVersionMatchmakerOperationTestInterface upsertVersionMatchmakerOperation;
 
-    final VersionMatchmakerModelFactory versionMatchmakerModelFactory;
+    final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
 
     @Override
-    public VersionMatchmakerModel createTestVersionMatchmaker(final Long tenantId,
-                                                              final Long versionId,
-                                                              final Long matchmakerId) {
+    public VersionMatchmakerRefModel createTestVersionMatchmaker(final Long tenantId,
+                                                                 final Long versionId,
+                                                                 final Long matchmakerId) {
         int shard = 0;
 
-        final var versionMatchmaker = versionMatchmakerModelFactory
+        final var versionMatchmaker = versionMatchmakerRefModelFactory
                 .create(tenantId, versionId, matchmakerId);
         upsertVersionMatchmakerOperation.upsertVersionMatchmaker(shard, versionMatchmaker);
 

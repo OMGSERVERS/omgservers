@@ -4,44 +4,41 @@ import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
-import com.omgservers.model.dto.client.DeleteClientRuntimeRequest;
-import com.omgservers.model.dto.client.DeleteClientRuntimeResponse;
-import com.omgservers.model.dto.client.FindClientRuntimeRequest;
-import com.omgservers.model.dto.client.FindClientRuntimeResponse;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.FindClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.GetClientRuntimeRequest;
-import com.omgservers.model.dto.client.GetClientRuntimeResponse;
+import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
-import com.omgservers.model.dto.client.SelectClientRuntimeRequest;
-import com.omgservers.model.dto.client.SelectClientRuntimeResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.dto.client.SyncClientResponse;
-import com.omgservers.model.dto.client.SyncClientRuntimeRequest;
-import com.omgservers.model.dto.client.SyncClientRuntimeResponse;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
+import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
-import com.omgservers.model.dto.client.ViewClientRuntimesRequest;
-import com.omgservers.model.dto.client.ViewClientRuntimesResponse;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
+import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.ClientModuleClient;
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.GetClientModuleClientOperation;
 import com.omgservers.service.module.client.impl.service.clientService.ClientService;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClient.DeleteClientMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientMessages.DeleteClientMessagesMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientRuntime.DeleteClientRuntimeMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.findClientRuntime.FindClientRuntimeMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientRuntimeRef.DeleteClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.findClientRuntimeRef.FindClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClient.GetClientMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClientRuntime.GetClientRuntimeMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClientRuntimeRef.GetClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.interchange.InterchangeMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.selectClientRuntime.SelectClientRuntimeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClient.SyncClientMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientMessage.SyncClientMessageMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientRuntime.SyncClientRuntimeMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientMessages.ViewClientMessagesMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientRuntimes.ViewClientRuntimesMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -56,15 +53,15 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientServiceImpl implements ClientService {
 
+
+    final DeleteClientRuntimeRefMethod deleteClientRuntimeRefMethod;
+    final ViewClientRuntimeRefsMethod viewClientRuntimeRefsMethod;
     final DeleteClientMessagesMethod deleteClientMessagesMethod;
-    final SelectClientRuntimeMethod selectClientRuntimeMethod;
-    final DeleteClientRuntimeMethod deleteClientRuntimeMethod;
+    final SyncClientRuntimeRefMethod syncClientRuntimeRefMethod;
+    final FindClientRuntimeRefMethod findClientRuntimeRefMethod;
+    final GetClientRuntimeRefMethod getClientRuntimeRefMethod;
     final ViewClientMessagesMethod viewClientMessagesMethod;
-    final ViewClientRuntimesMethod viewClientRuntimesMethod;
     final SyncClientMessageMethod syncClientMessageMethod;
-    final SyncClientRuntimeMethod syncClientRuntimeMethod;
-    final FindClientRuntimeMethod findClientRuntimeMethod;
-    final GetClientRuntimeMethod getClientRuntimeMethod;
     final DeleteClientMethod deleteClientMethod;
     final InterchangeMethod interchangeMethod;
     final SyncClientMethod syncClientMethod;
@@ -133,50 +130,43 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Uni<GetClientRuntimeResponse> getClientRuntime(@Valid final GetClientRuntimeRequest request) {
+    public Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(@Valid final GetClientRuntimeRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::getClientRuntime,
-                getClientRuntimeMethod::getClientRuntime);
+                ClientModuleClient::getClientRuntimeRef,
+                getClientRuntimeRefMethod::getClientRuntimeRef);
     }
 
     @Override
-    public Uni<FindClientRuntimeResponse> findClientRuntime(@Valid final FindClientRuntimeRequest request) {
+    public Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(@Valid final FindClientRuntimeRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::findClientRuntime,
-                findClientRuntimeMethod::findClientRuntime);
+                ClientModuleClient::findClientRuntimeRef,
+                findClientRuntimeRefMethod::findClientRuntimeRef);
     }
 
     @Override
-    public Uni<ViewClientRuntimesResponse> viewClientRuntimes(@Valid final ViewClientRuntimesRequest request) {
+    public Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(@Valid final ViewClientRuntimeRefsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::viewClientRuntimes,
-                viewClientRuntimesMethod::viewClientRuntimes);
+                ClientModuleClient::viewClientRuntimeRefs,
+                viewClientRuntimeRefsMethod::viewClientRuntimeRefs);
     }
 
     @Override
-    public Uni<SelectClientRuntimeResponse> selectClientRuntime(@Valid final SelectClientRuntimeRequest request) {
+    public Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(@Valid final SyncClientRuntimeRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::selectClientRuntime,
-                selectClientRuntimeMethod::selectClientRuntime);
+                ClientModuleClient::syncClientRuntimeRef,
+                syncClientRuntimeRefMethod::syncClientRuntimeRef);
     }
 
     @Override
-    public Uni<SyncClientRuntimeResponse> syncClientRuntime(@Valid final SyncClientRuntimeRequest request) {
+    public Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(
+            @Valid final DeleteClientRuntimeRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getClientModuleClientOperation::getClient,
-                ClientModuleClient::syncClientRuntime,
-                syncClientRuntimeMethod::syncClientRuntime);
-    }
-
-    @Override
-    public Uni<DeleteClientRuntimeResponse> deleteClientRuntime(@Valid final DeleteClientRuntimeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getClientModuleClientOperation::getClient,
-                ClientModuleClient::deleteClientRuntime,
-                deleteClientRuntimeMethod::deleteClientRuntime);
+                ClientModuleClient::deleteClientRuntimeRef,
+                deleteClientRuntimeRefMethod::deleteClientRuntimeRef);
     }
 }

@@ -1,6 +1,16 @@
 package com.omgservers.service.module.system.impl.bootstrap;
 
+import com.omgservers.model.dto.system.FindIndexRequest;
+import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.dto.system.FindServiceAccountRequest;
+import com.omgservers.model.dto.system.FindServiceAccountResponse;
+import com.omgservers.model.dto.system.SyncIndexRequest;
+import com.omgservers.model.dto.system.SyncIndexResponse;
+import com.omgservers.model.dto.system.SyncServiceAccountRequest;
+import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.index.IndexConfigModel;
+import com.omgservers.model.index.IndexModel;
+import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.service.ServiceConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.IndexModelFactory;
@@ -45,7 +55,7 @@ public class BootstrapService {
     Uni<Void> createIndex() {
         final var indexName = getConfigOperation.getServiceConfig().indexName();
 
-        return systemModule.getShortcutService().findIndex(indexName)
+        return findIndex(indexName)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var addresses = getConfigOperation.getServiceConfig().addresses();
@@ -58,16 +68,28 @@ public class BootstrapService {
                             addresses.size(),
                             shardCount);
 
-                    return systemModule.getShortcutService().syncIndex(indexModel)
+                    return syncIndex(indexModel)
                             .replaceWith(indexModel);
                 })
                 .replaceWithVoid();
     }
 
+    Uni<IndexModel> findIndex(final String indexName) {
+        final var request = new FindIndexRequest(indexName);
+        return systemModule.getIndexService().findIndex(request)
+                .map(FindIndexResponse::getIndex);
+    }
+
+    Uni<Boolean> syncIndex(final IndexModel index) {
+        final var request = new SyncIndexRequest(index);
+        return systemModule.getIndexService().syncIndex(request)
+                .map(SyncIndexResponse::getCreated);
+    }
+
     Uni<Void> createServiceAccount() {
         final var serviceUsername = getConfigOperation.getServiceConfig().serviceUsername();
 
-        return systemModule.getShortcutService().findServiceAccount(serviceUsername)
+        return findServiceAccount(serviceUsername)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var servicePassword = getConfigOperation.getServiceConfig().servicePassword();
@@ -76,9 +98,21 @@ public class BootstrapService {
 
                     log.info("Bootstrap service account, username={}", serviceUsername);
 
-                    return systemModule.getShortcutService().syncServiceAccount(serviceAccount)
+                    return syncServiceAccount(serviceAccount)
                             .replaceWith(serviceAccount);
                 })
                 .replaceWithVoid();
+    }
+
+    Uni<ServiceAccountModel> findServiceAccount(final String username) {
+        final var request = new FindServiceAccountRequest(username);
+        return systemModule.getServiceAccountService().findServiceAccount(request)
+                .map(FindServiceAccountResponse::getServiceAccount);
+    }
+
+    Uni<Boolean> syncServiceAccount(final ServiceAccountModel serviceAccount) {
+        final var request = new SyncServiceAccountRequest(serviceAccount);
+        return systemModule.getServiceAccountService().syncServiceAccount(request)
+                .map(SyncServiceAccountResponse::getCreated);
     }
 }

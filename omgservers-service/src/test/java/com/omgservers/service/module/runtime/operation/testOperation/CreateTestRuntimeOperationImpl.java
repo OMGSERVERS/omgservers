@@ -4,7 +4,7 @@ import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.factory.VersionRuntimeModelFactory;
+import com.omgservers.service.factory.VersionLobbyRefModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertVersionRuntimeOperationTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ class CreateTestRuntimeOperationImpl implements CreateTestRuntimeOperation {
     final UpsertVersionRuntimeOperationTestInterface upsertVersionRuntimeOperation;
     final UpsertRuntimeOperationTestInterface upsertRuntimeOperation;
 
-    final VersionRuntimeModelFactory versionRuntimeModelFactory;
+    final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
 
     @Override

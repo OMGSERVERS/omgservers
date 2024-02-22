@@ -2,17 +2,17 @@ package com.omgservers.service.module.lobby.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.lobby.DeleteLobbyRequest;
 import com.omgservers.model.dto.lobby.DeleteLobbyResponse;
-import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeResponse;
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefResponse;
+import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.GetLobbyRequest;
 import com.omgservers.model.dto.lobby.GetLobbyResponse;
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRequest;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.lobby.impl.service.webService.WebService;
@@ -52,25 +52,25 @@ public class LobbyApiImpl implements LobbyApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetLobbyRuntimeResponse> getLobbyRuntime(final GetLobbyRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getLobbyRuntime);
+    public Uni<GetLobbyRuntimeRefResponse> getLobbyRuntimeRef(final GetLobbyRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getLobbyRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindLobbyRuntimeResponse> findLobbyRuntime(final FindLobbyRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findLobbyRuntime);
+    public Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(final FindLobbyRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findLobbyRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncLobbyRuntimeResponse> syncLobbyRuntime(final SyncLobbyRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntime);
+    public Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(final SyncLobbyRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteLobbyRuntimeResponse> deleteLobbyRuntime(final DeleteLobbyRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteLobbyRuntime);
+    public Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(final DeleteLobbyRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteLobbyRuntimeRef);
     }
 }

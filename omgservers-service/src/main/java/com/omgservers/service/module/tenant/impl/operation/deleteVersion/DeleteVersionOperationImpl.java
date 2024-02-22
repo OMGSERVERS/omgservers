@@ -43,7 +43,7 @@ class DeleteVersionOperationImpl implements DeleteVersionOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new VersionDeletedEventBodyModel(tenantId, id),
-                () -> logModelFactory.create(String.format("Version was deleted, tenantId=%d, id=%d", tenantId, id))
+                () -> null
         );
     }
 }

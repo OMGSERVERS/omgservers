@@ -25,7 +25,7 @@ class SyncMatchClientMethodImpl implements SyncMatchClientMethod {
 
     @Override
     public Uni<SyncMatchClientResponse> syncMatchClient(final SyncMatchClientRequest request) {
-        log.debug("Delete match client, request={}", request);
+        log.debug("Sync match client, request={}", request);
 
         final var matchClient = request.getMatchClient();
         final var matchmakerId = matchClient.getMatchmakerId();

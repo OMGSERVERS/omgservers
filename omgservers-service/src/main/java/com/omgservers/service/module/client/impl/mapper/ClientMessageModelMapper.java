@@ -27,7 +27,6 @@ public class ClientMessageModelMapper {
         final var qualifier = MessageQualifierEnum.valueOf(row.getString("qualifier"));
         clientMessage.setQualifier(qualifier);
         clientMessage.setDeleted(row.getBoolean("deleted"));
-
         try {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             clientMessage.setBody(body);
@@ -35,7 +34,6 @@ public class ClientMessageModelMapper {
             throw new ServerSideConflictException("client message can't be parsed, " +
                     "clientMessage=" + clientMessage, e);
         }
-
         return clientMessage;
     }
 }

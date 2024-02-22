@@ -33,6 +33,7 @@ class SelectActiveProjectsByTenantIdOperationImpl implements SelectActiveProject
                             id, tenant_id, created, modified, deleted
                         from $schema.tab_tenant_project
                         where tenant_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Collections.singletonList(tenantId),
                 "Project",

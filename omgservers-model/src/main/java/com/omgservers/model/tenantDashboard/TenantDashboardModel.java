@@ -2,9 +2,9 @@ package com.omgservers.model.tenantDashboard;
 
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.stage.StageModel;
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.model.versionProjection.VersionProjectionModel;
-import com.omgservers.model.versionRuntime.VersionRuntimeModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,8 +27,8 @@ public class TenantDashboardModel {
     List<VersionProjectionModel> versions;
 
     @NotNull
-    List<VersionRuntimeModel> versionRuntimes;
+    List<VersionLobbyRefModel> versionLobbyRefs;
 
     @NotNull
-    List<VersionMatchmakerModel> versionMatchmakers;
+    List<VersionMatchmakerRefModel> versionMatchmakerLobbyRefs;
 }

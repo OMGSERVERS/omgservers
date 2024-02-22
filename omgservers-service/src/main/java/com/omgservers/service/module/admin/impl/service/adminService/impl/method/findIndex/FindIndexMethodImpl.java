@@ -2,6 +2,9 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl.metho
 
 import com.omgservers.model.dto.admin.FindIndexAdminRequest;
 import com.omgservers.model.dto.admin.FindIndexAdminResponse;
+import com.omgservers.model.dto.system.FindIndexRequest;
+import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.index.IndexModel;
 import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +23,13 @@ class FindIndexMethodImpl implements FindIndexMethod {
         log.debug("Find index, request={}", request);
 
         final var indexName = request.getName();
-        return systemModule.getShortcutService().findIndex(indexName)
+        return findIndex(indexName)
                 .map(FindIndexAdminResponse::new);
+    }
+
+    Uni<IndexModel> findIndex(final String indexName) {
+        final var request = new FindIndexRequest(indexName);
+        return systemModule.getIndexService().findIndex(request)
+                .map(FindIndexResponse::getIndex);
     }
 }

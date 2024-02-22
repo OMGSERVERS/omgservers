@@ -1,5 +1,8 @@
 package com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes;
 
+import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.dto.client.GetClientRequest;
+import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
@@ -60,13 +63,19 @@ class DoSetAttributesMethodImpl implements DoSetAttributesMethod {
 
     Uni<Boolean> doSetAttributes(final Long clientId,
                                  final PlayerAttributesModel attributes) {
-        return clientModule.getShortcutService().getClient(clientId)
+        return getClient(clientId)
                 .flatMap(client -> {
                     final var userId = client.getUserId();
                     final var playerId = client.getPlayerId();
                     return updatePlayerAttributes(userId, playerId, attributes);
                 })
                 .replaceWith(true);
+    }
+
+    Uni<ClientModel> getClient(final Long clientId) {
+        final var request = new GetClientRequest(clientId);
+        return clientModule.getClientService().getClient(request)
+                .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> updatePlayerAttributes(final Long userId,

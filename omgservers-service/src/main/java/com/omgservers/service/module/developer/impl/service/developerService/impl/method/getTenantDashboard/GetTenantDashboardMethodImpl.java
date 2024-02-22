@@ -2,8 +2,11 @@ package com.omgservers.service.module.developer.impl.service.developerService.im
 
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
+import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -31,8 +34,14 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         final var userId = securityIdentity.<Long>getAttribute("userId");
         final var tenantId = request.getTenantId();
         return checkGetDashboardPermission(tenantId, userId)
-                .flatMap(voidItem -> tenantModule.getShortcutService().getTenantDashboard(tenantId))
+                .flatMap(voidItem -> getTenantDashboard(tenantId))
                 .map(GetTenantDashboardDeveloperResponse::new);
+    }
+
+    Uni<TenantDashboardModel> getTenantDashboard(Long id) {
+        final var request = new GetTenantDashboardRequest(id);
+        return tenantModule.getTenantService().getTenantDashboard(request)
+                .map(GetTenantDashboardResponse::getTenantDashboard);
     }
 
     Uni<Void> checkGetDashboardPermission(final Long tenantId, final Long userId) {

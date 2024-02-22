@@ -4,9 +4,12 @@ import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
+import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
+import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.TenantPermissionModelFactory;
@@ -45,7 +48,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         return getTenant(tenantId)
                 .flatMap(tenant -> createUser(password))
                 .call(user -> syncCreateProjectPermission(tenantId, user.getId()))
-                .call(user -> syncViewDashboardPermission(tenantId, user.getId()))
+                .call(user -> syncGetDashboardPermission(tenantId, user.getId()))
                 .map(user -> new CreateDeveloperAdminResponse(user.getId(), password));
     }
 
@@ -66,12 +69,18 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     Uni<Boolean> syncCreateProjectPermission(Long tenantId, Long userId) {
         final var tenantPermission = tenantPermissionModelFactory
                 .create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
-        return tenantModule.getShortcutService().syncTenantPermission(tenantPermission);
+        return syncTenantPermission(tenantPermission);
     }
 
-    Uni<Boolean> syncViewDashboardPermission(Long tenantId, Long userId) {
+    Uni<Boolean> syncGetDashboardPermission(Long tenantId, Long userId) {
         final var tenantPermission = tenantPermissionModelFactory
                 .create(tenantId, userId, TenantPermissionEnum.GET_DASHBOARD);
-        return tenantModule.getShortcutService().syncTenantPermission(tenantPermission);
+        return syncTenantPermission(tenantPermission);
+    }
+
+    Uni<Boolean> syncTenantPermission(TenantPermissionModel tenantPermission) {
+        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
+        return tenantModule.getTenantService().syncTenantPermission(syncTenantPermissionServiceRequest)
+                .map(SyncTenantPermissionResponse::getCreated);
     }
 }

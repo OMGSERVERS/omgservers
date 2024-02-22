@@ -7,7 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -29,7 +29,7 @@ class HasClientOperationImpl implements HasClientOperation {
                         where id = $1 and deleted = false
                         limit 1
                         """,
-                Collections.singletonList(id),
+                List.of(id),
                 "Client");
     }
 }

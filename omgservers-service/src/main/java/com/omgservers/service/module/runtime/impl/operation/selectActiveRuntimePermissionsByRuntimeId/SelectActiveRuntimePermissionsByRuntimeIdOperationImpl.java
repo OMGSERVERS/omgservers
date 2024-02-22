@@ -33,6 +33,7 @@ class SelectActiveRuntimePermissionsByRuntimeIdOperationImpl implements
                         select id, runtime_id, created, modified, user_id, permission, deleted
                         from $schema.tab_runtime_permission
                         where runtime_id = $1 and deleted = false
+                        order by id asc
                         """,
                 Collections.singletonList(runtimeId),
                 "Runtime permission",

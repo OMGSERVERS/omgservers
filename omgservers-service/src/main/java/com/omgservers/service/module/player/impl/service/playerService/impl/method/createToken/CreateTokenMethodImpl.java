@@ -2,6 +2,8 @@ package com.omgservers.service.module.player.impl.service.playerService.impl.met
 
 import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
+import com.omgservers.model.dto.user.CreateTokenRequest;
+import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -28,8 +30,14 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
         final var userId = request.getUserId();
         final var password = request.getPassword();
 
-        return userModule.getShortcutService().createToken(userId, password)
+        return createToken(userId, password)
                 .map(CreateTokenPlayerResponse::new);
+    }
+
+    Uni<String> createToken(final Long userId, final String password) {
+        final var createTokenRequest = new CreateTokenRequest(userId, password);
+        return userModule.getTokenService().createToken(createTokenRequest)
+                .map(CreateTokenResponse::getRawToken);
     }
 
 }

@@ -34,6 +34,7 @@ class SelectMatchClientsByMatchmakerIdOperationImpl implements SelectMatchClient
                             user_id, client_id, group_name, config, deleted
                         from $schema.tab_matchmaker_match_client
                         where matchmaker_id = $1
+                        order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
                 "Match client",

@@ -1,5 +1,8 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.interchange;
 
+import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.dto.client.GetClientRequest;
+import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
@@ -53,14 +56,14 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var consumedMessages = request.getConsumedMessages();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> clientModule.getShortcutService().getClient(clientId)
+                .flatMap(shardModel -> getClient(clientId)
                         .flatMap(client -> {
                             final var shard = shardModel.shard();
 
                             if (client.getUserId().equals(fromUserId)) {
                                 if (client.getDeleted()) {
-                                    log.info("Client was already deleted, " +
-                                            "skip message handling, clientId={}", clientId);
+                                    log.debug("Client was already deleted, " +
+                                            "skip incoming messages, clientId={}", clientId);
                                     return receiveMessages(shard, clientId, consumedMessages);
                                 }
 
@@ -72,6 +75,12 @@ class InterchangeMethodImpl implements InterchangeMethod {
                         })
                         .map(InterchangeResponse::new)
                 );
+    }
+
+    Uni<ClientModel> getClient(final Long clientId) {
+        final var request = new GetClientRequest(clientId);
+        return clientModule.getClientService().getClient(request)
+                .map(GetClientResponse::getClient);
     }
 
     Uni<Void> handleMessages(final Long clientId, final List<MessageModel> messages) {

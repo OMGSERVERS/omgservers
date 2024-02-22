@@ -12,16 +12,24 @@ import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionRuntimeResponse;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.FindVersionRuntimeResponse;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.FindVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -32,12 +40,16 @@ import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.GetVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.GetVersionRequest;
 import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.GetVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.HasProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
@@ -46,10 +58,6 @@ import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
 import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SelectVersionMatchmakerResponse;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SelectVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
@@ -62,12 +70,16 @@ import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.tenant.SyncTenantRequest;
 import com.omgservers.model.dto.tenant.SyncTenantResponse;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequest;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerResponse;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestRequest;
+import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestResponse;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestRequest;
+import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestResponse;
 import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeRequest;
-import com.omgservers.model.dto.tenant.SyncVersionRuntimeResponse;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
@@ -78,10 +90,14 @@ import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakersRequest;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakersResponse;
-import com.omgservers.model.dto.tenant.ViewVersionRuntimesRequest;
-import com.omgservers.model.dto.tenant.ViewVersionRuntimesResponse;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsResponse;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
+import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import io.smallrye.mutiny.Uni;
@@ -212,50 +228,84 @@ public interface TenantApi {
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 
     @PUT
-    @Path("/get-version-matchmaker")
-    Uni<GetVersionMatchmakerResponse> getVersionMatchmaker(GetVersionMatchmakerRequest request);
+    @Path("/get-version-lobby-request")
+    Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(GetVersionLobbyRequestRequest request);
 
     @PUT
-    @Path("/sync-version-matchmaker")
-    Uni<SyncVersionMatchmakerResponse> syncVersionMatchmaker(SyncVersionMatchmakerRequest request);
+    @Path("/find-version-lobby-request")
+    Uni<FindVersionLobbyRequestResponse> findVersionLobbyRequest(FindVersionLobbyRequestRequest request);
 
     @PUT
-    @Path("/find-version-matchmaker")
-    Uni<FindVersionMatchmakerResponse> findVersionMatchmaker(FindVersionMatchmakerRequest request);
+    @Path("/view-version-lobby-requests")
+    Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(ViewVersionLobbyRequestsRequest request);
 
     @PUT
-    @Path("/select-version-matchmaker")
-    Uni<SelectVersionMatchmakerResponse> selectVersionMatchmaker(SelectVersionMatchmakerRequest request);
+    @Path("/sync-version-lobby-request")
+    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(SyncVersionLobbyRequestRequest request);
 
     @PUT
-    @Path("/view-version-matchmakers")
-    Uni<ViewVersionMatchmakersResponse> viewVersionMatchmakers(ViewVersionMatchmakersRequest request);
+    @Path("/delete-version-lobby-request")
+    Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(DeleteVersionLobbyRequestRequest request);
 
     @PUT
-    @Path("/delete-version-matchmaker")
-    Uni<DeleteVersionMatchmakerResponse> deleteVersionMatchmaker(DeleteVersionMatchmakerRequest request);
+    @Path("/get-version-lobby-ref")
+    Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(GetVersionLobbyRefRequest request);
 
     @PUT
-    @Path("/get-version-runtime")
-    Uni<GetVersionRuntimeResponse> getVersionRuntime(GetVersionRuntimeRequest request);
+    @Path("/find-version-lobby-ref")
+    Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(FindVersionLobbyRefRequest request);
 
     @PUT
-    @Path("/sync-version-runtime")
-    Uni<SyncVersionRuntimeResponse> syncVersionRuntime(SyncVersionRuntimeRequest request);
+    @Path("/view-version-lobby-refs")
+    Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(ViewVersionLobbyRefsRequest request);
 
     @PUT
-    @Path("/find-version-runtime")
-    Uni<FindVersionRuntimeResponse> findVersionRuntime(FindVersionRuntimeRequest request);
+    @Path("/sync-version-lobby-ref")
+    Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(SyncVersionLobbyRefRequest request);
 
     @PUT
-    @Path("/select-version-runtime")
-    Uni<SelectVersionRuntimeResponse> selectVersionRuntime(SelectVersionRuntimeRequest request);
+    @Path("/delete-version-lobby-ref")
+    Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(DeleteVersionLobbyRefRequest request);
 
     @PUT
-    @Path("/view-version-runtimes")
-    Uni<ViewVersionRuntimesResponse> viewVersionRuntimes(ViewVersionRuntimesRequest request);
+    @Path("/get-version-matchmaker-request")
+    Uni<GetVersionMatchmakerRequestResponse> getVersionMatchmakerRequest(GetVersionMatchmakerRequestRequest request);
 
     @PUT
-    @Path("/delete-version-runtime")
-    Uni<DeleteVersionRuntimeResponse> deleteVersionRuntime(DeleteVersionRuntimeRequest request);
+    @Path("/find-version-matchmaker-request")
+    Uni<FindVersionMatchmakerRequestResponse> findVersionMatchmakerRequest(FindVersionMatchmakerRequestRequest request);
+
+    @PUT
+    @Path("/view-version-matchmaker-requests")
+    Uni<ViewVersionMatchmakerRequestsResponse> viewVersionMatchmakerRequests(
+            ViewVersionMatchmakerRequestsRequest request);
+
+    @PUT
+    @Path("/sync-version-matchmaker-request")
+    Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(SyncVersionMatchmakerRequestRequest request);
+
+    @PUT
+    @Path("/delete-version-matchmaker-request")
+    Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(
+            DeleteVersionMatchmakerRequestRequest request);
+
+    @PUT
+    @Path("/get-version-matchmaker-ref")
+    Uni<GetVersionMatchmakerRefResponse> getVersionMatchmakerRef(GetVersionMatchmakerRefRequest request);
+
+    @PUT
+    @Path("/find-version-matchmaker-ref")
+    Uni<FindVersionMatchmakerRefResponse> findVersionMatchmakerRef(FindVersionMatchmakerRefRequest request);
+
+    @PUT
+    @Path("/view-version-matchmaker-refs")
+    Uni<ViewVersionMatchmakerRefsResponse> viewVersionMatchmakerRefs(ViewVersionMatchmakerRefsRequest request);
+
+    @PUT
+    @Path("/sync-version-matchmaker-ref")
+    Uni<SyncVersionMatchmakerRefResponse> syncVersionMatchmakerRef(SyncVersionMatchmakerRefRequest request);
+
+    @PUT
+    @Path("/delete-version-matchmaker-ref")
+    Uni<DeleteVersionMatchmakerRefResponse> deleteVersionMatchmakerRef(DeleteVersionMatchmakerRefRequest request);
 }

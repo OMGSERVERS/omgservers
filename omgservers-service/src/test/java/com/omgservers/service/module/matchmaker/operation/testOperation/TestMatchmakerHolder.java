@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation.testOperation;
 
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.versionMatchmaker.VersionMatchmakerModel;
+import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 
 public record TestMatchmakerHolder(MatchmakerModel matchmaker,
-                                   VersionMatchmakerModel versionMatchmaker) {
+                                   VersionMatchmakerRefModel versionMatchmaker) {
 }

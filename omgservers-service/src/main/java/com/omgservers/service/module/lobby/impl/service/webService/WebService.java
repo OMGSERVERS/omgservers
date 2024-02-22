@@ -2,17 +2,17 @@ package com.omgservers.service.module.lobby.impl.service.webService;
 
 import com.omgservers.model.dto.lobby.DeleteLobbyRequest;
 import com.omgservers.model.dto.lobby.DeleteLobbyResponse;
-import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeResponse;
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefResponse;
+import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.GetLobbyRequest;
 import com.omgservers.model.dto.lobby.GetLobbyResponse;
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeRequest;
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefRequest;
+import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRequest;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
 import io.smallrye.mutiny.Uni;
 
@@ -24,11 +24,11 @@ public interface WebService {
 
     Uni<DeleteLobbyResponse> deleteLobby(DeleteLobbyRequest request);
 
-    Uni<GetLobbyRuntimeResponse> getLobbyRuntime(GetLobbyRuntimeRequest request);
+    Uni<GetLobbyRuntimeRefResponse> getLobbyRuntimeRef(GetLobbyRuntimeRefRequest request);
 
-    Uni<FindLobbyRuntimeResponse> findLobbyRuntime(FindLobbyRuntimeRequest request);
+    Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(FindLobbyRuntimeRefRequest request);
 
-    Uni<SyncLobbyRuntimeResponse> syncLobbyRuntime(SyncLobbyRuntimeRequest request);
+    Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request);
 
-    Uni<DeleteLobbyRuntimeResponse> deleteLobbyRuntime(DeleteLobbyRuntimeRequest request);
+    Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(DeleteLobbyRuntimeRefRequest request);
 }
