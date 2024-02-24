@@ -4,11 +4,10 @@ import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.service.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -29,7 +28,6 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
@@ -70,13 +68,7 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
                         final ChangeContext<?> changeContext,
                         final SqlConnection sqlConnection,
                         final Supplier<LogModel> logSupplier) {
-        if (result) {
-            final var changeLog = logSupplier.get();
-            if (Objects.nonNull(changeLog)) {
-                return upsertLogOperation.upsertLog(changeContext, sqlConnection, changeLog)
-                        .replaceWithVoid();
-            }
-        }
+        // TODO clean up method
         return Uni.createFrom().voidItem();
     }
 }

@@ -38,7 +38,6 @@ import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -67,7 +66,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final LobbyModule lobbyModule;
 
     final GetServersOperation getServersOperation;
-    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {

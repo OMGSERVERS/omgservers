@@ -2,10 +2,9 @@ package com.omgservers.service.operation.selectList;
 
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.service.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -28,7 +27,6 @@ class SelectListOperationImpl implements SelectListOperation {
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;

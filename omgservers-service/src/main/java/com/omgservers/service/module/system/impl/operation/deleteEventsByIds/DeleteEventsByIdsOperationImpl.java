@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +33,7 @@ class DeleteEventsByIdsOperationImpl implements DeleteEventsByIdsOperation {
                         set modified = $2, deleted = true
                         where id = any($1) and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         ids.toArray(),
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),

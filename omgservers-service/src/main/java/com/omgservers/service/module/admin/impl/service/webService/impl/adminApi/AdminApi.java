@@ -2,8 +2,6 @@ package com.omgservers.service.module.admin.impl.service.webService.impl.adminAp
 
 import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
 import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
-import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
@@ -78,9 +76,5 @@ public interface AdminApi {
     @PUT
     @Path("/create-developer")
     Uni<CreateDeveloperAdminResponse> createDeveloper(CreateDeveloperAdminRequest request);
-
-    @PUT
-    @Path("/collect-logs")
-    Uni<CollectLogsAdminResponse> collectLogs(CollectLogsAdminRequest request);
 
 }

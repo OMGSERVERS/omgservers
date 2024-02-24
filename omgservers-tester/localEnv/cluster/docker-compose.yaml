@@ -31,6 +31,7 @@ services:
       - omgservers
     depends_on:
       - db-1
+      - mq-1
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -38,6 +39,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-1
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -52,6 +57,7 @@ services:
       - omgservers
     depends_on:
       - db-1
+      - mq-1
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -59,6 +65,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-1
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -77,6 +87,16 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
+  mq-1:
+    image: "apache/activemq-artemis:2.31.2-alpine"
+    container_name: "mq-1"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
+    networks:
+      - omgservers
   svc-2:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "svc-2"
@@ -91,6 +111,7 @@ services:
       - omgservers
     depends_on:
       - db-2
+      - mq-2
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -98,6 +119,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-2
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -112,6 +137,7 @@ services:
       - omgservers
     depends_on:
       - db-2
+      - mq-2
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -119,6 +145,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-2
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -137,6 +167,16 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
+  mq-2:
+    image: "apache/activemq-artemis:2.31.2-alpine"
+    container_name: "mq-2"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
+    networks:
+      - omgservers
   svc-3:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "svc-3"
@@ -151,6 +191,7 @@ services:
       - omgservers
     depends_on:
       - db-3
+      - mq-3
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -158,6 +199,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-3
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -172,6 +217,7 @@ services:
       - omgservers
     depends_on:
       - db-3
+      - mq-3
     tmpfs:
       - /var/log/omgservers
     environment:
@@ -179,6 +225,10 @@ services:
       - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
       - OMGSERVERS_DATASOURCE_USERNAME=root
       - OMGSERVERS_DATASOURCE_PASSWORD=root
+      - OMGSERVERS_AMQP_HOST=mq-3
+      - OMGSERVERS_AMQP_PORT=5672
+      - OMGSERVERS_AMQP_USERNAME=admin
+      - OMGSERVERS_AMQP_PASSWORD=admin
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -195,6 +245,16 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
+    networks:
+      - omgservers
+  mq-3:
+    image: "apache/activemq-artemis:2.31.2-alpine"
+    container_name: "mq-3"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
+    volumes:
+      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
 networks:

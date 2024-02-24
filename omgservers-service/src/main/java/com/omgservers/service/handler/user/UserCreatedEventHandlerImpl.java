@@ -6,7 +6,6 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.UserCreatedEventBodyModel;
 import com.omgservers.model.user.UserModel;
-import com.omgservers.service.factory.EntityModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
@@ -23,8 +22,6 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
     final SystemModule systemModule;
     final UserModule userModule;
-
-    final EntityModelFactory entityModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {

@@ -2,6 +2,7 @@ package com.omgservers.service.factory;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.event.EventModel;
+import com.omgservers.model.event.EventStatusEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,10 @@ public class EventModelFactory {
         event.setId(id);
         event.setCreated(now);
         event.setModified(now);
+        event.setDelayed(now);
         event.setQualifier(body.getQualifier());
         event.setBody(body);
-        event.setDelayed(now);
-        event.setAttempts(0);
+        event.setStatus(EventStatusEnum.CREATED);
         event.setDeleted(false);
         return event;
     }

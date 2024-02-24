@@ -25,6 +25,9 @@ public class EventModel {
     Instant modified;
 
     @NotNull
+    Instant delayed;
+
+    @NotNull
     EventQualifierEnum qualifier;
 
     @NotNull
@@ -32,10 +35,7 @@ public class EventModel {
     EventBodyModel body;
 
     @NotNull
-    Instant delayed;
-
-    @NotNull
-    Integer attempts;
+    EventStatusEnum status;
 
     @NotNull
     Boolean deleted;

@@ -34,7 +34,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                         changeContext, sqlConnection, 0,
                         """
                                 insert into system.tab_event(
-                                    id, created, modified, qualifier, body, delayed, attempts, deleted)
+                                    id, created, modified, delayed, qualifier, body, status, deleted)
                                 values($1, $2, $3, $4, $5, $6, $7, $8)
                                 on conflict (id) do
                                 nothing
@@ -43,16 +43,16 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                                 event.getId(),
                                 event.getCreated().atOffset(ZoneOffset.UTC),
                                 event.getModified().atOffset(ZoneOffset.UTC),
+                                event.getDelayed().atOffset(ZoneOffset.UTC),
                                 event.getQualifier(),
                                 getBodyString(event),
-                                event.getDelayed().atOffset(ZoneOffset.UTC),
-                                event.getAttempts(),
+                                event.getStatus(),
                                 event.getDeleted()),
                         () -> null,
                         () -> null
                 )
-                .invoke(eventWasInserted -> {
-                    if (eventWasInserted) {
+                .invoke(inserted -> {
+                    if (inserted) {
                         changeContext.add(event);
                     }
                 });

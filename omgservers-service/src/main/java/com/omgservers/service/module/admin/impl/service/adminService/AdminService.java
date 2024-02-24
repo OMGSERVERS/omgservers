@@ -2,8 +2,6 @@ package com.omgservers.service.module.admin.impl.service.adminService;
 
 import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
 import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
-import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
@@ -47,6 +45,4 @@ public interface AdminService {
     Uni<DeleteTenantAdminResponse> deleteTenant(@Valid DeleteTenantAdminRequest request);
 
     Uni<CreateDeveloperAdminResponse> createDeveloper(@Valid CreateDeveloperAdminRequest request);
-
-    Uni<CollectLogsAdminResponse> collectLogs(@Valid CollectLogsAdminRequest request);
 }

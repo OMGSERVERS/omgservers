@@ -11,7 +11,6 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.service.factory.EntityModelFactory;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.VersionMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -34,7 +33,6 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
 
     final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
-    final EntityModelFactory entityModelFactory;
     final EventModelFactory eventModelFactory;
 
     @Override

@@ -2,8 +2,6 @@ package com.omgservers.service.module.admin.impl.service.webService.impl.adminAp
 
 import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
 import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
-import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
@@ -110,11 +108,5 @@ public class AdminApiImpl implements AdminApi {
     @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
-    }
-
-    @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
-    public Uni<CollectLogsAdminResponse> collectLogs(final CollectLogsAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::collectLogs);
     }
 }

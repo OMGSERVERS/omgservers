@@ -1,7 +1,8 @@
 package com.omgservers.model.event;
 
 public enum EventStatusEnum {
-    NEW,
-    PROCESSED,
+    CREATED,
+    RELAYED,
+    HANDLED,
     FAILED
 }

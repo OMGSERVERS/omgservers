@@ -2,10 +2,9 @@ package com.omgservers.service.operation.hasObject;
 
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.service.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
+import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -24,7 +23,6 @@ class HasObjectOperationImpl implements HasObjectOperation {
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;

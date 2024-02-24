@@ -2,8 +2,6 @@ package com.omgservers.service.module.admin.impl.service.adminService.impl;
 
 import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
 import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
-import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
@@ -23,7 +21,6 @@ import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
 import com.omgservers.service.module.admin.impl.service.adminService.AdminService;
-import com.omgservers.service.module.admin.impl.service.adminService.impl.method.collectLogs.CollectLogsMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createDeveloper.CreateDeveloperMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createIndex.CreateIndexMethod;
 import com.omgservers.service.module.admin.impl.service.adminService.impl.method.createServiceAccount.CreateServiceAccountMethod;
@@ -53,7 +50,6 @@ class AdminServiceImpl implements AdminService {
     final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
     final CreateIndexMethod createIndexMethod;
-    final CollectLogsMethod collectLogsMethod;
     final PingServerMethod pingServerMethod;
     final GenerateIdMethod generateIdMethod;
     final SyncIndexMethod syncIndexMethod;
@@ -115,10 +111,5 @@ class AdminServiceImpl implements AdminService {
     @Override
     public Uni<CreateDeveloperAdminResponse> createDeveloper(@Valid final CreateDeveloperAdminRequest request) {
         return createDeveloperMethod.createDeveloper(request);
-    }
-
-    @Override
-    public Uni<CollectLogsAdminResponse> collectLogs(@Valid final CollectLogsAdminRequest request) {
-        return collectLogsMethod.collectLogs(request);
     }
 }

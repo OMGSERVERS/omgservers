@@ -3,7 +3,6 @@ package com.omgservers.service.operation.selectObject;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.module.system.impl.operation.upsertLog.UpsertLogOperation;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
 import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
@@ -28,7 +27,6 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
-    final UpsertLogOperation upsertLogOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;

@@ -2,8 +2,6 @@ package com.omgservers.service.module.admin.impl.service.webService.impl;
 
 import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
 import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.CollectLogsAdminRequest;
-import com.omgservers.model.dto.admin.CollectLogsAdminResponse;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminRequest;
 import com.omgservers.model.dto.admin.CreateDeveloperAdminResponse;
 import com.omgservers.model.dto.admin.CreateIndexAdminRequest;
@@ -91,10 +89,5 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
         return adminService.createDeveloper(request);
-    }
-
-    @Override
-    public Uni<CollectLogsAdminResponse> collectLogs(final CollectLogsAdminRequest request) {
-        return adminService.collectLogs(request);
     }
 }

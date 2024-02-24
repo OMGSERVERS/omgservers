@@ -7,13 +7,9 @@ import com.omgservers.model.event.body.ClientRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.event.body.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
-import com.omgservers.model.event.body.HandlerCreatedEventBodyModel;
-import com.omgservers.model.event.body.HandlerDeletedEventBodyModel;
 import com.omgservers.model.event.body.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
-import com.omgservers.model.event.body.JobCreatedEventBodyModel;
-import com.omgservers.model.event.body.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
 import com.omgservers.model.event.body.LobbyDeletedEventBodyModel;
 import com.omgservers.model.event.body.LobbyRuntimeRefCreatedEventBodyModel;
@@ -69,10 +65,6 @@ public enum EventQualifierEnum {
     INDEX_DELETED(IndexDeletedEventBodyModel.class),
     SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class),
     SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class),
-    HANDLER_CREATED(HandlerCreatedEventBodyModel.class),
-    HANDLER_DELETED(HandlerDeletedEventBodyModel.class),
-    JOB_CREATED(JobCreatedEventBodyModel.class),
-    JOB_DELETED(JobDeletedEventBodyModel.class),
     CONTAINER_CREATED(ContainerCreatedEventBodyModel.class),
     CONTAINER_DELETED(ContainerDeletedEventBodyModel.class),
     // Shard
