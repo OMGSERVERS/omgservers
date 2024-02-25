@@ -5,6 +5,7 @@ import com.omgservers.service.module.system.impl.component.relayJobTask.RelayJob
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,6 +32,7 @@ public class BootstrapRelayJob {
         } else {
             final var trigger = scheduler.newJob("relayJobTask")
                     .setInterval("1s")
+                    .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                     .setAsyncTask(scheduledExecution -> relayJobTask.executeTask())
                     .schedule();
             log.info("Relay job was scheduled, {}", trigger);
