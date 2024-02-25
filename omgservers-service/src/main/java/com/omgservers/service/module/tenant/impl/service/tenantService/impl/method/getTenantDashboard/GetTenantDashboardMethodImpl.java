@@ -53,8 +53,8 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         return selectProjects(sqlConnection, shard, tenantId, tenantDashboard)
                 .flatMap(voidItem -> selectStages(sqlConnection, shard, tenantId, tenantDashboard))
                 .flatMap(voidItem -> selectVersions(sqlConnection, shard, tenantId, tenantDashboard))
-                .flatMap(voidItem -> selectVersionRuntimes(sqlConnection, shard, tenantId, tenantDashboard))
-                .flatMap(voidItem -> selectVersionMatchmakers(sqlConnection, shard, tenantId, tenantDashboard))
+                .flatMap(voidItem -> selectLobbyRefs(sqlConnection, shard, tenantId, tenantDashboard))
+                .flatMap(voidItem -> selectMatchmakerRefs(sqlConnection, shard, tenantId, tenantDashboard))
                 .replaceWith(tenantDashboard);
     }
 
@@ -91,25 +91,25 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> selectVersionRuntimes(final SqlConnection sqlConnection,
-                                    final int shard,
-                                    final Long tenantId,
-                                    final TenantDashboardModel tenantDashboard) {
+    Uni<Void> selectLobbyRefs(final SqlConnection sqlConnection,
+                              final int shard,
+                              final Long tenantId,
+                              final TenantDashboardModel tenantDashboard) {
         return selectActiveVersionLobbyRefsByTenantId.selectActiveVersionLobbyRefsByTenantId(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantDashboard::setVersionLobbyRefs)
+                .invoke(tenantDashboard::setLobbyRefs)
                 .replaceWithVoid();
     }
 
-    Uni<Void> selectVersionMatchmakers(final SqlConnection sqlConnection,
-                                       final int shard,
-                                       final Long tenantId,
-                                       final TenantDashboardModel tenantDashboard) {
+    Uni<Void> selectMatchmakerRefs(final SqlConnection sqlConnection,
+                                   final int shard,
+                                   final Long tenantId,
+                                   final TenantDashboardModel tenantDashboard) {
         return selectActiveVersionMatchmakerRefsByTenantId.selectActiveVersionMatchmakerRefsByTenantId(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantDashboard::setVersionMatchmakerLobbyRefs)
+                .invoke(tenantDashboard::setMatchmakerLobbyRefs)
                 .replaceWithVoid();
     }
 }

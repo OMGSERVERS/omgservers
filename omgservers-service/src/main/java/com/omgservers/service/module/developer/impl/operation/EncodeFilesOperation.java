@@ -1,4 +1,4 @@
-package com.omgservers.service.module.developer.impl.operation.encodeFiles;
+package com.omgservers.service.module.developer.impl.operation;
 
 import com.omgservers.model.file.DecodedFileModel;
 import com.omgservers.model.file.EncodedFileModel;

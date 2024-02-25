@@ -27,8 +27,8 @@ public class TenantDashboardModel {
     List<VersionProjectionModel> versions;
 
     @NotNull
-    List<VersionLobbyRefModel> versionLobbyRefs;
+    List<VersionLobbyRefModel> lobbyRefs;
 
     @NotNull
-    List<VersionMatchmakerRefModel> versionMatchmakerLobbyRefs;
+    List<VersionMatchmakerRefModel> matchmakerLobbyRefs;
 }

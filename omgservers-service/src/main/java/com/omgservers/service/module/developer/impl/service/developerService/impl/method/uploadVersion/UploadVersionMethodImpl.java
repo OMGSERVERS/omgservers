@@ -8,7 +8,7 @@ import com.omgservers.model.file.DecodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.module.developer.impl.operation.encodeFiles.EncodeFilesOperation;
+import com.omgservers.service.module.developer.impl.operation.EncodeFilesOperation;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;

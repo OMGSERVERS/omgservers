@@ -39,9 +39,7 @@ public interface ServiceConfig {
 
     long inactiveInterval();
 
-    int handlerCount();
-
-    int handlerLimit();
+    boolean disableRelayJob();
 
     String workersImage();
 
