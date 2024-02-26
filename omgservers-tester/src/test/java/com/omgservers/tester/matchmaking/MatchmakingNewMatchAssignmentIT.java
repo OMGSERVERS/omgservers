@@ -49,7 +49,7 @@ public class MatchmakingNewMatchAssignmentIT extends Assertions {
                 }})
         );
 
-        Thread.sleep(10_000);
+        Thread.sleep(30_000);
 
         try {
             // Client 1

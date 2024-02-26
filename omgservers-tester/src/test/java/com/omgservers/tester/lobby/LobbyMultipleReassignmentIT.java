@@ -61,7 +61,7 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                 }})
         );
 
-        Thread.sleep(10_000);
+        Thread.sleep(30_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
@@ -113,7 +113,7 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment2.getId()));
 
-            Thread.sleep(10_000);
+            Thread.sleep(30_000);
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

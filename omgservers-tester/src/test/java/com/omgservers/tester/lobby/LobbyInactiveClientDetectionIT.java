@@ -39,7 +39,7 @@ public class LobbyInactiveClientDetectionIT extends Assertions {
                         """
                                 """);
 
-        Thread.sleep(10_000);
+        Thread.sleep(30_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
