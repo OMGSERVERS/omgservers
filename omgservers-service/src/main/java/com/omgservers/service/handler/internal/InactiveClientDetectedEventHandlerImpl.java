@@ -66,12 +66,6 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> deleteClient(final Long clientId) {
-        final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
-                .map(DeleteClientResponse::getDeleted);
-    }
-
     Uni<Boolean> syncDisconnectionMessage(final Long clientId) {
         final var messageBody = new DisconnectionMessageBodyModel(DisconnectionReasonEnum.CLIENT_INACTIVITY);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
@@ -84,5 +78,11 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         final var request = new SyncClientMessageRequest(clientMessage);
         return clientModule.getClientService().syncClientMessage(request)
                 .map(SyncClientMessageResponse::getCreated);
+    }
+
+    Uni<Boolean> deleteClient(final Long clientId) {
+        final var request = new DeleteClientRequest(clientId);
+        return clientModule.getClientService().deleteClient(request)
+                .map(DeleteClientResponse::getDeleted);
     }
 }
