@@ -38,7 +38,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
                                 if (eventProjections.isEmpty()) {
                                     return Uni.createFrom().item(false);
                                 } else {
-                                    return handleEventProjections(eventProjections)
+                                    return relayEvents(eventProjections)
                                             .flatMap(voidItem -> {
                                                 final var ids = eventProjections.stream()
                                                         .map(EventProjectionModel::getId)
@@ -57,7 +57,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
                 .map(RelayEventsResponse::new);
     }
 
-    Uni<Void> handleEventProjections(final List<EventProjectionModel> eventProjections) {
+    Uni<Void> relayEvents(final List<EventProjectionModel> eventProjections) {
         return Multi.createFrom().iterable(eventProjections)
                 .onItem().transformToUniAndConcatenate(eventProjection ->
                         outboxEventEmitter.send(eventProjection.getId()))

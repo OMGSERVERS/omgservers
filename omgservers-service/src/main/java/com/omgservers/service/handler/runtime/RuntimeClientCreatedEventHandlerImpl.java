@@ -20,6 +20,7 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.ClientRuntimeRefModelFactory;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
@@ -119,6 +120,8 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(clientId, runtimeId);
         final var request = new SyncClientRuntimeRefRequest(clientRuntimeRef);
         return clientModule.getClientService().syncClientRuntimeRef(request)
-                .map(SyncClientRuntimeRefResponse::getCreated);
+                .map(SyncClientRuntimeRefResponse::getCreated)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(Boolean.FALSE);
     }
 }

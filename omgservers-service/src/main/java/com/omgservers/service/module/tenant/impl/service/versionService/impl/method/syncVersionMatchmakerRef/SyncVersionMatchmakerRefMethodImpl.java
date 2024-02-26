@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertVersionMatchmakerRef.UpsertVersionMatchmakerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -52,7 +52,7 @@ class SyncVersionMatchmakerRefMethodImpl implements SyncVersionMatchmakerRefMeth
                                                                     shard,
                                                                     versionMatchmakerRef);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "version does not exist or was deleted, id=" + versionId);
                                                 }
                                             })

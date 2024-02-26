@@ -20,6 +20,8 @@ public class EventHandlerImpl implements EventHandler {
     @Incoming("inbox-events")
     @Blocking(ordered = false)
     Uni<Void> eventHandler(Long message) {
+        log.info("Message was received, {}", message);
+//        return Uni.createFrom().voidItem();
         final var eventId = message;
         return handleEvent(eventId)
                 .replaceWithVoid();

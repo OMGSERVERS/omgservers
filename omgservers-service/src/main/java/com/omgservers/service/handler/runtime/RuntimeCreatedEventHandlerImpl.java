@@ -26,6 +26,7 @@ import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ContainerModelFactory;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LobbyRuntimeRefModelFactory;
@@ -178,7 +179,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId);
                 final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
                 yield lobbyModule.getLobbyService().syncLobbyRuntimeRef(request)
-                        .map(SyncLobbyRuntimeResponse::getCreated);
+                        .map(SyncLobbyRuntimeResponse::getCreated)
+                        .onFailure(ServerSideNotFoundException.class)
+                        .recoverWithItem(Boolean.FALSE);
             }
             case MATCH -> {
                 final var matchConfig = runtime.getConfig().getMatchConfig();
@@ -187,7 +190,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var matchRuntimeRef = matchRuntimeRefModelFactory.create(matchmakerId, matchId, runtimeId);
                 final var request = new SyncMatchRuntimeRefRequest(matchRuntimeRef);
                 yield matchmakerModule.getMatchmakerService().syncMatchRuntimeRef(request)
-                        .map(SyncMatchRuntimeRefResponse::getCreated);
+                        .map(SyncMatchRuntimeRefResponse::getCreated)
+                        .onFailure(ServerSideNotFoundException.class)
+                        .recoverWithItem(Boolean.FALSE);
             }
         };
     }

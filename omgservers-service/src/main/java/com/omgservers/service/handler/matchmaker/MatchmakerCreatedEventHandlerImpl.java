@@ -11,6 +11,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.VersionMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -73,7 +74,9 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var versionMatchmakerRef = versionMatchmakerRefModelFactory.create(tenantId, versionId, matchmakerId);
         final var request = new SyncVersionMatchmakerRefRequest(versionMatchmakerRef);
         return tenantModule.getVersionService().syncVersionMatchmakerRef(request)
-                .map(SyncVersionMatchmakerRefResponse::getCreated);
+                .map(SyncVersionMatchmakerRefResponse::getCreated)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(Boolean.FALSE);
     }
 
     Uni<Boolean> requestJobExecution(final Long matchmakerId) {
