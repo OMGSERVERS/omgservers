@@ -21,7 +21,6 @@ public class RelayJobTaskImpl implements RelayJobTask {
 
     @Override
     public Uni<Void> executeTask() {
-        log.info("Relay job was executed");
         return Multi.createBy().repeating()
                 .uni(this::relayEvents)
                 .whilst(Boolean.TRUE::equals)

@@ -56,8 +56,8 @@ public class RuntimeClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(runtimeClient -> {
                     final var clientId = runtimeClient.getClientId();
 
-                    log.info("Runtime client was deleted, runtimeId={}, clientId={}",
-                            runtimeId, clientId);
+                    log.info("Runtime client was deleted, id={}, runtimeId={}, clientId={}",
+                            runtimeClient.getId(), runtimeId, clientId);
 
                     return findAndDeleteClientRuntimeRef(clientId, runtimeId)
                             .flatMap(voidItem -> getRuntime(runtimeId)

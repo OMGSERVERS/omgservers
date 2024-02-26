@@ -45,7 +45,8 @@ public class VersionLobbyRequestCreatedEventHandlerImpl implements EventHandler 
                 .flatMap(versionLobbyRequest -> {
                     final var versionId = versionLobbyRequest.getVersionId();
                     final var lobbyId = versionLobbyRequest.getLobbyId();
-                    log.info("Version lobby request was created, version={}/{}, lobbyId={}",
+                    log.info("Version lobby request was created, id={}, version={}/{}, lobbyId={}",
+                            versionLobbyRequest.getId(),
                             tenantId,
                             versionId,
                             lobbyId);

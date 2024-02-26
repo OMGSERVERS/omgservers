@@ -46,7 +46,8 @@ public class VersionLobbyRefCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(versionLobbyRef -> {
                     final var versionId = versionLobbyRef.getVersionId();
                     final var lobbyId = versionLobbyRef.getLobbyId();
-                    log.info("Version lobby ref was created, version={}/{}, lobbyId={}",
+                    log.info("Version lobby ref was created, id={}, version={}/{}, lobbyId={}",
+                            versionLobbyRef.getId(),
                             tenantId,
                             versionId,
                             lobbyId);

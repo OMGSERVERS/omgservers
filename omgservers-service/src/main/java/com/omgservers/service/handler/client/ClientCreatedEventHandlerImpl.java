@@ -65,7 +65,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                     final var tenantId = client.getTenantId();
                     final var versionId = client.getVersionId();
 
-                    log.info("Client was created, clientId={}, version={}/{}",
+                    log.info("Client was created, id={}, version={}/{}",
                             clientId, tenantId, versionId);
 
                     return syncWelcomeMessage(client)

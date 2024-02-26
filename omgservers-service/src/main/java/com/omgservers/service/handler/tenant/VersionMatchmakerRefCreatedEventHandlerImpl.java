@@ -44,7 +44,8 @@ public class VersionMatchmakerRefCreatedEventHandlerImpl implements EventHandler
                 .flatMap(versionMatchmakerRef -> {
                     final var versionId = versionMatchmakerRef.getVersionId();
                     final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                    log.info("Version matchmaker ref was created, version={}/{}, matchmakerId={}",
+                    log.info("Version matchmaker ref was created, id={}, version={}/{}, matchmakerId={}",
+                            versionMatchmakerRef.getId(),
                             tenantId,
                             versionId,
                             matchmakerId);

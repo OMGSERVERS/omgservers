@@ -62,8 +62,8 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(runtimeClient -> {
                     final var clientId = runtimeClient.getClientId();
 
-                    log.info("Runtime client was created, runtimeId={}, clientId={}",
-                            runtimeId, clientId);
+                    log.info("Runtime client was created, id={}, runtimeId={}, clientId={}",
+                            runtimeClient.getId(), runtimeId, clientId);
 
                     return getRuntime(runtimeId)
                             .flatMap(runtime -> syncAssignmentMessage(runtime, clientId))

@@ -38,10 +38,13 @@ public class VersionLobbyRequestDeletedEventHandlerImpl implements EventHandler 
 
         return getVersionLobbyRequest(tenantId, id)
                 .flatMap(versionLobbyRequest -> {
-                    log.info("Version lobby request was deleted, version={}/{}, lobbyId={}",
-                            versionLobbyRequest.getTenantId(),
-                            versionLobbyRequest.getVersionId(),
-                            versionLobbyRequest.getLobbyId());
+                    final var versionId = versionLobbyRequest.getVersionId();
+                    final var lobbyId = versionLobbyRequest.getLobbyId();
+                    log.info("Version lobby request was deleted, id={}, version={}/{}, lobbyId={}",
+                            versionLobbyRequest.getId(),
+                            tenantId,
+                            versionId,
+                            lobbyId);
 
                     return Uni.createFrom().voidItem();
                 })

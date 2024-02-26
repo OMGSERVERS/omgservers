@@ -41,8 +41,10 @@ public class VersionMatchmakerRequestDeletedEventHandlerImpl implements EventHan
                     final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
 
                     log.info("Version matchmaker request was deleted, " +
+                                    "id={}" +
                                     "versionId={}, " +
                                     "matchmakerId={}",
+                            versionMatchmakerRequest.getId(),
                             tenantId,
                             matchmakerId);
 
