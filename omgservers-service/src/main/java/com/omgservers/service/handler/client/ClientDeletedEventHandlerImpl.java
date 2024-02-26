@@ -146,7 +146,9 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
-                .map(SyncMatchmakerCommandResponse::getCreated);
+                .map(SyncMatchmakerCommandResponse::getCreated)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithItem(Boolean.FALSE);
     }
 }
 
