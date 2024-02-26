@@ -92,11 +92,12 @@ public class LobbySetGetAttributesIT extends Assertions {
 
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
                     MessageQualifierEnum.WELCOME_MESSAGE);
-            playerApiTester.sendMessage(testClient, new TestMessage("init_attributes"));
 
             final var lobbyAssignment = playerApiTester.waitMessage(testClient,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
+
+            playerApiTester.sendMessage(testClient, new TestMessage("init_attributes"));
 
             final var serverMessage1 = playerApiTester.waitMessage(testClient,
                     MessageQualifierEnum.SERVER_MESSAGE,
