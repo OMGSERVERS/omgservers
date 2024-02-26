@@ -33,6 +33,7 @@ class SelectClientRuntimeRefByClientIdAndRuntimeIdOperationImpl
                         select id, client_id, created, modified, runtime_id, deleted
                         from $schema.tab_client_runtime_ref
                         where client_id = $1 and runtime_id = $2
+                        order by id desc
                         limit 1
                         """,
                 List.of(clientId, runtimeId),

@@ -50,7 +50,7 @@ public class LobbyInactiveClientDetectionIT extends Assertions {
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
 
-            Thread.sleep(10_000);
+            Thread.sleep(30_000);
 
             // TODO: implement test
             //final var disconnectionMessage = playerApiTester.waitMessage(testClient,

@@ -1,6 +1,5 @@
 package com.omgservers.tester.lobby;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
@@ -44,7 +43,8 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                         """,
                 """
                         function handle_command(self, command)
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "handle_message" then
+                                local var message = command.message
                                 return {
                                     {
                                         qualifier = "kick",
@@ -87,6 +87,8 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                                     RuntimeQualifierEnum.MATCH),
                     Collections.singletonList(lobbyAssignment1.getId()));
 
+            playerApiTester.sendMessage(testClient, new TestMessage("kick_me"));
+
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
                             ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
@@ -102,6 +104,8 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                             ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.MATCH),
                     Collections.singletonList(lobbyAssignment2.getId()));
+
+            playerApiTester.sendMessage(testClient, new TestMessage("kick_me"));
 
             final var lobbyAssignment3 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
@@ -119,7 +123,6 @@ public class LobbyMultipleReassignmentIT extends Assertions {
     @Data
     @AllArgsConstructor
     static class TestMessage {
-        @JsonProperty("client_id")
-        Long id;
+        String text;
     }
 }

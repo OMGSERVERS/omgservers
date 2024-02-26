@@ -40,13 +40,8 @@ public class VersionMatchmakerRequestDeletedEventHandlerImpl implements EventHan
                 .flatMap(versionMatchmakerRequest -> {
                     final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
 
-                    log.info("Version matchmaker request was deleted, " +
-                                    "id={}" +
-                                    "versionId={}, " +
-                                    "matchmakerId={}",
-                            versionMatchmakerRequest.getId(),
-                            tenantId,
-                            matchmakerId);
+                    log.info("Version matchmaker request was deleted, id={}, versionId={}, matchmakerId={}",
+                            versionMatchmakerRequest.getId(), tenantId, matchmakerId);
 
                     return Uni.createFrom().voidItem();
                 })

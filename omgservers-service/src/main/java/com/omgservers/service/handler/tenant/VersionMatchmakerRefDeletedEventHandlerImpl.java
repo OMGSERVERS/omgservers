@@ -40,7 +40,8 @@ public class VersionMatchmakerRefDeletedEventHandlerImpl implements EventHandler
                 .flatMap(versionMatchmakerRef -> {
                     final var versionId = versionMatchmakerRef.getVersionId();
                     final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                    log.info("Version matchmaker ref was deleted, version={}/{}, matchmakerId={}",
+                    log.info("Version matchmaker ref was deleted, id={}, version={}/{}, matchmakerId={}",
+                            versionMatchmakerRef.getId(),
                             tenantId,
                             versionId,
                             matchmakerId);

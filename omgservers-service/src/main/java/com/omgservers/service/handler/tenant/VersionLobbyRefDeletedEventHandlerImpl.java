@@ -41,7 +41,8 @@ public class VersionLobbyRefDeletedEventHandlerImpl implements EventHandler {
                     final var versionId = versionLobbyRef.getVersionId();
                     final var lobbyId = versionLobbyRef.getLobbyId();
 
-                    log.info("Version lobby ref was deleted, version={}/{}, lobbyId={}",
+                    log.info("Version lobby ref was deleted, id={}, version={}/{}, lobbyId={}",
+                            versionLobbyRef.getId(),
                             tenantId,
                             versionId,
                             lobbyId);
