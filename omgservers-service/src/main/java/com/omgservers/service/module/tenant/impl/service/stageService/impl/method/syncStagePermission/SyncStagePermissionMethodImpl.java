@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.model.dto.tenant.SyncStagePermissionResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasStage.HasStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -50,7 +50,7 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
                                                             shardModel.shard(),
                                                             permission);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "stage does not exist or was deleted, id=" + stageId);
                                                 }
                                             })

@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.hasMatchmaker.HasMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -45,7 +45,7 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
                                                             shard,
                                                             requestModel);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "matchmaker does not exist or was deleted, " +
                                                                     "id=" + matchmakerId);
                                                 }

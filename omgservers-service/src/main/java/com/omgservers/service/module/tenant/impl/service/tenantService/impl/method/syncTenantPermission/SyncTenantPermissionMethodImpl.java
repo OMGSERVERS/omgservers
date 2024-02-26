@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 
 import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.impl.operation.hasTenant.HasTenantOperation;
@@ -50,7 +50,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                                                         shardModel.shard(),
                                                         permission);
                                             } else {
-                                                throw new ServerSideConflictException(
+                                                throw new ServerSideNotFoundException(
                                                         "tenant does not exist or was deleted, id=" + tenantId);
                                             }
                                         })

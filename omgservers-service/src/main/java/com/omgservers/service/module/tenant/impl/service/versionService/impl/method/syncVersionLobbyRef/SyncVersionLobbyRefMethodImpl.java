@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertVersionLobbyRef.UpsertVersionLobbyRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -50,7 +50,7 @@ class SyncVersionLobbyRefMethodImpl implements SyncVersionLobbyRefMethod {
                                                                     shardModel.shard(),
                                                                     versionLobbyRef);
                                                 } else {
-                                                    throw new ServerSideConflictException(
+                                                    throw new ServerSideNotFoundException(
                                                             "version does not exist or was deleted, id=" + versionId);
                                                 }
                                             })
