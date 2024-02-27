@@ -2,16 +2,14 @@ package com.omgservers.service.module.runtime.impl.service.doService.impl.method
 
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.runtime.DoKickClientRequest;
 import com.omgservers.model.dto.runtime.DoKickClientResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
@@ -84,7 +82,10 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                         log.info("Do kick client from the match, clientId={}, runtimeId={}",
                                 clientId, runtimeId);
 
-                        yield findAndDeleteRuntimeClient(runtimeId, clientId);
+                        final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
+                        final var matchId = runtime.getConfig().getMatchConfig().getMatchId();
+
+                        yield syncKickClientMatchmakerCommand(matchmakerId, matchId, clientId);
                     }
                 })
                 .replaceWith(true);
@@ -102,24 +103,15 @@ class DoKickClientMethodImpl implements DoKickClientMethod {
                 .map(DeleteClientResponse::getDeleted);
     }
 
-    Uni<Void> findAndDeleteRuntimeClient(final Long runtimeId, final Long clientId) {
-        return findRuntimeClient(runtimeId, clientId)
+    Uni<Boolean> syncKickClientMatchmakerCommand(final Long matchmakerId,
+                                                 final Long matchId,
+                                                 final Long clientId) {
+        final var commandBody = new KickClientMatchmakerCommandBodyModel(clientId, matchId);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
+        final var request = new SyncMatchmakerCommandRequest(commandModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+                .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(runtimeClient ->
-                        deleteRuntimeClient(runtimeId, runtimeClient.getId()))
-                .replaceWithVoid();
-    }
-
-    Uni<RuntimeClientModel> findRuntimeClient(final Long runtimeId, final Long clientId) {
-        final var request = new FindRuntimeClientRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeClient(request)
-                .map(FindRuntimeClientResponse::getRuntimeClient);
-    }
-
-    Uni<Boolean> deleteRuntimeClient(final Long runtimeId, final Long id) {
-        final var request = new DeleteRuntimeClientRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeClient(request)
-                .map(DeleteRuntimeClientResponse::getDeleted);
+                .recoverWithItem(Boolean.FALSE);
     }
 }

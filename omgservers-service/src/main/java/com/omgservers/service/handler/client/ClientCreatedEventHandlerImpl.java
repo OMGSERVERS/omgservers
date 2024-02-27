@@ -70,10 +70,13 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
                     return syncWelcomeMessage(client)
                             .flatMap(created -> selectVersionLobbyRef(tenantId, versionId))
-                            .flatMap(versionLobbyRef -> getLobby(versionLobbyRef.getLobbyId()))
-                            .flatMap(lobby -> {
-                                final var runtimeId = lobby.getRuntimeId();
-                                return syncRuntimeClient(runtimeId, clientId);
+                            .flatMap(versionLobbyRef -> {
+                                final var lobbyId = versionLobbyRef.getLobbyId();
+                                return getLobby(lobbyId)
+                                        .flatMap(lobby -> {
+                                            final var runtimeId = lobby.getRuntimeId();
+                                            return syncRuntimeClient(runtimeId, clientId);
+                                        });
                             });
                 })
                 .replaceWithVoid();
