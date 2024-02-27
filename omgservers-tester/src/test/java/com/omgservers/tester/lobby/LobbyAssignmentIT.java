@@ -38,7 +38,7 @@ public class LobbyAssignmentIT extends Assertions {
                 """
                         """);
 
-        Thread.sleep(30_000);
+        Thread.sleep(10_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

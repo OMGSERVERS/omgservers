@@ -30,7 +30,7 @@ public class DeveloperCreateNewVersionIT extends Assertions {
                 """
                         """);
 
-        Thread.sleep(30_000);
+        Thread.sleep(10_000);
 
         try {
             createTestVersionOperation.createTestVersion(testVersion, """                                               

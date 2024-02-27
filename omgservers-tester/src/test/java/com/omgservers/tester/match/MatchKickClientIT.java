@@ -74,7 +74,7 @@ public class MatchKickClientIT extends Assertions {
                 }})
         );
 
-        Thread.sleep(30_000);
+        Thread.sleep(10_000);
 
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
