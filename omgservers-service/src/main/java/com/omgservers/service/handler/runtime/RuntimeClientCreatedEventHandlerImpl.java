@@ -20,6 +20,7 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.ClientRuntimeRefModelFactory;
@@ -32,6 +33,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -66,9 +69,9 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
                             runtimeClient.getId(), runtimeId, clientId);
 
                     return getRuntime(runtimeId)
-                            .flatMap(runtime -> syncAssignmentMessage(runtime, clientId))
-                            .flatMap(created -> syncAddClientRuntimeCommand(runtimeId, clientId))
-                            .flatMap(created -> syncClientRuntimeRef(clientId, runtimeId));
+                            .flatMap(runtime -> syncAssignmentMessage(runtime, clientId)
+                                    .flatMap(created -> syncAddClientRuntimeCommand(runtimeClient))
+                                    .flatMap(created -> syncClientRuntimeRef(clientId, runtimeId)));
                 })
                 .replaceWithVoid();
     }
@@ -103,11 +106,20 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncClientMessageResponse::getCreated);
     }
 
-    Uni<Boolean> syncAddClientRuntimeCommand(final Long runtimeId,
-                                             final Long clientId) {
-        final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(clientId);
-        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
-        return syncRuntimeCommand(runtimeCommand);
+    Uni<Boolean> syncAddClientRuntimeCommand(final RuntimeClientModel runtimeClient) {
+        final var clientId = runtimeClient.getClientId();
+        final var runtimeId = runtimeClient.getRuntimeId();
+
+        if (Objects.nonNull(runtimeClient.getConfig().getMatchClient())) {
+            final var groupName = runtimeClient.getConfig().getMatchClient().getGroupName();
+            final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyModel(clientId, groupName);
+            final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+            return syncRuntimeCommand(runtimeCommand);
+        } else {
+            final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(clientId);
+            final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+            return syncRuntimeCommand(runtimeCommand);
+        }
     }
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {

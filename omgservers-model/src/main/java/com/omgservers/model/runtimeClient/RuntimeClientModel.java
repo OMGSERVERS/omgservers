@@ -31,5 +31,8 @@ public class RuntimeClientModel {
     Instant lastActivity;
 
     @NotNull
+    RuntimeClientConfigModel config;
+
+    @NotNull
     Boolean deleted;
 }

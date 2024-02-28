@@ -74,8 +74,7 @@ class UpsertRuntimeClientOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertRuntimeClient_thenException() {
         final var shard = 0;
         final var runtimeClient = runtimeClientModelFactory.create(runtimeId(),
-                shardKey(),
-                entityId());
+                shardKey());
         assertThrows(ServerSideConflictException.class, () -> upsertRuntimeClientOperation
                 .upsertRuntimeClient(shard, runtimeClient));
     }

@@ -42,6 +42,7 @@ public class MatchAddClientIT extends Assertions {
                         function handle_command(self, command)
                                                
                             if command.qualifier == "add_client" then
+                                assert(command.group_name == "players", "command.group_name is wrong")
                                 return {
                                     {
                                         qualifier = "respond",

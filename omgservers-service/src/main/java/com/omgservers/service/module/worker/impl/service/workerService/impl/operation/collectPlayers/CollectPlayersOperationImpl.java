@@ -9,6 +9,7 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
+import com.omgservers.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.service.exception.ServerSideInternalException;
@@ -34,6 +35,7 @@ class CollectPlayersOperationImpl implements CollectPlayersOperation {
 
     static final Set<RuntimeCommandQualifierEnum> CLIENT_RELATED_COMMANDS = Set.of(
             RuntimeCommandQualifierEnum.ADD_CLIENT,
+            RuntimeCommandQualifierEnum.ADD_MATCH_CLIENT,
             RuntimeCommandQualifierEnum.DELETE_CLIENT,
             RuntimeCommandQualifierEnum.HANDLE_MESSAGE
     );
@@ -49,6 +51,10 @@ class CollectPlayersOperationImpl implements CollectPlayersOperation {
                 .map(runtimeCommand -> switch (runtimeCommand.getQualifier()) {
                     case ADD_CLIENT -> {
                         final var body = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
+                        yield body.getClientId();
+                    }
+                    case ADD_MATCH_CLIENT -> {
+                        final var body = (AddMatchClientRuntimeCommandBodyModel) runtimeCommand.getBody();
                         yield body.getClientId();
                     }
                     case DELETE_CLIENT -> {

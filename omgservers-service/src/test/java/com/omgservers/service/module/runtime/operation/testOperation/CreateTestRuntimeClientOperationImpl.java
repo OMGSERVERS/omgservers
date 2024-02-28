@@ -16,13 +16,10 @@ public class CreateTestRuntimeClientOperationImpl implements CreateTestRuntimeCl
 
     @Override
     public RuntimeClientModel createTestRuntimeClientOperation(final Long runtimeId,
-                                                               final Long userId,
                                                                final Long clientId) {
         final var shard = 0;
 
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
-                userId,
-                clientId);
+        final var runtimeClient = runtimeClientModelFactory.create(runtimeId, clientId);
 
         upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
 

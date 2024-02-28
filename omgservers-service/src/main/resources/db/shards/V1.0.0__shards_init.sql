@@ -350,30 +350,10 @@ create table if not exists tab_runtime_client (
     modified timestamp with time zone not null,
     client_id bigint not null,
     last_activity timestamp with time zone not null,
-    deleted boolean not null
-);
-
-create table if not exists tab_runtime_lobby (
-    id bigint primary key,
-    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    lobby_id bigint not null,
-    deleted boolean not null
-);
-
-create table if not exists tab_runtime_match (
-    id bigint primary key,
-    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    matchmaker_id bigint not null,
-    match_id bigint not null,
+    config json not null,
     deleted boolean not null
 );
 
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_client_runtime_id on tab_runtime_client(runtime_id);
-create index if not exists idx_runtime_lobby_runtime_id on tab_runtime_lobby(runtime_id);
-create index if not exists idx_runtime_match_runtime_id on tab_runtime_match(runtime_id);

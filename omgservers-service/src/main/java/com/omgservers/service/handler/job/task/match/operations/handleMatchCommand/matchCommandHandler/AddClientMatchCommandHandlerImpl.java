@@ -5,9 +5,11 @@ import com.omgservers.model.dto.matchmaker.GetMatchResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.matchClient.MatchClientModel;
 import com.omgservers.model.matchCommand.MatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
+import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.job.task.match.operations.handleMatchCommand.MatchCommandHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -42,11 +44,12 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
 
         final var body = (AddClientMatchCommandBodyModel) matchCommand.getBody();
         final var clientId = body.getClientId();
+        final var matchClient = body.getMatchClient();
 
         return getMatch(matchmakerId, matchId)
                 .flatMap(match -> {
                     final var runtimeId = match.getRuntimeId();
-                    return syncRuntimeClient(runtimeId, clientId);
+                    return syncRuntimeClient(runtimeId, clientId, matchClient);
                 })
                 .replaceWithVoid();
     }
@@ -57,8 +60,14 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .map(GetMatchResponse::getMatch);
     }
 
-    Uni<Boolean> syncRuntimeClient(final Long runtimeId, final Long clientId) {
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId, clientId);
+    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
+                                   final Long clientId,
+                                   final MatchClientModel matchClient) {
+        final var runtimeClientConfig = RuntimeClientConfigModel.create();
+        runtimeClientConfig.setMatchClient(matchClient);
+        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
+                clientId,
+                runtimeClientConfig);
         final var request = new SyncRuntimeClientRequest(runtimeClient);
         return runtimeModule.getRuntimeService().syncRuntimeClient(request)
                 .map(SyncRuntimeClientResponse::getCreated);

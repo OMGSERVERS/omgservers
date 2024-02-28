@@ -49,13 +49,15 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         return getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
                     final var clientId = matchClient.getClientId();
+                    final var groupName = matchClient.getGroupName();
 
                     log.info("Match client was created, id={}, match={}/{}, clientId={}",
                             matchClient.getId(), matchmakerId, matchId, clientId);
 
                     return syncAddClientMatchCommand(matchmakerId,
                             matchId,
-                            clientId);
+                            clientId,
+                            matchClient);
                 })
                 .replaceWithVoid();
     }
@@ -68,8 +70,9 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncAddClientMatchCommand(final Long matchmakerId,
                                            final Long matchId,
-                                           final Long clientId) {
-        final var matchCommandBody = new AddClientMatchCommandBodyModel(clientId);
+                                           final Long clientId,
+                                           final MatchClientModel matchClient) {
+        final var matchCommandBody = new AddClientMatchCommandBodyModel(clientId, matchClient);
         final var matchCommand = matchCommandModelFactory.create(matchmakerId, matchId, matchCommandBody);
         return syncMatchCommand(matchCommand);
     }

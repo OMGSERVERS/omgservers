@@ -30,7 +30,7 @@ class SelectActiveRuntimeClientsByRuntimeIdOperationImpl implements
                 sqlConnection,
                 shard,
                 """
-                        select id, runtime_id, created, modified, client_id, last_activity, deleted
+                        select id, runtime_id, created, modified, client_id, last_activity, config, deleted
                         from $schema.tab_runtime_client
                         where runtime_id = $1 and deleted = false
                         order by id asc
