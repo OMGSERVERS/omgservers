@@ -78,7 +78,7 @@ match.lua - entrypoint and handler for match commands
     client_id = <client_id>,
     attributes = {},
     profile = {},
-    group_name = <group_name> -- optional, it exists if client was added to match runtime  
+    group_name = <group_name> -- optional, it exists if client was added to the match runtime  
 }
 ```
 

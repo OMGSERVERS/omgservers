@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 import org.luaj.vm2.LuaValue;
 
+import java.util.Objects;
+
 @Getter
 @ToString
 public class AddClientLuaCommand extends LuaCommand {
@@ -30,6 +32,9 @@ public class AddClientLuaCommand extends LuaCommand {
         set("attributes", attributes);
         set("profile", profile);
 
-        set("group_name", groupName);
+        // Field is optional, it exists if client was added to the match runtime
+        if (Objects.nonNull(groupName)) {
+            set("group_name", groupName);
+        }
     }
 }
