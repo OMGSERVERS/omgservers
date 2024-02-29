@@ -7,18 +7,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class DoStopCommandBodyModel extends DoCommandBodyModel {
+public class DoRespondClientCommandBodyModel extends DoCommandBodyModel {
 
     @NotNull
-    String reason;
+    Long clientId;
+
+    @NotNull
+    @ToString.Exclude
+    Object message;
 
     @Override
     public DoCommandQualifierEnum getQualifier() {
-        return DoCommandQualifierEnum.DO_STOP;
+        return DoCommandQualifierEnum.DO_RESPOND_CLIENT;
     }
 }

@@ -3,7 +3,7 @@ package com.omgservers.service.handler.job.task.matchmaker.operation.handleMatch
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.matchmakerCommand.body.StopMatchMatchmakerCommandBodyModel;
+import com.omgservers.model.matchmakerCommand.body.StopMatchmakingCommandBodyModel;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import com.omgservers.service.handler.job.task.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import io.smallrye.mutiny.Uni;
@@ -15,18 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class StopMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler {
+class StopMatchmakingCommandHandlerImpl implements MatchmakerCommandHandler {
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {
-        return MatchmakerCommandQualifierEnum.STOP_MATCH;
+        return MatchmakerCommandQualifierEnum.STOP_MATCHMAKING;
     }
 
     @Override
     public Uni<Void> handle(final MatchmakerState matchmakerState,
                             final MatchmakerChangeOfState changeOfState,
                             final MatchmakerCommandModel matchmakerCommand) {
-        final var body = (StopMatchMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (StopMatchmakingCommandBodyModel) matchmakerCommand.getBody();
         final var matchId = body.getId();
 
         return Uni.createFrom().voidItem()
@@ -40,7 +40,7 @@ class StopMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler 
                     changeOfState.getStoppedMatches().addAll(stoppedMatches);
 
                     log.info(
-                            "Match was marked as stopped, " +
+                            "Match matchmaking was stopped, " +
                                     "match={}/{}",
                             matchmakerCommand.getMatchmakerId(),
                             matchId);

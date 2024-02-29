@@ -24,8 +24,8 @@ import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
-import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingRequest;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
@@ -178,7 +178,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<DoStopRuntimeResponse> doStopRuntime(final DoStopRuntimeRequest request) {
+    public Uni<DoStopMatchmakingResponse> doStopRuntime(final DoStopMatchmakingRequest request) {
         return doService.doStopRuntime(request);
     }
 

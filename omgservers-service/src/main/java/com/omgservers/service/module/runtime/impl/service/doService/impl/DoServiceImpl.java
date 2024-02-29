@@ -12,8 +12,8 @@ import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
-import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingRequest;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingResponse;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.doService.DoService;
@@ -23,7 +23,7 @@ import com.omgservers.service.module.runtime.impl.service.doService.impl.method.
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doRespondClient.DoRespondClientMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetAttributes.DoSetAttributesMethod;
 import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doSetProfile.DoSetProfileMethod;
-import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doStopRuntime.DoStopRuntimeMethod;
+import com.omgservers.service.module.runtime.impl.service.doService.impl.method.doStopMatchmaking.DoStopMatchmakingMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,7 +44,7 @@ public class DoServiceImpl implements DoService {
     final DoBroadcastMessageMethod doBroadcastMessageMethod;
     final DoRespondClientMethod doRespondClientMethod;
     final DoSetAttributesMethod doSetAttributesMethod;
-    final DoStopRuntimeMethod doStopRuntimeMethod;
+    final DoStopMatchmakingMethod doStopMatchmakingMethod;
     final DoKickClientMethod doKickClientMethod;
     final DoSetProfileMethod doSetProfileMethod;
 
@@ -81,11 +81,11 @@ public class DoServiceImpl implements DoService {
     }
 
     @Override
-    public Uni<DoStopRuntimeResponse> doStopRuntime(@Valid final DoStopRuntimeRequest request) {
+    public Uni<DoStopMatchmakingResponse> doStopRuntime(@Valid final DoStopMatchmakingRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::doStopRuntime,
-                doStopRuntimeMethod::doStopRuntime);
+                doStopMatchmakingMethod::doStopMatchmaking);
     }
 
     @Override

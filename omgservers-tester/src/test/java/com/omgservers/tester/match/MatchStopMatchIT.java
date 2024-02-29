@@ -43,7 +43,7 @@ public class MatchStopMatchIT extends Assertions {
                             if command.qualifier == "add_client" then
                                 return {
                                     {
-                                        qualifier = "stop",
+                                        qualifier = "stop_matchmaking",
                                         reason = "why not?"
                                     }
                                 }

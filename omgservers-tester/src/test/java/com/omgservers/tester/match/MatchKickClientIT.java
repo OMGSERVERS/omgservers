@@ -49,7 +49,7 @@ public class MatchKickClientIT extends Assertions {
                                 
                                 return {
                                     {
-                                        qualifier = "kick",
+                                        qualifier = "kick_client",
                                         client_id = command.message.client_id
                                     }
                                 }
@@ -58,7 +58,7 @@ public class MatchKickClientIT extends Assertions {
                             if command.qualifier == "delete_client" then
                                 return {
                                     {
-                                        qualifier = "broadcast",
+                                        qualifier = "broadcast_message",
                                         message = {
                                             text = "client_was_deleted"
                                         }

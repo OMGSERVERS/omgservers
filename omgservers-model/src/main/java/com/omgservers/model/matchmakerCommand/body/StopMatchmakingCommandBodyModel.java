@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class StopMatchMatchmakerCommandBodyModel extends MatchmakerCommandBodyModel {
+public class StopMatchmakingCommandBodyModel extends MatchmakerCommandBodyModel {
 
     @NotNull
     Long id;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {
-        return MatchmakerCommandQualifierEnum.STOP_MATCH;
+        return MatchmakerCommandQualifierEnum.STOP_MATCHMAKING;
     }
 }

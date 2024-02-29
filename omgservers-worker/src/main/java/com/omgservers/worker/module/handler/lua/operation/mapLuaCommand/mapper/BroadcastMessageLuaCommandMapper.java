@@ -2,7 +2,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.mapper;
 
 import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoKickCommandBodyModel;
+import com.omgservers.model.doCommand.body.DoBroadcastMessageCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
 import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
@@ -15,19 +15,19 @@ import org.luaj.vm2.LuaTable;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class KickLuaCommandMapper implements LuaCommandMapper {
+public class BroadcastMessageLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public LuaCommandQualifierEnum getQualifier() {
-        return LuaCommandQualifierEnum.KICK;
+        return LuaCommandQualifierEnum.BROADCAST_MESSAGE;
     }
 
     @Override
-    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
-        final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
+    public DoCommandModel map(final LuaContext luaContext, final LuaTable luaCommand) {
+        final var luaMessage = luaCommand.get("message").checktable();
 
-        final var doCommandBody = new DoKickCommandBodyModel(clientId);
-        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_KICK, doCommandBody);
+        final var doCommandBody = new DoBroadcastMessageCommandBodyModel(luaMessage);
+        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_BROADCAST_MESSAGE, doCommandBody);
         return doCommandModel;
     }
 }

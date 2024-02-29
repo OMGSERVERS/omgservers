@@ -54,7 +54,7 @@ public class LobbySetGetAttributesIT extends Assertions {
                                             }
                                         },
                                         {
-                                            qualifier = "respond",
+                                            qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
                                                 text = "attributes_was_init"
@@ -70,7 +70,7 @@ public class LobbySetGetAttributesIT extends Assertions {
                                     
                                     return {
                                         {
-                                            qualifier = "respond",
+                                            qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
                                                 text = "attributes_was_checked"

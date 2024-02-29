@@ -2,15 +2,15 @@ package com.omgservers.model.luaCommand;
 
 public enum LuaCommandQualifierEnum {
 
-    RESPOND("respond"),
-    MULTICAST("multicast"),
-    BROADCAST("broadcast"),
+    RESPOND_CLIENT("respond_client"),
+    MULTICAST_MESSAGE("multicast_message"),
+    BROADCAST_MESSAGE("broadcast_message"),
 
     SET_ATTRIBUTES("set_attributes"),
     SET_PROFILE("set_profile"),
 
-    KICK("kick"),
-    STOP("stop");
+    KICK_CLIENT("kick_client"),
+    STOP_MATCHMAKING("stop_matchmaking");
 
     final String qualifier;
 

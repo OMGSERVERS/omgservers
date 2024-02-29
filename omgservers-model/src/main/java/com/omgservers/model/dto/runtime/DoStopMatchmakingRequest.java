@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoStopRuntimeRequest implements ShardedRequest {
+public class DoStopMatchmakingRequest implements ShardedRequest {
 
     @NotNull
     Long runtimeId;

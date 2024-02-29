@@ -55,7 +55,7 @@ public class MatchMulticastMessageIT extends Assertions {
                                 assert(message.text == "multicast_request", "message.text is wrong")
                                 return {
                                     {
-                                        qualifier = "multicast",
+                                        qualifier = "multicast_message",
                                         clients = self.clients,
                                         message = {
                                             text = "hello_client_1_and_client_2"

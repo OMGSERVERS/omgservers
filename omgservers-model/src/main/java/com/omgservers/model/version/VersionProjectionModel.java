@@ -1,4 +1,4 @@
-package com.omgservers.model.job;
+package com.omgservers.model.version;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,25 +10,22 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobModel {
+public class VersionProjectionModel {
 
     @NotNull
     Long id;
+
+    @NotNull
+    Long tenantId;
+
+    @NotNull
+    Long stageId;
 
     @NotNull
     Instant created;
 
     @NotNull
     Instant modified;
-
-    @NotNull
-    Long shardKey;
-
-    @NotNull
-    Long entityId;
-
-    @NotNull
-    JobQualifierEnum qualifier;
 
     @NotNull
     Boolean deleted;

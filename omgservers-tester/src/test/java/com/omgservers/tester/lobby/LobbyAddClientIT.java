@@ -37,7 +37,7 @@ public class LobbyAddClientIT extends Assertions {
                             if command.qualifier == "add_client" then
                                 return {
                                     {
-                                        qualifier = "respond",
+                                        qualifier = "respond_client",
                                         client_id = command.client_id,
                                         message = {
                                             text = "client_was_added"

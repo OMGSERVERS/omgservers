@@ -45,7 +45,7 @@ public class MatchAddClientIT extends Assertions {
                                 assert(command.group_name == "players", "command.group_name is wrong")
                                 return {
                                     {
-                                        qualifier = "respond",
+                                        qualifier = "respond_client",
                                         client_id = command.client_id,
                                         message = {
                                             text = "match_client_was_added"

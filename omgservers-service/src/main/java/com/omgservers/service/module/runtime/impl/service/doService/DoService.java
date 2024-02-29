@@ -12,8 +12,8 @@ import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
-import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingRequest;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -27,7 +27,7 @@ public interface DoService {
 
     Uni<DoKickClientResponse> doKickClient(@Valid DoKickClientRequest request);
 
-    Uni<DoStopRuntimeResponse> doStopRuntime(@Valid DoStopRuntimeRequest request);
+    Uni<DoStopMatchmakingResponse> doStopRuntime(@Valid DoStopMatchmakingRequest request);
 
     Uni<DoMulticastMessageResponse> doMulticastMessage(@Valid DoMulticastMessageRequest request);
 

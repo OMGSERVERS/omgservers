@@ -47,7 +47,7 @@ public class LobbyMultipleReassignmentIT extends Assertions {
                                 local var message = command.message
                                 return {
                                     {
-                                        qualifier = "kick",
+                                        qualifier = "kick_client",
                                         client_id = command.client_id
                                     }
                                 }

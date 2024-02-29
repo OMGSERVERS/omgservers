@@ -46,7 +46,7 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions 
 //        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1);
 //        final var runtimeCommand11 = runtimeCommandModelFactory.create(runtime1.getId(), new InitMatchCommandBodyModel());
 //        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand11);
-//        final var runtimeCommand12 = runtimeCommandModelFactory.create(runtime1.getId(), new StopMatchMatchmakerCommandBodyModel());
+//        final var runtimeCommand12 = runtimeCommandModelFactory.create(runtime1.getId(), new StopMatchmakingCommandBodyModel());
 //        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand12);
 //
 //        final var runtime21 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeQualifierEnum.SCRIPT, RuntimeClientConfigModel.create());

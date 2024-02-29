@@ -24,8 +24,8 @@ import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
 import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
 import com.omgservers.model.dto.runtime.DoSetProfileRequest;
 import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.model.dto.runtime.DoStopRuntimeRequest;
-import com.omgservers.model.dto.runtime.DoStopRuntimeResponse;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingRequest;
+import com.omgservers.model.dto.runtime.DoStopMatchmakingResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
@@ -147,7 +147,7 @@ public interface RuntimeApi {
 
     @PUT
     @Path("/do-stop-runtime")
-    Uni<DoStopRuntimeResponse> doStopRuntime(DoStopRuntimeRequest request);
+    Uni<DoStopMatchmakingResponse> doStopRuntime(DoStopMatchmakingRequest request);
 
     @PUT
     @Path("/do-multicast-message")

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DoStopRuntimeResponse {
+public class DoStopMatchmakingResponse {
 
     Boolean approved;
 }

@@ -42,7 +42,7 @@ public class LobbyHandleMessageIT extends Assertions {
                                 assert(message.text == "helloworld", "message.text is wrong")
                                 return {
                                     {
-                                        qualifier = "respond",
+                                        qualifier = "respond_client",
                                         client_id = command.client_id,
                                         message = {
                                             text = "message_was_handled"

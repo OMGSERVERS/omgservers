@@ -7,20 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class DoBroadcastCommandBodyModel extends DoCommandBodyModel {
+public class DoStopMatchmakingCommandBodyModel extends DoCommandBodyModel {
 
     @NotNull
-    @ToString.Exclude
-    Object message;
+    String reason;
 
     @Override
     public DoCommandQualifierEnum getQualifier() {
-        return DoCommandQualifierEnum.DO_BROADCAST;
+        return DoCommandQualifierEnum.DO_STOP_MATCHMAKING;
     }
 }

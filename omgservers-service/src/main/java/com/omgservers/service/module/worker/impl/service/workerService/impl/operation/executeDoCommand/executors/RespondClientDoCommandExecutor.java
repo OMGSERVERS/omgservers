@@ -2,7 +2,7 @@ package com.omgservers.service.module.worker.impl.service.workerService.impl.ope
 
 import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoRespondCommandBodyModel;
+import com.omgservers.model.doCommand.body.DoRespondClientCommandBodyModel;
 import com.omgservers.model.dto.runtime.DoRespondClientRequest;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.worker.impl.service.workerService.impl.operation.executeDoCommand.DoCommandExecutor;
@@ -15,18 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class RespondDoCommandExecutor implements DoCommandExecutor {
+public class RespondClientDoCommandExecutor implements DoCommandExecutor {
 
     final RuntimeModule runtimeModule;
 
     @Override
     public DoCommandQualifierEnum getQualifier() {
-        return DoCommandQualifierEnum.DO_RESPOND;
+        return DoCommandQualifierEnum.DO_RESPOND_CLIENT;
     }
 
     @Override
     public Uni<Void> execute(Long runtimeId, DoCommandModel doCommand) {
-        final var commandBody = (DoRespondCommandBodyModel) doCommand.getBody();
+        final var commandBody = (DoRespondClientCommandBodyModel) doCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var message = commandBody.getMessage();
 

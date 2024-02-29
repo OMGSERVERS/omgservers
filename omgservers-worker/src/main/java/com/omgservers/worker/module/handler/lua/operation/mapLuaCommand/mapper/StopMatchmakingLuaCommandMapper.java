@@ -2,7 +2,7 @@ package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.mapper;
 
 import com.omgservers.model.doCommand.DoCommandModel;
 import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoBroadcastCommandBodyModel;
+import com.omgservers.model.doCommand.body.DoStopMatchmakingCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
 import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
@@ -15,19 +15,19 @@ import org.luaj.vm2.LuaTable;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class BroadcastLuaCommandMapper implements LuaCommandMapper {
+public class StopMatchmakingLuaCommandMapper implements LuaCommandMapper {
 
     @Override
     public LuaCommandQualifierEnum getQualifier() {
-        return LuaCommandQualifierEnum.BROADCAST;
+        return LuaCommandQualifierEnum.STOP_MATCHMAKING;
     }
 
     @Override
-    public DoCommandModel map(final LuaContext luaContext, final LuaTable luaCommand) {
-        final var luaMessage = luaCommand.get("message").checktable();
+    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
+        final var reason = luaCommand.get("reason").checkjstring();
 
-        final var doCommandBody = new DoBroadcastCommandBodyModel(luaMessage);
-        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_BROADCAST, doCommandBody);
+        final var doCommandBody = new DoStopMatchmakingCommandBodyModel(reason);
+        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_STOP_MATCHMAKING, doCommandBody);
         return doCommandModel;
     }
 }

@@ -9,19 +9,19 @@
 
 ### Environment variables
 
-#### Mandatory variables
+#### Mandatory variables and their value templates
 
-- OMGSERVERS_DATASOURCE_URL
-- OMGSERVERS_DATASOURCE_USERNAME
-- OMGSERVERS_DATASOURCE_PASSWORD
-- OMGSERVERS_AMQP_HOST
-- OMGSERVERS_AMQP_PORT
-- OMGSERVERS_AMQP_USERNAME
-- OMGSERVERS_AMQP_PASSWORD
-- OMGSERVERS_EXTERNAL_URI
-- OMGSERVERS_INTERNAL_URI
-- OMGSERVERS_ADDRESSES
-- OMGSERVERS_WORKERS_NETWORK
+- OMGSERVERS_DATASOURCE_URL=postgresql://<db_hostname>:<db_port>/<db_name>
+- OMGSERVERS_DATASOURCE_USERNAME=<db_username>
+- OMGSERVERS_DATASOURCE_PASSWORD=<db_password>
+- OMGSERVERS_AMQP_HOST=<mq_host>
+- OMGSERVERS_AMQP_PORT=<mq_port>
+- OMGSERVERS_AMQP_USERNAME=<mq_username>
+- OMGSERVERS_AMQP_PASSWORD=<mq_password>
+- OMGSERVERS_EXTERNAL_URI=http://<external_hostname>:<external_port>
+- OMGSERVERS_INTERNAL_URI=http://<internal_hostname>:<internal_port>
+- OMGSERVERS_ADDRESSES=http://<address_1_hostname>:<address_1_port>,...,http://<address_N_hostname>:<address_N_port>
+- OMGSERVERS_WORKERS_NETWORK=<network_name>
 
 #### Optional variables and their default values
 
@@ -54,6 +54,24 @@
 config.json - game configuration
 lobby.lua - entrypoint and handler for lobby commands
 match.lua - entrypoint and handler for match commands
+```
+
+### Handler example (lobby.lua or match.lua)
+```
+    function handle_command(self, command)                                            
+        if command.qualifier == "handle_message" then
+            local var message = command.message            
+            return {
+                {
+                    qualifier = "respond_client",
+                    client_id = command.client_id,
+                    message = {
+                        text = "Hello world!"
+                    }
+                }
+            }
+        end
+    end
 ```
 
 ### Incoming commands
@@ -101,7 +119,7 @@ match.lua - entrypoint and handler for match commands
 
 ```
 {
-    qualifier = "respond",
+    qualifier = "respond_client",
     client_id = <client_id>,
     message = {}
 }
@@ -125,7 +143,7 @@ match.lua - entrypoint and handler for match commands
 
 ```
 {
-    qualifier = "multicast",
+    qualifier = "multicast_message",
     clients = {<client_1_id>, ..., <client_N_id> }
     message = {}
 }
@@ -133,26 +151,26 @@ match.lua - entrypoint and handler for match commands
 
 ```
 {
-    qualifier = "broadcast",
+    qualifier = "broadcast_message",
     message = {}
 }
 ```
 
 ```
 {
-    qualifier = "kick",   
+    qualifier = "kick_client",   
     client_id = <client_id>
 }
 ```
 
 ```
 {
-    qualifier = "stop",    
+    qualifier = "stop_matchmaking",    
     reason = "<reason>"    
 }
 ```
 
-### Config schema
+### Config schema (config.json)
 
 ```
 {

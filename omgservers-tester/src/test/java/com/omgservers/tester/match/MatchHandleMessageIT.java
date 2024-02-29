@@ -48,7 +48,7 @@ public class MatchHandleMessageIT extends Assertions {
                                 assert(message.text == "helloworld", "message.text is wrong")
                                 return {
                                     {
-                                        qualifier = "respond",
+                                        qualifier = "respond_client",
                                         client_id = command.client_id,
                                         message = {
                                             text = "match_message_was_handled"

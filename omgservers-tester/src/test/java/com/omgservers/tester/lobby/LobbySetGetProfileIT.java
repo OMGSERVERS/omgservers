@@ -54,7 +54,7 @@ public class LobbySetGetProfileIT extends Assertions {
                                             }
                                         },
                                         {
-                                            qualifier = "respond",
+                                            qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
                                                 text = "profile_was_init"
@@ -70,7 +70,7 @@ public class LobbySetGetProfileIT extends Assertions {
                                     
                                     return {
                                         {
-                                            qualifier = "respond",
+                                            qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
                                                 text = "profile_was_checked"

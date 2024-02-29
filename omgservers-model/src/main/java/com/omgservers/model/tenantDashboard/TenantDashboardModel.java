@@ -4,7 +4,7 @@ import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.model.versionProjection.VersionProjectionModel;
+import com.omgservers.model.version.VersionProjectionModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

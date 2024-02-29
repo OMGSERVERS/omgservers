@@ -48,7 +48,7 @@ public class MatchBroadcastMessageIT extends Assertions {
                                 assert(message.text == "broadcast_request", "message.text is wrong")
                                 return {
                                     {
-                                        qualifier = "broadcast",
+                                        qualifier = "broadcast_message",
                                         message = {
                                             text = "hello_all"
                                         }
