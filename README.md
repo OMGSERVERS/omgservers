@@ -56,23 +56,55 @@ lobby.lua - entrypoint and handler for lobby commands
 match.lua - entrypoint and handler for match commands
 ```
 
+### Config schema (config.json)
+
+```
+{
+  "modes": [
+    {
+      "name": "<mode_1_name>",
+      "minPlayers": <mode_1_min_players>,
+      "maxPlayers": <mode_1_max_players>,
+      "groups": [
+        {
+          "name": "<group_1_name>",
+          "minPlayers": <group_1_min_players>,
+          "maxPlayers": <group_1_max_players>
+        }
+        ...
+        {
+          "name": "<group_N_name>",
+          "minPlayers": <group_N_min_players>,
+          "maxPlayers": <group_N_max_players>
+        }
+      ]
+    },
+    ...
+    {
+        "name": "<mode_N_name>",
+        ...
+    }
+  ]
+}
+```
+
 ### Handler example (lobby.lua or match.lua)
 
 ```
-    function handle_command(self, command)                                            
-        if command.qualifier == "handle_message" then
-            local var message = command.message            
-            return {
-                {
-                    qualifier = "respond_client",
-                    client_id = command.client_id,
-                    message = {
-                        text = "Hello world!"
-                    }
+function handle_command(self, command)                                            
+    if command.qualifier == "handle_message" then
+        local var message = command.message            
+        return {
+            {
+                qualifier = "respond_client",
+                client_id = command.client_id,
+                message = {
+                    text = "Hello world!"
                 }
             }
-        end
+        }
     end
+end
 ```
 
 ### Incoming commands
@@ -168,38 +200,6 @@ match.lua - entrypoint and handler for match commands
 {
     qualifier = "stop_matchmaking",    
     reason = "<reason>"    
-}
-```
-
-### Config schema (config.json)
-
-```
-{
-  "modes": [
-    {
-      "name": "<mode_1_name>",
-      "minPlayers": <mode_1_min_players>,
-      "maxPlayers": <mode_1_max_players>,
-      "groups": [
-        {
-          "name": "<group_1_name>",
-          "minPlayers": <group_1_min_players>,
-          "maxPlayers": <group_1_max_players>
-        }
-        ...
-        {
-          "name": "<group_N_name>",
-          "minPlayers": <group_N_min_players>,
-          "maxPlayers": <group_N_max_players>
-        }
-      ]
-    },
-    ...
-    {
-        "name": "<mode_N_name>",
-        ...
-    }
-  ]
 }
 ```
 
