@@ -35,21 +35,15 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-1
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
+      - OMGSERVERS_MQ_HOST=mq-1
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_INSTANCE_ID=0
       - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   svc-1-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-1-b"
@@ -61,14 +55,9 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-1:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-1
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
+      - OMGSERVERS_MQ_HOST=mq-1
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -76,7 +65,6 @@ services:
       - OMGSERVERS_INSTANCE_ID=1
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=false
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   db-1:
     image: "postgres:15.1"
     container_name: "db-1"
@@ -115,21 +103,15 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-2
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
+      - OMGSERVERS_MQ_HOST=mq-2
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_INSTANCE_ID=2
       - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   svc-2-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-2-b"
@@ -141,14 +123,9 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-2:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-2
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
+      - OMGSERVERS_MQ_HOST=mq-2
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -156,7 +133,6 @@ services:
       - OMGSERVERS_INSTANCE_ID=3
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=false
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   db-2:
     image: "postgres:15.1"
     container_name: "db-2"
@@ -195,21 +171,15 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-3
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
+      - OMGSERVERS_MQ_HOST=mq-3
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
       - OMGSERVERS_DATACENTER_ID=0
       - OMGSERVERS_INSTANCE_ID=4
       - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   svc-3-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-3-b"
@@ -221,14 +191,9 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db-3:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq-3
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
+      - OMGSERVERS_MQ_HOST=mq-3
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
       - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
@@ -236,7 +201,6 @@ services:
       - OMGSERVERS_INSTANCE_ID=5
       - OMGSERVERS_SHARD_COUNT=3
       - OMGSERVERS_BOOTSTRAP_SERVICE=false
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   db-3:
     image: "postgres:15.1"
     container_name: "db-3"

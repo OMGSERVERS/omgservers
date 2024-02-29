@@ -22,18 +22,12 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
-      - OMGSERVERS_DATASOURCE_URL=postgresql://db:5432/root
-      - OMGSERVERS_DATASOURCE_USERNAME=root
-      - OMGSERVERS_DATASOURCE_PASSWORD=root
-      - OMGSERVERS_AMQP_HOST=mq
-      - OMGSERVERS_AMQP_PORT=5672
-      - OMGSERVERS_AMQP_USERNAME=admin
-      - OMGSERVERS_AMQP_PASSWORD=admin
+      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_DB_URL=postgresql://db:5432/root
+      - OMGSERVERS_MQ_HOST=mq
       - OMGSERVERS_EXTERNAL_URI=http://svc:8080
       - OMGSERVERS_INTERNAL_URI=http://svc:8080
       - OMGSERVERS_ADDRESSES=http://svc:8080
-      - OMGSERVERS_WORKERS_NETWORK=omgservers
   db:
     image: "postgres:15.1"
     container_name: "db"

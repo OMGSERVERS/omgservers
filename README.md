@@ -11,26 +11,25 @@
 
 #### Mandatory variables and their value templates
 
-- OMGSERVERS_DATASOURCE_URL=postgresql://<db_hostname>:<db_port>/<db_name>
-- OMGSERVERS_DATASOURCE_USERNAME=<db_username>
-- OMGSERVERS_DATASOURCE_PASSWORD=<db_password>
-- OMGSERVERS_AMQP_HOST=<mq_host>
-- OMGSERVERS_AMQP_PORT=<mq_port>
-- OMGSERVERS_AMQP_USERNAME=<mq_username>
-- OMGSERVERS_AMQP_PASSWORD=<mq_password>
+- OMGSERVERS_DB_URL=postgresql://<db_hostname>:<db_port>/<db_name>
+- OMGSERVERS_MQ_HOST=<mq_host>
 - OMGSERVERS_EXTERNAL_URI=http://<external_hostname>:<external_port>
 - OMGSERVERS_INTERNAL_URI=http://<internal_hostname>:<internal_port>
 - OMGSERVERS_ADDRESSES=http://<address_1_hostname>:<address_1_port>,...,http://<address_N_hostname>:<address_N_port>
-- OMGSERVERS_WORKERS_NETWORK=<network_name>
 
 #### Optional variables and their default values
 
+- OMGSERVERS_DB_USERNAME=root
+- OMGSERVERS_DB_PASSWORD=root
+- OMGSERVERS_MQ_PORT=5672
+- OMGSERVERS_MQ_USERNAME=admin
+- OMGSERVERS_MQ_PASSWORD=admin
+- OMGSERVERS_MQ_QUEUE=OmgserversEvents
 - OMGSERVERS_ROOT_LOG_LEVEL=INFO
 - OMGSERVERS_APP_LOG_LEVEL=INFO
 - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO
 - OMGSERVERS_CONSOLE_LOG_ENABLED=true
 - OMGSERVERS_ACCESS_LOG_ENABLED=false
-- OMGSERVERS_SCHEDULER_ENABLED=true
 - OMGSERVERS_INDEX_NAME=main
 - OMGSERVERS_MIGRATION_CONCURRENCY=16
 - OMGSERVERS_DISABLE_MIGRATION=false
@@ -47,6 +46,7 @@
 - OMGSERVERS_INACTIVE_INTERVAL=30
 - OMGSERVERS_DISABLE_DOCKER=false
 - OMGSERVERS_DOCKER_HOST=tcp://docker:2375
+- OMGSERVERS_WORKERS_NETWORK=omgservers
 
 ### Game project structure
 
@@ -57,6 +57,7 @@ match.lua - entrypoint and handler for match commands
 ```
 
 ### Handler example (lobby.lua or match.lua)
+
 ```
     function handle_command(self, command)                                            
         if command.qualifier == "handle_message" then
