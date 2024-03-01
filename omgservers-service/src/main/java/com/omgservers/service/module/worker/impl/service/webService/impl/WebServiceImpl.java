@@ -2,12 +2,10 @@ package com.omgservers.service.module.worker.impl.service.webService.impl;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
-import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
+import com.omgservers.model.dto.worker.InterchangeWorkerRequest;
+import com.omgservers.model.dto.worker.InterchangeWorkerResponse;
 import com.omgservers.service.module.worker.impl.service.webService.WebService;
 import com.omgservers.service.module.worker.impl.service.workerService.WorkerService;
 import io.smallrye.mutiny.Uni;
@@ -34,12 +32,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetWorkerContextWorkerResponse> getWorkerContext(final GetWorkerContextWorkerRequest request) {
-        return workerService.getWorkerContext(request);
-    }
-
-    @Override
-    public Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(final DoWorkerCommandsWorkerRequest request) {
-        return workerService.doWorkerCommands(request);
+    public Uni<InterchangeWorkerResponse> interchange(final InterchangeWorkerRequest request) {
+        return workerService.interchange(request);
     }
 }

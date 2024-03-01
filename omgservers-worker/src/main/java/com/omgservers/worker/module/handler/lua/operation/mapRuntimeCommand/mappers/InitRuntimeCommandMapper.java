@@ -3,7 +3,6 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.impl.InitRuntimeLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
@@ -25,7 +24,7 @@ public class InitRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public InitRuntimeLuaCommand map(LuaContext luaContext, final RuntimeCommandModel runtimeCommand) {
+    public InitRuntimeLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (InitRuntimeCommandBodyModel) runtimeCommand.getBody();
         final var luaConfig = coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getConfig());
         return new InitRuntimeLuaCommand(luaConfig);

@@ -1,19 +1,16 @@
 package com.omgservers.worker.module.handler.lua;
 
-import com.omgservers.model.doCommand.DoCommandModel;
-import com.omgservers.model.workerContext.WorkerContextModel;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.worker.module.handler.HandlerModule;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.LuaCommand;
-import com.omgservers.worker.module.handler.lua.component.luaCommand.impl.UpdateRuntimeLuaCommand;
 import com.omgservers.worker.module.handler.lua.component.luaInstance.LuaInstance;
-import com.omgservers.worker.module.handler.lua.operation.createLuaContext.CreateLuaContextOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.MapLuaCommandOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.MapRuntimeCommandOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,44 +18,34 @@ import java.util.List;
 public class LuaHandlerModuleImpl implements HandlerModule {
 
     final MapRuntimeCommandOperation mapRuntimeCommandOperation;
-    final CreateLuaContextOperation createLuaContextOperation;
     final MapLuaCommandOperation mapLuaCommandOperation;
 
     final LuaInstance luaInstance;
 
     public LuaHandlerModuleImpl(final MapRuntimeCommandOperation mapRuntimeCommandOperation,
-                                final CreateLuaContextOperation createLuaContextOperation,
                                 final MapLuaCommandOperation mapLuaCommandOperation,
                                 final LuaInstance luaInstance) {
         this.mapRuntimeCommandOperation = mapRuntimeCommandOperation;
-        this.createLuaContextOperation = createLuaContextOperation;
         this.mapLuaCommandOperation = mapLuaCommandOperation;
         this.luaInstance = luaInstance;
     }
 
     @Override
-    public List<DoCommandModel> handleCommands(final WorkerContextModel workerContext) {
-        final var luaContext = createLuaContextOperation.createLuaContext(workerContext);
-
-        final var runtimeCommands = workerContext.getRuntimeCommands();
+    public List<OutgoingCommandModel> handleCommands(List<RuntimeCommandModel> incomingCommands) {
         final var luaCommands = new ArrayList<LuaCommand>();
-        runtimeCommands.forEach(runtimeCommand -> {
+        incomingCommands.forEach(incomingCommand -> {
             try {
-                final var luaCommand = mapRuntimeCommandOperation.mapRuntimeCommand(luaContext, runtimeCommand);
+                final var luaCommand = mapRuntimeCommandOperation.mapRuntimeCommand(incomingCommand);
                 luaCommands.add(luaCommand);
             } catch (Exception e) {
                 log.warn("Map runtime command failed, qualifier={}, {}:{}",
-                        runtimeCommand.getQualifier(),
+                        incomingCommand.getQualifier(),
                         e.getClass().getSimpleName(),
                         e.getMessage());
             }
         });
 
-        // Add update command automatically
-        final var updateRuntimeLuaRequest = new UpdateRuntimeLuaCommand(Instant.now().toEpochMilli());
-        luaCommands.add(updateRuntimeLuaRequest);
-
-        final var doCommands = new ArrayList<DoCommandModel>();
+        final var outgoingCommands = new ArrayList<OutgoingCommandModel>();
         for (final var luaCommand : luaCommands) {
             if (luaCommand.getInfoLogging()) {
                 log.info("Handle, {}", luaCommand);
@@ -68,18 +55,18 @@ public class LuaHandlerModuleImpl implements HandlerModule {
             if (returnValue != LuaValue.NIL) {
                 final var returnTable = returnValue.checktable();
                 final var resultCommands = parseReturnValue(returnTable);
-                doCommands.addAll(resultCommands.stream()
-                        .map(resultCommand -> mapLuaCommandOperation.mapLuaCommand(luaContext, resultCommand))
-                        .peek(doCommand -> {
-                            if (doCommand.getQualifier().getInfoLogging()) {
-                                log.info("Produce, {}", doCommand.getBody());
+                outgoingCommands.addAll(resultCommands.stream()
+                        .map(mapLuaCommandOperation::mapLuaCommand)
+                        .peek(outgoingCommand -> {
+                            if (outgoingCommand.getQualifier().getInfoLogging()) {
+                                log.info("Produce, {}", outgoingCommand.getBody());
                             }
                         })
                         .toList());
             }
         }
 
-        return doCommands;
+        return outgoingCommands;
     }
 
     List<LuaTable> parseReturnValue(LuaTable returnValue) {

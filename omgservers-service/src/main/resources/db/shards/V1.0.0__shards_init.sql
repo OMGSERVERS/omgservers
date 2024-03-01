@@ -319,6 +319,8 @@ create table if not exists tab_runtime (
     tenant_id bigint not null,
     version_id bigint not null,
     qualifier text not null,
+    user_id bigint not null,
+    last_activity timestamp with time zone not null,
     config json not null,
     deleted boolean not null
 );

@@ -1,6 +1,6 @@
 package com.omgservers.model.runtimeChangeOfContext;
 
-import com.omgservers.model.doCommand.DoCommandModel;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.player.PlayerModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class RuntimeChangeOfContext {
     List<Long> handledRuntimeCommandIds;
 
     @NotNull
-    List<DoCommandModel> producedDoCommands;
+    List<OutgoingCommandModel> producedDoCommands;
 
     @NotNull
     List<PlayerModel> updatedPlayers;

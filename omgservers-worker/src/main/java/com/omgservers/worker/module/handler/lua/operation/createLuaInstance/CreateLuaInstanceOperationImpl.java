@@ -45,7 +45,7 @@ class CreateLuaInstanceOperationImpl implements CreateLuaInstanceOperation {
         globals.finder = new LuaResourceFinder(decodedFiles);
         globals.set("print", new LuaPrintFunction(globals));
         // TODO: determine filename
-        final var runtimeQualifier = getConfigOperation.getConfig().runtimeQualifier();
+        final var runtimeQualifier = getConfigOperation.getWorkerConfig().runtimeQualifier();
         final var luaInstance = switch (runtimeQualifier) {
             case LOBBY -> new LuaInstance(globals, "lobby.lua");
             case MATCH -> new LuaInstance(globals, "match.lua");

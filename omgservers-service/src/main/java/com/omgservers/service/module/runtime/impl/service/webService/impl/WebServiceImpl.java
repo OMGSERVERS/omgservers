@@ -12,20 +12,6 @@ import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.DoBroadcastMessageRequest;
-import com.omgservers.model.dto.runtime.DoBroadcastMessageResponse;
-import com.omgservers.model.dto.runtime.DoKickClientRequest;
-import com.omgservers.model.dto.runtime.DoKickClientResponse;
-import com.omgservers.model.dto.runtime.DoMulticastMessageRequest;
-import com.omgservers.model.dto.runtime.DoMulticastMessageResponse;
-import com.omgservers.model.dto.runtime.DoRespondClientRequest;
-import com.omgservers.model.dto.runtime.DoRespondClientResponse;
-import com.omgservers.model.dto.runtime.DoSetAttributesRequest;
-import com.omgservers.model.dto.runtime.DoSetAttributesResponse;
-import com.omgservers.model.dto.runtime.DoSetProfileRequest;
-import com.omgservers.model.dto.runtime.DoSetProfileResponse;
-import com.omgservers.model.dto.runtime.DoStopMatchmakingRequest;
-import com.omgservers.model.dto.runtime.DoStopMatchmakingResponse;
 import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
@@ -34,6 +20,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.InterchangeRequest;
+import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -50,7 +38,6 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.service.module.runtime.impl.service.doService.DoService;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -65,7 +52,6 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final RuntimeService runtimeService;
-    final DoService doService;
 
     @Override
     public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
@@ -158,37 +144,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<DoRespondClientResponse> doRespondClient(final DoRespondClientRequest request) {
-        return doService.doRespondClient(request);
-    }
-
-    @Override
-    public Uni<DoSetAttributesResponse> doSetAttributes(final DoSetAttributesRequest request) {
-        return doService.doSetAttributes(request);
-    }
-
-    @Override
-    public Uni<DoSetProfileResponse> doSetProfile(final DoSetProfileRequest request) {
-        return doService.doSetProfile(request);
-    }
-
-    @Override
-    public Uni<DoKickClientResponse> doKickClient(final DoKickClientRequest request) {
-        return doService.doKickClient(request);
-    }
-
-    @Override
-    public Uni<DoStopMatchmakingResponse> doStopRuntime(final DoStopMatchmakingRequest request) {
-        return doService.doStopRuntime(request);
-    }
-
-    @Override
-    public Uni<DoMulticastMessageResponse> doMulticastMessage(final DoMulticastMessageRequest request) {
-        return doService.doMulticastMessage(request);
-    }
-
-    @Override
-    public Uni<DoBroadcastMessageResponse> doBroadcastMessage(final DoBroadcastMessageRequest request) {
-        return doService.doBroadcastMessage(request);
+    public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
+        return runtimeService.interchange(request);
     }
 }

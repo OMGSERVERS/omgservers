@@ -7,6 +7,7 @@ import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.body.InactiveClientDetectedEventBodyModel;
+import com.omgservers.model.event.body.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.factory.EventModelFactory;
@@ -54,8 +55,32 @@ public class RuntimeJobTaskImpl {
     }
 
     Uni<Void> handleRuntime(final RuntimeModel runtime) {
-        final var runtimeId = runtime.getId();
+        return checkRuntimeInactivity(runtime)
+                .flatMap(voidItem -> detectInactiveClients(runtime));
+    }
 
+    Uni<Void> checkRuntimeInactivity(final RuntimeModel runtime) {
+        final var inactiveInterval = getConfigOperation.getServiceConfig().workersInactiveInterval();
+        final var now = Instant.now();
+        if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
+            return syncInactiveRuntimeDetectedEvent(runtime.getId())
+                    .replaceWithVoid();
+        } else {
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Boolean> syncInactiveRuntimeDetectedEvent(final Long runtimeId) {
+        final var eventBody = new InactiveRuntimeDetectedEventBodyModel(runtimeId);
+        final var eventModel = eventModelFactory.create(eventBody);
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
+    }
+
+    Uni<Void> detectInactiveClients(final RuntimeModel runtime) {
+        final var runtimeId = runtime.getId();
         return viewRuntimeClients(runtimeId)
                 .map(this::filterInactiveClients)
                 .flatMap(inactiveClients -> Multi.createFrom().iterable(inactiveClients)
@@ -71,7 +96,7 @@ public class RuntimeJobTaskImpl {
     }
 
     List<RuntimeClientModel> filterInactiveClients(List<RuntimeClientModel> runtimeClients) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().inactiveInterval();
+        final var inactiveInterval = getConfigOperation.getServiceConfig().clientInactiveInterval();
         final var now = Instant.now();
 
         return runtimeClients.stream()

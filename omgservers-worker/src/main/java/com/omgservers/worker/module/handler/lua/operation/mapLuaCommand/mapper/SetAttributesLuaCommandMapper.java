@@ -1,12 +1,11 @@
 package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.mapper;
 
-import com.omgservers.model.doCommand.DoCommandModel;
-import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoSetAttributesCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
 import com.omgservers.model.player.PlayerAttributeModel;
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,17 +27,15 @@ public class SetAttributesLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
+    public OutgoingCommandModel map(LuaTable luaCommand) {
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
-
         final var luaAttributes = luaCommand.get("attributes").checktable();
-        luaContext.updateAttributes(clientId, luaAttributes);
-
         final var attributes = parseAttributes(luaAttributes);
 
-        final var doCommandBody = new DoSetAttributesCommandBodyModel(clientId, attributes);
-        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_SET_ATTRIBUTES, doCommandBody);
-        return doCommandModel;
+        final var outgoingCommandBody = new SetAttributesOutgoingCommandBodyModel(clientId, attributes);
+        final var outgoingCommand = new OutgoingCommandModel(OutgoingCommandQualifierEnum.SET_ATTRIBUTES,
+                outgoingCommandBody);
+        return outgoingCommand;
     }
 
     PlayerAttributesModel parseAttributes(LuaTable luaAttributes) {

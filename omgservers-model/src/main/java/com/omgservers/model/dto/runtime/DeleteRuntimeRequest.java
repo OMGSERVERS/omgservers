@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteRuntimeRequest implements ShardedRequest {
 
-
     @NotNull
     Long id;
 

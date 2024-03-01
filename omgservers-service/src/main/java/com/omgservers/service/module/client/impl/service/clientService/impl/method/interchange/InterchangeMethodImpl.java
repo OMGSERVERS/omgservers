@@ -70,7 +70,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 return handleMessages(clientId, request.getOutgoingMessages())
                                         .flatMap(voidItem -> receiveMessages(shard, clientId, consumedMessages));
                             } else {
-                                throw new ServerSideBadRequestException("wrong clientId, " + clientId);
+                                throw new ServerSideBadRequestException("wrong clientId, clientId=" + clientId);
                             }
                         })
                         .map(InterchangeResponse::new)

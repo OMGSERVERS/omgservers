@@ -35,15 +35,17 @@ public interface ServiceConfig {
 
     boolean disableMigration();
 
-    long tokenLifetime();
+    long clientTokenLifetime();
 
-    long inactiveInterval();
+    long clientInactiveInterval();
 
     boolean disableRelayJob();
 
-    String workersImage();
+    long workersInactiveInterval();
 
-    String workersNetwork();
+    String workersDockerImage();
+
+    String workersDockerNetwork();
 
     boolean disableDocker();
 

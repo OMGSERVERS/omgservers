@@ -11,7 +11,7 @@ class GetConfigOperationImpl implements GetConfigOperation {
 
     final WorkerConfig workerConfig;
 
-    public WorkerConfig getConfig() {
+    public WorkerConfig getWorkerConfig() {
         return workerConfig;
     }
 }

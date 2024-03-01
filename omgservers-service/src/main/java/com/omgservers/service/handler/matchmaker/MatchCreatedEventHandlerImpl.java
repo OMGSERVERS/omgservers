@@ -100,6 +100,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 tenantId,
                 versionId,
                 RuntimeQualifierEnum.MATCH,
+                generateIdOperation.generateId(),
                 runtimeConfig);
         return syncRuntime(runtime);
     }

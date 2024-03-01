@@ -31,6 +31,12 @@ public class RuntimeModel {
     RuntimeQualifierEnum qualifier;
 
     @NotNull
+    Long userId;
+
+    @NotNull
+    Instant lastActivity;
+
+    @NotNull
     RuntimeConfigModel config;
 
     @NotNull

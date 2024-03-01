@@ -20,6 +20,8 @@ import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.model.dto.runtime.InterchangeRequest;
+import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
@@ -49,6 +51,7 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimePermission.FindRuntimePermissionMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntime.GetRuntimeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntimeClient.GetRuntimeClientMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.interchange.InterchangeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncClientCommand.SyncClientCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeClient.SyncRuntimeClientMethod;
@@ -87,6 +90,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     final GetRuntimeClientMethod getRuntimeClientMethod;
     final DeleteRuntimeMethod deleteRuntimeMethod;
     final SyncRuntimeMethod syncRuntimeMethod;
+    final InterchangeMethod interchangeMethod;
     final GetRuntimeMethod getRuntimeMethod;
 
     final GetRuntimeModuleClientOperation getRuntimeModuleClientOperation;
@@ -236,5 +240,13 @@ public class RuntimeServiceImpl implements RuntimeService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimeClient,
                 deleteRuntimeClientMethod::deleteRuntimeClient);
+    }
+
+    @Override
+    public Uni<InterchangeResponse> interchange(@Valid final InterchangeRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::interchange,
+                interchangeMethod::interchange);
     }
 }

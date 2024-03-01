@@ -9,7 +9,7 @@ public class ServiceModule {
 
     final WorkerService workerService;
 
-    public ServiceModule(@RestClient WorkerService workerService) {
+    public ServiceModule(@RestClient final WorkerService workerService) {
         this.workerService = workerService;
     }
 

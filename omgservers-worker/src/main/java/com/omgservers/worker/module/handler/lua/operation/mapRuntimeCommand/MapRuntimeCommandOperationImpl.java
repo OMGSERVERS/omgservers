@@ -3,7 +3,6 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.LuaCommand;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +27,7 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
     }
 
     @Override
-    public LuaCommand mapRuntimeCommand(final LuaContext luaContext,
-                                        final RuntimeCommandModel runtimeCommand) {
+    public LuaCommand mapRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var qualifier = runtimeCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
 
@@ -44,6 +42,6 @@ class MapRuntimeCommandOperationImpl implements MapRuntimeCommandOperation {
         }
 
         final var mapper = runtimeCommandMappers.get(qualifier);
-        return mapper.map(luaContext, runtimeCommand);
+        return mapper.map(runtimeCommand);
     }
 }

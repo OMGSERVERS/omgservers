@@ -3,13 +3,14 @@ package com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.map
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.impl.UpdateRuntimeLuaCommand;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Instant;
 
 @Slf4j
 @ApplicationScoped
@@ -22,8 +23,8 @@ public class UpdateRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public UpdateRuntimeLuaCommand map(LuaContext luaContext, RuntimeCommandModel runtimeCommand) {
+    public UpdateRuntimeLuaCommand map(RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (UpdateRuntimeCommandBodyModel) runtimeCommand.getBody();
-        return new UpdateRuntimeLuaCommand(runtimeCommandBody.getTime());
+        return new UpdateRuntimeLuaCommand(Instant.now().toEpochMilli());
     }
 }

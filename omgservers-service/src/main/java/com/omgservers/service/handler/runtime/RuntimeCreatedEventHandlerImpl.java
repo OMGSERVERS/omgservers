@@ -9,8 +9,6 @@ import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.system.SyncContainerRequest;
 import com.omgservers.model.dto.system.SyncContainerResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
@@ -22,8 +20,6 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -88,9 +84,13 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    return requestJobExecution(runtimeId)
-                            .flatMap(created -> createContainer(runtime))
-                            .flatMap(created -> syncRuntimeRef(runtime));
+                    final var userId = runtime.getUserId();
+                    // TODO: improve it
+                    final var password = String.valueOf(new SecureRandom().nextLong());
+                    return createUser(userId, password)
+                            .flatMap(user -> syncContainer(user, password, runtime))
+                            .flatMap(created -> syncRuntimeRef(runtime))
+                            .flatMap(created -> requestJobExecution(runtimeId));
                 })
                 .replaceWithVoid();
     }
@@ -101,59 +101,24 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> requestJobExecution(final Long runtimeId) {
-        final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
-        final var eventModel = eventModelFactory.create(eventBody);
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
-    }
-
-    Uni<Void> createContainer(final RuntimeModel runtime) {
-        // TODO: improve it
-        final var password = String.valueOf(new SecureRandom().nextLong());
-        return createUser(password)
-                .flatMap(user -> {
-                    final var runtimeId = runtime.getId();
-                    final var userId = user.getId();
-                    return createRuntimePermission(runtimeId, userId)
-                            .flatMap(wasRuntimePermissionCreated -> syncContainer(userId, password, runtime)
-                                    .replaceWithVoid());
-                });
-    }
-
-    Uni<UserModel> createUser(final String password) {
+    Uni<UserModel> createUser(final Long id, final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.WORKER, passwordHash);
+        final var user = userModelFactory.create(id, UserRoleEnum.WORKER, passwordHash);
         final var request = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(request)
                 .map(SyncUserResponse::getCreated)
                 .replaceWith(user);
     }
 
-    Uni<Boolean> createRuntimePermission(final Long runtimeId, final Long userId) {
-        final var runtimePermission = runtimePermissionModelFactory.create(runtimeId,
-                userId,
-                RuntimePermissionEnum.HANDLE_RUNTIME);
-        return syncRuntimePermission(runtimePermission);
-    }
-
-    Uni<Boolean> syncRuntimePermission(final RuntimePermissionModel runtimePermission) {
-        final var request = new SyncRuntimePermissionRequest(runtimePermission);
-        return runtimeModule.getRuntimeService().syncRuntimePermission(request)
-                .map(SyncRuntimePermissionResponse::getCreated);
-    }
-
-    Uni<Boolean> syncContainer(final Long userId,
+    Uni<Boolean> syncContainer(final UserModel user,
                                final String password,
                                final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
-        final var workerImage = getConfigOperation.getServiceConfig().workersImage();
+        final var workerImage = getConfigOperation.getServiceConfig().workersDockerImage();
         final var internalUri = getConfigOperation.getServiceConfig().internalUri();
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_URL", internalUri.toString());
-        environment.put("OMGSERVERS_USER_ID", userId.toString());
+        environment.put("OMGSERVERS_USER_ID", user.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
@@ -195,5 +160,14 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         .recoverWithItem(Boolean.FALSE);
             }
         };
+    }
+
+    Uni<Boolean> requestJobExecution(final Long runtimeId) {
+        final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
+        final var eventModel = eventModelFactory.create(eventBody);
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }

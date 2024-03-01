@@ -1,5 +1,6 @@
 package com.omgservers.model.runtimeCommand.body;
 
+import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,12 @@ public class AddClientRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
     Long clientId;
+
+    @NotNull
+    PlayerAttributesModel attributes;
+
+    @NotNull
+    Object profile;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {

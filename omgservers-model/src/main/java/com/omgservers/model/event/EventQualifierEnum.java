@@ -8,6 +8,7 @@ import com.omgservers.model.event.body.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
 import com.omgservers.model.event.body.InactiveClientDetectedEventBodyModel;
+import com.omgservers.model.event.body.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
 import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
@@ -119,6 +120,7 @@ public enum EventQualifierEnum {
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class),
     // Internal
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class),
+    INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class),
     // Job
     STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class),
     MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED(MatchmakerJobTaskExecutionRequestedEventBodyModel.class),

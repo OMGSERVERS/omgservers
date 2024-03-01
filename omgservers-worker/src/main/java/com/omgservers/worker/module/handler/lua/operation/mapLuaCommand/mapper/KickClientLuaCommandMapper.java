@@ -1,10 +1,9 @@
 package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.mapper;
 
-import com.omgservers.model.doCommand.DoCommandModel;
-import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoKickClientCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.model.outgoingCommand.body.KickClientOutgoingCommandBodyModel;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,11 +22,12 @@ public class KickClientLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
+    public OutgoingCommandModel map(final LuaTable luaCommand) {
         final var clientId = Long.valueOf(luaCommand.get("client_id").checkjstring());
 
-        final var doCommandBody = new DoKickClientCommandBodyModel(clientId);
-        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_KICK_CLIENT, doCommandBody);
-        return doCommandModel;
+        final var outgoingCommandBody = new KickClientOutgoingCommandBodyModel(clientId);
+        final var outgoingCommandModel = new OutgoingCommandModel(OutgoingCommandQualifierEnum.KICK_CLIENT,
+                outgoingCommandBody);
+        return outgoingCommandModel;
     }
 }

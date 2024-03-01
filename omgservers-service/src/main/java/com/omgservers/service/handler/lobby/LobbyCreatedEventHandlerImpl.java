@@ -18,6 +18,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,6 +33,8 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
     final LobbyModule lobbyModule;
+
+    final GenerateIdOperation generateIdOperation;
 
     final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
@@ -78,6 +81,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 tenantId,
                 versionId,
                 RuntimeQualifierEnum.LOBBY,
+                generateIdOperation.generateId(),
                 runtimeConfig);
 
         final var request = new SyncRuntimeRequest(runtime);

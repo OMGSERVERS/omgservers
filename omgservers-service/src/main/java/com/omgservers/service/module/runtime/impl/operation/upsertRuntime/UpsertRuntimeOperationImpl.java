@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.impl.operation.upsertRuntime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -36,8 +36,8 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime(
-                            id, created, modified, tenant_id, version_id, qualifier, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, created, modified, tenant_id, version_id, qualifier, user_id, last_activity, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -48,6 +48,8 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getTenantId(),
                         runtime.getVersionId(),
                         runtime.getQualifier(),
+                        runtime.getUserId(),
+                        runtime.getLastActivity().atOffset(ZoneOffset.UTC),
                         getConfigString(runtime),
                         runtime.getDeleted()
                 ),

@@ -40,8 +40,7 @@ class DeleteRuntimeCommandByIdsOperationImpl implements DeleteRuntimeCommandById
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Runtime commands were deleted, " +
-                        "runtimeId=%d, ids=%s", runtimeId, ids))
+                () -> null
         );
     }
 }

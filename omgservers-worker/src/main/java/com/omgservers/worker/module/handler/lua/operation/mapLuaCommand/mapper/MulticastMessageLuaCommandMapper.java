@@ -1,10 +1,9 @@
 package com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.mapper;
 
-import com.omgservers.model.doCommand.DoCommandModel;
-import com.omgservers.model.doCommand.DoCommandQualifierEnum;
-import com.omgservers.model.doCommand.body.DoMulticastMessageCommandBodyModel;
 import com.omgservers.model.luaCommand.LuaCommandQualifierEnum;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
 import com.omgservers.worker.module.handler.lua.operation.mapLuaCommand.LuaCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +24,7 @@ public class MulticastMessageLuaCommandMapper implements LuaCommandMapper {
     }
 
     @Override
-    public DoCommandModel map(final LuaContext luaContext, LuaTable luaCommand) {
+    public OutgoingCommandModel map(final LuaTable luaCommand) {
         final var luaClients = luaCommand.get("clients").checktable();
         final var clients = new ArrayList<Long>();
         for (int i = 1; i <= luaClients.length(); i++) {
@@ -33,8 +32,9 @@ public class MulticastMessageLuaCommandMapper implements LuaCommandMapper {
         }
         final var luaMessage = luaCommand.get("message").checktable();
 
-        final var doCommandBody = new DoMulticastMessageCommandBodyModel(clients, luaMessage);
-        final var doCommandModel = new DoCommandModel(DoCommandQualifierEnum.DO_MULTICAST_MESSAGE, doCommandBody);
-        return doCommandModel;
+        final var outgoingCommandBody = new MulticastMessageOutgoingCommandBodyModel(clients, luaMessage);
+        final var outgoingCommandModel = new OutgoingCommandModel(OutgoingCommandQualifierEnum.MULTICAST_MESSAGE,
+                outgoingCommandBody);
+        return outgoingCommandModel;
     }
 }

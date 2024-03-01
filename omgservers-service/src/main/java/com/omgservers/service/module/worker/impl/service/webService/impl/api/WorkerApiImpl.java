@@ -2,12 +2,10 @@ package com.omgservers.service.module.worker.impl.service.webService.impl.api;
 
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerRequest;
-import com.omgservers.model.dto.worker.DoWorkerCommandsWorkerResponse;
 import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.GetWorkerContextWorkerRequest;
-import com.omgservers.model.dto.worker.GetWorkerContextWorkerResponse;
+import com.omgservers.model.dto.worker.InterchangeWorkerRequest;
+import com.omgservers.model.dto.worker.InterchangeWorkerResponse;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.module.worker.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -38,13 +36,7 @@ class WorkerApiImpl implements WorkerApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.WORKER})
-    public Uni<GetWorkerContextWorkerResponse> getWorkerContext(final GetWorkerContextWorkerRequest request) {
-        return webService.getWorkerContext(request);
-    }
-
-    @Override
-    @RolesAllowed({UserRoleEnum.Names.WORKER})
-    public Uni<DoWorkerCommandsWorkerResponse> doWorkerCommands(final DoWorkerCommandsWorkerRequest request) {
-        return webService.doWorkerCommands(request);
+    public Uni<InterchangeWorkerResponse> interchange(final InterchangeWorkerRequest request) {
+        return webService.interchange(request);
     }
 }

@@ -1,5 +1,6 @@
 package com.omgservers.worker.module.handler.lua.component.luaInstance;
 
+import com.omgservers.worker.exception.WorkerStartUpException;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.LuaCommand;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,10 @@ public class LuaInstance {
     public synchronized void start() {
         luaChunk.call();
         // Call to check that lua handler is here
-        getHandler();
+        final var handler = getHandler();
+        if (handler == null || handler.isnil()) {
+            throw new WorkerStartUpException("Handler handle_command was not found");
+        }
     }
 
     public synchronized LuaValue call(final LuaCommand luaCommand) {
@@ -42,9 +46,6 @@ public class LuaInstance {
 
     LuaValue getHandler() {
         final var handler = globals.get("handle_command");
-        if (handler == null || handler.isnil()) {
-            throw new IllegalStateException("Handler handle_command was not found");
-        }
         return handler;
     }
 }

@@ -44,6 +44,7 @@ import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getServers.GetServersOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -64,6 +65,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final SystemModule systemModule;
     final LobbyModule lobbyModule;
+    final UserModule userModule;
 
     final GetServersOperation getServersOperation;
 
@@ -92,7 +94,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
                     // TODO: cleanup container user
                     return findAndDeleteContainer(runtimeId)
-                            .flatMap(deleted -> deleteRuntimePermissions(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeCommands(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeClients(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeRef(runtime));
@@ -123,29 +124,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteContainerRequest(id);
         return systemModule.getContainerService().deleteContainer(request)
                 .map(DeleteContainerResponse::getDeleted);
-    }
-
-    Uni<Void> deleteRuntimePermissions(final Long runtimeId) {
-        return viewRuntimePermissions(runtimeId)
-                .flatMap(runtimePermissions -> Multi.createFrom().iterable(runtimePermissions)
-                        .onItem().transformToUniAndConcatenate(runtimePermission ->
-                                deleteRuntimePermission(runtimeId, runtimePermission.getId())
-                                        .onFailure()
-                                        .recoverWithItem(t -> {
-                                            log.warn("Delete runtime permission failed, " +
-                                                            "runtimeId={}, " +
-                                                            "runtimePermissionId={}" +
-                                                            "{}:{}",
-                                                    runtimeId,
-                                                    runtimePermission.getId(),
-                                                    t.getClass().getSimpleName(),
-                                                    t.getMessage());
-                                            return null;
-                                        })
-                        )
-                        .collect().asList()
-                        .replaceWithVoid()
-                );
     }
 
     Uni<List<RuntimePermissionModel>> viewRuntimePermissions(final Long runtimeId) {

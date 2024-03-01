@@ -4,7 +4,6 @@ import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.worker.module.handler.lua.component.luaCommand.impl.AddClientLuaCommand;
-import com.omgservers.worker.module.handler.lua.component.luaContext.LuaContext;
 import com.omgservers.worker.module.handler.lua.operation.coerceJavaObject.CoerceJavaObjectOperation;
 import com.omgservers.worker.module.handler.lua.operation.mapRuntimeCommand.RuntimeCommandMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,21 +24,13 @@ public class AddClientRuntimeCommandMapper implements RuntimeCommandMapper {
     }
 
     @Override
-    public AddClientLuaCommand map(LuaContext luaContext, final RuntimeCommandModel runtimeCommand) {
+    public AddClientLuaCommand map(final RuntimeCommandModel runtimeCommand) {
         final var runtimeCommandBody = (AddClientRuntimeCommandBodyModel) runtimeCommand.getBody();
 
         final var clientId = runtimeCommandBody.getClientId();
-        final var luaProfileOptional = luaContext.getProfile(clientId);
-        final var luaAttributesOptional = luaContext.getAttributes(clientId);
+        final var luaAttributes = coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getAttributes());
+        final var luaProfile = coerceJavaObjectOperation.coerceJavaObject(runtimeCommandBody.getProfile());
 
-        if (luaAttributesOptional.isPresent() && luaProfileOptional.isPresent()) {
-            return new AddClientLuaCommand(clientId,
-                    luaAttributesOptional.get(),
-                    luaProfileOptional.get());
-        } else {
-            throw new IllegalArgumentException(
-                    String.format("profiles or attributes were not found for runtime command, " +
-                            "qualifier=%s, clientId=%d", runtimeCommand.getQualifier(), clientId));
-        }
+        return new AddClientLuaCommand(clientId, luaAttributes, luaProfile);
     }
 }
