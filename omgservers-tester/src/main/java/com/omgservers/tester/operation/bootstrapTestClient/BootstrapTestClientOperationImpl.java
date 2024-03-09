@@ -27,6 +27,23 @@ class BootstrapTestClientOperationImpl implements BootstrapTestClientOperation {
         final var userId = createUserResponse.getUserId();
         final var password = createUserResponse.getPassword();
 
+        return createTestClient(testVersion, userId, password);
+    }
+
+    @Override
+    public TestClientModel bootstrapTestClient(final TestVersionModel testVersion,
+                                               final TestClientModel testClient)
+            throws IOException {
+
+        final var userId = testClient.getUserId();
+        final var password = testClient.getPassword();
+
+        return createTestClient(testVersion, userId, password);
+    }
+
+    TestClientModel createTestClient(final TestVersionModel testVersion,
+                                     final Long userId,
+                                     final String password) throws IOException {
         final var token = playerApiTester.createToken(userId, password);
 
         final var clientId = playerApiTester.createClient(token,

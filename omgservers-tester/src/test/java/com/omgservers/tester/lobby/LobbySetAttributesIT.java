@@ -18,7 +18,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbySetGetProfileIT extends Assertions {
+public class LobbySetAttributesIT extends Assertions {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -33,20 +33,28 @@ public class LobbySetGetProfileIT extends Assertions {
     AdminApiTester adminApiTester;
 
     @Test
-    void lobbySetGetProfileIT() throws Exception {
+    void lobbySetAttributesIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
                         function handle_command(self, command)
 
+                            if command.qualifier == "init_runtime" then
+                                self.attributes = {}
+                            end
+
+                            if command.qualifier == "add_client" then
+                                self.attributes[command.client_id] = command.attributes
+                            end
+
                             if command.qualifier == "handle_message" then
                                 local var text = command.message.text
                                 
-                                if text == "init_profile" then
+                                if text == "init_attributes" then
                                     return {
                                         {
-                                            qualifier = "set_profile",
+                                            qualifier = "set_attributes",
                                             client_id = command.client_id,
-                                            profile = {
+                                            attributes = {
                                                 a1 = 1,
                                                 a2 = "string",
                                                 a3 = 3.14,
@@ -57,23 +65,23 @@ public class LobbySetGetProfileIT extends Assertions {
                                             qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
-                                                text = "profile_was_init"
+                                                text = "attributes_was_init"
                                             }
                                         }
                                     }
-                                elseif text == "check_profile" then
-                                    local var profile = command.profile
-                                    assert(type(profile.a1) == "number", "a1 is wrong")
-                                    assert(type(profile.a2) == "string", "a2 is wrong")
-                                    assert(type(profile.a3) == "number", "a3 is wrong")
-                                    assert(type(profile.a4) == "boolean", "a4 is wrong")
+                                elseif text == "check_attributes" then
+                                    local attributes = self.attributes[command.client_id]
+                                    assert(type(attributes.a1) == "number", "a1 is wrong")
+                                    assert(type(attributes.a2) == "string", "a2 is wrong")
+                                    assert(type(attributes.a3) == "number", "a3 is wrong")
+                                    assert(type(attributes.a4) == "boolean", "a4 is wrong")
                                     
                                     return {
                                         {
                                             qualifier = "respond_client",
                                             client_id = command.client_id,
                                             message = {
-                                                text = "profile_was_checked"
+                                                text = "attributes_was_checked"
                                             }
                                         }
                                     }
@@ -88,29 +96,39 @@ public class LobbySetGetProfileIT extends Assertions {
         Thread.sleep(10000);
 
         try {
-            final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
+            final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
-            final var welcomeMessage = playerApiTester.waitMessage(testClient,
+            final var welcomeMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.WELCOME_MESSAGE);
 
-            final var lobbyAssignment = playerApiTester.waitMessage(testClient,
+            final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(welcomeMessage.getId()));
+                    Collections.singletonList(welcomeMessage1.getId()));
 
-            playerApiTester.sendMessage(testClient, new TestMessage("init_profile"));
+            playerApiTester.sendMessage(testClient1, new TestMessage("init_attributes"));
 
-            final var serverMessage1 = playerApiTester.waitMessage(testClient,
+            final var serverMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.SERVER_MESSAGE,
-                    Collections.singletonList(lobbyAssignment.getId()));
-            assertEquals("{text=profile_was_init}",
+                    Collections.singletonList(lobbyAssignment1.getId()));
+            assertEquals("{text=attributes_was_init}",
                     ((ServerMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
 
-            playerApiTester.sendMessage(testClient, new TestMessage("check_profile"));
+            final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion, testClient1);
 
-            final var serverMessage2 = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.SERVER_MESSAGE,
+            final var welcomeMessage2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.WELCOME_MESSAGE,
                     Collections.singletonList(serverMessage1.getId()));
-            assertEquals("{text=profile_was_checked}",
+
+            final var lobbyAssignment2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(welcomeMessage2.getId()));
+
+            playerApiTester.sendMessage(testClient2, new TestMessage("check_attributes"));
+
+            final var serverMessage2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.SERVER_MESSAGE,
+                    Collections.singletonList(lobbyAssignment2.getId()));
+            assertEquals("{text=attributes_was_checked}",
                     ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
