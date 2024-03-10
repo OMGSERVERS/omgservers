@@ -8,6 +8,7 @@ import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.SetProfileOutgoingCommandBodyModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
@@ -60,6 +61,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
                                                 .replaceWithVoid();
                                     } else {
                                         throw new ServerSideBadRequestException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                 String.format("runtime client was not found, " +
                                                                 "runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));

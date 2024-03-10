@@ -3,6 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import io.smallrye.mutiny.Uni;
@@ -29,8 +30,8 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
                 .map(response -> {
                     final var stage = response.getStage();
                     if (!stage.getSecret().equals(secret)) {
-                        throw new ServerSideBadRequestException(String.format("stage secret is wrong, " +
-                                "tenantId=%s, stageId=%s", tenantId, stageId));
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.STAGE_SECRET_WRONG,
+                                String.format("stage secret is wrong, tenantId=%s, stageId=%s", tenantId, stageId));
                     }
                     return stage;
                 })

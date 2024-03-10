@@ -2,7 +2,8 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
 import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -33,9 +34,10 @@ class SelectStageVersionMethodImpl implements SelectStageVersionMethod {
                             .selectActiveVersionsByStageId(sqlConnection, shardModel.shard(), tenantId, stageId)
                             .map(versions -> {
                                 if (versions.isEmpty()) {
-                                    throw new ServerSideConflictException(String.format("Version was not select, " +
-                                            "there aren't active stage versions, " +
-                                            "stageId=%s", stageId));
+                                    throw new ServerSideNotFoundException(ExceptionQualifierEnum.VERSION_NOT_FOUND,
+                                            String.format("version was not select, " +
+                                                    "there aren't active stage versions, " +
+                                                    "stageId=%s", stageId));
                                 }
 
                                 final var strategy = request.getStrategy();

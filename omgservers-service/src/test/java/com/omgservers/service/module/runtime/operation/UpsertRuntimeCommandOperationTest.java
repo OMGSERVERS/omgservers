@@ -1,5 +1,6 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
@@ -65,7 +66,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     void givenUnknownRuntimeId_whenUpsertRuntimeCommand_thenException() {
         final var shard = 0;
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
-        final var exception = assertThrows(ServerSideConflictException.class, () -> upsertRuntimeCommandOperation
+        final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeCommandOperation
                 .upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand));
     }
 

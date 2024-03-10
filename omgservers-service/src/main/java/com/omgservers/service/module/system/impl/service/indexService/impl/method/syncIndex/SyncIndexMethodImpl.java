@@ -3,7 +3,6 @@ package com.omgservers.service.module.system.impl.service.indexService.impl.meth
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.service.module.system.impl.operation.upsertIndex.UpsertIndexOperation;
-import com.omgservers.service.module.system.impl.operation.validateIndex.ValidateIndexOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 class SyncIndexMethodImpl implements SyncIndexMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
-    final ValidateIndexOperation validateIndexOperation;
     final UpsertIndexOperation syncIndexOperation;
 
     @Override

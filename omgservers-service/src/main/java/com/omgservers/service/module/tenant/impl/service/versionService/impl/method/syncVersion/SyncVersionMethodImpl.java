@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.dto.tenant.SyncVersionResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasStage.HasStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertVersion.UpsertVersionOperation;
@@ -50,6 +51,7 @@ class SyncVersionMethodImpl implements SyncVersionMethod {
                                                             version);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "stage does not exist or was deleted, id=" + stageId);
                                                 }
                                             })

@@ -7,6 +7,7 @@ import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.model.file.DecodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.developer.impl.operation.EncodeFilesOperation;
 import com.omgservers.service.module.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
@@ -67,12 +68,14 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                         final var configModel = objectMapper.readValue(fileContent, VersionConfigModel.class);
                         return configModel;
                     } catch (IOException e) {
-                        throw new ServerSideBadRequestException(String.format("config.json was not parsed, " +
-                                "request=%s, %s", request, e.getMessage()), e);
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.CONFIG_JSON_WRONG,
+                                String.format("config.json was not parsed, request=%s, %s",
+                                        request, e.getMessage()), e);
                     }
                 })
                 .findFirst()
-                .orElseThrow(() -> new ServerSideBadRequestException("config.json was not found, request=" + request));
+                .orElseThrow(() -> new ServerSideBadRequestException(ExceptionQualifierEnum.CONFIG_JSON_NOT_FOUND,
+                        "config.json was not found, request=" + request));
     }
 
     VersionSourceCodeModel getSourceCode(final UploadVersionDeveloperRequest request) {
@@ -83,8 +86,9 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                         final var fileContent = Files.readString(fileUpload.filePath());
                         return new DecodedFileModel(fileUpload.name(), fileContent);
                     } catch (IOException e) {
-                        throw new ServerSideBadRequestException(String.format("%s was not parsed, " +
-                                "request=%s, %s", fileUpload.fileName(), request, e.getMessage()), e);
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.VERSION_FILE_WRONG,
+                                String.format("%s was not parsed, request=%s, %s", fileUpload.fileName(), request,
+                                        e.getMessage()), e);
                     }
                 })
                 .toList();

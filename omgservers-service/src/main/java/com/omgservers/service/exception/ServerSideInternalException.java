@@ -1,23 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideInternalException extends RuntimeException {
-    public ServerSideInternalException() {
-        super();
+public class ServerSideInternalException extends ServerSideBaseException {
+
+    public ServerSideInternalException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideInternalException(String message) {
-        super(message);
+    public ServerSideInternalException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideInternalException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideInternalException(final ExceptionQualifierEnum qualifier,
+                                       final String message,
+                                       final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideInternalException(Throwable cause) {
-        super(cause);
+    public ServerSideInternalException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideInternalException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideInternalException(final ExceptionQualifierEnum qualifier,
+                                          final String message,
+                                          final Throwable cause,
+                                          final boolean enableSuppression,
+                                          final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

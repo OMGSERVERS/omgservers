@@ -2,6 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
@@ -50,6 +51,7 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
                                                             runtimeCommand);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "runtime does not exist or was deleted, id=" + runtimeId);
                                                 }
                                             })

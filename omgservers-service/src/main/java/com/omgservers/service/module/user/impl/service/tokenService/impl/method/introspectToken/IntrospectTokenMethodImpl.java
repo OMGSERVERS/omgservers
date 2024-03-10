@@ -2,9 +2,10 @@ package com.omgservers.service.module.user.impl.service.tokenService.impl.method
 
 import com.omgservers.model.dto.user.IntrospectTokenRequest;
 import com.omgservers.model.dto.user.IntrospectTokenResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.token.TokenModel;
 import com.omgservers.model.user.UserTokenModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.module.user.impl.operation.decodeToken.DecodeTokenOperation;
 import com.omgservers.service.module.user.impl.operation.selectToken.SelectTokenOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -45,7 +46,9 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
                 .map(lifetime -> new IntrospectTokenResponse(tokenObject, lifetime));
     }
 
-    Long introspect(TokenModel tokenModel, String rawToken, UserTokenModel tokenObject) {
+    Long introspect(final TokenModel tokenModel,
+                    final String rawToken,
+                    final UserTokenModel tokenObject) {
         final var tokenHash = tokenModel.getHash();
         if (BcryptUtil.matches(rawToken, tokenHash)) {
             final var lifetime = Duration.between(Instant.now(), tokenModel.getExpire());
@@ -54,7 +57,8 @@ class IntrospectTokenMethodImpl implements IntrospectTokenMethod {
             }
             return lifetime.toSeconds();
         } else {
-            throw new ServerSideConflictException(String.format("Token hash mismatch, token=%s", tokenObject));
+            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.TOKEN_HASH_MISMATCH,
+                    String.format("token hash mismatch, token=%s", tokenObject));
         }
     }
 }

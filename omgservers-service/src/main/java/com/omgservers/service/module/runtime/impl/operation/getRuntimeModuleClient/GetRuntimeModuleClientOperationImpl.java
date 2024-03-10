@@ -21,10 +21,6 @@ class GetRuntimeModuleClientOperationImpl implements GetRuntimeModuleClientOpera
 
     @Override
     public synchronized RuntimeModuleClient getClient(final URI uri) {
-        if (uri == null) {
-            throw new ServerSideBadRequestException("uri is null");
-        }
-
         if (!cache.containsKey(uri)) {
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)

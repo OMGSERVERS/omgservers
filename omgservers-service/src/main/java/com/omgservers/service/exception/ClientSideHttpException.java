@@ -1,29 +1,21 @@
 package com.omgservers.service.exception;
 
-import java.util.Optional;
-
 public class ClientSideHttpException extends RuntimeException {
 
     final int statusCode;
-    final String errorText;
-    final Optional<ExceptionErrorResponse> errorResponse;
+    final String responseText;
 
-    public ClientSideHttpException(int statusCode, String errorText, ExceptionErrorResponse exceptionErrorResponse) {
-        super(String.format("rest client error, statusCode=%d, text=%s", statusCode, errorText));
+    public ClientSideHttpException(final int statusCode, final String responseText) {
+        super(String.format("client http error, statusCode=%d, responseText=%s", statusCode, responseText));
         this.statusCode = statusCode;
-        this.errorResponse = Optional.ofNullable(exceptionErrorResponse);
-        this.errorText = errorText;
+        this.responseText = responseText;
     }
 
     public int getStatusCode() {
         return statusCode;
     }
 
-    public String getErrorText() {
-        return errorText;
-    }
-
-    public Optional<ExceptionErrorResponse> getErrorResponse() {
-        return errorResponse;
+    public String getResponseText() {
+        return responseText;
     }
 }

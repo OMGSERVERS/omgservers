@@ -1,23 +1,21 @@
 package com.omgservers.service.exception;
 
-import java.util.Optional;
-
 public class ClientSideUnauthorizedException extends ServerSideUnauthorizedException {
 
     final String errorText;
-    final Optional<ExceptionErrorResponse> errorResponse;
+    final ExceptionErrorResponse errorResponse;
 
-    public ClientSideUnauthorizedException(String errorText, ExceptionErrorResponse exceptionErrorResponse) {
-        super(errorText);
-        this.errorResponse = Optional.ofNullable(exceptionErrorResponse);
-        this.errorText = errorText;
+    public ClientSideUnauthorizedException(final ExceptionErrorResponse exceptionErrorResponse) {
+        super(exceptionErrorResponse.getQualifier());
+        this.errorResponse = exceptionErrorResponse;
+        this.errorText = exceptionErrorResponse.getMessage();
     }
 
     public String getErrorText() {
         return errorText;
     }
 
-    public Optional<ExceptionErrorResponse> getErrorResponse() {
+    public ExceptionErrorResponse getErrorResponse() {
         return errorResponse;
     }
 }

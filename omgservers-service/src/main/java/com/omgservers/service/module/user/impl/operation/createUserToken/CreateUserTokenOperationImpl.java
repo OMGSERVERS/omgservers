@@ -1,6 +1,5 @@
 package com.omgservers.service.module.user.impl.operation.createUserToken;
 
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserTokenContainerModel;
 import com.omgservers.model.user.UserTokenModel;
@@ -23,11 +22,7 @@ class CreateUserTokenOperationImpl implements CreateUserTokenOperation {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public UserTokenContainerModel createUserToken(UserModel user) {
-        if (user == null) {
-            throw new ServerSideBadRequestException("user is null");
-        }
-
+    public UserTokenContainerModel createUserToken(final UserModel user) {
         final var lifetime = getConfigOperation.getServiceConfig().clientTokenLifetime();
         final var userId = user.getId();
 

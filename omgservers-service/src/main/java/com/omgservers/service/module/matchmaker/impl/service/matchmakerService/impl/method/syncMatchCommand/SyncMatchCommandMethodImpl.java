@@ -2,6 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.hasMatch.HasMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchCommand.UpsertMatchCommandOperation;
@@ -48,8 +49,8 @@ class SyncMatchCommandMethodImpl implements SyncMatchCommandMethod {
                                                                     matchCommand);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
-                                                            "match does not exist or was deleted, " +
-                                                                    "id=" + matchId);
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                            "match does not exist or was deleted, id=" + matchId);
                                                 }
                                             })
                             )

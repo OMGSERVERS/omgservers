@@ -9,7 +9,8 @@ import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
-import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
@@ -68,10 +69,8 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
                                     if (checkClients(clients, runtimeClients)) {
                                         return multicastMessage(clients, message);
                                     } else {
-                                        throw new ServerSideForbiddenException(
-                                                String.format(
-                                                        "not all runtime clients for clients were found, " +
-                                                                "runtimeId=%s, clients=%s",
+                                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
+                                                String.format("wrong clientIds, runtimeId=%s, clients=%s",
                                                         runtimeId, clients));
                                     }
                                 }))

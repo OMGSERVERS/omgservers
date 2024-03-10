@@ -11,8 +11,10 @@ import com.omgservers.model.event.body.ClientMessageReceivedEventBodyModel;
 import com.omgservers.model.message.body.ClientMessageBodyModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
@@ -58,8 +60,8 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
                             messageBody.getData()))
                     .replaceWithVoid();
         } else {
-            throw new ServerSideBadRequestException("message body type mismatch, " +
-                    message.getBody().getClass().getSimpleName());
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_MESSAGE_BODY_TYPE_MISMATCH,
+                    "body type mismatch, " + message.getBody().getClass().getSimpleName());
         }
     }
 
@@ -67,8 +69,8 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
         return viewClientRuntimeRefs(clientId)
                 .map(clientRuntimeRefs -> {
                     if (clientRuntimeRefs.isEmpty()) {
-                        throw new ServerSideConflictException(String.format("runtime was not selected, " +
-                                "clientId=%d", clientId));
+                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
+                                String.format("runtime was not selected, clientId=%d", clientId));
                     } else {
                         return clientRuntimeRefs.stream()
                                 .max(Comparator.comparing(ClientRuntimeRefModel::getId))

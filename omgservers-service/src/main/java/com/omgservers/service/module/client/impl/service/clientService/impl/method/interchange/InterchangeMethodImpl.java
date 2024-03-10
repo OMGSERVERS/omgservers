@@ -10,6 +10,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.body.ClientMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
@@ -70,7 +71,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 return handleMessages(clientId, request.getOutgoingMessages())
                                         .flatMap(voidItem -> receiveMessages(shard, clientId, consumedMessages));
                             } else {
-                                throw new ServerSideBadRequestException("wrong clientId, clientId=" + clientId);
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
+                                        "wrong clientId, clientId=" + clientId);
                             }
                         })
                         .map(InterchangeResponse::new)
@@ -91,7 +93,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 message);
                         case MATCHMAKER_MESSAGE -> new MatchmakerMessageReceivedEventBodyModel(clientId,
                                 message);
-                        default -> throw new ServerSideBadRequestException(
+                        default -> throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,
                                 "unsupported message has been received, " + message.getQualifier());
                     };
 

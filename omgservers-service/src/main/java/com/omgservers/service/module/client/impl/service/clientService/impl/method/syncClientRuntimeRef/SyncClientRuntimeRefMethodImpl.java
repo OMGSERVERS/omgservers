@@ -2,6 +2,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 
 import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.hasClient.HasClientOperation;
@@ -48,6 +49,7 @@ class SyncClientRuntimeRefMethodImpl implements SyncClientRuntimeRefMethod {
                                                         clientRuntimeRef);
                                             } else {
                                                 throw new ServerSideNotFoundException(
+                                                        ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                         "client does not exist or was deleted, id=" + clientId);
                                             }
                                         })

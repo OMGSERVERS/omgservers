@@ -1,23 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideUnauthorizedException extends ServerSideClientExceptionException {
-    public ServerSideUnauthorizedException() {
-        super();
+public class ServerSideUnauthorizedException extends ServerSideClientException {
+
+    public ServerSideUnauthorizedException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideUnauthorizedException(String message) {
-        super(message);
+    public ServerSideUnauthorizedException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideUnauthorizedException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideUnauthorizedException(final ExceptionQualifierEnum qualifier,
+                                           final String message,
+                                           final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideUnauthorizedException(Throwable cause) {
-        super(cause);
+    public ServerSideUnauthorizedException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideUnauthorizedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideUnauthorizedException(final ExceptionQualifierEnum qualifier,
+                                              final String message,
+                                              final Throwable cause,
+                                              final boolean enableSuppression,
+                                              final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

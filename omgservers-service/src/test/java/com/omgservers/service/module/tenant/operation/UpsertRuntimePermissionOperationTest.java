@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.factory.TenantPermissionModelFactory;
@@ -72,7 +73,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
         final var permission = tenantPermissionModelFactory.create(tenantId(),
                 userId(),
                 TenantPermissionEnum.CREATE_PROJECT);
-        assertThrows(ServerSideConflictException.class, () -> upsertTenantPermissionOperation
+        assertThrows(ServerSideBadRequestException.class, () -> upsertTenantPermissionOperation
                 .upsertTenantPermission(shard, permission));
     }
 

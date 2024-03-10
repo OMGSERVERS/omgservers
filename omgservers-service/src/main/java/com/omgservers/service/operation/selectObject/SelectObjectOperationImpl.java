@@ -1,5 +1,6 @@
 package com.omgservers.service.operation.selectObject;
 
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LogModelFactory;
@@ -47,10 +48,12 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
                         final var object = objectMapper.apply(iterator.next());
                         return object;
                     } else {
-                        throw new ServerSideNotFoundException(String.format("%s was not found, sql=%s, parameters=%s",
-                                objectName.toLowerCase(),
-                                preparedSql.replaceAll(System.lineSeparator(), " "),
-                                parameters));
+                        throw new ServerSideNotFoundException(
+                                ExceptionQualifierEnum.OBJECT_NOT_FOUND,
+                                String.format("%s was not found, sql=%s, parameters=%s",
+                                        objectName.toLowerCase(),
+                                        preparedSql.replaceAll(System.lineSeparator(), " "),
+                                        parameters));
                     }
                 })
                 .onFailure(PgException.class)

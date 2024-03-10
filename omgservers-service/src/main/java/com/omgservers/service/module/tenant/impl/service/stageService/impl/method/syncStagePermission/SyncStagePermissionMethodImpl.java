@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.SyncStagePermissionRequest;
 import com.omgservers.model.dto.tenant.SyncStagePermissionResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasStage.HasStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStagePermission.UpsertStagePermissionOperation;
@@ -39,9 +40,8 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> hasStageOperation
-                                            .hasStage(sqlConnection, shard, tenantId, stageId)
+                    return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                                    hasStageOperation.hasStage(sqlConnection, shard, tenantId, stageId)
                                             .flatMap(has -> {
                                                 if (has) {
                                                     return upsertStagePermissionOperation.upsertStagePermission(
@@ -51,6 +51,7 @@ class SyncStagePermissionMethodImpl implements SyncStagePermissionMethod {
                                                             permission);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "stage does not exist or was deleted, id=" + stageId);
                                                 }
                                             })

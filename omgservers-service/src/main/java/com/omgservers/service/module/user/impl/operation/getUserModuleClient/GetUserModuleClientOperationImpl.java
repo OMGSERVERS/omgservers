@@ -1,6 +1,5 @@
 package com.omgservers.service.module.user.impl.operation.getUserModuleClient;
 
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
@@ -21,10 +20,6 @@ class GetUserModuleClientOperationImpl implements GetUserModuleClientOperation {
 
     @Override
     public synchronized UserModuleClient getClient(final URI uri) {
-        if (uri == null) {
-            throw new ServerSideBadRequestException("uri is null");
-        }
-
         if (!cache.containsKey(uri)) {
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)

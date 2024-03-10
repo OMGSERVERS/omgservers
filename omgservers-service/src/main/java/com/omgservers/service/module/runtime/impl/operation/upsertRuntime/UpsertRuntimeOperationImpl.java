@@ -3,6 +3,7 @@ package com.omgservers.service.module.runtime.impl.operation.upsertRuntime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -62,7 +63,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
         try {
             return objectMapper.writeValueAsString(runtime.getConfig());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.omgservers.service.module.user.impl.operation.selectPlayerAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.player.PlayerAttributesModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -44,8 +45,9 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                     try {
                         return objectMapper.readValue(row.getString("attributes"), PlayerAttributesModel.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException(String.format("player attributes can't be parsed, " +
-                                "userId=%d, playerId=%d", userId, playerId));
+                        throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                                String.format("player attributes can't be parsed, userId=%d, playerId=%d",
+                                        userId, playerId));
                     }
                 });
     }

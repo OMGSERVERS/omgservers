@@ -11,7 +11,8 @@ import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.KickClientOutgoingCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.service.exception.ServerSideForbiddenException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.client.ClientModule;
@@ -55,22 +56,22 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
         final var clientId = commandBody.getClientId();
 
         return checkShardOperation.checkShard(runtimeId.toString())
-                .flatMap(shardModel -> pgPool.withTransaction(sqlConnection ->
-                                hasRuntimeClientOperation.hasRuntimeClient(
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                runtimeId,
-                                                clientId)
-                                        .flatMap(has -> {
-                                            if (has) {
-                                                return kickClient(runtimeId, clientId);
-                                            } else {
-                                                throw new ServerSideForbiddenException(
-                                                        String.format("runtime client was not found, " +
-                                                                        "runtimeId=%s, clientId=%s",
-                                                                runtimeId, clientId));
-                                            }
-                                        })
+                .flatMap(shardModel -> pgPool
+                        .withTransaction(sqlConnection -> hasRuntimeClientOperation
+                                .hasRuntimeClient(
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        runtimeId,
+                                        clientId)
+                                .flatMap(has -> {
+                                    if (has) {
+                                        return kickClient(runtimeId, clientId);
+                                    } else {
+                                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
+                                                String.format("wrong clientId, runtimeId=%s, clientId=%s",
+                                                        runtimeId, clientId));
+                                    }
+                                })
                         )
                 );
     }

@@ -8,6 +8,7 @@ import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
 import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -52,8 +53,9 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                 .map(HasTenantPermissionResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
-                        throw new ServerSideForbiddenException(String.format("lack of permission, " +
-                                "tenantId=%s, userId=%s, permission=%s", tenantId, userId, permission));
+                        throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
+                                String.format("permission was not found, tenantId=%d, userId=%d, permission=%s",
+                                        tenantId, userId, permission));
                     }
                 })
                 .replaceWithVoid();

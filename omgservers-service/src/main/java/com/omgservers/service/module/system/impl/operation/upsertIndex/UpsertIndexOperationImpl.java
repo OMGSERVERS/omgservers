@@ -1,12 +1,13 @@
 package com.omgservers.service.module.system.impl.operation.upsertIndex;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -56,7 +57,7 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
         try {
             return objectMapper.writeValueAsString(index.getConfig());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 }

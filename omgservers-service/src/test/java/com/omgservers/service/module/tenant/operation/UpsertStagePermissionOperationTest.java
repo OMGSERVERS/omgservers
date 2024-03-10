@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.stagePermission.StagePermissionEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
@@ -93,7 +94,7 @@ class UpsertStagePermissionOperationTest extends Assertions {
         final var permission =
                 stagePermissionModelFactory.create(tenantId(), stageId(), userId(),
                         StagePermissionEnum.VERSION_MANAGEMENT);
-        assertThrows(ServerSideConflictException.class, () -> upsertStagePermissionOperation
+        assertThrows(ServerSideBadRequestException.class, () -> upsertStagePermissionOperation
                 .upsertStagePermission(shard, permission));
     }
 

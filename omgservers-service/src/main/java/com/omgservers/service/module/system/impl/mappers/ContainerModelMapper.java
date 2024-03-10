@@ -1,10 +1,11 @@
 package com.omgservers.service.module.system.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ public class ContainerModelMapper {
         try {
             container.setConfig(objectMapper.readValue(row.getString("config"), ContainerConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("container config can't be parsed, container=" + container, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "container config can't be parsed, container=" + container, e);
         }
         return container;
     }

@@ -3,6 +3,7 @@ package com.omgservers.service.module.matchmaker.impl.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,8 +32,8 @@ public class MatchmakerCommandModelMapper {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             matchmakerCommand.setBody(body);
         } catch (IOException e) {
-            throw new ServerSideConflictException("matchmaker command can't be parsed, " +
-                    "matchmakerCommand=" + matchmakerCommand, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "matchmaker command can't be parsed, matchmakerCommand=" + matchmakerCommand, e);
         }
         return matchmakerCommand;
     }

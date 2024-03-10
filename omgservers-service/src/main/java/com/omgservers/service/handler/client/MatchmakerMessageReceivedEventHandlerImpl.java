@@ -13,6 +13,7 @@ import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.RequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -87,8 +88,8 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                     })
                     .replaceWithVoid();
         } else {
-            throw new ServerSideBadRequestException("message body type mismatch, " +
-                    message.getBody().getClass().getSimpleName());
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.MATCHMAKER_MESSAGE_BODY_TYPE_MISMATCH,
+                    "body type mismatch, " + message.getBody().getClass().getSimpleName());
         }
     }
 

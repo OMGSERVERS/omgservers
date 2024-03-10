@@ -1,23 +1,31 @@
 package com.omgservers.service.exception;
 
-public class ServerSideConflictException extends ServerSideClientExceptionException {
-    public ServerSideConflictException() {
-        super();
+public class ServerSideConflictException extends ServerSideClientException {
+
+    public ServerSideConflictException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideConflictException(String message) {
-        super(message);
+    public ServerSideConflictException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideConflictException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideConflictException(final ExceptionQualifierEnum qualifier,
+                                       final String message,
+                                       final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideConflictException(Throwable cause) {
-        super(cause);
+    public ServerSideConflictException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideConflictException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideConflictException(final ExceptionQualifierEnum qualifier,
+                                          final String message,
+                                          final Throwable cause,
+                                          final boolean enableSuppression,
+                                          final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }
+

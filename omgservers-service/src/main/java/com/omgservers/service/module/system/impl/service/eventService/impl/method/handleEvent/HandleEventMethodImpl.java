@@ -5,7 +5,7 @@ import com.omgservers.model.dto.system.HandleEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.EventStatusEnum;
-import com.omgservers.service.exception.ServerSideClientExceptionException;
+import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.impl.operation.deleteEventAndUpdateStatus.DeleteEventAndUpdateStatusOperation;
 import com.omgservers.service.module.system.impl.operation.selectEvent.SelectEventOperation;
@@ -77,7 +77,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             if (qualifier.getBodyClass().isInstance(eventBody)) {
                 return eventHandler.handle(event)
                         .replaceWith(Boolean.TRUE)
-                        .onFailure(ServerSideClientExceptionException.class)
+                        .onFailure(ServerSideClientException.class)
                         .recoverWithItem(t -> {
                             log.error("Event failed, " +
                                             "eventId={}, " +

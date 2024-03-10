@@ -9,6 +9,7 @@ import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
@@ -61,6 +62,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
                                                 .replaceWithVoid();
                                     } else {
                                         throw new ServerSideBadRequestException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                 String.format("runtime client was not found, " +
                                                                 "runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));

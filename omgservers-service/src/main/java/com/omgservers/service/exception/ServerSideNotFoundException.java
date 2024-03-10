@@ -1,23 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideNotFoundException extends ServerSideClientExceptionException {
-    public ServerSideNotFoundException() {
-        super();
+public class ServerSideNotFoundException extends ServerSideClientException {
+
+    public ServerSideNotFoundException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideNotFoundException(String message) {
-        super(message);
+    public ServerSideNotFoundException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideNotFoundException(final ExceptionQualifierEnum qualifier,
+                                       final String message,
+                                       final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideNotFoundException(Throwable cause) {
-        super(cause);
+    public ServerSideNotFoundException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideNotFoundException(final ExceptionQualifierEnum qualifier,
+                                          final String message,
+                                          final Throwable cause,
+                                          final boolean enableSuppression,
+                                          final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

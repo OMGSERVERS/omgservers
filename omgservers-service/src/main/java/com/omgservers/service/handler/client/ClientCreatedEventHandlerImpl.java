@@ -18,7 +18,8 @@ import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -105,7 +106,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
         return viewVersionLobbyRefs(tenantId, versionId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
-                        throw new ServerSideConflictException(
+                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.LOBBY_NOT_FOUND,
                                 String.format("lobby was not selected, version=%d/%d", tenantId, versionId));
                     } else {
                         final var randomRefIndex = ThreadLocalRandom.current().nextInt(refs.size()) % refs.size();

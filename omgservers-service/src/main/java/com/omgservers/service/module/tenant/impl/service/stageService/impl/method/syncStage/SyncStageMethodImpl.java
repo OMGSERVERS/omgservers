@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.dto.tenant.SyncStageResponse;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasProject.HasProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertStage.UpsertStageOperation;
@@ -51,6 +51,7 @@ class SyncStageMethodImpl implements SyncStageMethod {
                                                             stage);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "project does not exist or was deleted, id=" + projectId);
                                                 }
                                             })

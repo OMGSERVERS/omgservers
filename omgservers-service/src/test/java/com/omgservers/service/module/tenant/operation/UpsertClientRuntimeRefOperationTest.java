@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
@@ -66,7 +67,7 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     void givenUnknownTenant_whenUpsertProject_thenException() {
         final var shard = 0;
         final var project = projectModelFactory.create(tenantId());
-        assertThrows(ServerSideConflictException.class, () ->
+        assertThrows(ServerSideBadRequestException.class, () ->
                 upsertProjectOperation.upsertProject(shard, project));
     }
 

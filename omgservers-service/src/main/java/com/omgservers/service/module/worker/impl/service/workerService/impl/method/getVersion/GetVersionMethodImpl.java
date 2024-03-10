@@ -8,6 +8,7 @@ import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
 import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -37,12 +38,13 @@ class GetVersionMethodImpl implements GetVersionMethod {
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                     if (runtime.getUserId().equals(userId)) {
+                    if (runtime.getUserId().equals(userId)) {
                         final var tenantId = runtime.getTenantId();
                         final var versionId = runtime.getVersionId();
                         return getVersion(tenantId, versionId);
                     } else {
-                        throw new ServerSideBadRequestException("wrong runtimeId, runtimeId=" + runtimeId);
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
+                                "wrong runtimeId, runtimeId=" + runtimeId);
                     }
                 })
                 .map(GetVersionWorkerResponse::new);

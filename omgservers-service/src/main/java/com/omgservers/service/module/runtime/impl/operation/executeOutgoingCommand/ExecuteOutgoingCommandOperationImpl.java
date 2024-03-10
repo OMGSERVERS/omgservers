@@ -2,6 +2,7 @@ package com.omgservers.service.module.runtime.impl.operation.executeOutgoingComm
 
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,12 +34,13 @@ class ExecuteOutgoingCommandOperationImpl implements ExecuteOutgoingCommandOpera
         final var qualifierBodyClass = qualifier.getBodyClass();
 
         if (!qualifierBodyClass.isInstance(outgoingCommand.getBody())) {
-            throw new ServerSideBadRequestException("qualifier and outgoing command body are mismatch, " +
-                    "outgoingCommand=" + outgoingCommand);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.COMMAND_BODY_TYPE_MISMATCH,
+                    "qualifier and outgoing command body are mismatch, outgoingCommand=" + outgoingCommand);
         }
 
         if (!outgoingCommandExecutors.containsKey(qualifier)) {
-            throw new ServerSideBadRequestException("outgoing command executor was not found, qualifiers=" + qualifier);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.COMMAND_EXECUTOR_NOT_FOUND,
+                    "outgoing command executor was not found, qualifiers=" + qualifier);
         }
 
         final var executor = outgoingCommandExecutors.get(qualifier);

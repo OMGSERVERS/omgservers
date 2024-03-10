@@ -8,6 +8,7 @@ import com.omgservers.model.message.body.ServerMessageBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
@@ -63,9 +64,8 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
                                         return syncClientMessage(clientId, message)
                                                 .replaceWithVoid();
                                     } else {
-                                        throw new ServerSideBadRequestException(
-                                                String.format("runtime client was not found, " +
-                                                                "runtimeId=%s, clientId=%s",
+                                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                String.format("runtime client was not found, runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));
                                     }
                                 }))

@@ -1,9 +1,10 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.match.MatchConfigModel;
 import com.omgservers.model.match.MatchModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class MatchModelMapper {
         try {
             match.setConfig(objectMapper.readValue(row.getString("config"), MatchConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("match config can't be parsed, match=" + match, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "match config can't be parsed, match=" + match, e);
         }
         match.setDeleted(row.getBoolean("deleted"));
         return match;

@@ -4,6 +4,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.omgservers.model.dto.system.StopContainerRequest;
 import com.omgservers.model.dto.system.StopContainerResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.system.impl.component.dockerClient.DockerClientHolder;
 import io.smallrye.mutiny.Uni;
@@ -35,7 +36,8 @@ class StopContainerMethodImpl implements StopContainerMethod {
                     } catch (NotModifiedException e) {
                         log.info("Stop container failed, {}", e.getMessage());
                     } catch (NotFoundException e) {
-                        throw new ServerSideNotFoundException(e.getMessage(), e);
+                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.DOCKER_CONTAINER_NOT_FOUND,
+                                e.getMessage(), e);
                     }
 
                     if (request.getRemove()) {

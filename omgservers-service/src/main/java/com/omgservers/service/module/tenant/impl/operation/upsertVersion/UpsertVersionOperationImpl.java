@@ -3,6 +3,7 @@ package com.omgservers.service.module.tenant.impl.operation.upsertVersion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -60,7 +61,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         try {
             return objectMapper.writeValueAsString(version.getConfig());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 
@@ -68,7 +69,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         try {
             return objectMapper.writeValueAsString(version.getSourceCode());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 }

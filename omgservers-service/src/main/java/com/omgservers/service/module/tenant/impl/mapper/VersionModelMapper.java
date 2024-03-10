@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +32,8 @@ public class VersionModelMapper {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));
             version.setSourceCode(objectMapper.readValue(row.getString("source_code"), VersionSourceCodeModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("version can't be parsed, version=" + version, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "version can't be parsed, version=" + version, e);
         }
 
         return version;

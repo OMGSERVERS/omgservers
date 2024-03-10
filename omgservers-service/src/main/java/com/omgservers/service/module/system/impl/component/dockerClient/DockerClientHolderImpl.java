@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.component.dockerClient;
 
 import com.github.dockerjava.api.DockerClient;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +23,8 @@ class DockerClientHolderImpl implements DockerClientHolder {
     public DockerClient getDockerClient() {
         final var dockerClient = dockerClientContainer.get();
         if (Objects.isNull(dockerClient)) {
-            throw new ServerSideConflictException("Docker client is not ready yet");
+            throw new ServerSideConflictException(ExceptionQualifierEnum.INTERNAL_EXCEPTION,
+                    "docker client is not ready yet");
         }
 
         return dockerClient;

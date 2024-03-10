@@ -3,6 +3,7 @@ package com.omgservers.service.module.matchmaker.impl.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.matchClient.MatchClientConfigModel;
 import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +33,8 @@ public class MatchClientModelMapper {
         try {
             matchClient.setConfig(objectMapper.readValue(row.getString("config"), MatchClientConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("match client config can't be parsed, matchClient=" + matchClient, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "match client config can't be parsed, matchClient=" + matchClient, e);
         }
         return matchClient;
     }

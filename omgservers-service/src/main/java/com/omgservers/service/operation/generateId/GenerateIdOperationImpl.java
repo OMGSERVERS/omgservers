@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.generateId;
 
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,12 +19,14 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
     public GenerateIdOperationImpl(final GetConfigOperation getConfigOperation) {
         datacenterId = getConfigOperation.getServiceConfig().datacenterId();
         if (datacenterId < 0 || datacenterId >= 1 << DATACENTER_ID_BITS) {
-            throw new ServerSideConflictException("wrong datacenterId, value=" + datacenterId);
+            throw new ServerSideInternalException(ExceptionQualifierEnum.CONFIGURATION_WRONG,
+                    "wrong datacenterId, value=" + datacenterId);
         }
 
         instanceId = getConfigOperation.getServiceConfig().instanceId();
         if (instanceId < 0 || instanceId >= 1 << INSTANCE_ID_BITS) {
-            throw new ServerSideConflictException("wrong instanceId, value=" + instanceId);
+            throw new ServerSideInternalException(ExceptionQualifierEnum.CONFIGURATION_WRONG,
+                    "wrong instanceId, value=" + instanceId);
         }
 
         log.info("Generator was initialized, " +
@@ -45,16 +47,16 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
             sequence += 1;
 
             if (sequence >= (1 << SEQUENCE_BITS)) {
-                throw new ServerSideInternalException(String.format("sequence was overflowed, " +
-                        "sequence=%d, timestamp=%d", sequence, timestamp));
+                throw new ServerSideInternalException(ExceptionQualifierEnum.ID_GENERATOR_FAILED,
+                        String.format("sequence was overflowed, sequence=%d, timestamp=%d", sequence, timestamp));
             }
         } else if (timestamp > lastTimestamp) {
             sequence = 0;
         }
 
         if (timestamp < lastTimestamp) {
-            throw new ServerSideInternalException(String.format("wrong system time, " +
-                    "current=%d, last=%d", timestamp, lastTimestamp));
+            throw new ServerSideInternalException(ExceptionQualifierEnum.ID_GENERATOR_FAILED,
+                    String.format("wrong system time, current=%d, last=%d", timestamp, lastTimestamp));
         } else {
             lastTimestamp = timestamp;
         }

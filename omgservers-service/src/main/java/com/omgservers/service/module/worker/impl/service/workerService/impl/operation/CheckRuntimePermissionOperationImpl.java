@@ -2,6 +2,7 @@ package com.omgservers.service.module.worker.impl.service.workerService.impl.ope
 
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -25,7 +26,8 @@ class CheckRuntimePermissionOperationImpl implements CheckRuntimePermissionOpera
         return runtimeModule.getRuntimeService().findRuntimePermission(request)
                 .replaceWithVoid()
                 .onFailure(ServerSideNotFoundException.class)
-                .transform(t -> new ServerSideForbiddenException(String.format("lack of permission, " +
-                        "runtimeId=%d, userId=%d, permission=%s", runtimeId, userId, permission)));
+                .transform(t -> new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
+                        String.format("permission was not found, runtimeId=%d, userId=%d, permission=%s",
+                                runtimeId, userId, permission)));
     }
 }

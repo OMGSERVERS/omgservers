@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 
 import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.system.SystemModule;
@@ -51,6 +52,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                                                         permission);
                                             } else {
                                                 throw new ServerSideNotFoundException(
+                                                        ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                         "tenant does not exist or was deleted, id=" + tenantId);
                                             }
                                         })

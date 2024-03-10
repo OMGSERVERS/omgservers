@@ -1,6 +1,7 @@
 package com.omgservers.service.operation.handleInternalRequest;
 
 import com.omgservers.model.dto.ShardedRequest;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -27,7 +28,8 @@ class HandleInternalRequestOperationImpl implements HandleInternalRequestOperati
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     if (shard.locked()) {
-                        throw new ServerSideInternalException("shard is locked, shard=" + shard.shard());
+                        throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
+                                "shard is locked, shard=" + shard.shard());
                     }
 
                     if (shard.foreign()) {

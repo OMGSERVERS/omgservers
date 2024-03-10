@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ExceptionErrorResponse {
 
-    String id;
+    ExceptionQualifierEnum qualifier;
     String message;
 
-    public ExceptionErrorResponse(Throwable t) {
-        id = t.getClass().getSimpleName();
-        message = t.getMessage();
+    public ExceptionErrorResponse(final ServerSideBaseException e) {
+        qualifier = e.getQualifier();
+        message = e.getMessage();
     }
 }

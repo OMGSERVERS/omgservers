@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +32,8 @@ public class EventModelMapper {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             event.setBody(body);
         } catch (IOException e) {
-            throw new ServerSideConflictException("event body can't be parsed, event=" + event, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "event body can't be parsed, event=" + event, e);
         }
         event.setStatus(EventStatusEnum.valueOf(row.getString("status")));
         event.setDeleted(row.getBoolean("deleted"));

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
@@ -78,7 +78,7 @@ class UpsertVersionLobbyRequestOperationTest extends Assertions {
     void givenUnknownIds_whenUpsertStage_thenException() {
         final var shard = 0;
         final var stage = stageModelFactory.create(tenantId(), projectId());
-        assertThrows(ServerSideConflictException.class, () ->
+        assertThrows(ServerSideBadRequestException.class, () ->
                 upsertStageOperation.upsertStage(shard, stage));
     }
 

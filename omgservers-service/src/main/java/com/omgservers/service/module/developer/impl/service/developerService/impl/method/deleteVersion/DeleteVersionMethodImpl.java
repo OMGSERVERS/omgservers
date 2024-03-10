@@ -10,6 +10,7 @@ import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.VersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -65,8 +66,10 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
                 .map(HasStagePermissionResponse::getResult)
                 .invoke(result -> {
                     if (!result) {
-                        throw new ServerSideForbiddenException(String.format("lack of permission, " +
-                                "tenant=%s, stage=%s, user=%s, permission=%s", tenantId, stageId, userId, permission));
+                        throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
+                                String.format("permission was not found, " +
+                                                "tenantId=%d, stageId=%d, userId=%d, permission=%s",
+                                        tenantId, stageId, userId, permission));
                     }
                 })
                 .replaceWithVoid();

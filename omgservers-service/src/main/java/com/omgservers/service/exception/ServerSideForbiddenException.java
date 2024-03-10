@@ -1,23 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideForbiddenException extends ServerSideClientExceptionException {
-    public ServerSideForbiddenException() {
-        super();
+public class ServerSideForbiddenException extends ServerSideClientException {
+
+    public ServerSideForbiddenException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideForbiddenException(String message) {
-        super(message);
+    public ServerSideForbiddenException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideForbiddenException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideForbiddenException(final ExceptionQualifierEnum qualifier,
+                                        final String message,
+                                        final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideForbiddenException(Throwable cause) {
-        super(cause);
+    public ServerSideForbiddenException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideForbiddenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideForbiddenException(final ExceptionQualifierEnum qualifier,
+                                           final String message,
+                                           final Throwable cause,
+                                           final boolean enableSuppression,
+                                           final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

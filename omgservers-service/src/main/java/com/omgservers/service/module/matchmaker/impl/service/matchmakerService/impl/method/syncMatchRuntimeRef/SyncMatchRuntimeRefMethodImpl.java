@@ -2,6 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.hasMatch.HasMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchRuntimeRef.UpsertMatchRuntimeRefOperation;
@@ -46,8 +47,8 @@ class SyncMatchRuntimeRefMethodImpl implements SyncMatchRuntimeRefMethod {
                                                             matchRuntimeRef);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
-                                                            "match does not exist or was deleted, " +
-                                                                    "id=" + matchId);
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                            "match does not exist or was deleted, id=" + matchId);
                                                 }
                                             })
                             )

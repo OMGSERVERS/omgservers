@@ -1,6 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.selectPlayerProfile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
@@ -43,8 +44,9 @@ class SelectPlayerProfileOperationImpl implements SelectPlayerProfileOperation {
                     try {
                         return objectMapper.readValue(row.getString("profile"), Object.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException(String.format("player profile can't be parsed, " +
-                                "userId=%d, playerId=%d", userId, playerId));
+                        throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                                String.format("player profile can't be parsed, userId=%d, playerId=%d",
+                                        userId, playerId));
                     }
                 });
     }

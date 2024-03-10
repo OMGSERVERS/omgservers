@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.ProjectPermissionModelFactory;
@@ -81,7 +82,7 @@ class UpsertProjectPermissionOperationTest extends Assertions {
 
         final var permission = projectPermissionModelFactory.create(tenantId(), projectId(), userId(),
                 ProjectPermissionEnum.CREATE_STAGE);
-        assertThrows(ServerSideConflictException.class, () -> upsertProjectPermissionOperation
+        assertThrows(ServerSideBadRequestException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(shard, permission));
     }
 

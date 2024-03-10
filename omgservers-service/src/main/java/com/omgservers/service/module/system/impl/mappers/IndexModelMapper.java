@@ -3,6 +3,7 @@ package com.omgservers.service.module.system.impl.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +29,8 @@ public class IndexModelMapper {
         try {
             index.setConfig(objectMapper.readValue(row.getString("config"), IndexConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("index config can't be parsed, index=" + index, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "index config can't be parsed, index=" + index, e);
         }
         return index;
     }

@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertVersionLobbyRef.UpsertVersionLobbyRefOperation;
@@ -51,6 +52,7 @@ class SyncVersionLobbyRefMethodImpl implements SyncVersionLobbyRefMethod {
                                                                     versionLobbyRef);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "version does not exist or was deleted, id=" + versionId);
                                                 }
                                             })

@@ -1,6 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.updatePlayerProfile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -56,7 +57,7 @@ class UpdatePlayerProfileOperationImpl implements UpdatePlayerProfileOperation {
         try {
             return objectMapper.writeValueAsString(profile);
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 }

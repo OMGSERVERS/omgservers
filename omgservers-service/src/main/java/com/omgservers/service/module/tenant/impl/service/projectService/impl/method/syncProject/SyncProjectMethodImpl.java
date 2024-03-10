@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncProjectRequest;
 import com.omgservers.model.dto.tenant.SyncProjectResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasTenant.HasTenantOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertProject.UpsertProjectOperation;
@@ -48,6 +49,7 @@ class SyncProjectMethodImpl implements SyncProjectMethod {
                                                             project);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "tenant does not exist or was deleted, id=" + tenantId);
                                                 }
                                             })

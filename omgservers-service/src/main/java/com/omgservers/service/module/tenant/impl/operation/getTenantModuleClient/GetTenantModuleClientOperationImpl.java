@@ -1,6 +1,5 @@
 package com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient;
 
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
@@ -21,17 +20,13 @@ class GetTenantModuleClientOperationImpl implements GetTenantModuleClientOperati
 
     @Override
     public synchronized TenantModuleClient getClient(final URI uri) {
-        if (uri == null) {
-            throw new ServerSideBadRequestException("uri is null");
-        }
-
         if (!cache.containsKey(uri)) {
             TenantModuleClient restClient = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(TenantModuleClient.class);
 
             log.debug("Client was created, uri={}", uri);
-            
+
             cache.put(uri, restClient);
         }
         return cache.get(uri);

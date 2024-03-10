@@ -3,6 +3,7 @@ package com.omgservers.service.module.client.impl.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.clientMessage.ClientMessageModel;
 import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,8 +32,8 @@ public class ClientMessageModelMapper {
             final var body = objectMapper.readValue(row.getString("body"), qualifier.getBodyClass());
             clientMessage.setBody(body);
         } catch (IOException e) {
-            throw new ServerSideConflictException("client message can't be parsed, " +
-                    "clientMessage=" + clientMessage, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "client message can't be parsed, clientMessage=" + clientMessage, e);
         }
         return clientMessage;
     }

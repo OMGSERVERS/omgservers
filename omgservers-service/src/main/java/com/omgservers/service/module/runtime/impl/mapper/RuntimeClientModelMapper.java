@@ -3,6 +3,7 @@ package com.omgservers.service.module.runtime.impl.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,7 +31,8 @@ public class RuntimeClientModelMapper {
             runtimeClient.setConfig(objectMapper.readValue(row.getString("config"),
                     RuntimeClientConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("runtime client can't be parsed, runtimeClient=" + runtimeClient, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "runtime client can't be parsed, runtimeClient=" + runtimeClient, e);
         }
         runtimeClient.setDeleted(row.getBoolean("deleted"));
         return runtimeClient;

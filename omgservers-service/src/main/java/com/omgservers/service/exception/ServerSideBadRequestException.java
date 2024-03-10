@@ -1,23 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideBadRequestException extends ServerSideClientExceptionException {
-    public ServerSideBadRequestException() {
-        super();
+public class ServerSideBadRequestException extends ServerSideClientException {
+
+    public ServerSideBadRequestException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideBadRequestException(String message) {
-        super(message);
+    public ServerSideBadRequestException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideBadRequestException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideBadRequestException(final ExceptionQualifierEnum qualifier,
+                                         final String message,
+                                         final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideBadRequestException(Throwable cause) {
-        super(cause);
+    public ServerSideBadRequestException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideBadRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideBadRequestException(final ExceptionQualifierEnum qualifier,
+                                            final String message,
+                                            final Throwable cause,
+                                            final boolean enableSuppression,
+                                            final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

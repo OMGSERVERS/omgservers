@@ -1,9 +1,10 @@
 package com.omgservers.service.operation.checkShard;
 
 import com.omgservers.model.shard.ShardModel;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideGoneException;
 import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -21,10 +22,12 @@ class CheckShardOperationImpl implements CheckShardOperation {
         return calculateShardOperation.calculateShard(keys)
                 .map(shard -> {
                     if (shard.foreign()) {
-                        throw new ServerSideGoneException("wrong shard server, shard=" + shard.shard());
+                        throw new ServerSideGoneException(ExceptionQualifierEnum.SHARD_WRONG,
+                                "wrong shard server, shard=" + shard.shard());
                     }
                     if (shard.locked()) {
-                        throw new ServerSideInternalException("shard is locked, shard=" + shard.shard());
+                        throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
+                                "shard is locked, shard=" + shard.shard());
                     }
 
                     return shard;

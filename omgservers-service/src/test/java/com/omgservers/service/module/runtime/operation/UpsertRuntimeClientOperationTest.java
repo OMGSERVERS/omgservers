@@ -2,7 +2,8 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
@@ -75,8 +76,9 @@ class UpsertRuntimeClientOperationTest extends Assertions {
         final var shard = 0;
         final var runtimeClient = runtimeClientModelFactory.create(runtimeId(),
                 shardKey());
-        assertThrows(ServerSideConflictException.class, () -> upsertRuntimeClientOperation
+        final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeClientOperation
                 .upsertRuntimeClient(shard, runtimeClient));
+        assertEquals(ExceptionQualifierEnum.DB_VIOLATION, exception.getQualifier());
     }
 
     Long tenantId() {

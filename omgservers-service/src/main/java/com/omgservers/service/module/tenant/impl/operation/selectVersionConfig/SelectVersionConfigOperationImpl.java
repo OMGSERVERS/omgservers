@@ -1,8 +1,9 @@
 package com.omgservers.service.module.tenant.impl.operation.selectVersionConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -42,8 +43,9 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                     try {
                         return objectMapper.readValue(row.getString("config"), VersionConfigModel.class);
                     } catch (IOException e) {
-                        throw new ServerSideConflictException(String.format("config can't be parsed, " +
-                                "tenantId=%d, versionId=%d", tenantId, versionId), e);
+                        throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                                String.format("config can't be parsed, tenantId=%d, versionId=%d",
+                                        tenantId, versionId), e);
                     }
                 });
     }

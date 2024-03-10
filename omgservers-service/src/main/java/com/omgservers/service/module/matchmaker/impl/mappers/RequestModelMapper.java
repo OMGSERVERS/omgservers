@@ -1,9 +1,10 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.model.request.RequestConfigModel;
 import com.omgservers.model.request.RequestModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ public class RequestModelMapper {
         try {
             request.setConfig(objectMapper.readValue(row.getString("config"), RequestConfigModel.class));
         } catch (IOException e) {
-            throw new ServerSideConflictException("request config can't be parsed, request=" + request, e);
+            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
+                    "request config can't be parsed, request=" + request, e);
         }
         return request;
     }

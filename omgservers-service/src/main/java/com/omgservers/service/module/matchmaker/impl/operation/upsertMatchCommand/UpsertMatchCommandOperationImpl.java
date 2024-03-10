@@ -1,8 +1,9 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -59,7 +60,7 @@ class UpsertMatchCommandOperationImpl implements UpsertMatchCommandOperation {
         try {
             return objectMapper.writeValueAsString(matchCommand.getBody());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
         }
     }
 }

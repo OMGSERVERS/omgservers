@@ -9,7 +9,6 @@ import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -20,8 +19,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -56,13 +53,9 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
                                    final String reason) {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    if (Objects.isNull(runtime.getConfig().getMatchConfig())) {
-                        throw new ServerSideConflictException("Runtime is corrupted, matchConfig is null, " +
-                                "runtimeId=" + runtimeId);
-                    }
-
                     final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
                     final var matchId = runtime.getConfig().getMatchConfig().getMatchId();
+
                     log.info("Do stop matchmaking, runtimeId={}, match={}/{}, reason={}",
                             runtimeId, matchmakerId, matchId, reason);
 

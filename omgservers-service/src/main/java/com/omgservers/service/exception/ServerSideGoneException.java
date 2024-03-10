@@ -1,24 +1,30 @@
 package com.omgservers.service.exception;
 
-public class ServerSideGoneException extends ServerSideClientExceptionException {
+public class ServerSideGoneException extends ServerSideClientException {
 
-    public ServerSideGoneException() {
-        super();
+    public ServerSideGoneException(final ExceptionQualifierEnum qualifier) {
+        super(qualifier);
     }
 
-    public ServerSideGoneException(String message) {
-        super(message);
+    public ServerSideGoneException(final ExceptionQualifierEnum qualifier, final String message) {
+        super(qualifier, message);
     }
 
-    public ServerSideGoneException(String message, Throwable cause) {
-        super(message, cause);
+    public ServerSideGoneException(final ExceptionQualifierEnum qualifier,
+                                   final String message,
+                                   final Throwable cause) {
+        super(qualifier, message, cause);
     }
 
-    public ServerSideGoneException(Throwable cause) {
-        super(cause);
+    public ServerSideGoneException(final ExceptionQualifierEnum qualifier, final Throwable cause) {
+        super(qualifier, cause);
     }
 
-    protected ServerSideGoneException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected ServerSideGoneException(final ExceptionQualifierEnum qualifier,
+                                      final String message,
+                                      final Throwable cause,
+                                      final boolean enableSuppression,
+                                      final boolean writableStackTrace) {
+        super(qualifier, message, cause, enableSuppression, writableStackTrace);
     }
 }

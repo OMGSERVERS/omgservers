@@ -7,6 +7,7 @@ import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.runtime.impl.operation.deleteRuntimeCommandsByIds.DeleteRuntimeCommandByIdsOperation;
@@ -64,7 +65,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                         .flatMap(voidItem -> receiveCommands(shard, runtimeId, consumedCommands));
 
                             } else {
-                                throw new ServerSideBadRequestException("wrong runtimeId, runtimeId=" + runtimeId);
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
+                                        "wrong runtimeId, runtimeId=" + runtimeId);
                             }
                         })
                 )

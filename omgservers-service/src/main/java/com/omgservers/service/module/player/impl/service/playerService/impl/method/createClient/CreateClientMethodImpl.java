@@ -18,7 +18,7 @@ import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
@@ -131,8 +131,9 @@ class CreateClientMethodImpl implements CreateClientMethod {
         return viewVersions(tenantId, stageId)
                 .map(versions -> {
                     if (versions.isEmpty()) {
-                        throw new ServerSideConflictException(String.format("version was not selected, " +
-                                "tenantId=%d, stageId=%d", tenantId, stageId));
+                        throw new ServerSideNotFoundException(
+                                ExceptionQualifierEnum.VERSION_NOT_FOUND,
+                                String.format("version was not selected, tenantId=%d, stageId=%d", tenantId, stageId));
                     } else {
                         return versions.stream()
                                 .max(Comparator.comparing(VersionModel::getId))
@@ -151,7 +152,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
         return viewVersionMatchmakerRefs(tenantId, versionId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
-                        throw new ServerSideConflictException(
+                        throw new ServerSideNotFoundException(
+                                ExceptionQualifierEnum.MATCHMAKER_NOT_FOUND,
                                 String.format("matchmaker was not selected, version=%d/%d", tenantId, versionId));
                     } else {
                         final var randomRefIndex = ThreadLocalRandom.current().nextInt(refs.size()) % refs.size();

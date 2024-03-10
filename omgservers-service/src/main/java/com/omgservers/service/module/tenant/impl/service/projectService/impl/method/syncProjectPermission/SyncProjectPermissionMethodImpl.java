@@ -2,6 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.hasProject.HasProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
@@ -51,6 +52,7 @@ class SyncProjectPermissionMethodImpl implements SyncProjectPermissionMethod {
                                                             permission);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "project does not exist or was deleted, id=" + projectId);
                                                 }
                                             })

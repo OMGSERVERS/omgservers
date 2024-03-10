@@ -2,6 +2,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.lobby.impl.operation.hasLobby.HasLobbyOperation;
 import com.omgservers.service.module.lobby.impl.operation.upsertLobbyRuntimeRef.UpsertLobbyRuntimeRefOperation;
@@ -46,8 +47,8 @@ class SyncLobbyRuntimeRefMethodImpl implements SyncLobbyRuntimeRefMethod {
                                                             lobbyRuntime);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
-                                                            "lobby does not exist or was deleted, " +
-                                                                    "id=" + lobbyId);
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                            "lobby does not exist or was deleted, id=" + lobbyId);
                                                 }
                                             }))
                             .map(ChangeContext::getResult);

@@ -2,6 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.hasMatchmaker.HasMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertRequest.UpsertRequestOperation;
@@ -46,6 +47,7 @@ class SyncRequestMethodImpl implements SyncRequestMethod {
                                                             requestModel);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
+                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "matchmaker does not exist or was deleted, " +
                                                                     "id=" + matchmakerId);
                                                 }
