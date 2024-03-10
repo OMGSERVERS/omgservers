@@ -65,15 +65,18 @@ public class ServerSideExceptionMapper {
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> internalException(final ServerSideInternalException e) {
+        log.error("Internal exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
+
         final var exceptionErrorResponse = new ExceptionErrorResponse(e);
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
     }
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> throwable(final Throwable e) throws IOException {
-        log.error("{}", e.getMessage(), e);
-        final var exceptionErrorResponse =
-                new ExceptionErrorResponse(ExceptionQualifierEnum.INTERNAL_EXCEPTION, e.getMessage());
+        log.error("Uncaught exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
+
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.INTERNAL_EXCEPTION,
+                e.getMessage());
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
     }
 }

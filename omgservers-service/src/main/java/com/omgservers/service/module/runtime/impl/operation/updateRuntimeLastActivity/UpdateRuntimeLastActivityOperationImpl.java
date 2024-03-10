@@ -33,8 +33,8 @@ class UpdateRuntimeLastActivityOperationImpl implements UpdateRuntimeLastActivit
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_runtime
-                        set modified = $2, last_activity = $4
-                        where runtime_id = $1
+                        set modified = $2, last_activity = $3
+                        where id = $1
                         """,
                 Arrays.asList(
                         runtimeId,

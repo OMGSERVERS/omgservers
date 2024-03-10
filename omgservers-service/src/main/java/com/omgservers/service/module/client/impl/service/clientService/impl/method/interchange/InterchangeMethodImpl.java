@@ -12,6 +12,7 @@ import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
@@ -63,9 +64,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
                             if (client.getUserId().equals(fromUserId)) {
                                 if (client.getDeleted()) {
-                                    log.debug("Client was already deleted, " +
-                                            "skip incoming messages, clientId={}", clientId);
-                                    return receiveMessages(shard, clientId, consumedMessages);
+                                    throw new ServerSideNotFoundException(ExceptionQualifierEnum.CLIENT_NOT_FOUND,
+                                            "client was already deleted, clientId=" + clientId);
                                 }
 
                                 return handleMessages(clientId, request.getOutgoingMessages())
@@ -93,8 +93,9 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 message);
                         case MATCHMAKER_MESSAGE -> new MatchmakerMessageReceivedEventBodyModel(clientId,
                                 message);
-                        default -> throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,
-                                "unsupported message has been received, " + message.getQualifier());
+                        default ->
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,
+                                        "unsupported message has been received, " + message.getQualifier());
                     };
 
                     final var eventModel = eventModelFactory.create(eventBody);

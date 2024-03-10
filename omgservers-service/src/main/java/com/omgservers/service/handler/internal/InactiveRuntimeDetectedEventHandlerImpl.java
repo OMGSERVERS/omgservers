@@ -30,7 +30,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.info("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (InactiveRuntimeDetectedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
@@ -38,7 +38,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     if (runtime.getDeleted()) {
-                        log.warn("Runtime was already deleted, " +
+                        log.info("Runtime was already deleted, " +
                                 "skip operation, runtimeId={}", runtimeId);
                         return Uni.createFrom().item(true);
                     } else {

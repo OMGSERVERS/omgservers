@@ -9,10 +9,12 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.runtime.impl.operation.deleteRuntimeCommandsByIds.DeleteRuntimeCommandByIdsOperation;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.ExecuteOutgoingCommandOperation;
 import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.updateRuntimeLastActivity.UpdateRuntimeLastActivityOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -33,6 +35,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
     final RuntimeModule runtimeModule;
 
     final SelectActiveRuntimeCommandsByRuntimeIdOperation selectActiveRuntimeCommandsByRuntimeIdOperation;
+    final UpdateRuntimeLastActivityOperation updateRuntimeLastActivityOperation;
     final DeleteRuntimeCommandByIdsOperation deleteRuntimeCommandByIdsOperation;
     final ExecuteOutgoingCommandOperation executeOutgoingCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
@@ -56,9 +59,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 final var consumedCommands = request.getConsumedCommands();
 
                                 if (runtime.getDeleted()) {
-                                    log.debug("Runtime was already deleted, " +
-                                            "skip incoming commands, runtimeId={}", runtimeId);
-                                    return receiveCommands(shard, runtimeId, consumedCommands);
+                                    throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
+                                            "runtime was already deleted, runtimeId=" + runtimeId);
                                 }
 
                                 return handleCommands(runtimeId, request.getOutgoingCommands())
@@ -103,18 +105,22 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                                    final Long runtimeId,
                                                    final List<Long> consumedCommands) {
         return changeWithContextOperation.<List<RuntimeCommandModel>>changeWithContext((changeContext, sqlConnection) ->
-                        deleteRuntimeCommandByIdsOperation.deleteRuntimeCommandByIds(
+                        updateRuntimeLastActivityOperation.updateRuntimeLastActivity(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        runtimeId)
+                                .flatMap(updated -> deleteRuntimeCommandByIdsOperation.deleteRuntimeCommandByIds(
                                         changeContext,
                                         sqlConnection,
                                         shard,
                                         runtimeId,
-                                        consumedCommands)
+                                        consumedCommands))
                                 .flatMap(deleted -> selectActiveRuntimeCommandsByRuntimeIdOperation
                                         .selectActiveRuntimeCommandsByRuntimeId(
                                                 sqlConnection,
                                                 shard,
-                                                runtimeId)
-                                )
+                                                runtimeId))
                 )
                 .map(ChangeContext::getResult);
     }

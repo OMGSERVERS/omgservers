@@ -39,7 +39,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.info("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (InactiveClientDetectedEventBodyModel) event.getBody();
         final var clientId = body.getId();
@@ -47,7 +47,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     if (client.getDeleted()) {
-                        log.warn("Client was already deleted, " +
+                        log.info("Client was already deleted, " +
                                 "disconnection message won't be created, clientId={}", clientId);
                         return Uni.createFrom().item(true);
                     } else {

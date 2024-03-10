@@ -8,5 +8,5 @@ public interface UpdateRuntimeLastActivityOperation {
     Uni<Boolean> updateRuntimeLastActivity(ChangeContext<?> changeContext,
                                            SqlConnection sqlConnection,
                                            int shard,
-                                           final Long runtimeId);
+                                           Long runtimeId);
 }
