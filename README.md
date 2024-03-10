@@ -15,7 +15,6 @@
 - OMGSERVERS_MQ_HOST=<mq_host>
 - OMGSERVERS_EXTERNAL_URI=http://<external_hostname>:<external_port>
 - OMGSERVERS_INTERNAL_URI=http://<internal_hostname>:<internal_port>
-- OMGSERVERS_ADDRESSES=http://<address_1_hostname>:<address_1_port>,...,http://<address_N_hostname>:<address_N_port>
 
 #### Optional variables and their default values
 
@@ -42,6 +41,7 @@
 - OMGSERVERS_ADMIN_PASSWORD=admin
 - OMGSERVERS_SHARD_COUNT=1
 - OMGSERVERS_BOOTSTRAP_SERVICE=true
+- OMGSERVERS_ADDRESSES=http://localhost:8080
 - OMGSERVERS_TOKEN_LIFETIME=3600
 - OMGSERVERS_CLIENT_INACTIVE_INTERVAL=30
 - OMGSERVERS_DISABLE_DOCKER=false
