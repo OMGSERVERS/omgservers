@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 public class ExceptionErrorResponse {
 
     ExceptionQualifierEnum qualifier;
-    String message;
 
     public ExceptionErrorResponse(final ServerSideBaseException e) {
         qualifier = e.getQualifier();
-        message = e.getMessage();
     }
 }

@@ -15,15 +15,13 @@ public class ServerSideExceptionMapper {
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> illegalArgumentException(final IllegalArgumentException e) {
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.ILLEGAL_ARGUMENT,
-                e.getMessage());
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.ILLEGAL_ARGUMENT);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> constraintViolationException(final ConstraintViolationException e) {
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.CONSTRAINT_VIOLATION,
-                e.getMessage());
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.CONSTRAINT_VIOLATION);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
@@ -75,8 +73,7 @@ public class ServerSideExceptionMapper {
     public RestResponse<ExceptionErrorResponse> throwable(final Throwable e) throws IOException {
         log.error("Uncaught exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.INTERNAL_EXCEPTION,
-                e.getMessage());
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.INTERNAL_EXCEPTION);
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
     }
 }
