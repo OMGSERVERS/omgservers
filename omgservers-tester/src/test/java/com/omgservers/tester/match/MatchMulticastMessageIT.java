@@ -37,8 +37,10 @@ public class MatchMulticastMessageIT extends Assertions {
     AdminApiTester adminApiTester;
 
     @Test
-    void matchMuticastMessageIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+    void matchMulticastMessageIT() throws Exception {
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        function handle_command(self, command)
+                        end
                         """,
                 """
                         function handle_command(self, command)

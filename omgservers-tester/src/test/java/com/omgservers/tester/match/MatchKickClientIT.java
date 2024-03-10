@@ -39,7 +39,9 @@ public class MatchKickClientIT extends Assertions {
 
     @Test
     void matchKickClientIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        function handle_command(self, command)
+                        end
                         """,
                 """
                         function handle_command(self, command)

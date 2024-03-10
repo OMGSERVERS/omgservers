@@ -53,6 +53,8 @@ public class LobbyHandleMessageIT extends Assertions {
                         end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """);
 
         Thread.sleep(10000);

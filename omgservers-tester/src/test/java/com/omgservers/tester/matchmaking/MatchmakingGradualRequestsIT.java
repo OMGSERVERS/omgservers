@@ -35,9 +35,13 @@ public class MatchmakingGradualRequestsIT extends Assertions {
 
     @Test
     void matchmakingGradualRequests() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 5, 16, new ArrayList<>() {{

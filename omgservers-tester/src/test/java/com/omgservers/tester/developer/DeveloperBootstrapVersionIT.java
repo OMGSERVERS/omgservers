@@ -22,8 +22,12 @@ public class DeveloperBootstrapVersionIT extends Assertions {
     public void bootstrapVersionIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """);
 
         try {

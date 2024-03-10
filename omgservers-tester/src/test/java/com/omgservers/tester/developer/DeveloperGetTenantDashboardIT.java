@@ -26,8 +26,12 @@ public class DeveloperGetTenantDashboardIT extends Assertions {
     void getTenantDashboardIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """);
 
         Thread.sleep(10000);

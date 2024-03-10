@@ -36,9 +36,13 @@ public class MatchmakingSameMatchAssignmentIT extends Assertions {
 
     @Test
     void matchmakingSameMatchAssignment() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 1, 16, new ArrayList<>() {{

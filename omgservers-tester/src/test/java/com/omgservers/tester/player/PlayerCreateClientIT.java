@@ -25,8 +25,12 @@ public class PlayerCreateClientIT extends Assertions {
     @Test
     void createClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """);
 
         Thread.sleep(10000);

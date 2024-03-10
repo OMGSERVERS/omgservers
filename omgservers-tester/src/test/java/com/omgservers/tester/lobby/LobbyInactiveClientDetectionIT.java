@@ -1,8 +1,6 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.DisconnectionMessageBodyModel;
-import com.omgservers.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -34,9 +32,13 @@ public class LobbyInactiveClientDetectionIT extends Assertions {
     @Test
     void lobbyInactiveClientDetectionIT() throws Exception {
         final var testVersion =
-                bootstrapTestVersionOperation.bootstrapTestVersion("""                                              
+                bootstrapTestVersionOperation.bootstrapTestVersion("""
+                                function handle_command(self, command)
+                                end
                                 """,
                         """
+                                function handle_command(self, command)
+                                end
                                 """);
 
         Thread.sleep(10_000);

@@ -37,6 +37,8 @@ public class MatchAddClientIT extends Assertions {
     @Test
     void matchAddClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+                        function handle_command(self, command)
+                        end
                         """,
                 """
                         function handle_command(self, command)

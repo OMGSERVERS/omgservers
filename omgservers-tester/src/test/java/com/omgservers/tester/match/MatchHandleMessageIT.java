@@ -39,6 +39,8 @@ public class MatchHandleMessageIT extends Assertions {
     @Test
     void matchHandleMessageIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
+                        function handle_command(self, command)
+                        end
                         """,
                 """
                         function handle_command(self, command)

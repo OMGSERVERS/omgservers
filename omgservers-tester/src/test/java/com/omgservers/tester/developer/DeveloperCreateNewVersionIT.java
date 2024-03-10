@@ -26,8 +26,12 @@ public class DeveloperCreateNewVersionIT extends Assertions {
     void createNewVersionIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
+                        function handle_command(self, command)
+                        end
                         """,
                 """
+                        function handle_command(self, command)
+                        end
                         """);
 
         Thread.sleep(10_000);
