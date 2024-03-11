@@ -23,21 +23,24 @@ public class ClientSideExceptionMapper implements ResponseExceptionMapper<Runtim
 
         try {
             final var exceptionErrorResponse = objectMapper.readValue(responseAsString, ExceptionErrorResponse.class);
+            final var exceptionQualifier = exceptionErrorResponse.getQualifier();
 
             if (statusCode >= 400 && statusCode < 500) {
                 if (statusCode == Response.Status.BAD_REQUEST.getStatusCode()) {
-                    return new ClientSideBadRequestException(exceptionErrorResponse);
+                    return new ServerSideBadRequestException(exceptionQualifier);
                 } else if (statusCode == Response.Status.UNAUTHORIZED.getStatusCode()) {
-                    return new ClientSideUnauthorizedException(exceptionErrorResponse);
+                    return new ServerSideUnauthorizedException(exceptionQualifier);
+                } else if (statusCode == Response.Status.FORBIDDEN.getStatusCode()) {
+                    return new ServerSideForbiddenException(exceptionQualifier);
                 } else if (statusCode == Response.Status.NOT_FOUND.getStatusCode()) {
-                    return new ClientSideNotFoundException(exceptionErrorResponse);
+                    return new ServerSideNotFoundException(exceptionQualifier);
                 } else if (statusCode == Response.Status.CONFLICT.getStatusCode()) {
-                    return new ClientSideConflictException(exceptionErrorResponse);
+                    return new ServerSideConflictException(exceptionQualifier);
                 } else if (statusCode == Response.Status.GONE.getStatusCode()) {
-                    return new ClientSideGoneException(exceptionErrorResponse);
+                    return new ServerSideGoneException(exceptionQualifier);
                 }
             } else if (statusCode >= 500) {
-                return new ClientSideInternalException(exceptionErrorResponse);
+                return new ServerSideInternalException(exceptionQualifier);
             }
 
         } catch (IOException e) {
