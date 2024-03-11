@@ -1,9 +1,10 @@
 package com.omgservers.service.module.tenant.operation;
 
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -11,16 +12,13 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertClientOperationTest extends Assertions {
+class UpsertTenantOperationTest extends Assertions {
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void whenUpsertTenant_thenInserted() {
@@ -38,5 +36,17 @@ class UpsertClientOperationTest extends Assertions {
 
         final var changeContext = upsertTenantOperation.upsertTenant(shard, tenant);
         assertFalse(changeContext.getResult());
+    }
+
+    @Test
+    void givenTenant_whenUpsertTenant_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var tenant1 = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant1);
+
+        final var tenant2 = tenantModelFactory.create(tenant1.getIdempotencyKey());
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertTenantOperation.upsertTenant(shard, tenant2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 }

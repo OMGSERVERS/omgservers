@@ -33,13 +33,14 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_stage(
-                            id, tenant_id, project_id, created, modified, secret, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, project_id, created, modified, secret, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         stage.getId(),
+                        stage.getIdempotencyKey(),
                         stage.getTenantId(),
                         stage.getProjectId(),
                         stage.getCreated().atOffset(ZoneOffset.UTC),
@@ -48,8 +49,7 @@ class UpsertStageOperationImpl implements UpsertStageOperation {
                         stage.getDeleted()
                 ),
                 () -> new StageCreatedEventBodyModel(stage.getTenantId(), stage.getId()),
-                () -> logModelFactory.create(String.format("Stage was created, " +
-                        "tenantId=%d, stage=%s", stage.getTenantId(), stage))
+                () -> null
         );
     }
 }

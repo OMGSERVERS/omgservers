@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -22,14 +23,25 @@ public class StagePermissionModelFactory {
                                        final Long userId,
                                        final StagePermissionEnum permission) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, stageId, userId, permission);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, tenantId, stageId, userId, permission, idempotencyKey);
+    }
+
+    public StagePermissionModel create(final Long tenantId,
+                                       final Long stageId,
+                                       final Long userId,
+                                       final StagePermissionEnum permission,
+                                       final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, tenantId, stageId, userId, permission, idempotencyKey);
     }
 
     public StagePermissionModel create(final Long id,
                                        final Long tenantId,
                                        final Long stageId,
                                        final Long userId,
-                                       final StagePermissionEnum permission) {
+                                       final StagePermissionEnum permission,
+                                       final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var stagePermission = new StagePermissionModel();
@@ -38,6 +50,7 @@ public class StagePermissionModelFactory {
         stagePermission.setStageId(stageId);
         stagePermission.setCreated(now);
         stagePermission.setModified(now);
+        stagePermission.setIdempotencyKey(idempotencyKey);
         stagePermission.setUserId(userId);
         stagePermission.setPermission(permission);
         stagePermission.setDeleted(false);

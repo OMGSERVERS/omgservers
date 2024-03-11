@@ -29,28 +29,27 @@ class UpsertVersionMatchmakerRequestOperationImpl implements UpsertVersionMatchm
                                                        final SqlConnection sqlConnection,
                                                        final int shard,
                                                        final VersionMatchmakerRequestModel versionMatchmakerRequest) {
-        final var tenantId = versionMatchmakerRequest.getTenantId();
-        final var id = versionMatchmakerRequest.getId();
-
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version_matchmaker_request(
-                            id, tenant_id, version_id, created, modified, matchmaker_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, version_id, created, modified, matchmaker_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
-                        id,
-                        tenantId,
+                        versionMatchmakerRequest.getId(),
+                        versionMatchmakerRequest.getIdempotencyKey(),
+                        versionMatchmakerRequest.getTenantId(),
                         versionMatchmakerRequest.getVersionId(),
                         versionMatchmakerRequest.getCreated().atOffset(ZoneOffset.UTC),
                         versionMatchmakerRequest.getModified().atOffset(ZoneOffset.UTC),
                         versionMatchmakerRequest.getMatchmakerId(),
                         versionMatchmakerRequest.getDeleted()
                 ),
-                () -> new VersionMatchmakerRequestCreatedEventBodyModel(tenantId, id),
+                () -> new VersionMatchmakerRequestCreatedEventBodyModel(versionMatchmakerRequest.getTenantId(),
+                        versionMatchmakerRequest.getId()),
                 () -> null
         );
     }

@@ -19,6 +19,7 @@ public class StagePermissionModelMapper {
         stagePermission.setStageId(row.getLong("stage_id"));
         stagePermission.setCreated(row.getOffsetDateTime("created").toInstant());
         stagePermission.setModified(row.getOffsetDateTime("modified").toInstant());
+        stagePermission.setIdempotencyKey(row.getString("idempotency_key"));
         stagePermission.setUserId(row.getLong("user_id"));
         stagePermission.setPermission(StagePermissionEnum.valueOf(row.getString("permission")));
         stagePermission.setDeleted(row.getBoolean("deleted"));

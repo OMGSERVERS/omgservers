@@ -33,13 +33,14 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_project(
-                            id, tenant_id, created, modified, deleted)
-                        values($1, $2, $3, $4, $5)
+                            id, idempotency_key, tenant_id, created, modified, deleted)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         project.getId(),
+                        project.getIdempotencyKey(),
                         project.getTenantId(),
                         project.getCreated().atOffset(ZoneOffset.UTC),
                         project.getModified().atOffset(ZoneOffset.UTC),

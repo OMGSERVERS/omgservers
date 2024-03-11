@@ -1,12 +1,16 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
 import com.omgservers.service.factory.StageModelFactory;
 import com.omgservers.service.factory.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertStageOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +39,11 @@ class UpsertStageOperationTest extends Assertions {
     @Inject
     StageModelFactory stageModelFactory;
 
+    @Inject
+    GenerateIdOperation generateIdOperation;
+
     @Test
-    void whenUpsertStage_thenInserted() {
+    void givenStage_whenUpsertStage_thenInserted() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -62,5 +69,38 @@ class UpsertStageOperationTest extends Assertions {
         final var changeContext = upsertStageOperation.upsertStage(shard, stage);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.STAGE_CREATED));
+    }
+
+    @Test
+    void givenUnknownIds_whenUpsertStage_thenException() {
+        final var shard = 0;
+        final var stage = stageModelFactory.create(tenantId(), projectId());
+
+        assertThrows(ServerSideBadRequestException.class, () -> upsertStageOperation.upsertStage(shard, stage));
+    }
+
+    @Test
+    void givenStage_whenUpsertStage_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
+
+        final var stage1 = stageModelFactory.create(tenant.getId(), project.getId());
+        upsertStageOperation.upsertStage(shard, stage1);
+
+        final var stage2 = stageModelFactory.create(tenant.getId(), project.getId(), stage1.getIdempotencyKey());
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertStageOperation.upsertStage(shard, stage2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+    }
+
+    Long tenantId() {
+        return generateIdOperation.generateId();
+    }
+
+    Long projectId() {
+        return generateIdOperation.generateId();
     }
 }

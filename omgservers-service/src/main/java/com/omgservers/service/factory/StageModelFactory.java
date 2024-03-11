@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -21,13 +22,23 @@ public class StageModelFactory {
                              final Long projectId) {
         final var id = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
-        return create(id, tenantId, projectId, secret);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, tenantId, projectId, secret, idempotencyKey);
+    }
+
+    public StageModel create(final Long tenantId,
+                             final Long projectId,
+                             final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        final var secret = String.valueOf(new SecureRandom().nextLong());
+        return create(id, tenantId, projectId, secret, idempotencyKey);
     }
 
     public StageModel create(final Long id,
                              final Long tenantId,
                              final Long projectId,
-                             final String secret) {
+                             final String secret,
+                             final String idempotencyKey) {
         var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         StageModel stage = new StageModel();
@@ -36,6 +47,7 @@ public class StageModelFactory {
         stage.setProjectId(projectId);
         stage.setCreated(now);
         stage.setModified(now);
+        stage.setIdempotencyKey(idempotencyKey);
         stage.setSecret(secret);
         stage.setDeleted(false);
         return stage;

@@ -30,13 +30,14 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_stage_permission(
-                            id, tenant_id, stage_id, created, modified, user_id, permission, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, stage_id, created, modified, user_id, permission, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         stagePermission.getId(),
+                        stagePermission.getIdempotencyKey(),
                         stagePermission.getTenantId(),
                         stagePermission.getStageId(),
                         stagePermission.getCreated().atOffset(ZoneOffset.UTC),

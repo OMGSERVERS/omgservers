@@ -29,8 +29,7 @@ class SelectActiveProjectsByTenantIdOperationImpl implements SelectActiveProject
                 sqlConnection,
                 shard,
                 """
-                        select
-                            id, tenant_id, created, modified, deleted
+                        select id, idempotency_key, tenant_id, created, modified, deleted
                         from $schema.tab_tenant_project
                         where tenant_id = $1 and deleted = false
                         order by id asc

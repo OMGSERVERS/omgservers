@@ -19,6 +19,7 @@ public class TenantModelMapper {
         tenant.setId(row.getLong("id"));
         tenant.setCreated(row.getOffsetDateTime("created").toInstant());
         tenant.setModified(row.getOffsetDateTime("modified").toInstant());
+        tenant.setIdempotencyKey(row.getString("idempotency_key"));
         tenant.setDeleted(row.getBoolean("deleted"));
         return tenant;
     }

@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.TenantModelFactory;
@@ -75,6 +76,25 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
                 TenantPermissionEnum.CREATE_PROJECT);
         assertThrows(ServerSideBadRequestException.class, () -> upsertTenantPermissionOperation
                 .upsertTenantPermission(shard, permission));
+    }
+
+    @Test
+    void givenTenantPermission_whenUpsertTenantPermission_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
+        final var permission1 = tenantPermissionModelFactory.create(tenant.getId(),
+                userId(),
+                TenantPermissionEnum.CREATE_PROJECT);
+        upsertTenantPermissionOperation.upsertTenantPermission(shard, permission1);
+
+        final var permission2 = tenantPermissionModelFactory.create(tenant.getId(),
+                userId(),
+                TenantPermissionEnum.CREATE_PROJECT,
+                permission1.getIdempotencyKey());
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertTenantPermissionOperation.upsertTenantPermission(shard, permission2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 
     Long userId() {

@@ -29,28 +29,27 @@ class UpsertVersionMatchmakerRefOperationImpl implements UpsertVersionMatchmaker
                                                    final SqlConnection sqlConnection,
                                                    final int shard,
                                                    final VersionMatchmakerRefModel versionMatchmakerRef) {
-        final var tenantId = versionMatchmakerRef.getTenantId();
-        final var id = versionMatchmakerRef.getId();
-
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version_matchmaker_ref(
-                            id, tenant_id, version_id, created, modified, matchmaker_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, version_id, created, modified, matchmaker_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
-                        id,
-                        tenantId,
+                        versionMatchmakerRef.getId(),
+                        versionMatchmakerRef.getIdempotencyKey(),
+                        versionMatchmakerRef.getTenantId(),
                         versionMatchmakerRef.getVersionId(),
                         versionMatchmakerRef.getCreated().atOffset(ZoneOffset.UTC),
                         versionMatchmakerRef.getModified().atOffset(ZoneOffset.UTC),
                         versionMatchmakerRef.getMatchmakerId(),
                         versionMatchmakerRef.getDeleted()
                 ),
-                () -> new VersionMatchmakerRefCreatedEventBodyModel(tenantId, id),
+                () -> new VersionMatchmakerRefCreatedEventBodyModel(versionMatchmakerRef.getTenantId(),
+                        versionMatchmakerRef.getId()),
                 () -> null
         );
     }

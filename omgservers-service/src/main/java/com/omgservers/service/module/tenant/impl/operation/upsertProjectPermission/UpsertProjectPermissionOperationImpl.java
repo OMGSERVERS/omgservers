@@ -30,13 +30,14 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_project_permission(
-                            id, tenant_id, project_id, created, modified, user_id, permission, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, project_id, created, modified, user_id, permission, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         projectPermission.getId(),
+                        projectPermission.getIdempotencyKey(),
                         projectPermission.getTenantId(),
                         projectPermission.getProjectId(),
                         projectPermission.getCreated().atOffset(ZoneOffset.UTC),

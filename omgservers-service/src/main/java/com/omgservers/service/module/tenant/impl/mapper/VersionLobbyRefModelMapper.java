@@ -18,6 +18,7 @@ public class VersionLobbyRefModelMapper {
         versionLobbyRef.setVersionId(row.getLong("version_id"));
         versionLobbyRef.setCreated(row.getOffsetDateTime("created").toInstant());
         versionLobbyRef.setModified(row.getOffsetDateTime("modified").toInstant());
+        versionLobbyRef.setIdempotencyKey(row.getString("idempotency_key"));
         versionLobbyRef.setLobbyId(row.getLong("lobby_id"));
         versionLobbyRef.setDeleted(row.getBoolean("deleted"));
         return versionLobbyRef;

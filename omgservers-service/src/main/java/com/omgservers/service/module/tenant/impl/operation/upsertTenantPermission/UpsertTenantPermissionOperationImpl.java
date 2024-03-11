@@ -30,13 +30,14 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_permission(
-                            id, tenant_id, created, modified, user_id, permission, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, created, modified, user_id, permission, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         tenantPermission.getId(),
+                        tenantPermission.getIdempotencyKey(),
                         tenantPermission.getTenantId(),
                         tenantPermission.getCreated().atOffset(ZoneOffset.UTC),
                         tenantPermission.getModified().atOffset(ZoneOffset.UTC),
@@ -45,7 +46,7 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
                         tenantPermission.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Tenant permission was inserted, tenantPermission=" + tenantPermission)
+                () -> null
         );
     }
 }

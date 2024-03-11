@@ -74,6 +74,7 @@ create index if not exists idx_client_runtime_ref_client_id on tab_client_runtim
 
 create table if not exists tab_tenant (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     deleted boolean not null
@@ -81,6 +82,7 @@ create table if not exists tab_tenant (
 
 create table if not exists tab_tenant_permission (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -91,6 +93,7 @@ create table if not exists tab_tenant_permission (
 
 create table if not exists tab_tenant_project (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -99,6 +102,7 @@ create table if not exists tab_tenant_project (
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -110,6 +114,7 @@ create table if not exists tab_tenant_project_permission (
 
 create table if not exists tab_tenant_stage (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -120,6 +125,7 @@ create table if not exists tab_tenant_stage (
 
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -131,6 +137,7 @@ create table if not exists tab_tenant_stage_permission (
 
 create table if not exists tab_tenant_version (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -142,6 +149,7 @@ create table if not exists tab_tenant_version (
 
 create table if not exists tab_tenant_version_lobby_request (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -152,6 +160,7 @@ create table if not exists tab_tenant_version_lobby_request (
 
 create table if not exists tab_tenant_version_lobby_ref (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -162,6 +171,7 @@ create table if not exists tab_tenant_version_lobby_ref (
 
 create table if not exists tab_tenant_version_matchmaker_request (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -172,6 +182,7 @@ create table if not exists tab_tenant_version_matchmaker_request (
 
 create table if not exists tab_tenant_version_matchmaker_ref (
     id bigint primary key,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,

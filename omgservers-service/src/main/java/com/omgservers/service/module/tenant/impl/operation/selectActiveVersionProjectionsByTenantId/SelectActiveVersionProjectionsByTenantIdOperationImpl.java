@@ -30,8 +30,7 @@ class SelectActiveVersionProjectionsByTenantIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select
-                            id, tenant_id, stage_id, created, modified, deleted
+                        select id, idempotency_key, tenant_id, stage_id, created, modified, deleted
                         from $schema.tab_tenant_version
                         where tenant_id = $1 and deleted = false
                         order by id asc

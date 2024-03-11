@@ -20,6 +20,7 @@ public class ProjectModelMapper {
         project.setTenantId(row.getLong("tenant_id"));
         project.setCreated(row.getOffsetDateTime("created").toInstant());
         project.setModified(row.getOffsetDateTime("modified").toInstant());
+        project.setIdempotencyKey(row.getString("idempotency_key"));
         project.setDeleted(row.getBoolean("deleted"));
 
         return project;

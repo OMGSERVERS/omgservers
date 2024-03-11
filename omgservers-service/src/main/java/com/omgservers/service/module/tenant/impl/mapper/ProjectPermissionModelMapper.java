@@ -19,6 +19,7 @@ public class ProjectPermissionModelMapper {
         projectPermission.setProjectId(row.getLong("project_id"));
         projectPermission.setCreated(row.getOffsetDateTime("created").toInstant());
         projectPermission.setModified(row.getOffsetDateTime("modified").toInstant());
+        projectPermission.setIdempotencyKey(row.getString("idempotency_key"));
         projectPermission.setUserId(row.getLong("user_id"));
         projectPermission.setPermission(ProjectPermissionEnum.valueOf(row.getString("permission")));
         projectPermission.setDeleted(row.getBoolean("deleted"));

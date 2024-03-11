@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
@@ -9,7 +10,6 @@ import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjec
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertClientRuntimeRefOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
+class UpsertProjectOperationTest extends Assertions {
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;
@@ -35,11 +34,8 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenTenant_whenUpsertProject_thenInserted() {
+    void givenProject_whenUpsertProject_thenInserted() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -64,11 +60,25 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownTenant_whenUpsertProject_thenException() {
+    void givenUnknownTenantId_whenUpsertProject_thenException() {
         final var shard = 0;
         final var project = projectModelFactory.create(tenantId());
-        assertThrows(ServerSideBadRequestException.class, () ->
-                upsertProjectOperation.upsertProject(shard, project));
+        assertThrows(ServerSideBadRequestException.class, () -> upsertProjectOperation.upsertProject(shard, project));
+    }
+
+    @Test
+    void givenProject_whenUpsertProject_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
+        final var project1 = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project1);
+
+        final var project2 = projectModelFactory.create(tenant.getId(), project1.getIdempotencyKey());
+
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertProjectOperation.upsertProject(shard, project2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 
     Long tenantId() {

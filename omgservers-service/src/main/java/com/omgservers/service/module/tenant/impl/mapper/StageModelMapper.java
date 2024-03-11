@@ -21,6 +21,7 @@ public class StageModelMapper {
         stage.setProjectId(row.getLong("project_id"));
         stage.setCreated(row.getOffsetDateTime("created").toInstant());
         stage.setModified(row.getOffsetDateTime("modified").toInstant());
+        stage.setIdempotencyKey(row.getString("idempotency_key"));
         stage.setSecret(row.getString("secret"));
         stage.setDeleted(row.getBoolean("deleted"));
         return stage;

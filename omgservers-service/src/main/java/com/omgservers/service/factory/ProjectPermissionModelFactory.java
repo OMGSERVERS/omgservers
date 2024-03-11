@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -22,14 +23,25 @@ public class ProjectPermissionModelFactory {
                                          final Long userId,
                                          final ProjectPermissionEnum permission) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, projectId, userId, permission);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, tenantId, projectId, userId, permission, idempotencyKey);
+    }
+
+    public ProjectPermissionModel create(final Long tenantId,
+                                         final Long projectId,
+                                         final Long userId,
+                                         final ProjectPermissionEnum permission,
+                                         final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, tenantId, projectId, userId, permission, idempotencyKey);
     }
 
     public ProjectPermissionModel create(final Long id,
                                          final Long tenantId,
                                          final Long projectId,
                                          final Long userId,
-                                         final ProjectPermissionEnum permission) {
+                                         final ProjectPermissionEnum permission,
+                                         final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var projectPermission = new ProjectPermissionModel();
@@ -38,6 +50,7 @@ public class ProjectPermissionModelFactory {
         projectPermission.setProjectId(projectId);
         projectPermission.setCreated(now);
         projectPermission.setModified(now);
+        projectPermission.setIdempotencyKey(idempotencyKey);
         projectPermission.setUserId(userId);
         projectPermission.setPermission(permission);
         projectPermission.setDeleted(false);

@@ -29,8 +29,7 @@ class SelectActiveStagesByTenantIdOperationImpl implements SelectActiveStagesByT
                 sqlConnection,
                 shard,
                 """
-                        select
-                            id, tenant_id, project_id, created, modified, secret, deleted
+                        select id, idempotency_key,tenant_id, project_id, created, modified, secret, deleted
                         from $schema.tab_tenant_stage
                         where tenant_id = $1 and deleted = false
                         order by id asc

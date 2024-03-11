@@ -28,7 +28,7 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, created, modified, deleted
+                        select id, idempotency_key, created, modified, deleted
                         from $schema.tab_tenant
                         where id = $1
                         limit 1

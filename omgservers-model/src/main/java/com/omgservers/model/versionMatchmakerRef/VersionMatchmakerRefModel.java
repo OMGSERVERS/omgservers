@@ -1,5 +1,6 @@
 package com.omgservers.model.versionMatchmakerRef;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class VersionMatchmakerRefModel {
 
     @NotNull
     Instant modified;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long matchmakerId;

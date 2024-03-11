@@ -32,8 +32,7 @@ class SelectActiveProjectPermissionsByProjectIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select
-                            id, tenant_id, project_id, created, modified, user_id, permission, deleted
+                        select id, idempotency_key, tenant_id, project_id, created, modified, user_id, permission, deleted
                         from $schema.tab_tenant_project_permission
                         where tenant_id = $1 and project_id = $2 and deleted = false
                         order by id asc

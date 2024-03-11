@@ -29,7 +29,7 @@ class SelectVersionMatchmakerRefOperationImpl implements SelectVersionMatchmaker
                 sqlConnection,
                 shard,
                 """
-                        select id, tenant_id, version_id, created, modified, matchmaker_id, deleted
+                        select id, idempotency_key, tenant_id, version_id, created, modified, matchmaker_id, deleted
                         from $schema.tab_tenant_version_matchmaker_ref
                         where tenant_id = $1 and id = $2
                         limit 1

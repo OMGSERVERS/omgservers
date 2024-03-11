@@ -31,6 +31,9 @@ public class StageModel {
     Instant modified;
 
     @NotBlank
+    String idempotencyKey;
+
+    @NotBlank
     @Size(max = 1024)
     @ToString.Exclude
     String secret;

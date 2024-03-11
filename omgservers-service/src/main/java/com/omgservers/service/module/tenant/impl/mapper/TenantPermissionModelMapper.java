@@ -18,6 +18,7 @@ public class TenantPermissionModelMapper {
         tenantPermission.setTenantId(row.getLong("tenant_id"));
         tenantPermission.setCreated(row.getOffsetDateTime("created").toInstant());
         tenantPermission.setModified(row.getOffsetDateTime("modified").toInstant());
+        tenantPermission.setIdempotencyKey(row.getString("idempotency_key"));
         tenantPermission.setUserId(row.getLong("user_id"));
         tenantPermission.setPermission(TenantPermissionEnum.valueOf(row.getString("permission")));
         tenantPermission.setDeleted(row.getBoolean("deleted"));

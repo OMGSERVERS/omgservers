@@ -1,6 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ProjectModelFactory;
@@ -11,7 +12,6 @@ import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjec
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -42,9 +42,6 @@ class UpsertProjectPermissionOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenProjectPermission_whenUpsertProjectPermission_thenInserted() {
@@ -84,6 +81,29 @@ class UpsertProjectPermissionOperationTest extends Assertions {
                 ProjectPermissionEnum.CREATE_STAGE);
         assertThrows(ServerSideBadRequestException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(shard, permission));
+    }
+
+    @Test
+    void givenProjectPermission_whenUpsertProjectPermission_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var tenant = tenantModelFactory.create();
+        upsertTenantOperation.upsertTenant(shard, tenant);
+        final var project = projectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, project);
+        final var permission1 = projectPermissionModelFactory.create(tenant.getId(),
+                project.getId(),
+                userId(),
+                ProjectPermissionEnum.CREATE_STAGE);
+        upsertProjectPermissionOperation.upsertProjectPermission(shard, permission1);
+
+        final var permission2 = projectPermissionModelFactory.create(tenant.getId(),
+                project.getId(),
+                userId(),
+                ProjectPermissionEnum.CREATE_STAGE,
+                permission1.getIdempotencyKey());
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertProjectPermissionOperation.upsertProjectPermission(shard, permission2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 
     Long userId() {

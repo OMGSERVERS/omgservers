@@ -27,6 +27,7 @@ public class VersionModelMapper {
         version.setStageId(row.getLong("stage_id"));
         version.setCreated(row.getOffsetDateTime("created").toInstant());
         version.setModified(row.getOffsetDateTime("modified").toInstant());
+        version.setIdempotencyKey(row.getString("idempotency_key"));
         version.setDeleted(row.getBoolean("deleted"));
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));

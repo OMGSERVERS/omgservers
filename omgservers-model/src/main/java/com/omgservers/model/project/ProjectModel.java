@@ -1,5 +1,6 @@
 package com.omgservers.model.project;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,9 @@ public class ProjectModel {
 
     @NotNull
     Instant modified;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Boolean deleted;

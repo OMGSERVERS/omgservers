@@ -1,5 +1,6 @@
 package com.omgservers.model.version;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,9 @@ public class VersionModel {
 
     @NotNull
     Instant modified;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     @ToString.Exclude

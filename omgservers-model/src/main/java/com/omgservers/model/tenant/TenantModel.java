@@ -1,5 +1,6 @@
 package com.omgservers.model.tenant;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,9 @@ public class TenantModel {
 
     @NotNull
     Instant modified;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Boolean deleted;

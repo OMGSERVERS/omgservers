@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,13 +21,23 @@ public class VersionMatchmakerRequestModelFactory {
                                                 final Long versionId) {
         final var id = generateIdOperation.generateId();
         final var matchmakerId = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, matchmakerId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, tenantId, versionId, matchmakerId, idempotencyKey);
+    }
+
+    public VersionMatchmakerRequestModel create(final Long tenantId,
+                                                final Long versionId,
+                                                final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        final var matchmakerId = generateIdOperation.generateId();
+        return create(id, tenantId, versionId, matchmakerId, idempotencyKey);
     }
 
     public VersionMatchmakerRequestModel create(final Long id,
                                                 final Long tenantId,
                                                 final Long versionId,
-                                                final Long matchmakerId) {
+                                                final Long matchmakerId,
+                                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var versionMatchmakerRequest = new VersionMatchmakerRequestModel();
@@ -35,6 +46,7 @@ public class VersionMatchmakerRequestModelFactory {
         versionMatchmakerRequest.setVersionId(versionId);
         versionMatchmakerRequest.setCreated(now);
         versionMatchmakerRequest.setModified(now);
+        versionMatchmakerRequest.setIdempotencyKey(idempotencyKey);
         versionMatchmakerRequest.setMatchmakerId(matchmakerId);
         versionMatchmakerRequest.setDeleted(false);
         return versionMatchmakerRequest;

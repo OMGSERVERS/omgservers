@@ -18,6 +18,7 @@ public class VersionLobbyRequestModelMapper {
         versionLobbyRequest.setVersionId(row.getLong("version_id"));
         versionLobbyRequest.setCreated(row.getOffsetDateTime("created").toInstant());
         versionLobbyRequest.setModified(row.getOffsetDateTime("modified").toInstant());
+        versionLobbyRequest.setIdempotencyKey(row.getString("idempotency_key"));
         versionLobbyRequest.setLobbyId(row.getLong("lobby_id"));
         versionLobbyRequest.setDeleted(row.getBoolean("deleted"));
         return versionLobbyRequest;

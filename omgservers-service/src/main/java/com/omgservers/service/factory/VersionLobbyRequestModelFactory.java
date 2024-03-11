@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,13 +21,23 @@ public class VersionLobbyRequestModelFactory {
                                            final Long versionId) {
         final var id = generateIdOperation.generateId();
         final var lobbyId = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, lobbyId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, tenantId, versionId, lobbyId, idempotencyKey);
+    }
+
+    public VersionLobbyRequestModel create(final Long tenantId,
+                                           final Long versionId,
+                                           final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        final var lobbyId = generateIdOperation.generateId();
+        return create(id, tenantId, versionId, lobbyId, idempotencyKey);
     }
 
     public VersionLobbyRequestModel create(final Long id,
                                            final Long tenantId,
                                            final Long versionId,
-                                           final Long lobbyId) {
+                                           final Long lobbyId,
+                                           final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var versionLobbyRequest = new VersionLobbyRequestModel();
@@ -35,6 +46,7 @@ public class VersionLobbyRequestModelFactory {
         versionLobbyRequest.setVersionId(versionId);
         versionLobbyRequest.setCreated(now);
         versionLobbyRequest.setModified(now);
+        versionLobbyRequest.setIdempotencyKey(idempotencyKey);
         versionLobbyRequest.setLobbyId(lobbyId);
         versionLobbyRequest.setDeleted(false);
         return versionLobbyRequest;

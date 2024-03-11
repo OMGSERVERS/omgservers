@@ -18,6 +18,7 @@ public class VersionMatchmakerRefModelMapper {
         versionMatchmakerRef.setVersionId(row.getLong("version_id"));
         versionMatchmakerRef.setCreated(row.getOffsetDateTime("created").toInstant());
         versionMatchmakerRef.setModified(row.getOffsetDateTime("modified").toInstant());
+        versionMatchmakerRef.setIdempotencyKey(row.getString("idempotency_key"));
         versionMatchmakerRef.setMatchmakerId(row.getLong("matchmaker_id"));
         versionMatchmakerRef.setDeleted(row.getBoolean("deleted"));
         return versionMatchmakerRef;

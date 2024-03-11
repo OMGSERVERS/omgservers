@@ -27,28 +27,27 @@ class UpsertVersionLobbyRequestOperationImpl implements UpsertVersionLobbyReques
                                                   final SqlConnection sqlConnection,
                                                   final int shard,
                                                   final VersionLobbyRequestModel versionLobbyRequest) {
-        final var tenantId = versionLobbyRequest.getTenantId();
-        final var id = versionLobbyRequest.getId();
-
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version_lobby_request(
-                            id, tenant_id, version_id, created, modified, lobby_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, version_id, created, modified, lobby_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
-                        id,
-                        tenantId,
+                        versionLobbyRequest.getId(),
+                        versionLobbyRequest.getIdempotencyKey(),
+                        versionLobbyRequest.getTenantId(),
                         versionLobbyRequest.getVersionId(),
                         versionLobbyRequest.getCreated().atOffset(ZoneOffset.UTC),
                         versionLobbyRequest.getModified().atOffset(ZoneOffset.UTC),
                         versionLobbyRequest.getLobbyId(),
                         versionLobbyRequest.getDeleted()
                 ),
-                () -> new VersionLobbyRequestCreatedEventBodyModel(tenantId, id),
+                () -> new VersionLobbyRequestCreatedEventBodyModel(versionLobbyRequest.getTenantId(),
+                        versionLobbyRequest.getId()),
                 () -> null
         );
     }

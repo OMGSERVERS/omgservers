@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -33,19 +33,20 @@ class UpsertTenantOperationImpl implements UpsertTenantOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant(
-                            id, created, modified, deleted)
-                        values($1, $2, $3, $4)
+                            id, idempotency_key, created, modified, deleted)
+                        values($1, $2, $3, $4, $5)
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         tenant.getId(),
+                        tenant.getIdempotencyKey(),
                         tenant.getCreated().atOffset(ZoneOffset.UTC),
                         tenant.getModified().atOffset(ZoneOffset.UTC),
                         tenant.getDeleted()
                 ),
                 () -> new TenantCreatedEventBodyModel(tenant.getId()),
-                () -> logModelFactory.create("Tenant was inserted, tenant=" + tenant)
+                () -> null
         );
     }
 }

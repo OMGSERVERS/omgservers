@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -24,18 +25,36 @@ public class VersionModelFactory {
             final VersionConfigModel versionConfig,
             final VersionSourceCodeModel sourceCode) {
         final var id = generateIdOperation.generateId();
+        final var idempotencyKey = UUID.randomUUID().toString();
         return create(id,
                 tenantId,
                 stageId,
                 versionConfig,
-                sourceCode);
+                sourceCode,
+                idempotencyKey);
+    }
+
+    public VersionModel create(
+            final Long tenantId,
+            final Long stageId,
+            final VersionConfigModel versionConfig,
+            final VersionSourceCodeModel sourceCode,
+            final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id,
+                tenantId,
+                stageId,
+                versionConfig,
+                sourceCode,
+                idempotencyKey);
     }
 
     public VersionModel create(final Long id,
                                final Long tenantId,
                                final Long stageId,
                                final VersionConfigModel versionConfig,
-                               final VersionSourceCodeModel sourceCode) {
+                               final VersionSourceCodeModel sourceCode,
+                               final String idempotencyKey) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var version = new VersionModel();
@@ -44,6 +63,7 @@ public class VersionModelFactory {
         version.setStageId(stageId);
         version.setCreated(now);
         version.setModified(now);
+        version.setIdempotencyKey(idempotencyKey);
         version.setConfig(versionConfig);
         version.setSourceCode(sourceCode);
         version.setDeleted(false);

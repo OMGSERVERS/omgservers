@@ -1,5 +1,6 @@
 package com.omgservers.model.versionLobbyRequest;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class VersionLobbyRequestModel {
 
     @NotNull
     Instant modified;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long lobbyId;

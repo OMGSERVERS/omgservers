@@ -32,7 +32,7 @@ class SelectVersionMatchmakerRequestByMatchmakerIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, tenant_id, version_id, created, modified, matchmaker_id, deleted
+                        select id, idempotency_key, tenant_id, version_id, created, modified, matchmaker_id, deleted
                         from $schema.tab_tenant_version_matchmaker_request
                         where tenant_id = $1 and version_id = $2 and matchmaker_id = $3
                         order by id desc

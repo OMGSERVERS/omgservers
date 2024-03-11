@@ -37,13 +37,14 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(
-                            id, tenant_id, stage_id, created, modified, config, source_code, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, stage_id, created, modified, config, source_code, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         version.getId(),
+                        version.getIdempotencyKey(),
                         version.getTenantId(),
                         version.getStageId(),
                         version.getCreated().atOffset(ZoneOffset.UTC),

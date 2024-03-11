@@ -27,28 +27,26 @@ class UpsertVersionLobbyRefOperationImpl implements UpsertVersionLobbyRefOperati
                                               final SqlConnection sqlConnection,
                                               final int shard,
                                               final VersionLobbyRefModel versionLobbyRef) {
-        final var tenantId = versionLobbyRef.getTenantId();
-        final var id = versionLobbyRef.getId();
-
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version_lobby_ref(
-                            id, tenant_id, version_id, created, modified, lobby_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, version_id, created, modified, lobby_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
-                        id,
-                        tenantId,
+                        versionLobbyRef.getId(),
+                        versionLobbyRef.getIdempotencyKey(),
+                        versionLobbyRef.getTenantId(),
                         versionLobbyRef.getVersionId(),
                         versionLobbyRef.getCreated().atOffset(ZoneOffset.UTC),
                         versionLobbyRef.getModified().atOffset(ZoneOffset.UTC),
                         versionLobbyRef.getLobbyId(),
                         versionLobbyRef.getDeleted()
                 ),
-                () -> new VersionLobbyRefCreatedEventBodyModel(tenantId, id),
+                () -> new VersionLobbyRefCreatedEventBodyModel(versionLobbyRef.getTenantId(), versionLobbyRef.getId()),
                 () -> null
         );
     }

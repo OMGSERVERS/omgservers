@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -18,16 +19,24 @@ public class TenantModelFactory {
 
     public TenantModel create() {
         final var id = generateIdOperation.generateId();
-        return create(id);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, idempotencyKey);
     }
 
-    public TenantModel create(final Long id) {
+    public TenantModel create(final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, idempotencyKey);
+    }
+
+    public TenantModel create(final Long id,
+                              final String idempotencyKey) {
         var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        TenantModel tenant = new TenantModel();
+        final var tenant = new TenantModel();
         tenant.setId(id);
         tenant.setCreated(now);
         tenant.setModified(now);
+        tenant.setIdempotencyKey(idempotencyKey);
         tenant.setDeleted(false);
         return tenant;
     }
