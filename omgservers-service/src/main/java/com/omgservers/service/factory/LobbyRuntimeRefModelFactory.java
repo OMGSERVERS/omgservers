@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -16,18 +17,29 @@ public class LobbyRuntimeRefModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public LobbyRuntimeRefModel create(final Long lobbyId, final Long runtimeId) {
+    public LobbyRuntimeRefModel create(final Long lobbyId,
+                                       final Long runtimeId) {
         final var id = generateIdOperation.generateId();
-        return create(id, lobbyId, runtimeId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, lobbyId, runtimeId, idempotencyKey);
+    }
+
+    public LobbyRuntimeRefModel create(final Long lobbyId,
+                                       final Long runtimeId,
+                                       final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, lobbyId, runtimeId, idempotencyKey);
     }
 
     public LobbyRuntimeRefModel create(final Long id,
                                        final Long lobbyId,
-                                       final Long runtimeId) {
+                                       final Long runtimeId,
+                                       final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var lobbyRuntimeRef = new LobbyRuntimeRefModel();
         lobbyRuntimeRef.setId(id);
+        lobbyRuntimeRef.setIdempotencyKey(idempotencyKey);
         lobbyRuntimeRef.setLobbyId(lobbyId);
         lobbyRuntimeRef.setCreated(now);
         lobbyRuntimeRef.setModified(now);

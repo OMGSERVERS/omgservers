@@ -14,6 +14,7 @@ public class LobbyModelMapper {
     public LobbyModel fromRow(Row row) {
         final var lobbyModel = new LobbyModel();
         lobbyModel.setId(row.getLong("id"));
+        lobbyModel.setIdempotencyKey(row.getString("idempotency_key"));
         lobbyModel.setCreated(row.getOffsetDateTime("created").toInstant());
         lobbyModel.setModified(row.getOffsetDateTime("modified").toInstant());
         lobbyModel.setTenantId(row.getLong("tenant_id"));

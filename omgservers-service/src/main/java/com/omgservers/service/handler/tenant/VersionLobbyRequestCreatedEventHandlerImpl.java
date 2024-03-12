@@ -66,7 +66,10 @@ public class VersionLobbyRequestCreatedEventHandlerImpl implements EventHandler 
         final var tenantId = versionLobbyRequest.getTenantId();
         final var versionId = versionLobbyRequest.getVersionId();
         final var lobbyId = versionLobbyRequest.getLobbyId();
-        final var lobby = lobbyModelFactory.create(lobbyId, tenantId, versionId);
+        final var lobby = lobbyModelFactory.create(lobbyId,
+                tenantId,
+                versionId,
+                versionLobbyRequest.getIdempotencyKey());
         final var request = new SyncLobbyRequest(lobby);
         return lobbyModule.getLobbyService().syncLobby(request)
                 .map(SyncLobbyResponse::getCreated);

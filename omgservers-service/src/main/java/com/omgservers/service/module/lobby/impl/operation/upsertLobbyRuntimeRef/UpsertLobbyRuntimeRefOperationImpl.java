@@ -29,13 +29,14 @@ class UpsertLobbyRuntimeRefOperationImpl implements UpsertLobbyRuntimeRefOperati
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_lobby_runtime_ref(
-                            id, lobby_id, created, modified, runtime_id, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, lobby_id, created, modified, runtime_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         lobbyRuntimeRef.getId(),
+                        lobbyRuntimeRef.getIdempotencyKey(),
                         lobbyRuntimeRef.getLobbyId(),
                         lobbyRuntimeRef.getCreated().atOffset(ZoneOffset.UTC),
                         lobbyRuntimeRef.getModified().atOffset(ZoneOffset.UTC),

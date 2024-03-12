@@ -28,7 +28,7 @@ class SelectLobbyRuntimeByLobbyIdOperationImpl implements SelectLobbyRuntimeByLo
                 sqlConnection,
                 shard,
                 """
-                        select id, lobby_id, created, modified, runtime_id, deleted
+                        select id, idempotency_key, lobby_id, created, modified, runtime_id, deleted
                         from $schema.tab_lobby_runtime_ref
                         where lobby_id = $1
                         order by id desc

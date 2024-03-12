@@ -29,7 +29,7 @@ class SelectLobbyRuntimeRefOperationImpl implements SelectLobbyRuntimeRefOperati
                 sqlConnection,
                 shard,
                 """
-                        select id, lobby_id, created, modified, runtime_id, deleted
+                        select id, idempotency_key, lobby_id, created, modified, runtime_id, deleted
                         from $schema.tab_lobby_runtime_ref
                         where id = $1
                         limit 1

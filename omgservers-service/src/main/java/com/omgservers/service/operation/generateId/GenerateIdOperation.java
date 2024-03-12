@@ -16,4 +16,8 @@ public interface GenerateIdOperation {
     int TIMESTAMP_OFFSET = DATACENTER_ID_OFFSET + DATACENTER_ID_BITS;
 
     long generateId();
+
+    default String generateStringId() {
+        return String.valueOf(generateId());
+    }
 }

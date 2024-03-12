@@ -214,6 +214,7 @@ create index if not exists idx_tenant_version_matchmaker_ref_version_id on tab_t
 
 create table if not exists tab_lobby (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
@@ -224,6 +225,7 @@ create table if not exists tab_lobby (
 
 create table if not exists tab_lobby_runtime_ref (
     id bigint primary key,
+    idempotency_key text not null unique,
     lobby_id bigint not null references tab_lobby(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

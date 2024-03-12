@@ -29,13 +29,14 @@ class UpsertLobbyOperationImpl implements UpsertLobbyOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_lobby(
-                            id, created, modified, tenant_id, version_id, runtime_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, created, modified, tenant_id, version_id, runtime_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 List.of(
                         lobby.getId(),
+                        lobby.getIdempotencyKey(),
                         lobby.getCreated().atOffset(ZoneOffset.UTC),
                         lobby.getModified().atOffset(ZoneOffset.UTC),
                         lobby.getTenantId(),
