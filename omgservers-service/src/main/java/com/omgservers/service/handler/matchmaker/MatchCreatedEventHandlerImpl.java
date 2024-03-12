@@ -32,6 +32,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -101,7 +103,9 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 versionId,
                 RuntimeQualifierEnum.MATCH,
                 generateIdOperation.generateId(),
-                runtimeConfig);
+                runtimeConfig,
+                // TODO: using idempotencyKey from match
+                UUID.randomUUID().toString());
         return syncRuntime(runtime);
     }
 

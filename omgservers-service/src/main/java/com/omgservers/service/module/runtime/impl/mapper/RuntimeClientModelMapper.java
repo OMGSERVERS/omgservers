@@ -19,9 +19,10 @@ public class RuntimeClientModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RuntimeClientModel fromRow(Row row) {
+    public RuntimeClientModel fromRow(final Row row) {
         final var runtimeClient = new RuntimeClientModel();
         runtimeClient.setId(row.getLong("id"));
+        runtimeClient.setIdempotencyKey(row.getString("idempotency_key"));
         runtimeClient.setRuntimeId(row.getLong("runtime_id"));
         runtimeClient.setCreated(row.getOffsetDateTime("created").toInstant());
         runtimeClient.setModified(row.getOffsetDateTime("modified").toInstant());

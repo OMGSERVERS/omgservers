@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,16 +21,26 @@ public class RuntimeCommandModelFactory {
     public RuntimeCommandModel create(final Long runtimeId,
                                       final RuntimeCommandBodyModel body) {
         final var id = generateIdOperation.generateId();
-        return create(id, runtimeId, body);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, runtimeId, body, idempotencyKey);
+    }
+
+    public RuntimeCommandModel create(final Long runtimeId,
+                                      final RuntimeCommandBodyModel body,
+                                      final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, runtimeId, body, idempotencyKey);
     }
 
     public RuntimeCommandModel create(final Long id,
                                       final Long runtimeId,
-                                      final RuntimeCommandBodyModel body) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+                                      final RuntimeCommandBodyModel body,
+                                      final String idempotencyKey) {
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var runtimeCommand = new RuntimeCommandModel();
         runtimeCommand.setId(id);
+        runtimeCommand.setIdempotencyKey(idempotencyKey);
         runtimeCommand.setRuntimeId(runtimeId);
         runtimeCommand.setCreated(now);
         runtimeCommand.setModified(now);

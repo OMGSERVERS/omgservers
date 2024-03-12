@@ -19,9 +19,10 @@ public class RuntimeCommandModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RuntimeCommandModel fromRow(Row row) {
+    public RuntimeCommandModel fromRow(final Row row) {
         final var runtimeCommand = new RuntimeCommandModel();
         runtimeCommand.setId(row.getLong("id"));
+        runtimeCommand.setIdempotencyKey(row.getString("idempotency_key"));
         runtimeCommand.setRuntimeId(row.getLong("runtime_id"));
         runtimeCommand.setCreated(row.getOffsetDateTime("created").toInstant());
         runtimeCommand.setModified(row.getOffsetDateTime("modified").toInstant());

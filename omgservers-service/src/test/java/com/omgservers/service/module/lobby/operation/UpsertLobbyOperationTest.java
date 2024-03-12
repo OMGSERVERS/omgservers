@@ -1,5 +1,6 @@
 package com.omgservers.service.module.lobby.operation;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.LobbyModelFactory;
@@ -30,6 +31,7 @@ class UpsertLobbyOperationTest extends Assertions {
         final var lobby = lobbyModelFactory.create(tenantId(), versionId());
         final var changeContext = upsertLobbyOperation.upsertLobby(shard, lobby);
         assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.LOBBY_CREATED));
     }
 
     @Test
@@ -40,6 +42,7 @@ class UpsertLobbyOperationTest extends Assertions {
 
         final var changeContext = upsertLobbyOperation.upsertLobby(shard, lobby);
         assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.LOBBY_CREATED));
     }
 
     @Test

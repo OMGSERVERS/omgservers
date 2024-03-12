@@ -1,9 +1,11 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
@@ -40,7 +42,7 @@ class UpsertRuntimeClientOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenRuntimeClient_whenUpsertRuntimeClient_thenTrue() {
+    void givenRuntimeClient_whenUpsertRuntimeClient_thenInserted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -52,10 +54,11 @@ class UpsertRuntimeClientOperationTest extends Assertions {
 
         final var changeContext = upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
         assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_CLIENT_CREATED));
     }
 
     @Test
-    void givenRuntimeClient_whenUpsertRuntimeClient_thenFalse() {
+    void givenRuntimeClient_whenUpsertRuntimeClient_thenUpdated() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -69,16 +72,39 @@ class UpsertRuntimeClientOperationTest extends Assertions {
 
         final var changeContext = upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
         assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_CLIENT_CREATED));
     }
 
     @Test
     void givenUnknownIds_whenUpsertRuntimeClient_thenException() {
         final var shard = 0;
         final var runtimeClient = runtimeClientModelFactory.create(runtimeId(),
-                shardKey());
+                clientId());
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeClientOperation
                 .upsertRuntimeClient(shard, runtimeClient));
         assertEquals(ExceptionQualifierEnum.DB_VIOLATION, exception.getQualifier());
+    }
+
+    @Test
+    void givenRuntimeClient_whenUpsertRuntimeClient_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var runtime = runtimeModelFactory.create(tenantId(),
+                versionId(),
+                RuntimeQualifierEnum.MATCH,
+                new RuntimeConfigModel());
+        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+
+        final var runtimeClient1 = runtimeClientModelFactory.create(runtime.getId(),
+                clientId());
+        upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient1);
+
+        final var runtimeClient2 = runtimeClientModelFactory.create(runtime.getId(),
+                clientId(),
+                runtimeClient1.getIdempotencyKey());
+
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 
     Long tenantId() {
@@ -90,14 +116,6 @@ class UpsertRuntimeClientOperationTest extends Assertions {
     }
 
     Long runtimeId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long shardKey() {
-        return generateIdOperation.generateId();
-    }
-
-    Long entityId() {
         return generateIdOperation.generateId();
     }
 

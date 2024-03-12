@@ -20,9 +20,10 @@ public class RuntimeModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RuntimeModel fromRow(Row row) {
+    public RuntimeModel fromRow(final Row row) {
         final var runtime = new RuntimeModel();
         runtime.setId(row.getLong("id"));
+        runtime.setIdempotencyKey(row.getString("idempotency_key"));
         runtime.setCreated(row.getOffsetDateTime("created").toInstant());
         runtime.setModified(row.getOffsetDateTime("modified").toInstant());
         runtime.setTenantId(row.getLong("tenant_id"));

@@ -82,7 +82,8 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 versionId,
                 RuntimeQualifierEnum.LOBBY,
                 generateIdOperation.generateId(),
-                runtimeConfig);
+                runtimeConfig,
+                lobby.getIdempotencyKey());
 
         final var request = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(request)

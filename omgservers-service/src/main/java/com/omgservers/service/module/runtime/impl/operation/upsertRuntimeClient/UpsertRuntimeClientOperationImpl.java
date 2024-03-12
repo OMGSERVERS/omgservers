@@ -37,13 +37,14 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_client(
-                            id, runtime_id, created, modified, client_id, last_activity, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, runtime_id, created, modified, client_id, last_activity, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         runtimeClient.getId(),
+                        runtimeClient.getIdempotencyKey(),
                         runtimeClient.getRuntimeId(),
                         runtimeClient.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeClient.getModified().atOffset(ZoneOffset.UTC),

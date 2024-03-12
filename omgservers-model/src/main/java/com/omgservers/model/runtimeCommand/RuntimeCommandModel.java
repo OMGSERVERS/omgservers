@@ -1,6 +1,7 @@
 package com.omgservers.model.runtimeCommand;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,9 @@ public class RuntimeCommandModel {
 
     @NotNull
     Long id;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long runtimeId;

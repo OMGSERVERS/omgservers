@@ -37,13 +37,15 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime(
-                            id, created, modified, tenant_id, version_id, qualifier, user_id, last_activity, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                            id, idempotency_key, created, modified, tenant_id, version_id, qualifier, user_id, 
+                            last_activity, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         runtime.getId(),
+                        runtime.getIdempotencyKey(),
                         runtime.getCreated().atOffset(ZoneOffset.UTC),
                         runtime.getModified().atOffset(ZoneOffset.UTC),
                         runtime.getTenantId(),
@@ -55,7 +57,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getDeleted()
                 ),
                 () -> new RuntimeCreatedEventBodyModel(runtime.getId()),
-                () -> logModelFactory.create("Runtime was inserted, runtime=" + runtime)
+                () -> null
         );
     }
 

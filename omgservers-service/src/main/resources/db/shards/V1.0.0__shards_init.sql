@@ -327,6 +327,7 @@ create index if not exists idx_matchmaker_match_client_match_id on tab_matchmake
 
 create table if not exists tab_runtime (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
@@ -340,6 +341,7 @@ create table if not exists tab_runtime (
 
 create table if not exists tab_runtime_permission (
     id bigint primary key,
+    idempotency_key text not null unique,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -350,6 +352,7 @@ create table if not exists tab_runtime_permission (
 
 create table if not exists tab_runtime_command (
     id bigint primary key,
+    idempotency_key text not null unique,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -360,6 +363,7 @@ create table if not exists tab_runtime_command (
 
 create table if not exists tab_runtime_client (
     id bigint primary key,
+    idempotency_key text not null unique,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

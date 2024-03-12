@@ -33,7 +33,7 @@ class SelectRuntimePermissionByRuntimeIdAndUserIdOperationImpl implements
                 sqlConnection,
                 shard,
                 """
-                        select id, runtime_id, created, modified, user_id, permission, deleted
+                        select id, idempotency_key, runtime_id, created, modified, user_id, permission, deleted
                         from $schema.tab_runtime_permission
                         where runtime_id = $1 and user_id = $2 and permission = $3
                         order by id desc

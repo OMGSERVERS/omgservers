@@ -6,8 +6,9 @@ import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeCommandOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeCommandOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,10 +26,10 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
     DeleteRuntimeCommandOperationTestInterface deleteRuntimeCommandOperation;
 
     @Inject
-    UpsertRuntimeOperation upsertRuntimeOperation;
+    UpsertRuntimeOperationTestInterface upsertRuntimeOperation;
 
     @Inject
-    UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
+    UpsertRuntimeCommandOperationTestInterface upsertRuntimeCommandOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -45,12 +46,13 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenRuntimeCommand_whenDeleteRuntimeCommand_thenDeleted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH, new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
+                new RuntimeConfigModel());
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand =
                 runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
-        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand);
+        upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand);
 
         final var changeContext =
                 deleteRuntimeCommandOperation.deleteRuntimeCommand(shard, runtime.getId(), runtimeCommand.getId());

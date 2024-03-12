@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,24 +21,37 @@ public class RuntimeClientModelFactory {
     public RuntimeClientModel create(final Long runtimeId,
                                      final Long clientId) {
         final var id = generateIdOperation.generateId();
-        return create(id, runtimeId, clientId, RuntimeClientConfigModel.create());
+        final var config = RuntimeClientConfigModel.create();
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, runtimeId, clientId, config, idempotencyKey);
+    }
+
+    public RuntimeClientModel create(final Long runtimeId,
+                                     final Long clientId,
+                                     final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        final var config = RuntimeClientConfigModel.create();
+        return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 
     public RuntimeClientModel create(final Long runtimeId,
                                      final Long clientId,
                                      final RuntimeClientConfigModel config) {
         final var id = generateIdOperation.generateId();
-        return create(id, runtimeId, clientId, config);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 
     public RuntimeClientModel create(final Long id,
                                      final Long runtimeId,
                                      final Long clientId,
-                                     final RuntimeClientConfigModel config) {
+                                     final RuntimeClientConfigModel config,
+                                     final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var runtimeClient = new RuntimeClientModel();
         runtimeClient.setId(id);
+        runtimeClient.setIdempotencyKey(idempotencyKey);
         runtimeClient.setRuntimeId(runtimeId);
         runtimeClient.setCreated(now);
         runtimeClient.setModified(now);

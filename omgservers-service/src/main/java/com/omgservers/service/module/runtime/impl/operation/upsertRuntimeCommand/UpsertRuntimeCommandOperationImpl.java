@@ -36,13 +36,14 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_command(
-                            id, runtime_id, created, modified, qualifier, body, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         runtimeCommand.getId(),
+                        runtimeCommand.getIdempotencyKey(),
                         runtimeCommand.getRuntimeId(),
                         runtimeCommand.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeCommand.getModified().atOffset(ZoneOffset.UTC),
@@ -51,7 +52,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
                         runtimeCommand.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Runtime command was inserted, runtimeCommand=" + runtimeCommand)
+                () -> null
         );
     }
 

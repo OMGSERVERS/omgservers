@@ -1,5 +1,6 @@
 package com.omgservers.model.runtimePermission;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,9 @@ public class RuntimePermissionModel {
 
     @NotNull
     Long id;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long runtimeId;

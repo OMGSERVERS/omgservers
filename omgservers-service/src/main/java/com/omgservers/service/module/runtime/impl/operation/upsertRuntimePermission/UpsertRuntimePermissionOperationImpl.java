@@ -30,13 +30,14 @@ class UpsertRuntimePermissionOperationImpl implements UpsertRuntimePermissionOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_permission(
-                            id, runtime_id, created, modified, user_id, permission, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, runtime_id, created, modified, user_id, permission, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         permission.getId(),
+                        permission.getIdempotencyKey(),
                         permission.getRuntimeId(),
                         permission.getCreated().atOffset(ZoneOffset.UTC),
                         permission.getModified().atOffset(ZoneOffset.UTC),
@@ -45,7 +46,7 @@ class UpsertRuntimePermissionOperationImpl implements UpsertRuntimePermissionOpe
                         permission.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Runtime permission was inserted, permission=" + permission)
+                () -> null
         );
     }
 }
