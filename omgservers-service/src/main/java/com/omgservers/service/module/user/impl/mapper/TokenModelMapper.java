@@ -14,15 +14,16 @@ public class TokenModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public TokenModel fromRow(Row row) {
-        final var tokenModel = new TokenModel();
-        tokenModel.setId(row.getLong("id"));
-        tokenModel.setUserId(row.getLong("user_id"));
-        tokenModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        tokenModel.setModified(row.getOffsetDateTime("modified").toInstant());
-        tokenModel.setExpire(row.getOffsetDateTime("expire").toInstant());
-        tokenModel.setHash(row.getString("hash"));
-        tokenModel.setDeleted(row.getBoolean("deleted"));
-        return tokenModel;
+    public TokenModel fromRow(final Row row) {
+        final var token = new TokenModel();
+        token.setId(row.getLong("id"));
+        token.setIdempotencyKey(row.getString("idempotency_key"));
+        token.setUserId(row.getLong("user_id"));
+        token.setCreated(row.getOffsetDateTime("created").toInstant());
+        token.setModified(row.getOffsetDateTime("modified").toInstant());
+        token.setExpire(row.getOffsetDateTime("expire").toInstant());
+        token.setHash(row.getString("hash"));
+        token.setDeleted(row.getBoolean("deleted"));
+        return token;
     }
 }

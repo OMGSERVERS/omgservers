@@ -1,13 +1,14 @@
 package com.omgservers.service.module.user.operation;
 
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
+import com.omgservers.service.module.user.operation.testInterface.UpsertPlayerOperationTestInterface;
 import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -16,13 +17,12 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class UpsertPlayerOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
-
-    @Inject
-    UpsertPlayerOperation upsertPlayerOperation;
 
     @Inject
     UpsertUserOperationTestInterface upsertUserOperation;
+
+    @Inject
+    UpsertPlayerOperationTestInterface upsertPlayerOperation;
 
     @Inject
     UserModelFactory userModelFactory;
@@ -33,28 +33,43 @@ class UpsertPlayerOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenUser_whenUpsertPlayer_thenInserted() {
+    void givenPlayer_whenUpsertPlayer_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
 
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
-        assertTrue(upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player));
+        final var changeContext = upsertPlayerOperation.upsertPlayer(shard, player);
+        assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenUserAndPlayer_whenUpsertPlayer_thenUpdated() {
+    void givenPlayer_whenUpsertPlayer_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
-        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
-        upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player);
 
-        assertFalse(upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player));
+        final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
+        upsertPlayerOperation.upsertPlayer(shard, player);
+
+        final var changeContext = upsertPlayerOperation.upsertPlayer(shard, player);
+        assertFalse(changeContext.getResult());
+    }
+
+    @Test
+    void givenPlayer_whenUpsertPlayer_thenIdempotencyViolation() {
+        final var shard = 0;
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        upsertUserOperation.upsertUser(shard, user);
+
+        final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());
+        upsertPlayerOperation.upsertPlayer(shard, player1);
+
+        final var player2 = playerModelFactory.create(user.getId(), tenantId(), stageId(), player1.getIdempotencyKey());
+        final var exception = assertThrows(ServerSideConflictException.class, () ->
+                upsertPlayerOperation.upsertPlayer(shard, player2));
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
     }
 
     Long tenantId() {

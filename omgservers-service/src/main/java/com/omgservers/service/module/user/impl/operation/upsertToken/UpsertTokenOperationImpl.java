@@ -30,13 +30,14 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_token(
-                            id, user_id, created, modified, expire, hash, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, user_id, created, modified, expire, hash, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         token.getId(),
+                        token.getIdempotencyKey(),
                         token.getUserId(),
                         token.getCreated().atOffset(ZoneOffset.UTC),
                         token.getModified().atOffset(ZoneOffset.UTC),

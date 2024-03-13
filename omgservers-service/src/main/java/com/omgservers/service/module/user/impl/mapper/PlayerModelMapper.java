@@ -19,9 +19,10 @@ public class PlayerModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public PlayerModel fromRow(Row row) {
-        PlayerModel player = new PlayerModel();
+    public PlayerModel fromRow(final Row row) {
+        final var player = new PlayerModel();
         player.setId(row.getLong("id"));
+        player.setIdempotencyKey(row.getString("idempotency_key"));
         player.setUserId(row.getLong("user_id"));
         player.setCreated(row.getOffsetDateTime("created").toInstant());
         player.setModified(row.getOffsetDateTime("modified").toInstant());

@@ -87,7 +87,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     final var userId = runtime.getUserId();
                     // TODO: improve it
                     final var password = String.valueOf(new SecureRandom().nextLong());
-                    return createUser(userId, password)
+                    return createUser(userId, password, runtime.getIdempotencyKey())
                             .flatMap(user -> syncContainer(user, password, runtime))
                             .flatMap(created -> syncRuntimeRef(runtime))
                             .flatMap(created -> requestJobExecution(runtimeId));
@@ -101,9 +101,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<UserModel> createUser(final Long id, final String password) {
+    Uni<UserModel> createUser(final Long id, final String password, final String idempotencyKey) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(id, UserRoleEnum.WORKER, passwordHash);
+        final var user = userModelFactory.create(id, UserRoleEnum.WORKER, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(request)
                 .map(SyncUserResponse::getCreated)

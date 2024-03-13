@@ -28,7 +28,7 @@ class SelectUserOperationImpl implements SelectUserOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, created, modified, role, password_hash, deleted
+                        select id, idempotency_key, created, modified, role, password_hash, deleted
                         from $schema.tab_user
                         where id = $1
                         limit 1

@@ -37,13 +37,15 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user_player(
-                            id, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, user_id, created, modified, tenant_id, stage_id, attributes, profile, 
+                            deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         player.getId(),
+                        player.getIdempotencyKey(),
                         player.getUserId(),
                         player.getCreated().atOffset(ZoneOffset.UTC),
                         player.getModified().atOffset(ZoneOffset.UTC),

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -21,17 +22,28 @@ public class PlayerModelFactory {
                               final Long tenantId,
                               final Long stageId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, tenantId, stageId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, userId, tenantId, stageId, idempotencyKey);
+    }
+
+    public PlayerModel create(final Long userId,
+                              final Long tenantId,
+                              final Long stageId,
+                              final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, userId, tenantId, stageId, idempotencyKey);
     }
 
     public PlayerModel create(final Long id,
                               final Long userId,
                               final Long tenantId,
-                              final Long stageId) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+                              final Long stageId,
+                              final String idempotencyKey) {
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        PlayerModel player = new PlayerModel();
+        final var player = new PlayerModel();
         player.setId(id);
+        player.setIdempotencyKey(idempotencyKey);
         player.setUserId(userId);
         player.setCreated(now);
         player.setModified(now);

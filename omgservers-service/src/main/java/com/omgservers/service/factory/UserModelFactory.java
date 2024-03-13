@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,16 +21,26 @@ public class UserModelFactory {
     public UserModel create(final UserRoleEnum role,
                             final String passwordHash) {
         final var id = generateIdOperation.generateId();
-        return create(id, role, passwordHash);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, role, passwordHash, idempotencyKey);
+    }
+
+    public UserModel create(final UserRoleEnum role,
+                            final String passwordHash,
+                            final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, role, passwordHash, idempotencyKey);
     }
 
     public UserModel create(final Long id,
                             final UserRoleEnum role,
-                            final String passwordHash) {
+                            final String passwordHash,
+                            final String idempotencyKey) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         UserModel user = new UserModel();
         user.setId(id);
+        user.setIdempotencyKey(idempotencyKey);
         user.setCreated(now);
         user.setModified(now);
         user.setRole(role);

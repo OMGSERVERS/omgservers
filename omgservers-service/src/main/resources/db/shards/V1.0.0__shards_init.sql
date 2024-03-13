@@ -2,6 +2,7 @@
 
 create table if not exists tab_user (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     role text not null,
@@ -11,6 +12,7 @@ create table if not exists tab_user (
 
 create table if not exists tab_user_token (
     id bigint primary key,
+    idempotency_key text not null unique,
     user_id bigint not null references tab_user(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -21,6 +23,7 @@ create table if not exists tab_user_token (
 
 create table if not exists tab_user_player (
     id bigint primary key,
+    idempotency_key text not null unique,
     user_id bigint not null references tab_user(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

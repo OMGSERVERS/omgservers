@@ -18,6 +18,9 @@ public class UserModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    String idempotencyKey;
+
     @NotNull
     Instant created;
 

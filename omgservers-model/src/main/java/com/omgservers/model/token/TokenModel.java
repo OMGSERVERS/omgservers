@@ -18,6 +18,9 @@ public class TokenModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    String idempotencyKey;
+
     @NotNull
     Long userId;
 

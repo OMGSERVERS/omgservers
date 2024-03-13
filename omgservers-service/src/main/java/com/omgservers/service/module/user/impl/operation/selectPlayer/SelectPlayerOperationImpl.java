@@ -32,7 +32,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
                 shard,
                 """
                         select
-                            id, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted
+                            id, idempotency_key, user_id, created, modified, tenant_id, stage_id, attributes, profile, deleted
                         from $schema.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1

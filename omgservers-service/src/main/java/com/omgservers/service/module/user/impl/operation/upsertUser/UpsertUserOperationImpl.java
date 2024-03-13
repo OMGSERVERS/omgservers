@@ -32,13 +32,14 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_user(
-                            id, created, modified, role, password_hash, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, created, modified, role, password_hash, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         user.getId(),
+                        user.getIdempotencyKey(),
                         user.getCreated().atOffset(ZoneOffset.UTC),
                         user.getModified().atOffset(ZoneOffset.UTC),
                         user.getRole(),

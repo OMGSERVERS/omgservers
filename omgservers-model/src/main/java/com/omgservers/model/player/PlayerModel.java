@@ -1,5 +1,6 @@
 package com.omgservers.model.player;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,9 @@ public class PlayerModel {
 
     @NotNull
     Long id;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long userId;

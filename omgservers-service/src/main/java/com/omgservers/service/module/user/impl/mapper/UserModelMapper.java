@@ -15,9 +15,10 @@ public class UserModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public UserModel fromRow(Row row) {
+    public UserModel fromRow(final Row row) {
         final var user = new UserModel();
         user.setId(row.getLong("id"));
+        user.setIdempotencyKey(row.getString("idempotency_key"));
         user.setCreated(row.getOffsetDateTime("created").toInstant());
         user.setModified(row.getOffsetDateTime("modified").toInstant());
         user.setRole(UserRoleEnum.valueOf(row.getString("role")));

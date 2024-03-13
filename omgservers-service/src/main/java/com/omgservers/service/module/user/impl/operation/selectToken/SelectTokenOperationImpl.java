@@ -29,7 +29,7 @@ class SelectTokenOperationImpl implements SelectTokenOperation {
                 shard,
                 """
                         select
-                            id, user_id, created, modified, expire, hash, deleted
+                            id, idempotency_key, user_id, created, modified, expire, hash, deleted
                         from $schema.tab_user_token
                         where id = $1
                         limit 1
