@@ -17,6 +17,7 @@ public class ClientRuntimeRefModelMapper {
     public ClientRuntimeRefModel fromRow(Row row) {
         final var clientRuntimeRef = new ClientRuntimeRefModel();
         clientRuntimeRef.setId(row.getLong("id"));
+        clientRuntimeRef.setIdempotencyKey(row.getString("idempotency_key"));
         clientRuntimeRef.setClientId(row.getLong("client_id"));
         clientRuntimeRef.setCreated(row.getOffsetDateTime("created").toInstant());
         clientRuntimeRef.setModified(row.getOffsetDateTime("modified").toInstant());

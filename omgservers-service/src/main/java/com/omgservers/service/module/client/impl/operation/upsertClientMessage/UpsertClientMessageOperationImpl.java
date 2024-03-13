@@ -35,13 +35,14 @@ class UpsertClientMessageOperationImpl implements UpsertClientMessageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_client_message(
-                            id, client_id, created, modified, qualifier, body, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, client_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         clientMessage.getId(),
+                        clientMessage.getIdempotencyKey(),
                         clientMessage.getClientId(),
                         clientMessage.getCreated().atOffset(ZoneOffset.UTC),
                         clientMessage.getModified().atOffset(ZoneOffset.UTC),

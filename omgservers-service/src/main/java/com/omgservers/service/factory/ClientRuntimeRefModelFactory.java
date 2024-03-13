@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -19,16 +20,26 @@ public class ClientRuntimeRefModelFactory {
     public ClientRuntimeRefModel create(final Long clientId,
                                         final Long runtimeId) {
         final var id = generateIdOperation.generateId();
-        return create(id, clientId, runtimeId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, clientId, runtimeId, idempotencyKey);
+    }
+
+    public ClientRuntimeRefModel create(final Long clientId,
+                                        final Long runtimeId,
+                                        final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, clientId, runtimeId, idempotencyKey);
     }
 
     public ClientRuntimeRefModel create(final Long id,
                                         final Long clientId,
-                                        final Long runtimeId) {
+                                        final Long runtimeId,
+                                        final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var clientRuntimeRef = new ClientRuntimeRefModel();
         clientRuntimeRef.setId(id);
+        clientRuntimeRef.setIdempotencyKey(idempotencyKey);
         clientRuntimeRef.setClientId(clientId);
         clientRuntimeRef.setCreated(now);
         clientRuntimeRef.setModified(now);

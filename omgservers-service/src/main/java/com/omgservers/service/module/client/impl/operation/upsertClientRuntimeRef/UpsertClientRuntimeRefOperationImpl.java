@@ -33,13 +33,14 @@ class UpsertClientRuntimeRefOperationImpl implements UpsertClientRuntimeRefOpera
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_client_runtime_ref(
-                            id, client_id, created, modified, runtime_id, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, client_id, created, modified, runtime_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         clientRuntimeRef.getId(),
+                        clientRuntimeRef.getIdempotencyKey(),
                         clientRuntimeRef.getClientId(),
                         clientRuntimeRef.getCreated().atOffset(ZoneOffset.UTC),
                         clientRuntimeRef.getModified().atOffset(ZoneOffset.UTC),

@@ -19,9 +19,10 @@ public class ClientMessageModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public ClientMessageModel fromRow(Row row) {
+    public ClientMessageModel fromRow(final Row row) {
         final var clientMessage = new ClientMessageModel();
         clientMessage.setId(row.getLong("id"));
+        clientMessage.setIdempotencyKey(row.getString("idempotency_key"));
         clientMessage.setClientId(row.getLong("client_id"));
         clientMessage.setCreated(row.getOffsetDateTime("created").toInstant());
         clientMessage.setModified(row.getOffsetDateTime("modified").toInstant());

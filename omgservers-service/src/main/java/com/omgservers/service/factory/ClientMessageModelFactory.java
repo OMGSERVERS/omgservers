@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -22,17 +23,28 @@ public class ClientMessageModelFactory {
                                      final MessageQualifierEnum qualifier,
                                      final MessageBodyModel body) {
         final var id = generateIdOperation.generateId();
-        return create(id, clientId, qualifier, body);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, clientId, qualifier, body, idempotencyKey);
+    }
+
+    public ClientMessageModel create(final Long clientId,
+                                     final MessageQualifierEnum qualifier,
+                                     final MessageBodyModel body,
+                                     final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, clientId, qualifier, body, idempotencyKey);
     }
 
     public ClientMessageModel create(final Long id,
                                      final Long clientId,
                                      final MessageQualifierEnum qualifier,
-                                     final MessageBodyModel body) {
+                                     final MessageBodyModel body,
+                                     final String idempotencyKey) {
         Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var clientMessage = new ClientMessageModel();
         clientMessage.setId(id);
+        clientMessage.setIdempotencyKey(idempotencyKey);
         clientMessage.setClientId(clientId);
         clientMessage.setCreated(now);
         clientMessage.setModified(now);

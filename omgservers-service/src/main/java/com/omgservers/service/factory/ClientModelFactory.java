@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -22,7 +23,18 @@ public class ClientModelFactory {
                               final Long versionId,
                               final Long matchmakerId) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, tenantId, versionId, matchmakerId);
+        final var idempotencyKey = UUID.randomUUID().toString();
+        return create(id, userId, playerId, tenantId, versionId, matchmakerId, idempotencyKey);
+    }
+
+    public ClientModel create(final Long userId,
+                              final Long playerId,
+                              final Long tenantId,
+                              final Long versionId,
+                              final Long matchmakerId,
+                              final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, userId, playerId, tenantId, versionId, matchmakerId, idempotencyKey);
     }
 
     public ClientModel create(final Long id,
@@ -30,11 +42,13 @@ public class ClientModelFactory {
                               final Long playerId,
                               final Long tenantId,
                               final Long versionId,
-                              final Long matchmakerId) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+                              final Long matchmakerId,
+                              final String idempotencyKey) {
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var client = new ClientModel();
         client.setId(id);
+        client.setIdempotencyKey(idempotencyKey);
         client.setCreated(now);
         client.setModified(now);
         client.setUserId(userId);

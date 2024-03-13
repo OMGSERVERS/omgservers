@@ -38,6 +38,7 @@ create index if not exists idx_user_player_user_id on tab_user_player(user_id);
 
 create table if not exists tab_client (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
@@ -50,6 +51,7 @@ create table if not exists tab_client (
 
 create table if not exists tab_client_message (
     id bigint primary key,
+    idempotency_key text not null unique,
     client_id bigint not null references tab_client(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -60,6 +62,7 @@ create table if not exists tab_client_message (
 
 create table if not exists tab_client_runtime_ref (
     id bigint primary key,
+    idempotency_key text not null unique,
     client_id bigint not null references tab_client(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,

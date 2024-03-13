@@ -28,7 +28,7 @@ class SelectActiveClientRuntimeRefsByClientIdOperationImpl implements SelectActi
                 sqlConnection,
                 shard,
                 """
-                        select id, client_id, created, modified, runtime_id, deleted
+                        select id, idempotency_key, client_id, created, modified, runtime_id, deleted
                         from $schema.tab_client_runtime_ref
                         where client_id = $1 and deleted = false
                         order by id asc

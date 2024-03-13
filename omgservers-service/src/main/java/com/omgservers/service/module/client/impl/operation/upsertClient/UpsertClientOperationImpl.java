@@ -33,13 +33,14 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_client(
-                            id, created, modified, user_id, player_id, tenant_id, version_id, matchmaker_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, created, modified, user_id, player_id, tenant_id, version_id, matchmaker_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         client.getId(),
+                        client.getIdempotencyKey(),
                         client.getCreated().atOffset(ZoneOffset.UTC),
                         client.getModified().atOffset(ZoneOffset.UTC),
                         client.getUserId(),
