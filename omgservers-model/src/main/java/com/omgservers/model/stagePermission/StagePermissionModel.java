@@ -16,6 +16,9 @@ public class StagePermissionModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    String idempotencyKey;
+
     @NotNull
     Long tenantId;
 
@@ -27,9 +30,6 @@ public class StagePermissionModel {
 
     @NotNull
     Instant modified;
-
-    @NotBlank
-    String idempotencyKey;
 
     @NotNull
     Long userId;
