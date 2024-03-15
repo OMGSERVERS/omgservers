@@ -35,7 +35,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
       - OMGSERVERS_MQ_HOST=mq-1
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
@@ -55,7 +55,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
       - OMGSERVERS_MQ_HOST=mq-1
       - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
@@ -103,7 +103,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
       - OMGSERVERS_MQ_HOST=mq-2
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
@@ -123,7 +123,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
       - OMGSERVERS_MQ_HOST=mq-2
       - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
@@ -171,7 +171,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
       - OMGSERVERS_MQ_HOST=mq-3
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
@@ -191,7 +191,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
       - OMGSERVERS_MQ_HOST=mq-3
       - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080

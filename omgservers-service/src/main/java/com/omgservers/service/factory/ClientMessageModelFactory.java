@@ -40,7 +40,7 @@ public class ClientMessageModelFactory {
                                      final MessageQualifierEnum qualifier,
                                      final MessageBodyModel body,
                                      final String idempotencyKey) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var clientMessage = new ClientMessageModel();
         clientMessage.setId(id);

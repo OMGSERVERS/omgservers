@@ -51,6 +51,11 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             eventModel.setModified(Instant.parse(modifiedNode.asText()));
         }
 
+        final var delayedNode = root.get("delayed");
+        if (delayedNode != null) {
+            eventModel.setDelayed(Instant.parse(delayedNode.asText()));
+        }
+
         final var qualifierNode = root.get("qualifier");
         if (qualifierNode != null) {
             final var qualifier = EventQualifierEnum.valueOf(qualifierNode.asText());

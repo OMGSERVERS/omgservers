@@ -5,7 +5,7 @@ public class ServerSideBaseException extends RuntimeException {
     final ExceptionQualifierEnum qualifier;
 
     public ServerSideBaseException(final ExceptionQualifierEnum qualifier) {
-        super();
+        super("server throws exception, reason=" + qualifier);
         this.qualifier = qualifier;
     }
 
