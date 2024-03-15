@@ -21,7 +21,7 @@ public class VersionLobbyRequestModelFactory {
                                            final Long versionId) {
         final var id = generateIdOperation.generateId();
         final var lobbyId = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, lobbyId, idempotencyKey);
     }
 

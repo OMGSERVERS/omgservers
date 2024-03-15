@@ -25,7 +25,7 @@ public class RuntimeModelFactory {
                                final RuntimeConfigModel config) {
         final var id = generateIdOperation.generateId();
         final var userId = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, qualifier, userId, config, idempotencyKey);
     }
 

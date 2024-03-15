@@ -21,7 +21,7 @@ public class UserModelFactory {
     public UserModel create(final UserRoleEnum role,
                             final String passwordHash) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, role, passwordHash, idempotencyKey);
     }
 

@@ -21,7 +21,7 @@ public class RuntimeCommandModelFactory {
     public RuntimeCommandModel create(final Long runtimeId,
                                       final RuntimeCommandBodyModel body) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, body, idempotencyKey);
     }
 

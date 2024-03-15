@@ -20,7 +20,7 @@ public class LobbyRuntimeRefModelFactory {
     public LobbyRuntimeRefModel create(final Long lobbyId,
                                        final Long runtimeId) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, lobbyId, runtimeId, idempotencyKey);
     }
 

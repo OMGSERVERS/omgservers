@@ -25,7 +25,7 @@ public class VersionModelFactory {
             final VersionConfigModel versionConfig,
             final VersionSourceCodeModel sourceCode) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id,
                 tenantId,
                 stageId,

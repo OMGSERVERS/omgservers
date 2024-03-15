@@ -20,7 +20,7 @@ public class ClientRuntimeRefModelFactory {
     public ClientRuntimeRefModel create(final Long clientId,
                                         final Long runtimeId) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, clientId, runtimeId, idempotencyKey);
     }
 

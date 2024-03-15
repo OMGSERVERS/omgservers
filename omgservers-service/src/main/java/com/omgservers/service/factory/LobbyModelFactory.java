@@ -20,7 +20,7 @@ public class LobbyModelFactory {
     public LobbyModel create(final Long tenantId,
                              final Long versionId) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, idempotencyKey);
     }
 

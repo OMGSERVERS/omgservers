@@ -22,7 +22,7 @@ public class StageModelFactory {
                              final Long projectId) {
         final var id = generateIdOperation.generateId();
         final var secret = String.valueOf(new SecureRandom().nextLong());
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, projectId, secret, idempotencyKey);
     }
 

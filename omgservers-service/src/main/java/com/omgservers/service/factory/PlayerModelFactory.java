@@ -22,7 +22,7 @@ public class PlayerModelFactory {
                               final Long tenantId,
                               final Long stageId) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, userId, tenantId, stageId, idempotencyKey);
     }
 

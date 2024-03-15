@@ -20,7 +20,7 @@ public class TokenModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public TokenModel create(final UserTokenContainerModel tokenContainer) {
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(tokenContainer, idempotencyKey);
     }
 

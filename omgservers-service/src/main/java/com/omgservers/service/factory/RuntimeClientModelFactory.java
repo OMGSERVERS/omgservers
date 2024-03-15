@@ -22,7 +22,7 @@ public class RuntimeClientModelFactory {
                                      final Long clientId) {
         final var id = generateIdOperation.generateId();
         final var config = RuntimeClientConfigModel.create();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 
@@ -38,7 +38,7 @@ public class RuntimeClientModelFactory {
                                      final Long clientId,
                                      final RuntimeClientConfigModel config) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 

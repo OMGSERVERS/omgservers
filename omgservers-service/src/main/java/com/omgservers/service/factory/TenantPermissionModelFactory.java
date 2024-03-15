@@ -23,7 +23,7 @@ public class TenantPermissionModelFactory {
             final Long userId,
             final TenantPermissionEnum permission) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, userId, permission, idempotencyKey);
     }
 

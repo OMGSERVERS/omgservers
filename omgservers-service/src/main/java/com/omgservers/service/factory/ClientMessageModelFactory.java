@@ -23,7 +23,7 @@ public class ClientMessageModelFactory {
                                      final MessageQualifierEnum qualifier,
                                      final MessageBodyModel body) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, clientId, qualifier, body, idempotencyKey);
     }
 

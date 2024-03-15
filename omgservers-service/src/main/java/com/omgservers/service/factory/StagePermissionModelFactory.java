@@ -23,7 +23,7 @@ public class StagePermissionModelFactory {
                                        final Long userId,
                                        final StagePermissionEnum permission) {
         final var id = generateIdOperation.generateId();
-        final var idempotencyKey = UUID.randomUUID().toString();
+        final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, stageId, userId, permission, idempotencyKey);
     }
 
