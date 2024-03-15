@@ -19,7 +19,7 @@ public class MatchCommandModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchCommandModel fromRow(Row row) {
+    public MatchCommandModel fromRow(final Row row) {
         final var matchCommand = new MatchCommandModel();
         matchCommand.setId(row.getLong("id"));
         matchCommand.setMatchmakerId(row.getLong("matchmaker_id"));

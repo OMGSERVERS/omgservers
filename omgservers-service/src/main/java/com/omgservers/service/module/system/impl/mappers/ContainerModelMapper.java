@@ -20,7 +20,7 @@ public class ContainerModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public ContainerModel fromRow(Row row) {
+    public ContainerModel fromRow(final Row row) {
         final var container = new ContainerModel();
         container.setId(row.getLong("id"));
         container.setCreated(row.getOffsetDateTime("created").toInstant());

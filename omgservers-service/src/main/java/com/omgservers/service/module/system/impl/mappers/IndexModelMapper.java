@@ -19,7 +19,7 @@ public class IndexModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public IndexModel fromRow(Row row) {
+    public IndexModel fromRow(final Row row) {
         final var index = new IndexModel();
         index.setId(row.getLong("id"));
         index.setCreated(row.getOffsetDateTime("created").toInstant());

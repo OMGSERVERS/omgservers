@@ -19,8 +19,8 @@ public class MatchModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchModel fromRow(Row row) {
-        MatchModel match = new MatchModel();
+    public MatchModel fromRow(final Row row) {
+        final var match = new MatchModel();
         match.setId(row.getLong("id"));
         match.setMatchmakerId(row.getLong("matchmaker_id"));
         match.setCreated(row.getOffsetDateTime("created").toInstant());

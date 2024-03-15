@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class VersionLobbyRequestModelMapper {
 
-    public VersionLobbyRequestModel fromRow(Row row) {
+    public VersionLobbyRequestModel fromRow(final Row row) {
         final var versionLobbyRequest = new VersionLobbyRequestModel();
         versionLobbyRequest.setId(row.getLong("id"));
         versionLobbyRequest.setTenantId(row.getLong("tenant_id"));

@@ -20,7 +20,7 @@ public class EventModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public EventModel fromRow(Row row) {
+    public EventModel fromRow(final Row row) {
         final var event = new EventModel();
         event.setId(row.getLong("id"));
         event.setCreated(row.getOffsetDateTime("created").toInstant());

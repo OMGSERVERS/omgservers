@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class EventProjectionModelMapper {
 
-    public EventProjectionModel fromRow(Row row) {
+    public EventProjectionModel fromRow(final Row row) {
         final var eventProjection = new EventProjectionModel();
         eventProjection.setId(row.getLong("id"));
         eventProjection.setCreated(row.getOffsetDateTime("created").toInstant());

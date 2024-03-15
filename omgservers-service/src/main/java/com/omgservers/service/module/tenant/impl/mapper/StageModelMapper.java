@@ -14,7 +14,7 @@ public class StageModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public StageModel fromRow(Row row) {
+    public StageModel fromRow(final Row row) {
         final var stage = new StageModel();
         stage.setId(row.getLong("id"));
         stage.setTenantId(row.getLong("tenant_id"));

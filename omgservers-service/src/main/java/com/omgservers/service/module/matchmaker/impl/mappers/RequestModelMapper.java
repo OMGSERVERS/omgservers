@@ -19,8 +19,8 @@ public class RequestModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RequestModel fromRow(Row row) {
-        RequestModel request = new RequestModel();
+    public RequestModel fromRow(final Row row) {
+        final var request = new RequestModel();
         request.setId(row.getLong("id"));
         request.setMatchmakerId(row.getLong("matchmaker_id"));
         request.setCreated(row.getOffsetDateTime("created").toInstant());

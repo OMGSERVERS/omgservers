@@ -14,7 +14,7 @@ public class ClientRuntimeRefModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public ClientRuntimeRefModel fromRow(Row row) {
+    public ClientRuntimeRefModel fromRow(final Row row) {
         final var clientRuntimeRef = new ClientRuntimeRefModel();
         clientRuntimeRef.setId(row.getLong("id"));
         clientRuntimeRef.setIdempotencyKey(row.getString("idempotency_key"));

@@ -19,7 +19,7 @@ public class MatchClientModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchClientModel fromRow(Row row) {
+    public MatchClientModel fromRow(final Row row) {
         final var matchClient = new MatchClientModel();
         matchClient.setId(row.getLong("id"));
         matchClient.setMatchmakerId(row.getLong("matchmaker_id"));

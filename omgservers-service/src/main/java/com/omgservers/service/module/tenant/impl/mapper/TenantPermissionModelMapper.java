@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class TenantPermissionModelMapper {
 
-    public TenantPermissionModel fromRow(Row row) {
+    public TenantPermissionModel fromRow(final Row row) {
         final var tenantPermission = new TenantPermissionModel();
         tenantPermission.setId(row.getLong("id"));
         tenantPermission.setTenantId(row.getLong("tenant_id"));

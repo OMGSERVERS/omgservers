@@ -14,7 +14,7 @@ public class ServiceAccountModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public ServiceAccountModel fromRow(Row row) {
+    public ServiceAccountModel fromRow(final Row row) {
         final var serviceAccount = new ServiceAccountModel();
         serviceAccount.setId(row.getLong("id"));
         serviceAccount.setCreated(row.getOffsetDateTime("created").toInstant());

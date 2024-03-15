@@ -14,7 +14,7 @@ public class ProjectModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public ProjectModel fromRow(Row row) {
+    public ProjectModel fromRow(final Row row) {
         final var project = new ProjectModel();
         project.setId(row.getLong("id"));
         project.setTenantId(row.getLong("tenant_id"));

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class LobbyModelMapper {
 
-    public LobbyModel fromRow(Row row) {
+    public LobbyModel fromRow(final Row row) {
         final var lobbyModel = new LobbyModel();
         lobbyModel.setId(row.getLong("id"));
         lobbyModel.setIdempotencyKey(row.getString("idempotency_key"));

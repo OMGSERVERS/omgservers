@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class MatchmakerModelMapper {
 
-    public MatchmakerModel fromRow(Row row) {
+    public MatchmakerModel fromRow(final Row row) {
         final var matchmakerModel = new MatchmakerModel();
         matchmakerModel.setId(row.getLong("id"));
         matchmakerModel.setCreated(row.getOffsetDateTime("created").toInstant());

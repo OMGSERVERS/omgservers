@@ -14,7 +14,7 @@ public class VersionProjectionModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public VersionProjectionModel fromRow(Row row) {
+    public VersionProjectionModel fromRow(final Row row) {
         final var versionProjection = new VersionProjectionModel();
         versionProjection.setId(row.getLong("id"));
         versionProjection.setTenantId(row.getLong("tenant_id"));

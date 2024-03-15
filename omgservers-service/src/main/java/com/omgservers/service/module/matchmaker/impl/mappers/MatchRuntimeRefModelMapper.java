@@ -14,7 +14,7 @@ public class MatchRuntimeRefModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchRuntimeRefModel fromRow(Row row) {
+    public MatchRuntimeRefModel fromRow(final Row row) {
         final var matchRuntimeRef = new MatchRuntimeRefModel();
         matchRuntimeRef.setId(row.getLong("id"));
         matchRuntimeRef.setMatchmakerId(row.getLong("matchmaker_id"));
