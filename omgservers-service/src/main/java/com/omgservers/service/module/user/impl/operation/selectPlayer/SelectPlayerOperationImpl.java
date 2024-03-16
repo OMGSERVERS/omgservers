@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -37,7 +37,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
                         where user_id = $1 and id = $2
                         limit 1
                         """,
-                Arrays.asList(userId, id),
+                List.of(userId, id),
                 "Player",
                 playerModelMapper::fromRow);
     }

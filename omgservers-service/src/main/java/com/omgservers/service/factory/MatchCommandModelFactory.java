@@ -28,7 +28,7 @@ public class MatchCommandModelFactory {
                                               final Long matchmakerId,
                                               final Long matchId,
                                               final MatchCommandBodyModel body) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var matchCommand = new MatchmakerMatchCommandModel();
         matchCommand.setId(id);

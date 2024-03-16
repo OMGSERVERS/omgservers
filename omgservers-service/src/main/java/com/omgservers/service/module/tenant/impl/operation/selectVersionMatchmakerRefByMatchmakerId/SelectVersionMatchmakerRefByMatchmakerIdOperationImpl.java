@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -37,10 +37,11 @@ class SelectVersionMatchmakerRefByMatchmakerIdOperationImpl
                         order by id desc
                         limit 1
                         """,
-                Arrays.asList(
+                List.of(
                         tenantId,
                         versionId,
-                        matchmakerId),
+                        matchmakerId
+                ),
                 "Version matchmaker ref",
                 versionMatchmakerRefModelMapper::fromRow);
     }

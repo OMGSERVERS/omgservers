@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -42,7 +42,7 @@ class UpsertRuntimeClientOperationImpl implements UpsertRuntimeClientOperation {
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         runtimeClient.getId(),
                         runtimeClient.getIdempotencyKey(),
                         runtimeClient.getRuntimeId(),

@@ -28,7 +28,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
 
     @Override
     public Uni<ShardModel> calculateShard(String... keys) {
-        return calculateShard(Arrays.asList(keys));
+        return calculateShard(List.of(keys));
     }
 
     @Override

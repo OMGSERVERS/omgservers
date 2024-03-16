@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -57,7 +58,7 @@ class AdminServiceTest extends Assertions {
     void givenIndex_whenFindIndex_thenFound() {
         final var name = UUID.randomUUID().toString();
         final var shards = 32;
-        final var addresses = Arrays.asList(URI.create("http://localhost:10001"), URI.create("http://localhost:1000"));
+        final var addresses = List.of(URI.create("http://localhost:10001"), URI.create("http://localhost:1000"));
         final var createIndexAdminRequest = new CreateIndexAdminRequest(name, shards, addresses);
         final var createIndexAdminResponse = adminService.createIndex(createIndexAdminRequest);
         final var findIndexAdminRequest = new FindIndexAdminRequest(name);

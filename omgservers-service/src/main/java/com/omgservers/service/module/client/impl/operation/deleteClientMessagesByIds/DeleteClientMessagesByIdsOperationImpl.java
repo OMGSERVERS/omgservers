@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +33,7 @@ class DeleteClientMessagesByIdsOperationImpl implements DeleteClientMessagesById
                         set modified = $3, deleted = true
                         where client_id = $1 and id = any($2) and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         clientId,
                         ids.toArray(),
                         Instant.now().atOffset(ZoneOffset.UTC)

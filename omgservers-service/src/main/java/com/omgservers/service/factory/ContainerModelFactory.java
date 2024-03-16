@@ -31,7 +31,7 @@ public class ContainerModelFactory {
                                  final ContainerQualifierEnum qualifier,
                                  final String image,
                                  final ContainerConfigModel config) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var container = new ContainerModel();
         container.setId(id);

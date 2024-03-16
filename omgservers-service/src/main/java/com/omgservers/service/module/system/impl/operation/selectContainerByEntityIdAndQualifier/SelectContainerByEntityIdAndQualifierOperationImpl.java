@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -34,7 +34,7 @@ class SelectContainerByEntityIdAndQualifierOperationImpl implements SelectContai
                         where entity_id = $1 and qualifier = $2
                         limit 1
                         """,
-                Arrays.asList(entityId, qualifier),
+                List.of(entityId, qualifier),
                 "Container",
                 containerModelMapper::fromRow);
     }

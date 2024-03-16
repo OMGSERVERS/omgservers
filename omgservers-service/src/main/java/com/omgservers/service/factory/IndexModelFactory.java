@@ -19,9 +19,9 @@ public class IndexModelFactory {
 
     public IndexModel create(final String name,
                              final IndexConfigModel config) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        IndexModel index = new IndexModel();
+        final var index = new IndexModel();
         index.setId(generateIdOperation.generateId());
         index.setCreated(now);
         index.setModified(now);

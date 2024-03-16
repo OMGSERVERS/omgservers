@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -37,8 +36,11 @@ class SelectActiveMatchmakerMatchCommandsByMatchIdOperationImpl
                         where matchmaker_id = $1 and match_id = $2 and deleted = false
                         order by id asc
                         """,
-                Arrays.asList(matchmakerId, matchId),
-                "Match command",
+                List.of(
+                        matchmakerId,
+                        matchId
+                ),
+                "Matchmaker match command",
                 matchCommandModelMapper::fromRow);
     }
 }

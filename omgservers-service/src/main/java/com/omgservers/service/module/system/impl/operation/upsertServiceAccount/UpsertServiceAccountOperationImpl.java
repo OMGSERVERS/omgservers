@@ -3,8 +3,8 @@ package com.omgservers.service.module.system.impl.operation.upsertServiceAccount
 import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -35,7 +35,7 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         serviceAccount.getId(),
                         serviceAccount.getCreated().atOffset(ZoneOffset.UTC),
                         serviceAccount.getModified().atOffset(ZoneOffset.UTC),

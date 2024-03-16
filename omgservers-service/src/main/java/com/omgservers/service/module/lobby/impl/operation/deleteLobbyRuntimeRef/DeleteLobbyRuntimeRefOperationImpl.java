@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -33,7 +33,7 @@ class DeleteLobbyRuntimeRefOperationImpl implements DeleteLobbyRuntimeRefOperati
                         set modified = $3, deleted = true
                         where lobby_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         lobbyId,
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)

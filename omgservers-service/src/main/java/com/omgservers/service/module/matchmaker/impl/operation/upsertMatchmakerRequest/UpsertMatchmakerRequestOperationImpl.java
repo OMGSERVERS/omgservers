@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -41,7 +41,7 @@ class UpsertMatchmakerRequestOperationImpl implements UpsertMatchmakerRequestOpe
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         matchmakerRequest.getId(),
                         matchmakerRequest.getIdempotencyKey(),
                         matchmakerRequest.getMatchmakerId(),

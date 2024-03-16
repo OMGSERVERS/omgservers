@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.deleteRuntimePermission;
 
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeClient.SelectRuntimeClientOperation;
 import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.module.runtime.impl.operation.selectRuntimeClient.SelectRuntimeClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -36,7 +36,7 @@ class DeleteRuntimePermissionOperationImpl implements DeleteRuntimePermissionOpe
                         set modified = $3, deleted = true
                         where runtime_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         runtimeId,
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -37,7 +37,7 @@ class DeleteClientRuntimeRefOperationImpl implements DeleteClientRuntimeRefOpera
                         set modified = $3, deleted = true
                         where client_id = $1 and id = $2 and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         clientId,
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)

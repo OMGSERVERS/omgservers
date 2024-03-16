@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -36,7 +36,7 @@ class DeleteUserOperationImpl implements DeleteUserOperation {
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,
-                Arrays.asList(
+                List.of(
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),

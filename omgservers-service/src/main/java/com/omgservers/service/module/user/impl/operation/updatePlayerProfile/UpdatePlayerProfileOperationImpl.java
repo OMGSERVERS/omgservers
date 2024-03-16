@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -41,7 +41,7 @@ class UpdatePlayerProfileOperationImpl implements UpdatePlayerProfileOperation {
                         set modified = $3, profile = $4
                         where user_id = $1 and id = $2
                         """,
-                Arrays.asList(
+                List.of(
                         userId,
                         playerId,
                         Instant.now().atOffset(ZoneOffset.UTC),

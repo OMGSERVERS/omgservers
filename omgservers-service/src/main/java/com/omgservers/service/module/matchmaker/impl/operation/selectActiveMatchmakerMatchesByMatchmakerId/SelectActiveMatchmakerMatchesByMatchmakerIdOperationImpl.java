@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -23,9 +22,10 @@ class SelectActiveMatchmakerMatchesByMatchmakerIdOperationImpl
     final MatchmakerMatchModelMapper matchmakerMatchModelMapper;
 
     @Override
-    public Uni<List<MatchmakerMatchModel>> selectActiveMatchmakerMatchesByMatchmakerId(final SqlConnection sqlConnection,
-                                                                                       final int shard,
-                                                                                       final Long matchmakerId) {
+    public Uni<List<MatchmakerMatchModel>> selectActiveMatchmakerMatchesByMatchmakerId(
+            final SqlConnection sqlConnection,
+            final int shard,
+            final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
@@ -35,7 +35,7 @@ class SelectActiveMatchmakerMatchesByMatchmakerIdOperationImpl
                         where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,
-                Arrays.asList(matchmakerId),
+                List.of(matchmakerId),
                 "Match",
                 matchmakerMatchModelMapper::fromRow);
     }

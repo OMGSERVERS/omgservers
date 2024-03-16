@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -32,7 +32,7 @@ class SelectServiceAccountByUsernameOperationImpl implements SelectServiceAccoun
                         where username = $1
                         limit 1
                         """,
-                Arrays.asList(username),
+                List.of(username),
                 "Service account",
                 serviceAccountModelMapper::fromRow);
     }

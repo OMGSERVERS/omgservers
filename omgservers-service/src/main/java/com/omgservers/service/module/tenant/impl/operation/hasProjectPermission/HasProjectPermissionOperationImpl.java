@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -34,7 +34,7 @@ class HasProjectPermissionOperationImpl implements HasProjectPermissionOperation
                             tenant_id = $1 and project_id = $2 and user_id = $3 and permission = $4 and deleted = false
                         limit 1
                         """,
-                Arrays.asList(tenantId, projectId, userId, permission),
+                List.of(tenantId, projectId, userId, permission),
                 "Project permission");
     }
 }

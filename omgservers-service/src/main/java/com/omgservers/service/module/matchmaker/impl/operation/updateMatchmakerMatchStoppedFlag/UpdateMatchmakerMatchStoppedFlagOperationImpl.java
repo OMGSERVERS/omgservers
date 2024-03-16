@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -38,7 +38,7 @@ class UpdateMatchmakerMatchStoppedFlagOperationImpl implements UpdateMatchmakerM
                         set modified = $3, stopped = $4
                         where matchmaker_id = $1 and id = $2
                         """,
-                Arrays.asList(
+                List.of(
                         matchmakerId,
                         matchId,
                         Instant.now().atOffset(ZoneOffset.UTC),

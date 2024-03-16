@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -36,7 +36,7 @@ class SelectRuntimeClientByRuntimeIdAndClientIdOperationImpl implements
                         order by id desc
                         limit 1
                         """,
-                Arrays.asList(runtimeId, clientId),
+                List.of(runtimeId, clientId),
                 "Runtime client",
                 runtimeClientModelMapper::fromRow);
     }

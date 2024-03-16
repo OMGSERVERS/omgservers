@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -37,7 +37,7 @@ class UpdateRuntimeClientLastActivityOperationImpl implements UpdateRuntimeClien
                         set modified = $3, last_activity = $4
                         where runtime_id = $1 and client_id = $2
                         """,
-                Arrays.asList(
+                List.of(
                         runtimeId,
                         clientId,
                         Instant.now().atOffset(ZoneOffset.UTC),

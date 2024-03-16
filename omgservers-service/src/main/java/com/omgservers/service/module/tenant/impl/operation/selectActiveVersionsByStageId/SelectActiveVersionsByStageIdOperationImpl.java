@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -35,7 +34,7 @@ class SelectActiveVersionsByStageIdOperationImpl implements SelectActiveVersions
                         where tenant_id = $1 and stage_id = $2 and deleted = false
                         order by id asc
                         """,
-                Arrays.asList(
+                List.of(
                         tenantId,
                         stageId
                 ),

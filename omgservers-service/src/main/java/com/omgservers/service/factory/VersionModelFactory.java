@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -55,7 +54,7 @@ public class VersionModelFactory {
                                final VersionConfigModel versionConfig,
                                final VersionSourceCodeModel sourceCode,
                                final String idempotencyKey) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var version = new VersionModel();
         version.setId(id);

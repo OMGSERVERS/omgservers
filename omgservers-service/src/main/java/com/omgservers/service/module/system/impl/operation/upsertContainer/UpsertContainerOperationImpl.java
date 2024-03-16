@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -41,7 +41,7 @@ class UpsertContainerOperationImpl implements UpsertContainerOperation {
                         on conflict (id) do
                         nothing
                         """,
-                Arrays.asList(
+                List.of(
                         container.getId(),
                         container.getCreated().atOffset(ZoneOffset.UTC),
                         container.getModified().atOffset(ZoneOffset.UTC),

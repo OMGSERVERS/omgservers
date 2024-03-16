@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -36,7 +35,7 @@ public class UserModelFactory {
                             final UserRoleEnum role,
                             final String passwordHash,
                             final String idempotencyKey) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         UserModel user = new UserModel();
         user.setId(id);
