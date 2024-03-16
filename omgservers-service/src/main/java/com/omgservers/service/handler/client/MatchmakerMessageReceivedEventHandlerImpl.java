@@ -15,6 +15,8 @@ import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.MatchmakerRequestConfigModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.MatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
@@ -84,7 +86,8 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                                         userId,
                                         clientId,
                                         mode,
-                                        attributes));
+                                        attributes,
+                                        event.getIdempotencyKey()));
                     })
                     .replaceWithVoid();
         } else {
@@ -109,16 +112,28 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                                        final Long userId,
                                        final Long clientId,
                                        final String mode,
-                                       final PlayerAttributesModel attributes) {
+                                       final PlayerAttributesModel attributes,
+                                       final String idempotencyKey) {
         final var requestConfig = new MatchmakerRequestConfigModel(attributes);
-        final var requestModel = matchmakerRequestModelFactory.create(
-                matchmakerId,
+        final var requestModel = matchmakerRequestModelFactory.create(matchmakerId,
                 userId,
                 clientId,
                 mode,
-                requestConfig);
+                requestConfig,
+                idempotencyKey);
         final var request = new SyncMatchmakerRequestRequest(requestModel);
         return matchmakerModule.getMatchmakerService().syncMatchmakerRequest(request)
-                .map(SyncMatchmakerRequestResponse::getCreated);
+                .map(SyncMatchmakerRequestResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", requestModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

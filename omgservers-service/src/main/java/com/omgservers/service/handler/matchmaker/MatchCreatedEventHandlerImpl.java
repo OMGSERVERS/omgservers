@@ -12,11 +12,14 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
@@ -31,8 +34,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -69,8 +70,9 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                             log.info("Match was created, match={}/{}", matchmakerId, matchId);
 
                             final var versionId = matchmaker.getVersionId();
-                            return syncRuntime(matchmaker, match, versionId)
-                                    .flatMap(runtimeWasCreated -> requestJobExecution(match));
+                            return syncRuntime(matchmaker, match, versionId, event.getIdempotencyKey())
+                                    .flatMap(runtimeWasCreated ->
+                                            requestJobExecution(match, event.getIdempotencyKey()));
                         })
                 )
                 .replaceWithVoid();
@@ -90,7 +92,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
                              final MatchmakerMatchModel matchmakerMatch,
-                             final Long versionId) {
+                             final Long versionId,
+                             final String idempotencyKey) {
         final var tenantId = matchmaker.getTenantId();
         final var matchmakerId = matchmaker.getId();
         final var matchId = matchmakerMatch.getId();
@@ -104,26 +107,48 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 RuntimeQualifierEnum.MATCH,
                 generateIdOperation.generateId(),
                 runtimeConfig,
-                // TODO: using idempotencyKey from matchmakerMatch
-                UUID.randomUUID().toString());
+                idempotencyKey);
         return syncRuntime(runtime);
     }
 
     Uni<Boolean> syncRuntime(final RuntimeModel runtime) {
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
-                .map(SyncRuntimeResponse::getCreated);
+                .map(SyncRuntimeResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtime, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
-    Uni<Boolean> requestJobExecution(final MatchmakerMatchModel match) {
+    Uni<Boolean> requestJobExecution(final MatchmakerMatchModel match, final String idempotencyKey) {
         final var matchmakerId = match.getMatchmakerId();
         final var matchId = match.getId();
 
         final var eventBody = new MatchJobTaskExecutionRequestedEventBodyModel(matchmakerId, matchId);
-        final var eventModel = eventModelFactory.create(eventBody);
+        final var eventModel = eventModelFactory.create(eventBody,
+                idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+                .map(SyncEventResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

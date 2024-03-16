@@ -8,6 +8,9 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.VersionLobbyRequestCreatedEventBodyModel;
 import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.LobbyModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
@@ -51,7 +54,7 @@ public class VersionLobbyRequestCreatedEventHandlerImpl implements EventHandler 
                             versionId,
                             lobbyId);
 
-                    return syncLobby(versionLobbyRequest);
+                    return syncLobby(versionLobbyRequest, event.getIdempotencyKey());
                 })
                 .replaceWithVoid();
     }
@@ -62,16 +65,28 @@ public class VersionLobbyRequestCreatedEventHandlerImpl implements EventHandler 
                 .map(GetVersionLobbyRequestResponse::getVersionLobbyRequest);
     }
 
-    Uni<Boolean> syncLobby(final VersionLobbyRequestModel versionLobbyRequest) {
+    Uni<Boolean> syncLobby(final VersionLobbyRequestModel versionLobbyRequest,
+                           final String idempotencyKey) {
         final var tenantId = versionLobbyRequest.getTenantId();
         final var versionId = versionLobbyRequest.getVersionId();
         final var lobbyId = versionLobbyRequest.getLobbyId();
         final var lobby = lobbyModelFactory.create(lobbyId,
                 tenantId,
                 versionId,
-                versionLobbyRequest.getIdempotencyKey());
+                idempotencyKey);
         final var request = new SyncLobbyRequest(lobby);
         return lobbyModule.getLobbyService().syncLobby(request)
-                .map(SyncLobbyResponse::getCreated);
+                .map(SyncLobbyResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", lobby, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

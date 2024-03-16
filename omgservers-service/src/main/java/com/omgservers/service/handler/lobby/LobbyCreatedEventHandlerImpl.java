@@ -12,6 +12,9 @@ import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.factory.VersionLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -55,8 +58,10 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(lobby -> {
                     log.info("Lobby was created, id={}", lobbyId);
 
-                    return syncRuntime(lobby)
-                            .flatMap(created -> syncVersionLobbyRef(lobby));
+                    final var idempotencyKey = event.getIdempotencyKey();
+
+                    return syncRuntime(lobby, idempotencyKey)
+                            .flatMap(created -> syncVersionLobbyRef(lobby, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -67,7 +72,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .map(GetLobbyResponse::getLobby);
     }
 
-    Uni<Boolean> syncRuntime(final LobbyModel lobby) {
+    Uni<Boolean> syncRuntime(final LobbyModel lobby, final String idempotencyKey) {
         final var lobbyId = lobby.getId();
         final var tenantId = lobby.getTenantId();
         final var versionId = lobby.getVersionId();
@@ -83,20 +88,46 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 RuntimeQualifierEnum.LOBBY,
                 generateIdOperation.generateId(),
                 runtimeConfig,
-                lobby.getIdempotencyKey());
+                idempotencyKey);
 
         final var request = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntime(request)
-                .map(SyncRuntimeResponse::getCreated);
+                .map(SyncRuntimeResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtime, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
-    Uni<Boolean> syncVersionLobbyRef(final LobbyModel lobby) {
+    Uni<Boolean> syncVersionLobbyRef(final LobbyModel lobby,
+                                     final String idempotencyKey) {
         final var tenantId = lobby.getTenantId();
         final var versionId = lobby.getVersionId();
         final var lobbyId = lobby.getId();
-        final var versionLobbyRef = versionLobbyRefModelFactory.create(tenantId, versionId, lobbyId);
+        final var versionLobbyRef = versionLobbyRefModelFactory.create(tenantId,
+                versionId,
+                lobbyId,
+                idempotencyKey);
         final var request = new SyncVersionLobbyRefRequest(versionLobbyRef);
         return tenantModule.getVersionService().syncVersionLobbyRef(request)
-                .map(SyncVersionLobbyRefResponse::getCreated);
+                .map(SyncVersionLobbyRefResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", versionLobbyRef, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

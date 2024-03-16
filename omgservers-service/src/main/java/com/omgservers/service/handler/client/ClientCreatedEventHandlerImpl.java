@@ -19,6 +19,8 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
@@ -69,14 +71,16 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                     log.info("Client was created, id={}, version={}/{}",
                             clientId, tenantId, versionId);
 
-                    return syncWelcomeMessage(client)
+                    final var idempotencyKey = event.getIdempotencyKey();
+
+                    return syncWelcomeMessage(client, idempotencyKey)
                             .flatMap(created -> selectVersionLobbyRef(tenantId, versionId))
                             .flatMap(versionLobbyRef -> {
                                 final var lobbyId = versionLobbyRef.getLobbyId();
                                 return getLobby(lobbyId)
                                         .flatMap(lobby -> {
                                             final var runtimeId = lobby.getRuntimeId();
-                                            return syncRuntimeClient(runtimeId, clientId);
+                                            return syncRuntimeClient(runtimeId, clientId, idempotencyKey);
                                         });
                             });
                 })
@@ -89,17 +93,29 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> syncWelcomeMessage(final ClientModel client) {
+    Uni<Boolean> syncWelcomeMessage(final ClientModel client, final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
         final var versionId = client.getVersionId();
         final var messageBody = new WelcomeMessageBodyModel(tenantId, versionId);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.WELCOME_MESSAGE,
-                messageBody);
+                messageBody,
+                idempotencyKey);
         final var request = new SyncClientMessageRequest(clientMessage);
         return clientModule.getClientService().syncClientMessage(request)
-                .map(SyncClientMessageResponse::getCreated);
+                .map(SyncClientMessageResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", clientMessage, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     Uni<VersionLobbyRefModel> selectVersionLobbyRef(final Long tenantId, final Long versionId) {
@@ -128,11 +144,26 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetLobbyResponse::getLobby);
     }
 
-    Uni<Boolean> syncRuntimeClient(final Long runtimeId, final Long clientId) {
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId, clientId);
+    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
+                                   final Long clientId,
+                                   final String idempotencyKey) {
+        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
+                clientId,
+                idempotencyKey);
         final var request = new SyncRuntimeClientRequest(runtimeClient);
         return runtimeModule.getRuntimeService().syncRuntimeClient(request)
-                .map(SyncRuntimeClientResponse::getCreated);
+                .map(SyncRuntimeClientResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtimeClient, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }
 

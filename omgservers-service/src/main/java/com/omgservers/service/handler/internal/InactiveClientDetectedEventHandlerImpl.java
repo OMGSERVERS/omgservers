@@ -14,6 +14,9 @@ import com.omgservers.model.event.body.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.DisconnectionMessageBodyModel;
 import com.omgservers.model.message.body.DisconnectionReasonEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
@@ -53,7 +56,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                     } else {
                         log.info("Inactive client was detected, clientId={}", clientId);
 
-                        return syncDisconnectionMessage(clientId)
+                        return syncDisconnectionMessage(clientId, event.getIdempotencyKey())
                                 .flatMap(created -> deleteClient(clientId));
                     }
                 })
@@ -66,18 +69,30 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> syncDisconnectionMessage(final Long clientId) {
+    Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
         final var messageBody = new DisconnectionMessageBodyModel(DisconnectionReasonEnum.CLIENT_INACTIVITY);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.DISCONNECTION_MESSAGE,
-                messageBody);
+                messageBody,
+                idempotencyKey);
         return syncClientMessage(disconnectionMessage);
     }
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
         return clientModule.getClientService().syncClientMessage(request)
-                .map(SyncClientMessageResponse::getCreated);
+                .map(SyncClientMessageResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", clientMessage, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {

@@ -9,6 +9,9 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;
@@ -46,7 +49,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(stage -> {
                     log.info("Stage was created, stage={}/{}", tenantId, stageId);
 
-                    return requestJobExecution(tenantId, stageId);
+                    return requestJobExecution(tenantId, stageId, event.getIdempotencyKey());
                 })
                 .replaceWithVoid();
     }
@@ -57,12 +60,26 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .map(GetStageResponse::getStage);
     }
 
-    Uni<Boolean> requestJobExecution(final Long tenantId, final Long stageId) {
+    Uni<Boolean> requestJobExecution(final Long tenantId,
+                                     final Long stageId,
+                                     final String idempotencyKey) {
         final var eventBody = new StageJobTaskExecutionRequestedEventBodyModel(tenantId, stageId);
-        final var eventModel = eventModelFactory.create(eventBody);
+        final var eventModel = eventModelFactory.create(eventBody,
+                idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+                .map(SyncEventResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

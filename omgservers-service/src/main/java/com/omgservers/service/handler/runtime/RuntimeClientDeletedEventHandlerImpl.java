@@ -18,6 +18,9 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -69,7 +72,9 @@ public class RuntimeClientDeletedEventHandlerImpl implements EventHandler {
                                             return Uni.createFrom().voidItem();
                                         }
 
-                                        return syncDeleteClientRuntimeCommand(runtimeId, clientId);
+                                        return syncDeleteClientRuntimeCommand(runtimeId,
+                                                clientId,
+                                                event.getIdempotencyKey());
                                     }));
                 })
                 .replaceWithVoid();
@@ -88,16 +93,28 @@ public class RuntimeClientDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncDeleteClientRuntimeCommand(final Long runtimeId,
-                                                final Long clientId) {
+                                                final Long clientId,
+                                                final String idempotencyKey) {
         final var runtimeCommandBody = new DeleteClientRuntimeCommandBodyModel(clientId);
-        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody, idempotencyKey);
         return syncRuntimeCommand(runtimeCommand);
     }
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
         return runtimeModule.getRuntimeService().syncRuntimeCommand(request)
-                .map(SyncRuntimeCommandResponse::getCreated);
+                .map(SyncRuntimeCommandResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtimeCommand, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     Uni<Void> findAndDeleteClientRuntimeRef(final Long clientId, final Long runtimeId) {

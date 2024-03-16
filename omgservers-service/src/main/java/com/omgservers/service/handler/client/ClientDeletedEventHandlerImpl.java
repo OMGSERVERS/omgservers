@@ -22,6 +22,9 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -70,7 +73,9 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> handleClientMessages(clientId))
                             .flatMap(voidItem -> {
                                 final var matchmakerId = client.getMatchmakerId();
-                                return syncDeleteClientMatchmakerCommand(matchmakerId, client.getId());
+                                return syncDeleteClientMatchmakerCommand(matchmakerId,
+                                        client.getId(),
+                                        event.getIdempotencyKey());
                             });
                 })
                 .replaceWithVoid();
@@ -141,14 +146,36 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
-                                                   final Long clientId) {
+                                                   final Long clientId,
+                                                   final String idempotencyKey) {
         final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
-        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
+                commandBody,
+                idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(Boolean.FALSE);
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.PARENT_NOT_FOUND)) {
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                })
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", commandModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }
 

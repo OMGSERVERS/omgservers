@@ -13,6 +13,7 @@ import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
@@ -57,7 +58,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
         if (message.getBody() instanceof final ClientMessageBodyModel messageBody) {
             return selectClientRuntimeRef(clientId)
                     .flatMap(clientRuntimeRef -> syncHandleMessageRuntimeCommand(clientRuntimeRef,
-                            messageBody.getData()))
+                            messageBody.getData(), event.getIdempotencyKey()))
                     .replaceWithVoid();
         } else {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_MESSAGE_BODY_TYPE_MISMATCH,
@@ -86,17 +87,30 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncHandleMessageRuntimeCommand(final ClientRuntimeRefModel clientRuntimeRef,
-                                                 final Object message) {
+                                                 final Object message,
+                                                 final String idempotencyKey) {
         final var clientId = clientRuntimeRef.getClientId();
         final var runtimeId = clientRuntimeRef.getRuntimeId();
         final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(clientId, message);
-        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody, idempotencyKey);
         return syncClientCommand(clientId, runtimeCommand);
     }
 
-    Uni<Boolean> syncClientCommand(final Long clientId, final RuntimeCommandModel runtimeCommand) {
+    Uni<Boolean> syncClientCommand(final Long clientId,
+                                   final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncClientCommandRequest(clientId, runtimeCommand);
         return runtimeModule.getRuntimeService().syncClientCommand(request)
-                .map(SyncClientCommandResponse::getCreated);
+                .map(SyncClientCommandResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtimeCommand, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

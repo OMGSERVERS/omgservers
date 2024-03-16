@@ -13,6 +13,8 @@ import com.omgservers.model.dto.system.SyncContainerRequest;
 import com.omgservers.model.dto.system.SyncContainerResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.user.GetUserRequest;
+import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.event.EventModel;
@@ -22,6 +24,9 @@ import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBody
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ContainerModelFactory;
 import com.omgservers.service.factory.EventModelFactory;
@@ -84,13 +89,15 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier());
 
+                    final var idempotencyKey = event.getIdempotencyKey();
+
                     final var userId = runtime.getUserId();
                     // TODO: improve it
                     final var password = String.valueOf(new SecureRandom().nextLong());
-                    return createUser(userId, password, runtime.getIdempotencyKey())
+                    return createUser(userId, password, idempotencyKey)
                             .flatMap(user -> syncContainer(user, password, runtime))
-                            .flatMap(created -> syncRuntimeRef(runtime))
-                            .flatMap(created -> requestJobExecution(runtimeId));
+                            .flatMap(created -> syncRuntimeRef(runtime, idempotencyKey))
+                            .flatMap(created -> requestJobExecution(runtimeId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -101,18 +108,38 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<UserModel> createUser(final Long id, final String password, final String idempotencyKey) {
+    Uni<UserModel> createUser(final Long id,
+                              final String password,
+                              final String idempotencyKey) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.WORKER, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(request)
                 .map(SyncUserResponse::getCreated)
-                .replaceWith(user);
+                .replaceWith(user)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", user, t.getMessage());
+
+                            // User was already created
+                            final var getUserRequest = new GetUserRequest(id);
+                            return userModule.getUserService().getUser(getUserRequest)
+                                    .map(GetUserResponse::getUser);
+
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     Uni<Boolean> syncContainer(final UserModel user,
                                final String password,
                                final RuntimeModel runtime) {
+        // TODO: using idempotency key
+
         final var runtimeId = runtime.getId();
         final var workerImage = getConfigOperation.getServiceConfig().workersDockerImage();
         final var internalUri = getConfigOperation.getServiceConfig().internalUri();
@@ -136,38 +163,75 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncContainerResponse::getCreated);
     }
 
-    Uni<Boolean> syncRuntimeRef(final RuntimeModel runtime) {
+    Uni<Boolean> syncRuntimeRef(final RuntimeModel runtime, final String idempotencyKey) {
         final var runtimeId = runtime.getId();
         return switch (runtime.getQualifier()) {
             case LOBBY -> {
                 final var lobbyId = runtime.getConfig().getLobbyConfig().getLobbyId();
-                final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId);
+                final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId, idempotencyKey);
                 final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
                 yield lobbyModule.getLobbyService().syncLobbyRuntimeRef(request)
                         .map(SyncLobbyRuntimeResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
-                        .recoverWithItem(Boolean.FALSE);
+                        .recoverWithItem(Boolean.FALSE)
+                        .onFailure(ServerSideConflictException.class)
+                        .recoverWithUni(t -> {
+                            if (t instanceof final ServerSideBaseException exception) {
+                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                    log.warn("Idempotency was violated, object={}, {}", lobbyRuntimeRef,
+                                            t.getMessage());
+                                    return Uni.createFrom().item(Boolean.FALSE);
+                                }
+                            }
+
+                            return Uni.createFrom().failure(t);
+                        });
             }
             case MATCH -> {
                 final var matchConfig = runtime.getConfig().getMatchConfig();
                 final var matchmakerId = matchConfig.getMatchmakerId();
                 final var matchId = matchConfig.getMatchId();
-                final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory.create(matchmakerId, matchId, runtimeId);
+                final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory
+                        .create(matchmakerId, matchId, runtimeId, idempotencyKey);
                 final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
                 yield matchmakerModule.getMatchmakerService().syncMatchmakerMatchRuntimeRef(request)
                         .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
-                        .recoverWithItem(Boolean.FALSE);
+                        .recoverWithItem(Boolean.FALSE)
+                        .onFailure(ServerSideConflictException.class)
+                        .recoverWithUni(t -> {
+                            if (t instanceof final ServerSideBaseException exception) {
+                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                    log.warn("Idempotency was violated, object={}, {}", matchRuntimeRef,
+                                            t.getMessage());
+                                    return Uni.createFrom().item(Boolean.FALSE);
+                                }
+                            }
+
+                            return Uni.createFrom().failure(t);
+                        });
             }
         };
     }
 
-    Uni<Boolean> requestJobExecution(final Long runtimeId) {
+    Uni<Boolean> requestJobExecution(final Long runtimeId, final String idempotencyKey) {
         final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
-        final var eventModel = eventModelFactory.create(eventBody);
+        final var eventModel = eventModelFactory.create(eventBody,
+                idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+                .map(SyncEventResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }
