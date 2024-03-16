@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
@@ -12,13 +12,13 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.factory.MatchClientModelFactory;
+import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -44,7 +44,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     final SystemModule systemModule;
     final TenantModule tenantModule;
 
-    final MatchClientModelFactory matchClientModelFactory;
+    final MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
     final EventModelFactory eventModelFactory;
 
@@ -82,19 +82,19 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
+    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
-                             final MatchModel match,
+                             final MatchmakerMatchModel matchmakerMatch,
                              final Long versionId) {
         final var tenantId = matchmaker.getTenantId();
         final var matchmakerId = matchmaker.getId();
-        final var matchId = match.getId();
-        final var runtimeId = match.getRuntimeId();
+        final var matchId = matchmakerMatch.getId();
+        final var runtimeId = matchmakerMatch.getRuntimeId();
         final var runtimeConfig = new RuntimeConfigModel();
         runtimeConfig.setMatchConfig(new RuntimeConfigModel.MatchConfig(matchmakerId, matchId));
         final var runtime = runtimeModelFactory.create(
@@ -104,7 +104,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 RuntimeQualifierEnum.MATCH,
                 generateIdOperation.generateId(),
                 runtimeConfig,
-                // TODO: using idempotencyKey from match
+                // TODO: using idempotencyKey from matchmakerMatch
                 UUID.randomUUID().toString());
         return syncRuntime(runtime);
     }
@@ -115,7 +115,7 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncRuntimeResponse::getCreated);
     }
 
-    Uni<Boolean> requestJobExecution(final MatchModel match) {
+    Uni<Boolean> requestJobExecution(final MatchmakerMatchModel match) {
         final var matchmakerId = match.getMatchmakerId();
         final var matchId = match.getId();
 

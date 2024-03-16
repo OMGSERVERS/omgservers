@@ -1,19 +1,19 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
-import com.omgservers.model.dto.matchmaker.DeleteRequestRequest;
-import com.omgservers.model.dto.matchmaker.DeleteRequestResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchesRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.model.dto.matchmaker.ViewRequestsRequest;
-import com.omgservers.model.dto.matchmaker.ViewRequestsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefRequest;
@@ -21,10 +21,10 @@ import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.match.MatchModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
@@ -135,16 +135,16 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<RequestModel>> viewRequests(final Long matchmakerId) {
-        final var request = new ViewRequestsRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().viewRequests(request)
-                .map(ViewRequestsResponse::getRequests);
+    Uni<List<MatchmakerRequestModel>> viewRequests(final Long matchmakerId) {
+        final var request = new ViewMatchmakerRequestsRequest(matchmakerId);
+        return matchmakerModule.getMatchmakerService().viewMatchmakerRequests(request)
+                .map(ViewMatchmakerRequestsResponse::getMatchmakerRequests);
     }
 
     Uni<Boolean> deleteRequest(final Long matchmakerId, final Long id) {
-        final var request = new DeleteRequestRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteRequest(request)
-                .map(DeleteRequestResponse::getDeleted);
+        final var request = new DeleteMatchmakerRequestRequest(matchmakerId, id);
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerRequest(request)
+                .map(DeleteMatchmakerRequestResponse::getDeleted);
     }
 
     Uni<Void> deleteMatches(final Long matchmakerId) {
@@ -170,16 +170,16 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<MatchModel>> viewMatches(final Long matchmakerId) {
-        final var request = new ViewMatchesRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().viewMatches(request)
-                .map(ViewMatchesResponse::getMatches);
+    Uni<List<MatchmakerMatchModel>> viewMatches(final Long matchmakerId) {
+        final var request = new ViewMatchmakerMatchesRequest(matchmakerId);
+        return matchmakerModule.getMatchmakerService().viewMatchmakerMatches(request)
+                .map(ViewMatchmakerMatchesResponse::getMatchmakerMatches);
     }
 
     Uni<Boolean> deleteMatch(final Long matchmakerId, final Long id) {
-        final var request = new DeleteMatchRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatch(request)
-                .map(DeleteMatchResponse::getDeleted);
+        final var request = new DeleteMatchmakerMatchRequest(matchmakerId, id);
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatch(request)
+                .map(DeleteMatchmakerMatchResponse::getDeleted);
     }
 
     Uni<Void> findAndDeleteVersionMatchmakerRef(final MatchmakerModel matchmaker) {

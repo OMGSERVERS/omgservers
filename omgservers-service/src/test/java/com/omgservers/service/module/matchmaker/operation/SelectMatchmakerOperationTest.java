@@ -38,7 +38,7 @@ class SelectMatchmakerOperationTest extends Assertions {
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId());
         insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker1);
 
-        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(shard, matchmaker1.getId(), false);
+        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(shard, matchmaker1.getId());
         assertEquals(matchmaker1, matchmaker2);
     }
 
@@ -48,7 +48,7 @@ class SelectMatchmakerOperationTest extends Assertions {
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectMatchmakerOperation
-                .selectMatchmaker(shard, id, false));
+                .selectMatchmaker(shard, id));
     }
 
     Long tenantId() {

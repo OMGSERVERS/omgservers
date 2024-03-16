@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.job.task.matchmaker.operation.handleEndedMatches;
 
-import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerState.MatchmakerState;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ class HandleEndedMatchesOperationImpl implements HandleEndedMatchesOperation {
                                    final MatchmakerChangeOfState changeOfState) {
         // Step 1. Group match clients by matchId
         final var groupedMatchClients = matchmakerState.getMatchClients().stream()
-                .collect(Collectors.groupingBy(MatchClientModel::getMatchId));
+                .collect(Collectors.groupingBy(MatchmakerMatchClientModel::getMatchId));
 
         // Step 2. Filter out matches without match clients
         final var endedMatches = matchmakerState.getMatches().stream()

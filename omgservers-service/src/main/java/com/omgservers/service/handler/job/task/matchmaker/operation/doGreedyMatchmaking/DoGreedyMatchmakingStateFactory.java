@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking;
 
-import com.omgservers.model.match.MatchConfigModel;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientConfigModel;
-import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.service.factory.MatchClientModelFactory;
-import com.omgservers.service.factory.MatchModelFactory;
+import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.MatchmakerMatchModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 
@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class DoGreedyMatchmakingStateFactory {
 
-    final MatchClientModelFactory matchClientModelFactory;
-    final MatchModelFactory matchModelFactory;
+    final MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
+    final MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
     public DoGreedyMatchmakingState build(final VersionModeModel modeConfig,
-                                          final List<MatchModel> matches,
-                                          final List<MatchClientModel> matchClients) {
+                                          final List<MatchmakerMatchModel> matches,
+                                          final List<MatchmakerMatchClientModel> matchClients) {
         final var matchmakingMatches = matches.stream()
                 .map(MatchmakingMatch::new)
                 .toList();
@@ -59,7 +59,7 @@ public class DoGreedyMatchmakingStateFactory {
             createdMatches = new ArrayList<>();
         }
 
-        void matchRequest(RequestModel request) {
+        void matchRequest(MatchmakerRequestModel request) {
             // First of all trying to match requests with less filled matches
 
             final var sortedMatches = currentMatches.stream()
@@ -90,7 +90,7 @@ public class DoGreedyMatchmakingStateFactory {
 
             final var resultMatches = createdMatches.stream()
                     .filter(MatchmakingMatch::getReadiness)
-                    .map(MatchmakingMatch::getMatch)
+                    .map(MatchmakingMatch::getMatchmakerMatch)
                     .toList();
 
             final var resultMatchClients = currentMatches.stream()
@@ -102,8 +102,8 @@ public class DoGreedyMatchmakingStateFactory {
         }
 
         MatchmakingMatch createMatch(final Long matchmakerId) {
-            final var matchConfig = new MatchConfigModel(config);
-            final var matchModel = matchModelFactory.create(matchmakerId, matchConfig);
+            final var matchConfig = new MatchmakerMatchConfigModel(config);
+            final var matchModel = matchmakerMatchModelFactory.create(matchmakerId, matchConfig);
             final var newMatch = new MatchmakingMatch(matchModel);
             createdMatches.add(newMatch);
             currentMatches.add(newMatch);
@@ -113,18 +113,18 @@ public class DoGreedyMatchmakingStateFactory {
 
     class MatchmakingMatch {
 
-        List<RequestModel> matchedRequests;
-        List<MatchClientModel> createdMatchClients;
+        List<MatchmakerRequestModel> matchedRequests;
+        List<MatchmakerMatchClientModel> createdMatchClients;
         Map<String, MatchmakingGroup> groups;
         VersionModeModel config;
-        MatchModel match;
+        MatchmakerMatchModel matchmakerMatch;
         int size;
 
-        public MatchmakingMatch(final MatchModel match) {
-            this.match = match;
-            config = match.getConfig().getModeConfig();
+        public MatchmakingMatch(final MatchmakerMatchModel matchmakerMatch) {
+            this.matchmakerMatch = matchmakerMatch;
+            config = matchmakerMatch.getConfig().getModeConfig();
             groups = config.getGroups().stream()
-                    .map(groupConfig -> new MatchmakingGroup(match.getId(), groupConfig))
+                    .map(groupConfig -> new MatchmakingGroup(matchmakerMatch.getId(), groupConfig))
                     .collect(Collectors.toMap(MatchmakingGroup::getName, Function.identity()));
             matchedRequests = new ArrayList<>();
             createdMatchClients = new ArrayList<>();
@@ -132,26 +132,26 @@ public class DoGreedyMatchmakingStateFactory {
         }
 
         Long getId() {
-            return match.getId();
+            return matchmakerMatch.getId();
         }
 
         int getSize() {
             return size;
         }
 
-        public MatchModel getMatch() {
-            return match;
+        public MatchmakerMatchModel getMatchmakerMatch() {
+            return matchmakerMatch;
         }
 
-        public List<MatchClientModel> getCreatedMatchClients() {
+        public List<MatchmakerMatchClientModel> getCreatedMatchClients() {
             return createdMatchClients;
         }
 
-        public List<RequestModel> getMatchedRequests() {
+        public List<MatchmakerRequestModel> getMatchedRequests() {
             return matchedRequests;
         }
 
-        void addMatchClient(final MatchClientModel matchClient) {
+        void addMatchClient(final MatchmakerMatchClientModel matchClient) {
             final var group = groups.get(matchClient.getGroupName());
             if (group != null) {
                 group.addMatchClient(matchClient);
@@ -159,7 +159,7 @@ public class DoGreedyMatchmakingStateFactory {
             }
         }
 
-        boolean matchRequest(final RequestModel request) {
+        boolean matchRequest(final MatchmakerRequestModel request) {
             final var maxPlayers = config.getMaxPlayers();
             if (size >= maxPlayers) {
                 return false;
@@ -194,7 +194,7 @@ public class DoGreedyMatchmakingStateFactory {
 
     class MatchmakingGroup {
 
-        List<MatchClientModel> matchClients;
+        List<MatchmakerMatchClientModel> matchClients;
         VersionGroupModel config;
         long matchId;
 
@@ -209,11 +209,11 @@ public class DoGreedyMatchmakingStateFactory {
             return config.getName();
         }
 
-        void addMatchClient(final MatchClientModel matchClient) {
+        void addMatchClient(final MatchmakerMatchClientModel matchClient) {
             matchClients.add(matchClient);
         }
 
-        MatchClientModel matchRequest(final RequestModel request) {
+        MatchmakerMatchClientModel matchRequest(final MatchmakerRequestModel request) {
             final var maxPlayers = config.getMaxPlayers();
             if (matchClients.size() >= maxPlayers) {
                 return null;
@@ -232,16 +232,16 @@ public class DoGreedyMatchmakingStateFactory {
             return matchClients.size();
         }
 
-        MatchClientModel createMatchClient(RequestModel request) {
+        MatchmakerMatchClientModel createMatchClient(MatchmakerRequestModel request) {
             final var matchmakerId = request.getMatchmakerId();
             final var userId = request.getUserId();
             final var clientId = request.getClientId();
-            final var newMatchClient = matchClientModelFactory.create(matchmakerId,
+            final var newMatchClient = matchmakerMatchClientModelFactory.create(matchmakerId,
                     matchId,
                     userId,
                     clientId,
                     getName(),
-                    new MatchClientConfigModel(request));
+                    new MatchmakerMatchClientConfigModel(request));
             matchClients.add(newMatchClient);
             return newMatchClient;
         }

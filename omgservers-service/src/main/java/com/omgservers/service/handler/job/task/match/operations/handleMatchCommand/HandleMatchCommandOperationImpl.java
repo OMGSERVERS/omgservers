@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.job.task.match.operations.handleMatchCommand;
 
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ class HandleMatchCommandOperationImpl implements HandleMatchCommandOperation {
     }
 
     @Override
-    public Uni<Void> handleMatchCommand(MatchCommandModel matchCommand) {
+    public Uni<Void> handleMatchCommand(MatchmakerMatchCommandModel matchCommand) {
         final var qualifier = matchCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
         final var body = matchCommand.getBody();

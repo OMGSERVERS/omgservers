@@ -21,7 +21,7 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request) {
+    public Uni<GetMatchmakerResponse> getMatchmaker(final GetMatchmakerRequest request) {
         log.debug("Get matchmaker, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())

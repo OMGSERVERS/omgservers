@@ -1,14 +1,14 @@
 package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.match.MatchConfigModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.service.factory.MatchModelFactory;
+import com.omgservers.service.factory.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch.UpsertMatchmakerMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
-import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,19 +26,19 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteMatchOperationTestInterface deleteMatchOperation;
+    DeleteMatchmakerMatchOperationTestInterface deleteMatchOperation;
 
     @Inject
     UpsertMatchmakerOperation insertMatchmakerOperation;
 
     @Inject
-    UpsertMatchOperation upsertMatchOperation;
+    UpsertMatchmakerMatchOperation upsertMatchmakerMatchOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
 
     @Inject
-    MatchModelFactory matchModelFactory;
+    MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -56,11 +56,11 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
             add(VersionGroupModel.create("red", 1, 4));
             add(VersionGroupModel.create("blue", 1, 4));
         }});
-        final var matchConfig = new MatchConfigModel(modeConfig);
-        final var match = matchModelFactory.create(matchmaker.getId(), matchConfig);
-        upsertMatchOperation.upsertMatch(TIMEOUT, pgPool, shard, match);
+        final var matchConfig = new MatchmakerMatchConfigModel(modeConfig);
+        final var match = matchmakerMatchModelFactory.create(matchmaker.getId(), matchConfig);
+        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(TIMEOUT, pgPool, shard, match);
 
-        final var changeContext = deleteMatchOperation.deleteMatch(shard, matchmaker.getId(), match.getId());
+        final var changeContext = deleteMatchOperation.deleteMatchmakerMatch(shard, matchmaker.getId(), match.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
     }
@@ -71,7 +71,7 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteMatchOperation.deleteMatch(shard, matchmakerId, id);
+        final var changeContext = deleteMatchOperation.deleteMatchmakerMatch(shard, matchmakerId, id);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
     }

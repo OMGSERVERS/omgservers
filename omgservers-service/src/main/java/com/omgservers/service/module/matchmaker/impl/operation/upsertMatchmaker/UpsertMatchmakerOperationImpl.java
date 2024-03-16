@@ -31,13 +31,14 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker(
-                            id, created, modified, tenant_id, version_id, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, created, modified, tenant_id, version_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         matchmaker.getId(),
+                        matchmaker.getIdempotencyKey(),
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
                         matchmaker.getTenantId(),

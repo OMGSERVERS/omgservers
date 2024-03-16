@@ -3,8 +3,8 @@ package com.omgservers.service.handler.client;
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
-import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.event.EventModel;
@@ -12,10 +12,10 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.request.RequestConfigModel;
+import com.omgservers.model.request.MatchmakerRequestConfigModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.RequestModelFactory;
+import com.omgservers.service.factory.MatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -40,7 +40,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
 
     final GenerateIdOperation generateIdOperation;
 
-    final RequestModelFactory requestModelFactory;
+    final MatchmakerRequestModelFactory matchmakerRequestModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -110,15 +110,15 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                                        final Long clientId,
                                        final String mode,
                                        final PlayerAttributesModel attributes) {
-        final var requestConfig = new RequestConfigModel(attributes);
-        final var requestModel = requestModelFactory.create(
+        final var requestConfig = new MatchmakerRequestConfigModel(attributes);
+        final var requestModel = matchmakerRequestModelFactory.create(
                 matchmakerId,
                 userId,
                 clientId,
                 mode,
                 requestConfig);
-        final var request = new SyncRequestRequest(requestModel);
-        return matchmakerModule.getMatchmakerService().syncRequest(request)
-                .map(SyncRequestResponse::getCreated);
+        final var request = new SyncMatchmakerRequestRequest(requestModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerRequest(request)
+                .map(SyncMatchmakerRequestResponse::getCreated);
     }
 }

@@ -245,6 +245,7 @@ create index if not exists idx_lobby_runtime_ref_lobby_id on tab_lobby_runtime_r
 
 create table if not exists tab_matchmaker (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
@@ -254,6 +255,7 @@ create table if not exists tab_matchmaker (
 
 create table if not exists tab_matchmaker_command (
     id bigint primary key,
+    idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -264,6 +266,7 @@ create table if not exists tab_matchmaker_command (
 
 create table if not exists tab_matchmaker_request (
     id bigint primary key,
+    idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -276,6 +279,7 @@ create table if not exists tab_matchmaker_request (
 
 create table if not exists tab_matchmaker_match (
     id bigint primary key,
+    idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
@@ -287,6 +291,7 @@ create table if not exists tab_matchmaker_match (
 
 create table if not exists tab_matchmaker_match_runtime_ref (
     id bigint primary key,
+    idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
@@ -295,6 +300,7 @@ create table if not exists tab_matchmaker_match_runtime_ref (
     deleted boolean not null
 );
 
+-- TODO: To be removed
 create table if not exists tab_matchmaker_match_command (
     id bigint primary key,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -308,6 +314,7 @@ create table if not exists tab_matchmaker_match_command (
 
 create table if not exists tab_matchmaker_match_client (
     id bigint primary key,
+    idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
     match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
     created timestamp with time zone not null,

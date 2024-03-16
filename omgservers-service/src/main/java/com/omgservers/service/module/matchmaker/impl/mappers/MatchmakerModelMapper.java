@@ -14,6 +14,7 @@ public class MatchmakerModelMapper {
     public MatchmakerModel fromRow(final Row row) {
         final var matchmakerModel = new MatchmakerModel();
         matchmakerModel.setId(row.getLong("id"));
+        matchmakerModel.setIdempotencyKey(row.getString("idempotency_key"));
         matchmakerModel.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmakerModel.setModified(row.getOffsetDateTime("modified").toInstant());
         matchmakerModel.setTenantId(row.getLong("tenant_id"));

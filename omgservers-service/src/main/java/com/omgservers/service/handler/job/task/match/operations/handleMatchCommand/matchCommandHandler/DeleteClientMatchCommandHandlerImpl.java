@@ -10,7 +10,7 @@ import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsResponse;
 import com.omgservers.model.lobby.LobbyModel;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.DeleteClientMatchCommandBodyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
@@ -53,7 +53,7 @@ class DeleteClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     @Override
-    public Uni<Void> handle(MatchCommandModel matchCommand) {
+    public Uni<Void> handle(MatchmakerMatchCommandModel matchCommand) {
         log.debug("Handle match command, {}", matchCommand);
 
         final var body = (DeleteClientMatchCommandBodyModel) matchCommand.getBody();

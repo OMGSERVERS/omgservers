@@ -5,8 +5,8 @@ import com.omgservers.model.container.ContainerModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.system.SyncContainerRequest;
@@ -26,7 +26,7 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ContainerModelFactory;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.LobbyRuntimeRefModelFactory;
-import com.omgservers.service.factory.MatchRuntimeRefModelFactory;
+import com.omgservers.service.factory.MatchmakerMatchRuntimeRefModelFactory;
 import com.omgservers.service.factory.RuntimePermissionModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -61,7 +61,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
     final LobbyRuntimeRefModelFactory lobbyRuntimeRefModelFactory;
-    final MatchRuntimeRefModelFactory matchRuntimeRefModelFactory;
+    final MatchmakerMatchRuntimeRefModelFactory matchmakerMatchRuntimeRefModelFactory;
     final ContainerModelFactory containerModelFactory;
     final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
@@ -152,10 +152,10 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var matchConfig = runtime.getConfig().getMatchConfig();
                 final var matchmakerId = matchConfig.getMatchmakerId();
                 final var matchId = matchConfig.getMatchId();
-                final var matchRuntimeRef = matchRuntimeRefModelFactory.create(matchmakerId, matchId, runtimeId);
-                final var request = new SyncMatchRuntimeRefRequest(matchRuntimeRef);
-                yield matchmakerModule.getMatchmakerService().syncMatchRuntimeRef(request)
-                        .map(SyncMatchRuntimeRefResponse::getCreated)
+                final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory.create(matchmakerId, matchId, runtimeId);
+                final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
+                yield matchmakerModule.getMatchmakerService().syncMatchmakerMatchRuntimeRef(request)
+                        .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE);
             }

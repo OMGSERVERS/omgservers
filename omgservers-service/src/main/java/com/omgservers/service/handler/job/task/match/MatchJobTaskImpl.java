@@ -2,12 +2,12 @@ package com.omgservers.service.handler.job.task.match;
 
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsResponse;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.service.handler.job.task.match.operations.handleMatchCommand.HandleMatchCommandOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Multi;
@@ -40,28 +40,28 @@ public class MatchJobTaskImpl {
                 });
     }
 
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
+    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
-    Uni<Void> handleMatch(final MatchModel match) {
-        final var matchmakerId = match.getMatchmakerId();
-        final var matchId = match.getId();
-        return viewMatchCommands(matchmakerId, matchId)
+    Uni<Void> handleMatch(final MatchmakerMatchModel matchmakerMatch) {
+        final var matchmakerId = matchmakerMatch.getMatchmakerId();
+        final var matchmakerMatchId = matchmakerMatch.getId();
+        return viewMatchCommands(matchmakerId, matchmakerMatchId)
                 .call(this::handleMatchCommands)
                 .call(this::deleteMatchCommands)
                 .replaceWithVoid();
     }
 
-    Uni<List<MatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchCommandsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchCommands(request)
-                .map(ViewMatchCommandsResponse::getMatchCommands);
+    Uni<List<MatchmakerMatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
+        final var request = new ViewMatchmakerMatchCommandsRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().viewMatchmakerMatchCommands(request)
+                .map(ViewMatchmakerMatchCommandsResponse::getMatchmakerMatchCommands);
     }
 
-    Uni<Void> handleMatchCommands(List<MatchCommandModel> matchCommands) {
+    Uni<Void> handleMatchCommands(List<MatchmakerMatchCommandModel> matchCommands) {
         return Multi.createFrom().iterable(matchCommands)
                 .onItem().transformToUniAndConcatenate(matchCommand -> handleMatchCommandOperation
                         .handleMatchCommand(matchCommand)
@@ -83,7 +83,7 @@ public class MatchJobTaskImpl {
                 .replaceWithVoid();
     }
 
-    Uni<Void> deleteMatchCommands(List<MatchCommandModel> matchCommands) {
+    Uni<Void> deleteMatchCommands(List<MatchmakerMatchCommandModel> matchCommands) {
         return Multi.createFrom().iterable(matchCommands)
                 .onItem().transformToUniAndConcatenate(matchCommand -> {
                     final var matchmakerId = matchCommand.getMatchmakerId();
@@ -108,7 +108,7 @@ public class MatchJobTaskImpl {
 
     Uni<Boolean> deleteMatchCommand(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchCommandRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchCommand(request)
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchCommand(request)
                 .map(DeleteMatchCommandResponse::getDeleted);
     }
 }

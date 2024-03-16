@@ -66,7 +66,10 @@ public class VersionMatchmakerRequestCreatedEventHandlerImpl implements EventHan
         final var tenantId = versionMatchmakerRequest.getTenantId();
         final var versionId = versionMatchmakerRequest.getVersionId();
         final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
-        final var matchmaker = matchmakerModelFactory.create(matchmakerId, tenantId, versionId);
+        final var matchmaker = matchmakerModelFactory.create(matchmakerId,
+                tenantId,
+                versionId,
+                versionMatchmakerRequest.getIdempotencyKey());
         final var request = new SyncMatchmakerRequest(matchmaker);
         return matchmakerModule.getMatchmakerService().syncMatchmaker(request)
                 .map(SyncMatchmakerResponse::getCreated);

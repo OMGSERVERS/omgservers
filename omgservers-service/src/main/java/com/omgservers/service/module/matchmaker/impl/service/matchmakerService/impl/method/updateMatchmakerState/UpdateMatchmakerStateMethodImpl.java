@@ -2,17 +2,17 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.request.RequestModel;
-import com.omgservers.service.module.matchmaker.impl.operation.deleteMatch.DeleteMatchOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchClient.DeleteMatchClientOperation;
+import com.omgservers.model.request.MatchmakerRequestModel;
+import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatch.DeleteMatchmakerMatchOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatchClient.DeleteMatchmakerMatchClientOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerCommand.DeleteMatchmakerCommandOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.deleteRequest.DeleteRequestOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.updateMatchStoppedFlag.UpdateMatchStoppedFlagOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatch.UpsertMatchOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchClient.UpsertMatchClientOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerRequest.DeleteMatchmakerRequestOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.updateMatchmakerMatchStoppedFlag.UpdateMatchmakerMatchStoppedFlagOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch.UpsertMatchmakerMatchOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatchClient.UpsertMatchmakerMatchClientOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -31,13 +31,13 @@ import java.util.Collection;
 class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     final DeleteMatchmakerCommandOperation deleteMatchmakerCommandOperation;
-    final UpdateMatchStoppedFlagOperation updateMatchStoppedFlagOperation;
-    final UpsertMatchClientOperation upsertMatchClientOperation;
+    final UpdateMatchmakerMatchStoppedFlagOperation updateMatchmakerMatchStoppedFlagOperation;
+    final UpsertMatchmakerMatchClientOperation upsertMatchmakerMatchClientOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final DeleteMatchClientOperation deleteMatchClientOperation;
-    final DeleteRequestOperation deleteRequestOperation;
-    final UpsertMatchOperation upsertMatchOperation;
-    final DeleteMatchOperation deleteMatchOperation;
+    final DeleteMatchmakerMatchClientOperation deleteMatchmakerMatchClientOperation;
+    final DeleteMatchmakerRequestOperation deleteMatchmakerRequestOperation;
+    final UpsertMatchmakerMatchOperation upsertMatchmakerMatchOperation;
+    final DeleteMatchmakerMatchOperation deleteMatchmakerMatchOperation;
     final CheckShardOperation checkShardOperation;
 
     @Override
@@ -111,9 +111,9 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> deleteCompletedRequests(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
-                                      final Collection<RequestModel> deletedRequests) {
+                                      final Collection<MatchmakerRequestModel> deletedRequests) {
         return Multi.createFrom().iterable(deletedRequests)
-                .onItem().transformToUniAndConcatenate(deletedRequest -> deleteRequestOperation.deleteRequest(
+                .onItem().transformToUniAndConcatenate(deletedRequest -> deleteMatchmakerRequestOperation.deleteMatchmakerRequest(
                         changeContext,
                         sqlConnection,
                         shard,
@@ -126,10 +126,10 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> syncCreatedMatches(final ChangeContext<?> changeContext,
                                  final SqlConnection sqlConnection,
                                  final int shard,
-                                 final Collection<MatchModel> createdMatches) {
+                                 final Collection<MatchmakerMatchModel> createdMatches) {
         return Multi.createFrom().iterable(createdMatches)
                 .onItem().transformToUniAndConcatenate(createdMatch ->
-                        upsertMatchOperation.upsertMatch(changeContext, sqlConnection, shard, createdMatch))
+                        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(changeContext, sqlConnection, shard, createdMatch))
                 .collect().asList()
                 .replaceWithVoid();
     }
@@ -137,10 +137,10 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> updateStoppedMatches(final ChangeContext<?> changeContext,
                                    final SqlConnection sqlConnection,
                                    final int shard,
-                                   final Collection<MatchModel> updatedMatches) {
+                                   final Collection<MatchmakerMatchModel> updatedMatches) {
         return Multi.createFrom().iterable(updatedMatches)
                 .onItem().transformToUniAndConcatenate(updatedMatch ->
-                        updateMatchStoppedFlagOperation.updateMatch(changeContext,
+                        updateMatchmakerMatchStoppedFlagOperation.updateMatchmakerMatchStoppedFlag(changeContext,
                                 sqlConnection,
                                 shard,
                                 updatedMatch.getMatchmakerId(),
@@ -154,9 +154,9 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> deleteEndedMatches(final ChangeContext<?> changeContext,
                                  final SqlConnection sqlConnection,
                                  final int shard,
-                                 final Collection<MatchModel> endedMatches) {
+                                 final Collection<MatchmakerMatchModel> endedMatches) {
         return Multi.createFrom().iterable(endedMatches)
-                .onItem().transformToUniAndConcatenate(endedMatch -> deleteMatchOperation.deleteMatch(
+                .onItem().transformToUniAndConcatenate(endedMatch -> deleteMatchmakerMatchOperation.deleteMatchmakerMatch(
                         changeContext,
                         sqlConnection,
                         shard,
@@ -169,10 +169,10 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> syncCreatedMatchClients(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
                                       final int shard,
-                                      final Collection<MatchClientModel> createdMatchClients) {
+                                      final Collection<MatchmakerMatchClientModel> createdMatchClients) {
         return Multi.createFrom().iterable(createdMatchClients)
                 .onItem().transformToUniAndConcatenate(createdMatchClient ->
-                        upsertMatchClientOperation.upsertMatchClient(changeContext,
+                        upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(changeContext,
                                 sqlConnection,
                                 shard,
                                 createdMatchClient))
@@ -183,10 +183,10 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     Uni<Void> deleteOrphanedMatchClients(final ChangeContext<?> changeContext,
                                          final SqlConnection sqlConnection,
                                          final int shard,
-                                         final Collection<MatchClientModel> orphanedMatchClients) {
+                                         final Collection<MatchmakerMatchClientModel> orphanedMatchClients) {
         return Multi.createFrom().iterable(orphanedMatchClients)
                 .onItem()
-                .transformToUniAndConcatenate(orphanedMatchClient -> deleteMatchClientOperation.deleteMatchClient(
+                .transformToUniAndConcatenate(orphanedMatchClient -> deleteMatchmakerMatchClientOperation.deleteMatchmakerMatchClient(
                         changeContext,
                         sqlConnection,
                         shard,

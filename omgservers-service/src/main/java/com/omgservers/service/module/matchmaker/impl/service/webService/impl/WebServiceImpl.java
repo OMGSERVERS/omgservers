@@ -1,59 +1,59 @@
 package com.omgservers.service.module.matchmaker.impl.service.webService.impl;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.DeleteRequestRequest;
-import com.omgservers.model.dto.matchmaker.DeleteRequestResponse;
-import com.omgservers.model.dto.matchmaker.FindMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.FindMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
-import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchesRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.model.dto.matchmaker.ViewRequestsRequest;
-import com.omgservers.model.dto.matchmaker.ViewRequestsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
 import com.omgservers.service.module.matchmaker.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -110,97 +110,97 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncRequestResponse> syncRequest(final SyncRequestRequest request) {
-        return matchmakerService.syncRequest(request);
+    public Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequest(final SyncMatchmakerRequestRequest request) {
+        return matchmakerService.syncMatchmakerRequest(request);
     }
 
     @Override
-    public Uni<DeleteRequestResponse> deleteRequest(final DeleteRequestRequest request) {
-        return matchmakerService.deleteRequest(request);
+    public Uni<DeleteMatchmakerRequestResponse> deleteMatchmakerRequest(final DeleteMatchmakerRequestRequest request) {
+        return matchmakerService.deleteMatchmakerRequest(request);
     }
 
     @Override
-    public Uni<ViewRequestsResponse> viewRequests(final ViewRequestsRequest request) {
-        return matchmakerService.viewRequests(request);
+    public Uni<ViewMatchmakerRequestsResponse> viewMatchmakerRequests(final ViewMatchmakerRequestsRequest request) {
+        return matchmakerService.viewMatchmakerRequests(request);
     }
 
     @Override
-    public Uni<GetMatchResponse> getMatch(final GetMatchRequest request) {
-        return matchmakerService.getMatch(request);
+    public Uni<GetMatchmakerMatchResponse> getMatchmakerMatch(final GetMatchmakerMatchRequest request) {
+        return matchmakerService.getMatchmakerMatch(request);
     }
 
     @Override
-    public Uni<SyncMatchResponse> syncMatch(final SyncMatchRequest request) {
-        return matchmakerService.syncMatch(request);
+    public Uni<SyncMatchmakerMatchResponse> syncMatchmakerMatch(final SyncMatchmakerMatchRequest request) {
+        return matchmakerService.syncMatchmakerMatch(request);
     }
 
     @Override
-    public Uni<DeleteMatchResponse> deleteMatch(final DeleteMatchRequest request) {
-        return matchmakerService.deleteMatch(request);
+    public Uni<DeleteMatchmakerMatchResponse> deleteMatchmakerMatch(final DeleteMatchmakerMatchRequest request) {
+        return matchmakerService.deleteMatchmakerMatch(request);
     }
 
     @Override
-    public Uni<ViewMatchesResponse> viewMatches(final ViewMatchesRequest request) {
-        return matchmakerService.viewMatches(request);
+    public Uni<ViewMatchmakerMatchesResponse> viewMatchmakerMatches(final ViewMatchmakerMatchesRequest request) {
+        return matchmakerService.viewMatchmakerMatches(request);
     }
 
     @Override
-    public Uni<SyncMatchCommandResponse> syncMatchCommand(final SyncMatchCommandRequest request) {
-        return matchmakerService.syncMatchCommand(request);
+    public Uni<SyncMatchCommandResponse> syncMatchmakerMatchCommand(final SyncMatchCommandRequest request) {
+        return matchmakerService.syncMatchmakerMatchCommand(request);
     }
 
     @Override
-    public Uni<DeleteMatchCommandResponse> deleteMatchCommand(final DeleteMatchCommandRequest request) {
-        return matchmakerService.deleteMatchCommand(request);
+    public Uni<DeleteMatchCommandResponse> deleteMatchmakerMatchCommand(final DeleteMatchCommandRequest request) {
+        return matchmakerService.deleteMatchmakerMatchCommand(request);
     }
 
     @Override
-    public Uni<ViewMatchCommandsResponse> viewMatchCommands(final ViewMatchCommandsRequest request) {
-        return matchmakerService.viewMatchCommands(request);
+    public Uni<ViewMatchmakerMatchCommandsResponse> viewMatchmakerMatchCommands(final ViewMatchmakerMatchCommandsRequest request) {
+        return matchmakerService.viewMatchmakerMatchCommands(request);
     }
 
     @Override
-    public Uni<GetMatchClientResponse> getMatchClient(final GetMatchClientRequest request) {
-        return matchmakerService.getMatchClient(request);
+    public Uni<GetMatchmakerMatchClientResponse> getMatchmakerMatchClient(final GetMatchmakerMatchClientRequest request) {
+        return matchmakerService.getMatchmakerMatchClient(request);
     }
 
     @Override
-    public Uni<FindMatchClientResponse> findMatchClient(final FindMatchClientRequest request) {
-        return matchmakerService.findMatchClient(request);
+    public Uni<FindMatchmakerMatchClientResponse> findMatchmakerMatchClient(final FindMatchmakerMatchClientRequest request) {
+        return matchmakerService.findMatchmakerMatchClient(request);
     }
 
     @Override
-    public Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request) {
-        return matchmakerService.viewMatchClients(request);
+    public Uni<ViewMatchmakerMatchClientsResponse> viewMatchmakerMatchClients(ViewMatchmakerMatchClientsRequest request) {
+        return matchmakerService.viewMatchmakerMatchClients(request);
     }
 
     @Override
-    public Uni<SyncMatchClientResponse> syncMatchClient(final SyncMatchClientRequest request) {
-        return matchmakerService.syncMatchClient(request);
+    public Uni<SyncMatchmakerMatchClientResponse> syncMatchmakerMatchClient(final SyncMatchmakerMatchClientRequest request) {
+        return matchmakerService.syncMatchmakerMatchClient(request);
     }
 
     @Override
-    public Uni<DeleteMatchClientResponse> deleteMatchClient(final DeleteMatchClientRequest request) {
-        return matchmakerService.deleteMatchClient(request);
+    public Uni<DeleteMatchmakerMatchClientResponse> deleteMatchmakerMatchClient(final DeleteMatchmakerMatchClientRequest request) {
+        return matchmakerService.deleteMatchmakerMatchClient(request);
     }
 
     @Override
-    public Uni<GetMatchRuntimeRefResponse> getMatchRuntimeRef(final GetMatchRuntimeRefRequest request) {
-        return matchmakerService.getMatchRuntimeRef(request);
+    public Uni<GetMatchmakerMatchRuntimeRefResponse> getMatchmakerMatchRuntimeRef(final GetMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.getMatchmakerMatchRuntimeRef(request);
     }
 
     @Override
-    public Uni<FindMatchRuntimeRefResponse> findMatchRuntimeRef(final FindMatchRuntimeRefRequest request) {
-        return matchmakerService.findMatchRuntimeRef(request);
+    public Uni<FindMatchmakerMatchRuntimeRefResponse> findMatchmakerMatchRuntimeRef(final FindMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.findMatchmakerMatchRuntimeRef(request);
     }
 
     @Override
-    public Uni<SyncMatchRuntimeRefResponse> syncMatchRuntimeRef(final SyncMatchRuntimeRefRequest request) {
-        return matchmakerService.syncMatchRuntimeRef(request);
+    public Uni<SyncMatchmakerMatchRuntimeRefResponse> syncMatchmakerMatchRuntimeRef(final SyncMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.syncMatchmakerMatchRuntimeRef(request);
     }
 
     @Override
-    public Uni<DeleteMatchRuntimeRefResponse> deleteMatchRuntimeRef(final DeleteMatchRuntimeRefRequest request) {
-        return matchmakerService.deleteMatchRuntimeRef(request);
+    public Uni<DeleteMatchmakerMatchRuntimeRefResponse> deleteMatchmakerMatchRuntimeRef(final DeleteMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.deleteMatchmakerMatchRuntimeRef(request);
     }
 }

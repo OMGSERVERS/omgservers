@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -19,8 +19,8 @@ public class MatchCommandModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchCommandModel fromRow(final Row row) {
-        final var matchCommand = new MatchCommandModel();
+    public MatchmakerMatchCommandModel fromRow(final Row row) {
+        final var matchCommand = new MatchmakerMatchCommandModel();
         matchCommand.setId(row.getLong("id"));
         matchCommand.setMatchmakerId(row.getLong("matchmaker_id"));
         matchCommand.setMatchId(row.getLong("match_id"));

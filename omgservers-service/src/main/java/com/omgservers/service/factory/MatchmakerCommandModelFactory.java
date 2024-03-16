@@ -20,16 +20,26 @@ public class MatchmakerCommandModelFactory {
     public MatchmakerCommandModel create(final Long matchmakerId,
                                          final MatchmakerCommandBodyModel body) {
         final var id = generateIdOperation.generateId();
-        return create(id, matchmakerId, body);
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, matchmakerId, body, idempotencyKey);
+    }
+
+    public MatchmakerCommandModel create(final Long matchmakerId,
+                                         final MatchmakerCommandBodyModel body,
+                                         final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, matchmakerId, body, idempotencyKey);
     }
 
     public MatchmakerCommandModel create(final Long id,
                                          final Long matchmakerId,
-                                         final MatchmakerCommandBodyModel body) {
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+                                         final MatchmakerCommandBodyModel body,
+                                         final String idempotencyKey) {
+        final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var matchmakerCommand = new MatchmakerCommandModel();
         matchmakerCommand.setId(id);
+        matchmakerCommand.setIdempotencyKey(idempotencyKey);
         matchmakerCommand.setMatchmakerId(matchmakerId);
         matchmakerCommand.setCreated(now);
         matchmakerCommand.setModified(now);

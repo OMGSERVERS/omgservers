@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking;
 
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.model.request.MatchmakerRequestModel;
 
 import java.util.List;
 
 public record DoGreedyMatchmakingResult(
-        List<RequestModel> matchedRequests,
-        List<MatchModel> createdMatches,
-        List<MatchClientModel> createdMatchClients) {
+        List<MatchmakerRequestModel> matchedRequests,
+        List<MatchmakerMatchModel> createdMatches,
+        List<MatchmakerMatchClientModel> createdMatchClients) {
 }

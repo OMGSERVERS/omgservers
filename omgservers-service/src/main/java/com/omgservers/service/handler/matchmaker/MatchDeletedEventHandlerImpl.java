@@ -1,23 +1,23 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -72,10 +72,10 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
+    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
@@ -108,15 +108,15 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<MatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchCommandsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchCommands(request)
-                .map(ViewMatchCommandsResponse::getMatchCommands);
+    Uni<List<MatchmakerMatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
+        final var request = new ViewMatchmakerMatchCommandsRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().viewMatchmakerMatchCommands(request)
+                .map(ViewMatchmakerMatchCommandsResponse::getMatchmakerMatchCommands);
     }
 
     Uni<Boolean> deleteMatchCommand(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchCommandRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchCommand(request)
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchCommand(request)
                 .map(DeleteMatchCommandResponse::getDeleted);
     }
 
@@ -144,15 +144,15 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<MatchClientModel>> viewMatchClients(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchClientsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchClients(request)
-                .map(ViewMatchClientsResponse::getMatchClients);
+    Uni<List<MatchmakerMatchClientModel>> viewMatchClients(final Long matchmakerId, final Long matchId) {
+        final var request = new ViewMatchmakerMatchClientsRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().viewMatchmakerMatchClients(request)
+                .map(ViewMatchmakerMatchClientsResponse::getMatchClients);
     }
 
     Uni<Boolean> deleteMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new DeleteMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchClient(request)
-                .map(DeleteMatchClientResponse::getDeleted);
+        final var request = new DeleteMatchmakerMatchClientRequest(matchmakerId, id);
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchClient(request)
+                .map(DeleteMatchmakerMatchClientResponse::getDeleted);
     }
 }

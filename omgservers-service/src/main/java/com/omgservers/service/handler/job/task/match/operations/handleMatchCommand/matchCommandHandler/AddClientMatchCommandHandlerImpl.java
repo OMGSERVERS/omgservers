@@ -1,12 +1,12 @@
 package com.omgservers.service.handler.job.task.match.operations.handleMatchCommand.matchCommandHandler;
 
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
@@ -36,7 +36,7 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
     }
 
     @Override
-    public Uni<Void> handle(MatchCommandModel matchCommand) {
+    public Uni<Void> handle(MatchmakerMatchCommandModel matchCommand) {
         log.debug("Handle match command, {}", matchCommand);
 
         final var matchmakerId = matchCommand.getMatchmakerId();
@@ -54,15 +54,15 @@ class AddClientMatchCommandHandlerImpl implements MatchCommandHandler {
                 .replaceWithVoid();
     }
 
-    Uni<MatchModel> getMatch(final Long matchmakerId, final Long matchId) {
-        final var request = new GetMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatch(request)
-                .map(GetMatchResponse::getMatch);
+    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
+        final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<Boolean> syncRuntimeClient(final Long runtimeId,
                                    final Long clientId,
-                                   final MatchClientModel matchClient) {
+                                   final MatchmakerMatchClientModel matchClient) {
         final var runtimeClientConfig = RuntimeClientConfigModel.create();
         runtimeClientConfig.setMatchClient(matchClient);
         final var runtimeClient = runtimeClientModelFactory.create(runtimeId,

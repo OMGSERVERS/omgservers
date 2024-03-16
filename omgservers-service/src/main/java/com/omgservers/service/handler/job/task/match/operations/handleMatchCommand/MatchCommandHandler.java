@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.job.task.match.operations.handleMatchCommand;
 
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import io.smallrye.mutiny.Uni;
 
@@ -18,5 +18,5 @@ public interface MatchCommandHandler {
      *
      * @param matchCommand match command to process by this handler
      */
-    Uni<Void> handle(MatchCommandModel matchCommand);
+    Uni<Void> handle(MatchmakerMatchCommandModel matchCommand);
 }

@@ -20,8 +20,7 @@ public class SelectMatchmakerOperationTestInterface {
     final PgPool pgPool;
 
     public MatchmakerModel selectMatchmaker(final int shard,
-                                            final Long id,
-                                            final Boolean deleted) {
+                                            final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
                         .selectMatchmaker(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));

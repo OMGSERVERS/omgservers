@@ -1,10 +1,10 @@
 package com.omgservers.model.matchmakerChangeOfState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.omgservers.model.match.MatchModel;
-import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.request.MatchmakerRequestModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,22 +20,22 @@ public class MatchmakerChangeOfState {
     Set<MatchmakerCommandModel> completedMatchmakerCommands;
 
     @NotNull
-    Set<RequestModel> completedRequests;
+    Set<MatchmakerRequestModel> completedRequests;
 
     @NotNull
-    Set<MatchModel> createdMatches;
+    Set<MatchmakerMatchModel> createdMatches;
 
     @NotNull
-    Set<MatchModel> stoppedMatches;
+    Set<MatchmakerMatchModel> stoppedMatches;
 
     @NotNull
-    Set<MatchModel> endedMatches;
+    Set<MatchmakerMatchModel> endedMatches;
 
     @NotNull
-    Set<MatchClientModel> createdMatchClients;
+    Set<MatchmakerMatchClientModel> createdMatchClients;
 
     @NotNull
-    Set<MatchClientModel> orphanedMatchClients;
+    Set<MatchmakerMatchClientModel> orphanedMatchClients;
 
     public MatchmakerChangeOfState() {
         completedMatchmakerCommands = new HashSet<>();

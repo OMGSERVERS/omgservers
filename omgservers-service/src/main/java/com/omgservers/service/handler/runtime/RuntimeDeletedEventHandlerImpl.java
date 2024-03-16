@@ -6,10 +6,10 @@ import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
@@ -32,7 +32,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.model.matchRuntimeRef.MatchRuntimeRefModel;
+import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
@@ -255,18 +255,18 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<MatchRuntimeRefModel> findMatchRuntimeRef(final Long matchmakerId,
-                                                  final Long matchId) {
-        final var request = new FindMatchRuntimeRefRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().findMatchRuntimeRef(request)
-                .map(FindMatchRuntimeRefResponse::getMatchRuntimeRef);
+    Uni<MatchmakerMatchRuntimeRefModel> findMatchRuntimeRef(final Long matchmakerId,
+                                                            final Long matchId) {
+        final var request = new FindMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId);
+        return matchmakerModule.getMatchmakerService().findMatchmakerMatchRuntimeRef(request)
+                .map(FindMatchmakerMatchRuntimeRefResponse::getMatchRuntimeRef);
     }
 
     Uni<Boolean> deleteMatchRuntimeRef(final Long matchmakerId,
                                        final Long matchId,
                                        final Long id) {
-        final var request = new DeleteMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchRuntimeRef(request)
-                .map(DeleteMatchRuntimeRefResponse::getDeleted);
+        final var request = new DeleteMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
+        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchRuntimeRef(request)
+                .map(DeleteMatchmakerMatchRuntimeRefResponse::getDeleted);
     }
 }

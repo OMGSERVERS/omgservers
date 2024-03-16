@@ -7,7 +7,7 @@ import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerState.MatchmakerState;
-import com.omgservers.model.request.RequestModel;
+import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -80,7 +80,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .invoke(voidItem -> {
 
                     final var requests = matchmakerState.getRequests().stream()
-                            .collect(Collectors.groupingBy(RequestModel::getMode));
+                            .collect(Collectors.groupingBy(MatchmakerRequestModel::getMode));
 
                     final var matches = matchmakerState.getMatches().stream()
                             // Filter out all stopped matches from matchmaking

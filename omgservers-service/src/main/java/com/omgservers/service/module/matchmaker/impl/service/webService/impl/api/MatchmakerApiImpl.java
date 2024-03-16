@@ -1,59 +1,59 @@
 package com.omgservers.service.module.matchmaker.impl.service.webService.impl.api;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.DeleteRequestRequest;
-import com.omgservers.model.dto.matchmaker.DeleteRequestResponse;
-import com.omgservers.model.dto.matchmaker.FindMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.FindMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.FindMatchRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchClientRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchClientResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.SyncRequestRequest;
-import com.omgservers.model.dto.matchmaker.SyncRequestResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchClientsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchCommandsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchesRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchesResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.model.dto.matchmaker.ViewRequestsRequest;
-import com.omgservers.model.dto.matchmaker.ViewRequestsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.matchmaker.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -122,114 +122,114 @@ public class MatchmakerApiImpl implements MatchmakerApi {
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncRequestResponse> syncRequest(final SyncRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRequest);
+    public Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequest(final SyncMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerRequest);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteRequestResponse> deleteRequest(final DeleteRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRequest);
+    public Uni<DeleteMatchmakerRequestResponse> deleteMatchmakerRequest(final DeleteMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerRequest);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<ViewRequestsResponse> viewRequests(final ViewRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRequests);
+    public Uni<ViewMatchmakerRequestsResponse> viewMatchmakerRequests(final ViewMatchmakerRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerRequests);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetMatchResponse> getMatch(final GetMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatch);
+    public Uni<GetMatchmakerMatchResponse> getMatchmakerMatch(final GetMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatch);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchResponse> syncMatch(final SyncMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatch);
+    public Uni<SyncMatchmakerMatchResponse> syncMatchmakerMatch(final SyncMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatch);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteMatchResponse> deleteMatch(final DeleteMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatch);
+    public Uni<DeleteMatchmakerMatchResponse> deleteMatchmakerMatch(final DeleteMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatch);
     }
 
     @Override
-    public Uni<ViewMatchesResponse> viewMatches(final ViewMatchesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatches);
+    public Uni<ViewMatchmakerMatchesResponse> viewMatchmakerMatches(final ViewMatchmakerMatchesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerMatches);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchCommandResponse> syncMatchCommand(final SyncMatchCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchCommand);
+    public Uni<SyncMatchCommandResponse> syncMatchmakerMatchCommand(final SyncMatchCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatchCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteMatchCommandResponse> deleteMatchCommand(final DeleteMatchCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchCommand);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatchCommand);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<ViewMatchCommandsResponse> viewMatchCommands(final ViewMatchCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchCommands);
+    public Uni<ViewMatchmakerMatchCommandsResponse> viewMatchCommands(final ViewMatchmakerMatchCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerMatchCommands);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetMatchClientResponse> getMatchClient(final GetMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchClient);
+    public Uni<GetMatchmakerMatchClientResponse> getMatchmakerMatchClient(final GetMatchmakerMatchClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatchClient);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindMatchClientResponse> findMatchClient(final FindMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchClient);
+    public Uni<FindMatchmakerMatchClientResponse> findMatchmakerMatchClient(final FindMatchmakerMatchClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerMatchClient);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<ViewMatchClientsResponse> viewMatchClients(ViewMatchClientsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchClients);
+    public Uni<ViewMatchmakerMatchClientsResponse> viewMatchmakerMatchClients(ViewMatchmakerMatchClientsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerMatchClients);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchClientResponse> syncMatchClient(final SyncMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchClient);
+    public Uni<SyncMatchmakerMatchClientResponse> syncMatchmakerMatchClient(final SyncMatchmakerMatchClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatchClient);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteMatchClientResponse> deleteMatchClient(final DeleteMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchClient);
+    public Uni<DeleteMatchmakerMatchClientResponse> deleteMatchmakerMatchClient(final DeleteMatchmakerMatchClientRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatchClient);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<GetMatchRuntimeRefResponse> getMatchRuntimeRef(final GetMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchRuntimeRef);
+    public Uni<GetMatchmakerMatchRuntimeRefResponse> getMatchmakerMatchRuntimeRef(final GetMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatchRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<FindMatchRuntimeRefResponse> findMatchRuntimeRef(final FindMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchRuntimeRef);
+    public Uni<FindMatchmakerMatchRuntimeRefResponse> findMatchmakerMatchRuntimeRef(final FindMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerMatchRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<SyncMatchRuntimeRefResponse> syncMatchRuntimeRef(final SyncMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchRuntimeRef);
+    public Uni<SyncMatchmakerMatchRuntimeRefResponse> syncMatchmakerMatchRuntimeRef(final SyncMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatchRuntimeRef);
     }
 
     @Override
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteMatchRuntimeRefResponse> deleteMatchRuntimeRef(final DeleteMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchRuntimeRef);
+    public Uni<DeleteMatchmakerMatchRuntimeRefResponse> deleteMatchmakerMatchRuntimeRef(final DeleteMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatchRuntimeRef);
     }
 }

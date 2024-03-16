@@ -44,7 +44,6 @@ public class VersionModeModel {
     @NotNull
     Integer maxPlayers;
 
-    @NotNull
     @NotEmpty
     List<VersionGroupModel> groups;
 }

@@ -36,13 +36,14 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_command(
-                            id, matchmaker_id, created, modified, qualifier, body, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, matchmaker_id, created, modified, qualifier, body, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
                 Arrays.asList(
                         matchmakerCommand.getId(),
+                        matchmakerCommand.getIdempotencyKey(),
                         matchmakerCommand.getMatchmakerId(),
                         matchmakerCommand.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerCommand.getModified().atOffset(ZoneOffset.UTC),
@@ -51,11 +52,11 @@ class UpsertMatchmakerCommandOperationImpl implements UpsertMatchmakerCommandOpe
                         matchmakerCommand.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Matchmaker command was inserted, matchmakerCommand=" + matchmakerCommand)
+                () -> null
         );
     }
 
-    String getBodyString(MatchmakerCommandModel matchmakerCommand) {
+    String getBodyString(final MatchmakerCommandModel matchmakerCommand) {
         try {
             return objectMapper.writeValueAsString(matchmakerCommand.getBody());
         } catch (IOException e) {

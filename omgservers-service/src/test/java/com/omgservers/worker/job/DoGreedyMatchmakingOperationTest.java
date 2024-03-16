@@ -1,7 +1,7 @@
 package com.omgservers.worker.job;
 
+import com.omgservers.service.factory.MatchmakerRequestModelFactory;
 import com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
-import com.omgservers.service.factory.RequestModelFactory;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -16,7 +16,7 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
     DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
 
     @Inject
-    RequestModelFactory requestModelFactory;
+    MatchmakerRequestModelFactory matchmakerRequestModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -33,60 +33,60 @@ class DoGreedyMatchmakingOperationTest extends Assertions {
 //            add(VersionGroupModel.create("blue", 1, 2));
 //        }});
 //
-//        final var matchmakerRequests = new ArrayList<RequestModel>() {{
+//        final var matchmakerRequests = new ArrayList<MatchmakerRequestModel>() {{
 //            // match 1, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode, RequestConfigModel.create(
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode, MatchmakerRequestConfigModel.create(
 //                    PlayerAttributesModel.create())));
 //            // match 1, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 1, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 1, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 1, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 1, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //
 //            // match 2, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 2, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 2, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 2, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 2, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 2, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //
 //            // match 3, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 3, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 3, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 3, group - blue
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //            // match 3, group - red
-//            add(requestModelFactory.create(matchmaker, userId(), clientId(), mode,
-//                    RequestConfigModel.create(PlayerAttributesModel.create())));
+//            add(matchmakerRequestModelFactory.create(matchmaker, userId(), clientId(), mode,
+//                    MatchmakerRequestConfigModel.create(PlayerAttributesModel.create())));
 //        }};
 //
 //        final var result = doGreedyMatchmakingOperation.doGreedyMatchmaking(

@@ -1,6 +1,7 @@
 package com.omgservers.model.matchmakerCommand;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,9 @@ public class MatchmakerCommandModel {
 
     @NotNull
     Long id;
+
+    @NotBlank
+    String idempotencyKey;
 
     @NotNull
     Long matchmakerId;

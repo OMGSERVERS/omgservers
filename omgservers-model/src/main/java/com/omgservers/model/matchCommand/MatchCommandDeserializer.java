@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 import java.time.Instant;
 
-public class MatchCommandDeserializer extends StdDeserializer<MatchCommandModel> {
+public class MatchCommandDeserializer extends StdDeserializer<MatchmakerMatchCommandModel> {
 
     public MatchCommandDeserializer() {
         this(null);
@@ -21,7 +21,7 @@ public class MatchCommandDeserializer extends StdDeserializer<MatchCommandModel>
     }
 
     @Override
-    public MatchCommandModel deserialize(JsonParser parser, DeserializationContext context)
+    public MatchmakerMatchCommandModel deserialize(JsonParser parser, DeserializationContext context)
             throws IOException, JacksonException {
         try {
             return deserialize(parser);
@@ -30,11 +30,11 @@ public class MatchCommandDeserializer extends StdDeserializer<MatchCommandModel>
         }
     }
 
-    MatchCommandModel deserialize(JsonParser parser) throws IOException {
+    MatchmakerMatchCommandModel deserialize(JsonParser parser) throws IOException {
         final var mapper = (ObjectMapper) parser.getCodec();
         final var root = (JsonNode) mapper.readTree(parser);
 
-        final var commandModel = new MatchCommandModel();
+        final var commandModel = new MatchmakerMatchCommandModel();
 
         final var idNode = root.get("id");
         if (idNode != null) {

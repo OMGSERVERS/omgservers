@@ -1,7 +1,7 @@
 package com.omgservers.model.dto.matchmaker;
 
 import com.omgservers.model.dto.ShardedRequest;
-import com.omgservers.model.matchCommand.MatchCommandModel;
+import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class SyncMatchCommandRequest implements ShardedRequest {
 
     @NotNull
-    MatchCommandModel matchCommand;
+    MatchmakerMatchCommandModel matchCommand;
 
     @Override
     public String getRequestShardKey() {

@@ -1,6 +1,6 @@
 package com.omgservers.model.matchCommand.body;
 
-import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchCommand.MatchCommandBodyModel;
 import com.omgservers.model.matchCommand.MatchCommandQualifierEnum;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ public class AddClientMatchCommandBodyModel extends MatchCommandBodyModel {
     Long clientId;
 
     @NotNull
-    MatchClientModel matchClient;
+    MatchmakerMatchClientModel matchClient;
 
     @Override
     public MatchCommandQualifierEnum getQualifier() {

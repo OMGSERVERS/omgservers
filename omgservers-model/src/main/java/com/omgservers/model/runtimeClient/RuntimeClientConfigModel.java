@@ -1,6 +1,6 @@
 package com.omgservers.model.runtimeClient;
 
-import com.omgservers.model.matchClient.MatchClientModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ public class RuntimeClientConfigModel {
         return runtimeClientConfig;
     }
 
-    MatchClientModel matchClient;
+    MatchmakerMatchClientModel matchClient;
 }

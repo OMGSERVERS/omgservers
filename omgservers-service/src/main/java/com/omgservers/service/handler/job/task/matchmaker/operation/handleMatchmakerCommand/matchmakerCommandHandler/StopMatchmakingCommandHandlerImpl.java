@@ -27,7 +27,7 @@ class StopMatchmakingCommandHandlerImpl implements MatchmakerCommandHandler {
                             final MatchmakerChangeOfState changeOfState,
                             final MatchmakerCommandModel matchmakerCommand) {
         final var body = (StopMatchmakingCommandBodyModel) matchmakerCommand.getBody();
-        final var matchId = body.getId();
+        final var matchId = body.getMatchId();
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
