@@ -34,45 +34,50 @@ public class MatchmakerCommandDeserializer extends StdDeserializer<MatchmakerCom
         final var mapper = (ObjectMapper) parser.getCodec();
         final var root = (JsonNode) mapper.readTree(parser);
 
-        final var commandModel = new MatchmakerCommandModel();
+        final var matchmakerCommandModel = new MatchmakerCommandModel();
 
         final var idNode = root.get("id");
         if (idNode != null) {
-            commandModel.setId(Long.valueOf(idNode.asText()));
+            matchmakerCommandModel.setId(Long.valueOf(idNode.asText()));
+        }
+
+        final var idempotencyKeyNode = root.get("idempotencyKey");
+        if (idempotencyKeyNode != null) {
+            matchmakerCommandModel.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
         final var matchmakerIdNode = root.get("matchmakerId");
         if (matchmakerIdNode != null) {
-            commandModel.setMatchmakerId(Long.valueOf(matchmakerIdNode.asText()));
+            matchmakerCommandModel.setMatchmakerId(Long.valueOf(matchmakerIdNode.asText()));
         }
 
         final var createdNode = root.get("created");
         if (createdNode != null) {
-            commandModel.setCreated(Instant.parse(createdNode.asText()));
+            matchmakerCommandModel.setCreated(Instant.parse(createdNode.asText()));
         }
 
         final var modifiedNode = root.get("modified");
         if (modifiedNode != null) {
-            commandModel.setModified(Instant.parse(modifiedNode.asText()));
+            matchmakerCommandModel.setModified(Instant.parse(modifiedNode.asText()));
         }
 
         final var qualifierNode = root.get("qualifier");
         if (qualifierNode != null) {
             final var qualifier = MatchmakerCommandQualifierEnum.valueOf(qualifierNode.asText());
-            commandModel.setQualifier(qualifier);
+            matchmakerCommandModel.setQualifier(qualifier);
 
             final var bodyNode = root.get("body");
             if (bodyNode != null) {
                 final var body = mapper.treeToValue(bodyNode, qualifier.getBodyClass());
-                commandModel.setBody(body);
+                matchmakerCommandModel.setBody(body);
             }
         }
 
         final var deletedNode = root.get("deleted");
         if (deletedNode != null) {
-            commandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
+            matchmakerCommandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
         }
 
-        return commandModel;
+        return matchmakerCommandModel;
     }
 }

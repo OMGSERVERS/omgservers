@@ -21,6 +21,7 @@ class EventModelTest extends Assertions {
     @Test
     void givenEventModel_whenDeserialize_thenEqual() throws IOException {
         final var id = 1000L;
+        final var idempotencyKey = "idempotency_value";
         final var created = Instant.now();
         final var modified = Instant.now();
         final var delayed = Instant.now();
@@ -30,6 +31,7 @@ class EventModelTest extends Assertions {
         final var deleted = false;
 
         final var eventModel = new EventModel(id,
+                idempotencyKey,
                 created,
                 modified,
                 delayed,

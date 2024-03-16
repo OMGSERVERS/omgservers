@@ -32,6 +32,7 @@ create table if not exists tab_container (
 
 create table if not exists tab_event (
     id bigint primary key,
+    idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     delayed timestamp with time zone not null,

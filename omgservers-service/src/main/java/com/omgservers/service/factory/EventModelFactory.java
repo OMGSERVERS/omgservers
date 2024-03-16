@@ -18,16 +18,26 @@ public class EventModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public EventModel create(EventBodyModel body) {
+    public EventModel create(final EventBodyModel body) {
         final var id = generateIdOperation.generateId();
-        return create(id, body);
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, body, idempotencyKey);
     }
 
-    public EventModel create(Long id, EventBodyModel body) {
+    public EventModel create(final EventBodyModel body,
+                             final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, body, idempotencyKey);
+    }
+
+    public EventModel create(final Long id,
+                             final EventBodyModel body,
+                             final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var event = new EventModel();
         event.setId(id);
+        event.setIdempotencyKey(idempotencyKey);
         event.setCreated(now);
         event.setModified(now);
         event.setDelayed(now);

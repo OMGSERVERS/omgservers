@@ -35,13 +35,14 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                         changeContext, sqlConnection, 0,
                         """
                                 insert into system.tab_event(
-                                    id, created, modified, delayed, qualifier, body, status, deleted)
-                                values($1, $2, $3, $4, $5, $6, $7, $8)
+                                    id, idempotency_key, created, modified, delayed, qualifier, body, status, deleted)
+                                values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                                 on conflict (id) do
                                 nothing
                                 """,
                         List.of(
                                 event.getId(),
+                                event.getIdempotencyKey(),
                                 event.getCreated().atOffset(ZoneOffset.UTC),
                                 event.getModified().atOffset(ZoneOffset.UTC),
                                 event.getDelayed().atOffset(ZoneOffset.UTC),

@@ -41,6 +41,11 @@ public class EventDeserializer extends StdDeserializer<EventModel> {
             eventModel.setId(Long.valueOf(idNode.asText()));
         }
 
+        final var idempotencyKeyNode = root.get("idempotencyKey");
+        if (idempotencyKeyNode != null) {
+            eventModel.setIdempotencyKey(idempotencyKeyNode.asText());
+        }
+
         final var createdNode = root.get("created");
         if (createdNode != null) {
             eventModel.setCreated(Instant.parse(createdNode.asText()));

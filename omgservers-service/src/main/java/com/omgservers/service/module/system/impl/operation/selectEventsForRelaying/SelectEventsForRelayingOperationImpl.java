@@ -30,7 +30,7 @@ class SelectEventsForRelayingOperationImpl implements SelectEventsForRelayingOpe
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, delayed, qualifier, status, deleted
+                        select id, idempotency_key, created, modified, delayed, qualifier, status, deleted
                         from system.tab_event
                         where deleted = false and delayed <= $2 and status = $3
                         order by id asc

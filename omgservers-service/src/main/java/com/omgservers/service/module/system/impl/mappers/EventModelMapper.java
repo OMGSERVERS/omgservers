@@ -23,6 +23,7 @@ public class EventModelMapper {
     public EventModel fromRow(final Row row) {
         final var event = new EventModel();
         event.setId(row.getLong("id"));
+        event.setIdempotencyKey(row.getString("idempotency_key"));
         event.setCreated(row.getOffsetDateTime("created").toInstant());
         event.setModified(row.getOffsetDateTime("modified").toInstant());
         event.setDelayed(row.getOffsetDateTime("delayed").toInstant());
