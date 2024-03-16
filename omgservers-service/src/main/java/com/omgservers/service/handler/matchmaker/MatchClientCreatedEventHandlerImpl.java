@@ -51,7 +51,7 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
                     final var clientId = matchClient.getClientId();
                     final var groupName = matchClient.getGroupName();
 
-                    log.info("Match client was created, id={}, match={}/{}, clientId={}",
+                    log.info("Matchmaker match client was created, id={}, match={}/{}, clientId={}",
                             matchClient.getId(), matchmakerId, matchId, clientId);
 
                     return syncAddClientMatchCommand(matchmakerId,

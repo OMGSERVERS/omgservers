@@ -36,7 +36,7 @@ public class MatchClientModelMapper {
                     .readValue(row.getString("config"), MatchmakerMatchClientConfigModel.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
-                    "match client config can't be parsed, matchmakerMatchClient=" + matchmakerMatchClient, e);
+                    "matchmaker match client config can't be parsed, matchmakerMatchClient=" + matchmakerMatchClient, e);
         }
         return matchmakerMatchClient;
     }

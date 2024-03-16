@@ -41,7 +41,7 @@ class SelectMatchmakerMatchRuntimeRefOperationImpl implements SelectMatchmakerMa
                         matchId,
                         id
                 ),
-                "Match runtime ref",
+                "Matchmaker match runtime ref",
                 matchmakerMatchRuntimeRefModelMapper::fromRow);
     }
 }

@@ -48,7 +48,7 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
                     final var matchId = matchClient.getMatchId();
                     final var clientId = matchClient.getClientId();
 
-                    log.info("Match client was deleted, matchClient={}/{}, clientId={}, matchId={}",
+                    log.info("Matchmaker match client was deleted, matchClient={}/{}, clientId={}, matchId={}",
                             matchmakerId, matchClientId, clientId, matchId);
 
                     return getMatch(matchmakerId, matchId)

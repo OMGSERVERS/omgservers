@@ -23,20 +23,23 @@ class SelectActiveMatchmakerRequestsByMatchmakerIdOperationImpl
     final MatchmakerRequestModelMapper matchmakerRequestModelMapper;
 
     @Override
-    public Uni<List<MatchmakerRequestModel>> selectActiveMatchmakerRequestsByMatchmakerId(final SqlConnection sqlConnection,
-                                                                                          final int shard,
-                                                                                          final Long matchmakerId) {
+    public Uni<List<MatchmakerRequestModel>> selectActiveMatchmakerRequestsByMatchmakerId(
+            final SqlConnection sqlConnection,
+            final int shard,
+            final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, matchmaker_id, created, modified, user_id, client_id, mode, config, deleted
+                        select
+                            id, idempotency_key, matchmaker_id, created, modified, user_id, client_id, mode, config, 
+                            deleted
                         from $schema.tab_matchmaker_request
                         where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
-                "Request",
+                "Matchmaker request",
                 matchmakerRequestModelMapper::fromRow);
     }
 }

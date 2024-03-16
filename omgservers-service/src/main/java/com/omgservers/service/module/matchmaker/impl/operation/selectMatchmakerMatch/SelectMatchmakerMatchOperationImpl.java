@@ -29,13 +29,15 @@ class SelectMatchmakerMatchOperationImpl implements SelectMatchmakerMatchOperati
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, deleted
+                        select
+                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, 
+                            deleted
                         from $schema.tab_matchmaker_match
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,
                 List.of(matchmakerId, id),
-                "Match",
+                "Matchmaker match",
                 matchmakerMatchModelMapper::fromRow);
     }
 }

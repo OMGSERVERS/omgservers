@@ -34,6 +34,6 @@ class HasMatchmakerMatchOperationImpl implements HasMatchmakerMatchOperation {
                         matchmakerId,
                         id
                 ),
-                "Match");
+                "Matchmaker match");
     }
 }

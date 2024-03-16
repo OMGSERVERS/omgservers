@@ -40,7 +40,7 @@ class SelectMatchmakerMatchRuntimeRefByMatchmakerIdAndMatchIdOperationImpl
                 List.of(
                         matchmakerId,
                         matchId),
-                "Match runtime ref",
+                "Matchmaker match runtime ref",
                 matchmakerMatchRuntimeRefModelMapper::fromRow);
     }
 }

@@ -36,7 +36,7 @@ class SelectActiveMatchmakerMatchesByMatchmakerIdOperationImpl
                         order by id asc
                         """,
                 List.of(matchmakerId),
-                "Match",
+                "Matchmaker match",
                 matchmakerMatchModelMapper::fromRow);
     }
 }
