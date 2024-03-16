@@ -42,8 +42,7 @@ class DeleteRuntimePermissionOperationImpl implements DeleteRuntimePermissionOpe
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Runtime permission was deleted, " +
-                        "runtimeId=%d, id=%d", runtimeId, id))
+                () -> null
         );
     }
 }

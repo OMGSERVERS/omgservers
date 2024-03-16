@@ -41,7 +41,7 @@ class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new MatchmakerDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Matchmaker was deleted, id=" + id)
+                () -> null
         );
     }
 }

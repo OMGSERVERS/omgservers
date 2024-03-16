@@ -40,8 +40,7 @@ class DeleteTenantPermissionOperationImpl implements DeleteTenantPermissionOpera
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Tenant permission was deleted, " +
-                        "tenantId=%d, id=%d", tenantId, id))
+                () -> null
         );
     }
 }

@@ -38,7 +38,7 @@ class DeleteIndexOperationImpl implements DeleteIndexOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new IndexDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Index was deleted, id=" + id)
+                () -> null
         );
     }
 }

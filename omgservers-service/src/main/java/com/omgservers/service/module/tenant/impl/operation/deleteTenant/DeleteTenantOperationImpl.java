@@ -41,7 +41,7 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new TenantDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Tenant was deleted, id=" + id)
+                () -> null
         );
     }
 }

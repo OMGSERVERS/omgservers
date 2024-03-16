@@ -40,8 +40,7 @@ class DeleteMatchmakerCommandOperationImpl implements DeleteMatchmakerCommandOpe
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Matchmaker command was deleted, " +
-                        "matchmakerId=%d, id=%d", matchmakerId, id))
+                () -> null
         );
     }
 }

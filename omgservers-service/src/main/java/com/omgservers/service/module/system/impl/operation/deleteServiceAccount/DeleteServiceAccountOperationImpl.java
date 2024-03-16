@@ -40,7 +40,7 @@ class DeleteServiceAccountOperationImpl implements DeleteServiceAccountOperation
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new ServiceAccountDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Service account was deleted, id=" + id)
+                () -> null
         );
     }
 }

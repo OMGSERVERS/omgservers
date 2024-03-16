@@ -56,11 +56,11 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                         player.getDeleted()
                 ),
                 () -> new PlayerCreatedEventBodyModel(player.getUserId(), player.getId()),
-                () -> logModelFactory.create("Player was inserted, player=" + player)
+                () -> null
         );
     }
 
-    String getAttributesString(PlayerModel player) {
+    String getAttributesString(final PlayerModel player) {
         try {
             return objectMapper.writeValueAsString(player.getAttributes());
         } catch (IOException e) {
@@ -68,7 +68,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
         }
     }
 
-    String getProfileString(PlayerModel player) {
+    String getProfileString(final PlayerModel player) {
         try {
             return objectMapper.writeValueAsString(player.getProfile());
         } catch (IOException e) {

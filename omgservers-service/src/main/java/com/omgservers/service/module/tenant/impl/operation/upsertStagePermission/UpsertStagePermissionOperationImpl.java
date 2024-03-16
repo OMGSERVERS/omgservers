@@ -47,7 +47,7 @@ class UpsertStagePermissionOperationImpl implements UpsertStagePermissionOperati
                         stagePermission.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Stage permission was inserted, stagePermission=" + stagePermission)
+                () -> null
         );
     }
 }

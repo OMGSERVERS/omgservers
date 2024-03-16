@@ -49,7 +49,7 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
                         index.getDeleted()
                 ),
                 () -> new IndexCreatedEventBodyModel(index.getId()),
-                () -> logModelFactory.create("Index was created, index=" + index)
+                () -> null
         );
     }
 

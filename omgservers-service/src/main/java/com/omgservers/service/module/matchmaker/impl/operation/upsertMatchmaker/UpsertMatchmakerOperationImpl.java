@@ -46,7 +46,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getDeleted()
                 ),
                 () -> new MatchmakerCreatedEventBodyModel(matchmaker.getId()),
-                () -> logModelFactory.create("Matchmaker was inserted, matchmaker=" + matchmaker)
+                () -> null
         );
     }
 }

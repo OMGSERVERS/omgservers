@@ -54,11 +54,11 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                         version.getDeleted()
                 ),
                 () -> new VersionCreatedEventBodyModel(version.getTenantId(), version.getId()),
-                () -> logModelFactory.create("Version was created, " + version)
+                () -> null
         );
     }
 
-    String getConfigString(VersionModel version) {
+    String getConfigString(final VersionModel version) {
         try {
             return objectMapper.writeValueAsString(version.getConfig());
         } catch (IOException e) {
@@ -66,7 +66,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         }
     }
 
-    String getSourceCode(VersionModel version) {
+    String getSourceCode(final VersionModel version) {
         try {
             return objectMapper.writeValueAsString(version.getSourceCode());
         } catch (IOException e) {

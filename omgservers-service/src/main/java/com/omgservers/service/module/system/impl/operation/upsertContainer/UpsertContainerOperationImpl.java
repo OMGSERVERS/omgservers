@@ -52,7 +52,7 @@ class UpsertContainerOperationImpl implements UpsertContainerOperation {
                         container.getDeleted()
                 ),
                 () -> new ContainerCreatedEventBodyModel(container.getId()),
-                () -> logModelFactory.create("Container was created, container=" + container)
+                () -> null
         );
     }
 

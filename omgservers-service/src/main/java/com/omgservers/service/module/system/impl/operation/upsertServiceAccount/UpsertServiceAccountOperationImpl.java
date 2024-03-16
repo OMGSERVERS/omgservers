@@ -44,8 +44,7 @@ class UpsertServiceAccountOperationImpl implements UpsertServiceAccountOperation
                         serviceAccount.getDeleted()
                 ),
                 () -> new ServiceAccountCreatedEventBodyModel(serviceAccount.getId(), serviceAccount.getUsername()),
-                () -> logModelFactory.create("Service account was inserted, " +
-                        "serviceAccount=" + serviceAccount)
+                () -> null
         );
     }
 }

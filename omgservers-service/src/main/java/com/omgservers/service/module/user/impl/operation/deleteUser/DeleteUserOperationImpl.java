@@ -41,7 +41,7 @@ class DeleteUserOperationImpl implements DeleteUserOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new UserDeletedEventBodyModel(id),
-                () -> logModelFactory.create("User was deleted, id=" + id)
+                () -> null
         );
     }
 }

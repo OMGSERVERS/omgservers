@@ -47,7 +47,7 @@ class UpsertProjectPermissionOperationImpl implements UpsertProjectPermissionOpe
                         projectPermission.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Project permission was inserted, projectPermission=" + projectPermission)
+                () -> null
         );
     }
 }

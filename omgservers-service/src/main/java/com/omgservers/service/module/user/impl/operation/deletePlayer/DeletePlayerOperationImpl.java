@@ -43,7 +43,7 @@ class DeletePlayerOperationImpl implements DeletePlayerOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new PlayerDeletedEventBodyModel(userId, id),
-                () -> logModelFactory.create(String.format("Player was deleted, userId=%d, id=%d", userId, id))
+                () -> null
         );
     }
 }

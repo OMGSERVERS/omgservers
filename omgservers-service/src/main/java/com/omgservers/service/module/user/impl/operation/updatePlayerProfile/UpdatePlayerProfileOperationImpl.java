@@ -48,12 +48,11 @@ class UpdatePlayerProfileOperationImpl implements UpdatePlayerProfileOperation {
                         getProfileString(profile)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Player profile was updated, " +
-                        "userId=%d, playerId=%s", userId, playerId))
+                () -> null
         );
     }
 
-    String getProfileString(Object profile) {
+    String getProfileString(final Object profile) {
         try {
             return objectMapper.writeValueAsString(profile);
         } catch (IOException e) {

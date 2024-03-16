@@ -47,7 +47,7 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                         user.getDeleted()
                 ),
                 () -> new UserCreatedEventBodyModel(user.getId()),
-                () -> logModelFactory.create("User was created, user=" + user)
+                () -> null
         );
     }
 }

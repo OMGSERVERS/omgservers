@@ -49,8 +49,7 @@ class UpdatePlayerAttributesOperationImpl implements UpdatePlayerAttributesOpera
                         getAttributesString(attributes)
                 ),
                 () -> null,
-                () -> logModelFactory.create(String.format("Player attributes were updated, " +
-                        "userId=%d, playerId=%s", userId, playerId))
+                () -> null
         );
     }
 

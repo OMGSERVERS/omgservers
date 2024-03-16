@@ -38,7 +38,7 @@ class DeleteContainerOperationImpl implements DeleteContainerOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new ContainerDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Container was deleted, id=" + id)
+                () -> null
         );
     }
 }

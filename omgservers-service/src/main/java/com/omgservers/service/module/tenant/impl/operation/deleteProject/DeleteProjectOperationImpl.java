@@ -41,7 +41,7 @@ class DeleteProjectOperationImpl implements DeleteProjectOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new ProjectDeletedEventBodyModel(tenantId, id),
-                () -> logModelFactory.create(String.format("Project was deleted, tenantId=%d, id=%d", tenantId, id))
+                () -> null
         );
     }
 }

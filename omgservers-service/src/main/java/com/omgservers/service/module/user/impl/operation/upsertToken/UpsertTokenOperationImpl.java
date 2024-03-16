@@ -46,7 +46,7 @@ class UpsertTokenOperationImpl implements UpsertTokenOperation {
                         token.getDeleted()
                 ),
                 () -> null,
-                () -> logModelFactory.create("Token was inserted, token=" + token)
+                () -> null
         );
     }
 }

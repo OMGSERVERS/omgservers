@@ -40,7 +40,7 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
                 () -> new RuntimeDeletedEventBodyModel(id),
-                () -> logModelFactory.create("Runtime was deleted, id=" + id)
+                () -> null
         );
     }
 }

@@ -47,7 +47,7 @@ class UpsertProjectOperationImpl implements UpsertProjectOperation {
                         project.getDeleted()
                 ),
                 () -> new ProjectCreatedEventBodyModel(project.getTenantId(), project.getId()),
-                () -> logModelFactory.create("Project was created, project=" + project)
+                () -> null
         );
     }
 }
