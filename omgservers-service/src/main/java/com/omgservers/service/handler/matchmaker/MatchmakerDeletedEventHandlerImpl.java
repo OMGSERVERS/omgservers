@@ -162,7 +162,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                                     match.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
-                                            return Uni.createFrom().item(false);
+                                            return Uni.createFrom().item(Boolean.FALSE);
                                         })
                         )
                         .collect().asList()

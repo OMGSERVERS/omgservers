@@ -36,10 +36,10 @@ public class StageJobTaskImpl {
                 .flatMap(stage -> {
                     if (stage.getDeleted()) {
                         log.info("Stage was deleted, cancel job execution, stage={}/{}", tenantId, stageId);
-                        return Uni.createFrom().item(false);
+                        return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         return handleStage(stage)
-                                .replaceWith(true);
+                                .replaceWith(Boolean.TRUE);
                     }
                 });
     }

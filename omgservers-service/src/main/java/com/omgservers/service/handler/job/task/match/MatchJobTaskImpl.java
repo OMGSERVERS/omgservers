@@ -32,10 +32,10 @@ public class MatchJobTaskImpl {
                 .flatMap(match -> {
                     if (match.getDeleted()) {
                         log.info("Match was deleted, cancel job execution, match={}/{}", matchmakerId, matchId);
-                        return Uni.createFrom().item(false);
+                        return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         return handleMatch(match)
-                                .replaceWith(true);
+                                .replaceWith(Boolean.TRUE);
                     }
                 });
     }

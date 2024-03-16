@@ -40,10 +40,10 @@ public class RuntimeJobTaskImpl {
                 .flatMap(runtime -> {
                     if (runtime.getDeleted()) {
                         log.info("Runtime was deleted, cancel job execution, runtimeId={}", runtimeId);
-                        return Uni.createFrom().item(false);
+                        return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         return handleRuntime(runtime)
-                                .replaceWith(true);
+                                .replaceWith(Boolean.TRUE);
                     }
                 });
     }

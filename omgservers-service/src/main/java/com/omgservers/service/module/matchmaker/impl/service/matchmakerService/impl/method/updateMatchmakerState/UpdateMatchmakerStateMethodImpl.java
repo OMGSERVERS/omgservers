@@ -88,7 +88,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                     changeOfState.getOrphanedMatchClients()))
                     );
                 })
-                .replaceWith(true)
+                .replaceWith(Boolean.TRUE)
                 .map(UpdateMatchmakerStateResponse::new);
     }
 

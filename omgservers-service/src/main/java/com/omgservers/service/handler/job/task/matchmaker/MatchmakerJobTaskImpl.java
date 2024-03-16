@@ -37,10 +37,10 @@ public class MatchmakerJobTaskImpl {
                 .flatMap(matchmaker -> {
                     if (matchmaker.getDeleted()) {
                         log.info("Matchmaker was deleted, cancel job execution, id={}", matchmakerId);
-                        return Uni.createFrom().item(false);
+                        return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         return handleMatchmaker(matchmaker)
-                                .replaceWith(true);
+                                .replaceWith(Boolean.TRUE);
                     }
                 });
     }

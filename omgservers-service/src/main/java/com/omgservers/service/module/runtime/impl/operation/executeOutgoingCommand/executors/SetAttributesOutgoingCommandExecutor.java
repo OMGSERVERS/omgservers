@@ -79,7 +79,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
                     final var playerId = client.getPlayerId();
                     return updatePlayerAttributes(userId, playerId, attributes);
                 })
-                .replaceWith(true);
+                .replaceWith(Boolean.TRUE);
     }
 
     Uni<ClientModel> getClient(final Long clientId) {

@@ -45,7 +45,7 @@ public class RuntimeJobTaskExecutionRequestedEventHandlerImpl implements EventHa
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
-                    return Uni.createFrom().item(true);
+                    return Uni.createFrom().item(Boolean.TRUE);
                 })
                 .flatMap(oneMoreTime -> {
                     if (oneMoreTime) {

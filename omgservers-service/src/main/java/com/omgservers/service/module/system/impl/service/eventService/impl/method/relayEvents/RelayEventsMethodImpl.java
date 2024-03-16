@@ -36,7 +36,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
                     return selectEventsForRelayingOperation.selectEventsForRelaying(sqlConnection, limit)
                             .flatMap(eventProjections -> {
                                 if (eventProjections.isEmpty()) {
-                                    return Uni.createFrom().item(false);
+                                    return Uni.createFrom().item(Boolean.FALSE);
                                 } else {
                                     return relayEvents(eventProjections)
                                             .flatMap(voidItem -> {
@@ -49,7 +49,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
                                                                 ids,
                                                                 EventStatusEnum.RELAYED);
                                             })
-                                            .replaceWith(true);
+                                            .replaceWith(Boolean.TRUE);
                                 }
                             });
                 })

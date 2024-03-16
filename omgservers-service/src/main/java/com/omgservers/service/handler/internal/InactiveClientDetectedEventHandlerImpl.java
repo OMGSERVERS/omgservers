@@ -52,7 +52,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                     if (client.getDeleted()) {
                         log.info("Client was already deleted, " +
                                 "disconnection message won't be created, clientId={}", clientId);
-                        return Uni.createFrom().item(true);
+                        return Uni.createFrom().item(Boolean.TRUE);
                     } else {
                         log.info("Inactive client was detected, clientId={}", clientId);
 

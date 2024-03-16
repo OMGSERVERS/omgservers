@@ -102,7 +102,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                     final var syncEventRequest = new SyncEventRequest(eventModel);
                     return systemModule.getEventService().syncEvent(syncEventRequest)
                             .map(SyncEventResponse::getCreated)
-                            .replaceWith(true);
+                            .replaceWith(Boolean.TRUE);
                 })
                 .collect().asList()
                 .replaceWithVoid();
