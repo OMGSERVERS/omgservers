@@ -42,6 +42,8 @@ import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
+import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
@@ -55,6 +57,7 @@ import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
@@ -108,6 +111,11 @@ public interface MatchmakerApi {
     @PUT
     @Path("/get-matchmaker-match")
     Uni<GetMatchmakerMatchResponse> getMatchmakerMatch(GetMatchmakerMatchRequest request);
+
+    @PUT
+    @Path("/update-matchmaker-match-status")
+    Uni<UpdateMatchmakerMatchStatusResponse> updateMatchmakerMatchStatus(
+            @Valid UpdateMatchmakerMatchStatusRequest request);
 
     @PUT
     @Path("/view-matchmaker-matches")

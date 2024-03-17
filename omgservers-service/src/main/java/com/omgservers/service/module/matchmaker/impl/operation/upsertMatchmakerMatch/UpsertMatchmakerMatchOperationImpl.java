@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -37,8 +37,9 @@ class UpsertMatchmakerMatchOperationImpl implements UpsertMatchmakerMatchOperati
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match(
-                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, status,
+                            deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -51,9 +52,10 @@ class UpsertMatchmakerMatchOperationImpl implements UpsertMatchmakerMatchOperati
                         matchmakerMatch.getRuntimeId(),
                         matchmakerMatch.getStopped(),
                         getConfigString(matchmakerMatch),
+                        matchmakerMatch.getStatus(),
                         matchmakerMatch.getDeleted()
                 ),
-                () -> new MatchCreatedEventBodyModel(matchmakerMatch.getMatchmakerId(), matchmakerMatch.getId()),
+                () -> new MatchmakerMatchCreatedEventBodyModel(matchmakerMatch.getMatchmakerId(), matchmakerMatch.getId()),
                 () -> null
         );
     }

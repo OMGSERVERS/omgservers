@@ -286,6 +286,7 @@ create table if not exists tab_matchmaker_match (
     runtime_id bigint not null,
     stopped boolean not null,
     config json not null,
+    status text not null,
     deleted boolean not null
 );
 

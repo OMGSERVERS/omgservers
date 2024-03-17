@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class MatchRuntimeRefDeletedEventBodyModel extends EventBodyModel {
+public class MatchmakerMatchRuntimeRefCreatedEventBodyModel extends EventBodyModel {
 
     @NotNull
     Long matchmakerId;
@@ -25,6 +25,6 @@ public class MatchRuntimeRefDeletedEventBodyModel extends EventBodyModel {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_RUNTIME_REF_DELETED;
+        return EventQualifierEnum.MATCHMAKER_MATCH_RUNTIME_REF_CREATED;
     }
 }

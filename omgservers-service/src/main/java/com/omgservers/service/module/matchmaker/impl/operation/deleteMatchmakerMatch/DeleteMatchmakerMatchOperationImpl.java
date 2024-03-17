@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatch;
 
-import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatch.SelectMatchmakerMatchOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -42,7 +42,7 @@ class DeleteMatchmakerMatchOperationImpl implements DeleteMatchmakerMatchOperati
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new MatchDeletedEventBodyModel(matchmakerId, id),
+                () -> new MatchmakerMatchDeletedEventBodyModel(matchmakerId, id),
                 () -> null
         );
     }

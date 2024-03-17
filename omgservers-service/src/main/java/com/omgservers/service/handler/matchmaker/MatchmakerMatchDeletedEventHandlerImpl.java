@@ -14,7 +14,7 @@ import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
@@ -34,7 +34,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchDeletedEventHandlerImpl implements EventHandler {
+public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
@@ -42,14 +42,14 @@ public class MatchDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_DELETED;
+        return EventQualifierEnum.MATCHMAKER_MATCH_DELETED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (MatchDeletedEventBodyModel) event.getBody();
+        final var body = (MatchmakerMatchDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getId();
 

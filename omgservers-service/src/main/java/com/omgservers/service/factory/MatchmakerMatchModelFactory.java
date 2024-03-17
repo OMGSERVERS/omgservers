@@ -2,6 +2,7 @@ package com.omgservers.service.factory;
 
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchConfigModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,7 @@ public class MatchmakerMatchModelFactory {
         matchmakerMatch.setRuntimeId(runtimeId);
         matchmakerMatch.setStopped(Boolean.FALSE);
         matchmakerMatch.setConfig(matchmakerMatchConfig);
+        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.CREATED);
         matchmakerMatch.setDeleted(Boolean.FALSE);
         return matchmakerMatch;
     }

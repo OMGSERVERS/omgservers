@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatchRuntimeRef;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.MatchRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -49,7 +49,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationImpl implements UpsertMatchmakerMa
                         matchRuntimeRef.getRuntimeId(),
                         matchRuntimeRef.getDeleted()
                 ),
-                () -> new MatchRuntimeRefCreatedEventBodyModel(
+                () -> new MatchmakerMatchRuntimeRefCreatedEventBodyModel(
                         matchRuntimeRef.getMatchmakerId(),
                         matchRuntimeRef.getMatchId(),
                         matchRuntimeRef.getId()),

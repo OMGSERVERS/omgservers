@@ -1,8 +1,8 @@
-package com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatchClient;
+package com.omgservers.service.module.matchmaker.impl.operation.updateMatchmakerMatchStatus;
 
-import com.omgservers.model.event.body.MatchmakerMatchClientDeletedEventBodyModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.factory.LogModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatchClient.SelectMatchmakerMatchClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
@@ -18,31 +18,36 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class DeleteMatchmakerMatchClientOperationImpl implements DeleteMatchmakerMatchClientOperation {
+class UpdateMatchmakerMatchStatusOperationImpl implements UpdateMatchmakerMatchStatusOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final SelectMatchmakerMatchClientOperation selectMatchmakerMatchClientOperation;
+
     final LogModelFactory logModelFactory;
+    final ObjectMapper objectMapper;
 
     @Override
-    public Uni<Boolean> deleteMatchmakerMatchClient(final ChangeContext<?> changeContext,
+    public Uni<Boolean> updateMatchmakerMatchStatus(final ChangeContext<?> changeContext,
                                                     final SqlConnection sqlConnection,
                                                     final int shard,
                                                     final Long matchmakerId,
-                                                    final Long id) {
+                                                    final Long matchId,
+                                                    final MatchmakerMatchStatusEnum fromStatus,
+                                                    final MatchmakerMatchStatusEnum toStatus) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_matchmaker_match_client
-                        set modified = $3, deleted = true
-                        where matchmaker_id = $1 and id = $2 and deleted = false
+                        update $schema.tab_matchmaker_match
+                        set modified = $4, status = $5
+                        where matchmaker_id = $1 and id = $2 and status = $3
                         """,
                 List.of(
                         matchmakerId,
-                        id,
-                        Instant.now().atOffset(ZoneOffset.UTC)
+                        matchId,
+                        fromStatus,
+                        Instant.now().atOffset(ZoneOffset.UTC),
+                        toStatus
                 ),
-                () -> new MatchmakerMatchClientDeletedEventBodyModel(matchmakerId, id),
+                () -> null,
                 () -> null
         );
     }

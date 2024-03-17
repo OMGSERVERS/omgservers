@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatchRuntimeRef;
 
-import com.omgservers.model.event.body.MatchRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatchClient.SelectMatchmakerMatchClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -44,7 +44,7 @@ class DeleteMatchmakerMatchRuntimeRefOperationImpl implements DeleteMatchmakerMa
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new MatchRuntimeRefDeletedEventBodyModel(matchmakerId, matchId, id),
+                () -> new MatchmakerMatchRuntimeRefDeletedEventBodyModel(matchmakerId, matchId, id),
                 () -> null
         );
     }

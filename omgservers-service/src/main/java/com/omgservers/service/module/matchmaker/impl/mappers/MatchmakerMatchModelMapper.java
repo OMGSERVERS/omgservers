@@ -3,6 +3,7 @@ package com.omgservers.service.module.matchmaker.impl.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchConfigModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
@@ -29,11 +30,13 @@ public class MatchmakerMatchModelMapper {
         matchmakerMatch.setRuntimeId(row.getLong("runtime_id"));
         matchmakerMatch.setStopped(row.getBoolean("stopped"));
         try {
-            matchmakerMatch.setConfig(objectMapper.readValue(row.getString("config"), MatchmakerMatchConfigModel.class));
+            matchmakerMatch.setConfig(objectMapper.readValue(row.getString("config"),
+                    MatchmakerMatchConfigModel.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "matchmakerMatch config can't be parsed, matchmakerMatch=" + matchmakerMatch, e);
         }
+        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.valueOf(row.getString("status")));
         matchmakerMatch.setDeleted(row.getBoolean("deleted"));
         return matchmakerMatch;
     }

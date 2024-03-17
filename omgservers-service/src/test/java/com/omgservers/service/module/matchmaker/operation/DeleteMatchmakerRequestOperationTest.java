@@ -61,7 +61,7 @@ class DeleteMatchmakerRequestOperationTest extends Assertions {
         final var changeContext =
                 deleteRequestOperation.deleteMatchmakerRequest(shard, matchmaker.getId(), matchmakerRequest.getId());
         assertTrue(changeContext.getResult());
-        assertTrue(changeContext.contains(EventQualifierEnum.REQUEST_DELETED));
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_REQUEST_DELETED));
     }
 
     @Test
@@ -72,7 +72,7 @@ class DeleteMatchmakerRequestOperationTest extends Assertions {
 
         final var changeContext = deleteRequestOperation.deleteMatchmakerRequest(shard, matchmakerId, id);
         assertFalse(changeContext.getResult());
-        assertFalse(changeContext.contains(EventQualifierEnum.REQUEST_DELETED));
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_REQUEST_DELETED));
     }
 
     Long userId() {

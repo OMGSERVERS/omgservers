@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatchClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchClientCreatedEventBodyModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -56,7 +56,7 @@ class UpsertMatchmakerMatchClientOperationImpl implements UpsertMatchmakerMatchC
                         getConfigString(matchmakerMatchClient),
                         matchmakerMatchClient.getDeleted()
                 ),
-                () -> new MatchClientCreatedEventBodyModel(
+                () -> new MatchmakerMatchClientCreatedEventBodyModel(
                         matchmakerMatchClient.getMatchmakerId(),
                         matchmakerMatchClient.getMatchId(),
                         matchmakerMatchClient.getId()),

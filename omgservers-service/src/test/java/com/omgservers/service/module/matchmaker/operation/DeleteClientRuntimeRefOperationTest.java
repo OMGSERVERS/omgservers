@@ -62,7 +62,7 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
 
         final var changeContext = deleteMatchOperation.deleteMatchmakerMatch(shard, matchmaker.getId(), match.getId());
         assertTrue(changeContext.getResult());
-        assertTrue(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_DELETED));
     }
 
     @Test
@@ -73,7 +73,7 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
 
         final var changeContext = deleteMatchOperation.deleteMatchmakerMatch(shard, matchmakerId, id);
         assertFalse(changeContext.getResult());
-        assertFalse(changeContext.contains(EventQualifierEnum.MATCH_DELETED));
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_DELETED));
     }
 
     Long tenantId() {

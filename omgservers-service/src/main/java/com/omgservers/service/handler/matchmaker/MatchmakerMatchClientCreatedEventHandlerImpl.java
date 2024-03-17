@@ -6,10 +6,10 @@ import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchClientCreatedEventBodyModel;
-import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.model.event.body.MatchmakerMatchClientCreatedEventBodyModel;
 import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
+import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.factory.MatchCommandModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchClientCreatedEventHandlerImpl implements EventHandler {
+public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
 
@@ -34,14 +34,14 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_CLIENT_CREATED;
+        return EventQualifierEnum.MATCHMAKER_MATCH_CLIENT_CREATED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (MatchClientCreatedEventBodyModel) event.getBody();
+        final var body = (MatchmakerMatchClientCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getMatchId();
         final var matchClientId = body.getId();
@@ -49,7 +49,6 @@ public class MatchClientCreatedEventHandlerImpl implements EventHandler {
         return getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
                     final var clientId = matchClient.getClientId();
-                    final var groupName = matchClient.getGroupName();
 
                     log.info("Matchmaker match client was created, id={}, match={}/{}, clientId={}",
                             matchClient.getId(), matchmakerId, matchId, clientId);

@@ -42,5 +42,8 @@ public class MatchmakerMatchModel {
     MatchmakerMatchConfigModel config;
 
     @NotNull
+    MatchmakerMatchStatusEnum status;
+
+    @NotNull
     Boolean deleted;
 }

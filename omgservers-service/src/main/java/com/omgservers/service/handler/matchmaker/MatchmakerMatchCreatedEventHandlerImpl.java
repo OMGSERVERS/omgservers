@@ -10,7 +10,7 @@ import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchCreatedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.MatchJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchCreatedEventHandlerImpl implements EventHandler {
+public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
@@ -53,14 +53,14 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_CREATED;
+        return EventQualifierEnum.MATCHMAKER_MATCH_CREATED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (MatchCreatedEventBodyModel) event.getBody();
+        final var body = (MatchmakerMatchCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchId = body.getId();
 

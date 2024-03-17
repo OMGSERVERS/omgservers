@@ -8,7 +8,7 @@ import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.matchCommand.body.DeleteClientMatchCommandBodyModel;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchClientDeletedEventHandlerImpl implements EventHandler {
+public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
 
@@ -32,14 +32,14 @@ public class MatchClientDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCH_CLIENT_DELETED;
+        return EventQualifierEnum.MATCHMAKER_MATCH_CLIENT_DELETED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (MatchClientDeletedEventBodyModel) event.getBody();
+        final var body = (MatchmakerMatchClientDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var matchClientId = body.getId();
 

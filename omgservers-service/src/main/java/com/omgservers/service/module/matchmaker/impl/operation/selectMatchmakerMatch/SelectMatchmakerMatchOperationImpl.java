@@ -30,7 +30,7 @@ class SelectMatchmakerMatchOperationImpl implements SelectMatchmakerMatchOperati
                 shard,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, 
+                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, status,
                             deleted
                         from $schema.tab_matchmaker_match
                         where matchmaker_id = $1 and id = $2
