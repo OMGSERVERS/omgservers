@@ -31,7 +31,7 @@ class SelectMatchmakerMatchRuntimeRefOperationImpl implements SelectMatchmakerMa
                 shard,
                 """
                         select
-                            id, matchmaker_id, match_id, created, modified, runtime_id, deleted
+                            id, idempotency_key, matchmaker_id, match_id, created, modified, runtime_id, deleted
                         from $schema.tab_matchmaker_match_runtime_ref
                         where matchmaker_id = $1 and match_id = $2 and id = $3
                         limit 1
