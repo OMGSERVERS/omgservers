@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.model.matchmakerState.MatchmakerState;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchmakerMatchesByMatchmakerId.SelectActiveMatchmakerMatchesByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.selectActiveMatchmakerCommandsByMatchmakerId.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatchClientsByMatchmakerId.SelectMatchmakerMatchClientsByMatchmakerIdOperation;
@@ -40,7 +40,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                     .selectActiveMatchmakerCommandsByMatchmakerId(sqlConnection,
                                             shard,
                                             matchmakerId)
-                                    .flatMap(matchmakerCommands -> selectActiveMatchmakerRequestsByMatchmakerIdOperation
+                                    .flatMap(commands -> selectActiveMatchmakerRequestsByMatchmakerIdOperation
                                             .selectActiveMatchmakerRequestsByMatchmakerId(sqlConnection,
                                                     shard,
                                                     matchmakerId)
@@ -54,11 +54,11 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                                                     sqlConnection,
                                                                     shard,
                                                                     matchmakerId)
-                                                            .map(matchClients -> new MatchmakerState(
-                                                                    matchmakerCommands,
+                                                            .map(clients -> new MatchmakerStateModel(
+                                                                    commands,
                                                                     requests,
                                                                     matches,
-                                                                    matchClients)
+                                                                    clients)
                                                             )
                                                     )
                                             )

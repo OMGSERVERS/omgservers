@@ -3,7 +3,7 @@ package com.omgservers.service.handler.job.matchmaker.operation.handleMatchmaker
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.matchmakerState.MatchmakerState;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import io.smallrye.mutiny.Uni;
 
 public interface MatchmakerCommandHandler {
@@ -18,11 +18,11 @@ public interface MatchmakerCommandHandler {
     /**
      * Handle matchmaker command by this handler.
      *
-     * @param matchmakerState   current matchmaker state
+     * @param currentState      current matchmaker state
      * @param changeOfState     container for state changes
      * @param matchmakerCommand matchmaker command to process by this handler
      */
-    Uni<Void> handle(MatchmakerState matchmakerState,
-                     MatchmakerChangeOfState changeOfState,
+    Uni<Void> handle(MatchmakerStateModel currentState,
+                     MatchmakerChangeOfStateModel changeOfState,
                      MatchmakerCommandModel matchmakerCommand);
 }

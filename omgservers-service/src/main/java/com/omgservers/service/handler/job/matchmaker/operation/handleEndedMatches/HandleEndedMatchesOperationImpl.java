@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.job.matchmaker.operation.handleEndedMatches;
 
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
-import com.omgservers.model.matchmakerState.MatchmakerState;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 class HandleEndedMatchesOperationImpl implements HandleEndedMatchesOperation {
 
     @Override
-    public void handleEndedMatches(final MatchmakerState matchmakerState,
-                                   final MatchmakerChangeOfState changeOfState) {
+    public void handleEndedMatches(final MatchmakerStateModel matchmakerStateModel,
+                                   final MatchmakerChangeOfStateModel changeOfState) {
         // Step 1. Group match clients by matchId
-        final var groupedMatchClients = matchmakerState.getMatchClients().stream()
+        final var groupedMatchClients = matchmakerStateModel.getClients().stream()
                 .collect(Collectors.groupingBy(MatchmakerMatchClientModel::getMatchId));
 
         // Step 2. Filter out matches without match clients
-        final var endedMatches = matchmakerState.getMatches().stream()
+        final var endedMatches = matchmakerStateModel.getMatches().stream()
                 .filter(match -> !groupedMatchClients.containsKey(match.getId()))
                 .toList();
 

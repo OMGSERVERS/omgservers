@@ -3,7 +3,7 @@ package com.omgservers.service.handler.job.matchmaker.operation.handleMatchmaker
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.matchmakerState.MatchmakerState;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -29,8 +29,8 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
     }
 
     @Override
-    public Uni<Void> handleMatchmakerCommand(final MatchmakerState matchmakerState,
-                                             final MatchmakerChangeOfState changeOfState,
+    public Uni<Void> handleMatchmakerCommand(final MatchmakerStateModel matchmakerStateModel,
+                                             final MatchmakerChangeOfStateModel changeOfState,
                                              final MatchmakerCommandModel matchmakerCommand) {
         final var qualifier = matchmakerCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
@@ -49,6 +49,6 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
         }
 
         return matchmakerCommandHandlers.get(qualifier)
-                .handle(matchmakerState, changeOfState, matchmakerCommand);
+                .handle(matchmakerStateModel, changeOfState, matchmakerCommand);
     }
 }

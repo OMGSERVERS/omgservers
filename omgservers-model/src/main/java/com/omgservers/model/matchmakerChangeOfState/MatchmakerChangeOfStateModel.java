@@ -17,7 +17,7 @@ import java.util.Set;
 public class MatchmakerChangeOfState {
 
     @NotNull
-    Set<MatchmakerCommandModel> completedMatchmakerCommands;
+    Set<MatchmakerCommandModel> commandsToDelete;
 
     @NotNull
     Set<MatchmakerRequestModel> completedRequests;
@@ -32,10 +32,10 @@ public class MatchmakerChangeOfState {
     Set<MatchmakerMatchModel> endedMatches;
 
     @NotNull
-    Set<MatchmakerMatchClientModel> createdMatchClients;
+    Set<MatchmakerMatchClientModel> clientsToSync;
 
     @NotNull
-    Set<MatchmakerMatchClientModel> orphanedMatchClients;
+    Set<MatchmakerMatchClientModel> clientsToDelete;
 
     public MatchmakerChangeOfState() {
         completedMatchmakerCommands = new HashSet<>();

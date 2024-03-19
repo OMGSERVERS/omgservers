@@ -26,8 +26,8 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
     }
 
     @Override
-    public Uni<Void> handle(final MatchmakerState matchmakerState,
-                            final MatchmakerChangeOfState changeOfState,
+    public Uni<Void> handle(final MatchmakerStateModel currentState,
+                            final MatchmakerChangeOfStateModel changeOfState,
                             final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
@@ -38,22 +38,22 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                 .invoke(voidItem -> {
                     // Step 1. Finding client's requests and adding for removing
 
-                    final var orphanedRequests = matchmakerState.getRequests().stream()
+                    final var orphanedRequests = currentState.getRequests().stream()
                             .filter(request -> request.getClientId().equals(clientId))
                             .toList();
 
                     changeOfState.getCompletedRequests().addAll((orphanedRequests));
 
                     // Step 2. Removing client's requests from current matchmaking
-                    matchmakerState.getRequests().removeAll(orphanedRequests);
+                    currentState.getRequests().removeAll(orphanedRequests);
 
                     // Step 3. Finding client's match clients and adding for removing
 
-                    final var orphanedMatchClients = matchmakerState.getMatchClients().stream()
+                    final var orphanedMatchClients = currentState.getClients().stream()
                             .filter(matchClient -> matchClient.getClientId().equals(clientId))
                             .toList();
 
-                    changeOfState.getOrphanedMatchClients().addAll((orphanedMatchClients));
+                    changeOfState.getClientsToDelete().addAll((orphanedMatchClients));
 
                     log.info(
                             "Client was deleted from matchmaker, " +

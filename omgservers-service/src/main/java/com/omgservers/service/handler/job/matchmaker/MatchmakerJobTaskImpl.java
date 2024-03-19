@@ -84,23 +84,23 @@ public class MatchmakerJobTaskImpl {
                                                         "createdMatchClients={}, " +
                                                         "orphanedMatchClients={}",
                                                 matchmakerId,
-                                                changeOfState.getCompletedMatchmakerCommands().size(),
-                                                changeOfState.getCompletedRequests().size(),
-                                                changeOfState.getCreatedMatches().size(),
-                                                changeOfState.getStoppedMatches().size(),
-                                                changeOfState.getEndedMatches().size(),
-                                                changeOfState.getCreatedMatchClients().size(),
-                                                changeOfState.getOrphanedMatchClients().size());
+                                                changeOfState.getCommandsToDelete().size(),
+                                                changeOfState.getRequestsToDelete().size(),
+                                                changeOfState.getMatchesToSync().size(),
+                                                changeOfState.getMatchesToUpdateStatus().size(),
+                                                changeOfState.getMatchesToDelete().size(),
+                                                changeOfState.getClientsToSync().size(),
+                                                changeOfState.getClientsToDelete().size());
                                     }
                                 }))
                 )
                 .replaceWithVoid();
     }
 
-    Uni<MatchmakerState> getMatchmakerState(final Long matchmakerId) {
+    Uni<MatchmakerStateModel> getMatchmakerState(final Long matchmakerId) {
         final var request = new GetMatchmakerStateRequest(matchmakerId);
         return matchmakerModule.getMatchmakerService().getMatchmakerState(request)
-                .map(GetMatchmakerStateResponse::getMatchmakerState);
+                .map(GetMatchmakerStateResponse::getMatchmakerStateModel);
     }
 
     Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
@@ -110,12 +110,12 @@ public class MatchmakerJobTaskImpl {
                 .map(UpdateMatchmakerStateResponse::getUpdated);
     }
 
-    Uni<Void> handleMatchmakerCommands(final MatchmakerState matchmakerState,
-                                       final MatchmakerChangeOfState changeOfState) {
-        final var matchmakerCommands = matchmakerState.getMatchmakerCommands();
+    Uni<Void> handleMatchmakerCommands(final MatchmakerStateModel currentState,
+                                       final MatchmakerChangeOfStateModel changeOfState) {
+        final var matchmakerCommands = currentState.getCommands();
         return Multi.createFrom().iterable(matchmakerCommands)
                 .onItem().transformToUniAndConcatenate(matchmakerCommand -> handleMatchmakerCommandOperation
-                        .handleMatchmakerCommand(matchmakerState, changeOfState, matchmakerCommand)
+                        .handleMatchmakerCommand(currentState, changeOfState, matchmakerCommand)
                         .onFailure()
                         .recoverWithItem(t -> {
                             log.warn("Handle matchmaker command failed, " +
@@ -131,7 +131,7 @@ public class MatchmakerJobTaskImpl {
                         .replaceWithVoid()
                 )
                 .collect().asList()
-                .invoke(results -> changeOfState.getCompletedMatchmakerCommands().addAll(matchmakerCommands))
+                .invoke(results -> changeOfState.getCommandsToDelete().addAll(matchmakerCommands))
                 .replaceWithVoid();
     }
 }

@@ -26,8 +26,8 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
     }
 
     @Override
-    public Uni<Void> handle(final MatchmakerState matchmakerState,
-                            final MatchmakerChangeOfState changeOfState,
+    public Uni<Void> handle(final MatchmakerStateModel currentState,
+                            final MatchmakerChangeOfStateModel changeOfState,
                             final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
@@ -39,12 +39,12 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
                 .invoke(voidItem -> {
                     // Step 1. Finding client's match clients and adding for removing
 
-                    final var kickedMatchClients = matchmakerState.getMatchClients().stream()
+                    final var kickedMatchClients = currentState.getClients().stream()
                             .filter(matchClient -> matchClient.getClientId().equals(clientId))
                             .filter(matchClient -> matchClient.getMatchId().equals(matchId))
                             .toList();
 
-                    changeOfState.getOrphanedMatchClients().addAll(kickedMatchClients);
+                    changeOfState.getClientsToDelete().addAll(kickedMatchClients);
 
                     log.info(
                             "Client was kicked from matchmaker, " +

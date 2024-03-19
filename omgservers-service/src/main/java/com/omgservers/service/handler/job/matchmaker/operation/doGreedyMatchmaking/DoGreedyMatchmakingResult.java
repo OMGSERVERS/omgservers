@@ -9,5 +9,5 @@ import java.util.List;
 public record DoGreedyMatchmakingResult(
         List<MatchmakerRequestModel> matchedRequests,
         List<MatchmakerMatchModel> createdMatches,
-        List<MatchmakerMatchClientModel> createdMatchClients) {
+        List<MatchmakerMatchClientModel> createdClients) {
 }

@@ -60,8 +60,8 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                     changeContext,
                                                     sqlConnection,
                                                     shard,
-                                                    changeOfState.getCompletedMatchmakerCommands()))
-                                            .flatMap(voidItem -> syncCreatedMatches(
+                                                    changeOfState.getCommandsToDelete()))
+                                            .flatMap(voidItem -> syncMatches(
                                                     changeContext,
                                                     sqlConnection,
                                                     shard,
@@ -80,12 +80,12 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                     changeContext,
                                                     sqlConnection,
                                                     shard,
-                                                    changeOfState.getCreatedMatchClients()))
-                                            .flatMap(voidItem -> deleteOrphanedMatchClients(
+                                                    changeOfState.getClientsToSync()))
+                                            .flatMap(voidItem -> deleteClients(
                                                     changeContext,
                                                     sqlConnection,
                                                     shard,
-                                                    changeOfState.getOrphanedMatchClients()))
+                                                    changeOfState.getClientsToDelete()))
                     );
                 })
                 .replaceWith(Boolean.TRUE)
