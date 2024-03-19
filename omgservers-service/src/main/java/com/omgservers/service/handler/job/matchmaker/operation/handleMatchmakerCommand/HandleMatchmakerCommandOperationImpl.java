@@ -48,7 +48,8 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
             return Uni.createFrom().voidItem();
         }
 
-        return matchmakerCommandHandlers.get(qualifier)
-                .handle(matchmakerStateModel, changeOfState, matchmakerCommand);
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> matchmakerCommandHandlers.get(qualifier)
+                        .handle(matchmakerStateModel, changeOfState, matchmakerCommand));
     }
 }

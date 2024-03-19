@@ -6,7 +6,6 @@ import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,47 +22,44 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
     }
 
     @Override
-    public Uni<Void> handle(final MatchmakerStateModel currentState,
-                            final MatchmakerChangeOfStateModel changeOfState,
-                            final MatchmakerCommandModel matchmakerCommand) {
+    public void handle(final MatchmakerStateModel currentState,
+                       final MatchmakerChangeOfStateModel changeOfState,
+                       final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
         final var body = (DeleteClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
         final var clientId = body.getId();
 
-        return Uni.createFrom().voidItem()
-                .invoke(voidItem -> {
-                    // Step 1. Finding client's requests and adding for removing
+        // Step 1. Finding client's requests and adding for removing
 
-                    final var orphanedRequests = currentState.getRequests().stream()
-                            .filter(request -> request.getClientId().equals(clientId))
-                            .toList();
+        final var orphanedRequests = currentState.getRequests().stream()
+                .filter(request -> request.getClientId().equals(clientId))
+                .toList();
 
-                    changeOfState.getRequestsToDelete().addAll((orphanedRequests));
+        changeOfState.getRequestsToDelete().addAll((orphanedRequests));
 
-                    // Step 2. Removing client's requests from current matchmaking
-                    currentState.getRequests().removeAll(orphanedRequests);
+        // Step 2. Removing client's requests from current matchmaking
+        currentState.getRequests().removeAll(orphanedRequests);
 
-                    // Step 3. Finding client's match clients and adding for removing
+        // Step 3. Finding client's match clients and adding for removing
 
-                    final var orphanedMatchClients = currentState.getClients().stream()
-                            .filter(matchClient -> matchClient.getClientId().equals(clientId))
-                            .toList();
+        final var orphanedMatchClients = currentState.getClients().stream()
+                .filter(matchClient -> matchClient.getClientId().equals(clientId))
+                .toList();
 
-                    changeOfState.getClientsToDelete().addAll((orphanedMatchClients));
+        changeOfState.getClientsToDelete().addAll((orphanedMatchClients));
 
-                    log.info(
-                            "Client was deleted from matchmaker, " +
-                                    "clientId={}, " +
-                                    "matchmakerId={}, " +
-                                    "orphanedRequests={}, " +
-                                    "orphanedMatchClients={}, " +
-                                    "matchmakerCommandId={}",
-                            clientId,
-                            matchmakerCommand.getMatchmakerId(),
-                            orphanedRequests.size(),
-                            orphanedMatchClients.size(),
-                            matchmakerCommand.getId());
-                });
+        log.info(
+                "Client was deleted from matchmaker, " +
+                        "clientId={}, " +
+                        "matchmakerId={}, " +
+                        "orphanedRequests={}, " +
+                        "orphanedMatchClients={}, " +
+                        "matchmakerCommandId={}",
+                clientId,
+                matchmakerCommand.getMatchmakerId(),
+                orphanedRequests.size(),
+                orphanedMatchClients.size(),
+                matchmakerCommand.getId());
     }
 }

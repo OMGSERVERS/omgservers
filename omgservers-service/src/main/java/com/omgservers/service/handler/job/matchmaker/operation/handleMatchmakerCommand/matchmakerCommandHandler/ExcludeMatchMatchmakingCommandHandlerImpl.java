@@ -24,25 +24,21 @@ class ExcludeMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHand
     }
 
     @Override
-    public Uni<Void> handle(final MatchmakerStateModel currentState,
-                            final MatchmakerChangeOfStateModel changeOfState,
-                            final MatchmakerCommandModel matchmakerCommand) {
+    public void handle(final MatchmakerStateModel currentState,
+                       final MatchmakerChangeOfStateModel changeOfState,
+                       final MatchmakerCommandModel matchmakerCommand) {
         final var body = (ExcludeMatchMatchmakerCommandBodyModel) matchmakerCommand.getBody();
         final var matchId = body.getMatchId();
 
-        return Uni.createFrom().voidItem()
-                .invoke(voidItem -> {
+        final var excludedMatched = currentState.getMatches()
+                .stream().filter(match -> match.getId().equals(matchId))
+                .peek(match -> match.setStatus(MatchmakerMatchStatusEnum.EXCLUDED))
+                .toList();
 
-                    final var excludedMatched = currentState.getMatches()
-                            .stream().filter(match -> match.getId().equals(matchId))
-                            .peek(match -> match.setStatus(MatchmakerMatchStatusEnum.EXCLUDED))
-                            .toList();
+        changeOfState.getMatchesToUpdateStatus().addAll(excludedMatched);
 
-                    changeOfState.getMatchesToUpdateStatus().addAll(excludedMatched);
-
-                    log.info("Matchmaker match was excluded, match={}/{}",
-                            matchmakerCommand.getMatchmakerId(),
-                            matchId);
-                });
+        log.info("Matchmaker match was excluded, match={}/{}",
+                matchmakerCommand.getMatchmakerId(),
+                matchId);
     }
 }

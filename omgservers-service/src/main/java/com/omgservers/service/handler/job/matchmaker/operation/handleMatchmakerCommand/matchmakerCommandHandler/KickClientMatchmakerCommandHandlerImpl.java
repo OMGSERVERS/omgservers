@@ -6,7 +6,6 @@ import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,36 +22,33 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
     }
 
     @Override
-    public Uni<Void> handle(final MatchmakerStateModel currentState,
-                            final MatchmakerChangeOfStateModel changeOfState,
-                            final MatchmakerCommandModel matchmakerCommand) {
+    public void handle(final MatchmakerStateModel currentState,
+                       final MatchmakerChangeOfStateModel changeOfState,
+                       final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
         final var body = (KickClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
         final var clientId = body.getClientId();
         final var matchId = body.getMatchId();
 
-        return Uni.createFrom().voidItem()
-                .invoke(voidItem -> {
-                    // Step 1. Finding client's match clients and adding for removing
+        // Step 1. Finding client's match clients and adding for removing
 
-                    final var kickedMatchClients = currentState.getClients().stream()
-                            .filter(matchClient -> matchClient.getClientId().equals(clientId))
-                            .filter(matchClient -> matchClient.getMatchId().equals(matchId))
-                            .toList();
+        final var kickedMatchClients = currentState.getClients().stream()
+                .filter(matchClient -> matchClient.getClientId().equals(clientId))
+                .filter(matchClient -> matchClient.getMatchId().equals(matchId))
+                .toList();
 
-                    changeOfState.getClientsToDelete().addAll(kickedMatchClients);
+        changeOfState.getClientsToDelete().addAll(kickedMatchClients);
 
-                    log.info(
-                            "Client was kicked from matchmaker, " +
-                                    "clientId={}, " +
-                                    "matchmakerId={}, " +
-                                    "kickedMatchClients={}, " +
-                                    "matchmakerCommandId={}",
-                            clientId,
-                            matchmakerCommand.getMatchmakerId(),
-                            kickedMatchClients.size(),
-                            matchmakerCommand.getId());
-                });
+        log.info(
+                "Client was kicked from matchmaker, " +
+                        "clientId={}, " +
+                        "matchmakerId={}, " +
+                        "kickedMatchClients={}, " +
+                        "matchmakerCommandId={}",
+                clientId,
+                matchmakerCommand.getMatchmakerId(),
+                kickedMatchClients.size(),
+                matchmakerCommand.getId());
     }
 }

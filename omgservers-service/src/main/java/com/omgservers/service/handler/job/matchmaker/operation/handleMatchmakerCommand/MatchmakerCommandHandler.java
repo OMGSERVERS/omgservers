@@ -4,7 +4,6 @@ import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerState.MatchmakerStateModel;
-import io.smallrye.mutiny.Uni;
 
 public interface MatchmakerCommandHandler {
 
@@ -22,7 +21,7 @@ public interface MatchmakerCommandHandler {
      * @param changeOfState     container for state changes
      * @param matchmakerCommand matchmaker command to process by this handler
      */
-    Uni<Void> handle(MatchmakerStateModel currentState,
-                     MatchmakerChangeOfStateModel changeOfState,
-                     MatchmakerCommandModel matchmakerCommand);
+    void handle(MatchmakerStateModel currentState,
+                MatchmakerChangeOfStateModel changeOfState,
+                MatchmakerCommandModel matchmakerCommand);
 }
