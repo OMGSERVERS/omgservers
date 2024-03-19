@@ -22,12 +22,14 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
     final MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
     @Override
-    public DoGreedyMatchmakingResult doGreedyMatchmaking(final VersionModeModel modeConfig,
+    public DoGreedyMatchmakingResult doGreedyMatchmaking(final Long matchmakerId,
+                                                         final VersionModeModel config,
                                                          final List<MatchmakerRequestModel> requests,
                                                          final List<MatchmakerMatchModel> matches,
                                                          final List<MatchmakerMatchClientModel> clients) {
 
-        final var doGreedyMatchmakingState = doGreedyMatchmakingStateFactory.build(modeConfig,
+        final var doGreedyMatchmakingState = doGreedyMatchmakingStateFactory.build(matchmakerId,
+                config,
                 matches,
                 clients);
 

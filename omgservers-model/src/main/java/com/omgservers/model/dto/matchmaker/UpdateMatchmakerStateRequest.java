@@ -1,7 +1,7 @@
 package com.omgservers.model.dto.matchmaker;
 
 import com.omgservers.model.dto.ShardedRequest;
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class UpdateMatchmakerStateRequest implements ShardedRequest {
     Long matchmakerId;
 
     @NotNull
-    MatchmakerChangeOfState changeOfState;
+    MatchmakerChangeOfStateModel changeOfState;
 
     @Override
     public String getRequestShardKey() {

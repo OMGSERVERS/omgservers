@@ -1,7 +1,5 @@
 package com.omgservers.service.handler.job.matchmaker.operation.handlerMatchmakerRequests;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
 import com.omgservers.model.matchmaker.MatchmakerModel;
@@ -47,12 +45,6 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .replaceWithVoid();
     }
 
-    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
     Uni<VersionConfigModel> getVersionConfig(final Long tenantId, final Long versionId) {
         final var request = new GetVersionConfigRequest(tenantId, versionId);
         return tenantModule.getVersionService().getVersionConfig(request)
@@ -65,12 +57,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                            final VersionConfigModel versionConfig) {
         final var requests = currentState.getRequests();
 
-        if (requests.isEmpty()) {
-            return Uni.createFrom().voidItem();
-        } else {
-            return doMatchmaking(versionConfig,
-                    matchmakerState,
-                    changeOfState);
+        if (!requests.isEmpty()) {
+            doMatchmaking(matchmakerId, currentState, changeOfState, versionConfig);
         }
     }
 
@@ -99,26 +87,37 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
             final var modeMatches = matches.getOrDefault(modeName, new ArrayList<>());
             final var modeClients = clients.getOrDefault(modeName, new ArrayList<>());
 
-                        final var modeConfigOptional = versionConfig.getModes().stream()
-                                .filter(mode -> mode.getName().equals(modeName)).findFirst();
-                        if (modeConfigOptional.isPresent()) {
-                            final var modeConfig = modeConfigOptional.get();
-                            final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(
-                                    modeConfig,
-                                    modeRequests,
-                                    modeMatches,
-                                    modeMatchClients);
-                            changeOfState.getCompletedRequests()
-                                    .addAll(greedyMatchmakingResult.matchedRequests());
-                            changeOfState.getCreatedMatches()
-                                    .addAll(greedyMatchmakingResult.createdMatches());
-                            changeOfState.getCreatedMatchClients()
-                                    .addAll(greedyMatchmakingResult.createdMatchClients());
-                        } else {
-                            log.warn("Matchmaker requests with unknown mode were found, mode={}, requests={}",
-                                    modeName, modeRequests.size());
-                        }
-                    });
-                });
+            final var modeConfigOptional = versionConfig.getModes().stream()
+                    .filter(mode -> mode.getName().equals(modeName)).findFirst();
+            if (modeConfigOptional.isPresent()) {
+                final var modeConfig = modeConfigOptional.get();
+
+                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(
+                        matchmakerId,
+                        modeConfig,
+                        modeRequests,
+                        modeMatches,
+                        modeClients);
+
+                changeOfState.getRequestsToDelete()
+                        .addAll(greedyMatchmakingResult.matchedRequests());
+
+                final var currentCount = createdMatches.getOrDefault(modeName, new ArrayList<>()).size();
+                final var requiredCount = greedyMatchmakingResult.createdMatches().size();
+                if (requiredCount > currentCount) {
+                    for (int i = 0; i < requiredCount - currentCount; i++) {
+                        final var createdMatch = greedyMatchmakingResult.createdMatches().get(i);
+                        changeOfState.getMatchesToSync().add(createdMatch);
+                    }
+                }
+
+                changeOfState.getClientsToSync()
+                        .addAll(greedyMatchmakingResult.createdClients());
+            } else {
+                log.warn("Matchmaker requests with unknown mode were found, mode={}, requests={}",
+                        modeName, modeRequests.size());
+                changeOfState.getRequestsToDelete().addAll(modeRequests);
+            }
+        });
     }
 }

@@ -57,17 +57,17 @@ public class MatchmakerJobTaskImpl {
                 // TODO: get full state only first time, next use caching approach
                 // Step 1. Getting current matchmaker state
                 .flatMap(matchmakerId -> getMatchmakerState(matchmakerId)
-                        .flatMap(matchmakerState -> {
-                            final var changeOfState = new MatchmakerChangeOfState();
+                        .flatMap(currentState -> {
+                            final var changeOfState = new MatchmakerChangeOfStateModel();
                             // Step 2. Handling matchmaker commands
-                            return handleMatchmakerCommands(matchmakerState, changeOfState)
+                            return handleMatchmakerCommands(currentState, changeOfState)
                                     // Step 3. Handling ended matched
                                     .invoke(voidItem -> handleEndedMatchesOperation
-                                            .handleEndedMatches(matchmakerState, changeOfState))
+                                            .handleEndedMatches(currentState, changeOfState))
                                     // Step 4. Handling matchmaker requests
                                     .flatMap(voidItem -> handleMatchmakerRequestsOperation.handleMatchmakerRequests(
-                                            matchmakerId,
-                                            matchmakerState,
+                                            matchmaker,
+                                            currentState,
                                             changeOfState))
                                     .replaceWith(changeOfState);
                         })
@@ -104,7 +104,7 @@ public class MatchmakerJobTaskImpl {
     }
 
     Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
-                                       final MatchmakerChangeOfState changeOfState) {
+                                       final MatchmakerChangeOfStateModel changeOfState) {
         final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
         return matchmakerModule.getMatchmakerService().updateMatchmakerState(request)
                 .map(UpdateMatchmakerStateResponse::getUpdated);

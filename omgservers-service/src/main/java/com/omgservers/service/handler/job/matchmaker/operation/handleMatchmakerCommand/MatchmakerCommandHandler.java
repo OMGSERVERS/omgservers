@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand;
 
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerState.MatchmakerStateModel;

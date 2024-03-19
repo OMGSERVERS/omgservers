@@ -8,7 +8,8 @@ import com.omgservers.model.version.VersionModeModel;
 import java.util.List;
 
 public interface DoGreedyMatchmakingOperation {
-    DoGreedyMatchmakingResult doGreedyMatchmaking(VersionModeModel modeConfig,
+    DoGreedyMatchmakingResult doGreedyMatchmaking(Long matchmakerId,
+                                                  VersionModeModel config,
                                                   List<MatchmakerRequestModel> requests,
                                                   List<MatchmakerMatchModel> matches,
                                                   List<MatchmakerMatchClientModel> clients);

@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class MatchmakerChangeOfState {
+public class MatchmakerChangeOfStateModel {
 
     @NotNull
     Set<MatchmakerCommandModel> commandsToDelete;
