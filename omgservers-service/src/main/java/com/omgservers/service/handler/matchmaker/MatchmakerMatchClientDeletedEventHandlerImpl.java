@@ -18,6 +18,8 @@ import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -85,7 +87,9 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
                                             return getLobby(lobbyId)
                                                     .flatMap(lobby -> {
                                                         final var runtimeId = lobby.getRuntimeId();
-                                                        return syncRuntimeClient(runtimeId, clientId);
+
+                                                        final var idempotencyKey = event.getIdempotencyKey();
+                                                        return syncRuntimeClient(runtimeId, clientId, idempotencyKey);
                                                     });
                                         });
                             });
@@ -131,10 +135,23 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
                 .map(GetLobbyResponse::getLobby);
     }
 
-    Uni<Boolean> syncRuntimeClient(final Long runtimeId, final Long clientId) {
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId, clientId);
+    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
+                                   final Long clientId,
+                                   final String idempotencyKey) {
+        final var runtimeClient = runtimeClientModelFactory.create(runtimeId, clientId, idempotencyKey);
         final var request = new SyncRuntimeClientRequest(runtimeClient);
         return runtimeModule.getRuntimeService().syncRuntimeClient(request)
-                .map(SyncRuntimeClientResponse::getCreated);
+                .map(SyncRuntimeClientResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtimeClient, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }

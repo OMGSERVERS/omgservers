@@ -12,6 +12,9 @@ import com.omgservers.model.event.body.MatchmakerMatchClientCreatedEventBodyMode
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -57,7 +60,8 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                             .flatMap(match -> {
                                 final var runtimeId = match.getRuntimeId();
 
-                                return syncRuntimeClient(runtimeId, clientId, matchClient);
+                                final var idempotencyKey = event.getIdempotencyKey();
+                                return syncRuntimeClient(runtimeId, clientId, matchClient, idempotencyKey);
                             });
                 })
                 .replaceWithVoid();
@@ -77,14 +81,27 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
 
     Uni<Boolean> syncRuntimeClient(final Long runtimeId,
                                    final Long clientId,
-                                   final MatchmakerMatchClientModel matchClient) {
+                                   final MatchmakerMatchClientModel matchClient,
+                                   final String idempotencyKey) {
         final var runtimeClientConfig = RuntimeClientConfigModel.create();
         runtimeClientConfig.setMatchClient(matchClient);
         final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
                 clientId,
-                runtimeClientConfig);
+                runtimeClientConfig,
+                idempotencyKey);
         final var request = new SyncRuntimeClientRequest(runtimeClient);
         return runtimeModule.getRuntimeService().syncRuntimeClient(request)
-                .map(SyncRuntimeClientResponse::getCreated);
+                .map(SyncRuntimeClientResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", runtimeClient, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 }
