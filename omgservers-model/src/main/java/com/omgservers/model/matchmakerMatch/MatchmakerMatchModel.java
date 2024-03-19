@@ -35,9 +35,6 @@ public class MatchmakerMatchModel {
     Long runtimeId;
 
     @NotNull
-    Boolean stopped;
-
-    @NotNull
     @EqualsAndHashCode.Exclude
     MatchmakerMatchConfigModel config;
 

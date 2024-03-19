@@ -34,7 +34,7 @@ public class MatchmakingInstantRequestsIT extends Assertions {
     AdminApiTester adminApiTester;
 
     @Test
-    void matchmakingInstantRequests() throws Exception {
+    void matchmakingInstantRequestsIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         function handle_command(self, command)
                         end

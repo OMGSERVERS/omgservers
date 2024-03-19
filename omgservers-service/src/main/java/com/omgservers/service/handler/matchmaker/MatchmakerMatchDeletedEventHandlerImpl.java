@@ -2,14 +2,10 @@ package com.omgservers.service.handler.matchmaker;
 
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.DeleteMatchCommandRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchCommandResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchCommandsResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
 import com.omgservers.model.event.EventModel;
@@ -17,7 +13,6 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -66,7 +61,6 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
                             runtimeId);
 
                     return deleteRuntime(runtimeId)
-                            .flatMap(deleted -> deleteMatchCommands(matchmakerId, matchId))
                             .flatMap(voidItem -> deleteMatchClients(matchmakerId, matchId));
                 })
                 .replaceWithVoid();
@@ -82,42 +76,6 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteRuntimeRequest(runtimeId);
         return runtimeModule.getRuntimeService().deleteRuntime(request)
                 .map(DeleteRuntimeResponse::getDeleted);
-    }
-
-    Uni<Void> deleteMatchCommands(final Long matchmakerId, final Long matchId) {
-        return viewMatchCommands(matchmakerId, matchId)
-                .flatMap(matchCommands -> Multi.createFrom().iterable(matchCommands)
-                        .onItem().transformToUniAndConcatenate(matchCommand ->
-                                deleteMatchCommand(matchmakerId, matchCommand.getId())
-                                        .onFailure()
-                                        .recoverWithItem(t -> {
-                                            log.warn("Delete match command failed, " +
-                                                            "match={}/{}, " +
-                                                            "matchCommandId={} " +
-                                                            "{}:{}",
-                                                    matchmakerId,
-                                                    matchId,
-                                                    matchCommand.getId(),
-                                                    t.getClass().getSimpleName(),
-                                                    t.getMessage());
-                                            return null;
-                                        })
-                        )
-                        .collect().asList()
-                        .replaceWithVoid()
-                );
-    }
-
-    Uni<List<MatchmakerMatchCommandModel>> viewMatchCommands(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchmakerMatchCommandsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchmakerMatchCommands(request)
-                .map(ViewMatchmakerMatchCommandsResponse::getMatchmakerMatchCommands);
-    }
-
-    Uni<Boolean> deleteMatchCommand(final Long matchmakerId, final Long id) {
-        final var request = new DeleteMatchCommandRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchCommand(request)
-                .map(DeleteMatchCommandResponse::getDeleted);
     }
 
     Uni<Void> deleteMatchClients(final Long matchmakerId, final Long matchId) {

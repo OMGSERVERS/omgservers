@@ -42,7 +42,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                                 "skip operation, runtimeId={}", runtimeId);
                         return Uni.createFrom().item(Boolean.TRUE);
                     } else {
-                        log.info("Inactive runtime was detected, runtimeId={}", runtimeId);
+                        log.warn("Inactive runtime was detected, runtimeId={}", runtimeId);
 
                         return deleteRuntime(runtimeId);
                     }

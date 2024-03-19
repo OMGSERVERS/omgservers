@@ -27,9 +27,9 @@ class HandleEndedMatchesOperationImpl implements HandleEndedMatchesOperation {
                 .toList();
 
         // Step 4. Removing ended matches from current matchmaking
-        matchmakerState.getMatches().removeAll(endedMatches);
-
-        // Step 5. Adding for removing
-        changeOfState.getEndedMatches().addAll(endedMatches);
+//        matchmakerStateModel.getMatches().removeAll(endedMatches);
+//
+//        // Step 5. Adding for removing
+//        changeOfState.getMatchesToDelete().addAll(endedMatches);
     }
 }

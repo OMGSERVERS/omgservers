@@ -2,16 +2,14 @@ package com.omgservers.service.handler.matchmaker;
 
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
+import com.omgservers.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
-import com.omgservers.service.factory.MatchCommandModelFactory;
-import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Uni;
@@ -27,9 +25,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
 
     final MatchmakerModule matchmakerModule;
 
-    final MatchCommandModelFactory matchCommandModelFactory;
-    final RuntimeClientModelFactory runtimeClientModelFactory;
-    final MessageModelFactory messageModelFactory;
+    final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -51,7 +47,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                     log.info("Matchmaker match runtime ref was created, matchmakerId={}, matchId={}, runtimeId={} ",
                             matchmakerId, matchId, runtimeId);
 
-                    return updateMatchmakerMatchStatus(matchmakerId, matchId)
+                    return syncPrepareMatchMatchmakerCommand(matchmakerId, matchId)
                             .replaceWithVoid();
                 });
     }
@@ -64,12 +60,11 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 
-    Uni<Boolean> updateMatchmakerMatchStatus(final Long matchmakerId, final Long matchId) {
-        final var request = new UpdateMatchmakerMatchStatusRequest(matchmakerId,
-                matchId,
-                MatchmakerMatchStatusEnum.CREATED,
-                MatchmakerMatchStatusEnum.PREPARED);
-        return matchmakerModule.getMatchmakerService().updateMatchmakerMatchStatus(request)
-                .map(UpdateMatchmakerMatchStatusResponse::getUpdated);
+    Uni<Boolean> syncPrepareMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
+        final var commandBody = new PrepareMatchMatchmakerCommandBodyModel(matchId);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
+        final var request = new SyncMatchmakerCommandRequest(commandModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+                .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

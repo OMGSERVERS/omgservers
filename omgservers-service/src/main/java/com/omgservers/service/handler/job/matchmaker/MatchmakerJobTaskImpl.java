@@ -73,16 +73,16 @@ public class MatchmakerJobTaskImpl {
                         })
                         // Step 5. Updating matchmaker state
                         .flatMap(changeOfState -> updateMatchmakerState(matchmakerId, changeOfState)
-                                .invoke(udpated -> {
+                                .invoke(updated -> {
                                     if (changeOfState.isNotEmpty()) {
                                         log.info("Matchmaker was executed, id={}, " +
-                                                        "completedMatchmakerCommands={}, " +
-                                                        "completedRequests={}, " +
-                                                        "createdMatches={}, " +
-                                                        "updatedMatches={}, " +
-                                                        "endedMatches={}, " +
-                                                        "createdMatchClients={}, " +
-                                                        "orphanedMatchClients={}",
+                                                        "commandsToDelete={}, " +
+                                                        "requestsToDelete={}, " +
+                                                        "matchesToSync={}, " +
+                                                        "matchesToUpdateStatus={}, " +
+                                                        "matchesToDelete={}, " +
+                                                        "clientsToSync={}, " +
+                                                        "clientsToDelete={}",
                                                 matchmakerId,
                                                 changeOfState.getCommandsToDelete().size(),
                                                 changeOfState.getRequestsToDelete().size(),

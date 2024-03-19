@@ -44,6 +44,7 @@ public class MatchmakerMatchClientModel {
     String groupName;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     MatchmakerMatchClientConfigModel config;
 
     @NotNull

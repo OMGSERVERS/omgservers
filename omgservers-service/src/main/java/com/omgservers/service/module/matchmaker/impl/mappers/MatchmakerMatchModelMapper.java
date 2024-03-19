@@ -28,7 +28,8 @@ public class MatchmakerMatchModelMapper {
         matchmakerMatch.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmakerMatch.setModified(row.getOffsetDateTime("modified").toInstant());
         matchmakerMatch.setRuntimeId(row.getLong("runtime_id"));
-        matchmakerMatch.setStopped(row.getBoolean("stopped"));
+        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.valueOf(row.getString("status")));
+        matchmakerMatch.setDeleted(row.getBoolean("deleted"));
         try {
             matchmakerMatch.setConfig(objectMapper.readValue(row.getString("config"),
                     MatchmakerMatchConfigModel.class));
@@ -36,8 +37,6 @@ public class MatchmakerMatchModelMapper {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "matchmakerMatch config can't be parsed, matchmakerMatch=" + matchmakerMatch, e);
         }
-        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.valueOf(row.getString("status")));
-        matchmakerMatch.setDeleted(row.getBoolean("deleted"));
         return matchmakerMatch;
     }
 }

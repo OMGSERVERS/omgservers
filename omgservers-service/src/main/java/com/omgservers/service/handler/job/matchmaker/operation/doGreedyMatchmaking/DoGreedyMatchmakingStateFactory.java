@@ -107,7 +107,7 @@ public class DoGreedyMatchmakingStateFactory {
             // Created matches
             final var resultMatches = createdMatches.stream()
                     .filter(MatchmakingMatch::getReadiness)
-                    .map(MatchmakingMatch::getMatchmakerMatch)
+                    .map(MatchmakingMatch::getModel)
                     .toList();
 
             // Created clients
@@ -158,7 +158,7 @@ public class DoGreedyMatchmakingStateFactory {
             return size;
         }
 
-        public MatchmakerMatchModel getMatchmakerMatch() {
+        public MatchmakerMatchModel getModel() {
             return matchmakerMatch;
         }
 

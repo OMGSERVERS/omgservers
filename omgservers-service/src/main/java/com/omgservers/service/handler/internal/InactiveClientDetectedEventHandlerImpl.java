@@ -54,7 +54,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                                 "disconnection message won't be created, clientId={}", clientId);
                         return Uni.createFrom().item(Boolean.TRUE);
                     } else {
-                        log.info("Inactive client was detected, clientId={}", clientId);
+                        log.warn("Inactive client was detected, clientId={}", clientId);
 
                         return syncDisconnectionMessage(clientId, event.getIdempotencyKey())
                                 .flatMap(created -> deleteClient(clientId));

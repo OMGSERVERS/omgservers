@@ -31,21 +31,19 @@ class UpdateMatchmakerMatchStatusOperationImpl implements UpdateMatchmakerMatchS
                                                     final int shard,
                                                     final Long matchmakerId,
                                                     final Long matchId,
-                                                    final MatchmakerMatchStatusEnum fromStatus,
-                                                    final MatchmakerMatchStatusEnum toStatus) {
+                                                    final MatchmakerMatchStatusEnum status) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_matchmaker_match
-                        set modified = $4, status = $5
-                        where matchmaker_id = $1 and id = $2 and status = $3
+                        set modified = $3, status = $4
+                        where matchmaker_id = $1 and id = $2
                         """,
                 List.of(
                         matchmakerId,
                         matchId,
-                        fromStatus,
                         Instant.now().atOffset(ZoneOffset.UTC),
-                        toStatus
+                        status
                 ),
                 () -> null,
                 () -> null

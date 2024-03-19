@@ -31,8 +31,7 @@ class SelectActiveMatchmakerMatchesByMatchmakerIdOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, status,
-                            deleted
+                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, config, status, deleted
                         from $schema.tab_matchmaker_match
                         where matchmaker_id = $1 and deleted = false
                         order by id asc

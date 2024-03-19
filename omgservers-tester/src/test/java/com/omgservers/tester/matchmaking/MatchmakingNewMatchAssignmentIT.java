@@ -35,7 +35,7 @@ public class MatchmakingNewMatchAssignmentIT extends Assertions {
     AdminApiTester adminApiTester;
 
     @Test
-    void matchmakingNewMatchAssignment() throws Exception {
+    void matchmakingNewMatchAssignmentIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         function handle_command(self, command)
                         end

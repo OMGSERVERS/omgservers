@@ -284,7 +284,6 @@ create table if not exists tab_matchmaker_match (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
-    stopped boolean not null,
     config json not null,
     status text not null,
     deleted boolean not null
@@ -298,18 +297,6 @@ create table if not exists tab_matchmaker_match_runtime_ref (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
-    deleted boolean not null
-);
-
--- TODO: To be removed
-create table if not exists tab_matchmaker_match_command (
-    id bigint primary key,
-    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
-    match_id bigint not null references tab_matchmaker_match(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    qualifier text not null,
-    body json not null,
     deleted boolean not null
 );
 
@@ -332,8 +319,6 @@ create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmake
 create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);
 create index if not exists idx_matchmaker_match_runtime_ref_matchmaker_id on tab_matchmaker_match_runtime_ref(matchmaker_id);
 create index if not exists idx_matchmaker_match_runtime_ref_match_id on tab_matchmaker_match_runtime_ref(match_id);
-create index if not exists idx_matchmaker_match_command_matchmaker_id on tab_matchmaker_match_command(matchmaker_id);
-create index if not exists idx_matchmaker_match_command_match_id on tab_matchmaker_match_command(match_id);
 create index if not exists idx_matchmaker_match_client_matchmaker_id on tab_matchmaker_match_client(matchmaker_id);
 create index if not exists idx_matchmaker_match_client_match_id on tab_matchmaker_match_client(match_id);
 

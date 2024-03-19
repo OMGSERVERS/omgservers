@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.model.matchmakerCommand.body.StopMatchmakingCommandBodyModel;
+import com.omgservers.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -40,7 +40,7 @@ class UpsertMatchmakerCommandOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody = new StopMatchmakingCommandBodyModel(matchId());
+        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
 
@@ -54,7 +54,7 @@ class UpsertMatchmakerCommandOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody = new StopMatchmakingCommandBodyModel(matchId());
+        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
         upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand);
@@ -66,7 +66,7 @@ class UpsertMatchmakerCommandOperationTest extends Assertions {
     @Test
     void givenUnknownIds_whenUpsertMatchmakerCommand_thenException() {
         final var shard = 0;
-        final var matchmakerCommandBody = new StopMatchmakingCommandBodyModel(matchId());
+        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmakerId(),
                 matchmakerCommandBody);
         assertThrows(ServerSideBadRequestException.class, () ->
@@ -79,12 +79,12 @@ class UpsertMatchmakerCommandOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody1 = new StopMatchmakingCommandBodyModel(matchId());
+        final var matchmakerCommandBody1 = new ExcludeMatchMatchmakerCommandBodyModel(matchId());
         final var matchmakerCommand1 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody1);
         upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand1);
 
-        final var matchmakerCommandBody2 = new StopMatchmakingCommandBodyModel(matchId());
+        final var matchmakerCommandBody2 = new ExcludeMatchMatchmakerCommandBodyModel(matchId());
         final var matchmakerCommand2 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody2,
                 matchmakerCommand1.getIdempotencyKey());

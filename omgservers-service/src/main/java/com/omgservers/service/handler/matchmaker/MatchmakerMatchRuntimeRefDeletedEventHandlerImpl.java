@@ -6,7 +6,6 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
-import com.omgservers.service.factory.MatchCommandModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -24,7 +23,6 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
 
     final MatchmakerModule matchmakerModule;
 
-    final MatchCommandModelFactory matchCommandModelFactory;
     final RuntimeClientModelFactory runtimeClientModelFactory;
     final MessageModelFactory messageModelFactory;
 

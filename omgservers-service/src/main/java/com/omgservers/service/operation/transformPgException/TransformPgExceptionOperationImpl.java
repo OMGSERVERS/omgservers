@@ -13,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation {
 
     @Override
-    public RuntimeException transformPgException(PgException pgException) {
+    public RuntimeException transformPgException(final PgException pgException) {
         return transformPgException("", pgException);
     }
 
     @Override
-    public RuntimeException transformPgException(String sql, PgException pgException) {
+    public RuntimeException transformPgException(final String sql, final PgException pgException) {
         final var code = pgException.getSqlState();
         return switch (code) {
             // foreign_key_violation

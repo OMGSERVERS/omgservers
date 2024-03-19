@@ -1,9 +1,9 @@
 package com.omgservers.model.matchmakerChangeOfState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.request.MatchmakerRequestModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,16 +20,16 @@ public class MatchmakerChangeOfStateModel {
     Set<MatchmakerCommandModel> commandsToDelete;
 
     @NotNull
-    Set<MatchmakerRequestModel> completedRequests;
+    Set<MatchmakerRequestModel> requestsToDelete;
 
     @NotNull
-    Set<MatchmakerMatchModel> createdMatches;
+    Set<MatchmakerMatchModel> matchesToSync;
 
     @NotNull
-    Set<MatchmakerMatchModel> stoppedMatches;
+    Set<MatchmakerMatchModel> matchesToUpdateStatus;
 
     @NotNull
-    Set<MatchmakerMatchModel> endedMatches;
+    Set<MatchmakerMatchModel> matchesToDelete;
 
     @NotNull
     Set<MatchmakerMatchClientModel> clientsToSync;
@@ -37,24 +37,24 @@ public class MatchmakerChangeOfStateModel {
     @NotNull
     Set<MatchmakerMatchClientModel> clientsToDelete;
 
-    public MatchmakerChangeOfState() {
-        completedMatchmakerCommands = new HashSet<>();
-        completedRequests = new HashSet<>();
-        createdMatches = new HashSet<>();
-        stoppedMatches = new HashSet<>();
-        endedMatches = new HashSet<>();
-        createdMatchClients = new HashSet<>();
-        orphanedMatchClients = new HashSet<>();
+    public MatchmakerChangeOfStateModel() {
+        commandsToDelete = new HashSet<>();
+        requestsToDelete = new HashSet<>();
+        matchesToSync = new HashSet<>();
+        matchesToUpdateStatus = new HashSet<>();
+        matchesToDelete = new HashSet<>();
+        clientsToSync = new HashSet<>();
+        clientsToDelete = new HashSet<>();
     }
 
     @JsonIgnore
     public boolean isNotEmpty() {
-        return completedMatchmakerCommands.size() > 0 ||
-                completedRequests.size() > 0 ||
-                createdMatches.size() > 0 ||
-                stoppedMatches.size() > 0 ||
-                endedMatches.size() > 0 ||
-                createdMatchClients.size() > 0 ||
-                orphanedMatchClients.size() > 0;
+        return commandsToDelete.size() > 0 ||
+                requestsToDelete.size() > 0 ||
+                matchesToSync.size() > 0 ||
+                matchesToUpdateStatus.size() > 0 ||
+                matchesToDelete.size() > 0 ||
+                clientsToSync.size() > 0 ||
+                clientsToDelete.size() > 0;
     }
 }

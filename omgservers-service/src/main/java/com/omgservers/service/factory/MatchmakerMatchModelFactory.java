@@ -48,7 +48,6 @@ public class MatchmakerMatchModelFactory {
         matchmakerMatch.setCreated(now);
         matchmakerMatch.setModified(now);
         matchmakerMatch.setRuntimeId(runtimeId);
-        matchmakerMatch.setStopped(Boolean.FALSE);
         matchmakerMatch.setConfig(matchmakerMatchConfig);
         matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.CREATED);
         matchmakerMatch.setDeleted(Boolean.FALSE);

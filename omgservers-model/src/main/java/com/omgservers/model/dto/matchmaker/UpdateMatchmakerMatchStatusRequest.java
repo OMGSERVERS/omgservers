@@ -19,10 +19,7 @@ public class UpdateMatchmakerMatchStatusRequest implements ShardedRequest {
     Long matchId;
 
     @NotNull
-    MatchmakerMatchStatusEnum fromStatus;
-
-    @NotNull
-    MatchmakerMatchStatusEnum toStatus;
+    MatchmakerMatchStatusEnum status;
 
     @Override
     public String getRequestShardKey() {

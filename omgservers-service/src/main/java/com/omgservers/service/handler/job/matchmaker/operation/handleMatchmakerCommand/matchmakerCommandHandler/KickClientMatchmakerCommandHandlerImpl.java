@@ -4,9 +4,8 @@ import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerState.MatchmakerState;
-import com.omgservers.service.factory.MatchCommandModelFactory;
-import com.omgservers.service.handler.job.task.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -17,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler {
-
-    final MatchCommandModelFactory matchCommandModelFactory;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {

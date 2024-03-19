@@ -37,9 +37,8 @@ class UpsertMatchmakerMatchOperationImpl implements UpsertMatchmakerMatchOperati
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match(
-                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, stopped, config, status,
-                            deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                            id, idempotency_key, matchmaker_id, created, modified, runtime_id, config, status, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -50,7 +49,6 @@ class UpsertMatchmakerMatchOperationImpl implements UpsertMatchmakerMatchOperati
                         matchmakerMatch.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerMatch.getModified().atOffset(ZoneOffset.UTC),
                         matchmakerMatch.getRuntimeId(),
-                        matchmakerMatch.getStopped(),
                         getConfigString(matchmakerMatch),
                         matchmakerMatch.getStatus(),
                         matchmakerMatch.getDeleted()

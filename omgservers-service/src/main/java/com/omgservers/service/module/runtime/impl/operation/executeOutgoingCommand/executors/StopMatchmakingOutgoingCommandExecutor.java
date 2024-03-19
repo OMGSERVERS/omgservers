@@ -4,7 +4,7 @@ import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.matchmakerCommand.body.StopMatchmakingCommandBodyModel;
+import com.omgservers.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
@@ -59,7 +59,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
                     log.info("Do stop matchmaking, runtimeId={}, match={}/{}, reason={}",
                             runtimeId, matchmakerId, matchId, reason);
 
-                    return syncStopMatchMatchmakerCommand(matchmakerId, matchId);
+                    return syncExcludeMatchMatchmakerCommand(matchmakerId, matchId);
                 });
     }
 
@@ -69,8 +69,8 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> syncStopMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
-        final var commandBody = new StopMatchmakingCommandBodyModel(matchId);
+    Uni<Boolean> syncExcludeMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
+        final var commandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)

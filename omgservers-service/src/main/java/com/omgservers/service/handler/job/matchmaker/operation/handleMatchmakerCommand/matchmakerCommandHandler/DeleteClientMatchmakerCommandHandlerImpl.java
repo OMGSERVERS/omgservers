@@ -4,9 +4,8 @@ import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerState.MatchmakerState;
-import com.omgservers.service.factory.MatchCommandModelFactory;
-import com.omgservers.service.handler.job.task.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -17,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler {
-
-    final MatchCommandModelFactory matchCommandModelFactory;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {
@@ -42,7 +39,7 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                             .filter(request -> request.getClientId().equals(clientId))
                             .toList();
 
-                    changeOfState.getCompletedRequests().addAll((orphanedRequests));
+                    changeOfState.getRequestsToDelete().addAll((orphanedRequests));
 
                     // Step 2. Removing client's requests from current matchmaking
                     currentState.getRequests().removeAll(orphanedRequests);

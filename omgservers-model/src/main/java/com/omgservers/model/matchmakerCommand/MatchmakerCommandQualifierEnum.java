@@ -1,13 +1,15 @@
 package com.omgservers.model.matchmakerCommand;
 
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
+import com.omgservers.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerCommand.body.StopMatchmakingCommandBodyModel;
+import com.omgservers.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
 
 public enum MatchmakerCommandQualifierEnum {
     DELETE_CLIENT(DeleteClientMatchmakerCommandBodyModel.class),
     KICK_CLIENT(KickClientMatchmakerCommandBodyModel.class),
-    STOP_MATCHMAKING(StopMatchmakingCommandBodyModel.class);
+    PREPARE_MATCH(PrepareMatchMatchmakerCommandBodyModel.class),
+    EXCLUDE_MATCH(ExcludeMatchMatchmakerCommandBodyModel.class);
 
     final Class<? extends MatchmakerCommandBodyModel> bodyClass;
 

@@ -27,8 +27,7 @@ class UpdateMatchmakerMatchStatusMethodImpl implements UpdateMatchmakerMatchStat
 
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();
-        final var fromStatus = request.getFromStatus();
-        final var toStatus = request.getToStatus();
+        final var status = request.getStatus();
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
@@ -38,8 +37,8 @@ class UpdateMatchmakerMatchStatusMethodImpl implements UpdateMatchmakerMatchStat
                                     shard,
                                     matchmakerId,
                                     matchId,
-                                    fromStatus,
-                                    toStatus));
+                                    status
+                            ));
                 })
                 .map(ChangeContext::getResult)
                 .map(UpdateMatchmakerMatchStatusResponse::new);

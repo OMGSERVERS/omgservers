@@ -2,19 +2,20 @@ package com.omgservers.service.handler.matchmaker;
 
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchCommandRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchCommandResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.MatchmakerMatchClientCreatedEventBodyModel;
-import com.omgservers.model.matchCommand.MatchmakerMatchCommandModel;
-import com.omgservers.model.matchCommand.body.AddClientMatchCommandBodyModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.service.factory.MatchCommandModelFactory;
-import com.omgservers.service.factory.MessageModelFactory;
+import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,10 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
+    final RuntimeModule runtimeModule;
 
-    final MatchCommandModelFactory matchCommandModelFactory;
     final RuntimeClientModelFactory runtimeClientModelFactory;
-    final MessageModelFactory messageModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -53,10 +53,12 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                     log.info("Matchmaker match client was created, id={}, match={}/{}, clientId={}",
                             matchClient.getId(), matchmakerId, matchId, clientId);
 
-                    return syncAddClientMatchCommand(matchmakerId,
-                            matchId,
-                            clientId,
-                            matchClient);
+                    return getMatch(matchmakerId, matchId)
+                            .flatMap(match -> {
+                                final var runtimeId = match.getRuntimeId();
+
+                                return syncRuntimeClient(runtimeId, clientId, matchClient);
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -67,18 +69,22 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                 .map(GetMatchmakerMatchClientResponse::getMatchClient);
     }
 
-    Uni<Boolean> syncAddClientMatchCommand(final Long matchmakerId,
-                                           final Long matchId,
-                                           final Long clientId,
-                                           final MatchmakerMatchClientModel matchClient) {
-        final var matchCommandBody = new AddClientMatchCommandBodyModel(clientId, matchClient);
-        final var matchCommand = matchCommandModelFactory.create(matchmakerId, matchId, matchCommandBody);
-        return syncMatchCommand(matchCommand);
+    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long id) {
+        final var request = new GetMatchmakerMatchRequest(matchmakerId, id);
+        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
-    Uni<Boolean> syncMatchCommand(final MatchmakerMatchCommandModel matchCommand) {
-        final var request = new SyncMatchCommandRequest(matchCommand);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerMatchCommand(request)
-                .map(SyncMatchCommandResponse::getCreated);
+    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
+                                   final Long clientId,
+                                   final MatchmakerMatchClientModel matchClient) {
+        final var runtimeClientConfig = RuntimeClientConfigModel.create();
+        runtimeClientConfig.setMatchClient(matchClient);
+        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
+                clientId,
+                runtimeClientConfig);
+        final var request = new SyncRuntimeClientRequest(runtimeClient);
+        return runtimeModule.getRuntimeService().syncRuntimeClient(request)
+                .map(SyncRuntimeClientResponse::getCreated);
     }
 }

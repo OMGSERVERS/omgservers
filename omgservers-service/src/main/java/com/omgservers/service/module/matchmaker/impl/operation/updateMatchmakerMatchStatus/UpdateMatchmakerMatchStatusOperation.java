@@ -9,8 +9,7 @@ public interface UpdateMatchmakerMatchStatusOperation {
     Uni<Boolean> updateMatchmakerMatchStatus(ChangeContext<?> changeContext,
                                              SqlConnection sqlConnection,
                                              int shard,
-                                             final Long matchmakerId,
-                                             final Long matchId,
-                                             final MatchmakerMatchStatusEnum fromStatus,
-                                             final MatchmakerMatchStatusEnum toStatus);
+                                             Long matchmakerId,
+                                             Long matchId,
+                                             MatchmakerMatchStatusEnum status);
 }

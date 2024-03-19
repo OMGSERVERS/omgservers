@@ -37,7 +37,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
         return getUser(userId)
                 .flatMap(user -> {
-                    log.info("User was created, user={}", userId);
+                    log.info("User was created, id={}, role={}", userId, user.getRole());
 
                     return Uni.createFrom().voidItem();
                 })
