@@ -1,13 +1,12 @@
-package com.omgservers.service.handler.job;
+package com.omgservers.service.handler.job.runtime;
 
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.job.task.stage.StageJobTaskImpl;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,29 +19,28 @@ import java.time.Instant;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class StageJobTaskExecutionRequestedEventHandlerImpl implements EventHandler {
+public class RuntimeJobTaskExecutionRequestedEventHandlerImpl implements EventHandler {
 
-    static private final int JOB_INTERVAL_IN_SECONDS = 60;
+    static private final int JOB_INTERVAL_IN_SECONDS = 1;
 
-    final StageJobTaskImpl stageJobTaskImpl;
+    final RuntimeJobTaskImpl runtimeJobTask;
     final SystemModule systemModule;
 
     final EventModelFactory eventModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.STAGE_JOB_TASK_EXECUTION_REQUESTED;
+        return EventQualifierEnum.RUNTIME_JOB_TASK_EXECUTION_REQUESTED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (StageJobTaskExecutionRequestedEventBodyModel) event.getBody();
-        final var tenantId = body.getTenantId();
-        final var stageId = body.getStageId();
+        final var body = (RuntimeJobTaskExecutionRequestedEventBodyModel) event.getBody();
+        final var runtimeId = body.getRuntimeId();
 
-        return stageJobTaskImpl.executeTask(tenantId, stageId)
+        return runtimeJobTask.executeTask(runtimeId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
@@ -50,15 +48,15 @@ public class StageJobTaskExecutionRequestedEventHandlerImpl implements EventHand
                 })
                 .flatMap(oneMoreTime -> {
                     if (oneMoreTime) {
-                        return requestFurtherExecution(tenantId, stageId);
+                        return requestFurtherExecution(runtimeId);
                     } else {
                         return Uni.createFrom().voidItem();
                     }
                 });
     }
 
-    Uni<Void> requestFurtherExecution(final Long tenantId, final Long stageId) {
-        final var eventBody = new StageJobTaskExecutionRequestedEventBodyModel(tenantId, stageId);
+    Uni<Void> requestFurtherExecution(final Long runtimeId) {
+        final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
         final var eventModel = eventModelFactory.create(eventBody);
         eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(JOB_INTERVAL_IN_SECONDS)));
 

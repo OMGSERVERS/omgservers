@@ -1,13 +1,12 @@
-package com.omgservers.service.handler.job;
+package com.omgservers.service.handler.job.stage;
 
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.job.task.matchmaker.MatchmakerJobTaskImpl;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,28 +19,29 @@ import java.time.Instant;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchmakerJobTaskExecutionRequestedEventHandlerImpl implements EventHandler {
+public class StageJobTaskExecutionRequestedEventHandlerImpl implements EventHandler {
 
-    static private final int JOB_INTERVAL_IN_SECONDS = 1;
+    static private final int JOB_INTERVAL_IN_SECONDS = 60;
 
-    final MatchmakerJobTaskImpl matchmakerJobTask;
+    final StageJobTaskImpl stageJobTaskImpl;
     final SystemModule systemModule;
 
     final EventModelFactory eventModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED;
+        return EventQualifierEnum.STAGE_JOB_TASK_EXECUTION_REQUESTED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (MatchmakerJobTaskExecutionRequestedEventBodyModel) event.getBody();
-        final var matchmakerId = body.getMatchmakerId();
+        final var body = (StageJobTaskExecutionRequestedEventBodyModel) event.getBody();
+        final var tenantId = body.getTenantId();
+        final var stageId = body.getStageId();
 
-        return matchmakerJobTask.executeTask(matchmakerId)
+        return stageJobTaskImpl.executeTask(tenantId, stageId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
@@ -49,15 +49,15 @@ public class MatchmakerJobTaskExecutionRequestedEventHandlerImpl implements Even
                 })
                 .flatMap(oneMoreTime -> {
                     if (oneMoreTime) {
-                        return requestFurtherExecution(matchmakerId);
+                        return requestFurtherExecution(tenantId, stageId);
                     } else {
                         return Uni.createFrom().voidItem();
                     }
                 });
     }
 
-    Uni<Void> requestFurtherExecution(final Long matchmakerId) {
-        final var eventBody = new MatchmakerJobTaskExecutionRequestedEventBodyModel(matchmakerId);
+    Uni<Void> requestFurtherExecution(final Long tenantId, final Long stageId) {
+        final var eventBody = new StageJobTaskExecutionRequestedEventBodyModel(tenantId, stageId);
         final var eventModel = eventModelFactory.create(eventBody);
         eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(JOB_INTERVAL_IN_SECONDS)));
 

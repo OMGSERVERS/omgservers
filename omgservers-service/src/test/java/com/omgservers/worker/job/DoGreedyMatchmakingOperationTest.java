@@ -1,7 +1,7 @@
 package com.omgservers.worker.job;
 
 import com.omgservers.service.factory.MatchmakerRequestModelFactory;
-import com.omgservers.service.handler.job.task.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
+import com.omgservers.service.handler.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

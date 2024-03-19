@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.job.task.stage;
+package com.omgservers.service.handler.job.stage;
 
 import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
 import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;

@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.job.task.runtime;
+package com.omgservers.service.handler.job.runtime;
 
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;

@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.job.task.matchmaker;
+package com.omgservers.service.handler.job.matchmaker;
 
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
@@ -7,11 +7,11 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfState;
-import com.omgservers.model.matchmakerState.MatchmakerState;
-import com.omgservers.service.handler.job.task.matchmaker.operation.handleEndedMatches.HandleEndedMatchesOperation;
-import com.omgservers.service.handler.job.task.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
-import com.omgservers.service.handler.job.task.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
+import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.service.handler.job.matchmaker.operation.handleEndedMatches.HandleEndedMatchesOperation;
+import com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
+import com.omgservers.service.handler.job.matchmaker.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
