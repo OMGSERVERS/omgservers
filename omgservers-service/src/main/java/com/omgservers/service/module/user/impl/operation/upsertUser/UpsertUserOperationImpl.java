@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.impl.operation.upsertUser;
 
-import com.omgservers.model.event.body.UserCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.UserCreatedEventBodyModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

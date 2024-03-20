@@ -13,7 +13,7 @@ import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.WelcomeMessageBodyModel;

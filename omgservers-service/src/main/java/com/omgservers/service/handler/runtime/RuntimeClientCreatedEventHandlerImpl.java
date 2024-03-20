@@ -18,7 +18,7 @@ import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RuntimeClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.RuntimeClientCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.player.PlayerModel;

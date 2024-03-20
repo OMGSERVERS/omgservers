@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.upsertRuntimeClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.RuntimeClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.RuntimeClientCreatedEventBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;

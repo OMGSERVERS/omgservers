@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.impl.operation.upsertClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.event.body.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

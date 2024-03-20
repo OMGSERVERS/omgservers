@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.MatchmakerMatchCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;

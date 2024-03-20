@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.upsertVersionMatchmakerRef;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.VersionMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

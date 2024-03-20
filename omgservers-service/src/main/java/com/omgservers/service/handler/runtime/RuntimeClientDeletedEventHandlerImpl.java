@@ -13,7 +13,7 @@ import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RuntimeClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.RuntimeClientDeletedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;

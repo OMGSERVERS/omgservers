@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.deleteClient;
 
-import com.omgservers.model.event.body.ClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.selectClient.SelectClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

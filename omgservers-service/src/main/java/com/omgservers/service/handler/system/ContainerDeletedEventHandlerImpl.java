@@ -7,7 +7,7 @@ import com.omgservers.model.dto.system.StopContainerRequest;
 import com.omgservers.model.dto.system.StopContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.system.ContainerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;

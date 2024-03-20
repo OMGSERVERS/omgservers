@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.operation.upsertContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.container.ContainerModel;
-import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
+import com.omgservers.model.event.body.system.ContainerCreatedEventBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.LogModelFactory;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.deleteIndex;
 
-import com.omgservers.model.event.body.IndexDeletedEventBodyModel;
+import com.omgservers.model.event.body.system.IndexDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

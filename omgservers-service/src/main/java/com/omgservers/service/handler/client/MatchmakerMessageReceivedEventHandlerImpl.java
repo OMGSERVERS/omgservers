@@ -9,7 +9,7 @@ import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
 import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.player.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.player.PlayerAttributesModel;
 import com.omgservers.model.request.MatchmakerRequestConfigModel;

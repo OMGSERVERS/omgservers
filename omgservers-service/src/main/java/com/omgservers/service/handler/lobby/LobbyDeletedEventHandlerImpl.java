@@ -10,7 +10,7 @@ import com.omgservers.model.dto.tenant.FindVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.FindVersionLobbyRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.LobbyDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.LobbyDeletedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;

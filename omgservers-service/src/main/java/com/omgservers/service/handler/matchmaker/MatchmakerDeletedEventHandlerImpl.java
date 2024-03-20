@@ -20,7 +20,7 @@ import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;

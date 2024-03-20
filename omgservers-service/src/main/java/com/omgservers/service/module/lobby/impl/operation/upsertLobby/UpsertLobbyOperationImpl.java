@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.impl.operation.upsertLobby;
 
-import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.LobbyCreatedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

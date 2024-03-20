@@ -7,7 +7,7 @@ import com.omgservers.model.dto.system.RunContainerRequest;
 import com.omgservers.model.dto.system.RunContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ContainerCreatedEventBodyModel;
+import com.omgservers.model.event.body.system.ContainerCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;

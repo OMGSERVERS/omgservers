@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.GetVersionLobbyRequestRequest;
 import com.omgservers.model.dto.tenant.GetVersionLobbyRequestResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.VersionLobbyRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionLobbyRequestDeletedEventBodyModel;
 import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;

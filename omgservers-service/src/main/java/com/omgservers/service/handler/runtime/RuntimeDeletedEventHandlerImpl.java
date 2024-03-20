@@ -30,7 +30,7 @@ import com.omgservers.model.dto.system.FindContainerRequest;
 import com.omgservers.model.dto.system.FindContainerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.model.runtime.RuntimeModel;

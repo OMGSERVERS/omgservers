@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.deleteServiceAccount;
 
-import com.omgservers.model.event.body.ServiceAccountDeletedEventBodyModel;
+import com.omgservers.model.event.body.system.ServiceAccountDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.system.impl.operation.selectServiceAccountByUsername.SelectServiceAccountByUsernameOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

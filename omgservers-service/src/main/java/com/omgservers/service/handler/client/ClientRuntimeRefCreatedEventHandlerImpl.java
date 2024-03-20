@@ -11,7 +11,7 @@ import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ClientRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.RuntimeClientModelFactory;

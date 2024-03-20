@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.upsertServiceAccount;
 
-import com.omgservers.model.event.body.ServiceAccountCreatedEventBodyModel;
+import com.omgservers.model.event.body.system.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

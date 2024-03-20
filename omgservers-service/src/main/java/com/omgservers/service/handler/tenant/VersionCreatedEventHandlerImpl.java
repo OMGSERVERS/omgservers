@@ -8,7 +8,7 @@ import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.VersionCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionCreatedEventBodyModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

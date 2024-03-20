@@ -7,7 +7,7 @@ import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ClientMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.player.ClientMessageReceivedEventBodyModel;
 import com.omgservers.model.message.body.ClientMessageBodyModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;

@@ -3,7 +3,7 @@ package com.omgservers.service.handler.job.runtime;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.RuntimeJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.handler.EventHandler;

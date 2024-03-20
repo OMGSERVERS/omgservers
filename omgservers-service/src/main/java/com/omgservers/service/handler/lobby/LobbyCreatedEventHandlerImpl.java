@@ -8,7 +8,7 @@ import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.LobbyCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.LobbyCreatedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;

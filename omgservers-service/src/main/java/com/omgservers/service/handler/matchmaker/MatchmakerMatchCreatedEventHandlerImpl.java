@@ -8,7 +8,7 @@ import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerMatchCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.runtime.RuntimeConfigModel;

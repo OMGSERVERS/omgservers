@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker;
 
-import com.omgservers.model.event.body.MatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

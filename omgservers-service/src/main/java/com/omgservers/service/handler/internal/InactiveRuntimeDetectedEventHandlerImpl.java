@@ -6,7 +6,7 @@ import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.runtime.RuntimeModule;

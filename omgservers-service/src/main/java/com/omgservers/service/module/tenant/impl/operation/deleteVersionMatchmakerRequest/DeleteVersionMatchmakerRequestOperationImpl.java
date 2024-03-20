@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.deleteVersionMatchmakerRequest;
 
-import com.omgservers.model.event.body.VersionMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionMatchmakerRequestDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

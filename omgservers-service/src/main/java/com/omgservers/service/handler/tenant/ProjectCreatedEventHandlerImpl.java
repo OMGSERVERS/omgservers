@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.GetProjectRequest;
 import com.omgservers.model.dto.tenant.GetProjectResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.ProjectCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ProjectCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;

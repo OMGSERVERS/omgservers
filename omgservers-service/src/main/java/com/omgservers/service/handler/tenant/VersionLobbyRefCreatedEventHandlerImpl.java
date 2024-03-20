@@ -8,7 +8,7 @@ import com.omgservers.model.dto.tenant.GetVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.GetVersionLobbyRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.VersionLobbyRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionLobbyRefCreatedEventBodyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;

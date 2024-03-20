@@ -12,7 +12,7 @@ import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.StageDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.StageDeletedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.version.VersionModel;

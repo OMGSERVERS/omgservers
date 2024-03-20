@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.upsertVersionLobbyRequest;
 
-import com.omgservers.model.event.body.VersionLobbyRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionLobbyRequestCreatedEventBodyModel;
 import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

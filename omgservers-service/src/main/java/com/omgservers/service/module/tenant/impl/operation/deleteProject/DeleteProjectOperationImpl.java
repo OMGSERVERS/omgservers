@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.deleteProject;
 
-import com.omgservers.model.event.body.ProjectDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.ProjectDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

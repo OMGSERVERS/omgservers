@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.VersionMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.VersionMatchmakerRequestDeletedEventBodyModel;
 import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;

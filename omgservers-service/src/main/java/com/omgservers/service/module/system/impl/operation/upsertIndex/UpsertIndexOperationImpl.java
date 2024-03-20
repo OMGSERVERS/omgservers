@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.operation.upsertIndex;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.IndexCreatedEventBodyModel;
+import com.omgservers.model.event.body.system.IndexCreatedEventBodyModel;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;

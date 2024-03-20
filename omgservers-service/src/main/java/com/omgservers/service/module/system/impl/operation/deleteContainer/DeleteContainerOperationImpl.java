@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.deleteContainer;
 
-import com.omgservers.model.event.body.ContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.system.ContainerDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

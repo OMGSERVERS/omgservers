@@ -6,7 +6,7 @@ import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
