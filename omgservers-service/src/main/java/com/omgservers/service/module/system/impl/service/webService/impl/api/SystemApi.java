@@ -16,11 +16,16 @@ import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
+import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+@Tag(name = "System API")
 @Path("/omgservers/system-api/v1/request")
+@SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface SystemApi {
 
     @PUT

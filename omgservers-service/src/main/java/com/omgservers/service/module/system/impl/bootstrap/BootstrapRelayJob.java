@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.bootstrap;
 
-import com.omgservers.service.ServiceConfiguration;
+import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.module.system.impl.component.relayJobTask.RelayJobTask;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -25,7 +25,7 @@ public class BootstrapRelayJob {
     final RelayJobTask relayJobTask;
 
     @WithSpan
-    void startup(@Observes @Priority(ServiceConfiguration.START_UP_BOOTSTRAP_RELAY_JOB) StartupEvent event) {
+    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_RELAY_JOB_PRIORITY) StartupEvent event) {
         final var disableRelayJob = getConfigOperation.getServiceConfig().disableRelayJob();
         if (disableRelayJob) {
             log.warn("Relay job was disabled, skip operation");

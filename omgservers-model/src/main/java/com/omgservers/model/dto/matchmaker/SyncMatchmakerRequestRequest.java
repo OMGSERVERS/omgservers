@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class SyncMatchmakerRequestRequest implements ShardedRequest {
 
     @NotNull
-    MatchmakerRequestModel MatchmakerRequest;
+    MatchmakerRequestModel matchmakerRequest;
 
     @Override
     public String getRequestShardKey() {
-        return MatchmakerRequest.getMatchmakerId().toString();
+        return matchmakerRequest.getMatchmakerId().toString();
     }
 }

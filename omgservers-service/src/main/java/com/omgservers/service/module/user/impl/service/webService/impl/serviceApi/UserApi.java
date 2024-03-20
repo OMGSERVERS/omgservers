@@ -28,12 +28,17 @@ import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
 import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
 import com.omgservers.model.dto.user.ValidateCredentialsRequest;
 import com.omgservers.model.dto.user.ValidateCredentialsResponse;
+import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+@Tag(name = "User API")
 @Path("/omgservers/user-api/v1/request")
+@SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface UserApi {
 
     @PUT

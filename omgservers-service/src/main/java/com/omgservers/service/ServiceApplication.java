@@ -1,16 +1,33 @@
 package com.omgservers.service;
 
+import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.annotations.QuarkusMain;
+import jakarta.ws.rs.core.Application;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 
 @Slf4j
 @Startup
 @QuarkusMain
 @AllArgsConstructor
-public class ServiceApplication {
+@SecuritySchemes({
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.ADMIN_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Basic"),
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Basic"),
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Bearer"),
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Bearer"),
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.WORKER_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Bearer")
+})
+public class ServiceApplication extends Application {
 
     public static void main(String... args) {
         Quarkus.run(args);

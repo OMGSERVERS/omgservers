@@ -11,7 +11,7 @@ import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
-import com.omgservers.service.ServiceConfiguration;
+import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.IndexModelFactory;
 import com.omgservers.service.factory.ServiceAccountModelFactory;
@@ -41,7 +41,7 @@ public class BootstrapService {
     final ServiceAccountModelFactory serviceAccountModelFactory;
 
     @WithSpan
-    void startup(@Observes @Priority(ServiceConfiguration.START_UP_BOOTSTRAP_SERVICE_PRIORITY) StartupEvent event) {
+    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_SERVICE_PRIORITY) StartupEvent event) {
         if (getConfigOperation.getServiceConfig().bootstrapService()) {
             Uni.createFrom().voidItem()
                     .flatMap(voidItem -> createIndex())
