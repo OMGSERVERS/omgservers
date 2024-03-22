@@ -8,7 +8,7 @@ import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.ClientMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchmakerAssignmentMessageBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

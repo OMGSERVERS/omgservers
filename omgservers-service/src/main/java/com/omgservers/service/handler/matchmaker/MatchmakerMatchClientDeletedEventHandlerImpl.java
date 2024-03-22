@@ -12,7 +12,7 @@ import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

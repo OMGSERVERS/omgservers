@@ -22,7 +22,7 @@ import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.ClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
 import com.omgservers.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

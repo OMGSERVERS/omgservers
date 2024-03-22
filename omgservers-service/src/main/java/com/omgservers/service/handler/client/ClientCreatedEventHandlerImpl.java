@@ -11,7 +11,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

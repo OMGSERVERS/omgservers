@@ -1,7 +1,7 @@
 package com.omgservers.model.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.TenantCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

@@ -6,7 +6,7 @@ import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.VersionMatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;

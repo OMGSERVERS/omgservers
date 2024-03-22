@@ -4,7 +4,7 @@ import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.UserDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;

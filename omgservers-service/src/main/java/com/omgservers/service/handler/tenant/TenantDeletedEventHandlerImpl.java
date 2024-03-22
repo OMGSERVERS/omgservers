@@ -12,7 +12,7 @@ import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.TenantDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;

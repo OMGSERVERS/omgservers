@@ -4,7 +4,7 @@ import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.LobbyRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;

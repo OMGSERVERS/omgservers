@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.upsertProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.ProjectCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

@@ -9,7 +9,7 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.MatchmakerAssignmentDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
 import com.omgservers.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientMatchmakerRefModelFactory;

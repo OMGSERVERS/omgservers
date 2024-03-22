@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.TenantCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;

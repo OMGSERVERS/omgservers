@@ -5,7 +5,7 @@ import com.omgservers.model.dto.client.GetClientMatchmakerRefRequest;
 import com.omgservers.model.dto.client.GetClientMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.ClientMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import io.smallrye.mutiny.Uni;

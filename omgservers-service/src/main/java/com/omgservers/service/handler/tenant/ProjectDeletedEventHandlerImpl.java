@@ -12,7 +12,7 @@ import com.omgservers.model.dto.tenant.ViewStagesRequest;
 import com.omgservers.model.dto.tenant.ViewStagesResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.ProjectDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.ProjectDeletedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.model.stage.StageModel;

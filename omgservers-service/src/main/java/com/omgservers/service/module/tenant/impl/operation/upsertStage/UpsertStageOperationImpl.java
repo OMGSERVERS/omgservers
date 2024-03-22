@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.upsertStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.StageCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

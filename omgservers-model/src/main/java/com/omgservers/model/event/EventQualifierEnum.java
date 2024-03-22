@@ -7,58 +7,54 @@ import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEve
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientMatchmakerRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.LobbyCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.LobbyDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.LobbyRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.LobbyRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerAssignmentCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerAssignmentDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchClientCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerRequestCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.MatchmakerRequestDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.PlayerCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.PlayerDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.ProjectCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ProjectDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeClientCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeLobbyCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeLobbyDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeMatchCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.RuntimeMatchDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.StageCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.StageDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.TenantCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.TenantDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.UserCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.UserDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionLobbyRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionLobbyRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionLobbyRequestCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionLobbyRequestDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionMatchmakerRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionMatchmakerRequestCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.VersionMatchmakerRequestDeletedEventBodyModel;
-import com.omgservers.model.event.body.player.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.player.MatchmakerMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.StageDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionLobbyRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionLobbyRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.lobby.LobbyCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.lobby.LobbyDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.user.PlayerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.user.PlayerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.ProjectDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.user.UserDeletedEventBodyModel;
+import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.system.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.system.ContainerDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexCreatedEventBodyModel;
@@ -121,14 +117,9 @@ public enum EventQualifierEnum {
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
     RUNTIME_CLIENT_CREATED(RuntimeClientCreatedEventBodyModel.class),
     RUNTIME_CLIENT_DELETED(RuntimeClientDeletedEventBodyModel.class),
-    RUNTIME_LOBBY_CREATED(RuntimeLobbyCreatedEventBodyModel.class),
-    RUNTIME_LOBBY_DELETED(RuntimeLobbyDeletedEventBodyModel.class),
-    RUNTIME_MATCH_CREATED(RuntimeMatchCreatedEventBodyModel.class),
-    RUNTIME_MATCH_DELETED(RuntimeMatchDeletedEventBodyModel.class),
-    // Player
+    // Internal
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class),
-    // Internal
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class),
     LOBBY_ASSIGNMENT_REQUESTED(LobbyAssignmentRequestedEventBodyModel.class),

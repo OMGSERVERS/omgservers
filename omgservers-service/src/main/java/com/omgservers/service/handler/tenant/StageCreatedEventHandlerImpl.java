@@ -6,7 +6,7 @@ import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.StageCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

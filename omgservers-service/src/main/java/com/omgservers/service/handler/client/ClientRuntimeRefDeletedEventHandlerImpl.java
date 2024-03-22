@@ -5,7 +5,7 @@ import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.ClientRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.ClientRuntimeRefModelFactory;
 import com.omgservers.service.factory.RuntimeClientModelFactory;
 import com.omgservers.service.handler.EventHandler;

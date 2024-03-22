@@ -8,7 +8,7 @@ import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.VersionMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;

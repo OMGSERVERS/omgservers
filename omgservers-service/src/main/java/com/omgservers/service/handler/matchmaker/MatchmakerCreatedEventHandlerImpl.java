@@ -8,7 +8,7 @@ import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.MatchmakerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;

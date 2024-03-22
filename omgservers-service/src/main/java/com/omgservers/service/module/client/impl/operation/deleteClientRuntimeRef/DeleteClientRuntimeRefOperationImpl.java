@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.deleteClientRuntimeRef;
 
-import com.omgservers.model.event.body.module.ClientRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatch.SelectMatchmakerMatchOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
