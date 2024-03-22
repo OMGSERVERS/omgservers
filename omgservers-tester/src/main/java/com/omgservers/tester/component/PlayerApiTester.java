@@ -45,7 +45,7 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateUserPlayerRequest()))
-                .when().put("/omgservers/player-api/v1/request/create-user");
+                .when().put("/omgservers/v1/entrypoint/player/request/create-user");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateUserPlayerResponse.class);
@@ -59,7 +59,7 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenPlayerRequest(userId, password)))
-                .when().put("/omgservers/player-api/v1/request/create-token");
+                .when().put("/omgservers/v1/entrypoint/player/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenPlayerResponse.class);
@@ -78,7 +78,7 @@ public class PlayerApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenantId, stageId, secret)))
-                .when().put("/omgservers/player-api/v1/request/create-client");
+                .when().put("/omgservers/v1/entrypoint/player/request/create-client");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateClientPlayerResponse.class);
@@ -161,7 +161,7 @@ public class PlayerApiTester {
                 .body(objectMapper.writeValueAsString(new InterchangePlayerRequest(clientId,
                         messagesToHandle,
                         consumedMessages)))
-                .when().put("/omgservers/player-api/v1/request/interchange");
+                .when().put("/omgservers/v1/entrypoint/player/request/interchange");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(InterchangePlayerResponse.class);

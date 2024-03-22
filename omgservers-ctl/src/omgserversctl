@@ -74,11 +74,11 @@ env_useLocal() {
 # ADMIN
 
 admin_pingServer() {
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/ping-server" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/ping-server" \
       >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-      "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/ping-server" \
+      "${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/ping-server" \
       -H "Content-type: application/json" \
       -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
       -o ~/.omgservers/tmp/admin-ping-server
@@ -93,11 +93,11 @@ admin_pingServer() {
 }
 
 admin_generateId() {
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/generate-id" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/generate-id" \
       >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-      "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/generate-id" \
+      "${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/generate-id" \
       -H "Content-type: application/json" \
       -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
       -o ~/.omgservers/tmp/admin-generate-id
@@ -112,11 +112,11 @@ admin_generateId() {
 }
 
 admin_createTenant() {
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-tenant" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/create-tenant" \
     >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-    "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-tenant" \
+    "${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/create-tenant" \
     -H "Content-type: application/json" \
     -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
     -o ~/.omgservers/tmp/admin-create-tenant
@@ -156,11 +156,11 @@ admin_createDeveloper() {
 
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using tenant, TENANT_ID=$TENANT_ID"
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-developer" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/create-developer" \
     >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-    "${OMGSERVERS_URL}/omgservers/admin-api/v1/request/create-developer" \
+    "${OMGSERVERS_URL}/omgservers/v1/entrypoint/admin/request/create-developer" \
     -H "Content-type: application/json" \
     -u "${OMGSERVERS_ADMIN_USERNAME}:${OMGSERVERS_ADMIN_PASSWORD}" \
     -d "{ \"tenantId\": $TENANT_ID }" \
@@ -208,7 +208,7 @@ developer_createToken() {
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Using developer, USER_ID=$DEVELOPER_USER_ID"
 
   curl -s -S -X PUT --fail-with-body \
-    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-token" \
+    "${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/create-token" \
     -H "Content-type: application/json" \
     -d "{ \"userId\": ${DEVELOPER_USER_ID}, \"password\": \"${DEVELOPER_PASSWORD}\" }" \
     -o ~/.omgservers/tmp/developer-create-token
@@ -245,11 +245,11 @@ developer_createProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-project" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/create-project" \
     >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/create-project" \
+    "${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/create-project" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "{ \"tenantId\": ${TENANT_ID} }" \
@@ -301,11 +301,11 @@ developer_getTenantDashboard() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard" \
     >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
-    "${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+    "${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "{ \"tenantId\": ${TENANT_ID} }" \
@@ -350,14 +350,14 @@ developer_uploadVersion() {
 
   pushd ${SCRIPTS_PATH} >> /dev/null
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/developer-api/v1/request/get-tenant-dashboard" \
+  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) PUT ${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard" \
     >> ~/.omgservers/logs
 
   MULTIPART_FILES_PARAMS=$(find . -type f -name "*.lua" | sed "s/\(\.\/\)\(.*\)/-F \"\2=@\1\2\"/g" | tr -s '\n' ' ')
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT) Version files, $MULTIPART_FILES_PARAMS"
 
   CURL_CMD="curl -s -S -X PUT --fail-with-body \
-    \"${OMGSERVERS_URL}/omgservers/developer-api/v1/request/upload-version\" \
+    \"${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/upload-version\" \
     -H \"Content-type: multipart/form-data\" \
     -H \"Authorization: Bearer ${DEVELOPER_TOKEN}\" \
     -F \"tenantId=${TENANT_ID}\" \

@@ -21,9 +21,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "Lobby API")
-@SecurityRequirement(name = "token")
-@Path("/omgservers/lobby-api/v1/request")
+@Tag(name = "Lobby Module API")
+@Path("/omgservers/v1/module/lobby/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface LobbyApi {
 

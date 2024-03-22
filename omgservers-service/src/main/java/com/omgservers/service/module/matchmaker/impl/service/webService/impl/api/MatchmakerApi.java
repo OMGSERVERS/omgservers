@@ -68,8 +68,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "Matchmaker API")
-@Path("/omgservers/matchmaker-api/v1/request")
+@Tag(name = "Matchmaker Module API")
+@Path("/omgservers/v1/module/matchmaker/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface MatchmakerApi {
 

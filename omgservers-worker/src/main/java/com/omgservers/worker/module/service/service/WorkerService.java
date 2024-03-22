@@ -12,7 +12,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/omgservers/worker-api/v1/request")
+@Path("/omgservers/v1/entrypoint/worker/request")
 @RegisterRestClient(configKey = "omgservers")
 public interface WorkerService {
 

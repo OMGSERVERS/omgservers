@@ -107,8 +107,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "Tenant API")
-@Path("/omgservers/tenant-api/v1/request")
+@Tag(name = "Tenant Module API")
+@Path("/omgservers/v1/module/tenant/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface TenantApi {
 

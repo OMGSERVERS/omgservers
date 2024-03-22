@@ -41,8 +41,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "Client API")
-@Path("/omgservers/client-api/v1/request")
+@Tag(name = "Client Module API")
+@Path("/omgservers/v1/module/client/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface ClientApi {
 

@@ -45,8 +45,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "Runtime API")
-@Path("/omgservers/runtime-api/v1/request")
+@Tag(name = "Runtime Module API")
+@Path("/omgservers/v1/module/runtime/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface RuntimeApi {
 

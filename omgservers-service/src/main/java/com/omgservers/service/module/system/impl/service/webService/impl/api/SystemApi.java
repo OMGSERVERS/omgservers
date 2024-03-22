@@ -23,8 +23,8 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Tag(name = "System API")
-@Path("/omgservers/system-api/v1/request")
+@Tag(name = "System Module API")
+@Path("/omgservers/v1/module/system/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface SystemApi {
 

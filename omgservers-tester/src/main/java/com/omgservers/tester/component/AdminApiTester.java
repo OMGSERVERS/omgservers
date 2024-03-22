@@ -46,7 +46,7 @@ public class AdminApiTester {
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(name, shards, addresses)))
                 .when()
-                .put("/omgservers/admin-api/v1/request/create-index");
+                .put("/omgservers/v1/entrypoint/admin/request/create-index");
 
         if (responseSpecification.getStatusCode() == 200) {
             final var response = responseSpecification.getBody().as(CreateIndexAdminResponse.class);
@@ -68,7 +68,7 @@ public class AdminApiTester {
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateServiceAccountAdminRequest(username, password)))
                 .when()
-                .put("/omgservers/admin-api/v1/request/create-service-account");
+                .put("/omgservers/v1/entrypoint/admin/request/create-service-account");
 
         if (responseSpecification.getStatusCode() == 200) {
             final var response = responseSpecification.getBody().as(CreateServiceAccountAdminResponse.class);
@@ -87,7 +87,7 @@ public class AdminApiTester {
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateTenantAdminRequest()))
-                .when().put("/omgservers/admin-api/v1/request/create-tenant");
+                .when().put("/omgservers/v1/entrypoint/admin/request/create-tenant");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantAdminResponse.class);
@@ -104,7 +104,7 @@ public class AdminApiTester {
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantAdminRequest(tenantId)))
-                .when().put("/omgservers/admin-api/v1/request/delete-tenant");
+                .when().put("/omgservers/v1/entrypoint/admin/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(DeleteVersionDeveloperResponse.class);
@@ -120,7 +120,7 @@ public class AdminApiTester {
                 .auth()
                 .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateDeveloperAdminRequest(tenantId)))
-                .when().put("/omgservers/admin-api/v1/request/create-developer");
+                .when().put("/omgservers/v1/entrypoint/admin/request/create-developer");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateDeveloperAdminResponse.class);

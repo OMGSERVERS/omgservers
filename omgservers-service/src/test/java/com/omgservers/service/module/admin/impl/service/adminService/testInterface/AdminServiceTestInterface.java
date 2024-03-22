@@ -10,7 +10,7 @@ import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
 import com.omgservers.model.dto.admin.PingServerAdminResponse;
 import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
-import com.omgservers.service.module.admin.impl.service.adminService.AdminService;
+import com.omgservers.service.entrypoint.admin.impl.service.adminService.AdminService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
