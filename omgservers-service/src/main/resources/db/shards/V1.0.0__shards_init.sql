@@ -48,7 +48,6 @@ create table if not exists tab_client (
     player_id bigint not null,
     tenant_id bigint not null,
     version_id bigint not null,
-    matchmaker_id bigint not null,
     deleted boolean not null
 );
 
@@ -73,8 +72,19 @@ create table if not exists tab_client_runtime_ref (
     deleted boolean not null
 );
 
+create table if not exists tab_client_matchmaker_ref (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    client_id bigint not null references tab_client(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    matchmaker_id bigint not null,
+    deleted boolean not null
+);
+
 create index if not exists idx_client_message_client_id on tab_client_message(client_id);
 create index if not exists idx_client_runtime_ref_client_id on tab_client_runtime_ref(client_id);
+create index if not exists idx_client_matchmaker_ref_client_id on tab_client_matchmaker_ref(client_id);
 
 -- tenant module
 
@@ -253,6 +263,16 @@ create table if not exists tab_matchmaker (
     deleted boolean not null
 );
 
+create table if not exists tab_matchmaker_assignment (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    client_id bigint not null,
+    deleted boolean not null
+);
+
 create table if not exists tab_matchmaker_command (
     id bigint primary key,
     idempotency_key text not null unique,
@@ -314,6 +334,7 @@ create table if not exists tab_matchmaker_match_client (
     deleted boolean not null
 );
 
+create index if not exists idx_matchmaker_assignment_matchmaker_id on tab_matchmaker_assignment(matchmaker_id);
 create index if not exists idx_matchmaker_command_matchmaker_id on tab_matchmaker_command(matchmaker_id);
 create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmaker_request(matchmaker_id);
 create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);

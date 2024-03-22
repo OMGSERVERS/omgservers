@@ -25,7 +25,7 @@ class GetUserModuleClientOperationImpl implements GetUserModuleClientOperation {
                     .baseUri(uri)
                     .build(UserModuleClient.class);
 
-            log.debug("Client was created, uri={}", uri);
+            log.info("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

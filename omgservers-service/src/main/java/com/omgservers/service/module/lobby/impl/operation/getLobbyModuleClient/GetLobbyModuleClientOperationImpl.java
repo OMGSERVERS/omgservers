@@ -25,7 +25,7 @@ class GetLobbyModuleClientOperationImpl implements GetLobbyModuleClientOperation
                     .baseUri(uri)
                     .build(LobbyModuleClient.class);
 
-            log.debug("Client was created, uri={}", uri);
+            log.info("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

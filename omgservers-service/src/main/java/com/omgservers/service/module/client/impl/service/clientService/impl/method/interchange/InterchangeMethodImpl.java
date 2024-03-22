@@ -89,9 +89,9 @@ class InterchangeMethodImpl implements InterchangeMethod {
         return Multi.createFrom().iterable(messages)
                 .onItem().transformToUniAndConcatenate(message -> {
                     final var eventBody = switch (message.getQualifier()) {
-                        case CLIENT_MESSAGE -> new ClientMessageReceivedEventBodyModel(clientId,
+                        case CLIENT_OUTGOING_MESSAGE -> new ClientMessageReceivedEventBodyModel(clientId,
                                 message);
-                        case MATCHMAKER_MESSAGE -> new MatchmakerMessageReceivedEventBodyModel(clientId,
+                        case CLIENT_MATCHMAKER_MESSAGE -> new MatchmakerMessageReceivedEventBodyModel(clientId,
                                 message);
                         default ->
                                 throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,

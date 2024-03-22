@@ -25,7 +25,7 @@ class GetMatchmakerModuleClientOperationImpl implements GetMatchmakerModuleClien
                     .baseUri(uri)
                     .build(MatchmakerModuleClient.class);
 
-            log.debug("Client was created, uri={}", uri);
+            log.info("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

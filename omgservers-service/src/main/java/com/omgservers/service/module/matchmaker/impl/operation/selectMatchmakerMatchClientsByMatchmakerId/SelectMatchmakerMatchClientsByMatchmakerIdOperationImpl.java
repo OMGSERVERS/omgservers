@@ -38,7 +38,7 @@ class SelectMatchmakerMatchClientsByMatchmakerIdOperationImpl
                         order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
-                "Matchmaker Match client",
+                "Matchmaker match client",
                 matchClientModelMapper::fromRow);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -58,16 +58,19 @@ public class LobbyAddClientIT extends Assertions {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
             final var lobbyAssignment = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
-            final var serverMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.SERVER_MESSAGE,
+            final var matchmakerAssignment = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment.getId()));
+            final var serverMessage = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment.getId()));
 
             assertEquals("{text=client_was_added}",
-                    ((ServerMessageBodyModel) serverMessage.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());
         }

@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,21 +19,19 @@ public class ClientModelFactory {
     public ClientModel create(final Long userId,
                               final Long playerId,
                               final Long tenantId,
-                              final Long versionId,
-                              final Long matchmakerId) {
+                              final Long versionId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, userId, playerId, tenantId, versionId, matchmakerId, idempotencyKey);
+        return create(id, userId, playerId, tenantId, versionId, idempotencyKey);
     }
 
     public ClientModel create(final Long userId,
                               final Long playerId,
                               final Long tenantId,
                               final Long versionId,
-                              final Long matchmakerId,
                               final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, tenantId, versionId, matchmakerId, idempotencyKey);
+        return create(id, userId, playerId, tenantId, versionId, idempotencyKey);
     }
 
     public ClientModel create(final Long id,
@@ -42,7 +39,6 @@ public class ClientModelFactory {
                               final Long playerId,
                               final Long tenantId,
                               final Long versionId,
-                              final Long matchmakerId,
                               final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -55,7 +51,6 @@ public class ClientModelFactory {
         client.setPlayerId(playerId);
         client.setTenantId(tenantId);
         client.setVersionId(versionId);
-        client.setMatchmakerId(matchmakerId);
         client.setDeleted(false);
 
         return client;

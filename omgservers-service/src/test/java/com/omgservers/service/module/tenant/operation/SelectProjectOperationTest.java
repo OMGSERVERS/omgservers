@@ -8,7 +8,6 @@ import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjec
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class SelectProjectOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     SelectProjectOperationTestInterface selectProjectOperation;
@@ -36,9 +34,6 @@ class SelectProjectOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenProject_whenSelectProject_thenSelected() {

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.operation.testInterface;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.service.module.client.impl.operation.upsertClientRuntimeRef.UpsertClientRuntimeRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

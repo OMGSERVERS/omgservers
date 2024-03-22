@@ -38,7 +38,7 @@ class SelectMatchmakerMatchClientByMatchmakerIdAndClientIdOperationImpl
                         limit 1
                         """,
                 List.of(matchmakerId, clientId),
-                "Matchmaker Match client",
+                "Matchmaker match client",
                 matchClientModelMapper::fromRow);
     }
 }

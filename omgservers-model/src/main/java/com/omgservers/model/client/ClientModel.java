@@ -38,8 +38,5 @@ public class ClientModel {
     Long versionId;
 
     @NotNull
-    Long matchmakerId;
-
-    @NotNull
     Boolean deleted;
 }

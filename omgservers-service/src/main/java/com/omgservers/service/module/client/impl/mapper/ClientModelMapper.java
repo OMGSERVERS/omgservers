@@ -24,7 +24,6 @@ public class ClientModelMapper {
         client.setPlayerId(row.getLong("player_id"));
         client.setTenantId(row.getLong("tenant_id"));
         client.setVersionId(row.getLong("version_id"));
-        client.setMatchmakerId(row.getLong("matchmaker_id"));
         client.setDeleted(row.getBoolean("deleted"));
         return client;
     }

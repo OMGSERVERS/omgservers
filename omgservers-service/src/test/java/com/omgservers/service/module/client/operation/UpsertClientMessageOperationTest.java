@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.operation;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.WelcomeMessageBodyModel;
+import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -38,12 +38,12 @@ class UpsertClientMessageOperationTest extends Assertions {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
-                MessageQualifierEnum.WELCOME_MESSAGE,
-                new WelcomeMessageBodyModel(tenantId(), versionId()));
+                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
+                new ServerWelcomeMessageBodyModel(tenantId(), versionId()));
         final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
         assertTrue(changeContext.getResult());
     }
@@ -51,12 +51,12 @@ class UpsertClientMessageOperationTest extends Assertions {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
-                MessageQualifierEnum.WELCOME_MESSAGE,
-                new WelcomeMessageBodyModel(tenantId(), versionId()));
+                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
+                new ServerWelcomeMessageBodyModel(tenantId(), versionId()));
         upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
 
         final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
@@ -67,8 +67,8 @@ class UpsertClientMessageOperationTest extends Assertions {
     void givenUnknownId_whenUpsertClientMessage_thenException() {
         final var shard = 0;
         final var clientMessage = clientMessageModelFactory.create(clientId(),
-                MessageQualifierEnum.WELCOME_MESSAGE,
-                new WelcomeMessageBodyModel(tenantId(), versionId()));
+                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
+                new ServerWelcomeMessageBodyModel(tenantId(), versionId()));
         assertThrows(ServerSideBadRequestException.class, () ->
                 upsertClientMessageOperation.upsertClientMessage(shard, clientMessage));
     }
@@ -76,17 +76,17 @@ class UpsertClientMessageOperationTest extends Assertions {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage1 = clientMessageModelFactory.create(client.getId(),
-                MessageQualifierEnum.WELCOME_MESSAGE,
-                new WelcomeMessageBodyModel(tenantId(), versionId()));
+                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
+                new ServerWelcomeMessageBodyModel(tenantId(), versionId()));
         upsertClientMessageOperation.upsertClientMessage(shard, clientMessage1);
 
         final var clientMessage2 = clientMessageModelFactory.create(client.getId(),
-                MessageQualifierEnum.WELCOME_MESSAGE,
-                new WelcomeMessageBodyModel(tenantId(), versionId()),
+                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
+                new ServerWelcomeMessageBodyModel(tenantId(), versionId()),
                 clientMessage1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
@@ -107,10 +107,6 @@ class UpsertClientMessageOperationTest extends Assertions {
     }
 
     Long versionId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchmakerId() {
         return generateIdOperation.generateId();
     }
 

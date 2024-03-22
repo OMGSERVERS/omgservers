@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
@@ -8,7 +8,7 @@ import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.player.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.message.body.ClientMessageBodyModel;
+import com.omgservers.model.message.body.ClientOutgoingMessageBodyModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
@@ -55,7 +55,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var message = body.getMessage();
 
-        if (message.getBody() instanceof final ClientMessageBodyModel messageBody) {
+        if (message.getBody() instanceof final ClientOutgoingMessageBodyModel messageBody) {
             return selectClientRuntimeRef(clientId)
                     .flatMap(clientRuntimeRef -> syncHandleMessageRuntimeCommand(clientRuntimeRef,
                             messageBody.getData(), event.getIdempotencyKey()))

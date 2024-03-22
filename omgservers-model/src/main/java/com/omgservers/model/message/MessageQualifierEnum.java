@@ -1,21 +1,23 @@
 package com.omgservers.model.message;
 
-import com.omgservers.model.message.body.AssignmentMessageBodyModel;
-import com.omgservers.model.message.body.ClientMessageBodyModel;
-import com.omgservers.model.message.body.DisconnectionMessageBodyModel;
+import com.omgservers.model.message.body.ClientOutgoingMessageBodyModel;
+import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.model.message.body.MatchmakerAssignmentMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
-import com.omgservers.model.message.body.WelcomeMessageBodyModel;
+import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
 
 public enum MessageQualifierEnum {
     // Client messages
-    CLIENT_MESSAGE(ClientMessageBodyModel.class),
-    MATCHMAKER_MESSAGE(MatchmakerMessageBodyModel.class),
+    CLIENT_OUTGOING_MESSAGE(ClientOutgoingMessageBodyModel.class),
+    CLIENT_MATCHMAKER_MESSAGE(MatchmakerMessageBodyModel.class),
     // Server messages
-    WELCOME_MESSAGE(WelcomeMessageBodyModel.class),
-    ASSIGNMENT_MESSAGE(AssignmentMessageBodyModel.class),
-    DISCONNECTION_MESSAGE(DisconnectionMessageBodyModel.class),
-    SERVER_MESSAGE(ServerMessageBodyModel.class);
+    SERVER_WELCOME_MESSAGE(ServerWelcomeMessageBodyModel.class),
+    RUNTIME_ASSIGNMENT_MESSAGE(RuntimeAssignmentMessageBodyModel.class),
+    MATCHMAKER_ASSIGNMENT_MESSAGE(MatchmakerAssignmentMessageBodyModel.class),
+    DISCONNECTION_REASON_MESSAGE(DisconnectionReasonMessageBodyModel.class),
+    SERVER_OUTGOING_MESSAGE(ServerOutgoingMessageBodyModel.class);
 
     final Class<? extends MessageBodyModel> bodyClass;
 

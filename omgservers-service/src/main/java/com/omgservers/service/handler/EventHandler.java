@@ -8,8 +8,4 @@ public interface EventHandler {
     EventQualifierEnum getQualifier();
 
     Uni<Void> handle(EventModel event);
-
-    default String generateKey(EventModel event, String postfix) {
-        return event.getId() + "_" + postfix;
-    }
 }

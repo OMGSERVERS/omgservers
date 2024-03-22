@@ -26,7 +26,7 @@ class GetRuntimeModuleClientOperationImpl implements GetRuntimeModuleClientOpera
                     .baseUri(uri)
                     .build(RuntimeModuleClient.class);
 
-            log.debug("Client was created, uri={}", uri);
+            log.info("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

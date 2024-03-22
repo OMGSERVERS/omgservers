@@ -12,7 +12,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.DisconnectionMessageBodyModel;
+import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
@@ -70,9 +70,9 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
-        final var messageBody = new DisconnectionMessageBodyModel(DisconnectionReasonEnum.CLIENT_INACTIVITY);
+        final var messageBody = new DisconnectionReasonMessageBodyModel(DisconnectionReasonEnum.CLIENT_INACTIVITY);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
-                MessageQualifierEnum.DISCONNECTION_MESSAGE,
+                MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
                 messageBody,
                 idempotencyKey);
         return syncClientMessage(disconnectionMessage);

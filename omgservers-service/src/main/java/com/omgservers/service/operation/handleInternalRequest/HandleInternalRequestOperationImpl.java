@@ -30,6 +30,7 @@ class HandleInternalRequestOperationImpl implements HandleInternalRequestOperati
                     if (shard.locked()) {
                         throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
                                 "shard is locked, shard=" + shard.shard());
+
                     }
 
                     if (shard.foreign()) {

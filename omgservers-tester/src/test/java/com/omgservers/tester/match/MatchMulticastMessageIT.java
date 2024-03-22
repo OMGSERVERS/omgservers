@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
@@ -81,40 +81,47 @@ public class MatchMulticastMessageIT extends Assertions {
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
             final var welcomeMessage2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage2.getId()));
+
+            final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment1.getId()));
+            final var matchmakerAssignment2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment2.getId()));
 
             playerApiTester.requestMatchmaking(testClient1, "test");
             playerApiTester.requestMatchmaking(testClient2, "test");
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment1.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment1.getId()));
             final var matchAssignment2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment2.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment2.getId()));
 
             playerApiTester.sendMessage(testClient1, new TestMessage("multicast_request"));
 
             final var serverMessage1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.SERVER_MESSAGE,
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
             assertEquals("{text=hello_client_1_and_client_2}",
-                    ((ServerMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
 
             final var serverMessage2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.SERVER_MESSAGE,
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment2.getId()));
             assertEquals("{text=hello_client_1_and_client_2}",
-                    ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

@@ -37,7 +37,7 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -49,7 +49,7 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -71,7 +71,7 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef1 = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -99,10 +99,6 @@ class UpsertClientRuntimeRefOperationTest extends Assertions {
     }
 
     Long versionId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchmakerId() {
         return generateIdOperation.generateId();
     }
 

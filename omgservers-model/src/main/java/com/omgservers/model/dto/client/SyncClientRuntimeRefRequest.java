@@ -1,6 +1,6 @@
 package com.omgservers.model.dto.client;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.model.dto.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

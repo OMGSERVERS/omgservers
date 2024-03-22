@@ -1,5 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.webService.impl;
 
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
@@ -12,10 +14,14 @@ import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
@@ -26,6 +32,8 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientRequest;
@@ -42,6 +50,8 @@ import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerAssignmentsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerAssignmentsResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
@@ -78,6 +88,32 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(final DeleteMatchmakerRequest request) {
         return matchmakerService.deleteMatchmaker(request);
+    }
+
+    @Override
+    public Uni<GetMatchmakerAssignmentResponse> getMatchmakerAssignment(final GetMatchmakerAssignmentRequest request) {
+        return matchmakerService.getMatchmakerAssignment(request);
+    }
+
+    @Override
+    public Uni<FindMatchmakerAssignmentResponse> findMatchmakerAssignment(final FindMatchmakerAssignmentRequest request) {
+        return matchmakerService.findMatchmakerAssignment(request);
+    }
+
+    @Override
+    public Uni<ViewMatchmakerAssignmentsResponse> viewMatchmakerAssignments(final ViewMatchmakerAssignmentsRequest request) {
+        return matchmakerService.viewMatchmakerAssignments(request);
+    }
+
+    @Override
+    public Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(final SyncMatchmakerAssignmentRequest request) {
+        return matchmakerService.syncMatchmakerAssignment(request);
+    }
+
+    @Override
+    public Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(
+            final DeleteMatchmakerAssignmentRequest request) {
+        return matchmakerService.deleteMatchmakerAssignment(request);
     }
 
     @Override

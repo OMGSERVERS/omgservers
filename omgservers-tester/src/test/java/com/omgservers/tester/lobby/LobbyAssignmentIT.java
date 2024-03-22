@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.AssignmentMessageBodyModel;
+import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
@@ -35,7 +35,7 @@ public class LobbyAssignmentIT extends Assertions {
     void lobbyAssignmentIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         function handle_command(self, command)
-                        end                        
+                        end
                         """,
                 """
                         function handle_command(self, command)
@@ -48,16 +48,20 @@ public class LobbyAssignmentIT extends Assertions {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             final var lobbyAssignment = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
 
-            final var messageBody = ((AssignmentMessageBodyModel) lobbyAssignment.getBody());
+            final var messageBody = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment.getBody());
             assertNotNull(messageBody.getRuntimeId());
             assertEquals(RuntimeQualifierEnum.LOBBY, messageBody.getRuntimeQualifier());
             assertNotNull(messageBody.getRuntimeConfig());
+
+            final var matchmakerAssignment = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment.getId()));
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

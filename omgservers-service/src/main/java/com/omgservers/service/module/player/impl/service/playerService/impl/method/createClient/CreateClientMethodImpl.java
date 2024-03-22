@@ -7,8 +7,6 @@ import com.omgservers.model.dto.player.CreateClientPlayerRequest;
 import com.omgservers.model.dto.player.CreateClientPlayerResponse;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsRequest;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRefsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
 import com.omgservers.model.dto.user.FindPlayerRequest;
@@ -17,7 +15,6 @@ import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientModelFactory;
@@ -36,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -112,18 +108,14 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long tenantId,
                                   final Long stageId) {
         return selectStageVersion(tenantId, stageId)
-                .flatMap(version -> {
+                .map(version -> {
                     final var versionId = version.getId();
-                    return selectVersionMatchmakerRef(tenantId, versionId)
-                            .map(versionMatchmakerRef -> {
-                                final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                                final var client = clientModelFactory.create(userId,
-                                        playerId,
-                                        tenantId,
-                                        versionId,
-                                        matchmakerId);
-                                return client;
-                            });
+                    final var client = clientModelFactory.create(userId,
+                            playerId,
+                            tenantId,
+                            versionId);
+
+                    return client;
                 });
     }
 
@@ -146,27 +138,6 @@ class CreateClientMethodImpl implements CreateClientMethod {
         final var request = new ViewVersionsRequest(tenantId, stageId);
         return tenantModule.getVersionService().viewVersions(request)
                 .map(ViewVersionsResponse::getVersions);
-    }
-
-    Uni<VersionMatchmakerRefModel> selectVersionMatchmakerRef(final Long tenantId, final Long versionId) {
-        return viewVersionMatchmakerRefs(tenantId, versionId)
-                .map(refs -> {
-                    if (refs.isEmpty()) {
-                        throw new ServerSideNotFoundException(
-                                ExceptionQualifierEnum.MATCHMAKER_NOT_FOUND,
-                                String.format("matchmaker was not selected, version=%d/%d", tenantId, versionId));
-                    } else {
-                        final var randomRefIndex = ThreadLocalRandom.current().nextInt(refs.size()) % refs.size();
-                        final var randomMatchmakerRef = refs.get(randomRefIndex);
-                        return randomMatchmakerRef;
-                    }
-                });
-    }
-
-    Uni<List<VersionMatchmakerRefModel>> viewVersionMatchmakerRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionMatchmakerRefsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionMatchmakerRefs(request)
-                .map(ViewVersionMatchmakerRefsResponse::getVersionMatchmakerRefs);
     }
 
     Uni<Boolean> syncClient(ClientModel client) {

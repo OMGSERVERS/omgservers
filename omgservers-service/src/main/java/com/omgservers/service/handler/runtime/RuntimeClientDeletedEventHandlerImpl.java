@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.runtime;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
@@ -59,8 +59,8 @@ public class RuntimeClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(runtimeClient -> {
                     final var clientId = runtimeClient.getClientId();
 
-                    log.info("Runtime client was deleted, id={}, runtimeId={}, clientId={}",
-                            runtimeClient.getId(), runtimeId, clientId);
+                    log.info("Runtime client was deleted, runtimeClient={}/{}, clientId={}",
+                            runtimeId, runtimeClient.getId(), clientId);
 
                     return findAndDeleteClientRuntimeRef(clientId, runtimeId)
                             .flatMap(voidItem -> getRuntime(runtimeId)

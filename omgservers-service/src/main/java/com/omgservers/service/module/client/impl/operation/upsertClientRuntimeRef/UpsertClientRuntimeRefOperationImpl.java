@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.operation.upsertClientRuntimeRef;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.model.event.body.module.ClientRuntimeRefCreatedEventBodyModel;
 import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

@@ -1,17 +1,12 @@
 package com.omgservers.service.handler.runtime;
 
 import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.clientMessage.ClientMessageModel;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.SyncClientMessageRequest;
-import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.user.GetPlayerRequest;
@@ -19,10 +14,7 @@ import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.RuntimeClientCreatedEventBodyModel;
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.AssignmentMessageBodyModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeClient.RuntimeClientModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
@@ -76,17 +68,15 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(runtimeClient -> {
                     final var clientId = runtimeClient.getClientId();
 
-                    log.info("Runtime client was created, id={}, runtimeId={}, clientId={}",
-                            runtimeClient.getId(), runtimeId, clientId);
+                    log.info("Runtime client was created, runtimeClient={}/{}, clientId={}",
+                            runtimeId, runtimeClient.getId(), clientId);
 
                     final var idempotencyKey = event.getIdempotencyKey();
 
-                    return getRuntime(runtimeId)
-                            .flatMap(runtime -> syncAssignmentMessage(runtime, clientId, idempotencyKey)
-                                    .flatMap(created -> syncAddClientRuntimeCommand(runtimeClient, idempotencyKey))
-                                    .flatMap(created -> syncClientRuntimeRef(clientId,
-                                            runtimeId,
-                                            idempotencyKey)));
+                    return syncAddClientRuntimeCommand(runtimeClient, idempotencyKey)
+                            .flatMap(created -> syncClientRuntimeRef(clientId,
+                                    runtimeId,
+                                    idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -96,42 +86,6 @@ public class RuntimeClientCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetRuntimeClientRequest(runtimeId, id);
         return runtimeModule.getRuntimeService().getRuntimeClient(request)
                 .map(GetRuntimeClientResponse::getRuntimeClient);
-    }
-
-    Uni<RuntimeModel> getRuntime(final Long runtimeId) {
-        final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().getRuntime(request)
-                .map(GetRuntimeResponse::getRuntime);
-    }
-
-    Uni<Boolean> syncAssignmentMessage(final RuntimeModel runtime,
-                                       final Long clientId,
-                                       final String idempotencyKey) {
-        final var messageBody = new AssignmentMessageBodyModel(runtime.getId(),
-                runtime.getQualifier(),
-                runtime.getConfig());
-        final var clientMessage = clientMessageModelFactory.create(clientId,
-                MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                messageBody,
-                idempotencyKey);
-        return syncClientMessage(clientMessage);
-    }
-
-    Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
-        final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessage(request)
-                .map(SyncClientMessageResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", clientMessage, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
     }
 
     Uni<Boolean> syncAddClientRuntimeCommand(final RuntimeClientModel runtimeClient,

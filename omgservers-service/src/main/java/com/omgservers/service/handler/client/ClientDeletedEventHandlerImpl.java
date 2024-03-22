@@ -1,12 +1,15 @@
 package com.omgservers.service.handler.client;
 
 import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.model.clientMessage.ClientMessageModel;
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsRequest;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
@@ -69,14 +72,11 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     log.info("Client was deleted, clientId={}", clientId);
 
-                    return handleClientRuntimeRefs(clientId)
-                            .flatMap(voidItem -> handleClientMessages(clientId))
-                            .flatMap(voidItem -> {
-                                final var matchmakerId = client.getMatchmakerId();
-                                return syncDeleteClientMatchmakerCommand(matchmakerId,
-                                        client.getId(),
-                                        event.getIdempotencyKey());
-                            });
+                    final var idempotencyKey = event.getIdempotencyKey();
+
+                    return handleClientMatchmakerRefs(clientId, idempotencyKey)
+                            .flatMap(voidItem -> handleClientRuntimeRefs(clientId))
+                            .flatMap(voidItem -> handleClientMessages(clientId));
                 })
                 .replaceWithVoid();
     }
@@ -85,6 +85,58 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var request = new GetClientRequest(clientId);
         return clientModule.getClientService().getClient(request)
                 .map(GetClientResponse::getClient);
+    }
+
+    Uni<Void> handleClientMatchmakerRefs(final Long clientId, final String idempotencyKey) {
+        return viewClientMatchmakerRefs(clientId)
+                .flatMap(clientMatchmakerRefs -> Multi.createFrom().iterable(clientMatchmakerRefs)
+                        .onItem().transformToUniAndConcatenate(clientMatchmakerRef -> {
+                            final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
+                            return syncDeleteClientMatchmakerCommand(matchmakerId,
+                                    clientId,
+                                    idempotencyKey + "/" + matchmakerId);
+                        })
+                        .collect().asList()
+                        .replaceWithVoid());
+    }
+
+    Uni<List<ClientMatchmakerRefModel>> viewClientMatchmakerRefs(final Long clientId) {
+        final var request = new ViewClientMatchmakerRefsRequest(clientId);
+        return clientModule.getClientService().viewClientMatchmakerRefs(request)
+                .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
+    }
+
+    Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
+                                                   final Long clientId,
+                                                   final String idempotencyKey) {
+        final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
+                commandBody,
+                idempotencyKey);
+        final var request = new SyncMatchmakerCommandRequest(commandModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+                .map(SyncMatchmakerCommandResponse::getCreated)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.PARENT_NOT_FOUND)) {
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                })
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", commandModel, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     Uni<Void> handleClientRuntimeRefs(final Long clientId) {
@@ -143,39 +195,6 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteClientMessagesRequest(clientId, ids);
         return clientModule.getClientService().deleteClientMessages(request)
                 .map(DeleteClientMessagesResponse::getDeleted);
-    }
-
-    Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
-                                                   final Long clientId,
-                                                   final String idempotencyKey) {
-        final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
-        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
-                commandBody,
-                idempotencyKey);
-        final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
-                .map(SyncMatchmakerCommandResponse::getCreated)
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.PARENT_NOT_FOUND)) {
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                })
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", commandModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
     }
 }
 

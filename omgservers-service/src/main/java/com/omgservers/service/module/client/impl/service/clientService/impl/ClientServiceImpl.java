@@ -1,25 +1,35 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl;
 
+import com.omgservers.model.dto.client.DeleteClientMatchmakerRefRequest;
+import com.omgservers.model.dto.client.DeleteClientMatchmakerRefResponse;
 import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
 import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.DeleteClientRequest;
 import com.omgservers.model.dto.client.DeleteClientResponse;
 import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.FindClientMatchmakerRefRequest;
+import com.omgservers.model.dto.client.FindClientMatchmakerRefResponse;
 import com.omgservers.model.dto.client.FindClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.FindClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.GetClientMatchmakerRefRequest;
+import com.omgservers.model.dto.client.GetClientMatchmakerRefResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
 import com.omgservers.model.dto.client.InterchangeRequest;
 import com.omgservers.model.dto.client.InterchangeResponse;
+import com.omgservers.model.dto.client.SyncClientMatchmakerRefRequest;
+import com.omgservers.model.dto.client.SyncClientMatchmakerRefResponse;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.dto.client.SyncClientResponse;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsRequest;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsResponse;
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
@@ -28,15 +38,20 @@ import com.omgservers.service.module.client.impl.operation.getClientModuleClient
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.GetClientModuleClientOperation;
 import com.omgservers.service.module.client.impl.service.clientService.ClientService;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClient.DeleteClientMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientMatchmakerRef.DeleteClientMatchmakerRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientMessages.DeleteClientMessagesMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.deleteClientRuntimeRef.DeleteClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.findClientMatchmakerRef.FindClientMatchmakerRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.findClientRuntimeRef.FindClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClient.GetClientMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClientMatchmakerRef.GetClientMatchmakerRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.getClientRuntimeRef.GetClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.interchange.InterchangeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClient.SyncClientMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientMatchmakerRef.SyncClientMatchmakerRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientMessage.SyncClientMessageMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientMatchmakerRefs.ViewClientMatchmakerRefsMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientMessages.ViewClientMessagesMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
@@ -53,8 +68,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientServiceImpl implements ClientService {
 
-
+    final DeleteClientMatchmakerRefMethod deleteClientMatchmakerRefMethod;
+    final ViewClientMatchmakerRefsMethod viewClientMatchmakerRefsMethod;
+    final FindClientMatchmakerRefMethod findClientMatchmakerRefMethod;
+    final SyncClientMatchmakerRefMethod syncClientMatchmakerRefMethod;
     final DeleteClientRuntimeRefMethod deleteClientRuntimeRefMethod;
+    final GetClientMatchmakerRefMethod getClientMatchmakerRefMethod;
     final ViewClientRuntimeRefsMethod viewClientRuntimeRefsMethod;
     final DeleteClientMessagesMethod deleteClientMessagesMethod;
     final SyncClientRuntimeRefMethod syncClientRuntimeRefMethod;
@@ -168,5 +187,51 @@ public class ClientServiceImpl implements ClientService {
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::deleteClientRuntimeRef,
                 deleteClientRuntimeRefMethod::deleteClientRuntimeRef);
+    }
+
+    @Override
+    public Uni<GetClientMatchmakerRefResponse> getClientMatchmakerRef(
+            @Valid final GetClientMatchmakerRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getClientModuleClientOperation::getClient,
+                ClientModuleClient::getClientMatchmakerRef,
+                getClientMatchmakerRefMethod::getClientMatchmakerRef);
+    }
+
+    @Override
+    public Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(
+            @Valid final FindClientMatchmakerRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getClientModuleClientOperation::getClient,
+                ClientModuleClient::findClientMatchmakerRef,
+                findClientMatchmakerRefMethod::findClientMatchmakerRef);
+    }
+
+    @Override
+    public Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(
+            @Valid final ViewClientMatchmakerRefsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getClientModuleClientOperation::getClient,
+                ClientModuleClient::viewClientMatchmakerRefs,
+                viewClientMatchmakerRefsMethod::viewClientMatchmakerRefs);
+    }
+
+    @Override
+    public Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(
+            @Valid final SyncClientMatchmakerRefRequest request) {
+        return syncClientMatchmakerRefMethod.syncClientMatchmakerRef(request);
+//        return handleInternalRequestOperation.handleInternalRequest(log, request,
+//                getClientModuleClientOperation::getClient,
+//                ClientModuleClient::syncClientMatchmakerRef,
+//                syncClientMatchmakerRefMethod::syncClientMatchmakerRef);
+    }
+
+    @Override
+    public Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(
+            @Valid final DeleteClientMatchmakerRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getClientModuleClientOperation::getClient,
+                ClientModuleClient::deleteClientMatchmakerRef,
+                deleteClientMatchmakerRefMethod::deleteClientMatchmakerRef);
     }
 }

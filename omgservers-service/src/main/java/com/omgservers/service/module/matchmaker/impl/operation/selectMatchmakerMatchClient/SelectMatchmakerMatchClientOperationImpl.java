@@ -40,7 +40,7 @@ class SelectMatchmakerMatchClientOperationImpl implements SelectMatchmakerMatchC
                         matchmakerId,
                         id
                 ),
-                "Matchmaker Match client",
+                "Matchmaker match client",
                 matchClientModelMapper::fromRow);
     }
 }

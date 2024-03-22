@@ -4,7 +4,7 @@ import com.omgservers.model.clientMessage.ClientMessageModel;
 import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
@@ -74,9 +74,9 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
 
     Uni<Boolean> syncClientMessage(final Long clientId,
                                    final Object message) {
-        final var messageBody = new ServerMessageBodyModel(message);
+        final var messageBody = new ServerOutgoingMessageBodyModel(message);
         final var clientMessage = clientMessageModelFactory.create(clientId,
-                MessageQualifierEnum.SERVER_MESSAGE,
+                MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                 messageBody);
         return syncClientMessage(clientMessage);
     }

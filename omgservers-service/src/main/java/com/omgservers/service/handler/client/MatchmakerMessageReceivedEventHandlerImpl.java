@@ -1,8 +1,11 @@
 package com.omgservers.service.handler.client;
 
 import com.omgservers.model.client.ClientModel;
+import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsRequest;
+import com.omgservers.model.dto.client.ViewClientMatchmakerRefsResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequestResponse;
 import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
@@ -17,6 +20,7 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
@@ -29,6 +33,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -59,35 +66,27 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
         final var message = body.getMessage();
 
         if (message.getBody() instanceof final MatchmakerMessageBodyModel messageBody) {
-            return getClient(clientId)
-                    .flatMap(client -> {
-                        final var matchmakerId = client.getMatchmakerId();
-                        final var tenantId = client.getTenantId();
-                        final var versionId = client.getVersionId();
+            final var mode = messageBody.getMode();
 
-                        final var mode = messageBody.getMode();
+            log.info("Matchmaker was requested, clientId={}, mode={}", clientId, mode);
 
-                        log.info("Matchmaker was requested, " +
-                                        "id={}, " +
-                                        "mode={}, " +
-                                        "clientId={}, " +
-                                        "version={}/{}",
-                                matchmakerId,
-                                mode,
-                                clientId,
-                                tenantId,
-                                versionId);
+            return selectClientMatchmakerRef(clientId)
+                    .flatMap(clientMatchmakerRef -> {
+                        final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
 
-                        final var userId = client.getUserId();
-                        final var playerId = client.getPlayerId();
+                        return getClient(clientId)
+                                .flatMap(client -> {
+                                    final var userId = client.getUserId();
+                                    final var playerId = client.getPlayerId();
 
-                        return getPlayerAttributes(userId, playerId)
-                                .flatMap(attributes -> syncMatchmakerRequest(matchmakerId,
-                                        userId,
-                                        clientId,
-                                        mode,
-                                        attributes,
-                                        event.getIdempotencyKey()));
+                                    return getPlayerAttributes(userId, playerId)
+                                            .flatMap(attributes -> syncMatchmakerRequest(matchmakerId,
+                                                    userId,
+                                                    clientId,
+                                                    mode,
+                                                    attributes,
+                                                    event.getIdempotencyKey()));
+                                });
                     })
                     .replaceWithVoid();
         } else {
@@ -100,6 +99,26 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
         final var request = new GetClientRequest(clientId);
         return clientModule.getClientService().getClient(request)
                 .map(GetClientResponse::getClient);
+    }
+
+    Uni<ClientMatchmakerRefModel> selectClientMatchmakerRef(final Long clientId) {
+        return viewClientMatchmakerRefs(clientId)
+                .map(clientMatchmakerRefs -> {
+                    if (clientMatchmakerRefs.isEmpty()) {
+                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
+                                String.format("matchmaker was not selected, clientId=%d", clientId));
+                    } else {
+                        return clientMatchmakerRefs.stream()
+                                .max(Comparator.comparing(ClientMatchmakerRefModel::getId))
+                                .get();
+                    }
+                });
+    }
+
+    Uni<List<ClientMatchmakerRefModel>> viewClientMatchmakerRefs(final Long clientId) {
+        final var request = new ViewClientMatchmakerRefsRequest(clientId);
+        return clientModule.getClientService().viewClientMatchmakerRefs(request)
+                .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
     Uni<PlayerAttributesModel> getPlayerAttributes(final Long userId, final Long playerId) {

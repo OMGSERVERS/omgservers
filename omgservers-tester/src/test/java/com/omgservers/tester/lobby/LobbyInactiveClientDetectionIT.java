@@ -47,20 +47,23 @@ public class LobbyInactiveClientDetectionIT extends Assertions {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
             final var lobbyAssignment = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
+            final var matchmakerAssignment = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment.getId()));
 
             Thread.sleep(10_000);
 
             // TODO: implement test
             //final var disconnectionMessage = playerApiTester.waitMessage(testClient,
             //        MessageQualifierEnum.DISCONNECTION_MESSAGE,
-            //        Collections.singletonList(lobbyAssignment.getId()));
+            //        Collections.singletonList(matchmakerAssignment.getId()));
             //
             //assertEquals(DisconnectionReasonEnum.CLIENT_INACTIVITY,
-            //        ((DisconnectionMessageBodyModel) disconnectionMessage.getBody()).getReason());
+            //        ((DisconnectionReasonMessageBodyModel) disconnectionMessage.getBody()).getReason());
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

@@ -1,7 +1,7 @@
 package com.omgservers.tester.player;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.WelcomeMessageBodyModel;
+import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -45,10 +45,10 @@ public class PlayerWelcomeMessageIT extends Assertions {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             assertNotNull(welcomeMessage);
-            final var messageBody = ((WelcomeMessageBodyModel) welcomeMessage.getBody());
+            final var messageBody = ((ServerWelcomeMessageBodyModel) welcomeMessage.getBody());
             assertNotNull(messageBody.getTenantId());
             assertNotNull(messageBody.getVersionId());
 

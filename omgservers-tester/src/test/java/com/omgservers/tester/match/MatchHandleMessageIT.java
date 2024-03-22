@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
@@ -72,25 +72,29 @@ public class MatchHandleMessageIT extends Assertions {
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             final var lobbyAssignment = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
+
+            final var matchmakerAssignment = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment.getId()));
 
             playerApiTester.requestMatchmaking(testClient, "test");
 
             final var matchAssignment = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment.getId()));
 
             playerApiTester.sendMessage(testClient, new TestMessage("helloworld"));
 
             final var serverMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.SERVER_MESSAGE,
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment.getId()));
             assertEquals("{text=match_message_was_handled}",
-                    ((ServerMessageBodyModel) serverMessage.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

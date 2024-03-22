@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.AssignmentMessageBodyModel;
+import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
@@ -68,32 +68,32 @@ public class LobbyMultipleReassignmentIT extends Assertions {
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
-            // Welcome message
-
             final var welcomeMessage = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
-
-            // Lobby assignments
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
+
+            final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment1.getId()));
 
             // Reassignment 1
 
             playerApiTester.requestMatchmaking(testClient, "test");
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient,
-                    message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
-                            ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                    message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
+                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.MATCH),
-                    Collections.singletonList(lobbyAssignment1.getId()));
+                    Collections.singletonList(matchmakerAssignment1.getId()));
 
             playerApiTester.sendMessage(testClient, new TestMessage("kick_me"));
 
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient,
-                    message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
-                            ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                    message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
+                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment1.getId()));
 
@@ -102,16 +102,16 @@ public class LobbyMultipleReassignmentIT extends Assertions {
             playerApiTester.requestMatchmaking(testClient, "test");
 
             final var matchAssignment2 = playerApiTester.waitMessage(testClient,
-                    message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
-                            ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                    message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
+                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.MATCH),
                     Collections.singletonList(lobbyAssignment2.getId()));
 
             playerApiTester.sendMessage(testClient, new TestMessage("kick_me"));
 
             final var lobbyAssignment3 = playerApiTester.waitMessage(testClient,
-                    message -> message.getQualifier().equals(MessageQualifierEnum.ASSIGNMENT_MESSAGE) &&
-                            ((AssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                    message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
+                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment2.getId()));
 

@@ -22,6 +22,7 @@ public class MatchmakerCommandModelMapper {
     public MatchmakerCommandModel fromRow(final Row row) {
         final var matchmakerCommand = new MatchmakerCommandModel();
         matchmakerCommand.setId(row.getLong("id"));
+        matchmakerCommand.setIdempotencyKey(row.getString("idempotency_key"));
         matchmakerCommand.setMatchmakerId(row.getLong("matchmaker_id"));
         matchmakerCommand.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmakerCommand.setModified(row.getOffsetDateTime("modified").toInstant());

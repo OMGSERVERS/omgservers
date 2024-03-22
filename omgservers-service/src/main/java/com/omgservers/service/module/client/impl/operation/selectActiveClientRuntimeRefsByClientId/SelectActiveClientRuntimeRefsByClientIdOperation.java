@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.selectActiveClientRuntimeRefsByClientId;
 
-import com.omgservers.model.clientRuntime.ClientRuntimeRefModel;
+import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

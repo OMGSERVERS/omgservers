@@ -28,7 +28,7 @@ class UpsertClientOperationTest extends Assertions {
     @Test
     void givenClient_whenUpsertClient_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         final var changeContext = upsertClientOperation.upsertClient(shard, client);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.CLIENT_CREATED));
@@ -37,7 +37,7 @@ class UpsertClientOperationTest extends Assertions {
     @Test
     void givenClient_whenUpsertClient_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var changeContext = upsertClientOperation.upsertClient(shard, client);
@@ -48,7 +48,7 @@ class UpsertClientOperationTest extends Assertions {
     @Test
     void givenClient_whenUpsertClient_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client1 = clientModelFactory.create(userId(), playerId(), tenantId(), versionId(), matchmakerId());
+        final var client1 = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
         upsertClientOperation.upsertClient(shard, client1);
 
         final var client2 = clientModelFactory.create(userId(),

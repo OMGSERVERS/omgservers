@@ -61,29 +61,52 @@ public class MatchmakingGradualRequestsIT extends Assertions {
 
             // Welcome messages
 
-            final var welcomeMessage1 = playerApiTester.waitMessage(testClient1, MessageQualifierEnum.WELCOME_MESSAGE);
-            final var welcomeMessage2 = playerApiTester.waitMessage(testClient2, MessageQualifierEnum.WELCOME_MESSAGE);
-            final var welcomeMessage3 = playerApiTester.waitMessage(testClient3, MessageQualifierEnum.WELCOME_MESSAGE);
-            final var welcomeMessage4 = playerApiTester.waitMessage(testClient4, MessageQualifierEnum.WELCOME_MESSAGE);
-            final var welcomeMessage5 = playerApiTester.waitMessage(testClient5, MessageQualifierEnum.WELCOME_MESSAGE);
+            final var welcomeMessage1 =
+                    playerApiTester.waitMessage(testClient1, MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
+            final var welcomeMessage2 =
+                    playerApiTester.waitMessage(testClient2, MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
+            final var welcomeMessage3 =
+                    playerApiTester.waitMessage(testClient3, MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
+            final var welcomeMessage4 =
+                    playerApiTester.waitMessage(testClient4, MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
+            final var welcomeMessage5 =
+                    playerApiTester.waitMessage(testClient5, MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             // Lobby assignments
 
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage2.getId()));
             final var lobbyAssignment3 = playerApiTester.waitMessage(testClient3,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage3.getId()));
             final var lobbyAssignment4 = playerApiTester.waitMessage(testClient4,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage4.getId()));
             final var lobbyAssignment5 = playerApiTester.waitMessage(testClient5,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage5.getId()));
+
+            // Matchmaker assignments
+
+            final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment1.getId()));
+            final var matchmakerAssignment2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment2.getId()));
+            final var matchmakerAssignment3 = playerApiTester.waitMessage(testClient3,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment3.getId()));
+            final var matchmakerAssignment4 = playerApiTester.waitMessage(testClient4,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment4.getId()));
+            final var matchmakerAssignment5 = playerApiTester.waitMessage(testClient5,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment5.getId()));
 
             // Gradual matchmaking requests
 
@@ -105,20 +128,20 @@ public class MatchmakingGradualRequestsIT extends Assertions {
             // Match assignments
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment1.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment1.getId()));
             final var matchAssignment2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment2.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment2.getId()));
             final var matchAssignment3 = playerApiTester.waitMessage(testClient3,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment3.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment3.getId()));
             final var matchAssignment4 = playerApiTester.waitMessage(testClient4,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment4.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment4.getId()));
             final var matchAssignment5 = playerApiTester.waitMessage(testClient5,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
-                    Collections.singletonList(lobbyAssignment5.getId()));
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment5.getId()));
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

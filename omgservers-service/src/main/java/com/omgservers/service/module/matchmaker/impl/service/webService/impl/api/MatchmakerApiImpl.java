@@ -1,5 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.webService.impl.api;
 
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchClientRequest;
@@ -12,10 +14,14 @@ import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerResponse;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.FindMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
@@ -26,6 +32,8 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerAssignmentRequest;
+import com.omgservers.model.dto.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchClientRequest;
@@ -42,6 +50,8 @@ import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerAssignmentsRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerAssignmentsResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchClientsRequest;
@@ -84,6 +94,41 @@ public class MatchmakerApiImpl implements MatchmakerApi {
     @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(final DeleteMatchmakerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmaker);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<GetMatchmakerAssignmentResponse> getMatchmakerAssignment(final GetMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerAssignment);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<FindMatchmakerAssignmentResponse> findMatchmakerAssignment(
+            final FindMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerAssignment);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<ViewMatchmakerAssignmentsResponse> viewMatchmakerAssignments(
+            final ViewMatchmakerAssignmentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerAssignments);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(
+            final SyncMatchmakerAssignmentRequest request) {
+        log.info("WORLD2, {}", request);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerAssignment);
+    }
+
+    @Override
+    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
+    public Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(
+            final DeleteMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerAssignment);
     }
 
     @Override

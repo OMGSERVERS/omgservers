@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerMessageBodyModel;
+import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -101,37 +101,45 @@ public class LobbySetAttributesIT extends Assertions {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
             final var welcomeMessage1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.WELCOME_MESSAGE);
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
 
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
+
+            final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment1.getId()));
 
             playerApiTester.sendMessage(testClient1, new TestMessage("init_attributes"));
 
             final var serverMessage1 = playerApiTester.waitMessage(testClient1,
-                    MessageQualifierEnum.SERVER_MESSAGE,
-                    Collections.singletonList(lobbyAssignment1.getId()));
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment1.getId()));
             assertEquals("{text=attributes_was_init}",
-                    ((ServerMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
 
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion, testClient1);
 
             final var welcomeMessage2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.WELCOME_MESSAGE,
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
                     Collections.singletonList(serverMessage1.getId()));
 
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.ASSIGNMENT_MESSAGE,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage2.getId()));
+
+            final var matchmakerAssignment2 = playerApiTester.waitMessage(testClient2,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment2.getId()));
 
             playerApiTester.sendMessage(testClient2, new TestMessage("check_attributes"));
 
             final var serverMessage2 = playerApiTester.waitMessage(testClient2,
-                    MessageQualifierEnum.SERVER_MESSAGE,
-                    Collections.singletonList(lobbyAssignment2.getId()));
+                    MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment2.getId()));
             assertEquals("{text=attributes_was_checked}",
-                    ((ServerMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

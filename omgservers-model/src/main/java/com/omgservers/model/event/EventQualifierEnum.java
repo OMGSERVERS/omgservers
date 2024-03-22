@@ -1,26 +1,32 @@
 package com.omgservers.model.event;
 
-import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientDeletedEventBodyModel;
-import com.omgservers.model.event.body.player.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
+import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
+import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientRuntimeRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.LobbyCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.LobbyDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.LobbyRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.LobbyRuntimeRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerAssignmentCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.MatchmakerAssignmentDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.player.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.MatchmakerRequestDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.PlayerCreatedEventBodyModel;
@@ -31,14 +37,12 @@ import com.omgservers.model.event.body.module.RuntimeClientCreatedEventBodyModel
 import com.omgservers.model.event.body.module.RuntimeClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeLobbyCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeLobbyDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeMatchCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.RuntimeMatchDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.StageCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.StageDeletedEventBodyModel;
-import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.TenantCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.TenantDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.UserCreatedEventBodyModel;
@@ -53,6 +57,8 @@ import com.omgservers.model.event.body.module.VersionMatchmakerRefCreatedEventBo
 import com.omgservers.model.event.body.module.VersionMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.VersionMatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.VersionMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.player.ClientMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.player.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.system.ContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.system.ContainerDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexCreatedEventBodyModel;
@@ -93,6 +99,8 @@ public enum EventQualifierEnum {
     CLIENT_DELETED(ClientDeletedEventBodyModel.class),
     CLIENT_RUNTIME_REF_CREATED(ClientRuntimeRefCreatedEventBodyModel.class),
     CLIENT_RUNTIME_REF_DELETED(ClientRuntimeRefDeletedEventBodyModel.class),
+    CLIENT_MATCHMAKER_REF_CREATED(ClientMatchmakerRefCreatedEventBodyModel.class),
+    CLIENT_MATCHMAKER_REF_DELETED(ClientMatchmakerRefDeletedEventBodyModel.class),
     LOBBY_CREATED(LobbyCreatedEventBodyModel.class),
     LOBBY_DELETED(LobbyDeletedEventBodyModel.class),
     LOBBY_RUNTIME_REF_CREATED(LobbyRuntimeRefCreatedEventBodyModel.class),
@@ -107,6 +115,8 @@ public enum EventQualifierEnum {
     MATCHMAKER_MATCH_RUNTIME_REF_DELETED(MatchmakerMatchRuntimeRefDeletedEventBodyModel.class),
     MATCHMAKER_REQUEST_CREATED(MatchmakerRequestCreatedEventBodyModel.class),
     MATCHMAKER_REQUEST_DELETED(MatchmakerRequestDeletedEventBodyModel.class),
+    MATCHMAKER_ASSIGNMENT_CREATED(MatchmakerAssignmentCreatedEventBodyModel.class),
+    MATCHMAKER_ASSIGNMENT_DELETED(MatchmakerAssignmentDeletedEventBodyModel.class),
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
     RUNTIME_CLIENT_CREATED(RuntimeClientCreatedEventBodyModel.class),
@@ -121,6 +131,8 @@ public enum EventQualifierEnum {
     // Internal
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class),
+    LOBBY_ASSIGNMENT_REQUESTED(LobbyAssignmentRequestedEventBodyModel.class),
+    MATCHMAKER_ASSIGNMENT_REQUESTED(MatchmakerAssignmentRequestedEventBodyModel.class),
     // Job
     STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class),
     MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED(MatchmakerJobTaskExecutionRequestedEventBodyModel.class),
