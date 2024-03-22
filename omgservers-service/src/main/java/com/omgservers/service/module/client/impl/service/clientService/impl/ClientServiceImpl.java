@@ -219,11 +219,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(
             @Valid final SyncClientMatchmakerRefRequest request) {
-        return syncClientMatchmakerRefMethod.syncClientMatchmakerRef(request);
-//        return handleInternalRequestOperation.handleInternalRequest(log, request,
-//                getClientModuleClientOperation::getClient,
-//                ClientModuleClient::syncClientMatchmakerRef,
-//                syncClientMatchmakerRefMethod::syncClientMatchmakerRef);
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getClientModuleClientOperation::getClient,
+                ClientModuleClient::syncClientMatchmakerRef,
+                syncClientMatchmakerRefMethod::syncClientMatchmakerRef);
     }
 
     @Override
