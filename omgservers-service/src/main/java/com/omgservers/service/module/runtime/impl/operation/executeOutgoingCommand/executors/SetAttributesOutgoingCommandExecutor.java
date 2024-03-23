@@ -13,7 +13,7 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -31,7 +31,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
     final ClientModule clientModule;
     final UserModule userModule;
 
-    final HasRuntimeClientOperation hasRuntimeClientOperation;
+    final HasRuntimeAssignmentOperation hasRuntimeAssignmentOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -51,7 +51,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(sqlConnection ->
-                        hasRuntimeClientOperation.hasRuntimeClient(
+                        hasRuntimeAssignmentOperation.hasRuntimeAssignment(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,
@@ -63,7 +63,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
                                     } else {
                                         throw new ServerSideBadRequestException(
                                                 ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                String.format("runtime client was not found, " +
+                                                String.format("runtime assignment was not found, " +
                                                                 "runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));
                                     }

@@ -7,7 +7,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.factory.MessageModelFactory;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +23,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
 
     final MatchmakerModule matchmakerModule;
 
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final MessageModelFactory messageModelFactory;
 
     @Override

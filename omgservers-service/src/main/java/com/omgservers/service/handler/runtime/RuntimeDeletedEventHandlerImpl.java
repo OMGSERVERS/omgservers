@@ -10,16 +10,16 @@ import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefReques
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
@@ -34,7 +34,7 @@ import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyMod
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -95,7 +95,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                     // TODO: cleanup container user
                     return findAndDeleteContainer(runtimeId)
                             .flatMap(voidItem -> deleteRuntimeCommands(runtimeId))
-                            .flatMap(voidItem -> deleteRuntimeClients(runtimeId))
+                            .flatMap(voidItem -> deleteRuntimeAssignments(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeRef(runtime));
                 })
                 .replaceWithVoid();
@@ -173,19 +173,19 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 .map(DeleteRuntimeCommandResponse::getDeleted);
     }
 
-    Uni<Void> deleteRuntimeClients(final Long runtimeId) {
-        return viewRuntimeClients(runtimeId)
-                .flatMap(runtimeClients -> Multi.createFrom().iterable(runtimeClients)
-                        .onItem().transformToUniAndConcatenate(runtimeClient ->
-                                deleteRuntimeClient(runtimeId, runtimeClient.getId())
+    Uni<Void> deleteRuntimeAssignments(final Long runtimeId) {
+        return viewRuntimeAssignments(runtimeId)
+                .flatMap(runtimeAssignments -> Multi.createFrom().iterable(runtimeAssignments)
+                        .onItem().transformToUniAndConcatenate(runtimeAssignment ->
+                                deleteRuntimeAssignment(runtimeId, runtimeAssignment.getId())
                                         .onFailure()
                                         .recoverWithItem(t -> {
-                                            log.warn("Delete runtime client failed, " +
+                                            log.warn("Delete runtime assignment failed, " +
                                                             "runtimeId={}, " +
-                                                            "runtimeClientId={}" +
+                                                            "runtimeAssignmentId={}" +
                                                             "{}:{}",
                                                     runtimeId,
-                                                    runtimeClient.getId(),
+                                                    runtimeAssignment.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;
@@ -196,16 +196,16 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<Boolean> deleteRuntimeClient(final Long runtimeId, final Long id) {
-        final var request = new DeleteRuntimeClientRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeClient(request)
-                .map(DeleteRuntimeClientResponse::getDeleted);
+    Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
+        final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
+        return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
+                .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 
-    Uni<List<RuntimeClientModel>> viewRuntimeClients(final Long runtimeId) {
-        final var request = new ViewRuntimeClientsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeClients(request)
-                .map(ViewRuntimeClientsResponse::getRuntimeClients);
+    Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
+        final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
+        return runtimeModule.getRuntimeService().viewRuntimeAssignments(request)
+                .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
     Uni<Void> deleteRuntimeRef(final RuntimeModel runtime) {

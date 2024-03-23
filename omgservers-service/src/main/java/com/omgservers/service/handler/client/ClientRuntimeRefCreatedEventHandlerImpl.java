@@ -8,10 +8,10 @@ import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.event.EventModel;
@@ -20,7 +20,7 @@ import com.omgservers.model.event.body.module.client.ClientRuntimeRefCreatedEven
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -130,7 +130,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                                 return Uni.createFrom().voidItem();
                             } else {
                                 final var runtimeId = clientRuntimeRef.getRuntimeId();
-                                return findAndDeleteRuntimeClient(runtimeId, clientId);
+                                return findAndDeleteRuntimeAssignment(runtimeId, clientId);
                             }
                         })
                         .collect().asList()
@@ -144,25 +144,25 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
-    Uni<Void> findAndDeleteRuntimeClient(final Long runtimeId, final Long clientId) {
-        return findRuntimeClient(runtimeId, clientId)
+    Uni<Void> findAndDeleteRuntimeAssignment(final Long runtimeId, final Long clientId) {
+        return findRuntimeAssignment(runtimeId, clientId)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(runtimeClient ->
-                        deleteRuntimeClient(runtimeId, runtimeClient.getId()))
+                .onItem().ifNotNull().transformToUni(runtimeAssignment ->
+                        deleteRuntimeAssignment(runtimeId, runtimeAssignment.getId()))
                 .replaceWithVoid();
     }
 
-    Uni<RuntimeClientModel> findRuntimeClient(final Long runtimeId, final Long clientId) {
-        final var request = new FindRuntimeClientRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeClient(request)
-                .map(FindRuntimeClientResponse::getRuntimeClient);
+    Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
+        final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
+        return runtimeModule.getRuntimeService().findRuntimeAssignment(request)
+                .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
-    Uni<Boolean> deleteRuntimeClient(final Long runtimeId, final Long id) {
-        final var request = new DeleteRuntimeClientRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeClient(request)
-                .map(DeleteRuntimeClientResponse::getDeleted);
+    Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
+        final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
+        return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
+                .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }
 

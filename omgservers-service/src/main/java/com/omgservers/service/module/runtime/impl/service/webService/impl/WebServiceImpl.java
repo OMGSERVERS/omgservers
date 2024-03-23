@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.impl.service.webService.impl;
 
-import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
@@ -12,28 +12,28 @@ import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.InterchangeRequest;
 import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
@@ -114,33 +114,33 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetRuntimeClientResponse> getRuntimeClient(final GetRuntimeClientRequest request) {
-        return runtimeService.getRuntimeClient(request);
+    public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
+        return runtimeService.getRuntimeAssignment(request);
     }
 
     @Override
-    public Uni<FindRuntimeClientResponse> findRuntimeClient(final FindRuntimeClientRequest request) {
-        return runtimeService.findRuntimeClient(request);
+    public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(final FindRuntimeAssignmentRequest request) {
+        return runtimeService.findRuntimeAssignment(request);
     }
 
     @Override
-    public Uni<ViewRuntimeClientsResponse> viewRuntimeClients(final ViewRuntimeClientsRequest request) {
-        return runtimeService.viewRuntimeClients(request);
+    public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(final ViewRuntimeAssignmentsRequest request) {
+        return runtimeService.viewRuntimeAssignments(request);
     }
 
     @Override
-    public Uni<CountRuntimeClientsResponse> countRuntimeClients(final CountRuntimeClientsRequest request) {
-        return runtimeService.countRuntimeClients(request);
+    public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(final CountRuntimeAssignmentsRequest request) {
+        return runtimeService.countRuntimeAssignments(request);
     }
 
     @Override
-    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(final SyncRuntimeClientRequest request) {
-        return runtimeService.syncRuntimeClient(request);
+    public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
+        return runtimeService.syncRuntimeAssignment(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(final DeleteRuntimeClientRequest request) {
-        return runtimeService.deleteRuntimeClient(request);
+    public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
+        return runtimeService.deleteRuntimeAssignment(request);
     }
 
     @Override

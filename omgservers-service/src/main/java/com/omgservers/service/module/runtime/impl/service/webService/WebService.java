@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.impl.service.webService;
 
-import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
@@ -12,28 +12,28 @@ import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.InterchangeRequest;
 import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
@@ -65,17 +65,17 @@ public interface WebService {
 
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(DeleteRuntimeCommandsRequest request);
 
-    Uni<GetRuntimeClientResponse> getRuntimeClient(GetRuntimeClientRequest request);
+    Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(GetRuntimeAssignmentRequest request);
 
-    Uni<FindRuntimeClientResponse> findRuntimeClient(FindRuntimeClientRequest request);
+    Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(FindRuntimeAssignmentRequest request);
 
-    Uni<ViewRuntimeClientsResponse> viewRuntimeClients(ViewRuntimeClientsRequest request);
+    Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(ViewRuntimeAssignmentsRequest request);
 
-    Uni<CountRuntimeClientsResponse> countRuntimeClients(CountRuntimeClientsRequest request);
+    Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(CountRuntimeAssignmentsRequest request);
 
-    Uni<SyncRuntimeClientResponse> syncRuntimeClient(SyncRuntimeClientRequest request);
+    Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(SyncRuntimeAssignmentRequest request);
 
-    Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(DeleteRuntimeClientRequest request);
+    Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(DeleteRuntimeAssignmentRequest request);
 
     Uni<InterchangeResponse> interchange(InterchangeRequest request);
 }

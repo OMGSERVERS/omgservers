@@ -381,7 +381,7 @@ create table if not exists tab_runtime_command (
     deleted boolean not null
 );
 
-create table if not exists tab_runtime_client (
+create table if not exists tab_runtime_assignment (
     id bigint primary key,
     idempotency_key text not null unique,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
@@ -395,4 +395,4 @@ create table if not exists tab_runtime_client (
 
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
-create index if not exists idx_runtime_client_runtime_id on tab_runtime_client(runtime_id);
+create index if not exists idx_runtime_assignment_runtime_id on tab_runtime_assignment(runtime_id);

@@ -5,7 +5,7 @@ import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.hasRuntime.HasRuntimeOperation;
-import com.omgservers.service.module.runtime.impl.operation.updateRuntimeClientLastActivity.UpdateRuntimeClientLastActivityOperation;
+import com.omgservers.service.module.runtime.impl.operation.updateRuntimeAssignmentLastActivity.UpdateRuntimeAssignmentLastActivityOperation;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
 
-    final UpdateRuntimeClientLastActivityOperation updateRuntimeClientLastActivityOperation;
+    final UpdateRuntimeAssignmentLastActivityOperation updateRuntimeAssignmentLastActivityOperation;
     final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
@@ -47,8 +47,8 @@ class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
                                             .hasRuntime(sqlConnection, shard, runtimeId)
                                             .flatMap(has -> {
                                                 if (has) {
-                                                    return updateRuntimeClientLastActivityOperation
-                                                            .updateRuntimeClientLastActivity(
+                                                    return updateRuntimeAssignmentLastActivityOperation
+                                                            .updateRuntimeAssignmentLastActivity(
                                                                     changeContext,
                                                                     sqlConnection,
                                                                     shard,

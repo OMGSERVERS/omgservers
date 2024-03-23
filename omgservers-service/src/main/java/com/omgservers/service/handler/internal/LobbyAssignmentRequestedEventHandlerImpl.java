@@ -2,8 +2,8 @@ package com.omgservers.service.handler.internal;
 
 import com.omgservers.model.dto.lobby.GetLobbyRequest;
 import com.omgservers.model.dto.lobby.GetLobbyResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRefsResponse;
 import com.omgservers.model.event.EventModel;
@@ -15,7 +15,7 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -38,7 +38,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final LobbyModule lobbyModule;
 
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -60,7 +60,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                     return getLobby(lobbyId)
                             .flatMap(lobby -> {
                                 final var runtimeId = lobby.getRuntimeId();
-                                return syncRuntimeClient(runtimeId, clientId, event.getIdempotencyKey());
+                                return syncRuntimeAssignment(runtimeId, clientId, event.getIdempotencyKey());
                             });
                 })
                 .replaceWithVoid();
@@ -92,20 +92,20 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 .map(GetLobbyResponse::getLobby);
     }
 
-    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
+    Uni<Boolean> syncRuntimeAssignment(final Long runtimeId,
                                    final Long clientId,
                                    final String idempotencyKey) {
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
+        final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId,
                 clientId,
                 idempotencyKey);
-        final var request = new SyncRuntimeClientRequest(runtimeClient);
-        return runtimeModule.getRuntimeService().syncRuntimeClient(request)
-                .map(SyncRuntimeClientResponse::getCreated)
+        final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
+        return runtimeModule.getRuntimeService().syncRuntimeAssignment(request)
+                .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", runtimeClient, t.getMessage());
+                            log.warn("Idempotency was violated, object={}, {}", runtimeAssignment, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

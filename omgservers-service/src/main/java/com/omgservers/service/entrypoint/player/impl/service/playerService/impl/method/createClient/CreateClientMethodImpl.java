@@ -19,7 +19,7 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.ClientModelFactory;
 import com.omgservers.service.factory.PlayerModelFactory;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -44,7 +44,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 

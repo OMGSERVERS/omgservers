@@ -4,18 +4,18 @@ import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchClientResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchClientCreatedEventBodyModel;
 import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.runtimeClient.RuntimeClientConfigModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentConfigModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -33,7 +33,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
 
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -61,7 +61,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                                 final var runtimeId = match.getRuntimeId();
 
                                 final var idempotencyKey = event.getIdempotencyKey();
-                                return syncRuntimeClient(runtimeId, clientId, matchClient, idempotencyKey);
+                                return syncRuntimeAssignment(runtimeId, clientId, matchClient, idempotencyKey);
                             });
                 })
                 .replaceWithVoid();
@@ -79,24 +79,24 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
-    Uni<Boolean> syncRuntimeClient(final Long runtimeId,
-                                   final Long clientId,
-                                   final MatchmakerMatchClientModel matchClient,
-                                   final String idempotencyKey) {
-        final var runtimeClientConfig = RuntimeClientConfigModel.create();
-        runtimeClientConfig.setMatchClient(matchClient);
-        final var runtimeClient = runtimeClientModelFactory.create(runtimeId,
+    Uni<Boolean> syncRuntimeAssignment(final Long runtimeId,
+                                       final Long clientId,
+                                       final MatchmakerMatchClientModel matchClient,
+                                       final String idempotencyKey) {
+        final var runtimeAssignmentConfig = RuntimeAssignmentConfigModel.create();
+        runtimeAssignmentConfig.setMatchClient(matchClient);
+        final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId,
                 clientId,
-                runtimeClientConfig,
+                runtimeAssignmentConfig,
                 idempotencyKey);
-        final var request = new SyncRuntimeClientRequest(runtimeClient);
-        return runtimeModule.getRuntimeService().syncRuntimeClient(request)
-                .map(SyncRuntimeClientResponse::getCreated)
+        final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
+        return runtimeModule.getRuntimeService().syncRuntimeAssignment(request)
+                .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", runtimeClient, t.getMessage());
+                            log.warn("Idempotency was violated, object={}, {}", runtimeAssignment, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

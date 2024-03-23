@@ -7,7 +7,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.ClientRuntimeRefModelFactory;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -25,7 +25,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final ClientModule clientModule;
 
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final ClientRuntimeRefModelFactory clientRuntimeRefModelFactory;
 
     @Override

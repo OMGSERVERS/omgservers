@@ -47,8 +47,8 @@ import com.omgservers.model.event.body.module.user.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.user.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.runtime.RuntimeClientCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.runtime.RuntimeClientDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
@@ -115,8 +115,8 @@ public enum EventQualifierEnum {
     MATCHMAKER_ASSIGNMENT_DELETED(MatchmakerAssignmentDeletedEventBodyModel.class),
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class),
-    RUNTIME_CLIENT_CREATED(RuntimeClientCreatedEventBodyModel.class),
-    RUNTIME_CLIENT_DELETED(RuntimeClientDeletedEventBodyModel.class),
+    RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class),
+    RUNTIME_ASSIGNMENT_DELETED(RuntimeAssignmentDeletedEventBodyModel.class),
     // Internal
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class),

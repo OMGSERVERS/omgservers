@@ -14,7 +14,7 @@ import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.hasRuntimeClient.HasRuntimeClientOperation;
+import com.omgservers.service.module.runtime.impl.operation.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -32,7 +32,7 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
     final ClientModule clientModule;
     final UserModule userModule;
 
-    final HasRuntimeClientOperation hasRuntimeClientOperation;
+    final HasRuntimeAssignmentOperation hasRuntimeAssignmentOperation;
     final CheckShardOperation checkShardOperation;
 
     final ClientMessageModelFactory clientMessageModelFactory;
@@ -54,7 +54,7 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(
-                        sqlConnection -> hasRuntimeClientOperation.hasRuntimeClient(
+                        sqlConnection -> hasRuntimeAssignmentOperation.hasRuntimeAssignment(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,
@@ -65,7 +65,8 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
                                                 .replaceWithVoid();
                                     } else {
                                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                String.format("runtime client was not found, runtimeId=%s, clientId=%s",
+                                                String.format(
+                                                        "runtime assignment was not found, runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));
                                     }
                                 }))

@@ -2,14 +2,14 @@ package com.omgservers.service.handler.job.runtime;
 
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
@@ -81,7 +81,7 @@ public class RuntimeJobTaskImpl {
 
     Uni<Void> detectInactiveClients(final RuntimeModel runtime) {
         final var runtimeId = runtime.getId();
-        return viewRuntimeClients(runtimeId)
+        return viewRuntimeAssignments(runtimeId)
                 .map(this::filterInactiveClients)
                 .flatMap(inactiveClients -> Multi.createFrom().iterable(inactiveClients)
                         .onItem().transformToUniAndConcatenate(this::syncInactiveClientDetectedEvent)
@@ -89,25 +89,25 @@ public class RuntimeJobTaskImpl {
                 .replaceWithVoid();
     }
 
-    Uni<List<RuntimeClientModel>> viewRuntimeClients(final Long runtimeId) {
-        final var request = new ViewRuntimeClientsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeClients(request)
-                .map(ViewRuntimeClientsResponse::getRuntimeClients);
+    Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
+        final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
+        return runtimeModule.getRuntimeService().viewRuntimeAssignments(request)
+                .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
-    List<RuntimeClientModel> filterInactiveClients(List<RuntimeClientModel> runtimeClients) {
+    List<RuntimeAssignmentModel> filterInactiveClients(List<RuntimeAssignmentModel> runtimeAssignments) {
         final var inactiveInterval = getConfigOperation.getServiceConfig().clientInactiveInterval();
         final var now = Instant.now();
 
-        return runtimeClients.stream()
-                .filter(runtimeClient -> runtimeClient
+        return runtimeAssignments.stream()
+                .filter(runtimeAssignment -> runtimeAssignment
                         .getLastActivity()
                         .plusSeconds(inactiveInterval)
                         .isBefore(now))
                 .toList();
     }
 
-    Uni<Boolean> syncInactiveClientDetectedEvent(RuntimeClientModel inactiveClient) {
+    Uni<Boolean> syncInactiveClientDetectedEvent(RuntimeAssignmentModel inactiveClient) {
         final var clientId = inactiveClient.getClientId();
         final var eventBody = new InactiveClientDetectedEventBodyModel(clientId);
         final var eventModel = eventModelFactory.create(eventBody);

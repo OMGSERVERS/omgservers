@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl;
 
-import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsResponse;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
@@ -12,28 +12,28 @@ import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.FindRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.FindRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.FindRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.GetRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.runtime.InterchangeRequest;
 import com.omgservers.model.dto.runtime.InterchangeResponse;
 import com.omgservers.model.dto.runtime.SyncClientCommandRequest;
 import com.omgservers.model.dto.runtime.SyncClientCommandResponse;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeClientResponse;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
 import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
@@ -41,23 +41,23 @@ import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.countRuntimeClients.CountRuntimeClientsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.countRuntimeAssignments.CountRuntimeAssignmentsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntime.DeleteRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeClient.DeleteRuntimeClientMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeAssignment.DeleteRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeCommand.DeleteRuntimeCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimeCommands.DeleteRuntimeCommandsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.deleteRuntimePermission.DeleteRuntimePermissionMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimeClient.FindRuntimeClientMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimeAssignment.FindRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.findRuntimePermission.FindRuntimePermissionMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntime.GetRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntimeClient.GetRuntimeClientMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.getRuntimeAssignment.GetRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.interchange.InterchangeMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncClientCommand.SyncClientCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntime.SyncRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeClient.SyncRuntimeClientMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeAssignment.SyncRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimeCommand.SyncRuntimeCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.syncRuntimePermission.SyncRuntimePermissionMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeClients.ViewRuntimeClientsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeAssignments.ViewRuntimeAssignmentsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimeCommands.ViewRuntimeCommandsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.viewRuntimePermissions.ViewRuntimePermissionsMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -80,14 +80,14 @@ public class RuntimeServiceImpl implements RuntimeService {
     final DeleteRuntimeCommandsMethod deleteRuntimeCommandsMethod;
     final DeleteRuntimeCommandMethod deleteRuntimeCommandMethod;
     final ViewRuntimeCommandsMethod viewRuntimeCommandsMethod;
-    final DeleteRuntimeClientMethod deleteRuntimeClientMethod;
-    final CountRuntimeClientsMethod countRuntimeClientsMethod;
+    final DeleteRuntimeAssignmentMethod deleteRuntimeAssignmentMethod;
+    final CountRuntimeAssignmentsMethod countRuntimeAssignmentsMethod;
     final SyncRuntimeCommandMethod syncRuntimeCommandMethod;
-    final ViewRuntimeClientsMethod viewRuntimeClientsMethod;
+    final ViewRuntimeAssignmentsMethod viewRuntimeAssignmentsMethod;
     final SyncClientCommandMethod syncClientCommandMethod;
-    final SyncRuntimeClientMethod syncRuntimeClientMethod;
-    final FindRuntimeClientMethod findRuntimeClientMethod;
-    final GetRuntimeClientMethod getRuntimeClientMethod;
+    final SyncRuntimeAssignmentMethod syncRuntimeAssignmentMethod;
+    final FindRuntimeAssignmentMethod findRuntimeAssignmentMethod;
+    final GetRuntimeAssignmentMethod getRuntimeAssignmentMethod;
     final DeleteRuntimeMethod deleteRuntimeMethod;
     final SyncRuntimeMethod syncRuntimeMethod;
     final InterchangeMethod interchangeMethod;
@@ -195,51 +195,51 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<GetRuntimeClientResponse> getRuntimeClient(@Valid final GetRuntimeClientRequest request) {
+    public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(@Valid final GetRuntimeAssignmentRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::getRuntimeClient,
-                getRuntimeClientMethod::getRuntimeClient);
+                RuntimeModuleClient::getRuntimeAssignment,
+                getRuntimeAssignmentMethod::getRuntimeAssignment);
     }
 
     @Override
-    public Uni<FindRuntimeClientResponse> findRuntimeClient(@Valid final FindRuntimeClientRequest request) {
+    public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(@Valid final FindRuntimeAssignmentRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::findRuntimeClient,
-                findRuntimeClientMethod::findRuntimeClient);
+                RuntimeModuleClient::findRuntimeAssignment,
+                findRuntimeAssignmentMethod::findRuntimeAssignment);
     }
 
     @Override
-    public Uni<ViewRuntimeClientsResponse> viewRuntimeClients(@Valid final ViewRuntimeClientsRequest request) {
+    public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(@Valid final ViewRuntimeAssignmentsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::viewRuntimeClients,
-                viewRuntimeClientsMethod::viewRuntimeClients);
+                RuntimeModuleClient::viewRuntimeAssignments,
+                viewRuntimeAssignmentsMethod::viewRuntimeAssignments);
     }
 
     @Override
-    public Uni<CountRuntimeClientsResponse> countRuntimeClients(@Valid final CountRuntimeClientsRequest request) {
+    public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(@Valid final CountRuntimeAssignmentsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::countRuntimeClients,
-                countRuntimeClientsMethod::countRuntimeClients);
+                RuntimeModuleClient::countRuntimeAssignments,
+                countRuntimeAssignmentsMethod::countRuntimeAssignments);
     }
 
     @Override
-    public Uni<SyncRuntimeClientResponse> syncRuntimeClient(@Valid final SyncRuntimeClientRequest request) {
+    public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(@Valid final SyncRuntimeAssignmentRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimeClient,
-                syncRuntimeClientMethod::syncRuntimeClient);
+                RuntimeModuleClient::syncRuntimeAssignment,
+                syncRuntimeAssignmentMethod::syncRuntimeAssignment);
     }
 
     @Override
-    public Uni<DeleteRuntimeClientResponse> deleteRuntimeClient(@Valid final DeleteRuntimeClientRequest request) {
+    public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(@Valid final DeleteRuntimeAssignmentRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimeClient,
-                deleteRuntimeClientMethod::deleteRuntimeClient);
+                RuntimeModuleClient::deleteRuntimeAssignment,
+                deleteRuntimeAssignmentMethod::deleteRuntimeAssignment);
     }
 
     @Override

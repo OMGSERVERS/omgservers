@@ -8,12 +8,12 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeClientsByRuntimeId.SelectActiveRuntimeClientsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeAssignmentsByRuntimeId.SelectActiveRuntimeAssignmentsByRuntimeIdOperation;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -36,7 +36,7 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
     final SystemModule systemModule;
     final UserModule userModule;
 
-    final SelectActiveRuntimeClientsByRuntimeIdOperation selectActiveRuntimeClientsByRuntimeIdOperation;
+    final SelectActiveRuntimeAssignmentsByRuntimeIdOperation selectActiveRuntimeAssignmentsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final ClientMessageModelFactory clientMessageModelFactory;
@@ -57,8 +57,8 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(
-                        sqlConnection -> selectActiveRuntimeClientsByRuntimeIdOperation
-                                .selectActiveRuntimeClientsByRuntimeId(sqlConnection,
+                        sqlConnection -> selectActiveRuntimeAssignmentsByRuntimeIdOperation
+                                .selectActiveRuntimeAssignmentsByRuntimeId(sqlConnection,
                                         shardModel.shard(),
                                         runtimeId)
                                 .map(this::createClientList)
@@ -66,9 +66,9 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
                 );
     }
 
-    List<Long> createClientList(final List<RuntimeClientModel> runtimeClients) {
-        return runtimeClients.stream()
-                .map(RuntimeClientModel::getClientId)
+    List<Long> createClientList(final List<RuntimeAssignmentModel> runtimeAssignments) {
+        return runtimeAssignments.stream()
+                .map(RuntimeAssignmentModel::getClientId)
                 .toList();
     }
 

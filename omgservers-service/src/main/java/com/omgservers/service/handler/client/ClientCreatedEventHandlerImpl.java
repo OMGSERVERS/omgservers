@@ -19,7 +19,7 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.system.SystemModule;
@@ -38,7 +38,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
     final SystemModule systemModule;
 
     final ClientMessageModelFactory clientMessageModelFactory;
-    final RuntimeClientModelFactory runtimeClientModelFactory;
+    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
     final EventModelFactory eventModelFactory;
 

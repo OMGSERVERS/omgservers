@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.job.stage;
 
-import com.omgservers.model.dto.runtime.CountRuntimeClientsRequest;
-import com.omgservers.model.dto.runtime.CountRuntimeClientsResponse;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsRequest;
+import com.omgservers.model.dto.runtime.CountRuntimeAssignmentsResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
@@ -96,7 +96,7 @@ public class StageJobTaskImpl {
                 .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
                         .onItem().transformToUniAndConcatenate(versionRuntime -> {
                             final var runtimeId = versionRuntime.getLobbyId();
-                            return countRuntimeClients(runtimeId)
+                            return countRuntimeAssignments(runtimeId)
                                     .map(count -> count > 0);
                         })
                         .collect().asList()
@@ -112,10 +112,10 @@ public class StageJobTaskImpl {
                 .map(ViewVersionLobbyRefsResponse::getVersionLobbyRefs);
     }
 
-    Uni<Integer> countRuntimeClients(Long runtimeId) {
-        final var request = new CountRuntimeClientsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().countRuntimeClients(request)
-                .map(CountRuntimeClientsResponse::getCount);
+    Uni<Integer> countRuntimeAssignments(Long runtimeId) {
+        final var request = new CountRuntimeAssignmentsRequest(runtimeId);
+        return runtimeModule.getRuntimeService().countRuntimeAssignments(request)
+                .map(CountRuntimeAssignmentsResponse::getCount);
     }
 
     Uni<Boolean> deleteVersion(final Long tenantId, final Long id) {

@@ -2,11 +2,11 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.service.factory.RuntimeClientModelFactory;
+import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
-import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeClientOperationTestInterface;
-import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeClientOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeAssignmentOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeAssignmentOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -21,19 +21,19 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
-    DeleteRuntimeClientOperationTestInterface deleteRuntimeClientOperation;
+    DeleteRuntimeAssignmentOperationTestInterface deleteRuntimeAssignmentOperation;
 
     @Inject
     UpsertRuntimeOperation upsertRuntimeOperation;
 
     @Inject
-    UpsertRuntimeClientOperationTestInterface upsertRuntimeClientOperation;
+    UpsertRuntimeAssignmentOperationTestInterface upsertRuntimeAssignmentOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
-    RuntimeClientModelFactory runtimeClientModelFactory;
+    RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -42,7 +42,7 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
     PgPool pgPool;
 
     @Test
-    void givenRuntimeClient_whenDeleteRuntimeClient_thenDeleted() {
+    void givenRuntimeAssignment_whenDeleteRuntimeAssignment_thenDeleted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -50,23 +50,23 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
                 new RuntimeConfigModel());
         upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
 
-        final var runtimeClient = runtimeClientModelFactory
+        final var runtimeAssignment = runtimeAssignmentModelFactory
                 .create(runtime.getId(), clientId());
-        upsertRuntimeClientOperation.upsertRuntimeClient(shard, runtimeClient);
+        upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment);
 
-        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard,
+        final var changeContext = deleteRuntimeAssignmentOperation.deleteRuntimeAssignment(shard,
                 runtime.getId(),
-                runtimeClient.getId());
+                runtimeAssignment.getId());
         assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenUnknownIds_whenDeleteRuntimeClient_thenFalse() {
+    void givenUnknownIds_whenDeleteRuntimeAssignment_thenFalse() {
         final var shard = 0;
         final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteRuntimeClientOperation.deleteRuntimeClient(shard, runtimeId, id);
+        final var changeContext = deleteRuntimeAssignmentOperation.deleteRuntimeAssignment(shard, runtimeId, id);
         assertFalse(changeContext.getResult());
     }
 

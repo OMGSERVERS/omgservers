@@ -8,14 +8,14 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
-import com.omgservers.model.runtimeClient.RuntimeClientModel;
+import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.ClientMessageModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeClientsByRuntimeId.SelectActiveRuntimeClientsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.selectActiveRuntimeAssignmentsByRuntimeId.SelectActiveRuntimeAssignmentsByRuntimeIdOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
@@ -37,7 +37,7 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
     final ClientModule clientModule;
     final UserModule userModule;
 
-    final SelectActiveRuntimeClientsByRuntimeIdOperation selectActiveRuntimeClientsByRuntimeIdOperation;
+    final SelectActiveRuntimeAssignmentsByRuntimeIdOperation selectActiveRuntimeAssignmentsByRuntimeIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final ClientMessageModelFactory clientMessageModelFactory;
@@ -60,13 +60,13 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(
-                        sqlConnection -> selectActiveRuntimeClientsByRuntimeIdOperation
-                                .selectActiveRuntimeClientsByRuntimeId(
+                        sqlConnection -> selectActiveRuntimeAssignmentsByRuntimeIdOperation
+                                .selectActiveRuntimeAssignmentsByRuntimeId(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId)
-                                .flatMap(runtimeClients -> {
-                                    if (checkClients(clients, runtimeClients)) {
+                                .flatMap(runtimeAssignments -> {
+                                    if (checkClients(clients, runtimeAssignments)) {
                                         return multicastMessage(clients, message);
                                     } else {
                                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
@@ -78,12 +78,12 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
     }
 
     boolean checkClients(final List<Long> clients,
-                         final List<RuntimeClientModel> runtimeClients) {
-        final var runtimeClientSet = runtimeClients.stream()
-                .map(RuntimeClientModel::getClientId)
+                         final List<RuntimeAssignmentModel> runtimeAssignments) {
+        final var runtimeAssignmentsSet = runtimeAssignments.stream()
+                .map(RuntimeAssignmentModel::getClientId)
                 .collect(Collectors.toSet());
 
-        return runtimeClientSet.containsAll(clients);
+        return runtimeAssignmentsSet.containsAll(clients);
     }
 
     Uni<Void> multicastMessage(final List<Long> clients,
