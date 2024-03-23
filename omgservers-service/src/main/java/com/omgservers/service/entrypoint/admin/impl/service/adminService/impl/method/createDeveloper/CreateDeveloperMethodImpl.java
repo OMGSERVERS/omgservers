@@ -17,13 +17,12 @@ import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.security.SecureRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -33,9 +32,10 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final TenantPermissionModelFactory tenantPermissionModelFactory;
+    final GenerateSecureStringOperation generateSecureStringOperation;
     final GenerateIdOperation generateIdOperation;
 
+    final TenantPermissionModelFactory tenantPermissionModelFactory;
     final UserModelFactory userModelFactory;
 
     @Override
@@ -43,8 +43,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         log.debug("Create developer, request={}", request);
 
         final var tenantId = request.getTenantId();
-        // TODO: improve it
-        final var password = String.valueOf(new SecureRandom().nextLong());
+        final var password = generateSecureStringOperation.generateSecureString();
         return getTenant(tenantId)
                 .flatMap(tenant -> createUser(password))
                 .call(user -> syncCreateProjectPermission(tenantId, user.getId()))

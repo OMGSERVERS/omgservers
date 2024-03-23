@@ -19,8 +19,8 @@ import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
@@ -40,6 +40,7 @@ import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
@@ -48,7 +49,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.security.SecureRandom;
 import java.util.HashMap;
 
 @Slf4j
@@ -62,6 +62,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final LobbyModule lobbyModule;
     final UserModule userModule;
 
+    final GenerateSecureStringOperation generateSecureStringOperation;
     final GetConfigOperation getConfigOperation;
 
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
@@ -92,8 +93,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     final var idempotencyKey = event.getIdempotencyKey();
 
                     final var userId = runtime.getUserId();
-                    // TODO: improve it
-                    final var password = String.valueOf(new SecureRandom().nextLong());
+                    final var password = generateSecureStringOperation.generateSecureString();
                     return createUser(userId, password, idempotencyKey)
                             .flatMap(user -> syncContainer(user, password, runtime))
                             .flatMap(created -> syncRuntimeRef(runtime, idempotencyKey))

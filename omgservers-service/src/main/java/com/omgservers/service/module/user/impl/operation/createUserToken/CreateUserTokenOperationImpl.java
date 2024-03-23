@@ -5,18 +5,18 @@ import com.omgservers.model.user.UserTokenContainerModel;
 import com.omgservers.model.user.UserTokenModel;
 import com.omgservers.service.module.user.impl.operation.encodeToken.EncodeTokenOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.security.SecureRandom;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class CreateUserTokenOperationImpl implements CreateUserTokenOperation {
 
+    final GenerateSecureStringOperation generateSecureStringOperation;
     final EncodeTokenOperation encodeTokenOperation;
     final GenerateIdOperation generateIdOperation;
     final GetConfigOperation getConfigOperation;
@@ -30,8 +30,7 @@ class CreateUserTokenOperationImpl implements CreateUserTokenOperation {
         tokenObject.setId(generateIdOperation.generateId());
         tokenObject.setUserId(userId);
         tokenObject.setRole(user.getRole());
-        // TODO improve secret generation
-        tokenObject.setSecret(new SecureRandom().nextLong());
+        tokenObject.setSecret(generateSecureStringOperation.generateSecureString());
 
         final var rawToken = encodeTokenOperation.encodeToken(tokenObject);
         final var result = new UserTokenContainerModel(tokenObject, rawToken, lifetime);

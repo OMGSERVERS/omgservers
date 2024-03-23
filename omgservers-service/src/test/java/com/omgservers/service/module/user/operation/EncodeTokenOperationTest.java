@@ -26,7 +26,7 @@ class EncodeTokenOperationTest extends Assertions {
         token.setId(generateIdOperation.generateId());
         token.setUserId(generateIdOperation.generateId());
         token.setRole(UserRoleEnum.PLAYER);
-        token.setSecret(1234567890L);
+        token.setSecret("secret");
 
         String rawToken = encodeTokenOperation.encodeToken(token);
         assertNotNull(rawToken);

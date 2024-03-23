@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class GenerateIdOperationTest extends Assertions {
+class GenerateSecureStringOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;

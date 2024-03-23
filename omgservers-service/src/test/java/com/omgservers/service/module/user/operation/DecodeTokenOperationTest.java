@@ -31,7 +31,7 @@ class DecodeTokenOperationTest extends Assertions {
         userToken1.setId(generateIdOperation.generateId());
         userToken1.setUserId(generateIdOperation.generateId());
         userToken1.setRole(UserRoleEnum.PLAYER);
-        userToken1.setSecret(1234567890L);
+        userToken1.setSecret("secret");
 
         String rawToken = encodeTokenOperation.encodeToken(userToken1);
 

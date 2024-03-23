@@ -7,14 +7,13 @@ import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.security.SecureRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -23,15 +22,15 @@ class CreateUserMethodImpl implements CreateUserMethod {
 
     final UserModule userModule;
 
+    final GenerateSecureStringOperation generateSecureStringOperation;
+
     final UserModelFactory userModelFactory;
 
     @Override
     public Uni<CreateUserPlayerResponse> createUser(final CreateUserPlayerRequest request) {
         log.debug("Create user, request={}", request);
 
-        //TODO: improve it
-        final var password = String.valueOf(new SecureRandom().nextLong());
-
+        final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)
                 .map(user -> new CreateUserPlayerResponse(user.getId(), password));
     }

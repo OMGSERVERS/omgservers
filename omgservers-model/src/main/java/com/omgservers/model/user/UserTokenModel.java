@@ -22,5 +22,5 @@ public class UserTokenModel {
 
     @NotNull
     @ToString.Exclude
-    long secret;
+    String secret;
 }
