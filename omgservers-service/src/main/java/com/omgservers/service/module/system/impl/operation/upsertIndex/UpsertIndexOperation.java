@@ -12,13 +12,4 @@ public interface UpsertIndexOperation {
     Uni<Boolean> upsertIndex(ChangeContext<?> changeContext,
                              SqlConnection sqlConnection,
                              IndexModel index);
-
-    default Boolean upsertIndex(long timeout, PgPool pgPool, IndexModel index) {
-        return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection ->
-                            upsertIndex(changeContext, sqlConnection, index));
-                })
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

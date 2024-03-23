@@ -4,12 +4,11 @@ import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.PlayerModelFactory;
 import com.omgservers.service.factory.UserModelFactory;
-import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.service.module.user.operation.testInterface.SelectPlayerOperationTestInterface;
+import com.omgservers.service.module.user.operation.testInterface.UpsertPlayerOperationTestInterface;
 import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class SelectPermissionOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     SelectPlayerOperationTestInterface selectPlayerOperation;
@@ -27,7 +25,7 @@ class SelectPermissionOperationTest extends Assertions {
     UpsertUserOperationTestInterface upsertUserOperation;
 
     @Inject
-    UpsertPlayerOperation upsertPlayerOperation;
+    UpsertPlayerOperationTestInterface upsertPlayerOperation;
 
     @Inject
     UserModelFactory userModelFactory;
@@ -38,9 +36,6 @@ class SelectPermissionOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
     void givenPlayer_whenSelectPlayer_thenSelected() {
         final var shard = 0;
@@ -49,7 +44,7 @@ class SelectPermissionOperationTest extends Assertions {
         upsertUserOperation.upsertUser(shard, user);
         final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var playerId = player1.getId();
-        upsertPlayerOperation.upsertPlayer(TIMEOUT, pgPool, shard, player1);
+        upsertPlayerOperation.upsertPlayer(shard, player1);
 
         final var player2 = selectPlayerOperation.selectPlayer(shard, userId, playerId, false);
         assertEquals(player1, player2);

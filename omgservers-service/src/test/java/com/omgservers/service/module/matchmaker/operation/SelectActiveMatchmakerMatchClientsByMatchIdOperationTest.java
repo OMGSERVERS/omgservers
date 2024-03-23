@@ -5,8 +5,8 @@ import com.omgservers.model.request.MatchmakerRequestConfigModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.MatchmakerModelFactory;
 import com.omgservers.service.factory.MatchmakerRequestModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.operation.testInterface.SelectMatchmakerRequestOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerRequestOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,7 +24,7 @@ class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertion
     private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertMatchmakerOperation upsertMatchmakerOperation;
+    UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
 
     @Inject
     UpsertMatchmakerRequestOperationTestInterface upsertMatchmakerRequestOperation;
@@ -33,13 +33,13 @@ class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertion
     SelectMatchmakerRequestOperationTestInterface selectMatchmakerRequestOperation;
 
     @Inject
+    GenerateIdOperation generateIdOperation;
+
+    @Inject
     MatchmakerModelFactory matchmakerModelFactory;
 
     @Inject
     MatchmakerRequestModelFactory matchmakerRequestModelFactory;
-
-    @Inject
-    GenerateIdOperation generateIdOperation;
 
     @Inject
     PgPool pgPool;
@@ -48,7 +48,7 @@ class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertion
     void givenMatchmakerRequest_whenSelectMatchmakerRequest_thenSelected() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        upsertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerRequestConfig = MatchmakerRequestConfigModel.create(PlayerAttributesModel.create());
         final var matchmakerRequest1 = matchmakerRequestModelFactory

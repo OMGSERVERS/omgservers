@@ -6,13 +6,12 @@ import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientConfigMod
 import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch.UpsertMatchmakerMatchOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatchClient.UpsertMatchmakerMatchClientOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchClientOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchClientOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -23,19 +22,21 @@ import java.util.UUID;
 @Slf4j
 @QuarkusTest
 class DeleteMatchmakerMatchRuntimeRefOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     DeleteMatchmakerMatchClientOperationTestInterface deleteMatchClientOperation;
 
     @Inject
-    UpsertMatchmakerMatchClientOperation upsertMatchmakerMatchClientOperation;
+    UpsertMatchmakerMatchClientOperationTestInterface upsertMatchmakerMatchClientOperation;
 
     @Inject
-    UpsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
 
     @Inject
-    UpsertMatchmakerMatchOperation upsertMatchmakerMatchOperation;
+    UpsertMatchmakerMatchOperationTestInterface upsertMatchmakerMatchOperation;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -46,32 +47,31 @@ class DeleteMatchmakerMatchRuntimeRefOperationTest extends Assertions {
     @Inject
     MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
 
-    @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenMatchClient_whenDeleteMatchClient_thenDeleted() {
+    void givenMatchClient_whenDeleteMatchmakerMatchClient_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
-        final var match = matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigModel());
-        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(TIMEOUT, pgPool, shard, match);
-        final var matchClient =
-                matchmakerMatchClientModelFactory.create(matchmaker.getId(), match.getId(), userId(), clientId(), groupName(),
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
+        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        final var matchmakerMatch = matchmakerMatchModelFactory
+                .create(matchmaker.getId(), new MatchmakerMatchConfigModel());
+        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
+        final var matchmakerMatchClient = matchmakerMatchClientModelFactory
+                .create(matchmaker.getId(),
+                        matchmakerMatch.getId(),
+                        userId(),
+                        clientId(),
+                        groupName(),
                         new MatchmakerMatchClientConfigModel());
-        upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(TIMEOUT, pgPool, shard, matchClient);
+        upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchmakerMatchClient);
 
         final var changeContext = deleteMatchClientOperation
-                .deleteMatchmakerMatchClient(shard, matchmaker.getId(), matchClient.getId());
+                .deleteMatchmakerMatchClient(shard, matchmaker.getId(), matchmakerMatchClient.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_CLIENT_DELETED));
     }
 
     @Test
-    void givenUnknownIds_whenDeleteMatchClient_thenFalse() {
+    void givenUnknownIds_whenDeleteMatchmakerMatchClient_thenSkip() {
         final var shard = 0;
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
@@ -93,7 +93,7 @@ class DeleteMatchmakerMatchRuntimeRefOperationTest extends Assertions {
         return generateIdOperation.generateId();
     }
 
-    Long stageId() {
+    Long versionId() {
         return generateIdOperation.generateId();
     }
 

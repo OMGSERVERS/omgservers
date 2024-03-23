@@ -2,11 +2,10 @@ package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -15,28 +14,24 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class DeleteMatchmakerOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     DeleteMatchmakerOperationTestInterface deleteMatchmakerOperation;
 
     @Inject
-    UpsertMatchmakerOperation insertMatchmakerOperation;
-
-    @Inject
-    MatchmakerModelFactory matchmakerModelFactory;
+    UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
 
     @Inject
     GenerateIdOperation generateIdOperation;
 
     @Inject
-    PgPool pgPool;
+    MatchmakerModelFactory matchmakerModelFactory;
 
     @Test
     void givenMatchmaker_whenDeleteMatchmaker_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, matchmaker.getId());
         assertTrue(changeContext.getResult());

@@ -6,12 +6,11 @@ import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.service.factory.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerMatch.UpsertMatchmakerMatchOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -23,16 +22,18 @@ import java.util.UUID;
 @Slf4j
 @QuarkusTest
 class DeleteClientRuntimeRefOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     DeleteMatchmakerMatchOperationTestInterface deleteMatchOperation;
 
     @Inject
-    UpsertMatchmakerOperation insertMatchmakerOperation;
+    UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
 
     @Inject
-    UpsertMatchmakerMatchOperation upsertMatchmakerMatchOperation;
+    UpsertMatchmakerMatchOperationTestInterface upsertMatchmakerMatchOperation;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
 
     @Inject
     MatchmakerModelFactory matchmakerModelFactory;
@@ -40,17 +41,11 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
     @Inject
     MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
-    @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
-
     @Test
-    void givenMatch_whenDeleteMatch_thenDeleted() {
+    void givenMatchmakerMatch_whenDeleteMatchmakerMatch_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
-        insertMatchmakerOperation.upsertMatchmaker(TIMEOUT, pgPool, shard, matchmaker);
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
+        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
             add(VersionGroupModel.create("red", 1, 4));
@@ -58,7 +53,7 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
         }});
         final var matchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var match = matchmakerMatchModelFactory.create(matchmaker.getId(), matchConfig);
-        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(TIMEOUT, pgPool, shard, match);
+        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, match);
 
         final var changeContext = deleteMatchOperation.deleteMatchmakerMatch(shard, matchmaker.getId(), match.getId());
         assertTrue(changeContext.getResult());
@@ -66,7 +61,7 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownIds_whenDeleteMatch_thenFalse() {
+    void givenUnknownIds_whenDeleteMatchmakerMatch_thenSkip() {
         final var shard = 0;
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
@@ -77,10 +72,6 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
     }
 
     Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long stageId() {
         return generateIdOperation.generateId();
     }
 

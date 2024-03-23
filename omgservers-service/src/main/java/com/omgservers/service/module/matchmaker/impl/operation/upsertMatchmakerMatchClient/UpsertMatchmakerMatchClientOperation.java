@@ -13,16 +13,4 @@ public interface UpsertMatchmakerMatchClientOperation {
                                              SqlConnection sqlConnection,
                                              int shard,
                                              MatchmakerMatchClientModel matchmakerMatchClient);
-
-    default Boolean upsertMatchmakerMatchClient(long timeout,
-                                                PgPool pgPool,
-                                                int shard,
-                                                MatchmakerMatchClientModel matchClient) {
-        return Uni.createFrom().context(context -> {
-                    final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection ->
-                            upsertMatchmakerMatchClient(changeContext, sqlConnection, shard, matchClient));
-                })
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

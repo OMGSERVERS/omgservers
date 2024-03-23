@@ -1,15 +1,15 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeAssignmentOperationTestInterface;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeAssignmentOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -18,28 +18,24 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class DeleteRuntimePermissionOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     DeleteRuntimeAssignmentOperationTestInterface deleteRuntimeAssignmentOperation;
 
     @Inject
-    UpsertRuntimeOperation upsertRuntimeOperation;
+    UpsertRuntimeOperationTestInterface upsertRuntimeOperation;
 
     @Inject
     UpsertRuntimeAssignmentOperationTestInterface upsertRuntimeAssignmentOperation;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
     RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
-
-    @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenRuntimeAssignment_whenDeleteRuntimeAssignment_thenDeleted() {
@@ -48,7 +44,7 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory
                 .create(runtime.getId(), clientId());
@@ -58,16 +54,18 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
                 runtime.getId(),
                 runtimeAssignment.getId());
         assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_ASSIGNMENT_DELETED));
     }
 
     @Test
-    void givenUnknownIds_whenDeleteRuntimeAssignment_thenFalse() {
+    void givenUnknownIds_whenDeleteRuntimeAssignment_thenSkip() {
         final var shard = 0;
         final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
         final var changeContext = deleteRuntimeAssignmentOperation.deleteRuntimeAssignment(shard, runtimeId, id);
         assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_ASSIGNMENT_DELETED));
     }
 
     Long tenantId() {

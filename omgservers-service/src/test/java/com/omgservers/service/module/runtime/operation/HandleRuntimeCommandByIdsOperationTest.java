@@ -1,12 +1,12 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -15,10 +15,9 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class HandleRuntimeCommandByIdsOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
-    UpsertRuntimeOperation upsertRuntimeOperation;
+    UpsertRuntimeOperationTestInterface upsertRuntimeOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
@@ -26,44 +25,37 @@ class HandleRuntimeCommandByIdsOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
         final var shard = 0;
-        final var runtime1 =
-                runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH, new RuntimeConfigModel());
-        assertTrue(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime1));
+        final var runtime = runtimeModelFactory.create(tenantId(),
+                versionId(),
+                RuntimeQualifierEnum.MATCH,
+                new RuntimeConfigModel());
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        assertTrue(changeContext.getResult());
+        assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }
 
     @Test
-    void givenRuntime_whenInsertRuntimeAgain_thenUpdated() {
+    void givenRuntime_whenUpsertRuntime_thenSkip() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
+        final var runtime = runtimeModelFactory.create(tenantId(),
+                versionId(),
+                RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
-        assertFalse(upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime));
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        assertFalse(changeContext.getResult());
+        assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }
 
     Long tenantId() {
         return generateIdOperation.generateId();
     }
 
-    Long stageId() {
-        return generateIdOperation.generateId();
-    }
-
     Long versionId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchmakerId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchId() {
         return generateIdOperation.generateId();
     }
 }

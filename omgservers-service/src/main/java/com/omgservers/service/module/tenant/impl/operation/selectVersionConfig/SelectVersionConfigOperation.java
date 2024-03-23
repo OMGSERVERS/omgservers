@@ -12,13 +12,4 @@ public interface SelectVersionConfigOperation {
                                                 int shard,
                                                 Long tenantId,
                                                 Long versionId);
-
-    default VersionConfigModel selectVersionConfig(long timeout,
-                                                   PgPool pgPool,
-                                                   int shard,
-                                                   Long tenantId,
-                                                   Long versionId) {
-        return pgPool.withTransaction(sqlConnection -> selectVersionConfig(sqlConnection, shard, tenantId, versionId))
-                .await().atMost(Duration.ofSeconds(timeout));
-    }
 }

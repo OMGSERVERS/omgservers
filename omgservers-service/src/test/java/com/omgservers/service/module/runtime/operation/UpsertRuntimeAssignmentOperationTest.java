@@ -8,11 +8,10 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeAssignmentOperationTestInterface;
+import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -21,25 +20,21 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 @QuarkusTest
 class UpsertRuntimeAssignmentOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
 
     @Inject
     UpsertRuntimeAssignmentOperationTestInterface upsertRuntimeAssignmentOperation;
 
     @Inject
-    UpsertRuntimeOperation upsertRuntimeOperation;
+    UpsertRuntimeOperationTestInterface upsertRuntimeOperation;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
 
     @Inject
     RuntimeModelFactory runtimeModelFactory;
 
     @Inject
     RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
-
-    @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenInserted() {
@@ -48,7 +43,7 @@ class UpsertRuntimeAssignmentOperationTest extends Assertions {
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtime.getId(), clientId());
 
@@ -58,13 +53,13 @@ class UpsertRuntimeAssignmentOperationTest extends Assertions {
     }
 
     @Test
-    void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenUpdated() {
+    void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenSkip() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtime.getId(),
                 clientId());
@@ -92,7 +87,7 @@ class UpsertRuntimeAssignmentOperationTest extends Assertions {
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigModel());
-        upsertRuntimeOperation.upsertRuntime(TIMEOUT, pgPool, shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeAssignment1 = runtimeAssignmentModelFactory.create(runtime.getId(),
                 clientId());
