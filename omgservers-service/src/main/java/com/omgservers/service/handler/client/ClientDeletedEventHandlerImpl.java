@@ -92,6 +92,8 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(clientMatchmakerRefs -> Multi.createFrom().iterable(clientMatchmakerRefs)
                         .onItem().transformToUniAndConcatenate(clientMatchmakerRef -> {
                             final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
+                            // TODO: findAndDeleteMatchmakerAssignment
+
                             return syncDeleteClientMatchmakerCommand(matchmakerId,
                                     clientId,
                                     idempotencyKey + "/" + matchmakerId);

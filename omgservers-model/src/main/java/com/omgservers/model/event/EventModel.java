@@ -23,9 +23,11 @@ public class EventModel {
     String idempotencyKey;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotNull

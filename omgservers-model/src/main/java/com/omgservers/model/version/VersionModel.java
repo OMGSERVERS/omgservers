@@ -25,9 +25,11 @@ public class VersionModel {
     Long stageId;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotBlank

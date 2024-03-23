@@ -3,6 +3,7 @@ package com.omgservers.model.container;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
@@ -16,9 +17,11 @@ public class ContainerModel {
     Long id;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotNull

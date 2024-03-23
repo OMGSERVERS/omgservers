@@ -25,9 +25,11 @@ public class PlayerModel {
     Long userId;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotNull

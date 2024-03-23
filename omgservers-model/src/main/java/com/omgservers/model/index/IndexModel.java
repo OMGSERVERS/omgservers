@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -18,9 +19,11 @@ public class IndexModel {
     Long id;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotNull
