@@ -60,17 +60,14 @@ import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
-import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Matchmaker Module API")
 @Path("/omgservers/v1/module/matchmaker/request")
-@SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface MatchmakerApi {
 
     @PUT

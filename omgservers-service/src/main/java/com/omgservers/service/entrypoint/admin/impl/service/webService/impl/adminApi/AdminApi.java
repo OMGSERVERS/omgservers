@@ -31,7 +31,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Admin Entrypoint API")
 @Path("/omgservers/v1/entrypoint/admin/request")
-@SecurityRequirement(name = ServiceOpenApiConfiguration.ADMIN_SECURITY_SCHEMA)
 public interface AdminApi {
 
     @PUT

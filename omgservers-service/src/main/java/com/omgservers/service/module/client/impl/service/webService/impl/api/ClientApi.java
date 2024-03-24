@@ -34,16 +34,13 @@ import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Client Module API")
 @Path("/omgservers/v1/module/client/request")
-@SecurityRequirement(name = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA)
 public interface ClientApi {
 
     @PUT

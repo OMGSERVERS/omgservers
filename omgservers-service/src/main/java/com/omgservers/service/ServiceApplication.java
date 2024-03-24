@@ -16,10 +16,6 @@ import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 @QuarkusMain
 @AllArgsConstructor
 @SecuritySchemes({
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.ADMIN_SECURITY_SCHEMA,
-                type = SecuritySchemeType.HTTP, scheme = "Basic"),
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.SERVICE_SECURITY_SCHEMA,
-                type = SecuritySchemeType.HTTP, scheme = "Basic"),
         @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer"),
         @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA,
