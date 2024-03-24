@@ -16,8 +16,6 @@ import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.dto.user.IntrospectTokenRequest;
-import com.omgservers.model.dto.user.IntrospectTokenResponse;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncPlayerResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
@@ -26,8 +24,6 @@ import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
 import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
-import com.omgservers.model.dto.user.ValidateCredentialsRequest;
-import com.omgservers.model.dto.user.ValidateCredentialsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -38,11 +34,7 @@ public interface WebService {
 
     Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
 
-    Uni<ValidateCredentialsResponse> validateCredentials(ValidateCredentialsRequest request);
-
     Uni<CreateTokenResponse> createToken(CreateTokenRequest request);
-
-    Uni<IntrospectTokenResponse> introspectToken(IntrospectTokenRequest request);
 
     Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
 

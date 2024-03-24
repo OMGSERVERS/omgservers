@@ -16,8 +16,6 @@ import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.dto.user.IntrospectTokenRequest;
-import com.omgservers.model.dto.user.IntrospectTokenResponse;
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncPlayerResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
@@ -26,10 +24,6 @@ import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
 import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
-import com.omgservers.model.dto.user.ValidateCredentialsRequest;
-import com.omgservers.model.dto.user.ValidateCredentialsResponse;
-import com.omgservers.service.module.user.impl.service.playerService.PlayerService;
-import com.omgservers.service.module.user.impl.service.tokenService.TokenService;
 import com.omgservers.service.module.user.impl.service.userService.UserService;
 import com.omgservers.service.module.user.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -43,8 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class WebServiceImpl implements WebService {
 
-    final PlayerService playerService;
-    final TokenService tokenService;
     final UserService userService;
 
     @Override
@@ -63,57 +55,47 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<ValidateCredentialsResponse> validateCredentials(final ValidateCredentialsRequest request) {
-        return userService.validateCredentials(request);
-    }
-
-    @Override
     public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
-        return tokenService.createToken(request);
-    }
-
-    @Override
-    public Uni<IntrospectTokenResponse> introspectToken(final IntrospectTokenRequest request) {
-        return tokenService.introspectToken(request);
+        return userService.createToken(request);
     }
 
     @Override
     public Uni<GetPlayerResponse> getPlayer(final GetPlayerRequest request) {
-        return playerService.getPlayer(request);
+        return userService.getPlayer(request);
     }
 
     @Override
     public Uni<GetPlayerAttributesResponse> getPlayerAttributes(final GetPlayerAttributesRequest request) {
-        return playerService.getPlayerAttributes(request);
+        return userService.getPlayerAttributes(request);
     }
 
     @Override
     public Uni<GetPlayerProfileResponse> getPlayerProfile(final GetPlayerProfileRequest request) {
-        return playerService.getPlayerProfile(request);
+        return userService.getPlayerProfile(request);
     }
 
     @Override
     public Uni<FindPlayerResponse> findPlayer(final FindPlayerRequest request) {
-        return playerService.findPlayer(request);
+        return userService.findPlayer(request);
     }
 
     @Override
     public Uni<SyncPlayerResponse> syncPlayer(final SyncPlayerRequest request) {
-        return playerService.syncPlayer(request);
+        return userService.syncPlayer(request);
     }
 
     @Override
     public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(final UpdatePlayerAttributesRequest request) {
-        return playerService.updatePlayerAttributes(request);
+        return userService.updatePlayerAttributes(request);
     }
 
     @Override
     public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(final UpdatePlayerProfileRequest request) {
-        return playerService.updatePlayerProfile(request);
+        return userService.updatePlayerProfile(request);
     }
 
     @Override
     public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
-        return playerService.deletePlayer(request);
+        return userService.deletePlayer(request);
     }
 }

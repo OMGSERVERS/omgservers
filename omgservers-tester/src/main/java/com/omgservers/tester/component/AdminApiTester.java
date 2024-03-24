@@ -42,8 +42,6 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
-                .auth()
-                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateIndexAdminRequest(name, shards, addresses)))
                 .when()
                 .put("/omgservers/v1/entrypoint/admin/request/create-index");
@@ -64,8 +62,6 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
-                .auth()
-                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateServiceAccountAdminRequest(username, password)))
                 .when()
                 .put("/omgservers/v1/entrypoint/admin/request/create-service-account");
@@ -84,8 +80,6 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
-                .auth()
-                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateTenantAdminRequest()))
                 .when().put("/omgservers/v1/entrypoint/admin/request/create-tenant");
         responseSpecification.then().statusCode(200);
@@ -100,8 +94,6 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
-                .auth()
-                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantAdminRequest(tenantId)))
                 .when().put("/omgservers/v1/entrypoint/admin/request/delete-tenant");
@@ -117,8 +109,6 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().adminUri().toString())
                 .contentType(ContentType.JSON)
-                .auth()
-                .basic(getConfigOperation.getConfig().adminUsername(), getConfigOperation.getConfig().adminPassword())
                 .body(objectMapper.writeValueAsString(new CreateDeveloperAdminRequest(tenantId)))
                 .when().put("/omgservers/v1/entrypoint/admin/request/create-developer");
         responseSpecification.then().statusCode(200);

@@ -90,7 +90,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
                                      final Long playerId,
                                      final Object profile) {
         final var request = new UpdatePlayerProfileRequest(userId, playerId, profile);
-        return userModule.getPlayerService().updatePlayerProfile(request)
+        return userModule.getUserService().updatePlayerProfile(request)
                 .map(UpdatePlayerProfileResponse::getUpdated);
     }
 }

@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
 import com.omgservers.model.dto.user.CreateTokenRequest;
+import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,13 +24,15 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
         final var userId = request.getUserId();
         final var password = request.getPassword();
+
+        // TODO: does role have to be "Developer" only, block others?
+        return createToken(userId, password)
+                .map(CreateTokenDeveloperResponse::new);
+    }
+
+    Uni<String> createToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getTokenService().createToken(createTokenRequest)
-                .map(response -> {
-                    // TODO: does role have to be "Developer" only, block others?
-                    final var rawToken = response.getRawToken();
-                    final var createTokenApiResponse = new CreateTokenDeveloperResponse(rawToken);
-                    return createTokenApiResponse;
-                });
+        return userModule.getUserService().createToken(createTokenRequest)
+                .map(CreateTokenResponse::getRawToken);
     }
 }

@@ -119,311 +119,261 @@ class TenantApiImpl implements TenantApi {
     final HandleApiRequestOperation handleApiRequestOperation;
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetTenantResponse> getTenant(final GetTenantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenant);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetTenantDashboardResponse> getTenantDashboard(final GetTenantDashboardRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncTenantResponse> syncTenant(final SyncTenantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenant);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(final ViewTenantPermissionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantPermissions);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasTenantPermissionResponse> hasTenantPermission(final HasTenantPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasTenantPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(final DeleteTenantPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetProjectResponse> getProject(final GetProjectRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getProject);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncProjectResponse> syncProject(final SyncProjectRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncProject);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewProjects);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteProjectResponse> deleteProject(final DeleteProjectRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteProject);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewProjectPermissionsResponse> viewProjectPermissions(final ViewProjectPermissionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewProjectPermissions);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasProjectPermissionResponse> hasProjectPermission(final HasProjectPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasProjectPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncProjectPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(final DeleteProjectPermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteProjectPermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetStageResponse> getStage(final GetStageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getStage);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStage);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewStagesResponse> viewStages(ViewStagesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewStages);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteStageResponse> deleteStage(final DeleteStageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteStage);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewStagePermissionsResponse> viewStagePermissions(final ViewStagePermissionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewStagePermissions);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<HasStagePermissionResponse> hasStagePermission(final HasStagePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::hasStagePermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStagePermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteStagePermissionResponse> deleteStagePermission(final DeleteStagePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteStagePermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::selectStageVersion);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionResponse> getVersion(final GetVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersion);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersion);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersions);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionResponse> deleteVersion(final DeleteVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionConfigResponse> getVersionConfig(final GetVersionConfigRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionConfig);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(final GetVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindVersionLobbyRequestResponse> findVersionLobbyRequest(final FindVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionLobbyRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(
             final ViewVersionLobbyRequestsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRequests);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(final SyncVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(
             final DeleteVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(final GetVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(final FindVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionLobbyRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(final ViewVersionLobbyRefsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRefs);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(final SyncVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(final DeleteVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionMatchmakerRefResponse> getVersionMatchmakerRef(GetVersionMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetVersionMatchmakerRequestResponse> getVersionMatchmakerRequest(
             final GetVersionMatchmakerRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionMatchmakerRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindVersionMatchmakerRequestResponse> findVersionMatchmakerRequest(
             final FindVersionMatchmakerRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionMatchmakerRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewVersionMatchmakerRequestsResponse> viewVersionMatchmakerRequests(
             final ViewVersionMatchmakerRequestsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionMatchmakerRequests);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(
             final SyncVersionMatchmakerRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionMatchmakerRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(
             final DeleteVersionMatchmakerRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionMatchmakerRequest);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindVersionMatchmakerRefResponse> findVersionMatchmakerRef(
             final FindVersionMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewVersionMatchmakerRefsResponse> viewVersionMatchmakerRefs(
             final ViewVersionMatchmakerRefsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionMatchmakerRefs);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncVersionMatchmakerRefResponse> syncVersionMatchmakerRef(
             final SyncVersionMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteVersionMatchmakerRefResponse> deleteVersionMatchmakerRef(
             final DeleteVersionMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionMatchmakerRef);

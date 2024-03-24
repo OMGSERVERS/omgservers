@@ -30,6 +30,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,13 +50,13 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 
-    final SecurityIdentity securityIdentity;
+    final JsonWebToken jwt;
 
     @Override
     public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
         log.debug("Create client, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute("userId");
+        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
 
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
@@ -90,7 +92,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<PlayerModel> findPlayer(final Long userId, final Long stageId) {
         final var request = new FindPlayerRequest(userId, stageId);
-        return userModule.getPlayerService().findPlayer(request)
+        return userModule.getUserService().findPlayer(request)
                 .map(FindPlayerResponse::getPlayer);
     }
 
@@ -99,7 +101,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long stageId) {
         final var player = playerModelFactory.create(userId, tenantId, stageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
-        return userModule.getPlayerService().syncPlayer(syncPlayerRequest)
+        return userModule.getUserService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
     }
 

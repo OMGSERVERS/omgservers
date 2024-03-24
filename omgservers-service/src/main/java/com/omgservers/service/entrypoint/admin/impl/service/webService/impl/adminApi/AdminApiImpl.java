@@ -22,11 +22,9 @@ import com.omgservers.model.dto.admin.SyncIndexAdminRequest;
 import com.omgservers.model.dto.admin.SyncIndexAdminResponse;
 import com.omgservers.model.dto.admin.SyncServiceAccountAdminRequest;
 import com.omgservers.model.dto.admin.SyncServiceAccountAdminResponse;
-import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.entrypoint.admin.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,31 +39,26 @@ public class AdminApiImpl implements AdminApi {
     final HandleApiRequestOperation handleApiRequestOperation;
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<PingServerAdminResponse> pingServer() {
         return webService.pingServer();
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<GenerateIdAdminResponse> generateId() {
         return webService.generateId();
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<BcryptHashAdminResponse> bcryptHash(BcryptHashAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::bcryptHash);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<FindIndexAdminResponse> findIndex(final FindIndexAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findIndex);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateIndexAdminResponse> createIndex(final CreateIndexAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createIndex);
     }
@@ -76,13 +69,11 @@ public class AdminApiImpl implements AdminApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<FindServiceAccountAdminResponse> findServiceAccount(final FindServiceAccountAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findServiceAccount);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateServiceAccountAdminResponse> createServiceAccount(final CreateServiceAccountAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createServiceAccount);
     }
@@ -93,19 +84,16 @@ public class AdminApiImpl implements AdminApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateTenantAdminResponse> createTenant(final CreateTenantAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenant);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<DeleteTenantAdminResponse> deleteTenant(DeleteTenantAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.ADMIN})
     public Uni<CreateDeveloperAdminResponse> createDeveloper(final CreateDeveloperAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
     }

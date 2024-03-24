@@ -123,7 +123,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
 
     Uni<PlayerAttributesModel> getPlayerAttributes(final Long userId, final Long playerId) {
         final var request = new GetPlayerAttributesRequest(userId, playerId);
-        return userModule.getPlayerService().getPlayerAttributes(request)
+        return userModule.getUserService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesResponse::getAttributes);
     }
 

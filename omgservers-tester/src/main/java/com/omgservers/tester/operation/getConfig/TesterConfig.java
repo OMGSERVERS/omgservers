@@ -10,8 +10,4 @@ public interface TesterConfig {
     URI externalUri();
 
     URI adminUri();
-
-    String adminUsername();
-
-    String adminPassword();
 }

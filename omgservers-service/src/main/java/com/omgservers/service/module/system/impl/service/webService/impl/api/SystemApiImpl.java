@@ -34,49 +34,41 @@ class SystemApiImpl implements SystemApi {
     final WebService webService;
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getIndex);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindIndexResponse> findIndex(final FindIndexRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findIndex);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncIndexResponse> syncIndex(final SyncIndexRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncIndex);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteIndexResponse> deleteIndex(final DeleteIndexRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteIndex);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetServiceAccountResponse> getServiceAccount(GetServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getServiceAccount);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindServiceAccountResponse> findServiceAccount(FindServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findServiceAccount);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncServiceAccountResponse> syncServiceAccount(final SyncServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncServiceAccount);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteServiceAccountResponse> deleteServiceAccount(DeleteServiceAccountRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteServiceAccount);
     }

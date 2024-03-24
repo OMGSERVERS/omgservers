@@ -34,11 +34,9 @@ import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.client.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,19 +51,16 @@ class ClientApiImpl implements ClientApi {
     final HandleApiRequestOperation handleApiRequestOperation;
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetClientResponse> getClient(final GetClientRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getClient);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncClientResponse> syncClient(final SyncClientRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClient);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteClientResponse> deleteClient(final DeleteClientRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClient);
     }
@@ -76,81 +71,70 @@ class ClientApiImpl implements ClientApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewClientMessagesResponse> viewClientMessages(final ViewClientMessagesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewClientMessages);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncClientMessageResponse> syncClientMessage(final SyncClientMessageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientMessage);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteClientMessagesResponse> deleteClientMessages(
             final DeleteClientMessagesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClientMessages);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(final GetClientRuntimeRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getClientRuntimeRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(final FindClientRuntimeRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findClientRuntimeRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(final ViewClientRuntimeRefsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewClientRuntimeRefs);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(final SyncClientRuntimeRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientRuntimeRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(final DeleteClientRuntimeRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClientRuntimeRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetClientMatchmakerRefResponse> getClientMatchmakerRef(final GetClientMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getClientMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(final FindClientMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findClientMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(final ViewClientMatchmakerRefsRequest request) {
+    public Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(
+            final ViewClientMatchmakerRefsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewClientMatchmakerRefs);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(final SyncClientMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientMatchmakerRef);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
-    public Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(final DeleteClientMatchmakerRefRequest request) {
+    public Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(
+            final DeleteClientMatchmakerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteClientMatchmakerRef);
     }
 }

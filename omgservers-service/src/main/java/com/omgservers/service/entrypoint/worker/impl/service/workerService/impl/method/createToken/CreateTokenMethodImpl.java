@@ -1,6 +1,7 @@
 package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.method.createToken;
 
 import com.omgservers.model.dto.user.CreateTokenRequest;
+import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
 import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
 import com.omgservers.service.module.user.UserModule;
@@ -23,13 +24,15 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
         final var userId = request.getUserId();
         final var password = request.getPassword();
+
+        // TODO: does role have to be "Worker" only, block others?
+        return createToken(userId, password)
+                .map(CreateTokenWorkerResponse::new);
+    }
+
+    Uni<String> createToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getTokenService().createToken(createTokenRequest)
-                .map(response -> {
-                    final var tokenObject = response.getTokenObject();
-                    final var rawToken = response.getRawToken();
-                    final var lifetime = response.getLifetime();
-                    return new CreateTokenWorkerResponse(tokenObject, rawToken, lifetime);
-                });
+        return userModule.getUserService().createToken(createTokenRequest)
+                .map(CreateTokenResponse::getRawToken);
     }
 }

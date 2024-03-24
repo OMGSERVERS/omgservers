@@ -57,43 +57,36 @@ public class RuntimeApiImpl implements RuntimeApi {
     final WebService webService;
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntime);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetRuntimeResponse> getRuntime(final GetRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntime);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeResponse> deleteRuntime(final DeleteRuntimeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntime);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(final SyncRuntimePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimePermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimePermission);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimePermissions);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(final DeleteRuntimePermissionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimePermission);
     }
@@ -104,7 +97,6 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
     }
@@ -115,7 +107,6 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(final DeleteRuntimeCommandRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeCommand);
     }
@@ -126,43 +117,36 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeAssignment);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(final FindRuntimeAssignmentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeAssignment);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(final ViewRuntimeAssignmentsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeAssignments);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(final CountRuntimeAssignmentsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::countRuntimeAssignments);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeAssignment);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeAssignment);
     }
 
     @Override
-    @RolesAllowed({InternalRoleEnum.Names.SERVICE})
     public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::interchange);
     }

@@ -10,17 +10,6 @@ create table if not exists tab_user (
     deleted boolean not null
 );
 
-create table if not exists tab_user_token (
-    id bigint primary key,
-    idempotency_key text not null unique,
-    user_id bigint not null references tab_user(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    expire timestamp with time zone not null,
-    hash text not null,
-    deleted boolean not null
-);
-
 create table if not exists tab_user_player (
     id bigint primary key,
     idempotency_key text not null unique,
@@ -34,7 +23,6 @@ create table if not exists tab_user_player (
     deleted boolean not null
 );
 
-create index if not exists idx_user_token_user_id on tab_user_token(user_id);
 create index if not exists idx_user_player_user_id on tab_user_player(user_id);
 
 -- client module

@@ -15,14 +15,6 @@ public interface ServiceConfig {
 
     URI internalUri();
 
-    String serviceUsername();
-
-    String servicePassword();
-
-    String adminUsername();
-
-    String adminPassword();
-
     String indexName();
 
     List<URI> addresses();

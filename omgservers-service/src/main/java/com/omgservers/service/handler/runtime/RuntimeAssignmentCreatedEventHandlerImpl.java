@@ -135,7 +135,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PlayerModel> getPlayer(final Long userId, final Long id) {
         final var request = new GetPlayerRequest(userId, id);
-        return userModule.getPlayerService().getPlayer(request)
+        return userModule.getUserService().getPlayer(request)
                 .map(GetPlayerResponse::getPlayer);
     }
 

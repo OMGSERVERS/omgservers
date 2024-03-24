@@ -12,6 +12,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -21,11 +23,12 @@ class InterchangeMethodImpl implements InterchangeMethod {
     final RuntimeModule runtimeModule;
     final UserModule userModule;
 
-    final SecurityIdentity securityIdentity;
+    final JsonWebToken jwt;
 
     @Override
     public Uni<InterchangeWorkerResponse> interchange(final InterchangeWorkerRequest request) {
-        final var userId = securityIdentity.<Long>getAttribute("userId");
+        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+
         final var runtimeId = request.getRuntimeId();
         final var outgoingCommands = request.getOutgoingCommands();
         final var consumedCommands = request.getConsumedCommands();

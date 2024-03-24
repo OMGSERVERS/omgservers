@@ -24,12 +24,13 @@ import com.omgservers.service.factory.StagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -39,20 +40,20 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final GenerateIdOperation generateIdOperation;
+
     final ProjectPermissionModelFactory projectPermissionModelFactory;
     final StagePermissionModelFactory stagePermissionModelFactory;
     final ProjectModelFactory projectModelFactory;
     final StageModelFactory stageModelFactory;
 
-    final GenerateIdOperation generateIdOperation;
-
-    final SecurityIdentity securityIdentity;
+    final JsonWebToken jwt;
 
     @Override
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         log.debug("Create project, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute("userId");
+        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
         final var tenantId = request.getTenantId();
         return checkCreateProjectPermission(tenantId, userId)
                 .flatMap(voidItem -> syncProject(tenantId, userId)

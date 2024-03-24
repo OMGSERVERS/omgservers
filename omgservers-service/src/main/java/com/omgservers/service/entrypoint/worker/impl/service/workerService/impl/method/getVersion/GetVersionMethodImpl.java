@@ -18,6 +18,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -27,13 +29,14 @@ class GetVersionMethodImpl implements GetVersionMethod {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    final SecurityIdentity securityIdentity;
+    final JsonWebToken jwt;
 
     @Override
     public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
         log.debug("Get version, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute("userId");
+        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+
         final var runtimeId = request.getRuntimeId();
 
         return getRuntime(runtimeId)

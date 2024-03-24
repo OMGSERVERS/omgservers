@@ -92,7 +92,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
                                         final Long playerId,
                                         final PlayerAttributesModel attributes) {
         final var request = new UpdatePlayerAttributesRequest(userId, playerId, attributes);
-        return userModule.getPlayerService().updatePlayerAttributes(request)
+        return userModule.getUserService().updatePlayerAttributes(request)
                 .map(UpdatePlayerAttributesResponse::getUpdated);
     }
 }
