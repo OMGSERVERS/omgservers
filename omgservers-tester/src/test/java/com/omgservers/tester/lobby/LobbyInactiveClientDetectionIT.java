@@ -1,6 +1,8 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.model.message.body.DisconnectionReasonEnum;
+import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -55,15 +57,15 @@ public class LobbyInactiveClientDetectionIT extends Assertions {
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment.getId()));
 
-            Thread.sleep(10_000);
+            log.info("Waiting for disconnection");
+            Thread.sleep(30_000);
 
-            // TODO: implement test
-            //final var disconnectionMessage = playerApiTester.waitMessage(testClient,
-            //        MessageQualifierEnum.DISCONNECTION_MESSAGE,
-            //        Collections.singletonList(matchmakerAssignment.getId()));
-            //
-            //assertEquals(DisconnectionReasonEnum.CLIENT_INACTIVITY,
-            //        ((DisconnectionReasonMessageBodyModel) disconnectionMessage.getBody()).getReason());
+            final var disconnectionMessage = playerApiTester.waitMessage(testClient,
+                    MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment.getId()));
+
+            assertEquals(DisconnectionReasonEnum.CLIENT_INACTIVITY,
+                    ((DisconnectionReasonMessageBodyModel) disconnectionMessage.getBody()).getReason());
 
         } finally {
             adminApiTester.deleteTenant(testVersion.getTenantId());

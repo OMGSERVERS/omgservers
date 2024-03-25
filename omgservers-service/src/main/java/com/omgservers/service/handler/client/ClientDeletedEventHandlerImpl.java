@@ -2,16 +2,11 @@ package com.omgservers.service.handler.client;
 
 import com.omgservers.model.client.ClientModel;
 import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.model.clientMessage.ClientMessageModel;
 import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.model.dto.client.DeleteClientMessagesRequest;
-import com.omgservers.model.dto.client.DeleteClientMessagesResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.ViewClientMatchmakerRefsRequest;
 import com.omgservers.model.dto.client.ViewClientMatchmakerRefsResponse;
-import com.omgservers.model.dto.client.ViewClientMessagesRequest;
-import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
@@ -74,9 +69,9 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
                     final var idempotencyKey = event.getIdempotencyKey();
 
+                    // Don't touch client messages because users can return to get disconnection reason
                     return handleClientMatchmakerRefs(clientId, idempotencyKey)
-                            .flatMap(voidItem -> handleClientRuntimeRefs(clientId))
-                            .flatMap(voidItem -> handleClientMessages(clientId));
+                            .flatMap(voidItem -> handleClientRuntimeRefs(clientId));
                 })
                 .replaceWithVoid();
     }
@@ -178,25 +173,6 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
         return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
-    }
-
-    Uni<Void> handleClientMessages(final Long clientId) {
-        return viewClientMessages(clientId)
-                .flatMap(clientMessages -> deleteClientMessages(clientId, clientMessages))
-                .replaceWithVoid();
-    }
-
-    Uni<List<ClientMessageModel>> viewClientMessages(final Long clientId) {
-        final var request = new ViewClientMessagesRequest(clientId);
-        return clientModule.getClientService().viewClientMessages(request)
-                .map(ViewClientMessagesResponse::getClientMessages);
-    }
-
-    Uni<Boolean> deleteClientMessages(final Long clientId, List<ClientMessageModel> messages) {
-        final var ids = messages.stream().map(ClientMessageModel::getId).toList();
-        final var request = new DeleteClientMessagesRequest(clientId, ids);
-        return clientModule.getClientService().deleteClientMessages(request)
-                .map(DeleteClientMessagesResponse::getDeleted);
     }
 }
 

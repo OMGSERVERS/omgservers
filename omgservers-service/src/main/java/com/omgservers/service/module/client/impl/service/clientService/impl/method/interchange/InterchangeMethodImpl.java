@@ -12,7 +12,6 @@ import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBo
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
@@ -64,12 +63,12 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
                             if (client.getUserId().equals(fromUserId)) {
                                 if (client.getDeleted()) {
-                                    throw new ServerSideNotFoundException(ExceptionQualifierEnum.CLIENT_NOT_FOUND,
-                                            "client was already deleted, clientId=" + clientId);
+                                    // If client was deleted then only receiving is available
+                                    return receiveMessages(shard, clientId, consumedMessages);
+                                } else {
+                                    return handleMessages(clientId, request.getOutgoingMessages())
+                                            .flatMap(voidItem -> receiveMessages(shard, clientId, consumedMessages));
                                 }
-
-                                return handleMessages(clientId, request.getOutgoingMessages())
-                                        .flatMap(voidItem -> receiveMessages(shard, clientId, consumedMessages));
                             } else {
                                 throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
                                         "wrong clientId, clientId=" + clientId);
