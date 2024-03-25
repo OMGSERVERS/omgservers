@@ -25,7 +25,6 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
         final var userId = request.getUserId();
         final var password = request.getPassword();
 
-        // TODO: does role have to be "Developer" only, block others?
         return createToken(userId, password)
                 .map(CreateTokenDeveloperResponse::new);
     }

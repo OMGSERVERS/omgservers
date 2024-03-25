@@ -9,8 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// TODO: unit test it
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -19,6 +17,12 @@ class ValidateCredentialsOperationImpl implements ValidateCredentialsOperation {
     @Override
     public Uni<UserModel> validateCredentials(final UserModel user,
                                               final String password) {
+        if (user.getDeleted()) {
+            throw new ServerSideUnauthorizedException(
+                    ExceptionQualifierEnum.USER_NOT_FOUND,
+                    String.format("user was already deleted, userId=%s", user.getId()));
+        }
+
         if (BcryptUtil.matches(password, user.getPasswordHash())) {
             return Uni.createFrom().item(user);
         } else {

@@ -67,7 +67,6 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     }
 
     Uni<Void> checkCreateProjectPermission(final Long tenantId, final Long userId) {
-        // TODO: move to new operation
         final var permission = TenantPermissionEnum.CREATE_PROJECT;
         final var hasTenantPermissionServiceRequest = new HasTenantPermissionRequest(tenantId, userId, permission);
         return tenantModule.getTenantService().hasTenantPermission(hasTenantPermissionServiceRequest)
