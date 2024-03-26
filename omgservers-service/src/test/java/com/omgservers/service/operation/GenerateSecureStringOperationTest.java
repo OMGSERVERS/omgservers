@@ -1,8 +1,6 @@
 package com.omgservers.service.operation;
 
-import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,43 +12,13 @@ import org.junit.jupiter.api.Test;
 class GenerateSecureStringOperationTest extends Assertions {
 
     @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
-    GetConfigOperation getConfigOperation;
+    GenerateSecureStringOperation generateSecureStringOperation;
 
     @Test
-    void sequenceTest() {
-        long v1 = generateIdOperation.generateId();
-        long v2 = generateIdOperation.generateId();
-        long v3 = generateIdOperation.generateId();
-        assertTrue(v3 > v2 && v2 > v1);
-    }
-
-    @Test
-    void overflowTest() {
-        assertThrows(ServerSideInternalException.class, () -> {
-            for (int i = 0; i < 8192; i++) {
-                generateIdOperation.generateId();
-            }
-        });
-    }
-
-    @Test
-    void structureTest() throws InterruptedException {
-        Thread.sleep(1);
-        // Skip sequence 0 for test purpose
-        generateIdOperation.generateId();
-        long id = generateIdOperation.generateId();
-
-        long sequence = id & GenerateIdOperation.SEQUENCE_MASK;
-        long instanceId = (id >> GenerateIdOperation.INSTANCE_ID_OFFSET) & GenerateIdOperation.INSTANCE_ID_MASK;
-        long datacenterId = (id >> GenerateIdOperation.DATACENTER_ID_OFFSET) & GenerateIdOperation.DATACENTER_ID_MASK;
-        long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
-
-        assertEquals(1, sequence);
-        assertEquals(getConfigOperation.getServiceConfig().instanceId(), instanceId);
-        assertEquals(getConfigOperation.getServiceConfig().datacenterId(), datacenterId);
-        assertTrue(timestamp > 0);
+    void givenOperation_whenGenerateSecureString_thenGenerated() {
+        final var value1 = generateSecureStringOperation.generateSecureString();
+        final var value2 = generateSecureStringOperation.generateSecureString();
+        assertNotEquals(value1, value2);
+        log.info("Secure strings were generated, v1={}, v2={}", value1, value2);
     }
 }

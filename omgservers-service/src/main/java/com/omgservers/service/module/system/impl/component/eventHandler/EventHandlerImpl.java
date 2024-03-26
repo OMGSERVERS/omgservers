@@ -17,7 +17,7 @@ public class EventHandlerImpl implements EventHandler {
 
     final SystemModule systemModule;
 
-    @Incoming("inbox-events")
+    @Incoming("incoming-events")
     @Blocking(ordered = false)
     Uni<Void> eventHandler(Long message) {
         log.trace("Message was received, {}", message);

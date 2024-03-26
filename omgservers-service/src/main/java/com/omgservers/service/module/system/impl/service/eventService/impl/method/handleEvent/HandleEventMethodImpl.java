@@ -1,12 +1,16 @@
 package com.omgservers.service.module.system.impl.service.eventService.impl.method.handleEvent;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.dto.system.HandleEventRequest;
 import com.omgservers.model.dto.system.HandleEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.system.impl.component.eventEmitter.EventEmitter;
 import com.omgservers.service.module.system.impl.operation.deleteEventAndUpdateStatus.DeleteEventAndUpdateStatusOperation;
 import com.omgservers.service.module.system.impl.operation.selectEvent.SelectEventOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -17,6 +21,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,12 +34,16 @@ public class HandleEventMethodImpl implements HandleEventMethod {
     final SelectEventOperation selectEventOperation;
 
     final Map<EventQualifierEnum, EventHandler> eventHandlers;
+    final EventEmitter eventEmitter;
+    final ObjectMapper objectMapper;
     final PgPool pgPool;
 
     public HandleEventMethodImpl(final DeleteEventAndUpdateStatusOperation deleteEventAndUpdateStatusOperation,
                                  final ChangeWithContextOperation changeWithContextOperation,
                                  final SelectEventOperation selectEventOperation,
                                  final Instance<EventHandler> eventHandlerBeans,
+                                 final ObjectMapper objectMapper,
+                                 final EventEmitter eventEmitter,
                                  final PgPool pgPool) {
         this.deleteEventAndUpdateStatusOperation = deleteEventAndUpdateStatusOperation;
         this.changeWithContextOperation = changeWithContextOperation;
@@ -46,6 +55,8 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 log.error("Multiple event handlers were detected, qualifier={}", qualifier);
             }
         });
+        this.eventEmitter = eventEmitter;
+        this.objectMapper = objectMapper;
         this.pgPool = pgPool;
     }
 
@@ -56,15 +67,17 @@ public class HandleEventMethodImpl implements HandleEventMethod {
         final var eventId = request.getEventId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         selectEventOperation.selectEvent(sqlConnection, eventId)
-                                .flatMap(this::handleEvent)
-                                .flatMap(handled -> {
-                                    final var status = handled ? EventStatusEnum.HANDLED : EventStatusEnum.FAILED;
-                                    return deleteEventAndUpdateStatusOperation.deleteEventAndUpdateStatus(
-                                            changeContext,
-                                            sqlConnection,
-                                            eventId,
-                                            status);
-                                }))
+                                .flatMap(event -> handleEvent(event)
+                                        .call(handled -> forwardEvent(event))
+                                        .flatMap(handled -> {
+                                            final var status = handled ? EventStatusEnum.HANDLED : EventStatusEnum.FAILED;
+                                            return deleteEventAndUpdateStatusOperation.deleteEventAndUpdateStatus(
+                                                    changeContext,
+                                                    sqlConnection,
+                                                    eventId,
+                                                    status);
+                                        }))
+                )
                 .map(ChangeContext::getResult)
                 .map(HandleEventResponse::new);
     }
@@ -96,6 +109,20 @@ public class HandleEventMethodImpl implements HandleEventMethod {
             }
         } else {
             log.info("Handler wasn't found, event={}", event);
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
+    }
+
+    Uni<Boolean> forwardEvent(final EventModel event) {
+        if (event.getQualifier().isForward()) {
+            try {
+                final var eventMessage = objectMapper.writeValueAsString(event);
+                return eventEmitter.forwardEvent(eventMessage)
+                        .replaceWith(Boolean.TRUE);
+            } catch (IOException e) {
+                throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+            }
+        } else {
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }

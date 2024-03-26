@@ -4,6 +4,7 @@ import com.omgservers.model.dto.system.RelayEventsRequest;
 import com.omgservers.model.dto.system.RelayEventsResponse;
 import com.omgservers.model.event.EventProjectionModel;
 import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.service.module.system.impl.component.eventEmitter.EventEmitter;
 import com.omgservers.service.module.system.impl.operation.selectEventsForRelaying.SelectEventsForRelayingOperation;
 import com.omgservers.service.module.system.impl.operation.updateEventsStatusByIds.UpdateEventsStatusByIdsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -25,7 +26,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
     final UpdateEventsStatusByIdsOperation updateEventsStatusByIdsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
 
-    final OutboxEventEmitter outboxEventEmitter;
+    final EventEmitter eventEmitter;
 
     @Override
     public Uni<RelayEventsResponse> relayEvents(final RelayEventsRequest request) {
@@ -60,7 +61,7 @@ public class RelayEventsMethodImpl implements RelayEventsMethod {
     Uni<Void> relayEvents(final List<EventProjectionModel> eventProjections) {
         return Multi.createFrom().iterable(eventProjections)
                 .onItem().transformToUniAndConcatenate(eventProjection ->
-                        outboxEventEmitter.send(eventProjection.getId()))
+                        eventEmitter.sendEvent(eventProjection.getId()))
                 .collect().asList()
                 .replaceWithVoid();
     }
