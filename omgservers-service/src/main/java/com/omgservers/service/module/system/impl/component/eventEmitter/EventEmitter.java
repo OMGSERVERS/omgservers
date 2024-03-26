@@ -25,7 +25,7 @@ public class EventEmitter {
     }
 
     public Uni<Void> forwardEvent(final String eventMessage) {
-        log.info("Forward event, eventMessage={}", eventMessage);
+        log.debug("Forward event, eventMessage={}", eventMessage);
         return forwardedEventEmitter.send(eventMessage);
     }
 }
