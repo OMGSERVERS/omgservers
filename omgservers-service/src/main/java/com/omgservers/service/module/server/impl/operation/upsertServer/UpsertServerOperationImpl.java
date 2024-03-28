@@ -33,9 +33,9 @@ class UpsertServerOperationImpl implements UpsertServerOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_client(
+                        insert into $schema.tab_server(
                             id, idempotency_key, created, modified, pool_id, qualifier, ip_address, cpu_count,
-                            memory_size, config, deleted,
+                            memory_size, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                         on conflict (id) do
                         nothing
@@ -47,7 +47,7 @@ class UpsertServerOperationImpl implements UpsertServerOperation {
                         server.getModified().atOffset(ZoneOffset.UTC),
                         server.getPoolId(),
                         server.getQualifier(),
-                        server.getIpAddress(),
+                        server.getIpAddress().getHostAddress(),
                         server.getCpuCount(),
                         server.getMemorySize(),
                         getConfigString(server),

@@ -28,6 +28,7 @@ import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,7 @@ public class ServerServiceImpl implements ServerService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetServerResponse> getServer(GetServerRequest request) {
+    public Uni<GetServerResponse> getServer(@Valid final GetServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::getServer,
@@ -58,7 +59,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<SyncServerResponse> syncServer(SyncServerRequest request) {
+    public Uni<SyncServerResponse> syncServer(@Valid final SyncServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::syncServer,
@@ -66,7 +67,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<DeleteServerResponse> deleteServer(DeleteServerRequest request) {
+    public Uni<DeleteServerResponse> deleteServer(@Valid final DeleteServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::deleteServer,
@@ -74,7 +75,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<GetServerContainerResponse> getServerContainer(GetServerContainerRequest request) {
+    public Uni<GetServerContainerResponse> getServerContainer(@Valid final GetServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::getServerContainer,
@@ -82,7 +83,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<ViewServerContainersResponse> viewServerContainers(ViewServerContainersRequest request) {
+    public Uni<ViewServerContainersResponse> viewServerContainers(@Valid final ViewServerContainersRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::viewServerContainers,
@@ -90,7 +91,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<SyncServerContainerResponse> syncServerContainer(SyncServerContainerRequest request) {
+    public Uni<SyncServerContainerResponse> syncServerContainer(@Valid final SyncServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::syncServerContainer,
@@ -98,7 +99,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<DeleteServerContainerResponse> deleteServerContainer(DeleteServerContainerRequest request) {
+    public Uni<DeleteServerContainerResponse> deleteServerContainer(@Valid final DeleteServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getServerModuleClientOperation::getClient,
                 ServerModuleClient::deleteServerContainer,
