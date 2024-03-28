@@ -15,6 +15,8 @@ public interface ServiceConfig {
 
     URI internalUri();
 
+    Long rootId();
+
     String indexName();
 
     List<URI> addresses();

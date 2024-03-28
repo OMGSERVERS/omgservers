@@ -1,3 +1,67 @@
+-- root module
+
+create table if not exists tab_root (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    default_pool_id bigint not null,
+    deleted boolean not null
+);
+
+-- pool module
+
+create table if not exists tab_pool (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_pool_server_ref (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    pool_id bigint not null references tab_root(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    server_id bigint not null,
+    deleted boolean not null
+);
+
+create index if not exists idx_pool_server_ref_pool_id on tab_pool_server_ref(pool_id);
+
+-- server module
+
+create table if not exists tab_server (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    pool_id bigint not null,
+    qualifier text not null,
+    ip_address text not null,
+    cpu_count integer not null,
+    memory_size integer not null,
+    config json not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_server_container (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    server_id bigint not null references tab_server(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    image text not null,
+    cpu_limit integer not null,
+    memory_limit integer not null,
+    config json not null,
+    deleted boolean not null
+);
+
+create index if not exists idx_server_container_server_id on tab_server_container(server_id);
+
 -- user module
 
 create table if not exists tab_user (

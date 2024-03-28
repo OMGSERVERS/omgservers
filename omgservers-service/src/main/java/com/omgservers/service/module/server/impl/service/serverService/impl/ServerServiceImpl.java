@@ -1,0 +1,107 @@
+package com.omgservers.service.module.server.impl.service.serverService.impl;
+
+import com.omgservers.model.dto.server.DeleteServerContainerRequest;
+import com.omgservers.model.dto.server.DeleteServerContainerResponse;
+import com.omgservers.model.dto.server.DeleteServerRequest;
+import com.omgservers.model.dto.server.DeleteServerResponse;
+import com.omgservers.model.dto.server.GetServerContainerRequest;
+import com.omgservers.model.dto.server.GetServerContainerResponse;
+import com.omgservers.model.dto.server.GetServerRequest;
+import com.omgservers.model.dto.server.GetServerResponse;
+import com.omgservers.model.dto.server.SyncServerContainerRequest;
+import com.omgservers.model.dto.server.SyncServerContainerResponse;
+import com.omgservers.model.dto.server.SyncServerRequest;
+import com.omgservers.model.dto.server.SyncServerResponse;
+import com.omgservers.model.dto.server.ViewServerContainersRequest;
+import com.omgservers.model.dto.server.ViewServerContainersResponse;
+import com.omgservers.service.module.server.impl.operation.getServerModuleClient.GetServerModuleClientOperation;
+import com.omgservers.service.module.server.impl.operation.getServerModuleClient.ServerModuleClient;
+import com.omgservers.service.module.server.impl.service.serverService.ServerService;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.deleteServer.DeleteServerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.deleteServerContainer.DeleteServerContainerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.getServer.GetServerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.getServerContainer.GetServerContainerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.syncServer.SyncServerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.syncServerContainer.SyncServerContainerMethod;
+import com.omgservers.service.module.server.impl.service.serverService.impl.method.viewServerContainers.ViewServerContainersMethod;
+import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+public class ServerServiceImpl implements ServerService {
+
+    final DeleteServerContainerMethod deleteServerContainerMethod;
+    final ViewServerContainersMethod viewServerContainersMethod;
+    final SyncServerContainerMethod syncServerContainerMethod;
+    final GetServerContainerMethod getServerContainerMethod;
+    final DeleteServerMethod deleteServerMethod;
+    final SyncServerMethod syncServerMethod;
+    final GetServerMethod getServerMethod;
+
+    final GetServerModuleClientOperation getServerModuleClientOperation;
+    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final CalculateShardOperation calculateShardOperation;
+
+    @Override
+    public Uni<GetServerResponse> getServer(GetServerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::getServer,
+                getServerMethod::getServer);
+    }
+
+    @Override
+    public Uni<SyncServerResponse> syncServer(SyncServerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::syncServer,
+                syncServerMethod::syncServer);
+    }
+
+    @Override
+    public Uni<DeleteServerResponse> deleteServer(DeleteServerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::deleteServer,
+                deleteServerMethod::deleteServer);
+    }
+
+    @Override
+    public Uni<GetServerContainerResponse> getServerContainer(GetServerContainerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::getServerContainer,
+                getServerContainerMethod::getServerContainer);
+    }
+
+    @Override
+    public Uni<ViewServerContainersResponse> viewServerContainers(ViewServerContainersRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::viewServerContainers,
+                viewServerContainersMethod::viewServerContainers);
+    }
+
+    @Override
+    public Uni<SyncServerContainerResponse> syncServerContainer(SyncServerContainerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::syncServerContainer,
+                syncServerContainerMethod::syncServerContainer);
+    }
+
+    @Override
+    public Uni<DeleteServerContainerResponse> deleteServerContainer(DeleteServerContainerRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getServerModuleClientOperation::getClient,
+                ServerModuleClient::deleteServerContainer,
+                deleteServerContainerMethod::deleteServerContainer);
+    }
+}

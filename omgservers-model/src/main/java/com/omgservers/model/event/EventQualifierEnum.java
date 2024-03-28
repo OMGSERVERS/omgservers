@@ -31,10 +31,20 @@ import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeR
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.root.RootCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.server.ServerContainerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.server.ServerContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.server.ServerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.server.ServerDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
@@ -71,6 +81,16 @@ public enum EventQualifierEnum {
     CONTAINER_CREATED(ContainerCreatedEventBodyModel.class, true),
     CONTAINER_DELETED(ContainerDeletedEventBodyModel.class, true),
     // Module
+    ROOT_CREATED(RootCreatedEventBodyModel.class, false),
+    ROOT_DELETED(RootDeletedEventBodyModel.class, false),
+    POOL_CREATED(PoolCreatedEventBodyModel.class, false),
+    POOL_DELETED(PoolDeletedEventBodyModel.class, false),
+    POOL_SERVER_REF_CREATED(PoolServerRefCreatedEventBodyModel.class, false),
+    POOL_SERVER_REF_DELETED(PoolServerRefDeletedEventBodyModel.class, false),
+    SERVER_CREATED(ServerCreatedEventBodyModel.class, false),
+    SERVER_DELETED(ServerDeletedEventBodyModel.class, false),
+    SERVER_CONTAINER_CREATED(ServerContainerCreatedEventBodyModel.class, false),
+    SERVER_CONTAINER_DELETED(ServerContainerDeletedEventBodyModel.class, false),
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
     PROJECT_CREATED(ProjectCreatedEventBodyModel.class, true),
@@ -79,12 +99,12 @@ public enum EventQualifierEnum {
     STAGE_DELETED(StageDeletedEventBodyModel.class, true),
     VERSION_LOBBY_REQUEST_CREATED(VersionLobbyRequestCreatedEventBodyModel.class, true),
     VERSION_LOBBY_REQUEST_DELETED(VersionLobbyRequestDeletedEventBodyModel.class, true),
-    VERSION_LOBBY_REF_CREATED(VersionLobbyRefCreatedEventBodyModel.class, true),
-    VERSION_LOBBY_REF_DELETED(VersionLobbyRefDeletedEventBodyModel.class, true),
+    VERSION_LOBBY_REF_CREATED(VersionLobbyRefCreatedEventBodyModel.class, false),
+    VERSION_LOBBY_REF_DELETED(VersionLobbyRefDeletedEventBodyModel.class, false),
     VERSION_MATCHMAKER_REQUEST_CREATED(VersionMatchmakerRequestCreatedEventBodyModel.class, true),
     VERSION_MATCHMAKER_REQUEST_DELETED(VersionMatchmakerRequestDeletedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_REF_CREATED(VersionMatchmakerRefCreatedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_REF_DELETED(VersionMatchmakerRefDeletedEventBodyModel.class, true),
+    VERSION_MATCHMAKER_REF_CREATED(VersionMatchmakerRefCreatedEventBodyModel.class, false),
+    VERSION_MATCHMAKER_REF_DELETED(VersionMatchmakerRefDeletedEventBodyModel.class, false),
     VERSION_CREATED(VersionCreatedEventBodyModel.class, true),
     VERSION_DELETED(VersionDeletedEventBodyModel.class, true),
     USER_CREATED(UserCreatedEventBodyModel.class, true),
@@ -93,22 +113,22 @@ public enum EventQualifierEnum {
     PLAYER_DELETED(PlayerDeletedEventBodyModel.class, true),
     CLIENT_CREATED(ClientCreatedEventBodyModel.class, true),
     CLIENT_DELETED(ClientDeletedEventBodyModel.class, true),
-    CLIENT_RUNTIME_REF_CREATED(ClientRuntimeRefCreatedEventBodyModel.class, true),
-    CLIENT_RUNTIME_REF_DELETED(ClientRuntimeRefDeletedEventBodyModel.class, true),
-    CLIENT_MATCHMAKER_REF_CREATED(ClientMatchmakerRefCreatedEventBodyModel.class, true),
-    CLIENT_MATCHMAKER_REF_DELETED(ClientMatchmakerRefDeletedEventBodyModel.class, true),
+    CLIENT_RUNTIME_REF_CREATED(ClientRuntimeRefCreatedEventBodyModel.class, false),
+    CLIENT_RUNTIME_REF_DELETED(ClientRuntimeRefDeletedEventBodyModel.class, false),
+    CLIENT_MATCHMAKER_REF_CREATED(ClientMatchmakerRefCreatedEventBodyModel.class, false),
+    CLIENT_MATCHMAKER_REF_DELETED(ClientMatchmakerRefDeletedEventBodyModel.class, false),
     LOBBY_CREATED(LobbyCreatedEventBodyModel.class, true),
     LOBBY_DELETED(LobbyDeletedEventBodyModel.class, true),
-    LOBBY_RUNTIME_REF_CREATED(LobbyRuntimeRefCreatedEventBodyModel.class, true),
-    LOBBY_RUNTIME_REF_DELETED(LobbyRuntimeRefDeletedEventBodyModel.class, true),
+    LOBBY_RUNTIME_REF_CREATED(LobbyRuntimeRefCreatedEventBodyModel.class, false),
+    LOBBY_RUNTIME_REF_DELETED(LobbyRuntimeRefDeletedEventBodyModel.class, false),
     MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class, true),
     MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class, true),
     MATCHMAKER_MATCH_CREATED(MatchmakerMatchCreatedEventBodyModel.class, true),
     MATCHMAKER_MATCH_DELETED(MatchmakerMatchDeletedEventBodyModel.class, true),
     MATCHMAKER_MATCH_CLIENT_CREATED(MatchmakerMatchClientCreatedEventBodyModel.class, true),
     MATCHMAKER_MATCH_CLIENT_DELETED(MatchmakerMatchClientDeletedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_RUNTIME_REF_CREATED(MatchmakerMatchRuntimeRefCreatedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_RUNTIME_REF_DELETED(MatchmakerMatchRuntimeRefDeletedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_RUNTIME_REF_CREATED(MatchmakerMatchRuntimeRefCreatedEventBodyModel.class, false),
+    MATCHMAKER_MATCH_RUNTIME_REF_DELETED(MatchmakerMatchRuntimeRefDeletedEventBodyModel.class, false),
     MATCHMAKER_REQUEST_CREATED(MatchmakerRequestCreatedEventBodyModel.class, true),
     MATCHMAKER_REQUEST_DELETED(MatchmakerRequestDeletedEventBodyModel.class, true),
     MATCHMAKER_ASSIGNMENT_CREATED(MatchmakerAssignmentCreatedEventBodyModel.class, true),
