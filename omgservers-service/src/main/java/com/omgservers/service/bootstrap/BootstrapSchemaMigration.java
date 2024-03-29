@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.bootstrap;
+package com.omgservers.service.bootstrap;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.module.system.impl.operation.migrateSchema.MigrateSchemaOperation;
@@ -21,12 +21,13 @@ public class BootstrapSchemaMigration {
     final MigrateSchemaOperation migrateSchemaOperation;
 
     @WithSpan
-    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_SCHEMA_MIGRATION_PRIORITY) StartupEvent event) {
-        if (getConfigOperation.getServiceConfig().disableMigration()) {
-            log.warn("Schema migration was disabled, skip operation");
-        } else {
+    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_SCHEMA_MIGRATION_PRIORITY)
+                 StartupEvent event) {
+        if (getConfigOperation.getServiceConfig().migration().enabled()) {
             migrateSchemaOperation.migrateSystemSchema("db/system");
             migrateSchemaOperation.migrateShardsSchema("db/shards");
+        } else {
+            log.warn("Schema migration was disabled, skip operation");
         }
     }
 }

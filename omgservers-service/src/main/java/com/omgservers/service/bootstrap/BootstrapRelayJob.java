@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.bootstrap;
+package com.omgservers.service.bootstrap;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.module.system.impl.component.relayJobTask.RelayJobTask;
@@ -25,17 +25,18 @@ public class BootstrapRelayJob {
     final RelayJobTask relayJobTask;
 
     @WithSpan
-    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_RELAY_JOB_PRIORITY) StartupEvent event) {
-        final var disableRelayJob = getConfigOperation.getServiceConfig().disableRelayJob();
-        if (disableRelayJob) {
-            log.warn("Relay job was disabled, skip operation");
-        } else {
+    void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_RELAY_JOB_PRIORITY)
+                 StartupEvent event) {
+        final var enabled = getConfigOperation.getServiceConfig().relayJob().enabled();
+        if (enabled) {
             final var trigger = scheduler.newJob("relayJobTask")
                     .setInterval("1s")
                     .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                     .setAsyncTask(scheduledExecution -> relayJobTask.executeTask())
                     .schedule();
             log.info("Relay job was scheduled, {}", trigger);
+        } else {
+            log.warn("Relay job was disabled, skip operation");
         }
     }
 }

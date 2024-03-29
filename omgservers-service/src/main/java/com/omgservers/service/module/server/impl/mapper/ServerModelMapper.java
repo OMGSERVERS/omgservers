@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.InetAddress;
+import java.net.URI;
 
 @Slf4j
 @ApplicationScoped
@@ -29,15 +29,10 @@ public class ServerModelMapper {
         server.setModified(row.getOffsetDateTime("modified").toInstant());
         server.setPoolId(row.getLong("pool_id"));
         server.setQualifier(ServerQualifierEnum.valueOf(row.getString("qualifier")));
+        server.setUri(URI.create(row.getString("ip_address")));
         server.setCpuCount(row.getInteger("cpu_count"));
         server.setMemorySize(row.getInteger("memory_size"));
         server.setDeleted(row.getBoolean("deleted"));
-        try {
-            server.setIpAddress(InetAddress.getByName(row.getString("ip_address")));
-        } catch (IOException e) {
-            throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
-                    "server ip address can't be parsed, server=" + server, e);
-        }
         try {
             final var config = objectMapper.readValue(row.getString("config"), ServerConfigModel.class);
             server.setConfig(config);

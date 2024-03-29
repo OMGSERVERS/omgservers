@@ -108,7 +108,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return Uni.createFrom().item(Boolean.FALSE);
             }
         } else {
-            log.info("Handler wasn't found, event={}", event);
+            log.debug("Handler wasn't found, event={}", event);
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }

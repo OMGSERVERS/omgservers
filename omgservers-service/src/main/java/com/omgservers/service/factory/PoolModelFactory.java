@@ -16,19 +16,27 @@ public class PoolModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public PoolModel create() {
+    public PoolModel create(final Long rootId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
 
-        return create(id, idempotencyKey);
-    }
-
-    public PoolModel create(final String idempotencyKey) {
-        final var id = generateIdOperation.generateId();
-        return create(id, idempotencyKey);
+        return create(id, rootId, idempotencyKey);
     }
 
     public PoolModel create(final Long id,
+                            final Long rootId) {
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, rootId, idempotencyKey);
+    }
+
+    public PoolModel create(final Long rootId,
+                            final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, rootId, idempotencyKey);
+    }
+
+    public PoolModel create(final Long id,
+                            final Long rootId,
                             final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -37,6 +45,7 @@ public class PoolModelFactory {
         pool.setIdempotencyKey(idempotencyKey);
         pool.setCreated(now);
         pool.setModified(now);
+        pool.setRootId(rootId);
         pool.setDeleted(Boolean.FALSE);
         return pool;
     }

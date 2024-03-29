@@ -22,12 +22,14 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=INFO
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://db:5432/root
       - OMGSERVERS_MQ_HOST=mq
-      - OMGSERVERS_EXTERNAL_URI=http://svc:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc:8080
-      - OMGSERVERS_ADDRESSES=http://svc:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://svc:8080
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
   db:
     image: "postgres:15.1"
     container_name: "db"

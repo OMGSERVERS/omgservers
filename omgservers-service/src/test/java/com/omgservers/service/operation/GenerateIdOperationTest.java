@@ -49,8 +49,8 @@ class GenerateIdOperationTest extends Assertions {
         long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
 
         assertEquals(1, sequence);
-        assertEquals(getConfigOperation.getServiceConfig().instanceId(), instanceId);
-        assertEquals(getConfigOperation.getServiceConfig().datacenterId(), datacenterId);
+        assertEquals(getConfigOperation.getServiceConfig().generator().instanceId(), instanceId);
+        assertEquals(getConfigOperation.getServiceConfig().generator().datacenterId(), datacenterId);
         assertTrue(timestamp > 0);
     }
 }

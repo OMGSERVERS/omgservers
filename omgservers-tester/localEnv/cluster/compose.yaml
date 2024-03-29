@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-  gw:
+  gateway:
     image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "gw"
+    container_name: "gateway"
     ports:
       - "8080:8080"
     networks:
@@ -35,15 +35,18 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
       - OMGSERVERS_MQ_HOST=mq-1
-      - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=0
-      - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-1:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_URI=tcp://docker:2375
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-1:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=0
   svc-1-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-1-b"
@@ -55,16 +58,14 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-1:5432/root
       - OMGSERVERS_MQ_HOST=mq-1
-      - OMGSERVERS_EXTERNAL_URI=http://svc-1:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-1:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=1
-      - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_BOOTSTRAP_SERVICE=false
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-1:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-1:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=1
   db-1:
     image: "postgres:15.1"
     container_name: "db-1"
@@ -103,15 +104,17 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
       - OMGSERVERS_MQ_HOST=mq-2
-      - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=2
-      - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-2:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-2:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=2
   svc-2-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-2-b"
@@ -123,16 +126,14 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-2:5432/root
       - OMGSERVERS_MQ_HOST=mq-2
-      - OMGSERVERS_EXTERNAL_URI=http://svc-2:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-2:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=3
-      - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_BOOTSTRAP_SERVICE=false
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-2:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-2:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=3
   db-2:
     image: "postgres:15.1"
     container_name: "db-2"
@@ -171,15 +172,17 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
       - OMGSERVERS_MQ_HOST=mq-3
-      - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=4
-      - OMGSERVERS_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-3:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-3:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=4
   svc-3-b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "svc-3-b"
@@ -191,16 +194,14 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
       - OMGSERVERS_DB_URL=postgresql://db-3:5432/root
       - OMGSERVERS_MQ_HOST=mq-3
-      - OMGSERVERS_EXTERNAL_URI=http://svc-3:8080
-      - OMGSERVERS_INTERNAL_URI=http://svc-3:8080
-      - OMGSERVERS_ADDRESSES=http://svc-1:8080,http://svc-2:8080,http://svc-3:8080
-      - OMGSERVERS_DATACENTER_ID=0
-      - OMGSERVERS_INSTANCE_ID=5
-      - OMGSERVERS_SHARD_COUNT=3
-      - OMGSERVERS_BOOTSTRAP_SERVICE=false
+      - OMGSERVERS_INDEX_SHARD_COUNT=3
+      - OMGSERVERS_INDEX_SERVER_URI=http://svc-3:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc-3:8080
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=5
   db-3:
     image: "postgres:15.1"
     container_name: "db-3"

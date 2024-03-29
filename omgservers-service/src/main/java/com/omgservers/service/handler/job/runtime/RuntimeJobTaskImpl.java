@@ -60,7 +60,7 @@ public class RuntimeJobTaskImpl {
     }
 
     Uni<Void> checkRuntimeInactivity(final RuntimeModel runtime) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().workersInactiveInterval();
+        final var inactiveInterval = getConfigOperation.getServiceConfig().workers().inactiveInterval();
         final var now = Instant.now();
         if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
             return syncInactiveRuntimeDetectedEvent(runtime.getId())
@@ -96,7 +96,7 @@ public class RuntimeJobTaskImpl {
     }
 
     List<RuntimeAssignmentModel> filterInactiveClients(List<RuntimeAssignmentModel> runtimeAssignments) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().clientInactiveInterval();
+        final var inactiveInterval = getConfigOperation.getServiceConfig().clients().inactiveInterval();
         final var now = Instant.now();
 
         return runtimeAssignments.stream()

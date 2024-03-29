@@ -47,7 +47,7 @@ class UpsertServerOperationImpl implements UpsertServerOperation {
                         server.getModified().atOffset(ZoneOffset.UTC),
                         server.getPoolId(),
                         server.getQualifier(),
-                        server.getIpAddress().getHostAddress(),
+                        server.getUri().toString(),
                         server.getCpuCount(),
                         server.getMemorySize(),
                         getConfigString(server),

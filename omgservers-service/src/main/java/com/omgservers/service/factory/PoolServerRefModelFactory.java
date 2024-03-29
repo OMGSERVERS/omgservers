@@ -16,11 +16,11 @@ public class PoolServerRefModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public PoolServerRefModel create(final Long clientId,
-                                     final Long runtimeId) {
+    public PoolServerRefModel create(final Long poolId,
+                                     final Long serverId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, clientId, runtimeId, idempotencyKey);
+        return create(id, poolId, serverId, idempotencyKey);
     }
 
     public PoolServerRefModel create(final Long poolId,

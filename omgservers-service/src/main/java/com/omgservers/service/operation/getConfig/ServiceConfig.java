@@ -7,41 +7,84 @@ import java.util.List;
 
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
-    long datacenterId();
 
-    long instanceId();
+    GeneratorConfig generator();
 
-    URI externalUri();
+    IndexConfig index();
 
-    URI internalUri();
+    MigrationConfig migration();
 
-    Long rootId();
+    BootstrapConfig bootstrap();
 
-    String indexName();
+    RelayJobConfig relayJob();
 
-    List<URI> addresses();
+    ClientsConfig clients();
 
-    int shardCount();
+    WorkersConfig workers();
 
-    boolean bootstrapService();
+    interface GeneratorConfig {
+        long datacenterId();
 
-    Integer migrationConcurrency();
+        long instanceId();
+    }
 
-    boolean disableMigration();
+    interface MigrationConfig {
+        boolean enabled();
 
-    long clientTokenLifetime();
+        int concurrency();
+    }
 
-    long clientInactiveInterval();
+    interface IndexConfig {
+        String name();
 
-    boolean disableRelayJob();
+        int shardCount();
 
-    long workersInactiveInterval();
+        URI serverUri();
+    }
 
-    String workersDockerImage();
+    interface RelayJobConfig {
+        boolean enabled();
+    }
 
-    String workersDockerNetwork();
+    interface ClientsConfig {
+        long tokenLifetime();
 
-    boolean disableDocker();
+        long inactiveInterval();
+    }
 
-    String dockerHost();
+    interface WorkersConfig {
+        long inactiveInterval();
+
+        String dockerImage();
+
+        String dockerNetwork();
+
+        URI serviceUri();
+    }
+
+    interface BootstrapConfig {
+        long rootId();
+
+        BootstrapIndexConfig index();
+
+        BootstrapDockerHostConfig dockerHost();
+    }
+
+    interface BootstrapIndexConfig {
+        boolean enabled();
+
+        List<URI> servers();
+    }
+
+    interface BootstrapDockerHostConfig {
+        boolean enabled();
+
+        URI uri();
+
+        int cpuCount();
+
+        int memorySize();
+
+        int maxContainers();
+    }
 }

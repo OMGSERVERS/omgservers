@@ -35,7 +35,7 @@ public class RootDeletedEventHandlerImpl implements EventHandler {
 
         return getRoot(rootId)
                 .flatMap(root -> {
-                    log.info("Root was deleted, root={}", rootId);
+                    log.error("Root was deleted, root={}", rootId);
 
                     return Uni.createFrom().voidItem();
                 })

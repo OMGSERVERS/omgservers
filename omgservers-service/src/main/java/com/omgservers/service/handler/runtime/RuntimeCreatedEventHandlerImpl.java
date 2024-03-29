@@ -141,8 +141,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         // TODO: using idempotency key
 
         final var runtimeId = runtime.getId();
-        final var workerImage = getConfigOperation.getServiceConfig().workersDockerImage();
-        final var internalUri = getConfigOperation.getServiceConfig().internalUri();
+        final var workerImage = getConfigOperation.getServiceConfig().workers().dockerImage();
+        final var internalUri = getConfigOperation.getServiceConfig().workers().serviceUri();
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_URL", internalUri.toString());
         environment.put("OMGSERVERS_USER_ID", user.getId().toString());

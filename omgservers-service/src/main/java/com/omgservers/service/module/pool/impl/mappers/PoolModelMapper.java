@@ -17,6 +17,7 @@ public class PoolModelMapper {
         pool.setIdempotencyKey(row.getString("idempotency_key"));
         pool.setCreated(row.getOffsetDateTime("created").toInstant());
         pool.setModified(row.getOffsetDateTime("modified").toInstant());
+        pool.setRootId(row.getLong("root_id"));
         pool.setDeleted(row.getBoolean("deleted"));
         return pool;
     }

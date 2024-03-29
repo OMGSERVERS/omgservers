@@ -6,6 +6,7 @@ import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBody
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
@@ -138,6 +139,7 @@ public enum EventQualifierEnum {
     RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_DELETED(RuntimeAssignmentDeletedEventBodyModel.class, true),
     // Internal
+    ROOT_INITIALIZATION_REQUESTED(RootInitializationRequestedEventBodyModel.class, false),
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),

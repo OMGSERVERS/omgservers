@@ -22,7 +22,6 @@ public class ServerConfigModel {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DockerHostConfig {
-        Integer dockerDaemonPort;
         Integer maxContainers;
     }
 }

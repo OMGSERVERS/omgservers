@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.net.InetAddress;
+import java.net.URI;
 import java.time.Instant;
 
 @Data
@@ -36,7 +36,7 @@ public class ServerModel {
     ServerQualifierEnum qualifier;
 
     @NotNull
-    InetAddress ipAddress;
+    URI uri;
 
     @NotNull
     Integer cpuCount;

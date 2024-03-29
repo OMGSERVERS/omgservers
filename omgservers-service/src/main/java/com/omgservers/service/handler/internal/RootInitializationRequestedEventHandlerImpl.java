@@ -1,19 +1,19 @@
-package com.omgservers.service.handler.root;
+package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.pool.SyncPoolRequest;
-import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
+import com.omgservers.model.dto.root.SyncRootRequest;
+import com.omgservers.model.dto.root.SyncRootResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.root.RootCreatedEventBodyModel;
+import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
 import com.omgservers.model.root.RootModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.PoolModelFactory;
+import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.factory.RootModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.root.RootModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,53 +24,51 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class RootCreatedEventHandlerImpl implements EventHandler {
+public class RootInitializationRequestedEventHandlerImpl implements EventHandler {
 
     final RootModule rootModule;
-    final PoolModule poolModule;
 
-    final PoolModelFactory poolModelFactory;
+    final RootModelFactory rootModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.ROOT_CREATED;
+        return EventQualifierEnum.ROOT_INITIALIZATION_REQUESTED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (RootCreatedEventBodyModel) event.getBody();
-        final var rootId = body.getId();
+        final var body = (RootInitializationRequestedEventBodyModel) event.getBody();
+        final var rootId = body.getRootId();
 
         return getRoot(rootId)
-                .flatMap(root -> {
-                    log.info("Root was created, root={}", rootId);
-
-                    final var idempotencyKey = event.getIdempotencyKey();
-
-                    return syncDefaultPool(root, idempotencyKey);
+                .invoke(root -> log.info("Root was already initialized, skip operation, root={}", rootId))
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithUni(t -> {
+                    // Use the same idempotencyKey within all service instances
+                    final var root = rootModelFactory.create(rootId, "initialization");
+                    return syncRoot(root)
+                            .replaceWith(root);
                 })
                 .replaceWithVoid();
     }
 
     Uni<RootModel> getRoot(final Long id) {
-        final var request = new GetRootRequest(id);
-        return rootModule.getRootService().getRoot(request)
+        final var getRootRequest = new GetRootRequest(id);
+        return rootModule.getRootService().getRoot(getRootRequest)
                 .map(GetRootResponse::getRoot);
     }
 
-    Uni<Boolean> syncDefaultPool(final RootModel root, final String idempotencyKey) {
-        final var pool = poolModelFactory.create(root.getDefaultPoolId(), root.getId(), idempotencyKey);
-
-        final var request = new SyncPoolRequest(pool);
-        return poolModule.getPoolService().syncPool(request)
-                .map(SyncPoolResponse::getCreated)
+    Uni<Boolean> syncRoot(final RootModel root) {
+        final var syncRootRequest = new SyncRootRequest(root);
+        return rootModule.getRootService().syncRoot(syncRootRequest)
+                .map(SyncRootResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", pool, t.getMessage());
+                            log.warn("Idempotency was violated, object={}, {}", root, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

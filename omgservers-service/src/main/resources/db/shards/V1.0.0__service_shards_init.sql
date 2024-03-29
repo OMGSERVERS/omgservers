@@ -16,13 +16,14 @@ create table if not exists tab_pool (
     idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    root_id bigint not null,
     deleted boolean not null
 );
 
 create table if not exists tab_pool_server_ref (
     id bigint primary key,
     idempotency_key text not null unique,
-    pool_id bigint not null references tab_root(id) on delete restrict on update restrict,
+    pool_id bigint not null references tab_pool(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     server_id bigint not null,

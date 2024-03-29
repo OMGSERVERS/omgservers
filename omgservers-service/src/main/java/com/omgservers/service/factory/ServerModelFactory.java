@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.InetAddress;
+import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -21,31 +21,31 @@ public class ServerModelFactory {
 
     public ServerModel create(final Long poolId,
                               final ServerQualifierEnum qualifier,
-                              final InetAddress ipAddress,
+                              final URI uri,
                               final Integer cpuCount,
                               final Integer memorySize,
                               final ServerConfigModel config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
 
-        return create(id, poolId, qualifier, ipAddress, cpuCount, memorySize, config, idempotencyKey);
+        return create(id, poolId, qualifier, uri, cpuCount, memorySize, config, idempotencyKey);
     }
 
     public ServerModel create(final Long poolId,
                               final ServerQualifierEnum qualifier,
-                              final InetAddress ipAddress,
+                              final URI uri,
                               final Integer cpuCount,
                               final Integer memorySize,
                               final ServerConfigModel config,
                               final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, poolId, qualifier, ipAddress, cpuCount, memorySize, config, idempotencyKey);
+        return create(id, poolId, qualifier, uri, cpuCount, memorySize, config, idempotencyKey);
     }
 
     public ServerModel create(final Long id,
                               final Long poolId,
                               final ServerQualifierEnum qualifier,
-                              final InetAddress ipAddress,
+                              final URI uri,
                               final Integer cpuCount,
                               final Integer memorySize,
                               final ServerConfigModel config,
@@ -59,7 +59,7 @@ public class ServerModelFactory {
         server.setModified(now);
         server.setPoolId(poolId);
         server.setQualifier(qualifier);
-        server.setIpAddress(ipAddress);
+        server.setUri(uri);
         server.setCpuCount(cpuCount);
         server.setMemorySize(memorySize);
         server.setConfig(config);

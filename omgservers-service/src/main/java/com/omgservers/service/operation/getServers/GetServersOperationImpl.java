@@ -27,7 +27,7 @@ class GetServersOperationImpl implements GetServersOperation {
 
     @Override
     public Uni<List<URI>> getServers() {
-        final var indexName = getConfigOperation.getServiceConfig().indexName();
+        final var indexName = getConfigOperation.getServiceConfig().index().name();
         return findIndex(indexName)
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerModel::getUri)
