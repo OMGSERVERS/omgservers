@@ -34,7 +34,7 @@ class UpsertServerOperationImpl implements UpsertServerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_server(
-                            id, idempotency_key, created, modified, pool_id, qualifier, ip_address, cpu_count,
+                            id, idempotency_key, created, modified, pool_id, qualifier, uri, cpu_count,
                             memory_size, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                         on conflict (id) do

@@ -29,7 +29,7 @@ class SelectServerOperationImpl implements SelectServerOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, pool_id, qualifier, ip_address, cpu_count,
+                            id, idempotency_key, created, modified, pool_id, qualifier, uri, cpu_count,
                             memory_size, config, deleted
                         from $schema.tab_server
                         where id = $1

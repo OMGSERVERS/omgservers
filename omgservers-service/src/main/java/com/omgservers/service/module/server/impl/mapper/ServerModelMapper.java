@@ -29,7 +29,7 @@ public class ServerModelMapper {
         server.setModified(row.getOffsetDateTime("modified").toInstant());
         server.setPoolId(row.getLong("pool_id"));
         server.setQualifier(ServerQualifierEnum.valueOf(row.getString("qualifier")));
-        server.setUri(URI.create(row.getString("ip_address")));
+        server.setUri(URI.create(row.getString("uri")));
         server.setCpuCount(row.getInteger("cpu_count"));
         server.setMemorySize(row.getInteger("memory_size"));
         server.setDeleted(row.getBoolean("deleted"));

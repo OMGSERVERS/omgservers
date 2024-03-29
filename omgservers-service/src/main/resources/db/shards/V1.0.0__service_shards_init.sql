@@ -41,7 +41,7 @@ create table if not exists tab_server (
     modified timestamp with time zone not null,
     pool_id bigint not null,
     qualifier text not null,
-    ip_address text not null,
+    uri text not null,
     cpu_count integer not null,
     memory_size integer not null,
     config json not null,
