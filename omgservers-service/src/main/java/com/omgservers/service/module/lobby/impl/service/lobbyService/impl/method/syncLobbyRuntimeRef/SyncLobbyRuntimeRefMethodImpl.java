@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.syncLobbyRuntimeRef;
 
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.lobby.impl.operation.hasLobby.HasLobbyOperation;
@@ -25,7 +25,7 @@ class SyncLobbyRuntimeRefMethodImpl implements SyncLobbyRuntimeRefMethod {
     final HasLobbyOperation hasLobbyOperation;
 
     @Override
-    public Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request) {
+    public Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request) {
         log.debug("Sync lobby runtime ref, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
@@ -53,6 +53,6 @@ class SyncLobbyRuntimeRefMethodImpl implements SyncLobbyRuntimeRefMethod {
                                             }))
                             .map(ChangeContext::getResult);
                 })
-                .map(SyncLobbyRuntimeResponse::new);
+                .map(SyncLobbyRuntimeRefResponse::new);
     }
 }

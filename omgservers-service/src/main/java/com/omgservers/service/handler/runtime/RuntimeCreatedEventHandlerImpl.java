@@ -4,7 +4,7 @@ import com.omgservers.model.container.ContainerConfigModel;
 import com.omgservers.model.container.ContainerModel;
 import com.omgservers.model.container.ContainerQualifierEnum;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
@@ -171,7 +171,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId, idempotencyKey);
                 final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
                 yield lobbyModule.getLobbyService().syncLobbyRuntimeRef(request)
-                        .map(SyncLobbyRuntimeResponse::getCreated)
+                        .map(SyncLobbyRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)
                         .onFailure(ServerSideConflictException.class)

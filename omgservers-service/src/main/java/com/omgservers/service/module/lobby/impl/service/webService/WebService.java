@@ -13,7 +13,7 @@ import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -28,7 +28,7 @@ public interface WebService {
 
     Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(FindLobbyRuntimeRefRequest request);
 
-    Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request);
+    Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request);
 
     Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(DeleteLobbyRuntimeRefRequest request);
 }

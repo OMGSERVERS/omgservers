@@ -13,7 +13,7 @@ import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.service.module.lobby.impl.operation.getLobbyModuleClient.GetLobbyModuleClientOperation;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.LobbyService;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.deleteLobby.DeleteLobbyMethod;
@@ -91,7 +91,7 @@ class LobbyServiceImpl implements LobbyService {
     }
 
     @Override
-    public Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(@Valid final SyncLobbyRuntimeRefRequest request) {
+    public Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(@Valid final SyncLobbyRuntimeRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::syncLobbyRuntimeRef,

@@ -13,7 +13,7 @@ import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -28,7 +28,7 @@ public interface LobbyService {
 
     Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(@Valid FindLobbyRuntimeRefRequest request);
 
-    Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(@Valid SyncLobbyRuntimeRefRequest request);
+    Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(@Valid SyncLobbyRuntimeRefRequest request);
 
     Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(@Valid DeleteLobbyRuntimeRefRequest request);
 }

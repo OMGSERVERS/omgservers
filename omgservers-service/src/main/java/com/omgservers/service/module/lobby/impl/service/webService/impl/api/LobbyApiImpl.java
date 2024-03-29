@@ -13,7 +13,7 @@ import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyResponse;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeResponse;
+import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.service.module.lobby.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -56,7 +56,7 @@ public class LobbyApiImpl implements LobbyApi {
     }
 
     @Override
-    public Uni<SyncLobbyRuntimeResponse> syncLobbyRuntimeRef(final SyncLobbyRuntimeRefRequest request) {
+    public Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(final SyncLobbyRuntimeRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntimeRef);
     }
 

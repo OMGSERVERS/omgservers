@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SyncLobbyRuntimeResponse {
+public class SyncLobbyRuntimeRefResponse {
 
     Boolean created;
 }
