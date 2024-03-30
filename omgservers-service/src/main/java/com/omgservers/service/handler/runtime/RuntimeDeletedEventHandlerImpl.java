@@ -267,7 +267,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     Uni<Boolean> deleteServerContainer(RuntimeServerContainerRefModel runtimeServerContainerRef) {
         final var serverId = runtimeServerContainerRef.getServerId();
         final var serverContainerId = runtimeServerContainerRef.getServerContainerId();
-        final var request = new DeleteServerContainerRequest(serverContainerId, serverContainerId);
+        final var request = new DeleteServerContainerRequest(serverId, serverContainerId);
         return serverModule.getServerService().deleteServerContainer(request)
                 .map(DeleteServerContainerResponse::getDeleted);
     }
