@@ -38,6 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -118,6 +126,25 @@ public interface RuntimeApi {
     @PUT
     @Path("/delete-runtime-assignment")
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(DeleteRuntimeAssignmentRequest request);
+
+    @PUT
+    @Path("/get-runtime-server-container-ref")
+    Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(GetRuntimeServerContainerRefRequest request);
+
+    @PUT
+    @Path("/find-runtime-server-container-ref")
+    Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
+            FindRuntimeServerContainerRefRequest request);
+
+    @PUT
+    @Path("/sync-runtime-server-container-ref")
+    Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
+            SyncRuntimeServerContainerRefRequest request);
+
+    @PUT
+    @Path("/delete-runtime-server-container-ref")
+    Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
+            DeleteRuntimeServerContainerRefRequest request);
 
     @PUT
     @Path("/interchange")

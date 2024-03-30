@@ -42,7 +42,13 @@ public class ServerModel {
     Integer cpuCount;
 
     @NotNull
+    Integer cpuUsed;
+
+    @NotNull
     Integer memorySize;
+
+    @NotNull
+    Integer memoryUsed;
 
     @NotNull
     ServerConfigModel config;

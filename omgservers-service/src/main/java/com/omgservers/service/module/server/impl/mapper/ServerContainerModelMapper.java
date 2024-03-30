@@ -26,6 +26,7 @@ public class ServerContainerModelMapper {
         serverContainer.setServerId(row.getLong("server_id"));
         serverContainer.setCreated(row.getOffsetDateTime("created").toInstant());
         serverContainer.setModified(row.getOffsetDateTime("modified").toInstant());
+        serverContainer.setRuntimeId(row.getLong("runtime_id"));
         serverContainer.setImage(row.getString("image"));
         serverContainer.setCpuLimit(row.getInteger("cpu_limit"));
         serverContainer.setMemoryLimit(row.getInteger("memory_limit"));

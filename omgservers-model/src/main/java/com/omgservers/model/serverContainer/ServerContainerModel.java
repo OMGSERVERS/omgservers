@@ -32,6 +32,9 @@ public class ServerContainerModel {
     Instant modified;
 
     @NotNull
+    Long runtimeId;
+
+    @NotNull
     String image;
 
     @NotNull

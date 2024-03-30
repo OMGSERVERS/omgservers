@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.GetRuntimeAssignmentRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeAssignmentResponse;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimeAssignment.SelectRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.selectRuntimeAssignment.SelectRuntimeAssignmentOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

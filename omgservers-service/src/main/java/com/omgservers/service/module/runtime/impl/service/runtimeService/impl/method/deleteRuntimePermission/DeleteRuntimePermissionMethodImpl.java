@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
-import com.omgservers.service.module.runtime.impl.operation.deleteRuntimePermission.DeleteRuntimePermissionOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimePermission.deleteRuntimePermission.DeleteRuntimePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

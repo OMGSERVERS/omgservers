@@ -42,6 +42,8 @@ import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentCreatedEv
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeServerContainerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimeServerContainerRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.server.ServerContainerCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.server.ServerContainerDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.server.ServerCreatedEventBodyModel;
@@ -66,8 +68,6 @@ import com.omgservers.model.event.body.module.user.PlayerCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.user.PlayerDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.user.UserDeletedEventBodyModel;
-import com.omgservers.model.event.body.system.ContainerCreatedEventBodyModel;
-import com.omgservers.model.event.body.system.ContainerDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.ServiceAccountCreatedEventBodyModel;
@@ -79,8 +79,6 @@ public enum EventQualifierEnum {
     INDEX_DELETED(IndexDeletedEventBodyModel.class, true),
     SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class, true),
     SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class, true),
-    CONTAINER_CREATED(ContainerCreatedEventBodyModel.class, true),
-    CONTAINER_DELETED(ContainerDeletedEventBodyModel.class, true),
     // Module
     ROOT_CREATED(RootCreatedEventBodyModel.class, false),
     ROOT_DELETED(RootDeletedEventBodyModel.class, false),
@@ -138,6 +136,8 @@ public enum EventQualifierEnum {
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_DELETED(RuntimeAssignmentDeletedEventBodyModel.class, true),
+    RUNTIME_SERVER_CONTAINER_REF_CREATED(RuntimeServerContainerRefCreatedEventBodyModel.class, false),
+    RUNTIME_SERVER_CONTAINER_REF_DELETED(RuntimeServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
     ROOT_INITIALIZATION_REQUESTED(RootInitializationRequestedEventBodyModel.class, false),
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),

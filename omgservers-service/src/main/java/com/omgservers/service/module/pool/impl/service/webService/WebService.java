@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -27,6 +29,8 @@ public interface WebService {
     Uni<GetPoolServerRefResponse> getPoolServerRef(GetPoolServerRefRequest request);
 
     Uni<FindPoolServerRefResponse> findPoolServerRef(FindPoolServerRefRequest request);
+
+    Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(ViewPoolServerRefsRequest request);
 
     Uni<SyncPoolServerRefResponse> syncPoolServerRef(SyncPoolServerRefRequest request);
 

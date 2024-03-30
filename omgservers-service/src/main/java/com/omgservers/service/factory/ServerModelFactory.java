@@ -61,7 +61,9 @@ public class ServerModelFactory {
         server.setQualifier(qualifier);
         server.setUri(uri);
         server.setCpuCount(cpuCount);
+        server.setCpuUsed(0);
         server.setMemorySize(memorySize);
+        server.setMemoryUsed(0);
         server.setConfig(config);
         server.setDeleted(Boolean.FALSE);
         return server;

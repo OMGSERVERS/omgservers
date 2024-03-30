@@ -38,6 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -76,6 +84,17 @@ public interface WebService {
     Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(SyncRuntimeAssignmentRequest request);
 
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(DeleteRuntimeAssignmentRequest request);
+
+    Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(GetRuntimeServerContainerRefRequest request);
+
+    Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
+            FindRuntimeServerContainerRefRequest request);
+
+    Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
+            SyncRuntimeServerContainerRefRequest request);
+
+    Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
+            DeleteRuntimeServerContainerRefRequest request);
 
     Uni<InterchangeResponse> interchange(InterchangeRequest request);
 }

@@ -18,27 +18,30 @@ public class ServerContainerModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public ServerContainerModel create(final Long serverId,
+                                       final Long runtimeId,
                                        final String image,
                                        final Integer cpuLimit,
                                        final Integer memoryLimit,
                                        final ServerContainerConfigModel config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, serverId, image, cpuLimit, memoryLimit, config, idempotencyKey);
+        return create(id, serverId, runtimeId, image, cpuLimit, memoryLimit, config, idempotencyKey);
     }
 
     public ServerContainerModel create(final Long serverId,
+                                       final Long runtimeId,
                                        final String image,
                                        final Integer cpuLimit,
                                        final Integer memoryLimit,
                                        final ServerContainerConfigModel config,
                                        final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, serverId, image, cpuLimit, memoryLimit, config, idempotencyKey);
+        return create(id, serverId, runtimeId, image, cpuLimit, memoryLimit, config, idempotencyKey);
     }
 
     public ServerContainerModel create(final Long id,
                                        final Long serverId,
+                                       final Long runtimeId,
                                        final String image,
                                        final Integer cpuLimit,
                                        final Integer memoryLimit,
@@ -52,6 +55,7 @@ public class ServerContainerModelFactory {
         serverContainer.setServerId(serverId);
         serverContainer.setCreated(now);
         serverContainer.setModified(now);
+        serverContainer.setRuntimeId(runtimeId);
         serverContainer.setImage(image);
         serverContainer.setCpuLimit(cpuLimit);
         serverContainer.setMemoryLimit(memoryLimit);

@@ -38,6 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -141,6 +149,30 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
         return runtimeService.deleteRuntimeAssignment(request);
+    }
+
+    @Override
+    public Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(
+            final GetRuntimeServerContainerRefRequest request) {
+        return runtimeService.getRuntimeServerContainerRef(request);
+    }
+
+    @Override
+    public Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
+            final FindRuntimeServerContainerRefRequest request) {
+        return runtimeService.findRuntimeServerContainerRef(request);
+    }
+
+    @Override
+    public Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
+            final SyncRuntimeServerContainerRefRequest request) {
+        return runtimeService.syncRuntimeServerContainerRef(request);
+    }
+
+    @Override
+    public Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
+            final DeleteRuntimeServerContainerRefRequest request) {
+        return runtimeService.deleteRuntimeServerContainerRef(request);
     }
 
     @Override

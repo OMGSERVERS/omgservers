@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -52,6 +54,11 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<FindPoolServerRefResponse> findPoolServerRef(final FindPoolServerRefRequest request) {
         return poolService.findPoolServerRef(request);
+    }
+
+    @Override
+    public Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(final ViewPoolServerRefsRequest request) {
+        return poolService.viewPoolServerRefs(request);
     }
 
     @Override

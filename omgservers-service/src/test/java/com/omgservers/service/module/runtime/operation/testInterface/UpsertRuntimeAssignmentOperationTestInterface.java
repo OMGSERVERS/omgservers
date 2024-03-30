@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation.testInterface;
 
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntimeAssignment.UpsertRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.upsertRuntimeAssignment.UpsertRuntimeAssignmentOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.pool.impl.service.poolService.impl.method.
 
 import com.omgservers.model.dto.pool.DeletePoolServerRefRequest;
 import com.omgservers.model.dto.pool.DeletePoolServerRefResponse;
-import com.omgservers.service.module.pool.impl.operation.deletePoolServerRef.DeletePoolServerRefOperation;
+import com.omgservers.service.module.pool.impl.operation.poolServer.deletePoolServerRef.DeletePoolServerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

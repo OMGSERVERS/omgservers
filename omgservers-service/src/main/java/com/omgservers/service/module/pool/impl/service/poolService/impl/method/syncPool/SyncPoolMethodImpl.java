@@ -2,7 +2,7 @@ package com.omgservers.service.module.pool.impl.service.poolService.impl.method.
 
 import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
-import com.omgservers.service.module.pool.impl.operation.upsertPool.UpsertPoolOperation;
+import com.omgservers.service.module.pool.impl.operation.pool.upsertPool.UpsertPoolOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

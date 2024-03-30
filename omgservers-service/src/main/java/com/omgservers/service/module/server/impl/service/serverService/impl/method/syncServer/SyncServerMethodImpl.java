@@ -2,7 +2,7 @@ package com.omgservers.service.module.server.impl.service.serverService.impl.met
 
 import com.omgservers.model.dto.server.SyncServerRequest;
 import com.omgservers.model.dto.server.SyncServerResponse;
-import com.omgservers.service.module.server.impl.operation.upsertServer.UpsertServerOperation;
+import com.omgservers.service.module.server.impl.operation.server.upsertServer.UpsertServerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

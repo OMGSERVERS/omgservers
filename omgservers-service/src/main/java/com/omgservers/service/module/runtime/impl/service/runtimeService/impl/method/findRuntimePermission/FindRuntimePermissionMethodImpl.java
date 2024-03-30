@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
 import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
-import com.omgservers.service.module.runtime.impl.operation.selectRuntimePermissionByRuntimeIdAndUserId.SelectRuntimePermissionByRuntimeIdAndUserIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimePermission.selectRuntimePermissionByRuntimeIdAndUserId.SelectRuntimePermissionByRuntimeIdAndUserIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

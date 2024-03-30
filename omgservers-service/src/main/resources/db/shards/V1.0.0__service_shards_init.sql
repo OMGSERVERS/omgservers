@@ -43,7 +43,9 @@ create table if not exists tab_server (
     qualifier text not null,
     uri text not null,
     cpu_count integer not null,
+    cpu_used integer not null,
     memory_size integer not null,
+    memory_used integer not null,
     config json not null,
     deleted boolean not null
 );
@@ -54,6 +56,7 @@ create table if not exists tab_server_container (
     server_id bigint not null references tab_server(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    runtime_id bigint not null,
     image text not null,
     cpu_limit integer not null,
     memory_limit integer not null,
@@ -446,6 +449,18 @@ create table if not exists tab_runtime_assignment (
     deleted boolean not null
 );
 
+create table if not exists tab_runtime_server_container_ref (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    server_id bigint not null,
+    server_container_id bigint not null,
+    deleted boolean not null
+);
+
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_assignment_runtime_id on tab_runtime_assignment(runtime_id);
+create index if not exists idx_runtime_server_container_ref_runtime_id on tab_runtime_server_container_ref(runtime_id);

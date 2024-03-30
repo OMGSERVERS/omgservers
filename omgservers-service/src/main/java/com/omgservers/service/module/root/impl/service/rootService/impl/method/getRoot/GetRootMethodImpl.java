@@ -2,7 +2,7 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 
 import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
-import com.omgservers.service.module.root.impl.operation.selectRoot.SelectRootOperation;
+import com.omgservers.service.module.root.impl.operation.root.selectRoot.SelectRootOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.server.impl.service.serverService.impl.met
 
 import com.omgservers.model.dto.server.DeleteServerContainerRequest;
 import com.omgservers.model.dto.server.DeleteServerContainerResponse;
-import com.omgservers.service.module.server.impl.operation.deleteServerContainer.DeleteServerContainerOperation;
+import com.omgservers.service.module.server.impl.operation.serverContainer.deleteServerContainer.DeleteServerContainerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

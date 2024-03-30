@@ -13,13 +13,6 @@ import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.EventModelFactory;
 import com.omgservers.service.factory.IndexModelFactory;
-import com.omgservers.service.factory.PoolModelFactory;
-import com.omgservers.service.factory.RootModelFactory;
-import com.omgservers.service.factory.ServerModelFactory;
-import com.omgservers.service.factory.ServiceAccountModelFactory;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.server.ServerModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -38,18 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 public class BootstrapInstance {
 
     final SystemModule systemModule;
-    final ServerModule serverModule;
-    final RootModule rootModule;
-    final PoolModule poolModule;
 
     final GetConfigOperation getConfigOperation;
 
-    final ServiceAccountModelFactory serviceAccountModelFactory;
-    final ServerModelFactory serverModelFactory;
     final IndexModelFactory indexModelFactory;
     final EventModelFactory eventModelFactory;
-    final RootModelFactory rootModelFactory;
-    final PoolModelFactory poolModelFactory;
 
     @WithSpan
     void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_INSTANCE_PRIORITY)

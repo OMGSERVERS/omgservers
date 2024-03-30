@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.deletePool.DeletePoolMethod;
@@ -23,6 +25,7 @@ import com.omgservers.service.module.pool.impl.service.poolService.impl.method.g
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.getPoolServerRef.GetPoolServerRefMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.syncPool.SyncPoolMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.syncPoolServerRef.SyncPoolServerRefMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.viewPoolServerRefs.ViewPoolServerRefsMethod;
 import com.omgservers.service.module.pool.impl.service.webService.impl.api.PoolApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -39,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 class PoolServiceImpl implements PoolService {
 
     final DeletePoolServerRefMethod deletePoolServerRefMethod;
+    final ViewPoolServerRefsMethod viewPoolServerRefsMethod;
     final FindPoolServerRefMethod findPoolServerRefMethod;
     final SyncPoolServerRefMethod syncPoolServerRefMethod;
     final GetPoolServerRefMethod getPoolServerRefMethod;
@@ -88,6 +92,14 @@ class PoolServiceImpl implements PoolService {
                 getMatchServiceApiClientOperation::getClient,
                 PoolApi::findPoolServerRef,
                 findPoolServerRefMethod::findPoolServerRef);
+    }
+
+    @Override
+    public Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(@Valid final ViewPoolServerRefsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getMatchServiceApiClientOperation::getClient,
+                PoolApi::viewPoolServerRefs,
+                viewPoolServerRefsMethod::viewPoolServerRefs);
     }
 
     @Override

@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -28,6 +30,8 @@ public interface PoolService {
     Uni<GetPoolServerRefResponse> getPoolServerRef(@Valid GetPoolServerRefRequest request);
 
     Uni<FindPoolServerRefResponse> findPoolServerRef(@Valid FindPoolServerRefRequest request);
+
+    Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(@Valid ViewPoolServerRefsRequest request);
 
     Uni<SyncPoolServerRefResponse> syncPoolServerRef(@Valid SyncPoolServerRefRequest request);
 

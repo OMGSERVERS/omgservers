@@ -2,7 +2,7 @@ package com.omgservers.service.module.server.impl.service.serverService.impl.met
 
 import com.omgservers.model.dto.server.ViewServerContainersRequest;
 import com.omgservers.model.dto.server.ViewServerContainersResponse;
-import com.omgservers.service.module.server.impl.operation.selectActiveServerContainersByServerId.SelectActiveServerContainersByServerIdOperation;
+import com.omgservers.service.module.server.impl.operation.serverContainer.selectActiveServerContainersByServerId.SelectActiveServerContainersByServerIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

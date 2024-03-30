@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -42,6 +44,10 @@ public interface PoolApi {
     @PUT
     @Path("/find-pool-server-ref")
     Uni<FindPoolServerRefResponse> findPoolServerRef(FindPoolServerRefRequest request);
+
+    @PUT
+    @Path("/view-pool-server-ref")
+    Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(ViewPoolServerRefsRequest request);
 
     @PUT
     @Path("/sync-pool-server-ref")

@@ -2,7 +2,7 @@ package com.omgservers.service.module.pool.impl.service.poolService.impl.method.
 
 import com.omgservers.model.dto.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.GetPoolResponse;
-import com.omgservers.service.module.pool.impl.operation.selectPool.SelectPoolOperation;
+import com.omgservers.service.module.pool.impl.operation.pool.selectPool.SelectPoolOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

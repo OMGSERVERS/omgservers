@@ -31,7 +31,9 @@ public class ServerModelMapper {
         server.setQualifier(ServerQualifierEnum.valueOf(row.getString("qualifier")));
         server.setUri(URI.create(row.getString("uri")));
         server.setCpuCount(row.getInteger("cpu_count"));
+        server.setCpuUsed(row.getInteger("cpu_used"));
         server.setMemorySize(row.getInteger("memory_size"));
+        server.setMemoryUsed(row.getInteger("memory_used"));
         server.setDeleted(row.getBoolean("deleted"));
         try {
             final var config = objectMapper.readValue(row.getString("config"), ServerConfigModel.class);

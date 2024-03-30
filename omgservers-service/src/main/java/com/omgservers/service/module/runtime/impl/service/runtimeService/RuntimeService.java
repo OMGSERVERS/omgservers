@@ -38,6 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -78,6 +86,18 @@ public interface RuntimeService {
     Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(@Valid SyncRuntimeAssignmentRequest request);
 
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(@Valid DeleteRuntimeAssignmentRequest request);
+
+    Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(
+            @Valid GetRuntimeServerContainerRefRequest request);
+
+    Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
+            @Valid FindRuntimeServerContainerRefRequest request);
+
+    Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
+            @Valid SyncRuntimeServerContainerRefRequest request);
+
+    Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
+            @Valid DeleteRuntimeServerContainerRefRequest request);
 
     Uni<InterchangeResponse> interchange(@Valid InterchangeRequest request);
 }

@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 
 import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
-import com.omgservers.service.module.runtime.impl.operation.deleteRuntimeAssignment.DeleteRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.deleteRuntimeAssignment.DeleteRuntimeAssignmentOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

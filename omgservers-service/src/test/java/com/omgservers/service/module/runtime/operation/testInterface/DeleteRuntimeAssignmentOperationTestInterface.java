@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.operation.testInterface;
 
-import com.omgservers.service.module.runtime.impl.operation.deleteRuntimeAssignment.DeleteRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.deleteRuntimeAssignment.DeleteRuntimeAssignmentOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 
 import com.omgservers.model.dto.root.SyncRootRequest;
 import com.omgservers.model.dto.root.SyncRootResponse;
-import com.omgservers.service.module.root.impl.operation.upsertRoot.UpsertRootOperation;
+import com.omgservers.service.module.root.impl.operation.root.upsertRoot.UpsertRootOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

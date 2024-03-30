@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandResponse;
 import com.omgservers.model.shard.ShardModel;
-import com.omgservers.service.module.runtime.impl.operation.deleteRuntimeCommand.DeleteRuntimeCommandOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.deleteRuntimeCommand.DeleteRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

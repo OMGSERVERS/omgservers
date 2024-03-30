@@ -14,6 +14,8 @@ import com.omgservers.model.dto.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.SyncPoolResponse;
 import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
 import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -53,6 +55,11 @@ public class PoolApiImpl implements PoolApi {
     @Override
     public Uni<FindPoolServerRefResponse> findPoolServerRef(final FindPoolServerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findPoolServerRef);
+    }
+
+    @Override
+    public Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(final ViewPoolServerRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewPoolServerRefs);
     }
 
     @Override

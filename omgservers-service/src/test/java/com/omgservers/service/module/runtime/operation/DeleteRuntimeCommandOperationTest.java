@@ -5,7 +5,6 @@ import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.service.factory.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeCommandOperationTestInterface;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeCommandOperationTestInterface;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
