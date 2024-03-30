@@ -2,7 +2,7 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 
 import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
 import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
-import com.omgservers.service.module.user.impl.operation.updatePlayerProfile.UpdatePlayerProfileOperation;
+import com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerProfile.UpdatePlayerProfileOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

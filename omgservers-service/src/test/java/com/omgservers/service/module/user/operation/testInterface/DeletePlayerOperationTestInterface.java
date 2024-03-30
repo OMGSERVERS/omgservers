@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
-import com.omgservers.service.module.user.impl.operation.deletePlayer.DeletePlayerOperation;
+import com.omgservers.service.module.user.impl.operation.userPlayer.deletePlayer.DeletePlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

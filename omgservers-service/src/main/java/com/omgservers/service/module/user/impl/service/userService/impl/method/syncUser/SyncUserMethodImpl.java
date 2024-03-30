@@ -3,7 +3,7 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.dto.user.SyncUserResponse;
-import com.omgservers.service.module.user.impl.operation.upsertUser.UpsertUserOperation;
+import com.omgservers.service.module.user.impl.operation.user.upsertUser.UpsertUserOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

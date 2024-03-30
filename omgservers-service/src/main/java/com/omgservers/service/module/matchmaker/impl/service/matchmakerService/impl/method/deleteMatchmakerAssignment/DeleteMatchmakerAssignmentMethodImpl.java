@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerAssignmentResponse;
-import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerAssignment.DeleteMatchmakerAssignmentOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerAssignment.deleteMatchmakerAssignment.DeleteMatchmakerAssignmentOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

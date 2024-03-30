@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 
 import com.omgservers.model.dto.lobby.DeleteLobbyRequest;
 import com.omgservers.model.dto.lobby.DeleteLobbyResponse;
-import com.omgservers.service.module.lobby.impl.operation.deleteLobby.DeleteLobbyOperation;
+import com.omgservers.service.module.lobby.impl.operation.lobby.deleteLobby.DeleteLobbyOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmakerMatchRuntimeRefByMatchmakerIdAndMatchId.SelectMatchmakerMatchRuntimeRefByMatchmakerIdAndMatchIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.selectMatchmakerMatchRuntimeRefByMatchmakerIdAndMatchId.SelectMatchmakerMatchRuntimeRefByMatchmakerIdAndMatchIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveTenantPermissionsByTenantId.SelectActiveTenantPermissionsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantPermission.selectActiveTenantPermissionsByTenantId.SelectActiveTenantPermissionsByTenantIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

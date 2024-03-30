@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.DeleteProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectPermissionResponse;
-import com.omgservers.service.module.tenant.impl.operation.deleteProjectPermission.DeleteProjectPermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.projectPermission.deleteProjectPermission.DeleteProjectPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionLobbyRefResponse;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.module.tenant.impl.operation.deleteVersionLobbyRef.DeleteVersionLobbyRefOperation;
+import com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.deleteVersionLobbyRef.DeleteVersionLobbyRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

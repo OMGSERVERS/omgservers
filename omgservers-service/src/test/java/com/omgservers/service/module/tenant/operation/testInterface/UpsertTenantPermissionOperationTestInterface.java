@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenantPermission.UpsertTenantPermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantPermission.upsertTenantPermission.UpsertTenantPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

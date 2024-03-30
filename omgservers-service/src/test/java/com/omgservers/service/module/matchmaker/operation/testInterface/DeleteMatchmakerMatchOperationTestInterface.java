@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
-import com.omgservers.service.module.matchmaker.impl.operation.deleteMatchmakerMatch.DeleteMatchmakerMatchOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.deleteMatchmakerMatch.DeleteMatchmakerMatchOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

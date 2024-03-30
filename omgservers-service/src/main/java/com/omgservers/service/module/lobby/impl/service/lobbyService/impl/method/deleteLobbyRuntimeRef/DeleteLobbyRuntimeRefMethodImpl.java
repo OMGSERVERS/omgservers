@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 
 import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefResponse;
-import com.omgservers.service.module.lobby.impl.operation.deleteLobbyRuntimeRef.DeleteLobbyRuntimeRefOperation;
+import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.deleteLobbyRuntimeRef.DeleteLobbyRuntimeRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

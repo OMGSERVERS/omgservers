@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionLobbyRequestsByVersionId.SelectActiveVersionLobbyRequestsByVersionId;
+import com.omgservers.service.module.tenant.impl.operation.versionLobbyRequest.selectActiveVersionLobbyRequestsByVersionId.SelectActiveVersionLobbyRequestsByVersionId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.ViewProjectsRequest;
 import com.omgservers.model.dto.tenant.ViewProjectsResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.project.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

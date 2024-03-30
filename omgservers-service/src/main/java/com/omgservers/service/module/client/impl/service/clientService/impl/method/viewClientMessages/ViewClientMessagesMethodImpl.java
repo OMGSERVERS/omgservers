@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 
 import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
-import com.omgservers.service.module.client.impl.operation.selectActiveClientMessagesByClientId.SelectActiveClientMessagesByClientIdOperation;
+import com.omgservers.service.module.client.impl.operation.clientMessage.selectActiveClientMessagesByClientId.SelectActiveClientMessagesByClientIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

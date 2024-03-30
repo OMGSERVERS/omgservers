@@ -3,7 +3,7 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.model.dto.user.DeletePlayerRequest;
 import com.omgservers.model.dto.user.DeletePlayerResponse;
-import com.omgservers.service.module.user.impl.operation.deletePlayer.DeletePlayerOperation;
+import com.omgservers.service.module.user.impl.operation.userPlayer.deletePlayer.DeletePlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

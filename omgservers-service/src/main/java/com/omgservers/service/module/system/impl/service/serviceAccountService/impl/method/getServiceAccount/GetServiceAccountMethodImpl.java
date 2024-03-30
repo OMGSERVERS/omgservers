@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.service.serviceAccountService.
 
 import com.omgservers.model.dto.system.GetServiceAccountRequest;
 import com.omgservers.model.dto.system.GetServiceAccountResponse;
-import com.omgservers.service.module.system.impl.operation.selectServiceAccount.SelectServiceAccountOperation;
+import com.omgservers.service.module.system.impl.operation.serviceAccount.selectServiceAccount.SelectServiceAccountOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

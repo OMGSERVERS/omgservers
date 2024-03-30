@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.service.module.client.impl.operation.selectActiveClientRuntimeRefsByClientId.SelectActiveClientRuntimeRefsByClientIdOperation;
+import com.omgservers.service.module.client.impl.operation.clientRuntimeRef.selectActiveClientRuntimeRefsByClientId.SelectActiveClientRuntimeRefsByClientIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

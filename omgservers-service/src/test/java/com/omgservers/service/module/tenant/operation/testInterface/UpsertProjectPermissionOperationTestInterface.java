@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.service.module.tenant.impl.operation.upsertProjectPermission.UpsertProjectPermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.projectPermission.upsertProjectPermission.UpsertProjectPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

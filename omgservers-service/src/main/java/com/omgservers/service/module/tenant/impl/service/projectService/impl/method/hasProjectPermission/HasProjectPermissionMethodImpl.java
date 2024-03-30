@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 
 import com.omgservers.model.dto.tenant.HasProjectPermissionRequest;
 import com.omgservers.model.dto.tenant.HasProjectPermissionResponse;
-import com.omgservers.service.module.tenant.impl.operation.hasProjectPermission.HasProjectPermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.projectPermission.hasProjectPermission.HasProjectPermissionOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

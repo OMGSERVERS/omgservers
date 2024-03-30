@@ -2,7 +2,7 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 
 import com.omgservers.model.dto.user.GetPlayerRequest;
 import com.omgservers.model.dto.user.GetPlayerResponse;
-import com.omgservers.service.module.user.impl.operation.selectPlayer.SelectPlayerOperation;
+import com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayer.SelectPlayerOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

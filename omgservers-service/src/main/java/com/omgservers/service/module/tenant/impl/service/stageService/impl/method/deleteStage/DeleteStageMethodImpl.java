@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.DeleteStageRequest;
 import com.omgservers.model.dto.tenant.DeleteStageResponse;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.module.tenant.impl.operation.deleteStage.DeleteStageOperation;
+import com.omgservers.service.module.tenant.impl.operation.stage.deleteStage.DeleteStageOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

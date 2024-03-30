@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.service.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenant.deleteTenant.DeleteTenantOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

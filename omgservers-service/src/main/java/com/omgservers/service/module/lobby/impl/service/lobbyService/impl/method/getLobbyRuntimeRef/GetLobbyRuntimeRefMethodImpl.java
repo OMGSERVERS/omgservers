@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 
 import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
-import com.omgservers.service.module.lobby.impl.operation.selectLobbyRuntimeRef.SelectLobbyRuntimeRefOperation;
+import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.selectLobbyRuntimeRef.SelectLobbyRuntimeRefOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

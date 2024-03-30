@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
 import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
-import com.omgservers.service.module.tenant.impl.operation.hasStagePermission.HasStagePermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.stagePermission.hasStagePermission.HasStagePermissionOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

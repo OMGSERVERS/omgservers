@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
 import com.omgservers.model.dto.tenant.DeleteTenantResponse;
-import com.omgservers.service.module.tenant.impl.operation.deleteTenant.DeleteTenantOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenant.deleteTenant.DeleteTenantOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.operation.testInterface;
 
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.service.module.lobby.impl.operation.upsertLobbyRuntimeRef.UpsertLobbyRuntimeRefOperation;
+import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.upsertLobbyRuntimeRef.UpsertLobbyRuntimeRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

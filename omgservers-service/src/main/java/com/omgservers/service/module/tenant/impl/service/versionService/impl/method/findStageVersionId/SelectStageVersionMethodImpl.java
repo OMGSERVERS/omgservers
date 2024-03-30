@@ -4,7 +4,7 @@ import com.omgservers.model.dto.tenant.SelectStageVersionRequest;
 import com.omgservers.model.dto.tenant.SelectStageVersionResponse;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.DeleteStagePermissionRequest;
 import com.omgservers.model.dto.tenant.DeleteStagePermissionResponse;
-import com.omgservers.service.module.tenant.impl.operation.deleteStagePermission.DeleteStagePermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.stagePermission.deleteStagePermission.DeleteStagePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.service.serviceAccountService.
 
 import com.omgservers.model.dto.system.DeleteServiceAccountRequest;
 import com.omgservers.model.dto.system.DeleteServiceAccountResponse;
-import com.omgservers.service.module.system.impl.operation.deleteServiceAccount.DeleteServiceAccountOperation;
+import com.omgservers.service.module.system.impl.operation.serviceAccount.deleteServiceAccount.DeleteServiceAccountOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;

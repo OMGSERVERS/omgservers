@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
 import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
-import com.omgservers.service.module.matchmaker.impl.operation.updateMatchmakerMatchStatus.UpdateMatchmakerMatchStatusOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.updateMatchmakerMatchStatus.UpdateMatchmakerMatchStatusOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

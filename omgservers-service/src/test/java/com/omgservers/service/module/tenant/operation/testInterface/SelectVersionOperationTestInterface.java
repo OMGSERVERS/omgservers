@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.service.module.tenant.impl.operation.selectVersion.SelectVersionOperation;
+import com.omgservers.service.module.tenant.impl.operation.version.selectVersion.SelectVersionOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

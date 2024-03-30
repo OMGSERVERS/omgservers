@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.model.project.ProjectModel;
-import com.omgservers.service.module.tenant.impl.operation.selectProject.SelectProjectOperation;
+import com.omgservers.service.module.tenant.impl.operation.project.selectProject.SelectProjectOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

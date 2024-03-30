@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.service.module.tenant.impl.operation.hasStagePermission.HasStagePermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.stagePermission.hasStagePermission.HasStagePermissionOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

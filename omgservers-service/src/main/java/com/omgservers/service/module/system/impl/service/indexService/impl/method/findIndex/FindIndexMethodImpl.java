@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.service.indexService.impl.meth
 
 import com.omgservers.model.dto.system.FindIndexRequest;
 import com.omgservers.model.dto.system.FindIndexResponse;
-import com.omgservers.service.module.system.impl.operation.selectIndexByName.SelectIndexByNameOperation;
+import com.omgservers.service.module.system.impl.operation.index.selectIndexByName.SelectIndexByNameOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

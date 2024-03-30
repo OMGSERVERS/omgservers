@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
 import com.omgservers.model.request.MatchmakerRequestModel;
-import com.omgservers.service.module.matchmaker.impl.operation.upsertMatchmakerRequest.UpsertMatchmakerRequestOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.upsertMatchmakerRequest.UpsertMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -3,8 +3,8 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 import com.omgservers.model.dto.user.CreateTokenRequest;
 import com.omgservers.model.dto.user.CreateTokenResponse;
 import com.omgservers.model.user.UserModel;
-import com.omgservers.service.module.user.impl.operation.selectUser.SelectUserOperation;
-import com.omgservers.service.module.user.impl.operation.validateCredentials.ValidateCredentialsOperation;
+import com.omgservers.service.module.user.impl.operation.user.selectUser.SelectUserOperation;
+import com.omgservers.service.module.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

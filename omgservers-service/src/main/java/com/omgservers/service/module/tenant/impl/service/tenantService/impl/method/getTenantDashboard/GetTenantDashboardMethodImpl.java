@@ -3,11 +3,11 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
 import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
 import com.omgservers.model.tenantDashboard.TenantDashboardModel;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveStagesByTenantId.SelectActiveStagesByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionMatchmakerRefsByTenantId.SelectActiveVersionMatchmakerRefsByTenantId;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionProjectionsByTenantId.SelectActiveVersionProjectionsByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.selectActiveVersionLobbyRefsByTenantId.SelectActiveVersionLobbyRefsByTenantId;
+import com.omgservers.service.module.tenant.impl.operation.project.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.stage.selectActiveStagesByTenantId.SelectActiveStagesByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.selectActiveVersionMatchmakerRefsByTenantId.SelectActiveVersionMatchmakerRefsByTenantId;
+import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionProjectionsByTenantId.SelectActiveVersionProjectionsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.selectActiveVersionLobbyRefsByTenantId.SelectActiveVersionLobbyRefsByTenantId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

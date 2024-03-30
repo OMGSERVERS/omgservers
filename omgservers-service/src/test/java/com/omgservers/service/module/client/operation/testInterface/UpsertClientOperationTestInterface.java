@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.operation.testInterface;
 
 import com.omgservers.model.client.ClientModel;
-import com.omgservers.service.module.client.impl.operation.upsertClient.UpsertClientOperation;
+import com.omgservers.service.module.client.impl.operation.client.upsertClient.UpsertClientOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

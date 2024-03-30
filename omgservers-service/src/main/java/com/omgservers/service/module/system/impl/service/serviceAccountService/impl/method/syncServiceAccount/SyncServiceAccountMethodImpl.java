@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.service.serviceAccountService.
 
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
-import com.omgservers.service.module.system.impl.operation.upsertServiceAccount.UpsertServiceAccountOperation;
+import com.omgservers.service.module.system.impl.operation.serviceAccount.upsertServiceAccount.UpsertServiceAccountOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;

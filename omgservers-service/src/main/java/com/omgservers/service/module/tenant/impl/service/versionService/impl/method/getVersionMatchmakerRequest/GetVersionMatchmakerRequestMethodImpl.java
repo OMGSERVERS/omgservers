@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
 import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
-import com.omgservers.service.module.tenant.impl.operation.selectVersionMatchmakerRequest.SelectVersionMatchmakerRequestOperation;
+import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.selectVersionMatchmakerRequest.SelectVersionMatchmakerRequestOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

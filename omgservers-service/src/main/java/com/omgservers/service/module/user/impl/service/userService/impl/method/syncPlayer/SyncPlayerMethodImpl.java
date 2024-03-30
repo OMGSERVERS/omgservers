@@ -2,7 +2,7 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 
 import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.dto.user.SyncPlayerResponse;
-import com.omgservers.service.module.user.impl.operation.upsertPlayer.UpsertPlayerOperation;
+import com.omgservers.service.module.user.impl.operation.userPlayer.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

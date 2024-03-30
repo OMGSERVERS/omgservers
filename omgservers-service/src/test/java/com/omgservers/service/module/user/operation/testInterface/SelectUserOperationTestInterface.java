@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
 import com.omgservers.model.user.UserModel;
-import com.omgservers.service.module.user.impl.operation.selectUser.SelectUserOperation;
+import com.omgservers.service.module.user.impl.operation.user.selectUser.SelectUserOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

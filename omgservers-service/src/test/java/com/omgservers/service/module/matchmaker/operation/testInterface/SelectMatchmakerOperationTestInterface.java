@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.service.module.matchmaker.impl.operation.selectMatchmaker.SelectMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.selectMatchmaker.SelectMatchmakerOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

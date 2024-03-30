@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 
 import com.omgservers.model.dto.lobby.GetLobbyRequest;
 import com.omgservers.model.dto.lobby.GetLobbyResponse;
-import com.omgservers.service.module.lobby.impl.operation.selectLobby.SelectLobbyOperation;
+import com.omgservers.service.module.lobby.impl.operation.lobby.selectLobby.SelectLobbyOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

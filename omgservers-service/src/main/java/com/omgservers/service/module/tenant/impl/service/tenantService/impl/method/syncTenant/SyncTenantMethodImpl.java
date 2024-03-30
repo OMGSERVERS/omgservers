@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 
 import com.omgservers.model.dto.tenant.SyncTenantRequest;
 import com.omgservers.model.dto.tenant.SyncTenantResponse;
-import com.omgservers.service.module.tenant.impl.operation.upsertTenant.UpsertTenantOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenant.upsertTenant.UpsertTenantOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

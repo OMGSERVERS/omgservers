@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
 import com.omgservers.model.user.UserModel;
-import com.omgservers.service.module.user.impl.operation.validateCredentials.ValidateCredentialsOperation;
+import com.omgservers.service.module.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
