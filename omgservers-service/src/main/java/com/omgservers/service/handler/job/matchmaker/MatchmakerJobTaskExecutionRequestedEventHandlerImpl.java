@@ -4,7 +4,7 @@ import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.handler.EventHandler;
 import io.smallrye.mutiny.Uni;

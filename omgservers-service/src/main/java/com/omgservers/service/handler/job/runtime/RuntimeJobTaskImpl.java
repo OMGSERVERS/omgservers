@@ -10,7 +10,7 @@ import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyM
 import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.factory.EventModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

@@ -5,7 +5,7 @@ import com.omgservers.model.dto.admin.CreateServiceAccountAdminResponse;
 import com.omgservers.model.dto.system.SyncServiceAccountRequest;
 import com.omgservers.model.dto.system.SyncServiceAccountResponse;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
-import com.omgservers.service.factory.ServiceAccountModelFactory;
+import com.omgservers.service.factory.system.ServiceAccountModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;

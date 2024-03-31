@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.operation.matchmaker.upser
 
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

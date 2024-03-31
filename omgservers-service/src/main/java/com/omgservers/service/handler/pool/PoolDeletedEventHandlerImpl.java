@@ -6,7 +6,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;
 import com.omgservers.model.pool.PoolModel;
-import com.omgservers.service.factory.PoolModelFactory;
+import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Uni;

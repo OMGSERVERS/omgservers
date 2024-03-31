@@ -2,8 +2,8 @@ package com.omgservers.service.operation.changeObject;
 
 import com.omgservers.model.event.EventBodyModel;
 import com.omgservers.model.log.LogModel;
-import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;

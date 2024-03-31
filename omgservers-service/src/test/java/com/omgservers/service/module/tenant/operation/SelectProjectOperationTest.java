@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.ProjectModelFactory;
-import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.factory.tenant.ProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.SelectProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;

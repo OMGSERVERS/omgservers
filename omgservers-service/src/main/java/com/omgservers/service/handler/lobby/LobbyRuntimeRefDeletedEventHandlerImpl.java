@@ -7,7 +7,7 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.service.factory.VersionLobbyRefModelFactory;
+import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;

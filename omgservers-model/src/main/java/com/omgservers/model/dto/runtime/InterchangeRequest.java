@@ -1,7 +1,7 @@
 package com.omgservers.model.dto.runtime;
 
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.model.dto.ShardedRequest;
+import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

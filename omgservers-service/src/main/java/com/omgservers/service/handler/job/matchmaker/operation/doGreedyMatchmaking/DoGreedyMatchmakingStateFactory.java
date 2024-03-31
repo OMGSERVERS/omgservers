@@ -7,8 +7,8 @@ import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
-import com.omgservers.service.factory.MatchmakerMatchModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 

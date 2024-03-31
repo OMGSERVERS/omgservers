@@ -12,7 +12,7 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.RootModelFactory;
+import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
 import io.smallrye.mutiny.Uni;

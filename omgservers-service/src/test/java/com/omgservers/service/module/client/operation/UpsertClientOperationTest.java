@@ -3,7 +3,7 @@ package com.omgservers.service.module.client.operation;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.ClientModelFactory;
+import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.module.client.operation.testInterface.UpsertClientOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

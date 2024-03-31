@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.deleteRuntimeAssignment;
 
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

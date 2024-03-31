@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.DeleteTenantOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;

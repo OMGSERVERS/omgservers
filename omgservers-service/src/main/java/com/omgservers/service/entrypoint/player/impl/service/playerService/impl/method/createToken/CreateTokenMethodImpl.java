@@ -4,7 +4,7 @@ import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
 import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
 import com.omgservers.model.dto.user.CreateTokenRequest;
 import com.omgservers.model.dto.user.CreateTokenResponse;
-import com.omgservers.service.factory.PlayerModelFactory;
+import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;

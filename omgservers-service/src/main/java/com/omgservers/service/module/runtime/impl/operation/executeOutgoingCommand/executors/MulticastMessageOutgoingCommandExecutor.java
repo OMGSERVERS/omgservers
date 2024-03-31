@@ -11,8 +11,8 @@ import com.omgservers.model.outgoingCommand.body.MulticastMessageOutgoingCommand
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.ClientMessageModelFactory;
-import com.omgservers.service.factory.MessageModelFactory;
+import com.omgservers.service.factory.client.ClientMessageModelFactory;
+import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.selectActiveRuntimeAssignmentsByRuntimeId.SelectActiveRuntimeAssignmentsByRuntimeIdOperation;

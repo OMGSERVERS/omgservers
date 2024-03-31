@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePermission.deleteRuntimePermission;
 
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.selectRuntimeAssignment.SelectRuntimeAssignmentOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

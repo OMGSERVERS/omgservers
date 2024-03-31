@@ -11,7 +11,7 @@ import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestMod
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.MatchmakerModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;

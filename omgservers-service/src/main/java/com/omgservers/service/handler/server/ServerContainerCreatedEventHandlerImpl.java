@@ -17,7 +17,7 @@ import com.omgservers.model.serverContainer.ServerContainerModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.RuntimeServerContainerRefModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeServerContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.server.operation.GetDockerClientOperation;
 import com.omgservers.service.module.runtime.RuntimeModule;

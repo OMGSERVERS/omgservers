@@ -5,7 +5,7 @@ import com.omgservers.model.dto.player.CreateUserPlayerResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.service.factory.UserModelFactory;
+import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;

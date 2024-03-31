@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.impl.operation.runtimeServerContai
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.module.runtime.RuntimeServerContainerRefCreatedEventBodyModel;
 import com.omgservers.model.runtimeServerContainerRef.RuntimeServerContainerRefModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

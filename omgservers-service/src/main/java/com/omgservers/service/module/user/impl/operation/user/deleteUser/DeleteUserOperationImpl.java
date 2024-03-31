@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.user.deleteUser;
 
 import com.omgservers.model.event.body.module.user.UserDeletedEventBodyModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayer.SelectPlayerOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

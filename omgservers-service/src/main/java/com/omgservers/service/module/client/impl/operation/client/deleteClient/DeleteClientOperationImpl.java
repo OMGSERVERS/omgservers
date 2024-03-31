@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.operation.client.deleteClient;
 
 import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.client.selectClient.SelectClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

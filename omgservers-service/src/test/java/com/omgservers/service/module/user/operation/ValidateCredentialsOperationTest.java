@@ -3,7 +3,7 @@ package com.omgservers.service.module.user.operation;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
-import com.omgservers.service.factory.UserModelFactory;
+import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.operation.testInterface.ValidateCredentialsOperationTestInterface;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.test.junit.QuarkusTest;

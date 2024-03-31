@@ -5,9 +5,9 @@ import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientConfigMod
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.MatchmakerMatchClientModelFactory;
-import com.omgservers.service.factory.MatchmakerMatchModelFactory;
-import com.omgservers.service.factory.MatchmakerModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchClientOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;

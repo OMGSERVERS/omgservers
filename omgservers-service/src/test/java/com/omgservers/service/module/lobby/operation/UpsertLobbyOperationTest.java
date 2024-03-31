@@ -3,7 +3,7 @@ package com.omgservers.service.module.lobby.operation;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.LobbyModelFactory;
+import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.module.lobby.operation.testInterface.UpsertLobbyOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

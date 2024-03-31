@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.returnCount;
 
-import com.omgservers.service.factory.EventModelFactory;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
 import com.omgservers.service.operation.transformPgException.TransformPgExceptionOperation;
 import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;

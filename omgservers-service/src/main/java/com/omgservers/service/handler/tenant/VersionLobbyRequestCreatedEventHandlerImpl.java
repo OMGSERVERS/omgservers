@@ -11,7 +11,7 @@ import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.LobbyModelFactory;
+import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;

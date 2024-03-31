@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.deleteClientMatchmakerRef;
 
 import com.omgservers.model.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.selectMatchmakerMatch.SelectMatchmakerMatchOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

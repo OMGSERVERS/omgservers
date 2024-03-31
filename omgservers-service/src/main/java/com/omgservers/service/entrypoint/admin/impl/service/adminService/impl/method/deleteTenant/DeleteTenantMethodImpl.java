@@ -3,7 +3,7 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 import com.omgservers.model.dto.admin.DeleteTenantAdminRequest;
 import com.omgservers.model.dto.admin.DeleteTenantAdminResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.service.factory.TenantModelFactory;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;

@@ -6,7 +6,7 @@ import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
 import com.omgservers.model.index.IndexConfigModel;
 import com.omgservers.model.index.IndexModel;
-import com.omgservers.service.factory.IndexModelFactory;
+import com.omgservers.service.factory.system.IndexModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;

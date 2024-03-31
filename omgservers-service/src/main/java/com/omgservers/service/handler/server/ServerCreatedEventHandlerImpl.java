@@ -11,7 +11,7 @@ import com.omgservers.model.server.ServerModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.PoolServerRefModelFactory;
+import com.omgservers.service.factory.pool.PoolServerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.server.ServerModule;

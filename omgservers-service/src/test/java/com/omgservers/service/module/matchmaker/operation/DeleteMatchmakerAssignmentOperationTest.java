@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.service.factory.MatchmakerAssignmentModelFactory;
-import com.omgservers.service.factory.MatchmakerModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerAssignmentOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerAssignmentOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;

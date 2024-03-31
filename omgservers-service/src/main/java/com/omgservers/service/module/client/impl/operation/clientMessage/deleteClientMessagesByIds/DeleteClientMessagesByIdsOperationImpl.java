@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.clientMessage.deleteClientMessagesByIds;
 
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

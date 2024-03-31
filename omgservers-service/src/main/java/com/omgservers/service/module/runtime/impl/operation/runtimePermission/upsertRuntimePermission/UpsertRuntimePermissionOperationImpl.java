@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePermission.upsertRuntimePermission;
 
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

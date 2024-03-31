@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.operation;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.service.factory.RuntimeModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;

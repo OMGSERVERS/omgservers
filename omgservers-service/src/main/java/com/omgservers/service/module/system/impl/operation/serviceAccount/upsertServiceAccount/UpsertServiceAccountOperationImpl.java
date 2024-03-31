@@ -2,7 +2,7 @@ package com.omgservers.service.module.system.impl.operation.serviceAccount.upser
 
 import com.omgservers.model.event.body.system.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.serviceAccount.ServiceAccountModel;
-import com.omgservers.service.factory.LogModelFactory;
+import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

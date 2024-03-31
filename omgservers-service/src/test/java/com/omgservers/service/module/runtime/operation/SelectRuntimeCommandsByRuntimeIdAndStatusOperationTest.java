@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.service.factory.RuntimeCommandModelFactory;
-import com.omgservers.service.factory.RuntimeModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtime.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
