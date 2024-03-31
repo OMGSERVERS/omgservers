@@ -45,7 +45,7 @@ public class RootCreatedEventHandlerImpl implements EventHandler {
 
         return getRoot(rootId)
                 .flatMap(root -> {
-                    log.info("Root was created, root={}", rootId);
+                    log.info("Root was created, root={}, defaultPoolId={}", rootId, root.getDefaultPoolId());
 
                     final var idempotencyKey = event.getIdempotencyKey();
 
