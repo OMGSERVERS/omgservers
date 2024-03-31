@@ -7,7 +7,6 @@ import com.omgservers.model.serverContainer.ServerContainerModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.LogModelFactory;
 import com.omgservers.service.module.server.impl.operation.server.hasServer.HasServerOperation;
 import com.omgservers.service.module.server.impl.operation.server.selectServerForUpdate.SelectServerForUpdateOperation;
 import com.omgservers.service.module.server.impl.operation.server.udpateServerUsage.UpdateServerUsageOperation;
@@ -16,7 +15,6 @@ import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +30,6 @@ class SyncServerContainerMethodImpl implements SyncServerContainerMethod {
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
     final HasServerOperation hasServerOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
 
     @Override
     public Uni<SyncServerContainerResponse> syncServerContainer(final SyncServerContainerRequest request) {
@@ -55,7 +50,7 @@ class SyncServerContainerMethodImpl implements SyncServerContainerMethod {
                                                                     sqlConnection,
                                                                     shard,
                                                                     serverId)
-                                                            .map(server -> tryServerUpdate(server, serverContainer))
+                                                            .map(server -> updateServerUsage(server, serverContainer))
                                                             // Update server usage
                                                             .flatMap(updatedServer -> updateServerUsageOperation
                                                                     .updateServerUsage(
@@ -85,14 +80,13 @@ class SyncServerContainerMethodImpl implements SyncServerContainerMethod {
     }
 
     // TODO: Unit test it
-    ServerModel tryServerUpdate(final ServerModel server, final ServerContainerModel serverContainer) {
+    ServerModel updateServerUsage(final ServerModel server, final ServerContainerModel serverContainer) {
         final var cpuLimit = serverContainer.getCpuLimit();
         final var cpuValue = server.getCpuUsed() + cpuLimit;
 
         if (cpuValue > server.getCpuCount()) {
-            // TODO: add exception message
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.SERVER_OVERWEIGHT,
-                    String.format("not enough server cpu, serverId=%d, count=%d, required=%d",
+                    String.format("reached server cpu limit, serverId=%d, count=%d, required=%d",
                             server.getId(), server.getCpuCount(), cpuValue));
         }
 
@@ -100,9 +94,8 @@ class SyncServerContainerMethodImpl implements SyncServerContainerMethod {
         final var memoryValue = server.getMemoryUsed() + memoryLimit;
 
         if (memoryValue > server.getMemorySize()) {
-            // TODO: add exception message
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.SERVER_OVERWEIGHT,
-                    String.format("not enough server memory, serverId=%d, size=%d, required=%d",
+                    String.format("reached server memory limit, serverId=%d, size=%d, required=%d",
                             server.getId(), server.getMemorySize(), memoryValue));
         }
 
