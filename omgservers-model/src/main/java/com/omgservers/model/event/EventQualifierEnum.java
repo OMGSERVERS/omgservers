@@ -34,6 +34,12 @@ import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestCreate
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeAssignmentCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeAssignmentDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRequestDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolServerRefCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolServerRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.root.RootCreatedEventBodyModel;
@@ -86,6 +92,12 @@ public enum EventQualifierEnum {
     POOL_DELETED(PoolDeletedEventBodyModel.class, false),
     POOL_SERVER_REF_CREATED(PoolServerRefCreatedEventBodyModel.class, false),
     POOL_SERVER_REF_DELETED(PoolServerRefDeletedEventBodyModel.class, false),
+    POOL_RUNTIME_SERVER_CONTAINER_REQUEST_CREATED(PoolRuntimeServerContainerRequestCreatedEventBodyModel.class, false),
+    POOL_RUNTIME_SERVER_CONTAINER_REQUEST_DELETED(PoolRuntimeServerContainerRequestDeletedEventBodyModel.class, false),
+    POOL_RUNTIME_ASSIGNMENT_CREATED(PoolRuntimeAssignmentCreatedEventBodyModel.class, false),
+    POOL_RUNTIME_ASSIGNMENT_DELETED(PoolRuntimeAssignmentDeletedEventBodyModel.class, false),
+    POOL_RUNTIME_SERVER_CONTAINER_REF_CREATED(PoolRuntimeServerContainerRefCreatedEventBodyModel.class, false),
+    POOL_RUNTIME_SERVER_CONTAINER_REF_DELETED(PoolRuntimeServerContainerRefDeletedEventBodyModel.class, false),
     SERVER_CREATED(ServerCreatedEventBodyModel.class, false),
     SERVER_DELETED(ServerDeletedEventBodyModel.class, false),
     SERVER_CONTAINER_CREATED(ServerContainerCreatedEventBodyModel.class, false),

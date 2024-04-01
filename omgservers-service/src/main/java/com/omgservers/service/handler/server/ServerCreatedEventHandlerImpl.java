@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.server;
 
-import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
-import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefRequest;
+import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefResponse;
 import com.omgservers.model.dto.server.GetServerRequest;
 import com.omgservers.model.dto.server.GetServerResponse;
 import com.omgservers.model.event.EventModel;

@@ -30,7 +30,45 @@ create table if not exists tab_pool_server_ref (
     deleted boolean not null
 );
 
+create table if not exists tab_pool_runtime_server_container_request (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    pool_id bigint not null references tab_pool(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    config json not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_pool_runtime_assignment (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    pool_id bigint not null references tab_pool(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    server_id bigint not null,
+    config json not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_pool_runtime_server_container_ref (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    pool_id bigint not null references tab_pool(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    runtime_id bigint not null,
+    server_id bigint not null,
+    container_id bigint not null,
+    deleted boolean not null
+);
+
 create index if not exists idx_pool_server_ref_pool_id on tab_pool_server_ref(pool_id);
+create index if not exists idx_pool_runtime_server_container_request_pool_id on tab_pool_runtime_server_container_request(pool_id);
+create index if not exists idx_pool_runtime_assignment_ref_pool_id on tab_pool_runtime_assignment(pool_id);
+create index if not exists idx_pool_runtime_server_container_ref_pool_id on tab_pool_runtime_server_container_ref(pool_id);
 
 -- server module
 

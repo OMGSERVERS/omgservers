@@ -1,11 +1,11 @@
 package com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.syncPoolServerRef;
 
-import com.omgservers.model.dto.pool.SyncPoolServerRefRequest;
-import com.omgservers.model.dto.pool.SyncPoolServerRefResponse;
+import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefRequest;
+import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefResponse;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.pool.impl.operation.pool.hasPool.HasPoolOperation;
-import com.omgservers.service.module.pool.impl.operation.poolServer.upsertPoolServerRef.UpsertPoolServerRefOperation;
+import com.omgservers.service.module.pool.impl.operation.poolServerRef.upsertPoolServerRef.UpsertPoolServerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

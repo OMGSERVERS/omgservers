@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.GetPoolRequest;
-import com.omgservers.model.dto.pool.GetPoolResponse;
+import com.omgservers.model.dto.pool.pool.GetPoolRequest;
+import com.omgservers.model.dto.pool.pool.GetPoolResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;

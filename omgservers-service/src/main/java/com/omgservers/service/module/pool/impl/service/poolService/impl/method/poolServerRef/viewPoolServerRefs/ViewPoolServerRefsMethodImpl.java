@@ -1,8 +1,8 @@
 package com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.viewPoolServerRefs;
 
-import com.omgservers.model.dto.pool.ViewPoolServerRefsRequest;
-import com.omgservers.model.dto.pool.ViewPoolServerRefsResponse;
-import com.omgservers.service.module.pool.impl.operation.poolServer.selectActivePoolServerRefsByPoolId.SelectActivePoolServerRefsByPoolIdOperation;
+import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsRequest;
+import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsResponse;
+import com.omgservers.service.module.pool.impl.operation.poolServerRef.selectActivePoolServerRefsByPoolId.SelectActivePoolServerRefsByPoolIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

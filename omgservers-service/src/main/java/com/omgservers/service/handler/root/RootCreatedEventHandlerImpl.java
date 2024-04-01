@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.root;
 
-import com.omgservers.model.dto.pool.SyncPoolRequest;
-import com.omgservers.model.dto.pool.SyncPoolResponse;
+import com.omgservers.model.dto.pool.pool.SyncPoolRequest;
+import com.omgservers.model.dto.pool.pool.SyncPoolResponse;
 import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
 import com.omgservers.model.event.EventModel;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.service.poolService.impl.method.pool.syncPool;
 
-import com.omgservers.model.dto.pool.SyncPoolRequest;
-import com.omgservers.model.dto.pool.SyncPoolResponse;
+import com.omgservers.model.dto.pool.pool.SyncPoolRequest;
+import com.omgservers.model.dto.pool.pool.SyncPoolResponse;
 import com.omgservers.service.module.pool.impl.operation.pool.upsertPool.UpsertPoolOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

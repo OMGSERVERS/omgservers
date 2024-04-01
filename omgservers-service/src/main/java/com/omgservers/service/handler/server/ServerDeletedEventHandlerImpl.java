@@ -1,9 +1,9 @@
 package com.omgservers.service.handler.server;
 
-import com.omgservers.model.dto.pool.DeletePoolServerRefRequest;
-import com.omgservers.model.dto.pool.DeletePoolServerRefResponse;
-import com.omgservers.model.dto.pool.FindPoolServerRefRequest;
-import com.omgservers.model.dto.pool.FindPoolServerRefResponse;
+import com.omgservers.model.dto.pool.poolServerRef.DeletePoolServerRefRequest;
+import com.omgservers.model.dto.pool.poolServerRef.DeletePoolServerRefResponse;
+import com.omgservers.model.dto.pool.poolServerRef.FindPoolServerRefRequest;
+import com.omgservers.model.dto.pool.poolServerRef.FindPoolServerRefResponse;
 import com.omgservers.model.dto.server.GetServerRequest;
 import com.omgservers.model.dto.server.GetServerResponse;
 import com.omgservers.model.event.EventModel;
