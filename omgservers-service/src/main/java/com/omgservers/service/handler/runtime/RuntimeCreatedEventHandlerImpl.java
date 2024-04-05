@@ -4,14 +4,12 @@ import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsRequest;
-import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsResponse;
+import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestRequest;
+import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestResponse;
 import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.server.SyncServerContainerRequest;
-import com.omgservers.model.dto.server.SyncServerContainerResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
@@ -22,22 +20,20 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
-import com.omgservers.model.poolServerRef.PoolServerRefModel;
+import com.omgservers.model.poolRequest.PoolRequestConfigModel;
 import com.omgservers.model.root.RootModel;
 import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.serverContainer.ServerContainerConfigModel;
-import com.omgservers.model.serverContainer.ServerContainerModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchRuntimeRefModelFactory;
+import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.runtime.RuntimePermissionModelFactory;
-import com.omgservers.service.factory.server.ServerContainerModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
@@ -45,7 +41,6 @@ import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.server.ServerModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
@@ -58,8 +53,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @ApplicationScoped
@@ -69,7 +62,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
     final SystemModule systemModule;
-    final ServerModule serverModule;
     final LobbyModule lobbyModule;
     final UserModule userModule;
     final RootModule rootModule;
@@ -80,8 +72,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerMatchRuntimeRefModelFactory matchmakerMatchRuntimeRefModelFactory;
     final RuntimePermissionModelFactory runtimePermissionModelFactory;
-    final ServerContainerModelFactory serverContainerModelFactory;
     final LobbyRuntimeRefModelFactory lobbyRuntimeRefModelFactory;
+    final PoolRequestModelFactory poolRequestModelFactory;
     final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
 
@@ -108,7 +100,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     final var userId = runtime.getUserId();
                     final var password = generateSecureStringOperation.generateSecureString();
                     return createUser(userId, password, idempotencyKey)
-                            .flatMap(user -> syncServerContainer(user, password, runtime))
+                            .flatMap(user -> syncPoolRequest(runtime, user, password))
                             .flatMap(created -> syncRuntimeRef(runtime, idempotencyKey))
                             .flatMap(created -> requestJobExecution(runtimeId, idempotencyKey));
                 })
@@ -148,76 +140,54 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<Boolean> syncServerContainer(final UserModel user,
-                                     final String password,
-                                     final RuntimeModel runtime) {
+    Uni<Boolean> syncPoolRequest(final RuntimeModel runtime,
+                                 final UserModel user,
+                                 final String password) {
         final var rootId = getConfigOperation.getServiceConfig().bootstrap().rootId();
         return getRoot(rootId)
-                .flatMap(root -> viewPoolServerRefs(root.getDefaultPoolId())
-                        .flatMap(refs -> {
-                            if (refs.isEmpty()) {
-                                throw new ServerSideNotFoundException(
-                                        ExceptionQualifierEnum.SERVER_NOT_FOUND,
-                                        String.format("server was not selected, root=%d, pool=%d",
-                                                rootId, root.getDefaultPoolId()));
-                            } else {
-                                // TODO: select server based on usage
+                .flatMap(root -> {
+                    final var defaultPoolId = root.getDefaultPoolId();
+                    final var poolRequestConfig = new PoolRequestConfigModel();
+                    poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
+                    final var workerImage = getConfigOperation.getServiceConfig().workers().dockerImage();
+                    poolRequestConfig.getServerContainerConfig().setImage(workerImage);
+                    poolRequestConfig.getServerContainerConfig().setCpuLimit(1000);
+                    poolRequestConfig.getServerContainerConfig().setMemoryLimit(1000);
+                    final var serviceUri = getConfigOperation.getServiceConfig().workers().serviceUri();
+                    final var environment = new HashMap<String, String>();
+                    environment.put("OMGSERVERS_URL", serviceUri.toString());
+                    environment.put("OMGSERVERS_USER_ID", user.getId().toString());
+                    environment.put("OMGSERVERS_PASSWORD", password);
+                    environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
+                    environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
+                    poolRequestConfig.getServerContainerConfig().setEnvironment(environment);
 
-                                final var randomRefIndex = ThreadLocalRandom.current()
-                                        .nextInt(refs.size()) % refs.size();
-                                final var randomPoolServerRef = refs.get(randomRefIndex);
+                    final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
+                            runtime.getId(),
+                            poolRequestConfig);
 
-                                final var serverId = randomPoolServerRef.getServerId();
-                                final var workerImage = getConfigOperation.getServiceConfig().workers().dockerImage();
-                                final var runtimeId = runtime.getId();
-                                final var serviceUri = getConfigOperation.getServiceConfig().workers().serviceUri();
-                                final var environment = new HashMap<String, String>();
-                                environment.put("OMGSERVERS_URL", serviceUri.toString());
-                                environment.put("OMGSERVERS_USER_ID", user.getId().toString());
-                                environment.put("OMGSERVERS_PASSWORD", password);
-                                environment.put("OMGSERVERS_RUNTIME_ID", runtimeId.toString());
-                                environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
-                                final var config = new ServerContainerConfigModel(environment);
-                                // TODO: determine cpu and memory limites
-                                final var serverContainer = serverContainerModelFactory.create(serverId,
-                                        runtimeId,
-                                        workerImage,
-                                        1,
-                                        1024,
-                                        config);
-                                return syncServerContainer(serverContainer);
-                            }
-                        })
-                );
+                    final var request = new SyncPoolRequestRequest(poolRequest);
+                    return poolModule.getPoolService().syncPoolRequest(request)
+                            .map(SyncPoolRequestResponse::getCreated)
+                            .onFailure(ServerSideConflictException.class)
+                            .recoverWithUni(t -> {
+                                if (t instanceof final ServerSideBaseException exception) {
+                                    if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                        log.warn("Idempotency was violated, object={}, {}", poolRequest,
+                                                t.getMessage());
+                                        return Uni.createFrom().item(Boolean.FALSE);
+                                    }
+                                }
+
+                                return Uni.createFrom().failure(t);
+                            });
+                });
     }
 
     Uni<RootModel> getRoot(final Long id) {
         final var getRootRequest = new GetRootRequest(id);
         return rootModule.getRootService().getRoot(getRootRequest)
                 .map(GetRootResponse::getRoot);
-    }
-
-    Uni<List<PoolServerRefModel>> viewPoolServerRefs(final Long poolId) {
-        final var request = new ViewPoolServerRefsRequest(poolId);
-        return poolModule.getPoolService().viewPoolServerRefs(request)
-                .map(ViewPoolServerRefsResponse::getPoolServerRefs);
-    }
-
-    Uni<Boolean> syncServerContainer(final ServerContainerModel serverContainer) {
-        final var request = new SyncServerContainerRequest(serverContainer);
-        return serverModule.getServerService().syncServerContainer(request)
-                .map(SyncServerContainerResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", serverContainer, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
     }
 
     Uni<Boolean> syncRuntimeRef(final RuntimeModel runtime, final String idempotencyKey) {

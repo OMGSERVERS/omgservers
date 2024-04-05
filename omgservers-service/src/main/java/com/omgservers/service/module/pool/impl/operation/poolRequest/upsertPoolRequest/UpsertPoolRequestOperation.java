@@ -1,0 +1,13 @@
+package com.omgservers.service.module.pool.impl.operation.poolRequest.upsertPoolRequest;
+
+import com.omgservers.model.poolRequest.PoolRequestModel;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlConnection;
+
+public interface UpsertPoolRequestOperation {
+    Uni<Boolean> upsertPoolRequest(ChangeContext<?> changeContext,
+                                   SqlConnection sqlConnection,
+                                   int shard,
+                                   PoolRequestModel poolRequest);
+}

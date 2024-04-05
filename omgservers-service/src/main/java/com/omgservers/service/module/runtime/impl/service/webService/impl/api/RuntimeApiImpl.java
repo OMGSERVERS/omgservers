@@ -38,14 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -153,27 +153,28 @@ public class RuntimeApiImpl implements RuntimeApi {
     }
 
     @Override
-    public Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(
-            final GetRuntimeServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeServerContainerRef);
+    public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
+            final GetRuntimePoolServerContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimePoolServerContainerRef);
     }
 
     @Override
-    public Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
-            final FindRuntimeServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeServerContainerRef);
+    public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
+            final FindRuntimePoolServerContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimePoolServerContainerRef);
     }
 
     @Override
-    public Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
-            final SyncRuntimeServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeServerContainerRef);
+    public Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
+            final SyncRuntimePoolServerContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimePoolServerContainerRef);
     }
 
     @Override
-    public Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
-            final DeleteRuntimeServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeServerContainerRef);
+    public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
+            final DeleteRuntimePoolServerContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request,
+                webService::deleteRuntimePoolServerContainerRef);
     }
 
     @Override

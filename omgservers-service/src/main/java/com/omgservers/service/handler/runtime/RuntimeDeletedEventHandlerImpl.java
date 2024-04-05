@@ -8,6 +8,8 @@ import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefReques
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.model.dto.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentRequest;
 import com.omgservers.model.dto.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.model.dto.runtime.DeleteRuntimeCommandRequest;
@@ -22,10 +24,8 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.server.DeleteServerContainerRequest;
-import com.omgservers.model.dto.server.DeleteServerContainerResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
@@ -35,13 +35,13 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimePermission.RuntimePermissionModel;
-import com.omgservers.model.runtimeServerContainerRef.RuntimeServerContainerRefModel;
+import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.server.ServerModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -64,9 +64,9 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
     final SystemModule systemModule;
-    final ServerModule serverModule;
     final LobbyModule lobbyModule;
     final UserModule userModule;
+    final PoolModule poolModule;
 
     final GetServersOperation getServersOperation;
 
@@ -253,22 +253,25 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> deleteRuntimeContainer(final Long runtimeId) {
-        return findRuntimeServerContainerRef(runtimeId)
-                .flatMap(this::deleteServerContainer)
+        return findPoolRuntimeServerContainerRef(runtimeId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(this::deletePoolServerContainer)
                 .replaceWithVoid();
     }
 
-    Uni<RuntimeServerContainerRefModel> findRuntimeServerContainerRef(final Long runtimeId) {
-        final var request = new FindRuntimeServerContainerRefRequest(runtimeId);
-        return runtimeModule.getRuntimeService().findRuntimeServerContainerRef(request)
-                .map(FindRuntimeServerContainerRefResponse::getRuntimeServerContainerRef);
+    Uni<RuntimePoolServerContainerRefModel> findPoolRuntimeServerContainerRef(final Long runtimeId) {
+        final var request = new FindRuntimePoolServerContainerRefRequest(runtimeId);
+        return runtimeModule.getRuntimeService().findRuntimePoolServerContainerRef(request)
+                .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
     }
 
-    Uni<Boolean> deleteServerContainer(RuntimeServerContainerRefModel runtimeServerContainerRef) {
-        final var serverId = runtimeServerContainerRef.getServerId();
-        final var serverContainerId = runtimeServerContainerRef.getServerContainerId();
-        final var request = new DeleteServerContainerRequest(serverId, serverContainerId);
-        return serverModule.getServerService().deleteServerContainer(request)
-                .map(DeleteServerContainerResponse::getDeleted);
+    Uni<Boolean> deletePoolServerContainer(RuntimePoolServerContainerRefModel runtimePoolServerContainerRef) {
+        final var poolId = runtimePoolServerContainerRef.getPoolId();
+        final var serverId = runtimePoolServerContainerRef.getServerId();
+        final var containerId = runtimePoolServerContainerRef.getContainerId();
+        final var request = new DeletePoolServerContainerRequest(poolId, serverId, containerId);
+        return poolModule.getPoolService().deletePoolServerContainer(request)
+                .map(DeletePoolServerContainerResponse::getDeleted);
     }
 }

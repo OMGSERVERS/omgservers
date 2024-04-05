@@ -8,6 +8,7 @@ import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEve
 import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
+import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
@@ -34,26 +35,20 @@ import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestCreate
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeAssignmentCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeAssignmentDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRequestCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolRuntimeServerContainerRequestDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolServerRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolServerRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolRequestDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.pool.PoolServerDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.runtime.RuntimeServerContainerRefCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.runtime.RuntimeServerContainerRefDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.server.ServerContainerCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.server.ServerContainerDeletedEventBodyModel;
-import com.omgservers.model.event.body.module.server.ServerCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.server.ServerDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimePoolServerContainerRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.runtime.RuntimePoolServerContainerRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.ProjectDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
@@ -90,18 +85,12 @@ public enum EventQualifierEnum {
     ROOT_DELETED(RootDeletedEventBodyModel.class, false),
     POOL_CREATED(PoolCreatedEventBodyModel.class, false),
     POOL_DELETED(PoolDeletedEventBodyModel.class, false),
-    POOL_SERVER_REF_CREATED(PoolServerRefCreatedEventBodyModel.class, false),
-    POOL_SERVER_REF_DELETED(PoolServerRefDeletedEventBodyModel.class, false),
-    POOL_RUNTIME_SERVER_CONTAINER_REQUEST_CREATED(PoolRuntimeServerContainerRequestCreatedEventBodyModel.class, false),
-    POOL_RUNTIME_SERVER_CONTAINER_REQUEST_DELETED(PoolRuntimeServerContainerRequestDeletedEventBodyModel.class, false),
-    POOL_RUNTIME_ASSIGNMENT_CREATED(PoolRuntimeAssignmentCreatedEventBodyModel.class, false),
-    POOL_RUNTIME_ASSIGNMENT_DELETED(PoolRuntimeAssignmentDeletedEventBodyModel.class, false),
-    POOL_RUNTIME_SERVER_CONTAINER_REF_CREATED(PoolRuntimeServerContainerRefCreatedEventBodyModel.class, false),
-    POOL_RUNTIME_SERVER_CONTAINER_REF_DELETED(PoolRuntimeServerContainerRefDeletedEventBodyModel.class, false),
-    SERVER_CREATED(ServerCreatedEventBodyModel.class, false),
-    SERVER_DELETED(ServerDeletedEventBodyModel.class, false),
-    SERVER_CONTAINER_CREATED(ServerContainerCreatedEventBodyModel.class, false),
-    SERVER_CONTAINER_DELETED(ServerContainerDeletedEventBodyModel.class, false),
+    POOL_SERVER_CREATED(PoolServerCreatedEventBodyModel.class, false),
+    POOL_SERVER_DELETED(PoolServerDeletedEventBodyModel.class, false),
+    POOL_REQUEST_CREATED(PoolRequestCreatedEventBodyModel.class, false),
+    POOL_REQUEST_DELETED(PoolRequestDeletedEventBodyModel.class, false),
+    POOL_SERVER_CONTAINER_CREATED(PoolServerContainerCreatedEventBodyModel.class, false),
+    POOL_SERVER_CONTAINER_DELETED(PoolServerContainerDeletedEventBodyModel.class, false),
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
     PROJECT_CREATED(ProjectCreatedEventBodyModel.class, true),
@@ -148,8 +137,8 @@ public enum EventQualifierEnum {
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_DELETED(RuntimeAssignmentDeletedEventBodyModel.class, true),
-    RUNTIME_SERVER_CONTAINER_REF_CREATED(RuntimeServerContainerRefCreatedEventBodyModel.class, false),
-    RUNTIME_SERVER_CONTAINER_REF_DELETED(RuntimeServerContainerRefDeletedEventBodyModel.class, false),
+    RUNTIME_POOL_SERVER_CONTAINER_REF_CREATED(RuntimePoolServerContainerRefCreatedEventBodyModel.class, false),
+    RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
     ROOT_INITIALIZATION_REQUESTED(RootInitializationRequestedEventBodyModel.class, false),
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),
@@ -161,7 +150,8 @@ public enum EventQualifierEnum {
     // Job
     STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class, false),
     MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED(MatchmakerJobTaskExecutionRequestedEventBodyModel.class, false),
-    RUNTIME_JOB_TASK_EXECUTION_REQUESTED(RuntimeJobTaskExecutionRequestedEventBodyModel.class, false);
+    RUNTIME_JOB_TASK_EXECUTION_REQUESTED(RuntimeJobTaskExecutionRequestedEventBodyModel.class, false),
+    POOL_JOB_TASK_EXECUTION_REQUESTED(PoolJobTaskExecutionRequestedEventBodyModel.class, false);
 
     final Class<? extends EventBodyModel> bodyClass;
     final boolean forward;

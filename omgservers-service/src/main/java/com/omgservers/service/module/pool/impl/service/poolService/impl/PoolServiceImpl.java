@@ -6,71 +6,53 @@ import com.omgservers.model.dto.pool.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.pool.GetPoolResponse;
 import com.omgservers.model.dto.pool.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.pool.SyncPoolResponse;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.DeletePoolRuntimeAssignmentRequest;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.DeletePoolRuntimeAssignmentResponse;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.FindPoolRuntimeAssignmentRequest;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.FindPoolRuntimeAssignmentResponse;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.GetPoolRuntimeAssignmentRequest;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.GetPoolRuntimeAssignmentResponse;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.SyncPoolRuntimeAssignmentRequest;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.SyncPoolRuntimeAssignmentResponse;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.ViewPoolRuntimeAssignmentsRequest;
-import com.omgservers.model.dto.pool.poolRuntimeAssignment.ViewPoolRuntimeAssignmentsResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.DeletePoolRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.DeletePoolRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.FindPoolRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.FindPoolRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.GetPoolRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.GetPoolRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.SyncPoolRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.SyncPoolRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.ViewPoolRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRef.ViewPoolRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.DeletePoolRuntimeServerContainerRequestRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.DeletePoolRuntimeServerContainerRequestResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.FindPoolRuntimeServerContainerRequestRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.FindPoolRuntimeServerContainerRequestResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.GetPoolRuntimeServerContainerRequestRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.GetPoolRuntimeServerContainerRequestResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.SyncPoolRuntimeServerContainerRequestRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.SyncPoolRuntimeServerContainerRequestResponse;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.ViewPoolRuntimeServerContainerRequestsRequest;
-import com.omgservers.model.dto.pool.poolRuntimeServerContainerRequest.ViewPoolRuntimeServerContainerRequestsResponse;
-import com.omgservers.model.dto.pool.poolServerRef.DeletePoolServerRefRequest;
-import com.omgservers.model.dto.pool.poolServerRef.DeletePoolServerRefResponse;
-import com.omgservers.model.dto.pool.poolServerRef.FindPoolServerRefRequest;
-import com.omgservers.model.dto.pool.poolServerRef.FindPoolServerRefResponse;
-import com.omgservers.model.dto.pool.poolServerRef.GetPoolServerRefRequest;
-import com.omgservers.model.dto.pool.poolServerRef.GetPoolServerRefResponse;
-import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefRequest;
-import com.omgservers.model.dto.pool.poolServerRef.SyncPoolServerRefResponse;
-import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsRequest;
-import com.omgservers.model.dto.pool.poolServerRef.ViewPoolServerRefsResponse;
+import com.omgservers.model.dto.pool.poolRequest.DeletePoolRequestRequest;
+import com.omgservers.model.dto.pool.poolRequest.DeletePoolRequestResponse;
+import com.omgservers.model.dto.pool.poolRequest.FindPoolRequestRequest;
+import com.omgservers.model.dto.pool.poolRequest.FindPoolRequestResponse;
+import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestRequest;
+import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestResponse;
+import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestRequest;
+import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestResponse;
+import com.omgservers.model.dto.pool.poolRequest.ViewPoolRequestsRequest;
+import com.omgservers.model.dto.pool.poolRequest.ViewPoolRequestsResponse;
+import com.omgservers.model.dto.pool.poolServer.DeletePoolServerRequest;
+import com.omgservers.model.dto.pool.poolServer.DeletePoolServerResponse;
+import com.omgservers.model.dto.pool.poolServer.GetPoolServerRequest;
+import com.omgservers.model.dto.pool.poolServer.GetPoolServerResponse;
+import com.omgservers.model.dto.pool.poolServer.SyncPoolServerRequest;
+import com.omgservers.model.dto.pool.poolServer.SyncPoolServerResponse;
+import com.omgservers.model.dto.pool.poolServer.ViewPoolServerResponse;
+import com.omgservers.model.dto.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerResponse;
+import com.omgservers.model.dto.pool.poolServerContainer.FindPoolServerContainerRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.FindPoolServerContainerResponse;
+import com.omgservers.model.dto.pool.poolServerContainer.GetPoolServerContainerRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.GetPoolServerContainerResponse;
+import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainerRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainerResponse;
+import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersRequest;
+import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersResponse;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.pool.deletePool.DeletePoolMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.pool.getPool.GetPoolMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.pool.syncPool.SyncPoolMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeAssignment.deletePoolRuntimeAssignment.DeletePoolRuntimeAssignmentMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeAssignment.findPoolRuntimeAssignment.FindPoolRuntimeAssignmentMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeAssignment.getPoolRuntimeAssignment.GetPoolRuntimeAssignmentMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeAssignment.syncPoolRuntimeAssignment.SyncPoolRuntimeAssignmentMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeAssignment.viewPoolRuntimeAssignment.ViewPoolRuntimeAssignmentsMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRef.deletePoolRuntimeServerContainerRef.DeletePoolRuntimeServerContainerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRef.findPoolRuntimeServerContainerRef.FindPoolRuntimeServerContainerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRef.getPoolRuntimeServerContainerRef.GetPoolRuntimeServerContainerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRef.syncPoolRuntimeServerContainerRef.SyncPoolRuntimeServerContainerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRef.viewPoolRuntimeServerContainerRef.ViewPoolRuntimeServerContainerRefsMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRequest.deletePoolRuntimeServerContainerRequest.DeletePoolRuntimeServerContainerRequestMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRequest.findPoolRuntimeServerContainerRequest.FindPoolRuntimeServerContainerRequestMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRequest.getPoolRuntimeServerContainerRequest.GetPoolRuntimeServerContainerRequestMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRequest.syncPoolRuntimeServerContainerRequest.SyncPoolRuntimeServerContainerRequestMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRuntimeServerContainerRequest.viewPoolRuntimeServerContainerRequest.ViewPoolRuntimeServerContainerRequestsMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.deletePoolServerRef.DeletePoolServerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.findPoolServerRef.FindPoolServerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.getPoolServerRef.GetPoolServerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.syncPoolServerRef.SyncPoolServerRefMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerRef.viewPoolServerRefs.ViewPoolServerRefsMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.deletePoolRequest.DeletePoolRequestMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.findPoolRequest.FindPoolRequestMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.getPoolRequest.GetPoolRequestMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.syncPoolRequest.SyncPoolRequestMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.viewPoolRequest.ViewPoolRequestsMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.deletePoolServer.DeletePoolServerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.getPoolServer.GetPoolServerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.syncPoolServer.SyncPoolServerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.viewPoolServers.ViewPoolServersMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.deletePoolServerContainer.DeletePoolServerContainerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.findPoolServerContainer.FindPoolServerContainerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.getPoolServerContainer.GetPoolServerContainerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.syncPoolServerContainer.SyncPoolServerContainerMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.viewPoolServerContainers.ViewPoolServerContainersMethod;
 import com.omgservers.service.module.pool.impl.service.webService.impl.api.PoolApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -86,38 +68,32 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class PoolServiceImpl implements PoolService {
 
-    final DeletePoolRuntimeServerContainerRequestMethod deletePoolRuntimeServerContainerRequestMethod;
-    final ViewPoolRuntimeServerContainerRequestsMethod viewPoolRuntimeServerContainerRequestsMethod;
-    final FindPoolRuntimeServerContainerRequestMethod findPoolRuntimeServerContainerRequestMethod;
-    final SyncPoolRuntimeServerContainerRequestMethod syncPoolRuntimeServerContainerRequestMethod;
-    final GetPoolRuntimeServerContainerRequestMethod getPoolRuntimeServerContainerRequestMethod;
-    final DeletePoolRuntimeServerContainerRefMethod deletePoolRuntimeServerContainerRefMethod;
-    final ViewPoolRuntimeServerContainerRefsMethod viewPoolRuntimeServerContainerRefsMethod;
-    final FindPoolRuntimeServerContainerRefMethod findPoolRuntimeServerContainerRefMethod;
-    final SyncPoolRuntimeServerContainerRefMethod syncPoolRuntimeServerContainerRefMethod;
-    final GetPoolRuntimeServerContainerRefMethod getPoolRuntimeServerContainerRefMethod;
-    final DeletePoolRuntimeAssignmentMethod deletePoolRuntimeAssignmentMethod;
-    final ViewPoolRuntimeAssignmentsMethod viewPoolRuntimeAssignmentsMethod;
-    final FindPoolRuntimeAssignmentMethod findPoolRuntimeAssignmentMethod;
-    final SyncPoolRuntimeAssignmentMethod syncPoolRuntimeAssignmentMethod;
-    final GetPoolRuntimeAssignmentMethod getPoolRuntimeAssignmentMethod;
-    final DeletePoolServerRefMethod deletePoolServerRefMethod;
-    final ViewPoolServerRefsMethod viewPoolServerRefsMethod;
-    final FindPoolServerRefMethod findPoolServerRefMethod;
-    final SyncPoolServerRefMethod syncPoolServerRefMethod;
-    final GetPoolServerRefMethod getPoolServerRefMethod;
+    final DeletePoolServerContainerMethod deletePoolServerContainerMethod;
+    final ViewPoolServerContainersMethod viewPoolServerContainersMethod;
+    final FindPoolServerContainerMethod findPoolServerContainerMethod;
+    final SyncPoolServerContainerMethod syncPoolServerContainerMethod;
+    final GetPoolServerContainerMethod getPoolServerContainerMethod;
+    final DeletePoolRequestMethod deletePoolRequestMethod;
+    final ViewPoolRequestsMethod viewPoolRequestsMethod;
+    final DeletePoolServerMethod deletePoolServerMethod;
+    final FindPoolRequestMethod findPoolRequestMethod;
+    final SyncPoolRequestMethod syncPoolRequestMethod;
+    final ViewPoolServersMethod viewPoolServersMethod;
+    final GetPoolRequestMethod getPoolRequestMethod;
+    final SyncPoolServerMethod syncPoolServerMethod;
+    final GetPoolServerMethod getPoolServerMethod;
     final DeletePoolMethod deletePoolMethod;
     final SyncPoolMethod syncPoolMethod;
     final GetPoolMethod getPoolMethod;
 
-    final GetPoolModuleClientOperation getMatchServiceApiClientOperation;
     final HandleInternalRequestOperation handleInternalRequestOperation;
+    final GetPoolModuleClientOperation getPoolModuleClientOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetPoolResponse> getPool(@Valid final GetPoolRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getPoolModuleClientOperation::getClient,
                 PoolApi::getPool,
                 getPoolMethod::getPool);
     }
@@ -125,7 +101,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolResponse> syncPool(@Valid final SyncPoolRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getPoolModuleClientOperation::getClient,
                 PoolApi::syncPool,
                 syncPoolMethod::syncPool);
     }
@@ -133,183 +109,130 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolResponse> deletePool(@Valid final DeletePoolRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getPoolModuleClientOperation::getClient,
                 PoolApi::deletePool,
                 deletePoolMethod::deletePool);
     }
 
     @Override
-    public Uni<GetPoolServerRefResponse> getPoolServerRef(@Valid final GetPoolServerRefRequest request) {
+    public Uni<GetPoolServerResponse> getPoolServer(@Valid final GetPoolServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::getPoolServerRef,
-                getPoolServerRefMethod::getPoolServerRef);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::getPoolServer,
+                getPoolServerMethod::getPoolServer);
     }
 
     @Override
-    public Uni<FindPoolServerRefResponse> findPoolServerRef(@Valid final FindPoolServerRefRequest request) {
+    public Uni<ViewPoolServerResponse> viewPoolServers(@Valid final ViewPoolServersRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::findPoolServerRef,
-                findPoolServerRefMethod::findPoolServerRef);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::viewPoolServers,
+                viewPoolServersMethod::viewPoolServers);
     }
 
     @Override
-    public Uni<ViewPoolServerRefsResponse> viewPoolServerRefs(@Valid final ViewPoolServerRefsRequest request) {
+    public Uni<SyncPoolServerResponse> syncPoolServer(@Valid final SyncPoolServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::viewPoolServerRefs,
-                viewPoolServerRefsMethod::viewPoolServerRefs);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::syncPoolServer,
+                syncPoolServerMethod::syncPoolServer);
     }
 
     @Override
-    public Uni<SyncPoolServerRefResponse> syncPoolServerRef(@Valid final SyncPoolServerRefRequest request) {
+    public Uni<DeletePoolServerResponse> deletePoolServer(@Valid final DeletePoolServerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::syncPoolServerRef,
-                syncPoolServerRefMethod::syncPoolServerRef);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::deletePoolServer,
+                deletePoolServerMethod::deletePoolServer);
     }
 
     @Override
-    public Uni<DeletePoolServerRefResponse> deletePoolServerRef(@Valid final DeletePoolServerRefRequest request) {
+    public Uni<GetPoolRequestResponse> getPoolRequest(
+            @Valid final GetPoolRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::deletePoolServerRef,
-                deletePoolServerRefMethod::deletePoolServerRef);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::getPoolRequest,
+                getPoolRequestMethod::getPoolRequest);
     }
 
     @Override
-    public Uni<GetPoolRuntimeServerContainerRequestResponse> getPoolRuntimeServerContainerRequest(
-            @Valid final GetPoolRuntimeServerContainerRequestRequest request) {
+    public Uni<FindPoolRequestResponse> findPoolRequest(
+            @Valid final FindPoolRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::getPoolRuntimeServerContainerRequest,
-                getPoolRuntimeServerContainerRequestMethod::getPoolRuntimeServerContainerRequest);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::findPoolRequest,
+                findPoolRequestMethod::findPoolRequest);
     }
 
     @Override
-    public Uni<FindPoolRuntimeServerContainerRequestResponse> findPoolRuntimeServerContainerRequest(
-            @Valid final FindPoolRuntimeServerContainerRequestRequest request) {
+    public Uni<ViewPoolRequestsResponse> viewPoolRequests(
+            @Valid final ViewPoolRequestsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::findPoolRuntimeServerContainerRequest,
-                findPoolRuntimeServerContainerRequestMethod::findPoolRuntimeServerContainerRequest);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::viewPoolRequests,
+                viewPoolRequestsMethod::viewPoolRequests);
     }
 
     @Override
-    public Uni<ViewPoolRuntimeServerContainerRequestsResponse> viewPoolRuntimeServerContainerRequests(
-            @Valid final ViewPoolRuntimeServerContainerRequestsRequest request) {
+    public Uni<SyncPoolRequestResponse> syncPoolRequest(
+            @Valid final SyncPoolRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::viewPoolRuntimeServerContainerRequests,
-                viewPoolRuntimeServerContainerRequestsMethod::viewPoolRuntimeServerContainerRequests);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::syncPoolRequest,
+                syncPoolRequestMethod::syncPoolRequest);
     }
 
     @Override
-    public Uni<SyncPoolRuntimeServerContainerRequestResponse> syncPoolRuntimeServerContainerRequest(
-            @Valid final SyncPoolRuntimeServerContainerRequestRequest request) {
+    public Uni<DeletePoolRequestResponse> deletePoolRequest(
+            @Valid final DeletePoolRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::syncPoolRuntimeServerContainerRequest,
-                syncPoolRuntimeServerContainerRequestMethod::syncPoolRuntimeServerContainerRequest);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::deletePoolRequest,
+                deletePoolRequestMethod::deletePoolRuntimeServerContainerRequest);
     }
 
     @Override
-    public Uni<DeletePoolRuntimeServerContainerRequestResponse> deletePoolRuntimeServerContainerRequest(
-            @Valid final DeletePoolRuntimeServerContainerRequestRequest request) {
+    public Uni<GetPoolServerContainerResponse> getPoolServerContainer(
+            @Valid final GetPoolServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::deletePoolRuntimeServerContainerRequest,
-                deletePoolRuntimeServerContainerRequestMethod::deletePoolRuntimeServerContainerRequest);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::getPoolServerContainer,
+                getPoolServerContainerMethod::getPoolServerContainer);
     }
 
     @Override
-    public Uni<GetPoolRuntimeAssignmentResponse> getPoolRuntimeAssignment(
-            @Valid final GetPoolRuntimeAssignmentRequest request) {
+    public Uni<FindPoolServerContainerResponse> findPoolServerContainer(
+            @Valid final FindPoolServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::getPoolRuntimeAssignment,
-                getPoolRuntimeAssignmentMethod::getPoolRuntimeAssignment);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::findPoolServerContainer,
+                findPoolServerContainerMethod::findPoolServerContainer);
     }
 
     @Override
-    public Uni<FindPoolRuntimeAssignmentResponse> findPoolRuntimeAssignment(
-            @Valid final FindPoolRuntimeAssignmentRequest request) {
+    public Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(
+            @Valid final ViewPoolServerContainersRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::findPoolRuntimeAssignment,
-                findPoolRuntimeAssignmentMethod::findPoolRuntimeAssignment);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::viewPoolServerContainers,
+                viewPoolServerContainersMethod::viewPoolServerContainers);
     }
 
     @Override
-    public Uni<ViewPoolRuntimeAssignmentsResponse> viewPoolRuntimeAssignments(
-            @Valid final ViewPoolRuntimeAssignmentsRequest request) {
+    public Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(
+            @Valid final SyncPoolServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::viewPoolRuntimeAssignments,
-                viewPoolRuntimeAssignmentsMethod::viewPoolRuntimeAssignments);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::syncPoolServerContainer,
+                syncPoolServerContainerMethod::syncPoolServerContainer);
     }
 
     @Override
-    public Uni<SyncPoolRuntimeAssignmentResponse> syncPoolRuntimeAssignment(
-            @Valid final SyncPoolRuntimeAssignmentRequest request) {
+    public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
+            @Valid final DeletePoolServerContainerRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::syncPoolRuntimeAssignment,
-                syncPoolRuntimeAssignmentMethod::syncPoolRuntimeAssignment);
-    }
-
-    @Override
-    public Uni<DeletePoolRuntimeAssignmentResponse> deletePoolRuntimeAssignment(
-            @Valid final DeletePoolRuntimeAssignmentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::deletePoolRuntimeAssignment,
-                deletePoolRuntimeAssignmentMethod::deletePoolRuntimeAssignment);
-    }
-
-    @Override
-    public Uni<GetPoolRuntimeServerContainerRefResponse> getPoolRuntimeServerContainerRef(
-            @Valid final GetPoolRuntimeServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::getPoolRuntimeServerContainerRef,
-                getPoolRuntimeServerContainerRefMethod::getPoolRuntimeServerContainerRef);
-    }
-
-    @Override
-    public Uni<FindPoolRuntimeServerContainerRefResponse> findPoolRuntimeServerContainerRef(
-            @Valid final FindPoolRuntimeServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::findPoolRuntimeServerContainerRef,
-                findPoolRuntimeServerContainerRefMethod::findPoolRuntimeServerContainerRef);
-    }
-
-    @Override
-    public Uni<ViewPoolRuntimeServerContainerRefResponse> viewPoolRuntimeServerContainerRefs(
-            @Valid final ViewPoolRuntimeServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::viewPoolRuntimeServerContainerRefs,
-                viewPoolRuntimeServerContainerRefsMethod::viewPoolRuntimeServerContainerRefs);
-    }
-
-    @Override
-    public Uni<SyncPoolRuntimeServerContainerRefResponse> syncPoolRuntimeServerContainerRef(
-            @Valid final SyncPoolRuntimeServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::syncPoolRuntimeServerContainerRef,
-                syncPoolRuntimeServerContainerRefMethod::syncPoolRuntimeServerContainerRef);
-    }
-
-    @Override
-    public Uni<DeletePoolRuntimeServerContainerRefResponse> deletePoolRuntimeServerContainerRef(
-            @Valid final DeletePoolRuntimeServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
-                getMatchServiceApiClientOperation::getClient,
-                PoolApi::deletePoolRuntimeServerContainerRef,
-                deletePoolRuntimeServerContainerRefMethod::deletePoolRuntimeServerContainerRef);
+                getPoolModuleClientOperation::getClient,
+                PoolApi::deletePoolServerContainer,
+                deletePoolServerContainerMethod::deletePoolServerContainer);
     }
 }

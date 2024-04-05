@@ -2,27 +2,30 @@ package com.omgservers.service.handler.pool;
 
 import com.omgservers.model.dto.pool.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.pool.GetPoolResponse;
+import com.omgservers.model.dto.pool.poolServer.SyncPoolServerRequest;
+import com.omgservers.model.dto.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
-import com.omgservers.model.dto.server.SyncServerRequest;
-import com.omgservers.model.dto.server.SyncServerResponse;
+import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
+import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.model.pool.PoolModel;
+import com.omgservers.model.poolServer.PoolServerConfigModel;
+import com.omgservers.model.poolServer.PoolServerModel;
+import com.omgservers.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.model.root.RootModel;
-import com.omgservers.model.server.ServerConfigModel;
-import com.omgservers.model.server.ServerModel;
-import com.omgservers.model.server.ServerQualifierEnum;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
-import com.omgservers.service.factory.server.ServerModelFactory;
+import com.omgservers.service.factory.pool.PoolServerModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.server.ServerModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -37,13 +40,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PoolCreatedEventHandlerImpl implements EventHandler {
 
     final SystemModule systemModule;
-    final ServerModule serverModule;
     final PoolModule poolModule;
     final RootModule rootModule;
 
     final GetConfigOperation getConfigOperation;
 
-    final ServerModelFactory serverModelFactory;
+    final PoolServerModelFactory poolServerModelFactory;
+    final EventModelFactory eventModelFactory;
     final PoolModelFactory poolModelFactory;
 
     @Override
@@ -62,17 +65,18 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(pool -> {
                     log.info("Pool was created, pool={}, root={}", poolId, pool.getRootId());
 
+                    final var idempotencyKey = event.getIdempotencyKey();
+
                     final var rootId = pool.getRootId();
                     return getRoot(rootId)
                             .flatMap(root -> {
-                                final var idempotencyKey = event.getIdempotencyKey();
-
                                 if (root.getDefaultPoolId().equals(poolId)) {
                                     return fillDefaultPool(pool, idempotencyKey);
                                 } else {
                                     return Uni.createFrom().voidItem();
                                 }
-                            });
+                            })
+                            .flatMap(voidItem -> requestJobExecution(poolId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -93,33 +97,55 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
         final var dockerHostConfig = getConfigOperation.getServiceConfig().bootstrap().dockerHost();
         if (dockerHostConfig.enabled()) {
 
-            final var serverConfig = ServerConfigModel.create();
-            serverConfig.setDockerHostConfig(new ServerConfigModel.DockerHostConfig(dockerHostConfig.maxContainers()));
-
-            final var server = serverModelFactory.create(pool.getId(),
-                    ServerQualifierEnum.DOCKER_HOST,
+            final var serverConfig = PoolServerConfigModel.create();
+            serverConfig.setDockerHostConfig(new PoolServerConfigModel.DockerHostConfig(
                     dockerHostConfig.uri(),
                     dockerHostConfig.cpuCount(),
                     dockerHostConfig.memorySize(),
+                    dockerHostConfig.maxContainers()));
+
+            final var poolServer = poolServerModelFactory.create(pool.getId(),
+                    PoolServerQualifierEnum.DOCKER_HOST,
                     serverConfig,
                     idempotencyKey);
 
-            return syncServer(server)
+            return syncPoolServer(poolServer)
                     .replaceWithVoid();
         } else {
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Boolean> syncServer(final ServerModel server) {
-        final var request = new SyncServerRequest(server);
-        return serverModule.getServerService().syncServer(request)
-                .map(SyncServerResponse::getCreated)
+    Uni<Boolean> syncPoolServer(final PoolServerModel poolServer) {
+        final var request = new SyncPoolServerRequest(poolServer);
+        return poolModule.getPoolService().syncPoolServer(request)
+                .map(SyncPoolServerResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", server, t.getMessage());
+                            log.warn("Idempotency was violated, object={}, {}", poolServer, t.getMessage());
+                            return Uni.createFrom().item(Boolean.FALSE);
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    Uni<Boolean> requestJobExecution(final Long poolId, final String idempotencyKey) {
+        final var eventBody = new PoolJobTaskExecutionRequestedEventBodyModel(poolId);
+        final var eventModel = eventModelFactory.create(eventBody,
+                idempotencyKey + "/" + eventBody.getQualifier());
+
+        final var syncEventRequest = new SyncEventRequest(eventModel);
+        return systemModule.getEventService().syncEvent(syncEventRequest)
+                .map(SyncEventResponse::getCreated)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

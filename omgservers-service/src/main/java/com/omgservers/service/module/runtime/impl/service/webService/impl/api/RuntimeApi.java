@@ -38,14 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -128,23 +128,24 @@ public interface RuntimeApi {
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(DeleteRuntimeAssignmentRequest request);
 
     @PUT
-    @Path("/get-runtime-server-container-ref")
-    Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(GetRuntimeServerContainerRefRequest request);
+    @Path("/get-runtime-pool-server-container-ref")
+    Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
+            GetRuntimePoolServerContainerRefRequest request);
 
     @PUT
-    @Path("/find-runtime-server-container-ref")
-    Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
-            FindRuntimeServerContainerRefRequest request);
+    @Path("/find-runtime-pool-server-container-ref")
+    Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
+            FindRuntimePoolServerContainerRefRequest request);
 
     @PUT
-    @Path("/sync-runtime-server-container-ref")
-    Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
-            SyncRuntimeServerContainerRefRequest request);
+    @Path("/sync-runtime-pool-server-container-ref")
+    Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
+            SyncRuntimePoolServerContainerRefRequest request);
 
     @PUT
-    @Path("/delete-runtime-server-container-ref")
-    Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
-            DeleteRuntimeServerContainerRefRequest request);
+    @Path("/delete-runtime-pool-server-container-ref")
+    Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
+            DeleteRuntimePoolServerContainerRefRequest request);
 
     @PUT
     @Path("/interchange")

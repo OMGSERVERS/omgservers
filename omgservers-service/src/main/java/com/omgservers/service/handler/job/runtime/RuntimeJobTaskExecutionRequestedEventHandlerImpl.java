@@ -5,8 +5,8 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -43,7 +43,8 @@ public class RuntimeJobTaskExecutionRequestedEventHandlerImpl implements EventHa
         return runtimeJobTask.executeTask(runtimeId)
                 .onFailure()
                 .recoverWithUni(t -> {
-                    log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
+                    log.warn("Job task failed, runtimeId={}, {}:{}",
+                            runtimeId, t.getClass().getSimpleName(), t.getMessage());
                     return Uni.createFrom().item(Boolean.TRUE);
                 })
                 .flatMap(oneMoreTime -> {

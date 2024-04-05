@@ -38,14 +38,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.DeleteRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.FindRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.GetRuntimeServerContainerRefResponse;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefRequest;
-import com.omgservers.model.dto.runtime.serverRuntimeRef.SyncRuntimeServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
+import com.omgservers.model.dto.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -87,17 +87,17 @@ public interface RuntimeService {
 
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(@Valid DeleteRuntimeAssignmentRequest request);
 
-    Uni<GetRuntimeServerContainerRefResponse> getRuntimeServerContainerRef(
-            @Valid GetRuntimeServerContainerRefRequest request);
+    Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
+            @Valid GetRuntimePoolServerContainerRefRequest request);
 
-    Uni<FindRuntimeServerContainerRefResponse> findRuntimeServerContainerRef(
-            @Valid FindRuntimeServerContainerRefRequest request);
+    Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
+            @Valid FindRuntimePoolServerContainerRefRequest request);
 
-    Uni<SyncRuntimeServerContainerRefResponse> syncRuntimeServerContainerRef(
-            @Valid SyncRuntimeServerContainerRefRequest request);
+    Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
+            @Valid SyncRuntimePoolServerContainerRefRequest request);
 
-    Uni<DeleteRuntimeServerContainerRefResponse> deleteRuntimeServerContainerRef(
-            @Valid DeleteRuntimeServerContainerRefRequest request);
+    Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
+            @Valid DeleteRuntimePoolServerContainerRefRequest request);
 
     Uni<InterchangeResponse> interchange(@Valid InterchangeRequest request);
 }
