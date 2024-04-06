@@ -30,7 +30,7 @@ class RootDeletedEventHandlerImplTest extends Assertions {
     RootModelFactory rootModelFactory;
 
     @Test
-    void givenRoot_whenHandleRetry_thenFinished() {
+    void givenRoot_whenRetry_thenFinished() {
         final var root = rootModelFactory.create();
 
         final var syncRootRequest = new SyncRootRequest(root);
@@ -43,6 +43,7 @@ class RootDeletedEventHandlerImplTest extends Assertions {
         final var eventModel = eventModelFactory.create(eventBody);
 
         rootDeletedEventHandler.handle(eventModel);
+        log.info("Retry");
         rootDeletedEventHandler.handle(eventModel);
     }
 }

@@ -51,6 +51,8 @@ public interface ClientService {
 
     Uni<SyncClientMessageResponse> syncClientMessage(@Valid SyncClientMessageRequest request);
 
+    Uni<SyncClientMessageResponse> syncClientMessageWithIdempotency(@Valid SyncClientMessageRequest request);
+
     Uni<DeleteClientMessagesResponse> deleteClientMessages(@Valid DeleteClientMessagesRequest request);
 
     Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(@Valid GetClientRuntimeRefRequest request);

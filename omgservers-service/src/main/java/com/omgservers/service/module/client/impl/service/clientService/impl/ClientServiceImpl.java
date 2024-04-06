@@ -34,25 +34,28 @@ import com.omgservers.model.dto.client.ViewClientMessagesRequest;
 import com.omgservers.model.dto.client.ViewClientMessagesResponse;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.model.dto.client.ViewClientRuntimeRefsResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.ClientModuleClient;
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.GetClientModuleClientOperation;
 import com.omgservers.service.module.client.impl.service.clientService.ClientService;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.client.deleteClient.DeleteClientMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.deleteClientMatchmakerRef.DeleteClientMatchmakerRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.deleteClientMessages.DeleteClientMessagesMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.deleteClientRuntimeRef.DeleteClientRuntimeRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.findClientMatchmakerRef.FindClientMatchmakerRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.findClientRuntimeRef.FindClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.client.getClient.GetClientMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.getClientMatchmakerRef.GetClientMatchmakerRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.getClientRuntimeRef.GetClientRuntimeRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.interchange.InterchangeMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.client.syncClient.SyncClientMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.deleteClientMatchmakerRef.DeleteClientMatchmakerRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.findClientMatchmakerRef.FindClientMatchmakerRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.getClientMatchmakerRef.GetClientMatchmakerRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.syncClientMatchmakerRef.SyncClientMatchmakerRefMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.syncClientMessage.SyncClientMessageMethod;
-import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.viewClientMatchmakerRefs.ViewClientMatchmakerRefsMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.deleteClientMessages.DeleteClientMessagesMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.interchange.InterchangeMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.syncClientMessage.SyncClientMessageMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.viewClientMessages.ViewClientMessagesMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.deleteClientRuntimeRef.DeleteClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.findClientRuntimeRef.FindClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.getClientRuntimeRef.GetClientRuntimeRefMethod;
+import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
@@ -137,6 +140,24 @@ public class ClientServiceImpl implements ClientService {
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::syncClientMessage,
                 syncClientMessageMethod::syncClientMessage);
+    }
+
+    @Override
+    public Uni<SyncClientMessageResponse> syncClientMessageWithIdempotency(
+            @Valid final SyncClientMessageRequest request) {
+        return syncClientMessage(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}",
+                                    request.getClientMessage(), t.getMessage());
+                            return Uni.createFrom().item(new SyncClientMessageResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

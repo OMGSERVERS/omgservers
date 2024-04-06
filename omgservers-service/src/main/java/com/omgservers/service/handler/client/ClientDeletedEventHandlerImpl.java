@@ -69,7 +69,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
                     final var idempotencyKey = event.getIdempotencyKey();
 
-                    // Don't touch client messages because users can return to get disconnection reason
+                    // Remain client messages because users can come back to get disconnection reason
                     return handleClientMatchmakerRefs(clientId, idempotencyKey)
                             .flatMap(voidItem -> handleClientRuntimeRefs(clientId));
                 })

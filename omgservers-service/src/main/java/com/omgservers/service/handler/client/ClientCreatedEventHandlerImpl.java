@@ -14,12 +14,9 @@ import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEve
 import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.system.SystemModule;
@@ -65,14 +62,8 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                     final var idempotencyKey = event.getIdempotencyKey();
 
                     return syncWelcomeMessage(client, idempotencyKey)
-                            .flatMap(created -> requestLobbyAssignment(clientId,
-                                    tenantId,
-                                    versionId,
-                                    idempotencyKey))
-                            .flatMap(created -> requestMatchmakerAssignment(clientId,
-                                    tenantId,
-                                    versionId,
-                                    idempotencyKey));
+                            .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
+                            .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -92,72 +83,38 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
                 messageBody,
                 idempotencyKey);
+
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessage(request)
-                .map(SyncClientMessageResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", clientMessage, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+                .map(SyncClientMessageResponse::getCreated);
     }
 
-    Uni<Boolean> requestLobbyAssignment(final Long clientId,
-                                        final Long tenantId,
-                                        final Long versionId,
+    Uni<Boolean> requestLobbyAssignment(final ClientModel client,
                                         final String idempotencyKey) {
-        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId,
-                tenantId,
-                versionId);
+        final var clientId = client.getId();
+        final var tenantId = client.getTenantId();
+        final var versionId = client.getVersionId();
+        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId, tenantId, versionId);
         final var eventModel = eventModelFactory.create(eventBody,
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 
-    Uni<Boolean> requestMatchmakerAssignment(final Long clientId,
-                                             final Long tenantId,
-                                             final Long versionId,
+    Uni<Boolean> requestMatchmakerAssignment(final ClientModel client,
                                              final String idempotencyKey) {
-        final var eventBody = new MatchmakerAssignmentRequestedEventBodyModel(clientId,
-                tenantId,
-                versionId);
+        final var clientId = client.getId();
+        final var tenantId = client.getTenantId();
+        final var versionId = client.getVersionId();
+        final var eventBody = new MatchmakerAssignmentRequestedEventBodyModel(clientId, tenantId, versionId);
         final var eventModel = eventModelFactory.create(eventBody,
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }
 

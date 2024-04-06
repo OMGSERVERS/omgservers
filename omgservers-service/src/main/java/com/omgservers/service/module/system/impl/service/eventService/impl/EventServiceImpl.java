@@ -6,6 +6,9 @@ import com.omgservers.model.dto.system.RelayEventsRequest;
 import com.omgservers.model.dto.system.RelayEventsResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
 import com.omgservers.service.module.system.impl.service.eventService.impl.method.handleEvent.HandleEventMethod;
 import com.omgservers.service.module.system.impl.service.eventService.impl.method.relayEvents.RelayEventsMethod;
@@ -29,6 +32,22 @@ class EventServiceImpl implements EventService {
     @Override
     public Uni<SyncEventResponse> syncEvent(@Valid final SyncEventRequest request) {
         return syncEventMethod.syncEvent(request);
+    }
+
+    @Override
+    public Uni<SyncEventResponse> syncEventWithIdempotency(@Valid final SyncEventRequest request) {
+        return syncEvent(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getEvent(), t.getMessage());
+                            return Uni.createFrom().item(new SyncEventResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

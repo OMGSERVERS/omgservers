@@ -39,6 +39,7 @@ class TenantCreatedEventHandlerImplTest extends Assertions {
         final var eventModel = eventModelFactory.create(eventBody);
 
         tenantCreatedEventHandler.handle(eventModel);
+        log.info("Retry");
         tenantCreatedEventHandler.handle(eventModel);
     }
 }
