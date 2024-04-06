@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.tenant;
+package com.omgservers.service.handler.tenant.tenant;
 
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
