@@ -139,18 +139,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }
