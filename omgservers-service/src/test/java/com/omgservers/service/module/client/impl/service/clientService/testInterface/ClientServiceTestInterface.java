@@ -1,5 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.testInterface;
 
+import com.omgservers.model.dto.client.DeleteClientRequest;
+import com.omgservers.model.dto.client.DeleteClientResponse;
 import com.omgservers.model.dto.client.GetClientRequest;
 import com.omgservers.model.dto.client.GetClientResponse;
 import com.omgservers.model.dto.client.SyncClientRequest;
@@ -26,6 +28,11 @@ public class ClientServiceTestInterface {
 
     public SyncClientResponse syncClient(final SyncClientRequest request) {
         return clientService.syncClient(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    public DeleteClientResponse deleteClient(final DeleteClientRequest request) {
+        return clientService.deleteClient(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }
