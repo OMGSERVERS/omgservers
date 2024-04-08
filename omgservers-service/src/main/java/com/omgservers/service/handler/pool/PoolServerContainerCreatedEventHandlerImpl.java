@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.pool;
 
+import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -123,24 +124,28 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                     final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
                     final var dockerNetwork = getConfigOperation.getServiceConfig().workers().dockerNetwork();
 
-                    final var createContainerResponse = dockerClient.createContainerCmd(image)
-                            .withName(name)
-                            .withEnv(environment)
-                            .withExposedPorts(ExposedPort.parse("8080/tcp"))
-                            .withHostConfig(HostConfig.newHostConfig()
-                                    .withNetworkMode(dockerNetwork)
-                                    .withPortBindings(PortBinding.parse(":8080")))
-                            .exec();
-                    log.info("Create docker container, response={}", createContainerResponse);
+                    try {
+                        final var createContainerResponse = dockerClient.createContainerCmd(image)
+                                .withName(name)
+                                .withEnv(environment)
+                                .withExposedPorts(ExposedPort.parse("8080/tcp"))
+                                .withHostConfig(HostConfig.newHostConfig()
+                                        .withNetworkMode(dockerNetwork)
+                                        .withPortBindings(PortBinding.parse(":8080")))
+                                .exec();
+                        log.info("Create docker container, response={}", createContainerResponse);
 
-                    final var inspectContainerResponse = dockerClient.inspectContainerCmd(name)
-                            .exec();
-                    log.info("Inspect container, response={}", inspectContainerResponse);
+                        final var inspectContainerResponse = dockerClient.inspectContainerCmd(name)
+                                .exec();
+                        log.info("Inspect container, response={}", inspectContainerResponse);
 
-                    final var startContainerResponse = dockerClient.startContainerCmd(name)
-                            .exec();
+                        final var startContainerResponse = dockerClient.startContainerCmd(name)
+                                .exec();
 
-                    log.info("Start container, response={}", startContainerResponse);
+                        log.info("Start container, response={}", startContainerResponse);
+                    } catch (ConflictException e) {
+                        log.info("Conflict during star of container, {}", e.getMessage());
+                    }
                 });
     }
 }

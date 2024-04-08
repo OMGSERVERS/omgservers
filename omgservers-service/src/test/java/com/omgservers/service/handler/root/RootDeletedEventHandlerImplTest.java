@@ -1,12 +1,11 @@
 package com.omgservers.service.handler.root;
 
 import com.omgservers.model.dto.root.DeleteRootRequest;
-import com.omgservers.model.dto.root.SyncRootRequest;
 import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
-import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.root.testInterface.RootDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.root.impl.service.rootService.testInterface.RootServiceTestInterface;
+import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -27,19 +26,18 @@ class RootDeletedEventHandlerImplTest extends Assertions {
     EventModelFactory eventModelFactory;
 
     @Inject
-    RootModelFactory rootModelFactory;
+    TestDataFactory testDataFactory;
 
     @Test
     void givenRoot_whenRetry_thenFinished() {
-        final var root = rootModelFactory.create();
+        final var root = testDataFactory.getRootTestDataFactory().createRoot();
 
-        final var syncRootRequest = new SyncRootRequest(root);
-        rootService.syncRoot(syncRootRequest);
+        final var rootId = root.getId();
 
-        final var deleteRootRequest = new DeleteRootRequest(root.getId());
+        final var deleteRootRequest = new DeleteRootRequest(rootId);
         rootService.deleteRoot(deleteRootRequest);
 
-        final var eventBody = new RootDeletedEventBodyModel(root.getId());
+        final var eventBody = new RootDeletedEventBodyModel(rootId);
         final var eventModel = eventModelFactory.create(eventBody);
 
         rootDeletedEventHandler.handle(eventModel);

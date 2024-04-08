@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -20,6 +19,13 @@ public class LobbyModelFactory {
     public LobbyModel create(final Long tenantId,
                              final Long versionId) {
         final var id = generateIdOperation.generateId();
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, tenantId, versionId, idempotencyKey);
+    }
+
+    public LobbyModel create(final Long id,
+                             final Long tenantId,
+                             final Long versionId) {
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, idempotencyKey);
     }

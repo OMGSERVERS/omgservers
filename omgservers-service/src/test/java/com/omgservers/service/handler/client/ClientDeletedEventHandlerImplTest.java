@@ -1,13 +1,11 @@
 package com.omgservers.service.handler.client;
 
 import com.omgservers.model.dto.client.DeleteClientRequest;
-import com.omgservers.model.dto.client.SyncClientRequest;
 import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
-import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.client.testInterface.ClientDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.client.impl.service.clientService.testInterface.ClientServiceTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -25,20 +23,20 @@ class ClientDeletedEventHandlerImplTest extends Assertions {
     ClientServiceTestInterface clientService;
 
     @Inject
-    GenerateIdOperation generateIdOperation;
-
-    @Inject
     EventModelFactory eventModelFactory;
 
     @Inject
-    ClientModelFactory clientModelFactory;
+    TestDataFactory testDataFactory;
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
-
-        final var syncClientRequest = new SyncClientRequest(client);
-        clientService.syncClient(syncClientRequest);
+        final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
+        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
+        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var user = testDataFactory.getUserTestDataFactory().createPlayerUser("password");
+        final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user, tenant, stage);
+        final var client = testDataFactory.getClientTestDataFactory().createClient(player, tenant, version);
 
         final var deleteClientRequest = new DeleteClientRequest(client.getId());
         clientService.deleteClient(deleteClientRequest);
@@ -49,21 +47,5 @@ class ClientDeletedEventHandlerImplTest extends Assertions {
         clientDeletedEventHandler.handle(eventModel);
         log.info("Retry");
         clientDeletedEventHandler.handle(eventModel);
-    }
-
-    Long userId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long playerId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long versionId() {
-        return generateIdOperation.generateId();
     }
 }

@@ -16,7 +16,6 @@ import com.omgservers.model.event.body.module.pool.PoolServerContainerDeletedEve
 import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.pool.operation.GetDockerClientOperation;
@@ -119,8 +118,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
                     } catch (NotModifiedException e) {
                         log.info("Stop container failed, {}", e.getMessage());
                     } catch (NotFoundException e) {
-                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.DOCKER_CONTAINER_NOT_FOUND,
-                                e.getMessage(), e);
+                        log.info("Container was not found to stop, {}", e.getMessage());
                     }
                 })
                 .replaceWithVoid();
