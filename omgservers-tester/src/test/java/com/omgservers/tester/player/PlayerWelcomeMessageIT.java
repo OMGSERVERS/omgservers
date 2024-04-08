@@ -2,8 +2,8 @@ package com.omgservers.tester.player;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,7 +26,7 @@ public class PlayerWelcomeMessageIT extends Assertions {
     PlayerApiTester playerApiTester;
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Test
     void welcomeMessageIT() throws Exception {
@@ -53,7 +53,7 @@ public class PlayerWelcomeMessageIT extends Assertions {
             assertNotNull(messageBody.getVersionId());
 
         } finally {
-            adminApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getTenantId());
         }
     }
 }

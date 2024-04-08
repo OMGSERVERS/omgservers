@@ -1,6 +1,7 @@
 package com.omgservers.tester.player;
 
 import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,7 +21,7 @@ public class PlayerCreateClientIT extends Assertions {
     BootstrapTestClientOperation bootstrapTestClientOperation;
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Test
     void createClientIT() throws Exception {
@@ -44,7 +45,7 @@ public class PlayerCreateClientIT extends Assertions {
             assertNotNull(testClient.getClientId());
 
         } finally {
-            adminApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getTenantId());
         }
     }
 }

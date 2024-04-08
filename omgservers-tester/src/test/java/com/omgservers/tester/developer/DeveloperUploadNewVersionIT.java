@@ -1,6 +1,6 @@
 package com.omgservers.tester.developer;
 
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import com.omgservers.tester.operation.uploadTestVersion.UploadTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,7 +20,7 @@ public class DeveloperUploadNewVersionIT extends Assertions {
     UploadTestVersionOperation uploadTestVersionOperation;
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Test
     void uploadNewVersionIT() throws Exception {
@@ -44,7 +44,7 @@ public class DeveloperUploadNewVersionIT extends Assertions {
 
             Thread.sleep(120_000);
         } finally {
-            adminApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getTenantId());
         }
     }
 }

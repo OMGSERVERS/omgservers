@@ -1,7 +1,7 @@
 package com.omgservers.tester.developer;
 
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -17,7 +17,7 @@ public class DeveloperGetTenantDashboardIT extends Assertions {
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Inject
     DeveloperApiTester developerApiTester;
@@ -48,7 +48,7 @@ public class DeveloperGetTenantDashboardIT extends Assertions {
             assertEquals(1, tenantDashboard.getLobbyRefs().size());
             assertEquals(1, tenantDashboard.getMatchmakerLobbyRefs().size());
         } finally {
-            adminApiTester.deleteTenant(version.getTenantId());
+            supportApiTester.deleteTenant(version.getTenantId());
         }
     }
 }

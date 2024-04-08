@@ -2,8 +2,8 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -30,7 +30,7 @@ public class LobbyHandleMessageIT extends Assertions {
     PlayerApiTester playerApiTester;
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Test
     void lobbyHandleMessage() throws Exception {
@@ -82,7 +82,7 @@ public class LobbyHandleMessageIT extends Assertions {
                     ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
 
         } finally {
-            adminApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getTenantId());
         }
     }
 

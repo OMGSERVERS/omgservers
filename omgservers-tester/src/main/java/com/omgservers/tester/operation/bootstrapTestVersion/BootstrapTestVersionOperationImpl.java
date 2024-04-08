@@ -3,8 +3,8 @@ package com.omgservers.tester.operation.bootstrapTestVersion;
 import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
+import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.model.TestVersionModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -22,7 +22,7 @@ import java.util.Base64;
 class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation {
 
     @Inject
-    AdminApiTester adminApiTester;
+    SupportApiTester supportApiTester;
 
     @Inject
     DeveloperApiTester developerApiTester;
@@ -37,9 +37,9 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     public TestVersionModel bootstrapTestVersion(final String lobby,
                                                  final String match,
                                                  final VersionConfigModel versionConfig) throws IOException {
-        final var tenantId = adminApiTester.createTenant();
+        final var tenantId = supportApiTester.createTenant();
 
-        final var createDeveloperAdminResponse = adminApiTester.createDeveloper(tenantId);
+        final var createDeveloperAdminResponse = supportApiTester.createDeveloper(tenantId);
         final var developerUserId = createDeveloperAdminResponse.getUserId();
         final var developerPassword = createDeveloperAdminResponse.getPassword();
 
