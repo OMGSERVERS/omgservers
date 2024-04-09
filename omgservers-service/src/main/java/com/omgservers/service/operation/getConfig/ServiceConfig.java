@@ -67,7 +67,7 @@ public interface ServiceConfig {
 
         BootstrapIndexConfig index();
 
-        BootstrapDockerHostConfig dockerHost();
+        BootstrapLocalHostConfig localHost();
     }
 
     interface BootstrapIndexConfig {
@@ -76,7 +76,7 @@ public interface ServiceConfig {
         List<URI> servers();
     }
 
-    interface BootstrapDockerHostConfig {
+    interface BootstrapLocalHostConfig {
         boolean enabled();
 
         URI uri();

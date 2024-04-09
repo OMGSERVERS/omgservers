@@ -91,15 +91,15 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> fillDefaultPool(final PoolModel pool, final String idempotencyKey) {
-        final var dockerHostConfig = getConfigOperation.getServiceConfig().bootstrap().dockerHost();
-        if (dockerHostConfig.enabled()) {
+        final var localHostConfig = getConfigOperation.getServiceConfig().bootstrap().localHost();
+        if (localHostConfig.enabled()) {
 
             final var serverConfig = PoolServerConfigModel.create();
             serverConfig.setDockerHostConfig(new PoolServerConfigModel.DockerHostConfig(
-                    dockerHostConfig.uri(),
-                    dockerHostConfig.cpuCount(),
-                    dockerHostConfig.memorySize(),
-                    dockerHostConfig.maxContainers()));
+                    localHostConfig.uri(),
+                    localHostConfig.cpuCount(),
+                    localHostConfig.memorySize(),
+                    localHostConfig.maxContainers()));
 
             final var poolServer = poolServerModelFactory.create(pool.getId(),
                     PoolServerQualifierEnum.DOCKER_HOST,
