@@ -20,7 +20,7 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.pool.operation.GetDockerClientOperation;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

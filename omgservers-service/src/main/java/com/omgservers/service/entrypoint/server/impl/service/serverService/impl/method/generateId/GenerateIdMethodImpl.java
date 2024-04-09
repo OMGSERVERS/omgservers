@@ -1,4 +1,4 @@
-package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.method.generateId;
+package com.omgservers.service.entrypoint.server.impl.service.serverService.impl.method.generateId;
 
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.model.dto.admin.GenerateIdAdminResponse;

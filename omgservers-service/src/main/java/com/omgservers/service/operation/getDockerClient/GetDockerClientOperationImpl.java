@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.pool.operation;
+package com.omgservers.service.operation.getDockerClient;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

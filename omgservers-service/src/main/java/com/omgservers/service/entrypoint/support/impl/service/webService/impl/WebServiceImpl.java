@@ -2,6 +2,8 @@ package com.omgservers.service.entrypoint.support.impl.service.webService.impl;
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
+import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
+import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
@@ -22,6 +24,11 @@ class WebServiceImpl implements WebService {
     final SystemModule systemModule;
 
     final SupportService supportService;
+
+    @Override
+    public Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(final CreateDefaultPoolServerSupportRequest request) {
+        return supportService.createDefaultPoolServer(request);
+    }
 
     @Override
     public Uni<CreateTenantSupportResponse> createTenant(final CreateTenantSupportRequest request) {

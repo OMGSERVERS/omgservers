@@ -18,7 +18,7 @@ import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.pool.operation.GetDockerClientOperation;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;

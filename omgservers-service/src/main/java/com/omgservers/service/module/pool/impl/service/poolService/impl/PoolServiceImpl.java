@@ -34,6 +34,9 @@ import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainer
 import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainerResponse;
 import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersRequest;
 import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.pool.deletePool.DeletePoolMethod;
@@ -136,6 +139,23 @@ class PoolServiceImpl implements PoolService {
                 getPoolModuleClientOperation::getClient,
                 PoolApi::syncPoolServer,
                 syncPoolServerMethod::syncPoolServer);
+    }
+
+    @Override
+    public Uni<SyncPoolServerResponse> syncPoolServerWithIdempotency(SyncPoolServerRequest request) {
+        return syncPoolServer(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getPoolServer(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncPoolServerResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

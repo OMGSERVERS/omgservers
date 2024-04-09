@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService.impl.supportApi;
 
+import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
+import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
@@ -14,6 +16,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Tag(name = "Support Entrypoint API")
 @Path("/omgservers/v1/entrypoint/support/request")
 public interface SupportApi {
+
+    @PUT
+    @Path("/create-default-pool-server")
+    Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(CreateDefaultPoolServerSupportRequest request);
 
     @PUT
     @Path("/create-tenant")

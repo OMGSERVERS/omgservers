@@ -17,9 +17,6 @@ import com.omgservers.model.poolServer.PoolServerConfigModel;
 import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.model.root.RootModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
@@ -118,19 +115,8 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncPoolServer(final PoolServerModel poolServer) {
         final var request = new SyncPoolServerRequest(poolServer);
-        return poolModule.getPoolService().syncPoolServer(request)
-                .map(SyncPoolServerResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
-                            log.warn("Idempotency was violated, object={}, {}", poolServer, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return poolModule.getPoolService().syncPoolServerWithIdempotency(request)
+                .map(SyncPoolServerResponse::getCreated);
     }
 
     Uni<Boolean> requestJobExecution(final Long poolId, final String idempotencyKey) {

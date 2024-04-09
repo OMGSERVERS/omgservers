@@ -6,7 +6,6 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.pool.PoolServerCreatedEventBodyModel;
 import com.omgservers.model.poolServer.PoolServerModel;
-import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -23,8 +22,6 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final PoolModule poolModule;
-
-    final PoolServerModelFactory poolServerModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
