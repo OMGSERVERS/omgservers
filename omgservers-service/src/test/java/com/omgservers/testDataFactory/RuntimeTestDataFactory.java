@@ -34,9 +34,12 @@ public class RuntimeTestDataFactory {
         final var tenantId = tenant.getId();
         final var versionId = version.getId();
 
+        final var runtimeId = lobby.getRuntimeId();
+
         final var config = RuntimeConfigModel.create();
         config.setLobbyConfig(new RuntimeConfigModel.LobbyConfig(lobby.getId()));
-        final var runtime = runtimeModelFactory.create(tenantId,
+        final var runtime = runtimeModelFactory.create(runtimeId,
+                tenantId,
                 versionId,
                 RuntimeQualifierEnum.LOBBY,
                 config);

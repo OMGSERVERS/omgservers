@@ -21,7 +21,7 @@ public class LobbyAssignmentRequestedEventBodyModel extends EventBodyModel {
     Long tenantId;
 
     @NotNull
-    Long version;
+    Long versionId;
 
     @Override
     public EventQualifierEnum getQualifier() {

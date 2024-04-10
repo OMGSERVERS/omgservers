@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Slf4j
 @ApplicationScoped
@@ -24,6 +23,16 @@ public class RuntimeModelFactory {
                                final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigModel config) {
         final var id = generateIdOperation.generateId();
+        final var userId = generateIdOperation.generateId();
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, tenantId, versionId, qualifier, userId, config, idempotencyKey);
+    }
+
+    public RuntimeModel create(final Long id,
+                               final Long tenantId,
+                               final Long versionId,
+                               final RuntimeQualifierEnum qualifier,
+                               final RuntimeConfigModel config) {
         final var userId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, qualifier, userId, config, idempotencyKey);

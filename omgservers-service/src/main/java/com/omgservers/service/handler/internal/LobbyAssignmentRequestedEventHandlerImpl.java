@@ -52,7 +52,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
         final var body = (LobbyAssignmentRequestedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
         final var tenantId = body.getTenantId();
-        final var versionId = body.getVersion();
+        final var versionId = body.getVersionId();
 
         return selectVersionLobbyRef(tenantId, versionId)
                 .flatMap(versionLobbyRef -> {

@@ -47,7 +47,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
         final var body = (MatchmakerAssignmentRequestedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
         final var tenantId = body.getTenantId();
-        final var versionId = body.getVersion();
+        final var versionId = body.getVersionId();
 
         return selectVersionMatchmakerRef(tenantId, versionId)
                 .flatMap(versionMatchmakerRef -> {

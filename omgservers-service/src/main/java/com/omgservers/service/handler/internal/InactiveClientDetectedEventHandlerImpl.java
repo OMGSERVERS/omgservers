@@ -12,8 +12,8 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.model.message.body.DisconnectionReasonEnum;
+import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -50,9 +50,8 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     if (client.getDeleted()) {
-                        log.info("Client was already deleted, " +
-                                "disconnection message won't be created, clientId={}", clientId);
-                        return Uni.createFrom().item(Boolean.TRUE);
+                        log.info("Client was already deleted, skip operation, clientId={}", clientId);
+                        return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         log.warn("Inactive client was detected, clientId={}", clientId);
 
