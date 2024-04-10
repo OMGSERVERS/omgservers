@@ -54,9 +54,12 @@ public class RuntimeTestDataFactory {
         final var tenantId = tenant.getId();
         final var versionId = version.getId();
 
+        final var runtimeId = match.getRuntimeId();
+
         final var config = RuntimeConfigModel.create();
         config.setMatchConfig(new RuntimeConfigModel.MatchConfig(match.getMatchmakerId(), match.getId()));
-        final var runtime = runtimeModelFactory.create(tenantId,
+        final var runtime = runtimeModelFactory.create(runtimeId,
+                tenantId,
                 versionId,
                 RuntimeQualifierEnum.MATCH,
                 config);
