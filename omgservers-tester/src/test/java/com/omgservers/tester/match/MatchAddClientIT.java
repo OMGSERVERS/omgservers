@@ -5,6 +5,7 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -21,7 +22,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class MatchAddClientIT extends Assertions {
+public class MatchAddClientIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -43,14 +44,16 @@ public class MatchAddClientIT extends Assertions {
                         """,
                 """
                         function handle_command(self, command)
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 assert(command.group_name == "players", "command.group_name is wrong")
                                 return {
                                     {
-                                        qualifier = "respond_client",
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "match_client_was_added"
+                                        qualifier = "RESPOND_CLIENT",
+                                        body = {
+                                            client_id = command.client_id,
+                                            message = {
+                                                text = "match_client_was_added"
+                                            }
                                         }
                                     }
                                 }

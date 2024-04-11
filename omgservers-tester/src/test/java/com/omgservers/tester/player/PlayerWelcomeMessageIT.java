@@ -2,6 +2,7 @@ package com.omgservers.tester.player;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -9,12 +10,11 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-public class PlayerWelcomeMessageIT extends Assertions {
+public class PlayerWelcomeMessageIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;

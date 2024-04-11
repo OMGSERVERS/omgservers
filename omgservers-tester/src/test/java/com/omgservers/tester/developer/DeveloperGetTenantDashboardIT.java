@@ -1,5 +1,6 @@
 package com.omgservers.tester.developer;
 
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-public class DeveloperGetTenantDashboardIT extends Assertions {
+public class DeveloperGetTenantDashboardIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;

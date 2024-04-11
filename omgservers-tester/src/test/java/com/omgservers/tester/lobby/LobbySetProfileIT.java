@@ -2,7 +2,7 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -12,14 +12,13 @@ import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbySetProfileIT extends Assertions {
+public class LobbySetProfileIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -39,34 +38,38 @@ public class LobbySetProfileIT extends Assertions {
                 """
                         function handle_command(self, command)
 
-                            if command.qualifier == "init_runtime" then
+                            if command.qualifier == "INIT_RUNTIME" then
                                 self.profiles = {}
                             end
 
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 self.profiles[command.client_id] = command.profile
                             end
 
-                            if command.qualifier == "handle_message" then
+                            if command.qualifier == "HANDLE_MESSAGE" then
                                 local var text = command.message.text
                                 
                                 if text == "init_profile" then
                                     return {
                                         {
-                                            qualifier = "set_profile",
-                                            client_id = command.client_id,
-                                            profile = {
-                                                a1 = 1,
-                                                a2 = "string",
-                                                a3 = 3.14,
-                                                a4 = true
+                                            qualifier = "SET_PROFILE",
+                                            body =  {
+                                                client_id = command.client_id,
+                                                profile = {
+                                                    a1 = 1,
+                                                    a2 = "string",
+                                                    a3 = 3.14,
+                                                    a4 = true
+                                                }
                                             }
                                         },
                                         {
-                                            qualifier = "respond_client",
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "profile_was_init"
+                                            qualifier = "RESPOND_CLIENT",
+                                            body = {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "profile_was_init"
+                                                }
                                             }
                                         }
                                     }
@@ -80,10 +83,12 @@ public class LobbySetProfileIT extends Assertions {
                                     
                                     return {
                                         {
-                                            qualifier = "respond_client",
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "profile_was_checked"
+                                            qualifier = "RESPOND_CLIENT",
+                                            body =  {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "profile_was_checked"
+                                                }
                                             }
                                         }
                                     }

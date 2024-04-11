@@ -5,6 +5,7 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -23,7 +24,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class MatchMulticastMessageIT extends Assertions {
+public class MatchMulticastMessageIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -45,23 +46,25 @@ public class MatchMulticastMessageIT extends Assertions {
                         """,
                 """
                         function handle_command(self, command)
-                            if command.qualifier == "init_runtime" then
+                            if command.qualifier == "INIT_RUNTIME" then
                                 self.clients = {}
                             end
                                                
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 table.insert(self.clients, command.client_id)
                             end
                             
-                            if command.qualifier == "handle_message" then
+                            if command.qualifier == "HANDLE_MESSAGE" then
                                 local var message = command.message
                                 assert(message.text == "multicast_request", "message.text is wrong")
                                 return {
                                     {
-                                        qualifier = "multicast_message",
-                                        clients = self.clients,
-                                        message = {
-                                            text = "hello_client_1_and_client_2"
+                                        qualifier = "MULTICAST_MESSAGE",
+                                        body =  {
+                                            clients = self.clients,
+                                            message = {
+                                                text = "hello_client_1_and_client_2"
+                                            }
                                         }
                                     }
                                 }

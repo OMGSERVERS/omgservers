@@ -6,7 +6,7 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -16,7 +16,6 @@ import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class MatchKickClientIT extends Assertions {
+public class MatchKickClientIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -47,23 +46,27 @@ public class MatchKickClientIT extends Assertions {
                 """
                         function handle_command(self, command)
                                                                                      
-                            if command.qualifier == "handle_message" then
+                            if command.qualifier == "HANDLE_MESSAGE" then
                                 local var message = command.message
                                 
                                 return {
                                     {
-                                        qualifier = "kick_client",
-                                        client_id = command.message.client_id
+                                        qualifier = "KICK_CLIENT",
+                                        body = {
+                                            client_id = command.message.client_id
+                                        }
                                     }
                                 }
                             end
                                                 
-                            if command.qualifier == "delete_client" then
+                            if command.qualifier == "DELETE_CLIENT" then
                                 return {
                                     {
-                                        qualifier = "broadcast_message",
-                                        message = {
-                                            text = "client_was_deleted"
+                                        qualifier = "BROADCAST_MESSAGE",
+                                        body =  {
+                                            message = {
+                                                text = "client_was_deleted"
+                                            }
                                         }
                                     }
                                 }

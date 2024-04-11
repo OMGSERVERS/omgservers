@@ -4,6 +4,7 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -20,7 +21,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class MatchmakingInstantRequestsIT extends Assertions {
+public class MatchmakingInstantRequestsIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;

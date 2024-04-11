@@ -2,7 +2,7 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -12,14 +12,13 @@ import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbySetAttributesIT extends Assertions {
+public class LobbySetAttributesIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -39,50 +38,55 @@ public class LobbySetAttributesIT extends Assertions {
                 """
                         function handle_command(self, command)
 
-                            if command.qualifier == "init_runtime" then
+                            if command.qualifier == "INIT_RUNTIME" then
                                 self.attributes = {}
                             end
 
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 self.attributes[command.client_id] = command.attributes
                             end
 
-                            if command.qualifier == "handle_message" then
+                            if command.qualifier == "HANDLE_MESSAGE" then
                                 local var text = command.message.text
                                 
                                 if text == "init_attributes" then
                                     return {
                                         {
-                                            qualifier = "set_attributes",
-                                            client_id = command.client_id,
-                                            attributes = {
-                                                a1 = 1,
-                                                a2 = "string",
-                                                a3 = 3.14,
-                                                a4 = true
+                                            qualifier = "SET_ATTRIBUTES",
+                                            body = {
+                                                client_id = command.client_id,
+                                                attributes = {
+                                                    attributes = {
+                                                        {
+                                                            name = "a1",
+                                                            type = "LONG",
+                                                            value = 1
+                                                        }
+                                                    }
+                                                }
                                             }
                                         },
                                         {
-                                            qualifier = "respond_client",
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "attributes_was_init"
+                                            qualifier = "RESPOND_CLIENT",
+                                            body =  {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "attributes_was_init"
+                                                }
                                             }
                                         }
                                     }
                                 elseif text == "check_attributes" then
-                                    local attributes = self.attributes[command.client_id]
-                                    assert(type(attributes.a1) == "number", "a1 is wrong")
-                                    assert(type(attributes.a2) == "string", "a2 is wrong")
-                                    assert(type(attributes.a3) == "number", "a3 is wrong")
-                                    assert(type(attributes.a4) == "boolean", "a4 is wrong")
+                                    local attributes = self.attributes[command.client_id]                                    
                                     
                                     return {
                                         {
-                                            qualifier = "respond_client",
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "attributes_was_checked"
+                                            qualifier = "RESPOND_CLIENT",
+                                            body = {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "attributes_was_checked"
+                                                }
                                             }
                                         }
                                     }

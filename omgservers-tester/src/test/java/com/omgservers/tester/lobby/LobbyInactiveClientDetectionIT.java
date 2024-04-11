@@ -3,6 +3,7 @@ package com.omgservers.tester.lobby;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -18,7 +19,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbyInactiveClientDetectionIT extends Assertions {
+public class LobbyInactiveClientDetectionIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;

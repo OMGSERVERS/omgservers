@@ -2,6 +2,7 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -9,14 +10,13 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbyAddClientIT extends Assertions {
+public class LobbyAddClientIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -29,19 +29,20 @@ public class LobbyAddClientIT extends Assertions {
 
     @Inject
     SupportApiTester supportApiTester;
-    ;
 
     @Test
     void lobbyAddClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         function handle_command(self, command)
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 return {
                                     {
-                                        qualifier = "respond_client",
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "client_was_added"
+                                        qualifier = "RESPOND_CLIENT",
+                                        body = {
+                                            client_id = command.client_id,
+                                            message = {
+                                                text = "client_was_added"
+                                            }
                                         }
                                     }
                                 }

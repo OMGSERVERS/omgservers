@@ -3,6 +3,7 @@ package com.omgservers.tester.lobby;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -10,14 +11,13 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class LobbyAssignmentIT extends Assertions {
+public class LobbyAssignmentIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;

@@ -6,7 +6,7 @@ import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -14,7 +14,6 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.Collections;
 
 @Slf4j
 @QuarkusTest
-public class MatchStopMatchmakingIT extends Assertions {
+public class MatchStopMatchmakingIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -45,17 +44,21 @@ public class MatchStopMatchmakingIT extends Assertions {
                 """
                         function handle_command(self, command)
                                                 
-                            if command.qualifier == "add_client" then
+                            if command.qualifier == "ADD_CLIENT" then
                                 return {
                                     {
-                                        qualifier = "stop_matchmaking",
-                                        reason = "why not?"
+                                        qualifier = "STOP_MATCHMAKING",
+                                        body = {
+                                            reason = "why not?"
+                                        }
                                     },
                                     {
-                                        qualifier = "respond_client",
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "matchmaking_was_stop"
+                                        qualifier = "RESPOND_CLIENT",
+                                        body = {
+                                            client_id = command.client_id,
+                                            message = {
+                                                text = "matchmaking_was_stop"
+                                            }
                                         }
                                     }
                                 }

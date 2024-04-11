@@ -1,5 +1,6 @@
 package com.omgservers.model.outgoingCommand.body;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.omgservers.model.outgoingCommand.OutgoingCommandBodyModel;
 import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ import lombok.ToString;
 public class RespondClientOutgoingCommandBodyModel extends OutgoingCommandBodyModel {
 
     @NotNull
+    @JsonAlias("client_id")
     Long clientId;
 
     @NotNull

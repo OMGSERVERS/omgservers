@@ -1,18 +1,17 @@
 package com.omgservers.tester.player;
 
-import com.omgservers.tester.component.AdminApiTester;
+import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-public class PlayerCreateClientIT extends Assertions {
+public class PlayerCreateClientIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
