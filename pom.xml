@@ -33,6 +33,7 @@
         <module>omgservers-worker</module>
         <module>omgservers-tester</module>
         <module>omgservers-ctl</module>
+        <module>omgservers-builder</module>
     </modules>
 
     <dependencies>
