@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose up --remove-orphans -d
-docker-compose ps
+docker compose up --remove-orphans -d
+docker compose ps

@@ -1,10 +1,11 @@
 pipeline {
     agent any
     parameters {
-        string(name: "tenantId", description: "Customer tenant id is use as the namespace within a registry.")
-        string(name: "stageId", description: "The stage id is used as the docker image name.")
+        string(name: "namespace", description: "Namespace within a registry.")
+        string(name: "containerName", description: "Image name to build.")
         string(name: "versionId", description: "The version id is used as the docker image tag.")
         text(name: "sourceCodeJson", description: "Source code is in json representation.")
+        string(name: "dockerRegistry", description: "Registry address to use in form of https://host:port.")
     }
     stages {
         stage("Prepare") {
@@ -37,9 +38,19 @@ pipeline {
                     RUN luarocks install base64
                 """
                 script {
-                    def dockerImage = docker.build("omgservers/${tenantId}/${stageId}:${versionId}")
+                    docker.withRegistry("${dockerRegistry}") {
+                        def dockerImage = docker.build("${namespace}/${containerName}:${versionId}")
+                        dockerImage.push()
+                        def imageName = dockerImage.imageName()
+                        writeFile file: "image", text: imageName
+                    }
                 }
             }
+        }
+    }
+    post {
+        success {
+            archiveArtifacts artifacts: "image", allowEmptyArchive: true
         }
     }
 }

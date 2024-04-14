@@ -13,6 +13,14 @@ services:
       - omgservers
     environment:
       - DOCKER_TLS_CERTDIR=/certs
+    command: ["--insecure-registry=registry:5000"]
+  registry:
+    image: "registry:2.8.3"
+    container_name: "registry"
+    ports:
+      - "5000:5000"
+    networks:
+      - omgservers
   builder:
     image: "omgservers/omgservers-builder:1.0.0-SNAPSHOT"
     container_name: "builder"
