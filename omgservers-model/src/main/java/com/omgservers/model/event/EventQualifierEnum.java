@@ -7,6 +7,7 @@ import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBod
 import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
+import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
@@ -141,6 +142,7 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
     ROOT_INITIALIZATION_REQUESTED(RootInitializationRequestedEventBodyModel.class, false),
+    VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),
