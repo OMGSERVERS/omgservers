@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertVersionLobbyRefOperationTest extends Assertions {
+class UpsertVersionImageRefOperationTest extends Assertions {
 
     @Inject
     UpsertTenantOperationTestInterface upsertTenantOperation;

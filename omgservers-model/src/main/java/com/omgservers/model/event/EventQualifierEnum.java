@@ -58,6 +58,10 @@ import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel
 import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.VersionCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.VersionDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionImageRefDeletedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.model.event.body.module.tenant.VersionJenkinsRequestDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.VersionLobbyRefDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.VersionLobbyRequestCreatedEventBodyModel;
@@ -98,6 +102,10 @@ public enum EventQualifierEnum {
     PROJECT_DELETED(ProjectDeletedEventBodyModel.class, true),
     STAGE_CREATED(StageCreatedEventBodyModel.class, true),
     STAGE_DELETED(StageDeletedEventBodyModel.class, true),
+    VERSION_JENKINS_REQUEST_CREATED(VersionJenkinsRequestCreatedEventBodyModel.class, true),
+    VERSION_JENKINS_REQUEST_DELETED(VersionJenkinsRequestDeletedEventBodyModel.class, true),
+    VERSION_IMAGE_REF_CREATED(VersionImageRefCreatedEventBodyModel.class, true),
+    VERSION_IMAGE_REF_DELETED(VersionImageRefDeletedEventBodyModel.class, true),
     VERSION_LOBBY_REQUEST_CREATED(VersionLobbyRequestCreatedEventBodyModel.class, true),
     VERSION_LOBBY_REQUEST_DELETED(VersionLobbyRequestDeletedEventBodyModel.class, true),
     VERSION_LOBBY_REF_CREATED(VersionLobbyRefCreatedEventBodyModel.class, false),
