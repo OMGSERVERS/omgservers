@@ -52,6 +52,24 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -66,6 +84,29 @@ public interface VersionService {
     Uni<DeleteVersionResponse> deleteVersion(@Valid DeleteVersionRequest request);
 
     Uni<GetVersionConfigResponse> getVersionConfig(@Valid GetVersionConfigRequest request);
+
+    Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(@Valid GetVersionJenkinsRequestRequest request);
+
+    Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(
+            @Valid ViewVersionJenkinsRequestsRequest request);
+
+    Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(@Valid SyncVersionJenkinsRequestRequest request);
+
+    Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequestWithIdempotency(
+            @Valid SyncVersionJenkinsRequestRequest request);
+
+    Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(
+            @Valid DeleteVersionJenkinsRequestRequest request);
+
+    Uni<GetVersionImageRefResponse> getVersionImageRef(@Valid GetVersionImageRefRequest request);
+
+    Uni<FindVersionImageRefResponse> findVersionImageRef(@Valid FindVersionImageRefRequest request);
+
+    Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(@Valid ViewVersionImageRefsRequest request);
+
+    Uni<SyncVersionImageRefResponse> syncVersionImageRef(@Valid SyncVersionImageRefRequest request);
+
+    Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(@Valid DeleteVersionImageRefRequest request);
 
     Uni<SelectStageVersionResponse> selectStageVersion(@Valid SelectStageVersionRequest request);
 

@@ -100,6 +100,24 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -230,6 +248,42 @@ public interface TenantApi {
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
 
     @PUT
+    @Path("/get-version-jenkins-request")
+    Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(GetVersionJenkinsRequestRequest request);
+
+    @PUT
+    @Path("/view-version-jenkins-requests")
+    Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(ViewVersionJenkinsRequestsRequest request);
+
+    @PUT
+    @Path("/sync-version-jenkins-request")
+    Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(SyncVersionJenkinsRequestRequest request);
+
+    @PUT
+    @Path("/delete-version-jenkins-request")
+    Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(DeleteVersionJenkinsRequestRequest request);
+
+    @PUT
+    @Path("/get-version-image-ref")
+    Uni<GetVersionImageRefResponse> getVersionImageRef(GetVersionImageRefRequest request);
+
+    @PUT
+    @Path("/find-version-image-ref")
+    Uni<FindVersionImageRefResponse> findVersionImageRef(FindVersionImageRefRequest request);
+
+    @PUT
+    @Path("/view-version-image-refs")
+    Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(ViewVersionImageRefsRequest request);
+
+    @PUT
+    @Path("/sync-version-image-ref")
+    Uni<SyncVersionImageRefResponse> syncVersionImageRef(SyncVersionImageRefRequest request);
+
+    @PUT
+    @Path("/delete-version-image-ref")
+    Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(DeleteVersionImageRefRequest request);
+
+    @PUT
     @Path("/get-version-lobby-request")
     Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(GetVersionLobbyRequestRequest request);
 
@@ -239,35 +293,35 @@ public interface TenantApi {
 
     @PUT
     @Path("/view-version-lobby-requests")
-    Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(ViewVersionLobbyRequestsRequest request);
+    Uni<ViewVersionLobbyRequestsResponse> viewVersionJenkinsRequests(ViewVersionLobbyRequestsRequest request);
 
     @PUT
     @Path("/sync-version-lobby-request")
-    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(SyncVersionLobbyRequestRequest request);
+    Uni<SyncVersionLobbyRequestResponse> syncVersionJenkinsRequest(SyncVersionLobbyRequestRequest request);
 
     @PUT
     @Path("/delete-version-lobby-request")
-    Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(DeleteVersionLobbyRequestRequest request);
+    Uni<DeleteVersionLobbyRequestResponse> deleteVersionJenkinsRequest(DeleteVersionLobbyRequestRequest request);
 
     @PUT
     @Path("/get-version-lobby-ref")
-    Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(GetVersionLobbyRefRequest request);
+    Uni<GetVersionLobbyRefResponse> getVersionImageRef(GetVersionLobbyRefRequest request);
 
     @PUT
     @Path("/find-version-lobby-ref")
-    Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(FindVersionLobbyRefRequest request);
+    Uni<FindVersionLobbyRefResponse> findVersionImageRef(FindVersionLobbyRefRequest request);
 
     @PUT
     @Path("/view-version-lobby-refs")
-    Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(ViewVersionLobbyRefsRequest request);
+    Uni<ViewVersionLobbyRefsResponse> viewVersionImageRefs(ViewVersionLobbyRefsRequest request);
 
     @PUT
     @Path("/sync-version-lobby-ref")
-    Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(SyncVersionLobbyRefRequest request);
+    Uni<SyncVersionLobbyRefResponse> syncVersionImageRef(SyncVersionLobbyRefRequest request);
 
     @PUT
     @Path("/delete-version-lobby-ref")
-    Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(DeleteVersionLobbyRefRequest request);
+    Uni<DeleteVersionLobbyRefResponse> deleteVersionImageRef(DeleteVersionLobbyRefRequest request);
 
     @PUT
     @Path("/get-version-matchmaker-request")

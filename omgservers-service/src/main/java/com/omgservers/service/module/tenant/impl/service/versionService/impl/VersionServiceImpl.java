@@ -52,35 +52,65 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.versionService.VersionService;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.deleteVersion.DeleteVersionMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.deleteVersionLobbyRef.DeleteVersionLobbyRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.deleteVersionLobbyRequest.DeleteVersionLobbyRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.deleteVersionMatchmakerRef.DeleteVersionMatchmakerRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.deleteVersionMatchmakerRequest.DeleteVersionMatchmakerRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.findStageVersionId.SelectStageVersionMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.findVersionLobbyRef.FindVersionLobbyRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.findVersionLobbyRequest.FindVersionLobbyRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.findVersionMatchmakerRef.FindVersionMatchmakerRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.findVersionMatchmakerRequest.FindVersionMatchmakerRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.getVersion.GetVersionMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.getVersionConfig.GetVersionConfigMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.getVersionLobbyRef.GetVersionLobbyRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.getVersionLobbyRequest.GetVersionLobbyRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.getVersionMatchmakerRef.GetVersionMatchmakerRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.getVersionMatchmakerRequest.GetVersionMatchmakerRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.syncVersion.SyncVersionMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.syncVersionLobbyRef.SyncVersionLobbyRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.syncVersionLobbyRequest.SyncVersionLobbyRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.syncVersionMatchmakerRef.SyncVersionMatchmakerRefMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.syncVersionMatchmakerRequest.SyncVersionMatchmakerRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.viewVersionLobbyRefs.ViewVersionLobbyRefsMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.viewVersionLobbyRequests.ViewVersionLobbyRequestsMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.viewVersionMatchmakerRefs.ViewVersionMatchmakerRefsMethod;
-import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.viewVersionMatchmakerRequests.ViewVersionMatchmakerRequestsMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.viewVersions.ViewVersionsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.deleteVersionImageRef.DeleteVersionImageRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.findVersionImageRef.FindVersionImageRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.getVersionImageRef.GetVersionImageRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.syncVersionImageRef.SyncVersionImageRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.viewVersionImageRefs.ViewVersionImageRefsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionJenkinsRequest.deleteVersionJenkinsRequest.DeleteVersionJenkinsRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionJenkinsRequest.getVersionJenkinsRequest.GetVersionJenkinsRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionJenkinsRequest.syncVersionJenkinsRequest.SyncVersionJenkinsRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionJenkinsRequest.viewVersionJenkinsRequests.ViewVersionJenkinsRequestsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.deleteVersionLobbyRef.DeleteVersionLobbyRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.findVersionLobbyRef.FindVersionLobbyRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.getVersionLobbyRef.GetVersionLobbyRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.syncVersionLobbyRef.SyncVersionLobbyRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.viewVersionLobbyRefs.ViewVersionLobbyRefsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.deleteVersionLobbyRequest.DeleteVersionLobbyRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.findVersionLobbyRequest.FindVersionLobbyRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.getVersionLobbyRequest.GetVersionLobbyRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.syncVersionLobbyRequest.SyncVersionLobbyRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.viewVersionLobbyRequests.ViewVersionLobbyRequestsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.deleteVersionMatchmakerRef.DeleteVersionMatchmakerRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.findVersionMatchmakerRef.FindVersionMatchmakerRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.getVersionMatchmakerRef.GetVersionMatchmakerRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.syncVersionMatchmakerRef.SyncVersionMatchmakerRefMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.viewVersionMatchmakerRefs.ViewVersionMatchmakerRefsMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.deleteVersionMatchmakerRequest.DeleteVersionMatchmakerRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.findVersionMatchmakerRequest.FindVersionMatchmakerRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.getVersionMatchmakerRequest.GetVersionMatchmakerRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.syncVersionMatchmakerRequest.SyncVersionMatchmakerRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.viewVersionMatchmakerRequests.ViewVersionMatchmakerRequestsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -100,22 +130,32 @@ public class VersionServiceImpl implements VersionService {
     final FindVersionMatchmakerRequestMethod findVersionMatchmakerRequestMethod;
     final SyncVersionMatchmakerRequestMethod syncVersionMatchmakerRequestMethod;
     final GetVersionMatchmakerRequestMethod getVersionMatchmakerRequestMethod;
+    final DeleteVersionJenkinsRequestMethod deleteVersionJenkinsRequestMethod;
+    final ViewVersionJenkinsRequestsMethod viewVersionJenkinsRequestsMethod;
     final DeleteVersionMatchmakerRefMethod deleteVersionMatchmakerRefMethod;
     final ViewVersionMatchmakerRefsMethod viewVersionMatchmakerRefsMethod;
     final DeleteVersionLobbyRequestMethod deleteVersionLobbyRequestMethod;
+    final SyncVersionJenkinsRequestMethod syncVersionJenkinsRequestMethod;
+    final GetVersionJenkinsRequestMethod getVersionJenkinsRequestMethod;
     final SyncVersionMatchmakerRefMethod syncVersionMatchmakerRefMethod;
     final FindVersionMatchmakerRefMethod findVersionMatchmakerRefMethod;
     final ViewVersionLobbyRequestsMethod viewVersionLobbyRequestsMethod;
+
     final FindVersionLobbyRequestMethod findVersionLobbyRequestMethod;
     final SyncVersionLobbyRequestMethod syncVersionLobbyRequestMethod;
     final GetVersionLobbyRequestMethod getVersionLobbyRequestMethod;
     final DeleteVersionLobbyRefMethod deleteVersionLobbyRefMethod;
+    final DeleteVersionImageRefMethod deleteVersionImageRefMethod;
+    final ViewVersionImageRefsMethod viewVersionImageRefsMethod;
     final ViewVersionLobbyRefsMethod viewVersionLobbyRefsMethod;
     final SyncVersionLobbyRefMethod syncVersionLobbyRefMethod;
     final FindVersionLobbyRefMethod findVersionLobbyRefMethod;
+    final FindVersionImageRefMethod findVersionImageRefMethod;
+    final SyncVersionImageRefMethod syncVersionImageRefMethod;
     final GetVersionMatchmakerRefMethod getVersionMatchmaker;
     final SelectStageVersionMethod selectStageVersionMethod;
     final GetVersionLobbyRefMethod getVersionLobbyRefMethod;
+    final GetVersionImageRefMethod getVersionImageRefMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final ViewVersionsMethod viewVersionsMethod;
@@ -175,6 +215,100 @@ public class VersionServiceImpl implements VersionService {
     }
 
     @Override
+    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(
+            @Valid final GetVersionJenkinsRequestRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getVersionJenkinsRequest,
+                getVersionJenkinsRequestMethod::getVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(
+            @Valid final ViewVersionJenkinsRequestsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewVersionJenkinsRequests,
+                viewVersionJenkinsRequestsMethod::viewVersionJenkinsRequests);
+    }
+
+    @Override
+    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(
+            @Valid final SyncVersionJenkinsRequestRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncVersionJenkinsRequest,
+                syncVersionJenkinsRequestMethod::syncVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequestWithIdempotency(
+            final SyncVersionJenkinsRequestRequest request) {
+        return syncVersionJenkinsRequest(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getVersionJenkinsRequest(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncVersionJenkinsRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
+    public Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(
+            @Valid final DeleteVersionJenkinsRequestRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteVersionJenkinsRequest,
+                deleteVersionJenkinsRequestMethod::deleteVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<GetVersionImageRefResponse> getVersionImageRef(@Valid final GetVersionImageRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getVersionImageRef,
+                getVersionImageRefMethod::getVersionImageRef);
+    }
+
+    @Override
+    public Uni<FindVersionImageRefResponse> findVersionImageRef(@Valid final FindVersionImageRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::findVersionImageRef,
+                findVersionImageRefMethod::findVersionImageRef);
+    }
+
+    @Override
+    public Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(@Valid final ViewVersionImageRefsRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::viewVersionImageRefs,
+                viewVersionImageRefsMethod::viewVersionImageRefs);
+    }
+
+    @Override
+    public Uni<SyncVersionImageRefResponse> syncVersionImageRef(@Valid final SyncVersionImageRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::syncVersionImageRef,
+                syncVersionImageRefMethod::syncVersionImageRef);
+    }
+
+    @Override
+    public Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(@Valid final DeleteVersionImageRefRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::deleteVersionImageRef,
+                deleteVersionImageRefMethod::deleteVersionImageRef);
+    }
+
+    @Override
     public Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(
             @Valid final GetVersionLobbyRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
@@ -197,7 +331,7 @@ public class VersionServiceImpl implements VersionService {
             @Valid final ViewVersionLobbyRequestsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewVersionLobbyRequests,
+                TenantModuleClient::viewVersionJenkinsRequests,
                 viewVersionLobbyRequestsMethod::viewVersionLobbyRequests);
     }
 
@@ -206,7 +340,7 @@ public class VersionServiceImpl implements VersionService {
             @Valid final SyncVersionLobbyRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncVersionLobbyRequest,
+                TenantModuleClient::syncVersionJenkinsRequest,
                 syncVersionLobbyRequestMethod::syncVersionLobbyRequest);
     }
 
@@ -215,7 +349,7 @@ public class VersionServiceImpl implements VersionService {
             @Valid final DeleteVersionLobbyRequestRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteVersionLobbyRequest,
+                TenantModuleClient::deleteVersionJenkinsRequest,
                 deleteVersionLobbyRequestMethod::deleteVersionLobbyRequest);
     }
 
@@ -223,7 +357,7 @@ public class VersionServiceImpl implements VersionService {
     public Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(@Valid final GetVersionLobbyRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getVersionLobbyRef,
+                TenantModuleClient::getVersionImageRef,
                 getVersionLobbyRefMethod::getVersionLobbyRef);
     }
 
@@ -231,7 +365,7 @@ public class VersionServiceImpl implements VersionService {
     public Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(@Valid final FindVersionLobbyRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findVersionLobbyRef,
+                TenantModuleClient::findVersionImageRef,
                 findVersionLobbyRefMethod::findVersionLobbyRef);
     }
 
@@ -239,7 +373,7 @@ public class VersionServiceImpl implements VersionService {
     public Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(@Valid final ViewVersionLobbyRefsRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewVersionLobbyRefs,
+                TenantModuleClient::viewVersionImageRefs,
                 viewVersionLobbyRefsMethod::viewVersionLobbyRefs);
     }
 
@@ -247,7 +381,7 @@ public class VersionServiceImpl implements VersionService {
     public Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(@Valid final SyncVersionLobbyRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncVersionLobbyRef,
+                TenantModuleClient::syncVersionImageRef,
                 syncVersionLobbyRefMethod::syncVersionLobbyRef);
     }
 
@@ -255,7 +389,7 @@ public class VersionServiceImpl implements VersionService {
     public Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(@Valid final DeleteVersionLobbyRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteVersionLobbyRef,
+                TenantModuleClient::deleteVersionImageRef,
                 deleteVersionLobbyRefMethod::deleteVersionLobbyRef);
     }
 

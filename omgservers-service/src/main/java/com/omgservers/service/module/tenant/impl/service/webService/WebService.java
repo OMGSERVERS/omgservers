@@ -100,7 +100,27 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
 
 public interface WebService {
 
@@ -163,6 +183,24 @@ public interface WebService {
     Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
 
     Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
+
+    Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(GetVersionJenkinsRequestRequest request);
+
+    Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(ViewVersionJenkinsRequestsRequest request);
+
+    Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(SyncVersionJenkinsRequestRequest request);
+
+    Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(DeleteVersionJenkinsRequestRequest request);
+
+    Uni<GetVersionImageRefResponse> getVersionImageRef(GetVersionImageRefRequest request);
+
+    Uni<FindVersionImageRefResponse> findVersionImageRef(FindVersionImageRefRequest request);
+
+    Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(ViewVersionImageRefsRequest request);
+
+    Uni<SyncVersionImageRefResponse> syncVersionImageRef(SyncVersionImageRefRequest request);
+
+    Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(DeleteVersionImageRefRequest request);
 
     Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(GetVersionLobbyRequestRequest request);
 

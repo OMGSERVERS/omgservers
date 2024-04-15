@@ -100,6 +100,24 @@ import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.model.dto.tenant.ViewVersionsRequest;
 import com.omgservers.model.dto.tenant.ViewVersionsResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.DeleteVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.FindVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.tenant.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -269,6 +287,53 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
+    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(final GetVersionJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(
+            final ViewVersionJenkinsRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionJenkinsRequests);
+    }
+
+    @Override
+    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(final SyncVersionJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(
+            final DeleteVersionJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionJenkinsRequest);
+    }
+
+    @Override
+    public Uni<GetVersionImageRefResponse> getVersionImageRef(final GetVersionImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionImageRef);
+    }
+
+    @Override
+    public Uni<FindVersionImageRefResponse> findVersionImageRef(final FindVersionImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionImageRef);
+    }
+
+    @Override
+    public Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(final ViewVersionImageRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionImageRefs);
+    }
+
+    @Override
+    public Uni<SyncVersionImageRefResponse> syncVersionImageRef(final SyncVersionImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionImageRef);
+    }
+
+    @Override
+    public Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(final DeleteVersionImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionImageRef);
+    }
+
+    @Override
     public Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(final GetVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRequest);
     }
@@ -279,44 +344,44 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(
+    public Uni<ViewVersionLobbyRequestsResponse> viewVersionJenkinsRequests(
             final ViewVersionLobbyRequestsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRequests);
     }
 
     @Override
-    public Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(final SyncVersionLobbyRequestRequest request) {
+    public Uni<SyncVersionLobbyRequestResponse> syncVersionJenkinsRequest(final SyncVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRequest);
     }
 
     @Override
-    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(
+    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionJenkinsRequest(
             final DeleteVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRequest);
     }
 
     @Override
-    public Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(final GetVersionLobbyRefRequest request) {
+    public Uni<GetVersionLobbyRefResponse> getVersionImageRef(final GetVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRef);
     }
 
     @Override
-    public Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(final FindVersionLobbyRefRequest request) {
+    public Uni<FindVersionLobbyRefResponse> findVersionImageRef(final FindVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionLobbyRef);
     }
 
     @Override
-    public Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(final ViewVersionLobbyRefsRequest request) {
+    public Uni<ViewVersionLobbyRefsResponse> viewVersionImageRefs(final ViewVersionLobbyRefsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRefs);
     }
 
     @Override
-    public Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(final SyncVersionLobbyRefRequest request) {
+    public Uni<SyncVersionLobbyRefResponse> syncVersionImageRef(final SyncVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRef);
     }
 
     @Override
-    public Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(final DeleteVersionLobbyRefRequest request) {
+    public Uni<DeleteVersionLobbyRefResponse> deleteVersionImageRef(final DeleteVersionLobbyRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRef);
     }
 
