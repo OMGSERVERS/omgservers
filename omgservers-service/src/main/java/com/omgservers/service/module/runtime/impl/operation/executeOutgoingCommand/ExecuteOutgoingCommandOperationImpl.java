@@ -34,7 +34,7 @@ class ExecuteOutgoingCommandOperationImpl implements ExecuteOutgoingCommandOpera
         final var qualifierBodyClass = qualifier.getBodyClass();
 
         if (!qualifierBodyClass.isInstance(outgoingCommand.getBody())) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.COMMAND_BODY_TYPE_MISMATCH,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.COMMAND_BODY_TYPE_MISMATCHED,
                     "qualifier and outgoing command body are mismatch, outgoingCommand=" + outgoingCommand);
         }
 

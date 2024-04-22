@@ -1,11 +1,10 @@
 pipeline {
     agent any
     parameters {
-        string(name: "namespace", description: "Namespace within a registry.")
+        string(name: "groupId", description: "Group for new container.")
         string(name: "containerName", description: "Image name to build.")
         string(name: "versionId", description: "The version id is used as the docker image tag.")
         text(name: "sourceCodeJson", description: "Source code is in json representation.")
-        string(name: "dockerRegistry", description: "Registry address to use in form of https://host:port.")
     }
     stages {
         stage("Prepare") {
@@ -29,7 +28,7 @@ pipeline {
         }
         stage("Build") {
             steps {
-                writeFile file: 'Dockerfile', text: """
+                writeFile file: "Dockerfile", text: """
                     FROM nickblah/luajit:2.1.0-beta3-luarocks-debian
                     RUN apt-get update && apt-get install -y build-essential
                     RUN luarocks install luasocket
@@ -38,8 +37,8 @@ pipeline {
                     RUN luarocks install base64
                 """
                 script {
-                    docker.withRegistry("${dockerRegistry}") {
-                        def dockerImage = docker.build("${namespace}/${containerName}:${versionId}")
+                    docker.withRegistry("${env.DOCKER_REGISTRY}") {
+                        def dockerImage = docker.build("${groupId}/${containerName}:${versionId}")
                         dockerImage.push()
                         def imageName = dockerImage.imageName()
                         writeFile file: "image", text: imageName

@@ -54,7 +54,7 @@ class CreateDefaultPoolServerMethodImpl implements CreateDefaultPoolServerMethod
                                     dockerClient.pingCmd().exec();
                                 } catch (Exception e) {
                                     throw new ServerSideBadRequestException(
-                                            ExceptionQualifierEnum.DOCKER_DAEMON_UNREACHABLE, e.getMessage());
+                                            ExceptionQualifierEnum.DOCKER_DAEMON_UNREACHED, e.getMessage());
                                 }
 
                                 final var poolServerConfig = PoolServerConfigModel.create();

@@ -22,7 +22,7 @@ class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation
         final var code = pgException.getSqlState();
         return switch (code) {
             // foreign_key_violation
-            case "23503" -> new ServerSideBadRequestException(ExceptionQualifierEnum.DB_VIOLATION,
+            case "23503" -> new ServerSideBadRequestException(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED,
                     "foreign key violation, constraint=" + pgException.getConstraint() + ", sql=" +
                             sql.replaceAll(System.lineSeparator(), " "), pgException);
             // unique_violation
@@ -30,19 +30,19 @@ class TransformPgExceptionOperationImpl implements TransformPgExceptionOperation
                 // Using default name template for constraints
                 final String idempotencyKeyConstraintPrefix = pgException.getTable() + "_idempotency_key";
                 if (pgException.getConstraint().startsWith(idempotencyKeyConstraintPrefix)) {
-                    yield new ServerSideConflictException(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION,
+                    yield new ServerSideConflictException(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED,
                             "idempotency violation, errorMessage=" + pgException.getErrorMessage() + ", sql=" +
                                     sql.replaceAll(System.lineSeparator(), " "), pgException);
                 } else {
-                    yield new ServerSideBadRequestException(ExceptionQualifierEnum.DB_VIOLATION,
+                    yield new ServerSideBadRequestException(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED,
                             "unique violation, errorMessage=" + pgException.getErrorMessage() + ", sql=" +
                                     sql.replaceAll(System.lineSeparator(), " "), pgException);
                 }
             }
             // not_null_violation
-            case "23502" -> new ServerSideBadRequestException(ExceptionQualifierEnum.DB_VIOLATION,
+            case "23502" -> new ServerSideBadRequestException(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED,
                     "not null violation, errorMessage=" + pgException.getErrorMessage(), pgException);
-            default -> new ServerSideInternalException(ExceptionQualifierEnum.DB_EXCEPTION,
+            default -> new ServerSideInternalException(ExceptionQualifierEnum.DB_EXCEPTION_UNHANDLED,
                     "unhandled PgException, " + pgException.getErrorMessage() + ", sql=" +
                             sql.replaceAll(System.lineSeparator(), " "), pgException);
         };

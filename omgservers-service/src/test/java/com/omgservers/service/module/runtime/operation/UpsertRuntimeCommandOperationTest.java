@@ -95,7 +95,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

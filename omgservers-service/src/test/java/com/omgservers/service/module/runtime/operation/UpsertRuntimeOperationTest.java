@@ -69,7 +69,7 @@ class UpsertRuntimeOperationTest extends Assertions {
                 runtime1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertRuntimeOperation.upsertRuntime(shard, runtime2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

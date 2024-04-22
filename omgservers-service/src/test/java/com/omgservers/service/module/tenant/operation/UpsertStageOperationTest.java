@@ -93,7 +93,7 @@ class UpsertStageOperationTest extends Assertions {
         final var stage2 = stageModelFactory.create(tenant.getId(), project.getId(), stage1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertStageOperation.upsertStage(shard, stage2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

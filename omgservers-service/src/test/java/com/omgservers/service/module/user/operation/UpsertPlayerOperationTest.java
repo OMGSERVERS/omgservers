@@ -69,7 +69,7 @@ class UpsertPlayerOperationTest extends Assertions {
         final var player2 = playerModelFactory.create(user.getId(), tenantId(), stageId(), player1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertPlayerOperation.upsertPlayer(shard, player2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

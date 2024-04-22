@@ -136,7 +136,7 @@ class UpsertVersionJenkinsRequestOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertVersionLobbyRequestOperation.upsertVersionLobbyRequest(shard, versionLobbyRequest2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

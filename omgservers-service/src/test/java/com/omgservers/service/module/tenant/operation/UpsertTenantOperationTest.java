@@ -47,6 +47,6 @@ class UpsertTenantOperationTest extends Assertions {
         final var tenant2 = tenantModelFactory.create(tenant1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertTenantOperation.upsertTenant(shard, tenant2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 }

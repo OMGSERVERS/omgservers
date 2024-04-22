@@ -67,7 +67,7 @@ public class RootInitializationRequestedEventHandlerImpl implements EventHandler
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}", root, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }

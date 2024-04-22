@@ -22,6 +22,8 @@ public interface ServiceConfig {
 
     WorkersConfig workers();
 
+    BuilderConfig builder();
+
     interface GeneratorConfig {
         long datacenterId();
 
@@ -86,5 +88,13 @@ public interface ServiceConfig {
         int memorySize();
 
         int maxContainers();
+    }
+
+    interface BuilderConfig {
+        URI uri();
+
+        String userId();
+
+        String userToken();
     }
 }

@@ -51,7 +51,7 @@ class UpsertMatchmakerOperationTest extends Assertions {
         final var matchmaker2 = matchmakerModelFactory.create(tenantId(), stageId(), matchmaker1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

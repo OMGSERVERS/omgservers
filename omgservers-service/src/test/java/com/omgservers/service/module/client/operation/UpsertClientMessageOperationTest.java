@@ -91,7 +91,7 @@ class UpsertClientMessageOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertClientMessageOperation.upsertClientMessage(shard, clientMessage2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long userId() {

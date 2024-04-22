@@ -78,7 +78,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
                 RuntimePermissionEnum.HANDLE_RUNTIME);
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimePermissionOperation
                 .upsertRuntimePermission(shard, runtimePermission));
-        assertEquals(ExceptionQualifierEnum.DB_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

@@ -78,7 +78,7 @@ class UpsertProjectOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertProjectOperation.upsertProject(shard, project2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

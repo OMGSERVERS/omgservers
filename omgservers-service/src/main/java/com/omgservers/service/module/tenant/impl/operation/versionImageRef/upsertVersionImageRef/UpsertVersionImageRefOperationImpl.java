@@ -30,7 +30,7 @@ class UpsertVersionImageRefOperationImpl implements UpsertVersionImageRefOperati
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_version_lobby_ref(
+                        insert into $schema.tab_tenant_version_image_ref(
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

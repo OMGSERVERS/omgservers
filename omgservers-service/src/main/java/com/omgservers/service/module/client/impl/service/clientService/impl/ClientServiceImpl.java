@@ -149,7 +149,7 @@ public class ClientServiceImpl implements ClientService {
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}",
                                     request.getClientMessage(), t.getMessage());
                             return Uni.createFrom().item(new SyncClientMessageResponse(Boolean.FALSE));

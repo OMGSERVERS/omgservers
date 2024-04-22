@@ -125,7 +125,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}", user, t.getMessage());
 
                             // User was already created
@@ -172,7 +172,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             .onFailure(ServerSideConflictException.class)
                             .recoverWithUni(t -> {
                                 if (t instanceof final ServerSideBaseException exception) {
-                                    if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                    if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                                         log.warn("Idempotency was violated, object={}, {}", poolRequest,
                                                 t.getMessage());
                                         return Uni.createFrom().item(Boolean.FALSE);
@@ -204,7 +204,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         .onFailure(ServerSideConflictException.class)
                         .recoverWithUni(t -> {
                             if (t instanceof final ServerSideBaseException exception) {
-                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                                     log.warn("Idempotency was violated, object={}, {}", lobbyRuntimeRef,
                                             t.getMessage());
                                     return Uni.createFrom().item(Boolean.FALSE);
@@ -228,7 +228,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         .onFailure(ServerSideConflictException.class)
                         .recoverWithUni(t -> {
                             if (t instanceof final ServerSideBaseException exception) {
-                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                                     log.warn("Idempotency was violated, object={}, {}", matchRuntimeRef,
                                             t.getMessage());
                                     return Uni.createFrom().item(Boolean.FALSE);

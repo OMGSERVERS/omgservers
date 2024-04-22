@@ -94,7 +94,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
                 permission1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertTenantPermissionOperation.upsertTenantPermission(shard, permission2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long userId() {

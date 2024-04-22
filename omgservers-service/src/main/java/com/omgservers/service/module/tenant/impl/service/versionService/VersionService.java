@@ -106,6 +106,8 @@ public interface VersionService {
 
     Uni<SyncVersionImageRefResponse> syncVersionImageRef(@Valid SyncVersionImageRefRequest request);
 
+    Uni<SyncVersionImageRefResponse> syncVersionImageRefWithIdempotency(@Valid SyncVersionImageRefRequest request);
+
     Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(@Valid DeleteVersionImageRefRequest request);
 
     Uni<SelectStageVersionResponse> selectStageVersion(@Valid SelectStageVersionRequest request);
@@ -117,6 +119,8 @@ public interface VersionService {
     Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(@Valid ViewVersionLobbyRequestsRequest request);
 
     Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(@Valid SyncVersionLobbyRequestRequest request);
+
+    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequestWithIdempotency(@Valid SyncVersionLobbyRequestRequest request);
 
     Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(@Valid DeleteVersionLobbyRequestRequest request);
 
@@ -140,6 +144,9 @@ public interface VersionService {
             @Valid ViewVersionMatchmakerRequestsRequest request);
 
     Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(
+            @Valid SyncVersionMatchmakerRequestRequest request);
+
+    Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequestWithIdempotency(
             @Valid SyncVersionMatchmakerRequestRequest request);
 
     Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(

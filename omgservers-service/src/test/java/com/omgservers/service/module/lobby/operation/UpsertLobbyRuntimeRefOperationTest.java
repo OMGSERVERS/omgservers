@@ -84,7 +84,7 @@ class UpsertLobbyRuntimeRefOperationTest extends Assertions {
         final var changeContext = upsertLobbyRuntimeRefOperation.upsertLobbyRuntimeRef(shard, lobbyRuntimeRef1);
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertLobbyRuntimeRefOperation.upsertLobbyRuntimeRef(shard, lobbyRuntimeRef2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

@@ -243,12 +243,12 @@ public class VersionServiceImpl implements VersionService {
 
     @Override
     public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequestWithIdempotency(
-            final SyncVersionJenkinsRequestRequest request) {
+            @Valid final SyncVersionJenkinsRequestRequest request) {
         return syncVersionJenkinsRequest(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}", request.getVersionJenkinsRequest(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncVersionJenkinsRequestResponse(Boolean.FALSE));
@@ -301,6 +301,24 @@ public class VersionServiceImpl implements VersionService {
     }
 
     @Override
+    public Uni<SyncVersionImageRefResponse> syncVersionImageRefWithIdempotency(
+            @Valid final SyncVersionImageRefRequest request) {
+        return syncVersionImageRef(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getVersionImageRef(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncVersionImageRefResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(@Valid final DeleteVersionImageRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
@@ -342,6 +360,24 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncVersionJenkinsRequest,
                 syncVersionLobbyRequestMethod::syncVersionLobbyRequest);
+    }
+
+    @Override
+    public Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequestWithIdempotency(
+            @Valid final SyncVersionLobbyRequestRequest request) {
+        return syncVersionLobbyRequest(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getVersionLobbyRequest(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncVersionLobbyRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override
@@ -427,6 +463,24 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncVersionMatchmakerRequest,
                 syncVersionMatchmakerRequestMethod::syncVersionMatchmakerRequest);
+    }
+
+    @Override
+    public Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequestWithIdempotency(
+            @Valid final SyncVersionMatchmakerRequestRequest request) {
+        return syncVersionMatchmakerRequest(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getVersionMatchmakerRequest(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncVersionMatchmakerRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

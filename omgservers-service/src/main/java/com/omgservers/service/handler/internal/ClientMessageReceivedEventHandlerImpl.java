@@ -61,7 +61,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
                             messageBody.getData(), event.getIdempotencyKey()))
                     .replaceWithVoid();
         } else {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_MESSAGE_BODY_TYPE_MISMATCH,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_MESSAGE_BODY_TYPE_MISMATCHED,
                     "body type mismatch, " + message.getBody().getClass().getSimpleName());
         }
     }
@@ -104,7 +104,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}", runtimeCommand, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }

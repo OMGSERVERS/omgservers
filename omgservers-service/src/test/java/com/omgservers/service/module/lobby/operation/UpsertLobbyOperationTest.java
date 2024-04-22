@@ -54,7 +54,7 @@ class UpsertLobbyOperationTest extends Assertions {
         final var lobby2 = lobbyModelFactory.create(tenantId(), versionId(), lobby1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertLobbyOperation.upsertLobby(shard, lobby2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

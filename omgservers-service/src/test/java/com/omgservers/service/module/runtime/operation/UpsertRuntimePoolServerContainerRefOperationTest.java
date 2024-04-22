@@ -77,7 +77,7 @@ class UpsertRuntimePoolServerContainerRefOperationTest extends Assertions {
                 clientId());
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeAssignmentOperation
                 .upsertRuntimeAssignment(shard, runtimeAssignment));
-        assertEquals(ExceptionQualifierEnum.DB_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED, exception.getQualifier());
     }
 
     @Test
@@ -99,7 +99,7 @@ class UpsertRuntimePoolServerContainerRefOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

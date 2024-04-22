@@ -90,7 +90,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                     })
                     .replaceWithVoid();
         } else {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.MATCHMAKER_MESSAGE_BODY_TYPE_MISMATCH,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.MATCHMAKER_MESSAGE_BODY_TYPE_MISMATCHED,
                     "body type mismatch, " + message.getBody().getClass().getSimpleName());
         }
     }
@@ -146,7 +146,7 @@ public class MatchmakerMessageReceivedEventHandlerImpl implements EventHandler {
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION)) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
                             log.warn("Idempotency was violated, object={}, {}", requestModel, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }

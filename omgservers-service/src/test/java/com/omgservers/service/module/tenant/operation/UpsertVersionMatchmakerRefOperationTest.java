@@ -146,7 +146,7 @@ class UpsertVersionMatchmakerRefOperationTest extends Assertions {
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertVersionMatchmakerRefOperation.upsertVersionMatchmakerRef(shard,
                         VersionMatchmakerRef2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

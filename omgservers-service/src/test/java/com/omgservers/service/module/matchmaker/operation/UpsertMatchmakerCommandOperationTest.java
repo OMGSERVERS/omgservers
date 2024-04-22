@@ -90,7 +90,7 @@ class UpsertMatchmakerCommandOperationTest extends Assertions {
                 matchmakerCommand1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand2));
-        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATION, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
     Long tenantId() {

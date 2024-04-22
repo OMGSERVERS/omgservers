@@ -1,16 +1,17 @@
 // https://jenkinsci.github.io/job-dsl-plugin/
 
-pipelineScript = new File('/var/jobs/luajit-worker-builder.pipeline-script.groovy').getText("UTF-8")
-pipelineJob("luajit-worker-builder") {
-    description("Job builds LuaJIT workers")
+pipelineScript = new File('/var/jobs/luajit-worker-builder-v1.pipeline-script.groovy').getText("UTF-8")
+pipelineJob("luajit-worker-builder-v1") {
+    description("Job builds LuaJIT workers, v1")
 
     parameters {
-        stringParam("namespace", null, "Namespace within a registry.")
+        stringParam("groupId", null, "Group for new container.")
         stringParam("containerName", null, "Image name to build.")
         stringParam("versionId", null, "The version id is used as the docker image tag.")
         textParam("sourceCodeJson", null, "Source code is in json representation.")
-        stringParam("dockerRegistry", null, "Registry address to use in form of https://host:port.")
     }
+
+    quietPeriod(0)
 
     definition {
         cps {

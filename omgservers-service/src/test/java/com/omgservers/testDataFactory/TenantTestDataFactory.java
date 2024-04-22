@@ -8,6 +8,8 @@ import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestRequest;
 import com.omgservers.model.dto.tenant.SyncVersionRequest;
+import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.project.ProjectModel;
@@ -16,6 +18,10 @@ import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
@@ -23,6 +29,8 @@ import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestMod
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
+import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
+import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
 import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.VersionMatchmakerRefModelFactory;
@@ -47,8 +55,10 @@ public class TenantTestDataFactory {
     final VersionServiceTestInterface versionService;
 
     final VersionMatchmakerRequestModelFactory versionMatchmakerRequestModelFactory;
+    final VersionJenkinsRequestModelFactory versionJenkinsRequestModelFactory;
     final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
     final VersionLobbyRequestModelFactory versionLobbyRequestModelFactory;
+    final VersionImageRefModelFactory versionImageRefModelFactory;
     final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
     final VersionModelFactory versionModelFactory;
     final ProjectModelFactory projectModelFactory;
@@ -90,6 +100,32 @@ public class TenantTestDataFactory {
         final var syncVersionRequest = new SyncVersionRequest(version);
         versionService.syncVersion(syncVersionRequest);
         return version;
+    }
+
+    public VersionJenkinsRequestModel createVersionJenkinsRequest(final VersionModel version,
+                                                                  final VersionJenkinsRequestQualifierEnum qualifier,
+                                                                  final Integer buildNumber) {
+        final var tenantId = version.getTenantId();
+        final var versionId = version.getId();
+        final var versionJenkinsRequest = versionJenkinsRequestModelFactory.create(tenantId,
+                versionId,
+                qualifier,
+                buildNumber);
+        final var syncVersionJenkinsRequestRequest = new SyncVersionJenkinsRequestRequest(versionJenkinsRequest);
+        versionService.syncVersionJenkinsRequest(syncVersionJenkinsRequestRequest);
+        return versionJenkinsRequest;
+    }
+
+    public VersionImageRefModel createVersionImageRef(final VersionModel version) {
+        final var tenantId = version.getTenantId();
+        final var versionId = version.getId();
+        final var versionImageRef = versionImageRefModelFactory.create(tenantId,
+                versionId,
+                VersionImageRefQualifierEnum.UNIVERSAL,
+                "universal:latest");
+        final var syncVersionImageRefRequest = new SyncVersionImageRefRequest(versionImageRef);
+        versionService.syncVersionImageRef(syncVersionImageRefRequest);
+        return versionImageRef;
     }
 
     public VersionLobbyRequestModel createVersionLobbyRequest(final VersionModel version) {

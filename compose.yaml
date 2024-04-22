@@ -13,19 +13,19 @@ services:
       - omgservers
     environment:
       - DOCKER_TLS_CERTDIR=/certs
-    command: ["--insecure-registry=registry:5000"]
+    command: [ "--insecure-registry=registry:5000" ]
   registry:
     image: "registry:2.8.3"
     container_name: "registry"
     ports:
-      - "5000:5000"
+      - "5050:5000"
     networks:
       - omgservers
   builder:
     image: "omgservers/omgservers-builder:1.0.0-SNAPSHOT"
     container_name: "builder"
     ports:
-      - "8080:8080"
+      - "7070:8080"
       - "50000:50000"
     volumes:
       - docker-certs:/certs/client:ro
@@ -33,12 +33,14 @@ services:
     networks:
       - omgservers
     environment:
-      - JENKINS_URL=http://localhost:8080
+      - JENKINS_URL=http://localhost:7070
       - JENKINS_ADMIN_ID=admin
       - JENKINS_ADMIN_PASSWORD=admin
+      - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
+      - DOCKER_REGISTRY=http://registry:5000
 volumes:
   docker-certs:
   builder-data:

@@ -26,7 +26,7 @@ jenkins:
         freeSpaceThreshold: "1GiB"
         freeSpaceWarningThreshold: "2GiB"
     - "responseTime"
-  numExecutors: 2
+  numExecutors: 1
   primaryView:
     all:
       name: "all"
@@ -42,15 +42,6 @@ jenkins:
       users:
         - id: ${JENKINS_ADMIN_ID}
           password: ${JENKINS_ADMIN_PASSWORD}
-          properties:
-            - "apiToken"
-            - "consoleUrlProvider"
-            - "mailer"
-            - "myView"
-            - preferredProvider:
-                providerId: "default"
-            - "timezone"
-            - "experimentalFlags"
   slaveAgentPort: 50000
   updateCenter:
     sites:
@@ -93,4 +84,4 @@ tool:
     globalSettingsProvider: "standard"
     settingsProvider: "standard"
 jobs:
-  - file: /var/jobs/luajit-worker-builder.seed-job.groovy
+  - file: /var/jobs/luajit-worker-builder-v1.seed-job.groovy
