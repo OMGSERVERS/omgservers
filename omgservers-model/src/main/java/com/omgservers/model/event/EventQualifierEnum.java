@@ -7,6 +7,7 @@ import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBod
 import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
+import com.omgservers.model.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingFinishedEventBodyModel;
@@ -159,6 +160,7 @@ public enum EventQualifierEnum {
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class, false),
     VERSION_DEPLOYMENT_REQUESTED(VersionDeploymentRequestedEventBodyModel.class, false),
+    RUNTIME_DEPLOYMENT_REQUESTED(RuntimeDeploymentRequestedEventBodyModel.class, false),
     CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),
     MATCHMAKER_MESSAGE_RECEIVED(MatchmakerMessageReceivedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),

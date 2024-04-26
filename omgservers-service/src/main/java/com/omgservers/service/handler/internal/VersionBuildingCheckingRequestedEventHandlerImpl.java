@@ -111,8 +111,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
         final var versionId = versionJenkinsRequest.getVersionId();
         final var qualifier = versionJenkinsRequest.getQualifier();
         final var buildNumber = versionJenkinsRequest.getBuildNumber();
-        log.info(
-                "Checking jenkins request, versionJenkinsRequest={}/{}, versionId={}, qualifier={}, buildNumber={}",
+        log.info("Checking jenkins request, versionJenkinsRequest={}/{}, versionId={}, qualifier={}, buildNumber={}",
                 tenantId,
                 versionJenkinsRequest.getId(),
                 versionId,
@@ -120,7 +119,11 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
                 buildNumber);
 
         return getLuaJitWorkerBuilderV1Request(buildNumber)
-                .flatMap(imageId -> syncVersionImageRef(versionJenkinsRequest, imageId, idempotencyKey))
+                .flatMap(imageId -> {
+                    log.info("Jenkins job was finished, qualifier={}, buildNumber={}, imageId={}",
+                            qualifier, buildNumber, imageId);
+                    return syncVersionImageRef(versionJenkinsRequest, imageId, idempotencyKey);
+                })
                 .map(created -> JenkinsRequestResultEnum.FINISHED)
                 .onFailure(ServerSideBadRequestException.class)
                 .recoverWithUni(t -> {

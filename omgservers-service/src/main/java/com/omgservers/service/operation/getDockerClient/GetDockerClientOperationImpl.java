@@ -28,8 +28,13 @@ class GetDockerClientOperationImpl implements GetDockerClientOperation {
     @Override
     public synchronized DockerClient getClient(final URI uri) {
         if (!cache.containsKey(uri)) {
+            final var tlsVerify = getConfigOperation.getServiceConfig().docker().tlsVerify();
+            final var certPath = getConfigOperation.getServiceConfig().docker().certPath();
+
             final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
                     .withDockerHost(uri.toString())
+                    .withDockerTlsVerify(tlsVerify)
+                    .withDockerCertPath(certPath)
                     .build();
 
             final var httpClient = new ZerodepDockerHttpClient.Builder()

@@ -1,5 +1,6 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.model.dto.pool.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.pool.SyncPoolRequest;
 import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.model.dto.pool.poolServer.SyncPoolServerRequest;
@@ -14,6 +15,7 @@ import com.omgservers.model.poolSeverContainer.PoolServerContainerConfigModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.model.root.RootModel;
 import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.pool.PoolServerContainerModelFactory;
@@ -45,7 +47,22 @@ public class PoolTestDataFactory {
         final var rootId = root.getId();
         final var defaultPoolId = root.getDefaultPoolId();
 
-        final var pool = poolModelFactory.create(defaultPoolId, rootId);
+        try {
+            final var getPoolRequest = new GetPoolRequest(defaultPoolId);
+            log.info("Default pool was already created, defaultPoolId={}", defaultPoolId);
+            return poolService.getPool(getPoolRequest).getPool();
+        } catch (ServerSideNotFoundException e) {
+            final var pool = poolModelFactory.create(defaultPoolId, rootId);
+            final var syncPoolRequest = new SyncPoolRequest(pool);
+            poolService.syncPool(syncPoolRequest);
+            return pool;
+        }
+    }
+
+    public PoolModel createPool(final RootModel root) {
+        final var rootId = root.getId();
+
+        final var pool = poolModelFactory.create(rootId);
         final var syncPoolRequest = new SyncPoolRequest(pool);
         poolService.syncPool(syncPoolRequest);
         return pool;
@@ -87,7 +104,7 @@ public class PoolTestDataFactory {
 
         final var dockerImage = getConfigOperation.getServiceConfig().workers().dockerImage();
         final var config = PoolServerContainerConfigModel.create();
-        config.setImage(dockerImage);
+        config.setImageId(dockerImage);
         config.setCpuLimit(1000);
         config.setMemoryLimit(2048);
         config.setEnvironment(new HashMap<>());

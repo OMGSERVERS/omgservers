@@ -20,10 +20,10 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -60,7 +60,8 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
         return getPoolServerContainer(poolId, serverId, id)
                 .flatMap(poolServerContainer -> {
-                    log.info("Pool server container was created, id={}/{}/{}", poolId, serverId, id);
+                    final var imageId = poolServerContainer.getConfig().getImageId();
+                    log.info("Pool server container was created, id={}/{}/{}, image={}", poolId, serverId, id, imageId);
 
                     return syncRuntimePoolServerContainerRef(poolServerContainer)
                             .flatMap(created -> getPoolServer(poolId, serverId)
@@ -114,7 +115,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
-                    final var image = poolServerContainer.getConfig().getImage();
+                    final var imageId = poolServerContainer.getConfig().getImageId();
                     final var name = poolServerContainer.getId().toString();
                     final var environment = poolServerContainer.getConfig().getEnvironment().entrySet().stream()
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
@@ -125,7 +126,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                     final var dockerNetwork = getConfigOperation.getServiceConfig().workers().dockerNetwork();
 
                     try {
-                        final var createContainerResponse = dockerClient.createContainerCmd(image)
+                        final var createContainerResponse = dockerClient.createContainerCmd(imageId)
                                 .withName(name)
                                 .withEnv(environment)
                                 .withExposedPorts(ExposedPort.parse("8080/tcp"))

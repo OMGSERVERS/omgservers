@@ -18,7 +18,7 @@ public class PoolServerContainerConfigModel {
     }
 
     @NotNull
-    String image;
+    String imageId;
 
     @NotNull
     Integer cpuLimit;

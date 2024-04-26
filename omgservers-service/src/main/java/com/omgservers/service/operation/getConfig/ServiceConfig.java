@@ -1,6 +1,8 @@
 package com.omgservers.service.operation.getConfig;
 
 import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithConverter;
+import org.eclipse.microprofile.config.spi.Converter;
 
 import java.net.URI;
 import java.util.List;
@@ -19,6 +21,8 @@ public interface ServiceConfig {
     RelayJobConfig relayJob();
 
     ClientsConfig clients();
+
+    DockerConfig docker();
 
     WorkersConfig workers();
 
@@ -52,6 +56,13 @@ public interface ServiceConfig {
         long tokenLifetime();
 
         long inactiveInterval();
+    }
+
+    interface DockerConfig {
+        boolean tlsVerify();
+
+        @WithConverter(UserHomeConverter.class)
+        String certPath();
     }
 
     interface WorkersConfig {
@@ -96,5 +107,12 @@ public interface ServiceConfig {
         String userId();
 
         String userToken();
+    }
+
+    class UserHomeConverter implements Converter<String> {
+        @Override
+        public String convert(String path) throws IllegalArgumentException, NullPointerException {
+            return path.replaceFirst("^~", System.getProperty("user.home"));
+        }
     }
 }
