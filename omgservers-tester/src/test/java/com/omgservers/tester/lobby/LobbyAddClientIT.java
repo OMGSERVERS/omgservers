@@ -33,7 +33,7 @@ public class LobbyAddClientIT extends BaseTestClass {
     @Test
     void lobbyAddClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
+                        require("omgservers").enter_loop(function(self, command)
                             if command.qualifier == "ADD_CLIENT" then
                                 return {
                                     {
@@ -47,11 +47,9 @@ public class LobbyAddClientIT extends BaseTestClass {
                                     }
                                 }
                             end
-                        end
+                        end)
                         """,
                 """
-                        function handle_command(self, command)
-                        end
                         """);
 
         Thread.sleep(16_000);

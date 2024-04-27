@@ -36,7 +36,7 @@ public class LobbyHandleMessageIT extends BaseTestClass {
     void lobbyHandleMessage() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        function handle_command(self, command)
+                        require("omgservers").enter_loop(function(self, command)
                             if command.qualifier == "HANDLE_MESSAGE" then
                                 local var message = command.message
                                 assert(message.text == "helloworld", "message.text is wrong")
@@ -52,11 +52,9 @@ public class LobbyHandleMessageIT extends BaseTestClass {
                                     }
                                 }
                             end
-                        end
+                        end)
                         """,
-                """
-                        function handle_command(self, command)
-                        end
+                """                        
                         """);
 
         Thread.sleep(10000);

@@ -35,6 +35,9 @@ pipeline {
                     RUN luarocks install lua-cjson
                     RUN luarocks install inspect
                     RUN luarocks install base64
+                    ADD lua /home/user/bin/lua
+                    WORKDIR /home/user/bin/lua
+                    CMD ["luajit", "main.lua"]
                 """
                 script {
                     docker.withRegistry("${env.DOCKER_REGISTRY}") {

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Scanner;
 
 @Slf4j
 @ApplicationScoped
@@ -50,10 +51,10 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var stageSecret = createProjectDeveloperResponse.getSecret();
 
         final var sourceCode = VersionSourceCodeModel.create();
-        sourceCode.getFiles().add(new EncodedFileModel("lobby.lua", Base64.getEncoder()
+        sourceCode.getFiles().add(new EncodedFileModel("main.lua", Base64.getEncoder()
                 .encodeToString(lobby.getBytes(StandardCharsets.UTF_8))));
-        sourceCode.getFiles().add(new EncodedFileModel("match.lua", Base64.getEncoder()
-                .encodeToString(match.getBytes(StandardCharsets.UTF_8))));
+        sourceCode.getFiles().add(new EncodedFileModel("omgservers.lua", Base64.getEncoder()
+                .encodeToString(getOmgserversLua().getBytes(StandardCharsets.UTF_8))));
         final var createVersionDeveloperResponse =
                 developerApiTester.createVersion(developerToken, tenantId, stageId, versionConfig, sourceCode);
         final var versionId = createVersionDeveloperResponse.getId();
@@ -68,5 +69,12 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .stageSecret(stageSecret)
                 .versionId(versionId)
                 .build();
+    }
+
+    String getOmgserversLua() {
+        final var inputStream = this.getClass().getResourceAsStream("/omgservers.lua");
+        try (Scanner scanner = new Scanner(inputStream, "UTF-8")) {
+            return scanner.useDelimiter("\\A").next();
+        }
     }
 }
