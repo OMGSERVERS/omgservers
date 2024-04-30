@@ -39,12 +39,11 @@ public class MatchmakingNewMatchAssignmentIT extends BaseTestClass {
     @Test
     void matchmakingNewMatchAssignmentIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                        end
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                            end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 1, 1, new ArrayList<>() {{

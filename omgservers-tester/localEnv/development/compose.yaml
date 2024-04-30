@@ -1,19 +1,15 @@
 version: "3.8"
 services:
   docker:
-    image: "docker:dind"
+    image: "alpine/socat"
     container_name: "docker"
-    privileged: true
-    ports:
-      - "2376:2376"
-    volumes:
-      - ~/.docker/certs:/certs/client
-      - builder-data:/var/jenkins_home
     networks:
       - omgservers
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
-    command: [ "--insecure-registry=registry:5000" ]
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+    ports:
+      - "2375:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   database:
     image: "postgres:15.1"
     container_name: "database"
@@ -50,10 +46,6 @@ services:
     container_name: "builder"
     ports:
       - "7070:8080"
-      - "50000:50000"
-    volumes:
-      - ~/.docker/certs:/certs/client:ro
-      - builder-data:/var/jenkins_home
     networks:
       - omgservers
     environment:
@@ -61,12 +53,8 @@ services:
       - JENKINS_ADMIN_ID=admin
       - JENKINS_ADMIN_PASSWORD=admin
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
-      - DOCKER_HOST=tcp://docker:2376
-      - DOCKER_CERT_PATH=/certs/client
-      - DOCKER_TLS_VERIFY=1
-      - DOCKER_REGISTRY=http://registry:5000
-volumes:
-  builder-data:
+      - DOCKER_HOST=tcp://docker:2375
+      - DOCKER_REGISTRY=http://localhost:5050
 networks:
   omgservers:
     name: omgservers

@@ -17,17 +17,21 @@ import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
+import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 public class DeveloperApiTester {
 
+    final GetLuaFileOperation getLuaFileOperation;
     final GetConfigOperation getConfigOperation;
 
     final ObjectMapper objectMapper;
@@ -103,8 +107,7 @@ public class DeveloperApiTester {
                                                         final Long tenantId,
                                                         final Long stageId,
                                                         final VersionConfigModel versionConfig,
-                                                        final String lobbyScript,
-                                                        final String matchScript)
+                                                        final String mainLua)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -117,9 +120,10 @@ public class DeveloperApiTester {
                 .multiPart("config.json", "config.json",
                         objectMapper.writeValueAsString(versionConfig).getBytes(),
                         "application/octet-stream")
-                .multiPart("lobby.lua", "lobby.lua", lobbyScript.getBytes(),
+                .multiPart("lobby.lua", "main.lua", mainLua.getBytes(StandardCharsets.UTF_8),
                         "application/octet-stream")
-                .multiPart("match.lua", "match.lua", matchScript.getBytes(),
+                .multiPart("match.lua", "omgservers.lua", getLuaFileOperation.getOmgserversLua()
+                                .getBytes(StandardCharsets.UTF_8),
                         "application/octet-stream")
                 .when().put("/omgservers/v1/entrypoint/developer/request/upload-version");
         responseSpecification.then().statusCode(200);

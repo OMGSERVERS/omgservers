@@ -38,29 +38,27 @@ public class MatchHandleMessageIT extends BaseTestClass {
 
     @Test
     void matchHandleMessageIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                                            
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                assert(message.text == "helloworld", "message.text is wrong")
-                                return {
-                                    {
-                                        qualifier = "RESPOND_CLIENT",
-                                        body =  {
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "match_message_was_handled"
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    assert(message.text == "helloworld", "message.text is wrong")
+                                    return {
+                                        {
+                                            qualifier = "RESPOND_CLIENT",
+                                            body =  {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "match_message_was_handled"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 1, 16, new ArrayList<>() {{

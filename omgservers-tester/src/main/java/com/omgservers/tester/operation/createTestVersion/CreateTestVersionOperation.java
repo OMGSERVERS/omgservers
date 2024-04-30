@@ -8,11 +8,9 @@ import java.io.IOException;
 public interface CreateTestVersionOperation {
 
     Long createTestVersion(TestVersionModel testVersion,
-                           String newLobbyScript,
-                           String newMatchScript) throws IOException;
+                           String mainLua) throws IOException;
 
     Long createTestVersion(TestVersionModel testVersion,
-                           String newLobbyScript,
-                           String newMatchScript,
-                           VersionConfigModel newVersionConfig) throws IOException;
+                           String mainLua,
+                           VersionConfigModel versionConfig) throws IOException;
 }

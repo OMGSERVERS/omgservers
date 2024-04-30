@@ -6,7 +6,6 @@ import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.BaseTestClass;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -14,7 +13,6 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -38,27 +36,26 @@ public class MatchAddClientIT extends BaseTestClass {
 
     @Test
     void matchAddClientIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                            if command.qualifier == "ADD_CLIENT" then
-                                assert(command.group_name == "players", "command.group_name is wrong")
-                                return {
-                                    {
-                                        qualifier = "RESPOND_CLIENT",
-                                        body = {
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "match_client_was_added"
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "ADD_CLIENT" then
+                                    assert(command.group_name == "players", "command.group_name is wrong")
+                                    return {
+                                        {
+                                            qualifier = "RESPOND_CLIENT",
+                                            body = {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "match_client_was_added"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 2, 16, new ArrayList<>() {{

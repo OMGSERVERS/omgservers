@@ -40,38 +40,34 @@ public class MatchKickClientIT extends BaseTestClass {
     @Test
     void matchKickClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                                                                                     
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                
-                                return {
-                                    {
-                                        qualifier = "KICK_CLIENT",
-                                        body = {
-                                            client_id = command.message.client_id
-                                        }
-                                    }
-                                }
-                            end
-                                                
-                            if command.qualifier == "DELETE_CLIENT" then
-                                return {
-                                    {
-                                        qualifier = "BROADCAST_MESSAGE",
-                                        body =  {
-                                            message = {
-                                                text = "client_was_deleted"
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    return {
+                                        {
+                                            qualifier = "KICK_CLIENT",
+                                            body = {
+                                                client_id = command.message.client_id
                                             }
                                         }
                                     }
-                                }
+                                end
+                                if command.qualifier == "DELETE_CLIENT" then
+                                    return {
+                                        {
+                                            qualifier = "BROADCAST_MESSAGE",
+                                            body =  {
+                                                message = {
+                                                    text = "client_was_deleted"
+                                                }
+                                            }
+                                        }
+                                    }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 2, 16, new ArrayList<>() {{

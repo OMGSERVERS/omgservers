@@ -1,11 +1,12 @@
 local socket = require("socket")
 local http = require("socket.http")
 local ltn12 = require("ltn12")
+
 local json = require("cjson")
+json.encode_empty_table_as_object(false)
+
 local inspect = require("inspect")
 local base64 = require("base64")
-
-json.encode_empty_table_as_object(false)
 
 local service_url = os.getenv("OMGSERVERS_URL")
 if not service_url then
@@ -96,25 +97,6 @@ local function create_token()
     end
 end
 
-local function get_version(raw_token)
-    if not raw_token then
-        error("raw token is nil")
-    end
-
-    local request_body = {
-        runtime_id = runtime_id
-    }
-
-    local response_body, status_code = request_endpoint(get_version_url, request_body, raw_token)
-    if response_body then
-        local version_id = response_body.version.id
-        log("Version was got", string.format("%.0f", version_id))
-        return response_body.version
-    else
-        return nil, "version was not got, status_code=" .. status_code
-    end
-end
-
 local function interchange(raw_token, outgoing_commands, consumed_commands_ids)
     if not raw_token then
         error("raw token is nil")
@@ -136,58 +118,17 @@ local function interchange(raw_token, outgoing_commands, consumed_commands_ids)
     end
 end
 
-local raw_token, error_text = create_token()
-if not raw_token then
-    error(error_text)
-end
-
-local version, error_text = get_version(raw_token)
-if not version then
-    error(error_text)
-end
-
-local source_code = {}
-for index, file in ipairs(version.source_code.files) do
-    local file_name = file.file_name
-    local base64content = file.base64content
-    local file_content = base64.decode(base64content)
-    log("File name", file_name)
-    log("Base64 content", base64content)
-    log("File content", file_content)
-    source_code[file_name] = file_content
-end
-
-local custom_loader = function(module_name)
-    local file_name = module_name .. ".lua"
-    log("Search module", module_name)
-    if source_code[file_name] then
-        return assert(loadstring(source_code[file_name]))
-    else
-        return nil, "module was not found, " .. module_name
-    end
-end
-table.insert(package.loaders, custom_loader)
-
-local module_lua
-if runtime_qualifier == "LOBBY" then
-    module_lua = require("lobby")
-elseif runtime_qualifier == "MATCH" then
-    module_lua = require("match")
-else
-    error("unknown runtime qualifier" .. runtime_qualifier)
-end
-
+local handler_self = {}
 local outgoing_commands = {}
 local consumed_commands_ids = {}
 
-local handler_self = {}
-local finished = false
-while not finished do
+local function iterate(raw_token, handler)
     local incoming_commands, error_text = interchange(raw_token, outgoing_commands, consumed_commands_ids)
-    if not incoming_commands then
+    if error_text then
         error(error_text)
     end
 
+    outgoing_commands = {}
     consumed_commands_ids = {}
     for index, incoming_command in ipairs(incoming_commands) do
         local id = incoming_command.id
@@ -195,7 +136,7 @@ while not finished do
         local command_body = incoming_command.body
         log("Handle command", string.format("%.0f", id), qualifier)
         log("Command body", inspect(command_body, {newline=""}))
-        local result_commands = handle_command(handler_self, command_body)
+        local result_commands = handler(handler_self, runtime_qualifier, command_body)
         if result_commands then
             log("Result commands", inspect(result_commands))
             for result_command_index, result_command in ipairs(result_commands) do
@@ -207,8 +148,24 @@ while not finished do
     end
 
     log("Consumed", inspect(consumed_commands_ids, {newline=""}))
-
-    socket.sleep(1)
 end
 
-log("Finished")
+local function enter_loop(handler)
+    local raw_token, error_text = create_token()
+    if error_text then
+        error(error_text)
+    end
+
+    local finished = false
+    while not finished do
+        iterate(raw_token, handler)
+        socket.sleep(1)
+    end
+
+    log("Loop finished")
+end
+
+return {
+    qualifier = runtime_qualifier,
+    enter_loop = enter_loop
+}

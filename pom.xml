@@ -30,7 +30,7 @@
         <module>omgservers-document</module>
         <module>omgservers-service</module>
         <module>omgservers-model</module>
-        <module>omgservers-worker</module>
+        <module>omgservers-runtime</module>
         <module>omgservers-tester</module>
         <module>omgservers-ctl</module>
         <module>omgservers-builder</module>

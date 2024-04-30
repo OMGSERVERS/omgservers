@@ -7,7 +7,6 @@ import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersion
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
@@ -27,12 +26,8 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
     void getTenantDashboardIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                        end
+                        require("omgservers").enter_loop(function(self, command)
+                        end)
                         """);
 
         Thread.sleep(10000);

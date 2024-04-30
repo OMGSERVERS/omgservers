@@ -7,7 +7,6 @@ import com.omgservers.tester.operation.uploadTestVersion.UploadTestVersionOperat
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
@@ -27,21 +26,15 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
     void uploadNewVersionIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                        end
+                        require("omgservers").enter_loop(function(self, command)
+                        end)
                         """);
 
         Thread.sleep(10_000);
 
         try {
             uploadTestVersionOperation.uploadTestVersion(testVersion, """                                               
-                            """,
-                    """
-                            """);
+                    """);
 
             Thread.sleep(120_000);
         } finally {

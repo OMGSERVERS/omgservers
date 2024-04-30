@@ -8,11 +8,9 @@ import java.io.IOException;
 public interface UploadTestVersionOperation {
 
     Long uploadTestVersion(TestVersionModel testVersion,
-                           String newLobbyScript,
-                           String newMatchScript) throws IOException;
+                           String mainLua) throws IOException;
 
     Long uploadTestVersion(TestVersionModel testVersion,
-                           String newLobbyScript,
-                           String newMatchScript,
+                           String mainLua,
                            VersionConfigModel newVersionConfig) throws IOException;
 }

@@ -36,25 +36,26 @@ public class LobbyHandleMessageIT extends BaseTestClass {
     void lobbyHandleMessage() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, command)
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                assert(message.text == "helloworld", "message.text is wrong")
-                                return {
-                                    {
-                                        qualifier = "RESPOND_CLIENT",
-                                        body = {
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "message_was_handled"
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    assert(message.text == "helloworld", "message.text is wrong")
+                                    return {
+                                        {
+                                            qualifier = "RESPOND_CLIENT",
+                                            body = {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "message_was_handled"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
+                            elseif qualifier == "MATCH" then
                             end
                         end)
-                        """,
-                """                        
                         """);
 
         Thread.sleep(10000);

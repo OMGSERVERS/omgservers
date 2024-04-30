@@ -37,33 +37,31 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
 
     @Test
     void matchStopMatchmakingIT() throws Exception {
-        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                                                
-                            if command.qualifier == "ADD_CLIENT" then
-                                return {
-                                    {
-                                        qualifier = "STOP_MATCHMAKING",
-                                        body = {
-                                            reason = "why not?"
-                                        }
-                                    },
-                                    {
-                                        qualifier = "RESPOND_CLIENT",
-                                        body = {
-                                            client_id = command.client_id,
-                                            message = {
-                                                text = "matchmaking_was_stop"
+        final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "ADD_CLIENT" then
+                                    return {
+                                        {
+                                            qualifier = "STOP_MATCHMAKING",
+                                            body = {
+                                                reason = "finished"
+                                            }
+                                        },
+                                        {
+                                            qualifier = "RESPOND_CLIENT",
+                                            body = {
+                                                client_id = command.client_id,
+                                                message = {
+                                                    text = "matchmaking_was_stop"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 1, 16, new ArrayList<>() {{

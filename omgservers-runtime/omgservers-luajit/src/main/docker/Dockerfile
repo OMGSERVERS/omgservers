@@ -4,5 +4,3 @@ RUN luarocks install luasocket
 RUN luarocks install lua-cjson
 RUN luarocks install inspect
 RUN luarocks install base64
-ADD src/main/docker/entrypoint.lua /home/user/bin/entrypoint.lua
-CMD ["luajit", "/home/user/bin/entrypoint.lua"]

@@ -34,11 +34,12 @@ public class LobbyAssignmentIT extends BaseTestClass {
     @Test
     void lobbyAssignmentIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        require("omgservers").enter_loop(function(self, command)
-                        end)
-                        """,
-                """                        
-                        """);
+                require("omgservers").enter_loop(function(self, qualifier, command)
+                    if qualifier == "LOBBY" then
+                    elseif qualifier == "MATCH" then
+                    end
+                end)
+                """);
 
         Thread.sleep(10_000);
 

@@ -51,5 +51,5 @@ jobs:
         run: docker push omgservers/omgservers-service:1.0.0-SNAPSHOT
       - name: Push omgservers-builder
         run: docker push omgservers/omgservers-builder:1.0.0-SNAPSHOT
-      - name: Push omgservers-worker
-        run: docker push omgservers/omgservers-worker:1.0.0-SNAPSHOT
+      - name: Push omgservers-luajit
+        run: docker push omgservers/omgservers-luajit:1.0.0-SNAPSHOT

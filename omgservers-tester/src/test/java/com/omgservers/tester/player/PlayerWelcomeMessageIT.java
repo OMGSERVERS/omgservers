@@ -31,12 +31,11 @@ public class PlayerWelcomeMessageIT extends BaseTestClass {
     @Test
     void welcomeMessageIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                        end
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                            end
+                        end)
                         """);
 
         Thread.sleep(10_000);

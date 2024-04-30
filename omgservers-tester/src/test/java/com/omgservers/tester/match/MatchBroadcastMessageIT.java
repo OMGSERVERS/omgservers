@@ -39,27 +39,25 @@ public class MatchBroadcastMessageIT extends BaseTestClass {
     @Test
     void matchBroadcastMessageIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                                                
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                assert(message.text == "broadcast_request", "message.text is wrong")
-                                return {
-                                    {
-                                        qualifier = "BROADCAST_MESSAGE",
-                                        body = {
-                                            message = {
-                                                text = "hello_all"
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    assert(message.text == "broadcast_request", "message.text is wrong")
+                                    return {
+                                        {
+                                            qualifier = "BROADCAST_MESSAGE",
+                                            body = {
+                                                message = {
+                                                    text = "hello_all"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 2, 16, new ArrayList<>() {{

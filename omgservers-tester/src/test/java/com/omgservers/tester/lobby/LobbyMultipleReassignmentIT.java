@@ -40,23 +40,22 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
     @Test
     void lobbyMultipleReassignmentIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)                            
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                return {
-                                    {
-                                        qualifier = "KICK_CLIENT",
-                                        body = {
-                                            client_id = command.client_id
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    return {
+                                        {
+                                            qualifier = "KICK_CLIENT",
+                                            body = {
+                                                client_id = command.client_id
+                                            }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 1, 16, new ArrayList<>() {{

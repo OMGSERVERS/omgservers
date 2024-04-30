@@ -6,7 +6,6 @@ import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.BaseTestClass;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
@@ -16,7 +15,6 @@ import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -41,35 +39,32 @@ public class MatchMulticastMessageIT extends BaseTestClass {
     @Test
     void matchMulticastMessageIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        function handle_command(self, command)
-                        end
-                        """,
-                """
-                        function handle_command(self, command)
-                            if command.qualifier == "INIT_RUNTIME" then
-                                self.clients = {}
-                            end
-                                               
-                            if command.qualifier == "ADD_CLIENT" then
-                                table.insert(self.clients, command.client_id)
-                            end
-                            
-                            if command.qualifier == "HANDLE_MESSAGE" then
-                                local var message = command.message
-                                assert(message.text == "multicast_request", "message.text is wrong")
-                                return {
-                                    {
-                                        qualifier = "MULTICAST_MESSAGE",
-                                        body =  {
-                                            clients = self.clients,
-                                            message = {
-                                                text = "hello_client_1_and_client_2"
+                        require("omgservers").enter_loop(function(self, qualifier, command)
+                            if qualifier == "LOBBY" then
+                            elseif qualifier == "MATCH" then
+                                if command.qualifier == "INIT_RUNTIME" then
+                                    self.clients = {}
+                                end
+                                if command.qualifier == "ADD_CLIENT" then
+                                    table.insert(self.clients, command.client_id)
+                                end
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var message = command.message
+                                    assert(message.text == "multicast_request", "message.text is wrong")
+                                    return {
+                                        {
+                                            qualifier = "MULTICAST_MESSAGE",
+                                            body =  {
+                                                clients = self.clients,
+                                                message = {
+                                                    text = "hello_client_1_and_client_2"
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                end
                             end
-                        end
+                        end)
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 2, 16, new ArrayList<>() {{

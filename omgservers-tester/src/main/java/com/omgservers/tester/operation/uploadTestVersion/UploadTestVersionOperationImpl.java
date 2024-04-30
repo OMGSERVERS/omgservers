@@ -21,25 +21,21 @@ class UploadTestVersionOperationImpl implements UploadTestVersionOperation {
 
     @Override
     public Long uploadTestVersion(final TestVersionModel testVersion,
-                                  final String newLobbyScript,
-                                  final String newMatchScript) throws IOException {
+                                  final String mainLua) throws IOException {
         return uploadTestVersion(testVersion,
-                newLobbyScript,
-                newMatchScript,
+                mainLua,
                 VersionConfigModel.create());
     }
 
     @Override
     public Long uploadTestVersion(final TestVersionModel testVersion,
-                                  final String newLobbyScript,
-                                  final String newMatchScript,
+                                  final String mainLua,
                                   final VersionConfigModel newVersionConfig) throws IOException {
         final var uploadVersionDeveloperResponse = developerApiTester.uploadVersion(testVersion.getDeveloperToken(),
                 testVersion.getTenantId(),
                 testVersion.getStageId(),
                 newVersionConfig,
-                newLobbyScript,
-                newMatchScript);
+                mainLua);
 
         return uploadVersionDeveloperResponse.getId();
     }
