@@ -29,13 +29,13 @@ pipeline {
         stage("Build") {
             steps {
                 writeFile file: "Dockerfile", text: """
-                    FROM omgservers/omgservers-luajit:1.0.0-SNAPSHOT                    
+                    FROM ${env.DOCKER_REGISTRY}/omgservers/omgservers-luajit:1.0.0-SNAPSHOT                    
                     ADD lua /home/user/bin/lua
                     WORKDIR /home/user/bin/lua
                     CMD ["luajit", "main.lua"]
                 """
                 script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY}") {
+                    docker.withRegistry("https://${env.DOCKER_REGISTRY}") {
                         def dockerImage = docker.build("${groupId}/${containerName}:${versionId}")
                         dockerImage.push()
                         def imageName = dockerImage.imageName()

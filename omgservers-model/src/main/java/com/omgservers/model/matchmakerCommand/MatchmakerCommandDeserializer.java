@@ -41,12 +41,12 @@ public class MatchmakerCommandDeserializer extends StdDeserializer<MatchmakerCom
             matchmakerCommandModel.setId(Long.valueOf(idNode.asText()));
         }
 
-        final var idempotencyKeyNode = root.get("idempotencyKey");
+        final var idempotencyKeyNode = root.get("idempotency_key");
         if (idempotencyKeyNode != null) {
             matchmakerCommandModel.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
-        final var matchmakerIdNode = root.get("matchmakerId");
+        final var matchmakerIdNode = root.get("matchmaker_id");
         if (matchmakerIdNode != null) {
             matchmakerCommandModel.setMatchmakerId(Long.valueOf(matchmakerIdNode.asText()));
         }

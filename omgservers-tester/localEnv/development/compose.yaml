@@ -54,7 +54,7 @@ services:
       - JENKINS_ADMIN_PASSWORD=admin
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2375
-      - DOCKER_REGISTRY=http://localhost:5050
+      - DOCKER_REGISTRY=localhost:5050
 networks:
   omgservers:
     name: omgservers

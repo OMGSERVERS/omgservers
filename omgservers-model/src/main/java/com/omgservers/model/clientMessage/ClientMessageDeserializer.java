@@ -42,12 +42,12 @@ public class ClientMessageDeserializer extends StdDeserializer<ClientMessageMode
             clientMessage.setId(Long.valueOf(idNode.asText()));
         }
 
-        final var idempotencyKeyNode = root.get("idempotencyKey");
+        final var idempotencyKeyNode = root.get("idempotency_key");
         if (idempotencyKeyNode != null) {
             clientMessage.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
-        final var clientIdNode = root.get("clientId");
+        final var clientIdNode = root.get("client_id");
         if (clientIdNode != null) {
             clientMessage.setClientId(Long.valueOf(clientIdNode.asText()));
         }

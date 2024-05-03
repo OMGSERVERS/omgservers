@@ -58,7 +58,7 @@ public class LobbyHandleMessageIT extends BaseTestClass {
                         end)
                         """);
 
-        Thread.sleep(10000);
+        Thread.sleep(16_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

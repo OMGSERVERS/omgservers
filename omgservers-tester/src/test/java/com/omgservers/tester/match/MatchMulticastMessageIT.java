@@ -73,7 +73,7 @@ public class MatchMulticastMessageIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(10_000);
+        Thread.sleep(16_000);
 
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

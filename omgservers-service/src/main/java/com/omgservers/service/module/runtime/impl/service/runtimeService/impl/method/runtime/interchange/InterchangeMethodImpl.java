@@ -89,7 +89,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                         .recoverWithUni(t -> {
                             log.warn("Outgoing command failed, " +
                                             "runtimeId={}, " +
-                                            "outgoingCommand={}" +
+                                            "outgoingCommand={}, " +
                                             "{}:{}",
                                     runtimeId,
                                     outgoingCommand,

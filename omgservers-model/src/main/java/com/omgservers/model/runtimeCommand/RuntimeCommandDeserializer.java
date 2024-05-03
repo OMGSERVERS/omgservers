@@ -41,12 +41,12 @@ public class RuntimeCommandDeserializer extends StdDeserializer<RuntimeCommandMo
             commandModel.setId(Long.valueOf(idNode.asText()));
         }
 
-        final var idempotencyKeyNode = root.get("idempotencyKey");
+        final var idempotencyKeyNode = root.get("idempotency_key");
         if (idempotencyKeyNode != null) {
             commandModel.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
-        final var runtimeIdNode = root.get("runtimeId");
+        final var runtimeIdNode = root.get("runtime_id");
         if (runtimeIdNode != null) {
             commandModel.setRuntimeId(Long.valueOf(runtimeIdNode.asText()));
         }
