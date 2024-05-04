@@ -32,11 +32,13 @@ class GetLuaJitWorkerBuilderV1MethodImpl implements GetLuaJitWorkerBuilderV1Meth
         return jenkinsClient.getLuaJitWorkerBuilderV1(buildNumber)
                 .flatMap(response -> {
                     if (Objects.nonNull(response.getInProgress()) && response.getInProgress().equals(Boolean.TRUE)) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.JENKINS_JOB_UNFINISHED);
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.JENKINS_JOB_UNFINISHED,
+                                "jenkins job is still in progress");
                     }
 
                     if (Objects.nonNull(response.getResult()) && !response.getResult().equals(ResultEnum.SUCCESS)) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.JENKINS_REQUEST_FAILED);
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.JENKINS_JOB_FAILED,
+                                "jenkins job failed, result=" + response.getResult());
                     }
 
                     return jenkinsClient.getLuaJitWorkerBuilderV1ImageArtifact(buildNumber);
