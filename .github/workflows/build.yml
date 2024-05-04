@@ -36,6 +36,8 @@ jobs:
         run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml ps
       - name: Integration testing
         run: mvn -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+      - name: Log builder job
+        run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
       - name: Log containers
         if: always()
         run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml logs
