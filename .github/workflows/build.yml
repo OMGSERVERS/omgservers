@@ -34,6 +34,8 @@ jobs:
         run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml up -d && sleep 90
       - name: Check status
         run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml ps
+      - name: Init registry
+        run: docker tag omgservers/omgservers-luajit:1.0.0-SNAPSHOT localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT && docker push localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT
       - name: Integration testing
         run: mvn -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
       - name: Log builder job
