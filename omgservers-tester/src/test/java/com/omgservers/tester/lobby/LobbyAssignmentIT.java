@@ -41,7 +41,7 @@ public class LobbyAssignmentIT extends BaseTestClass {
                 end)
                 """);
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

@@ -30,7 +30,7 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
                         end)
                         """);
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             uploadTestVersionOperation.uploadTestVersion(testVersion, """                                               

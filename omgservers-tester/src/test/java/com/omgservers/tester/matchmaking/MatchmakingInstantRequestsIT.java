@@ -51,7 +51,7 @@ public class MatchmakingInstantRequestsIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
