@@ -63,7 +63,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-1:5432/root
       - OMGSERVERS_MQ_HOST=queues-1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
@@ -87,7 +87,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-1:5432/root
       - OMGSERVERS_MQ_HOST=queues-1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
@@ -136,7 +136,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-2:5432/root
       - OMGSERVERS_MQ_HOST=queues-2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
@@ -160,7 +160,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-2:5432/root
       - OMGSERVERS_MQ_HOST=queues-2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
@@ -209,7 +209,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-3:5432/root
       - OMGSERVERS_MQ_HOST=queues-3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
@@ -233,7 +233,7 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=DEBUG
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
       - OMGSERVERS_DB_URL=postgresql://database-3:5432/root
       - OMGSERVERS_MQ_HOST=queues-3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
