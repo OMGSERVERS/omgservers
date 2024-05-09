@@ -41,7 +41,7 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
                             elseif qualifier == "MATCH" then
-                                if command.qualifier == "ADD_CLIENT" then
+                                if command.qualifier == "ADD_MATCH_CLIENT" then
                                     return {
                                         {
                                             qualifier = "STOP_MATCHMAKING",
