@@ -11,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
 import java.util.Objects;
 
 @Slf4j
@@ -38,6 +39,8 @@ class RunLuaJitWorkerBuilderV1MethodImpl implements RunLuaJitWorkerBuilderV1Meth
                     final var itemNumber = parseItemNumber(locationHeader);
                     return itemNumber;
                 })
+                // TODO: use more smart approach
+                .onItem().delayIt().by(Duration.ofSeconds(1))
                 .flatMap(itemNumber -> jenkinsClient.getQueueItem(itemNumber)
                         .map(response -> {
                             log.info("Got queue item, response={}", response);
