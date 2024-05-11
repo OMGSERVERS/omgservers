@@ -30,16 +30,15 @@ class HandleInternalRequestOperationImpl implements HandleInternalRequestOperati
                     if (shard.locked()) {
                         throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
                                 "shard is locked, shard=" + shard.shard());
-
                     }
 
                     if (shard.foreign()) {
                         var serverUri = shard.serverUri();
                         final var client = api.apply(serverUri);
-                        log.debug("Route request, targetServer={}, request={}", serverUri, request);
+                        log.trace("Route request, targetServer={}, request={}", serverUri, request);
                         return route.apply(client, request);
                     } else {
-                        log.debug("Handle request, request={}", request);
+                        log.trace("Handle request, request={}", request);
                         return handle.apply(request);
                     }
                 });

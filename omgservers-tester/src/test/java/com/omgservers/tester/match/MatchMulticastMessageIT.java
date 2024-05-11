@@ -45,7 +45,7 @@ public class MatchMulticastMessageIT extends BaseTestClass {
                                 if command.qualifier == "INIT_RUNTIME" then
                                     self.clients = {}
                                 end
-                                if command.qualifier == "ADD_CLIENT" then
+                                if command.qualifier == "ADD_MATCH_CLIENT" then
                                     table.insert(self.clients, command.client_id)
                                 end
                                 if command.qualifier == "HANDLE_MESSAGE" then
