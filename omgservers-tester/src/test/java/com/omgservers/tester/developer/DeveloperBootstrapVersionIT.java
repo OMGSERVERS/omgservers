@@ -27,7 +27,7 @@ public class DeveloperBootstrapVersionIT extends BaseTestClass {
                         """);
 
         try {
-            Thread.sleep(32_000);
+            Thread.sleep(16_000);
         } finally {
             supportApiTester.deleteTenant(testVersion.getTenantId());
         }

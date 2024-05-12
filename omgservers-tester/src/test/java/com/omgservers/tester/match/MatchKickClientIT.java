@@ -76,7 +76,7 @@ public class MatchKickClientIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(32_000);
+        Thread.sleep(16_000);
 
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

@@ -30,7 +30,7 @@ public class DeveloperCreateNewVersionIT extends BaseTestClass {
                         require("omgservers").enter_loop(function(self, command)
                         """);
 
-        Thread.sleep(32_000);
+        Thread.sleep(16_000);
 
         try {
             createTestVersionOperation.createTestVersion(testVersion,
