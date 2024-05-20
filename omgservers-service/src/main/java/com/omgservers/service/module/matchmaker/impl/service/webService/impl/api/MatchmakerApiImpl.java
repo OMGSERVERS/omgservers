@@ -113,7 +113,6 @@ public class MatchmakerApiImpl implements MatchmakerApi {
     @Override
     public Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(
             final SyncMatchmakerAssignmentRequest request) {
-        log.info("WORLD2, {}", request);
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerAssignment);
     }
 

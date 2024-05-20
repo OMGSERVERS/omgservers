@@ -9,6 +9,8 @@ import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,6 +24,9 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final PoolModule poolModule;
+
+    final GetDockerClientOperation getDockerClientOperation;
+    final GetConfigOperation getConfigOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -38,7 +43,19 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
         return getPoolServer(poolId, id)
                 .flatMap(server -> {
-                    log.info("Pool server was created, id={}/{}", poolId, id);
+
+                    final var dockerDaemonUri = server.getConfig().getDockerHostConfig().getDockerDaemonUri();
+                    final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
+
+                    try {
+                        dockerClient.pingCmd().exec();
+                        log.info("Pool server was created and checked, id={}/{}, dockerDaemonUri={}",
+                                poolId, id, dockerDaemonUri);
+                    } catch (Exception e) {
+                        log.error("Pool server was created but couldn't be reached, " +
+                                        "id={}/{}, dockerDaemonUri={}, {}:{}",
+                                poolId, id, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+                    }
 
                     return Uni.createFrom().voidItem();
                 })

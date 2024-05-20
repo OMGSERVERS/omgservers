@@ -52,7 +52,10 @@ class CreateDefaultPoolServerMethodImpl implements CreateDefaultPoolServerMethod
                                 final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
                                 try {
                                     dockerClient.pingCmd().exec();
+                                    log.info("Docker host was checked, dockerDaemonUri={}", dockerDaemonUri);
                                 } catch (Exception e) {
+                                    log.error("Docker host didn't respond, dockerDaemonUri={}, {}:{}",
+                                            dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
                                     throw new ServerSideBadRequestException(
                                             ExceptionQualifierEnum.DOCKER_DAEMON_UNREACHED, e.getMessage());
                                 }

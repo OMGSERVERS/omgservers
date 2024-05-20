@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.pool;
 
-import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -144,8 +143,9 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                                 .exec();
 
                         log.info("Start container, response={}", startContainerResponse);
-                    } catch (ConflictException e) {
-                        log.info("Conflict during star of container, {}", e.getMessage());
+                    } catch (Exception e) {
+                        // TODO: handle docker exception
+                        log.error("Start container failed, {}:{}", e.getClass().getSimpleName(), e.getMessage());
                     }
                 });
     }

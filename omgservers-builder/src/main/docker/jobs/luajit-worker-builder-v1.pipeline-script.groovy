@@ -29,7 +29,7 @@ pipeline {
         stage("Build") {
             steps {
                 writeFile file: "Dockerfile", text: """
-                    FROM ${env.DOCKER_REGISTRY}/omgservers/omgservers-luajit:1.0.0-SNAPSHOT                    
+                    FROM omgservers/omgservers-luajit:1.0.0-SNAPSHOT                    
                     ADD lua /home/user/bin/lua
                     WORKDIR /home/user/bin/lua
                     CMD ["luajit", "main.lua"]
