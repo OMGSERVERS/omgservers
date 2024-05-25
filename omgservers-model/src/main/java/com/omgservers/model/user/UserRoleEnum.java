@@ -2,6 +2,16 @@ package com.omgservers.model.user;
 
 public enum UserRoleEnum {
     /**
+     * Role which is used to interact with the service through Admin Api.
+     */
+    ADMIN(Names.ADMIN),
+
+    /**
+     * Role which is used to interact with the service through Support Api.
+     */
+    SUPPORT(Names.SUPPORT),
+
+    /**
      * Role which is used to interact with the service through Developer Api.
      */
     DEVELOPER(Names.DEVELOPER),
@@ -27,6 +37,8 @@ public enum UserRoleEnum {
     }
 
     public class Names {
+        static public final String ADMIN = "admin";
+        static public final String SUPPORT = "support";
         static public final String DEVELOPER = "developer";
         static public final String PLAYER = "player";
         static public final String WORKER = "worker";

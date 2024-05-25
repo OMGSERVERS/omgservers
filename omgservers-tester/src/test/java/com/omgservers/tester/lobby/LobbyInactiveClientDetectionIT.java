@@ -67,7 +67,7 @@ public class LobbyInactiveClientDetectionIT extends BaseTestClass {
                     ((DisconnectionReasonMessageBodyModel) disconnectionMessage.getBody()).getReason());
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

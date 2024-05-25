@@ -73,7 +73,7 @@ public class LobbyAddClientIT extends BaseTestClass {
             assertEquals("{text=client_was_added}",
                     ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

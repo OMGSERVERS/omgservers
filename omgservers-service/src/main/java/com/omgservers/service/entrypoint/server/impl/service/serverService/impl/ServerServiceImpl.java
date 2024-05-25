@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.server.impl.service.serverService.impl;
 
-import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
-import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.server.BcryptHashServerRequest;
+import com.omgservers.model.dto.server.BcryptHashServerResponse;
+import com.omgservers.model.dto.server.GenerateIdServerResponse;
+import com.omgservers.model.dto.server.PingServerServerResponse;
 import com.omgservers.service.entrypoint.server.impl.service.serverService.ServerService;
 import com.omgservers.service.entrypoint.server.impl.service.serverService.impl.method.generateId.GenerateIdMethod;
 import com.omgservers.service.entrypoint.server.impl.service.serverService.impl.method.pingServer.PingServerMethod;
@@ -24,18 +24,18 @@ class ServerServiceImpl implements ServerService {
     final GenerateIdMethod generateIdMethod;
 
     @Override
-    public Uni<PingServerAdminResponse> pingServer() {
+    public Uni<PingServerServerResponse> pingServer() {
         return pingServerMethod.pingServer();
     }
 
     @Override
-    public Uni<GenerateIdAdminResponse> generateId() {
+    public Uni<GenerateIdServerResponse> generateId() {
         return generateIdMethod.getId();
     }
 
     @Override
-    public Uni<BcryptHashAdminResponse> bcryptHash(@Valid final BcryptHashAdminRequest request) {
+    public Uni<BcryptHashServerResponse> bcryptHash(@Valid final BcryptHashServerRequest request) {
         return Uni.createFrom().item(BcryptUtil.bcryptHash(request.getValue()))
-                .map(BcryptHashAdminResponse::new);
+                .map(BcryptHashServerResponse::new);
     }
 }

@@ -136,7 +136,7 @@ public class MatchmakingInstantRequestsIT extends BaseTestClass {
                     Collections.singletonList(matchmakerAssignment5.getId()));
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

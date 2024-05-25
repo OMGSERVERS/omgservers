@@ -2,12 +2,13 @@ package com.omgservers.service.exception;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
-import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -15,14 +16,25 @@ public class ServerSideExceptionMapper {
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> illegalArgumentException(final IllegalArgumentException e) {
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.ILLEGAL_ARGUMENT_PASSED);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.ARGUMENT_WRONG);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> constraintViolationException(final ConstraintViolationException e) {
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.VALIDATION_CONSTRAINT_VIOLATED);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum
+                .VALIDATION_CONSTRAINT_VIOLATED);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<ExceptionErrorResponse> webApplicationException(final WebApplicationException e) {
+        if (Objects.nonNull(e.getResponse()) && e.getResponse().getStatus() == 400) {
+            final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.REQUEST_WRONG);
+            return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
+        } else {
+            return throwable(e);
+        }
     }
 
     @ServerExceptionMapper
@@ -70,10 +82,11 @@ public class ServerSideExceptionMapper {
     }
 
     @ServerExceptionMapper
-    public RestResponse<ExceptionErrorResponse> throwable(final Throwable e) throws IOException {
+    public RestResponse<ExceptionErrorResponse> throwable(final Throwable e) {
         log.error("Uncaught exception, {}:{}", e.getClass().getSimpleName(), e.getMessage(), e);
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.INTERNAL_EXCEPTION_OCCURRED);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum
+                .INTERNAL_EXCEPTION_OCCURRED);
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
     }
 }

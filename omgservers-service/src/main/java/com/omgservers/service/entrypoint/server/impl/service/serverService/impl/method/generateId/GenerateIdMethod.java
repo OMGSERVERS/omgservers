@@ -1,8 +1,8 @@
 package com.omgservers.service.entrypoint.server.impl.service.serverService.impl.method.generateId;
 
-import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
+import com.omgservers.model.dto.server.GenerateIdServerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GenerateIdMethod {
-    Uni<GenerateIdAdminResponse> getId();
+    Uni<GenerateIdServerResponse> getId();
 }

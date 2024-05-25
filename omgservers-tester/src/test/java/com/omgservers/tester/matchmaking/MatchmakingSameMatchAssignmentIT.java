@@ -95,7 +95,7 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
             );
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

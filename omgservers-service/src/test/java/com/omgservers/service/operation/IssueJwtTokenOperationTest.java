@@ -11,13 +11,13 @@ import jakarta.inject.Inject;
 
 @Slf4j
 @QuarkusTest
-class PrepareShardSqlOperationTest extends Assertions {
+class IssueJwtTokenOperationTest extends Assertions {
 
     @Inject
     PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Test
-    void whenPrepareShardSql() {
+    void whenIssueUserJwtToken() {
         String sql = """
                 insert into $schema.tab_user (uuid, username, password)
                 values ($1, $2, $3)

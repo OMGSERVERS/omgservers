@@ -33,6 +33,13 @@ public class UserModelFactory {
 
     public UserModel create(final Long id,
                             final UserRoleEnum role,
+                            final String passwordHash) {
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, role, passwordHash, idempotencyKey);
+    }
+
+    public UserModel create(final Long id,
+                            final UserRoleEnum role,
                             final String passwordHash,
                             final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);

@@ -63,7 +63,7 @@ public class LobbyAssignmentIT extends BaseTestClass {
                     Collections.singletonList(lobbyAssignment.getId()));
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

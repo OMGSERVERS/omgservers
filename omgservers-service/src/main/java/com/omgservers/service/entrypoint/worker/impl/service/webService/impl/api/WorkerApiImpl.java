@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
+@RolesAllowed({UserRoleEnum.Names.WORKER})
 class WorkerApiImpl implements WorkerApi {
 
     final WebService webService;

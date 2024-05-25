@@ -130,6 +130,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
+@RolesAllowed({InternalRoleEnum.Names.SERVICE})
 class TenantApiImpl implements TenantApi {
 
     final WebService webService;

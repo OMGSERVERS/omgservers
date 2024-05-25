@@ -7,6 +7,8 @@ import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
+import com.omgservers.model.dto.support.CreateTokenSupportRequest;
+import com.omgservers.model.dto.support.CreateTokenSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
@@ -24,11 +26,27 @@ public class SupportApiTester {
 
     final ObjectMapper objectMapper;
 
-    public Long createTenant() throws JsonProcessingException {
+    public String createSupportToken(final Long userId,
+                                     final String password) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
-                .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().adminUri().toString())
+                .filter(new LoggingFilter("Support"))
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(new CreateTokenSupportRequest(userId, password)))
+                .when().put("/omgservers/v1/entrypoint/support/request/create-token");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(CreateTokenSupportResponse.class);
+        return response.getRawToken();
+    }
+
+    public Long createTenant(final String token) throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Support"))
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantSupportRequest()))
                 .when().put("/omgservers/v1/entrypoint/support/request/create-tenant");
@@ -38,12 +56,13 @@ public class SupportApiTester {
         return response.getId();
     }
 
-    public Boolean deleteTenant(final Long tenantId) throws JsonProcessingException {
+    public Boolean deleteTenant(final String token,
+                                final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
-                .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().adminUri().toString())
-                .contentType(ContentType.JSON)
+                .filter(new LoggingFilter("Support"))
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantSupportRequest(tenantId)))
                 .when().put("/omgservers/v1/entrypoint/support/request/delete-tenant");
@@ -53,11 +72,13 @@ public class SupportApiTester {
         return response.getDeleted();
     }
 
-    public CreateDeveloperSupportResponse createDeveloper(final Long tenantId) throws JsonProcessingException {
+    public CreateDeveloperSupportResponse createDeveloper(final String token,
+                                                          final Long tenantId) throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
-                .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().adminUri().toString())
+                .filter(new LoggingFilter("Support"))
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateDeveloperSupportRequest(tenantId)))
                 .when().put("/omgservers/v1/entrypoint/support/request/create-developer");

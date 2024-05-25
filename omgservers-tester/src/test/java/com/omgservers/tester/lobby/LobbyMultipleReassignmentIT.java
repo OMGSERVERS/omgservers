@@ -119,7 +119,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
             Thread.sleep(16_000);
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 

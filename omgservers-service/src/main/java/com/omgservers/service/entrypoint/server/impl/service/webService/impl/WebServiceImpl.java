@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.server.impl.service.webService.impl;
 
-import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
-import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.server.BcryptHashServerRequest;
+import com.omgservers.model.dto.server.BcryptHashServerResponse;
+import com.omgservers.model.dto.server.GenerateIdServerResponse;
+import com.omgservers.model.dto.server.PingServerServerResponse;
 import com.omgservers.service.entrypoint.server.impl.service.serverService.ServerService;
 import com.omgservers.service.entrypoint.server.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -19,17 +19,17 @@ class WebServiceImpl implements WebService {
     final ServerService serverService;
 
     @Override
-    public Uni<PingServerAdminResponse> pingServer() {
+    public Uni<PingServerServerResponse> pingServer() {
         return serverService.pingServer();
     }
 
     @Override
-    public Uni<GenerateIdAdminResponse> generateId() {
+    public Uni<GenerateIdServerResponse> generateId() {
         return serverService.generateId();
     }
 
     @Override
-    public Uni<BcryptHashAdminResponse> bcryptHash(final BcryptHashAdminRequest request) {
+    public Uni<BcryptHashServerResponse> bcryptHash(final BcryptHashServerRequest request) {
         return serverService.bcryptHash(request);
     }
 }

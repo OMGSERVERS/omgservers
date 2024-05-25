@@ -116,7 +116,7 @@ public class MatchBroadcastMessageIT extends BaseTestClass {
                     ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 

@@ -7,6 +7,10 @@ import lombok.Data;
 @Builder
 public class TestVersionModel {
 
+    Long supportUserId;
+    String supportPassword;
+    String supportToken;
+
     Long tenantId;
     Long developerUserId;
     String developerPassword;

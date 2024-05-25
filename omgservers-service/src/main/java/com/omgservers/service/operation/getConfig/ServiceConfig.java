@@ -80,6 +80,8 @@ public interface ServiceConfig {
 
         BootstrapIndexConfig index();
 
+        BootstrapAdminConfig admin();
+
         BootstrapLocalHostConfig localHost();
     }
 
@@ -87,6 +89,14 @@ public interface ServiceConfig {
         boolean enabled();
 
         List<URI> servers();
+    }
+
+    interface BootstrapAdminConfig {
+        boolean enabled();
+
+        long userId();
+
+        String password();
     }
 
     interface BootstrapLocalHostConfig {

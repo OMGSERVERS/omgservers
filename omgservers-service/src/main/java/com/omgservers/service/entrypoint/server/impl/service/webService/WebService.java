@@ -1,16 +1,16 @@
 package com.omgservers.service.entrypoint.server.impl.service.webService;
 
-import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
-import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.server.BcryptHashServerRequest;
+import com.omgservers.model.dto.server.BcryptHashServerResponse;
+import com.omgservers.model.dto.server.GenerateIdServerResponse;
+import com.omgservers.model.dto.server.PingServerServerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<PingServerAdminResponse> pingServer();
+    Uni<PingServerServerResponse> pingServer();
 
-    Uni<GenerateIdAdminResponse> generateId();
+    Uni<GenerateIdServerResponse> generateId();
 
-    Uni<BcryptHashAdminResponse> bcryptHash(BcryptHashAdminRequest request);
+    Uni<BcryptHashServerResponse> bcryptHash(BcryptHashServerRequest request);
 }

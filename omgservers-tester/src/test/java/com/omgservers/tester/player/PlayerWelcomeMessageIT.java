@@ -52,7 +52,7 @@ public class PlayerWelcomeMessageIT extends BaseTestClass {
             assertNotNull(messageBody.getVersionId());
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

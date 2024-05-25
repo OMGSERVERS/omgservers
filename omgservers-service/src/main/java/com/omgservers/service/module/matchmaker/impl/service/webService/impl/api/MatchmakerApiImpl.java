@@ -72,6 +72,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
+@RolesAllowed({InternalRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerApiImpl implements MatchmakerApi {
 

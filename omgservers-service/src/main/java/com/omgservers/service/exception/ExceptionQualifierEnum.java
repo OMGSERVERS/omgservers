@@ -1,6 +1,8 @@
 package com.omgservers.service.exception;
 
 public enum ExceptionQualifierEnum {
+    REQUEST_WRONG,
+    ARGUMENT_WRONG,
     OBJECT_WRONG,
     MESSAGE_QUALIFIER_WRONG,
     CLIENT_ID_WRONG,
@@ -36,7 +38,6 @@ public enum ExceptionQualifierEnum {
     JENKINS_REQUEST_FAILED,
     JENKINS_JOB_UNFINISHED,
     JENKINS_JOB_FAILED,
-    ILLEGAL_ARGUMENT_PASSED,
     VALIDATION_CONSTRAINT_VIOLATED,
     INTERNAL_EXCEPTION_OCCURRED,
     DOCKER_DAEMON_UNREACHED

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
+@RolesAllowed({UserRoleEnum.Names.PLAYER})
 class PlayerApiImpl implements PlayerApi {
 
     final WebService webService;

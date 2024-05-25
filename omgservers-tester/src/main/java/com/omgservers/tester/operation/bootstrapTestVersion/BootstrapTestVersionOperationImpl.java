@@ -3,6 +3,7 @@ package com.omgservers.tester.operation.bootstrapTestVersion;
 import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionSourceCodeModel;
+import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.model.TestVersionModel;
@@ -25,6 +26,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
 
     DeveloperApiTester developerApiTester;
     SupportApiTester supportApiTester;
+    AdminApiTester adminApiTester;
 
     @Override
     public TestVersionModel bootstrapTestVersion(final String mainLua) throws IOException {
@@ -34,9 +36,15 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     @Override
     public TestVersionModel bootstrapTestVersion(final String mainLua,
                                                  final VersionConfigModel versionConfig) throws IOException {
-        final var tenantId = supportApiTester.createTenant();
+        final var adminToken = adminApiTester.createAdminToken();
+        final var createSupportAdminResponse = adminApiTester.createSupport(adminToken);
 
-        final var createDeveloperAdminResponse = supportApiTester.createDeveloper(tenantId);
+        final var supportUserId = createSupportAdminResponse.getUserId();
+        final var supportPassword = createSupportAdminResponse.getPassword();
+        final var supportToken = supportApiTester.createSupportToken(supportUserId, supportPassword);
+        final var tenantId = supportApiTester.createTenant(supportToken);
+
+        final var createDeveloperAdminResponse = supportApiTester.createDeveloper(supportToken, tenantId);
         final var developerUserId = createDeveloperAdminResponse.getUserId();
         final var developerPassword = createDeveloperAdminResponse.getPassword();
 
@@ -56,6 +64,9 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var versionId = createVersionDeveloperResponse.getId();
 
         return TestVersionModel.builder()
+                .supportUserId(supportUserId)
+                .supportPassword(supportPassword)
+                .supportToken(supportToken)
                 .tenantId(tenantId)
                 .developerUserId(developerUserId)
                 .developerPassword(developerPassword)

@@ -41,7 +41,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenDeveloperRequest(userId, password)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/create-token");
@@ -51,12 +51,13 @@ public class DeveloperApiTester {
         return response.getRawToken();
     }
 
-    public TenantDashboardModel getTenantDashboard(String token, Long tenantId)
+    public TenantDashboardModel getTenantDashboard(final String token,
+                                                   final Long tenantId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId)))
@@ -71,7 +72,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateProjectDeveloperRequest(tenantId)))
@@ -91,7 +92,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
@@ -112,7 +113,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.MULTIPART)
                 .formParam("tenantId", tenantId)
@@ -137,7 +138,7 @@ public class DeveloperApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(

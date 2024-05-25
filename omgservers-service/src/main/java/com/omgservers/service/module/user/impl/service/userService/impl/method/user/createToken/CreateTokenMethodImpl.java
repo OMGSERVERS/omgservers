@@ -8,7 +8,7 @@ import com.omgservers.service.module.user.impl.operation.user.validateCredential
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
-import io.smallrye.jwt.build.Jwt;
+import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,10 +22,9 @@ import java.util.Set;
 @AllArgsConstructor
 class CreateTokenMethodImpl implements CreateTokenMethod {
 
-    private final String ISSUER = "https://omgservers.com";
-
     final ValidateCredentialsOperation validateCredentialsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
+    final IssueJwtTokenOperation issueJwtTokenOperation;
     final SelectUserOperation selectUserOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -51,10 +50,8 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     }
 
     String issueJwtToken(final UserModel user) {
-        String jwtToken = Jwt.issuer(ISSUER)
-                .upn(user.getId().toString())
-                .groups(Set.of(user.getRole().getName()))
-                .sign();
-        return jwtToken;
+        final var userId = user.getId();
+        final var groups = Set.of(user.getRole().getName());
+        return issueJwtTokenOperation.issueUserJwtToken(userId, groups);
     }
 }

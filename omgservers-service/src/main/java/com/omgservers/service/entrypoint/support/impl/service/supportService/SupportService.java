@@ -6,12 +6,16 @@ import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
 import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
+import com.omgservers.model.dto.support.CreateTokenSupportRequest;
+import com.omgservers.model.dto.support.CreateTokenSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface SupportService {
+
+    Uni<CreateTokenSupportResponse> createToken(@Valid CreateTokenSupportRequest request);
 
     Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(@Valid CreateDefaultPoolServerSupportRequest request);
 

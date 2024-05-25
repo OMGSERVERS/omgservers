@@ -43,7 +43,7 @@ public class PlayerCreateClientIT extends BaseTestClass {
             assertNotNull(testClient.getClientId());
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

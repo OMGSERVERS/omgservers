@@ -29,7 +29,7 @@ public class DeveloperBootstrapVersionIT extends BaseTestClass {
         try {
             Thread.sleep(16_000);
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

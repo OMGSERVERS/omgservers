@@ -28,6 +28,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
+@RolesAllowed({UserRoleEnum.Names.DEVELOPER})
 class DeveloperApiImpl implements DeveloperApi {
 
     final WebService webService;
@@ -41,26 +42,22 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
             final GetTenantDashboardDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createProject);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<UploadVersionDeveloperResponse> uploadVersion(final Long tenantId,
                                                              final Long stageId,
                                                              final List<FileUpload> files) {
@@ -69,7 +66,6 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.DEVELOPER})
     public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
     }

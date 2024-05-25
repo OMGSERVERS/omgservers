@@ -138,7 +138,7 @@ public class MatchKickClientIT extends BaseTestClass {
                     Collections.singletonList(matchAssignment2.getId()));
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 

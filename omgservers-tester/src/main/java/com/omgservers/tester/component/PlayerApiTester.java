@@ -42,7 +42,7 @@ public class PlayerApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Player"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateUserPlayerRequest()))
                 .when().put("/omgservers/v1/entrypoint/player/request/create-user");
@@ -56,7 +56,7 @@ public class PlayerApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Player"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenPlayerRequest(userId, password)))
                 .when().put("/omgservers/v1/entrypoint/player/request/create-token");
@@ -74,7 +74,7 @@ public class PlayerApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Player"))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenantId, stageId, secret)))
@@ -155,7 +155,7 @@ public class PlayerApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Client" + testClient.getId()))
-                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new InterchangePlayerRequest(clientId,

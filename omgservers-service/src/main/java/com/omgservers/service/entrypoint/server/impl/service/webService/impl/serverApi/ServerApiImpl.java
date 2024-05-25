@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.server.impl.service.webService.impl.serverApi;
 
-import com.omgservers.model.dto.admin.BcryptHashAdminRequest;
-import com.omgservers.model.dto.admin.BcryptHashAdminResponse;
-import com.omgservers.model.dto.admin.GenerateIdAdminResponse;
-import com.omgservers.model.dto.admin.PingServerAdminResponse;
+import com.omgservers.model.dto.server.BcryptHashServerRequest;
+import com.omgservers.model.dto.server.BcryptHashServerResponse;
+import com.omgservers.model.dto.server.GenerateIdServerResponse;
+import com.omgservers.model.dto.server.PingServerServerResponse;
 import com.omgservers.service.entrypoint.server.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,17 +21,17 @@ public class ServerApiImpl implements ServerApi {
     final HandleApiRequestOperation handleApiRequestOperation;
 
     @Override
-    public Uni<PingServerAdminResponse> pingServer() {
+    public Uni<PingServerServerResponse> pingServer() {
         return webService.pingServer();
     }
 
     @Override
-    public Uni<GenerateIdAdminResponse> generateId() {
+    public Uni<GenerateIdServerResponse> generateId() {
         return webService.generateId();
     }
 
     @Override
-    public Uni<BcryptHashAdminResponse> bcryptHash(final BcryptHashAdminRequest request) {
+    public Uni<BcryptHashServerResponse> bcryptHash(final BcryptHashServerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::bcryptHash);
     }
 }

@@ -133,7 +133,7 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
             assertNotEquals(runtimeId1, runtimeId2);
 
         } finally {
-            supportApiTester.deleteTenant(testVersion.getTenantId());
+            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
     }
 }

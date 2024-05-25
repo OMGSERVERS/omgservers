@@ -7,7 +7,13 @@ import java.net.URI;
 @ConfigMapping(prefix = "omgservers.tester")
 public interface TesterConfig {
 
-    URI externalUri();
+    URI serviceUri();
 
-    URI adminUri();
+    AdminConfig admin();
+
+    interface AdminConfig {
+        long userId();
+
+        String password();
+    }
 }

@@ -44,7 +44,8 @@ public class ClientSideExceptionMapper implements ResponseExceptionMapper<Runtim
             }
 
         } catch (IOException e) {
-            log.warn("Client side exception mapping failed, {}", e.getMessage());
+            log.warn("Client side exception mapping failed, statusCode={}, responseAsString={}, {}",
+                    statusCode, responseAsString, e.getMessage());
         }
 
         return new ClientSideHttpException(statusCode, responseAsString);
