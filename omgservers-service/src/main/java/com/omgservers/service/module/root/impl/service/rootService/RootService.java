@@ -14,5 +14,7 @@ public interface RootService {
 
     Uni<SyncRootResponse> syncRoot(@Valid SyncRootRequest request);
 
+    Uni<SyncRootResponse> syncRootWithIdempotency(@Valid SyncRootRequest request);
+
     Uni<DeleteRootResponse> deleteRoot(@Valid DeleteRootRequest request);
 }

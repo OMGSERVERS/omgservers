@@ -5,6 +5,7 @@ import com.omgservers.model.dto.admin.CreateSupportAdminResponse;
 import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
 import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
 import com.omgservers.model.internalRole.InternalRoleEnum;
+import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.admin.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@RolesAllowed({InternalRoleEnum.Names.ADMIN})
+@RolesAllowed({UserRoleEnum.Names.ADMIN})
 public class AdminApiImpl implements AdminApi {
 
     final WebService webService;

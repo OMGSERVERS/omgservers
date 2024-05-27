@@ -1,32 +1,46 @@
 package com.omgservers.service.operation;
 
-import com.omgservers.service.operation.prepareShardSql.PrepareShardSqlOperation;
+import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import jakarta.inject.Inject;
-
+import java.util.Set;
 
 @Slf4j
 @QuarkusTest
 class IssueJwtTokenOperationTest extends Assertions {
 
     @Inject
-    PrepareShardSqlOperation prepareShardSqlOperation;
+    IssueJwtTokenOperation issueJwtTokenOperation;
+
+    @Inject
+    GenerateIdOperation generateIdOperation;
 
     @Test
-    void whenIssueUserJwtToken() {
-        String sql = """
-                insert into $schema.tab_user (uuid, username, password)
-                values ($1, $2, $3)
-                """;
-        String raw = """
-                insert into shard_00010.tab_user (uuid, username, password)
-                values ($1, $2, $3)
-                """;
-        String result = prepareShardSqlOperation.prepareShardSql(sql, 10);
-        assertEquals(raw, result);
+    void whenIssueAdminJwtToken_thenIssued() {
+        final var jwtToken = issueJwtTokenOperation.issueAdminJwtToken();
+        assertNotNull(jwtToken);
+        log.info("Admin JWT token, {}", jwtToken);
+    }
+
+    @Test
+    void whenIssueServiceJwtToken_thenIssued() {
+        final var jwtToken = issueJwtTokenOperation.issueServiceJwtToken();
+        assertNotNull(jwtToken);
+        log.info("Service JWT token, {}", jwtToken);
+    }
+
+    @Test
+    void whenIssueUserJwtToken_thenIssued() {
+        final var userId = generateIdOperation.generateId();
+        final var groups = Set.of(UserRoleEnum.PLAYER.getName());
+        final var jwtToken = issueJwtTokenOperation.issueUserJwtToken(userId, groups);
+        assertNotNull(jwtToken);
+        log.info("User JWT token, {}", jwtToken);
     }
 }

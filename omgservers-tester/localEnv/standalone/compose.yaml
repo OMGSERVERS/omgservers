@@ -8,31 +8,53 @@ services:
     command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  svc:
+  registry:
+    image: "registry:2.8.3"
+    container_name: "registry"
+    ports:
+      - "5050:5000"
+    networks:
+      - omgservers
+  builder:
+    image: "omgservers/omgservers-builder:1.0.0-SNAPSHOT"
+    container_name: "builder"
+    ports:
+      - "7070:8080"
+    networks:
+      - omgservers
+    environment:
+      - JENKINS_URL=http://builder:8080
+      - JENKINS_ADMIN_ID=admin
+      - JENKINS_ADMIN_PASSWORD=admin
+      - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
+      - DOCKER_HOST=tcp://docker:2375
+      - DOCKER_REGISTRY=localhost:5050
+  service:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "svc"
+    container_name: "service"
     ports:
       - "8080:8080"
       - "9000:9000"
     networks:
       - omgservers
     depends_on:
-      - db
-      - mq
+      - database
+      - queues
     tmpfs:
       - /var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://db:5432/root
-      - OMGSERVERS_MQ_HOST=mq
-      - OMGSERVERS_INDEX_SERVER_URI=http://svc:8080
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://svc:8080
+      - OMGSERVERS_DB_URL=postgresql://database:5432/root
+      - OMGSERVERS_MQ_HOST=queues
+      - OMGSERVERS_INDEX_SERVER_URI=http://service:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://service:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://svc:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
-  db:
+      - OMGSERVERS_BUILDER_URI=http://builder:8080
+  database:
     image: "postgres:15.1"
-    container_name: "db"
+    container_name: "database"
     command: postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=512
     environment:
       - POSTGRES_USER=root
@@ -40,9 +62,9 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  mq:
-    image: "apache/activemq-artemis:2.31.2-alpine"
-    container_name: "mq"
+  queues:
+    image: "apache/activemq-artemis:2.33.0-alpine"
+    container_name: "queues"
     environment:
       - ARTEMIS_USER=admin
       - ARTEMIS_PASSWORD=admin

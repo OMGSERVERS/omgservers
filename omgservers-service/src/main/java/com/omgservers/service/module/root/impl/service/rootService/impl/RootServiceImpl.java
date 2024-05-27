@@ -6,6 +6,9 @@ import com.omgservers.model.dto.root.GetRootRequest;
 import com.omgservers.model.dto.root.GetRootResponse;
 import com.omgservers.model.dto.root.SyncRootRequest;
 import com.omgservers.model.dto.root.SyncRootResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.root.impl.operation.getRootModuleClient.GetRootModuleClientOperation;
 import com.omgservers.service.module.root.impl.service.rootService.RootService;
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.deleteRoot.DeleteRootMethod;
@@ -48,6 +51,22 @@ class RootServiceImpl implements RootService {
                 getMatchServiceApiClientOperation::getClient,
                 RootApi::syncRoot,
                 syncRootMethod::syncRoot);
+    }
+
+    @Override
+    public Uni<SyncRootResponse> syncRootWithIdempotency(SyncRootRequest request) {
+        return syncRoot(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getRoot(), t.getMessage());
+                            return Uni.createFrom().item(new SyncRootResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

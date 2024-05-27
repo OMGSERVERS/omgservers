@@ -23,7 +23,7 @@ public class RootTestDataFactory {
     final RootModelFactory rootModelFactory;
 
     public RootModel createRoot() {
-        final var rootId = getConfigOperation.getServiceConfig().bootstrap().rootId();
+        final var rootId = getConfigOperation.getServiceConfig().bootstrap().root().rootId();
 
         try {
             final var getRootRequest = new GetRootRequest(rootId);

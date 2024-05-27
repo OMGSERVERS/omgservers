@@ -33,6 +33,8 @@ public interface UserService {
 
     Uni<SyncUserResponse> syncUser(@Valid SyncUserRequest request);
 
+    Uni<SyncUserResponse> syncUserWithIdempotency(@Valid SyncUserRequest request);
+
     Uni<DeleteUserResponse> deleteUser(@Valid DeleteUserRequest request);
 
     Uni<CreateTokenResponse> createToken(@Valid CreateTokenRequest request);

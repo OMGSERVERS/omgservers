@@ -25,26 +25,26 @@ static_resources:
                         - match:
                             prefix: "/"
                           route:
-                            cluster: service-1-ab
+                            cluster: cluster
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
   clusters:
-    - name: service-1-ab
+    - name: cluster
       type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       load_assignment:
-        cluster_name: service-1-ab
+        cluster_name: cluster
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: service-1-a
+                      address: service3a
                       port_value: 8080
               - endpoint:
                   address:
                     socket_address:
-                      address: service-1-b
+                      address: service3b
                       port_value: 8080

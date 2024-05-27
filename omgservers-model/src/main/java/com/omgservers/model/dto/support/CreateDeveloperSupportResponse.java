@@ -11,6 +11,7 @@ import lombok.ToString;
 public class CreateDeveloperSupportResponse {
 
     Long userId;
+
     @ToString.Exclude
     String password;
 }

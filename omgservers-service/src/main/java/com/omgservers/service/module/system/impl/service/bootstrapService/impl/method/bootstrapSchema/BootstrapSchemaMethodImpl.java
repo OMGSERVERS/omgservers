@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.operation.migrateSchema;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchema;
 
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -14,14 +14,28 @@ import java.util.stream.IntStream;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class MigrateSchemaOperationImpl implements MigrateSchemaOperation {
+class BootstrapSchemaMethodImpl implements BootstrapSchemaMethod {
+
+    private static final String SYSTEM_SCHEMA_LOCATION = "db/system";
+    private static final String SHARDS_SCHEMA_LOCATION = "db/shards";
 
     final GetConfigOperation getConfigOperation;
 
     final DataSource dataSource;
 
     @Override
-    public void migrateSystemSchema(final String location) {
+    public Uni<Void> bootstrapSchema() {
+        log.debug("Bootstrap schema");
+
+        return Uni.createFrom().voidItem()
+                .emitOn(Infrastructure.getDefaultWorkerPool())
+                .invoke(voidItem -> {
+                    migrateSystemSchema(SYSTEM_SCHEMA_LOCATION);
+                    migrateShardsSchema(SHARDS_SCHEMA_LOCATION);
+                });
+    }
+
+    void migrateSystemSchema(final String location) {
         final var flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations(location)
@@ -31,7 +45,6 @@ class MigrateSchemaOperationImpl implements MigrateSchemaOperation {
         flyway.migrate();
     }
 
-    @Override
     public void migrateShardsSchema(final String location) {
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
         final var migrationConcurrency = getConfigOperation.getServiceConfig().migration().concurrency();

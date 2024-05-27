@@ -1,23 +1,48 @@
 version: "3.8"
 services:
+  # routing
+  entrypoint:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "entrypoint"
+    ports:
+      - "8080:8080"
+    networks:
+      - omgservers
+    volumes:
+      - ./config/entrypoint.yaml:/etc/envoy/envoy.yaml
+  gateway1:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway1"
+    networks:
+      - omgservers
+    volumes:
+      - ./config/gateway1.yaml:/etc/envoy/envoy.yaml
+  gateway2:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway2"
+    networks:
+      - omgservers
+    volumes:
+      - ./config/gateway2.yaml:/etc/envoy/envoy.yaml
+  gateway3:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway3"
+    networks:
+      - omgservers
+    volumes:
+      - ./config/gateway3.yaml:/etc/envoy/envoy.yaml
+  # backend
   docker:
     image: "alpine/socat"
     container_name: "docker"
     networks:
       - omgservers
     command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
-    ports:
-      - "2375:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   registry:
     image: "registry:2.8.3"
     container_name: "registry"
-    volumes:
-      - ./registry-certs:/certs
-    environment:
-      - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt
-      - REGISTRY_HTTP_TLS_KEY=/certs/registry.key
     ports:
       - "5050:5000"
     networks:
@@ -36,71 +61,85 @@ services:
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050
-  gateway:
-    image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "gateway"
-    ports:
-      - "8080:8080"
+  # service1
+  database1:
+    image: "postgres:16"
+    container_name: "database1"
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
     networks:
       - omgservers
+  queues1:
+    image: "apache/activemq-artemis:2.33.0-alpine"
+    container_name: "queues1"
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=admin
     volumes:
-      - ./envoy-gateway.yaml:/etc/envoy/envoy.yaml
-  service-1:
-    image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "service-1"
+      - ./config/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
-    volumes:
-      - ./envoy-service-1.yaml:/etc/envoy/envoy.yaml
-  service-1-a:
+  service1a:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-1-a"
+    container_name: "service1a"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-1
-      - queues-1
+      - database1
+      - queues1
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-1:5432/root
-      - OMGSERVERS_MQ_HOST=queues-1
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database1:5432/root
+      - OMGSERVERS_MQ_HOST=queues1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-1:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service-1:8080,http://service-2:8080,http://service-3:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
+      - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-1:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway1:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service-1-b:
+  service1b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-1-b"
+    container_name: "service1b"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-1
-      - queues-1
+      - database1
+      - queues1
+      - service1a
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-1:5432/root
-      - OMGSERVERS_MQ_HOST=queues-1
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database1:5432/root
+      - OMGSERVERS_MQ_HOST=queues1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-1:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-1:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway1:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=1
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  database-1:
+  # service2
+  database2:
     image: "postgres:16"
-    container_name: "database-1"
+    container_name: "database2"
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       - POSTGRES_USER=root
@@ -108,72 +147,73 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  queues-1:
+  queues2:
     image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "queues-1"
+    container_name: "queues2"
     environment:
       - ARTEMIS_USER=admin
       - ARTEMIS_PASSWORD=admin
     volumes:
-      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./config/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
-  service-2:
-    image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "service-2"
-    networks:
-      - omgservers
-    volumes:
-      - ./envoy-service-2.yaml:/etc/envoy/envoy.yaml
-  service-2-a:
+  service2a:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-2-a"
+    container_name: "service2a"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-2
-      - queues-2
+      - database2
+      - queues2
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-2:5432/root
-      - OMGSERVERS_MQ_HOST=queues-2
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database2:5432/root
+      - OMGSERVERS_MQ_HOST=queues2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-2:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway2:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service-1:8080,http://service-2:8080,http://service-3:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-2:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway2:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=2
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service-2-b:
+  service2b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-2-b"
+    container_name: "service2b"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-2
-      - queues-2
+      - database2
+      - queues2
+      - service2a
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-2:5432/root
-      - OMGSERVERS_MQ_HOST=queues-2
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database2:5432/root
+      - OMGSERVERS_MQ_HOST=queues2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-2:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway2:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-2:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway2:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=3
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  database-2:
+  # service3
+  database3:
     image: "postgres:16"
-    container_name: "database-2"
+    container_name: "database3"
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       - POSTGRES_USER=root
@@ -181,89 +221,69 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  queues-2:
+  queues3:
     image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "queues-2"
+    container_name: "queues3"
     environment:
       - ARTEMIS_USER=admin
       - ARTEMIS_PASSWORD=admin
     volumes:
-      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./config/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     networks:
       - omgservers
-  service-3:
-    image: "envoyproxy/envoy:v1.28-latest"
-    container_name: "service-3"
-    networks:
-      - omgservers
-    volumes:
-      - ./envoy-service-3.yaml:/etc/envoy/envoy.yaml
-  service-3-a:
+  service3a:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-3-a"
+    container_name: "service3a"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-3
-      - queues-3
+      - database3
+      - queues3
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-3:5432/root
-      - OMGSERVERS_MQ_HOST=queues-3
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database3:5432/root
+      - OMGSERVERS_MQ_HOST=queues3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-3:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway3:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service-1:8080,http://service-2:8080,http://service-3:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-3:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=4
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service-3-b:
+  service3b:
     image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
-    container_name: "service-3-b"
+    container_name: "service3b"
+    restart: unless-stopped
     networks:
       - omgservers
     depends_on:
-      - database-3
-      - queues-3
+      - database3
+      - queues3
+      - service3a
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=INFO
-      - OMGSERVERS_DB_URL=postgresql://database-3:5432/root
-      - OMGSERVERS_MQ_HOST=queues-3
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_DB_URL=postgresql://database3:5432/root
+      - OMGSERVERS_MQ_HOST=queues3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://service-3:8080
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway3:8080
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_LOCAL_HOST_URI=tcp://docker:2375
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://service-3:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=5
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  database-3:
-    image: "postgres:16"
-    container_name: "database-3"
-    command: postgres -c shared_preload_libraries=pg_stat_statements
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=root
-    networks:
-      - omgservers
-  queues-3:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "queues-3"
-    environment:
-      - ARTEMIS_USER=admin
-      - ARTEMIS_PASSWORD=admin
-    volumes:
-      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
-    networks:
-      - omgservers
 networks:
   omgservers:
     name: omgservers

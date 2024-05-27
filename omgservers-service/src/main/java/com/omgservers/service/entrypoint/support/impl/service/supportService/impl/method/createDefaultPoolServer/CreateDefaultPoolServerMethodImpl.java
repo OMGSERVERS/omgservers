@@ -42,7 +42,7 @@ class CreateDefaultPoolServerMethodImpl implements CreateDefaultPoolServerMethod
             final CreateDefaultPoolServerSupportRequest request) {
         log.debug("Create default pool server, request={}", request);
 
-        final var rootId = getConfigOperation.getServiceConfig().bootstrap().rootId();
+        final var rootId = getConfigOperation.getServiceConfig().bootstrap().root().rootId();
         return getRoot(rootId)
                 .flatMap(root -> {
                     final var defaultPoolId = root.getDefaultPoolId();

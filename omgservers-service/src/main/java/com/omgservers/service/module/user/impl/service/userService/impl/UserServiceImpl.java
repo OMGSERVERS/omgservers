@@ -24,21 +24,24 @@ import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
 import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
 import com.omgservers.model.dto.user.UpdatePlayerProfileRequest;
 import com.omgservers.model.dto.user.UpdatePlayerProfileResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.service.module.user.impl.service.userService.UserService;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.user.createToken.CreateTokenMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.deletePlayer.DeletePlayerMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.user.deleteUser.DeleteUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.findPlayer.FindPlayerMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayer.GetPlayerMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerAttributes.GetPlayerAttributesMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerProfile.GetPlayerProfileMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.user.getUser.GetUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.syncPlayer.SyncPlayerMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.user.syncUser.SyncUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.updatePlayerAttributes.UpdatePlayerAttributesMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.updatePlayerProfile.UpdatePlayerProfileMethod;
+import com.omgservers.service.module.user.impl.service.userService.impl.method.user.createToken.CreateTokenMethod;
+import com.omgservers.service.module.user.impl.service.userService.impl.method.user.deleteUser.DeleteUserMethod;
+import com.omgservers.service.module.user.impl.service.userService.impl.method.user.getUser.GetUserMethod;
+import com.omgservers.service.module.user.impl.service.userService.impl.method.user.syncUser.SyncUserMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -84,6 +87,22 @@ class UserServiceImpl implements UserService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncUser,
                 syncUserMethod::syncUser);
+    }
+
+    @Override
+    public Uni<SyncUserResponse> syncUserWithIdempotency(@Valid final SyncUserRequest request) {
+        return syncUser(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getUser(), t.getMessage());
+                            return Uni.createFrom().item(new SyncUserResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

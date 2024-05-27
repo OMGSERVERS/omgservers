@@ -188,7 +188,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                  final UserModel user,
                                  final String password,
                                  final String imageId) {
-        final var rootId = getConfigOperation.getServiceConfig().bootstrap().rootId();
+        final var rootId = getConfigOperation.getServiceConfig().bootstrap().root().rootId();
         return getRoot(rootId)
                 .flatMap(root -> {
                     final var defaultPoolId = root.getDefaultPoolId();

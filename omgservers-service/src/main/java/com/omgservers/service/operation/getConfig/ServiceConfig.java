@@ -76,11 +76,11 @@ public interface ServiceConfig {
     }
 
     interface BootstrapConfig {
-        long rootId();
-
         BootstrapIndexConfig index();
 
         BootstrapAdminConfig admin();
+
+        BootstrapRootConfig root();
 
         BootstrapLocalHostConfig localHost();
     }
@@ -97,6 +97,12 @@ public interface ServiceConfig {
         long userId();
 
         String password();
+    }
+
+    interface BootstrapRootConfig {
+        boolean enabled();
+
+        long rootId();
     }
 
     interface BootstrapLocalHostConfig {

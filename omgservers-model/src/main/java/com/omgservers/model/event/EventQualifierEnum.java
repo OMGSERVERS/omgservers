@@ -6,7 +6,6 @@ import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBody
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.internal.RootInitializationRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingFailedEventBodyModel;
@@ -154,7 +153,6 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_SERVER_CONTAINER_REF_CREATED(RuntimePoolServerContainerRefCreatedEventBodyModel.class, false),
     RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
-    ROOT_INITIALIZATION_REQUESTED(RootInitializationRequestedEventBodyModel.class, false),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_CHECKING_REQUESTED(VersionBuildingCheckingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),
