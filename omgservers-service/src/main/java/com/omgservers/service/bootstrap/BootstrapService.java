@@ -45,7 +45,7 @@ public class BootstrapService {
     }
 
     Uni<Void> bootstrapSchema() {
-        if (getConfigOperation.getServiceConfig().migration().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().schema().enabled()) {
             return systemModule.getBootstrapService().bootstrapSchema()
                     .invoke(voidItem -> log.info("Schema has been initialized"));
         } else {
@@ -95,7 +95,7 @@ public class BootstrapService {
     }
 
     Uni<Void> bootstrapRelay() {
-        if (getConfigOperation.getServiceConfig().relayJob().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().relayJob().enabled()) {
             return systemModule.getBootstrapService().bootstrapRelay()
                     .invoke(voidItem -> log.info("Relay has been initialized"));
         } else {

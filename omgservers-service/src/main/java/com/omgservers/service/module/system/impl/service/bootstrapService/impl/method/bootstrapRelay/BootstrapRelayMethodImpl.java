@@ -25,8 +25,9 @@ class BootstrapRelayMethodImpl implements BootstrapRelayMethod {
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
+                    final var interval = getConfigOperation.getServiceConfig().bootstrap().relayJob().interval();
                     final var trigger = scheduler.newJob("relay")
-                            .setInterval("1s")
+                            .setInterval(interval)
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> relayJobTask.executeTask())
                             .schedule();

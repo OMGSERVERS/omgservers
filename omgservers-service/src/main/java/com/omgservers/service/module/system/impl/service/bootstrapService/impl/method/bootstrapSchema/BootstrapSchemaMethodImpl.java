@@ -47,7 +47,7 @@ class BootstrapSchemaMethodImpl implements BootstrapSchemaMethod {
 
     public void migrateShardsSchema(final String location) {
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
-        final var migrationConcurrency = getConfigOperation.getServiceConfig().migration().concurrency();
+        final var migrationConcurrency = getConfigOperation.getServiceConfig().bootstrap().schema().concurrency();
         final var migrationTasks = IntStream.range(0, shardCount)
                 .mapToObj(shard -> migrateShard(location, shard)).toList();
         Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)

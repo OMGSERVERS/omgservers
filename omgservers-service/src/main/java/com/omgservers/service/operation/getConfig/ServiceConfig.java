@@ -16,11 +16,7 @@ public interface ServiceConfig {
 
     IndexConfig index();
 
-    MigrationConfig migration();
-
     BootstrapConfig bootstrap();
-
-    RelayJobConfig relayJob();
 
     ClientsConfig clients();
 
@@ -40,12 +36,6 @@ public interface ServiceConfig {
         long instanceId();
     }
 
-    interface MigrationConfig {
-        boolean enabled();
-
-        int concurrency();
-    }
-
     interface IndexConfig {
         String name();
 
@@ -54,8 +44,10 @@ public interface ServiceConfig {
         URI serverUri();
     }
 
-    interface RelayJobConfig {
+    interface BootstrapRelayJobConfig {
         boolean enabled();
+
+        String interval();
     }
 
     interface ClientsConfig {
@@ -82,6 +74,8 @@ public interface ServiceConfig {
     }
 
     interface BootstrapConfig {
+        BootstrapSchemaConfig schema();
+
         BootstrapIndexConfig index();
 
         BootstrapAdminConfig admin();
@@ -89,6 +83,14 @@ public interface ServiceConfig {
         BootstrapDefaultPoolConfig defaultPool();
 
         BootstrapDockerHostConfig dockerHost();
+
+        BootstrapRelayJobConfig relayJob();
+    }
+
+    interface BootstrapSchemaConfig {
+        boolean enabled();
+
+        int concurrency();
     }
 
     interface BootstrapIndexConfig {
