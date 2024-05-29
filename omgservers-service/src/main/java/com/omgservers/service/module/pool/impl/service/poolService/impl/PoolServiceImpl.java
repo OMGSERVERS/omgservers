@@ -110,6 +110,22 @@ class PoolServiceImpl implements PoolService {
     }
 
     @Override
+    public Uni<SyncPoolResponse> syncPoolWithIdempotency(SyncPoolRequest request) {
+        return syncPool(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getPool(), t.getMessage());
+                            return Uni.createFrom().item(new SyncPoolResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeletePoolResponse> deletePool(@Valid final DeletePoolRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getPoolModuleClientOperation::getClient,

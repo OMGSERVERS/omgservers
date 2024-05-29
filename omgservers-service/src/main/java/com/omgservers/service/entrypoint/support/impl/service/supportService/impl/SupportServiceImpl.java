@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl;
 
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
@@ -11,7 +9,6 @@ import com.omgservers.model.dto.support.CreateTokenSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createDefaultPoolServer.CreateDefaultPoolServerMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createDeveloper.CreateDeveloperMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenant.CreateTenantMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createToken.CreateTokenMethod;
@@ -28,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportServiceImpl implements SupportService {
 
-    final CreateDefaultPoolServerMethod createDefaultPoolServerMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
@@ -37,12 +33,6 @@ class SupportServiceImpl implements SupportService {
     @Override
     public Uni<CreateTokenSupportResponse> createToken(@Valid final CreateTokenSupportRequest request) {
         return createTokenMethod.createToken(request);
-    }
-
-    @Override
-    public Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(
-            @Valid final CreateDefaultPoolServerSupportRequest request) {
-        return createDefaultPoolServerMethod.createDefaultPoolServer(request);
     }
 
     @Override

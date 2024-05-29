@@ -13,7 +13,6 @@ import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerConfigModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.model.root.RootModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
@@ -43,26 +42,23 @@ public class PoolTestDataFactory {
     final PoolServerModelFactory poolServerModelFactory;
     final PoolModelFactory poolModelFactory;
 
-    public PoolModel createDefaultPool(final RootModel root) {
-        final var rootId = root.getId();
-        final var defaultPoolId = root.getDefaultPoolId();
+    public PoolModel createDefaultPool() {
+        final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
 
         try {
             final var getPoolRequest = new GetPoolRequest(defaultPoolId);
             log.info("Default pool was already created, defaultPoolId={}", defaultPoolId);
             return poolService.getPool(getPoolRequest).getPool();
         } catch (ServerSideNotFoundException e) {
-            final var pool = poolModelFactory.create(defaultPoolId, rootId);
+            final var pool = poolModelFactory.create(defaultPoolId);
             final var syncPoolRequest = new SyncPoolRequest(pool);
             poolService.syncPool(syncPoolRequest);
             return pool;
         }
     }
 
-    public PoolModel createPool(final RootModel root) {
-        final var rootId = root.getId();
-
-        final var pool = poolModelFactory.create(rootId);
+    public PoolModel createPool() {
+        final var pool = poolModelFactory.create();
         final var syncPoolRequest = new SyncPoolRequest(pool);
         poolService.syncPool(syncPoolRequest);
         return pool;

@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService.impl.supportApi;
 
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
@@ -34,12 +32,6 @@ public class SupportApiImpl implements SupportApi {
     @PermitAll
     public Uni<CreateTokenSupportResponse> createToken(final CreateTokenSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
-    }
-
-    @Override
-    public Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(
-            final CreateDefaultPoolServerSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createDefaultPoolServer);
     }
 
     @Override

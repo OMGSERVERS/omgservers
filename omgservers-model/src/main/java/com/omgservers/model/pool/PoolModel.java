@@ -29,8 +29,5 @@ public class PoolModel {
     Instant modified;
 
     @NotNull
-    Long rootId;
-
-    @NotNull
     Boolean deleted;
 }

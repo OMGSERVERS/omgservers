@@ -38,7 +38,8 @@ public class BootstrapService {
                 .flatMap(voidItem -> bootstrapSchema())
                 .flatMap(voidItem -> bootstrapIndex())
                 .flatMap(voidItem -> bootstrapAdmin())
-                .flatMap(voidItem -> bootstrapRoot())
+                .flatMap(voidItem -> bootstrapDefaultPool())
+                .flatMap(voidItem -> bootstrapDockerHost())
                 .flatMap(voidItem -> bootstrapRelay())
                 .await().indefinitely();
     }
@@ -73,12 +74,22 @@ public class BootstrapService {
         }
     }
 
-    Uni<Void> bootstrapRoot() {
-        if (getConfigOperation.getServiceConfig().bootstrap().root().enabled()) {
-            return systemModule.getBootstrapService().bootstrapRoot()
-                    .invoke(voidItem -> log.info("Root has been initialized"));
+    Uni<Void> bootstrapDefaultPool() {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultPool().enabled()) {
+            return systemModule.getBootstrapService().bootstrapDefaultPool()
+                    .invoke(voidItem -> log.info("Default pool has been initialized"));
         } else {
-            log.info("Bootstrap root is not enabled, skip operation");
+            log.info("Bootstrap default pool is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapDockerHost() {
+        if (getConfigOperation.getServiceConfig().bootstrap().dockerHost().enabled()) {
+            return systemModule.getBootstrapService().bootstrapDockerHost()
+                    .invoke(voidItem -> log.info("Docker host has been initialized"));
+        } else {
+            log.info("Bootstrap docker host is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

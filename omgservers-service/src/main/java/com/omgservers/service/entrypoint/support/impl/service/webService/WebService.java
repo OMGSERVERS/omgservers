@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService;
 
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
@@ -15,8 +13,6 @@ import io.smallrye.mutiny.Uni;
 public interface WebService {
 
     Uni<CreateTokenSupportResponse> createToken(CreateTokenSupportRequest request);
-
-    Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(CreateDefaultPoolServerSupportRequest request);
 
     Uni<CreateTenantSupportResponse> createTenant(CreateTenantSupportRequest request);
 

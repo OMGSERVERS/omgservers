@@ -2,8 +2,6 @@ package com.omgservers.service.handler.internal;
 
 import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.model.dto.pool.poolRequest.SyncPoolRequestResponse;
-import com.omgservers.model.dto.root.GetRootRequest;
-import com.omgservers.model.dto.root.GetRootResponse;
 import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.tenant.GetVersionRequest;
@@ -19,7 +17,6 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
 import com.omgservers.model.poolRequest.PoolRequestConfigModel;
 import com.omgservers.model.poolRequest.PoolRequestModel;
-import com.omgservers.model.root.RootModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
@@ -33,7 +30,6 @@ import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -57,7 +53,6 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
-    final RootModule rootModule;
     final PoolModule poolModule;
     final UserModule userModule;
 
@@ -188,36 +183,26 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                  final UserModel user,
                                  final String password,
                                  final String imageId) {
-        final var rootId = getConfigOperation.getServiceConfig().bootstrap().root().rootId();
-        return getRoot(rootId)
-                .flatMap(root -> {
-                    final var defaultPoolId = root.getDefaultPoolId();
-                    final var poolRequestConfig = new PoolRequestConfigModel();
-                    poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
-                    poolRequestConfig.getServerContainerConfig().setImage(imageId);
-                    poolRequestConfig.getServerContainerConfig().setCpuLimit(1000);
-                    poolRequestConfig.getServerContainerConfig().setMemoryLimit(1000);
-                    final var serviceUri = getConfigOperation.getServiceConfig().workers().serviceUri();
-                    final var environment = new HashMap<String, String>();
-                    environment.put("OMGSERVERS_URL", serviceUri.toString());
-                    environment.put("OMGSERVERS_USER_ID", user.getId().toString());
-                    environment.put("OMGSERVERS_PASSWORD", password);
-                    environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
-                    environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
-                    poolRequestConfig.getServerContainerConfig().setEnvironment(environment);
+        final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
+        final var poolRequestConfig = new PoolRequestConfigModel();
+        poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
+        poolRequestConfig.getServerContainerConfig().setImage(imageId);
+        poolRequestConfig.getServerContainerConfig().setCpuLimit(1000);
+        poolRequestConfig.getServerContainerConfig().setMemoryLimit(1000);
+        final var serviceUri = getConfigOperation.getServiceConfig().workers().serviceUri();
+        final var environment = new HashMap<String, String>();
+        environment.put("OMGSERVERS_URL", serviceUri.toString());
+        environment.put("OMGSERVERS_USER_ID", user.getId().toString());
+        environment.put("OMGSERVERS_PASSWORD", password);
+        environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
+        environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
+        poolRequestConfig.getServerContainerConfig().setEnvironment(environment);
 
-                    final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
-                            runtime.getId(),
-                            poolRequestConfig);
+        final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
+                runtime.getId(),
+                poolRequestConfig);
 
-                    return syncPoolRequest(poolRequest);
-                });
-    }
-
-    Uni<RootModel> getRoot(final Long id) {
-        final var getRootRequest = new GetRootRequest(id);
-        return rootModule.getRootService().getRoot(getRootRequest)
-                .map(GetRootResponse::getRoot);
+        return syncPoolRequest(poolRequest);
     }
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {

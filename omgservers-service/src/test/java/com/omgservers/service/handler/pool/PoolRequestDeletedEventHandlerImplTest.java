@@ -30,8 +30,7 @@ class PoolRequestDeletedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var root = testDataFactory.getRootTestDataFactory().createRoot();
-        final var defaultPool = testDataFactory.getPoolTestDataFactory().createDefaultPool(root);
+        final var defaultPool = testDataFactory.getPoolTestDataFactory().createDefaultPool();
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
         final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);

@@ -10,7 +10,9 @@ public interface BootstrapService {
 
     Uni<Void> bootstrapAdmin();
 
-    Uni<Void> bootstrapRoot();
+    Uni<Void> bootstrapDefaultPool();
+
+    Uni<Void> bootstrapDockerHost();
 
     Uni<Void> bootstrapRelay();
 }

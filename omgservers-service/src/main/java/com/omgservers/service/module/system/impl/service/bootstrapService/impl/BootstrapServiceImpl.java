@@ -2,9 +2,10 @@ package com.omgservers.service.module.system.impl.service.bootstrapService.impl;
 
 import com.omgservers.service.module.system.impl.service.bootstrapService.BootstrapService;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapAdmin.BootstrapAdminMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDefaultPool.BootstrapDefaultPoolMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapIndex.BootstrapIndexMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelay.BootstrapRelayMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRoot.BootstrapRootMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchema.BootstrapSchemaMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,11 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BootstrapServiceImpl implements BootstrapService {
 
+    final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
+    final BootstrapDockerHostMethod bootstrapDockerHostMethod;
     final BootstrapSchemaMethod bootstrapSchemaMethod;
     final BootstrapAdminMethod bootstrapAdminMethod;
     final BootstrapIndexMethod bootstrapIndexMethod;
     final BootstrapRelayMethod bootstrapRelayMethod;
-    final BootstrapRootMethod bootstrapRootMethod;
 
     @Override
     public Uni<Void> bootstrapSchema() {
@@ -39,8 +41,13 @@ class BootstrapServiceImpl implements BootstrapService {
     }
 
     @Override
-    public Uni<Void> bootstrapRoot() {
-        return bootstrapRootMethod.bootstrapRoot();
+    public Uni<Void> bootstrapDefaultPool() {
+        return bootstrapDefaultPoolMethod.bootstrapDefaultPool();
+    }
+
+    @Override
+    public Uni<Void> bootstrapDockerHost() {
+        return bootstrapDockerHostMethod.bootstrapDockerHost();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService.impl.supportApi;
 
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
@@ -25,10 +23,6 @@ public interface SupportApi {
     @PUT
     @Path("/create-token")
     Uni<CreateTokenSupportResponse> createToken(CreateTokenSupportRequest request);
-
-    @PUT
-    @Path("/create-default-pool-server")
-    Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(CreateDefaultPoolServerSupportRequest request);
 
     @PUT
     @Path("/create-tenant")

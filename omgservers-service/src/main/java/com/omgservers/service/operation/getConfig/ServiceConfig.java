@@ -10,6 +10,8 @@ import java.util.List;
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
 
+    DefaultsConfig defaults();
+
     GeneratorConfig generator();
 
     IndexConfig index();
@@ -27,6 +29,10 @@ public interface ServiceConfig {
     WorkersConfig workers();
 
     BuilderConfig builder();
+
+    interface DefaultsConfig {
+        long poolId();
+    }
 
     interface GeneratorConfig {
         long datacenterId();
@@ -80,9 +86,9 @@ public interface ServiceConfig {
 
         BootstrapAdminConfig admin();
 
-        BootstrapRootConfig root();
+        BootstrapDefaultPoolConfig defaultPool();
 
-        BootstrapLocalHostConfig localHost();
+        BootstrapDockerHostConfig dockerHost();
     }
 
     interface BootstrapIndexConfig {
@@ -99,13 +105,11 @@ public interface ServiceConfig {
         String password();
     }
 
-    interface BootstrapRootConfig {
+    interface BootstrapDefaultPoolConfig {
         boolean enabled();
-
-        long rootId();
     }
 
-    interface BootstrapLocalHostConfig {
+    interface BootstrapDockerHostConfig {
         boolean enabled();
 
         URI uri();

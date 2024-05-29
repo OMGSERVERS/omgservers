@@ -43,6 +43,8 @@ public interface PoolService {
 
     Uni<SyncPoolResponse> syncPool(@Valid SyncPoolRequest request);
 
+    Uni<SyncPoolResponse> syncPoolWithIdempotency(@Valid SyncPoolRequest request);
+
     Uni<DeletePoolResponse> deletePool(@Valid DeletePoolRequest request);
 
     Uni<GetPoolServerResponse> getPoolServer(@Valid GetPoolServerRequest request);

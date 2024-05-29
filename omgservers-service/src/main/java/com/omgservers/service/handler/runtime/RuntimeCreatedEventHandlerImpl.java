@@ -28,7 +28,6 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
@@ -50,7 +49,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final SystemModule systemModule;
     final LobbyModule lobbyModule;
     final UserModule userModule;
-    final RootModule rootModule;
     final PoolModule poolModule;
 
     final GenerateSecureStringOperation generateSecureStringOperation;

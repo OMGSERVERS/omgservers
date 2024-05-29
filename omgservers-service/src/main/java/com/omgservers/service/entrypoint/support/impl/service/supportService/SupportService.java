@@ -2,8 +2,6 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService;
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportRequest;
-import com.omgservers.model.dto.support.CreateDefaultPoolServerSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.CreateTokenSupportRequest;
@@ -16,8 +14,6 @@ import jakarta.validation.Valid;
 public interface SupportService {
 
     Uni<CreateTokenSupportResponse> createToken(@Valid CreateTokenSupportRequest request);
-
-    Uni<CreateDefaultPoolServerSupportResponse> createDefaultPoolServer(@Valid CreateDefaultPoolServerSupportRequest request);
 
     Uni<CreateTenantSupportResponse> createTenant(@Valid CreateTenantSupportRequest request);
 
