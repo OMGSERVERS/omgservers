@@ -109,7 +109,7 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         return selectActiveVersionMatchmakerRefsByTenantId.selectActiveVersionMatchmakerRefsByTenantId(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantDashboard::setMatchmakerLobbyRefs)
+                .invoke(tenantDashboard::setMatchmakerRefs)
                 .replaceWithVoid();
     }
 }

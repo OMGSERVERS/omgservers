@@ -30,5 +30,5 @@ public class TenantDashboardModel {
     List<VersionLobbyRefModel> lobbyRefs;
 
     @NotNull
-    List<VersionMatchmakerRefModel> matchmakerLobbyRefs;
+    List<VersionMatchmakerRefModel> matchmakerRefs;
 }

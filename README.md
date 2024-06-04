@@ -208,18 +208,27 @@ end
 ### Command line tool
 
 ```
-./omgserversctl
 OMGSERVERS ctl, v1.0.0
 Usage:
  omgserversctl help
  omgserversctl logs
  omgserversctl env print
  omgserversctl env useLocal
- omgserversctl admin pingServer
- omgserversctl admin generateId
- omgserversctl admin createTenant
- omgserversctl admin createDeveloper
+ omgserversctl admin useCredentials <user_id> <password>
+ omgserversctl admin printActive
+ omgserversctl admin createToken
+ omgserversctl admin createSupport
+ omgserversctl support useCredentials <user_id> <password>
+ omgserversctl support printActive
+ omgserversctl support createToken
+ omgserversctl support createTenant
+ omgserversctl support deleteTenant
+ omgserversctl support createDeveloper
+ omgserversctl developer useCredentials <user_id> <password>
+ omgserversctl developer printActive
  omgserversctl developer createToken
+ omgserversctl developer useTenant <tenant_id>
+ omgserversctl developer printTenant
  omgserversctl developer createProject
  omgserversctl developer getTenantDashboard
  omgserversctl developer uploadVersion <scripts_path>

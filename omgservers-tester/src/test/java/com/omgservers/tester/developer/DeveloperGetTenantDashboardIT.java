@@ -42,7 +42,7 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
             assertEquals(1, tenantDashboard.getStages().size());
             assertEquals(1, tenantDashboard.getVersions().size());
             assertEquals(1, tenantDashboard.getLobbyRefs().size());
-            assertEquals(1, tenantDashboard.getMatchmakerLobbyRefs().size());
+            assertEquals(1, tenantDashboard.getMatchmakerRefs().size());
         } finally {
             supportApiTester.deleteTenant(version.getSupportToken(), version.getTenantId());
         }
