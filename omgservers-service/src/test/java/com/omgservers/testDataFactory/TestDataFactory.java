@@ -16,6 +16,7 @@ public class TestDataFactory {
     final TenantTestDataFactory tenantTestDataFactory;
     final ClientTestDataFactory clientTestDataFactory;
     final LobbyTestDataFactory lobbyTestDataFactory;
+    final RootTestDataFactory rootTestDataFactory;
     final PoolTestDataFactory poolTestDataFactory;
     final UserTestDataFactory userTestDataFactory;
 }

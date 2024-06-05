@@ -8,6 +8,8 @@ public interface BootstrapService {
 
     Uni<Void> bootstrapIndex();
 
+    Uni<Void> bootstrapRoot();
+
     Uni<Void> bootstrapAdmin();
 
     Uni<Void> bootstrapDefaultPool();

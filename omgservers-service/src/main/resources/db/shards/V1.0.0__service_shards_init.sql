@@ -1,3 +1,13 @@
+-- root module
+
+create table if not exists tab_root (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    deleted boolean not null
+);
+
 -- pool module
 
 create table if not exists tab_pool (

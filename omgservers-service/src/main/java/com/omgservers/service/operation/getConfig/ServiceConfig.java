@@ -27,6 +27,8 @@ public interface ServiceConfig {
     BuilderConfig builder();
 
     interface DefaultsConfig {
+        long rootId();
+
         long poolId();
     }
 
@@ -80,6 +82,8 @@ public interface ServiceConfig {
 
         BootstrapAdminConfig admin();
 
+        BootstrapRootConfig root();
+
         BootstrapDefaultPoolConfig defaultPool();
 
         BootstrapDockerHostConfig dockerHost();
@@ -105,6 +109,10 @@ public interface ServiceConfig {
         long userId();
 
         String password();
+    }
+
+    interface BootstrapRootConfig {
+        boolean enabled();
     }
 
     interface BootstrapDefaultPoolConfig {

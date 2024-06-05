@@ -6,6 +6,7 @@ import com.omgservers.service.module.system.impl.service.bootstrapService.impl.m
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapIndex.BootstrapIndexMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelay.BootstrapRelayMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRoot.BootstrapRootMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchema.BootstrapSchemaMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,6 +25,7 @@ class BootstrapServiceImpl implements BootstrapService {
     final BootstrapAdminMethod bootstrapAdminMethod;
     final BootstrapIndexMethod bootstrapIndexMethod;
     final BootstrapRelayMethod bootstrapRelayMethod;
+    final BootstrapRootMethod bootstrapRootMethod;
 
     @Override
     public Uni<Void> bootstrapSchema() {
@@ -33,6 +35,11 @@ class BootstrapServiceImpl implements BootstrapService {
     @Override
     public Uni<Void> bootstrapIndex() {
         return bootstrapIndexMethod.bootstrapIndex();
+    }
+
+    @Override
+    public Uni<Void> bootstrapRoot() {
+        return bootstrapRootMethod.bootstrapRoot();
     }
 
     @Override

@@ -37,6 +37,7 @@ public class BootstrapService {
         Uni.createFrom().voidItem()
                 .flatMap(voidItem -> bootstrapSchema())
                 .flatMap(voidItem -> bootstrapIndex())
+                .flatMap(voidItem -> bootstrapRoot())
                 .flatMap(voidItem -> bootstrapAdmin())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .flatMap(voidItem -> bootstrapDockerHost())
@@ -47,7 +48,7 @@ public class BootstrapService {
     Uni<Void> bootstrapSchema() {
         if (getConfigOperation.getServiceConfig().bootstrap().schema().enabled()) {
             return systemModule.getBootstrapService().bootstrapSchema()
-                    .invoke(voidItem -> log.info("Schema has been initialized"));
+                    .invoke(voidItem -> log.info("Schema was initialized"));
         } else {
             log.info("Bootstrap schema is not enabled, skip operation");
             return Uni.createFrom().voidItem();
@@ -57,9 +58,19 @@ public class BootstrapService {
     Uni<Void> bootstrapIndex() {
         if (getConfigOperation.getServiceConfig().bootstrap().index().enabled()) {
             return systemModule.getBootstrapService().bootstrapIndex()
-                    .invoke(voidItem -> log.info("Index has been initialized"));
+                    .invoke(voidItem -> log.info("Index was initialized"));
         } else {
             log.info("Bootstrap index is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapRoot() {
+        if (getConfigOperation.getServiceConfig().bootstrap().root().enabled()) {
+            return systemModule.getBootstrapService().bootstrapRoot()
+                    .invoke(voidItem -> log.info("Root was initialized"));
+        } else {
+            log.info("Bootstrap root is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -67,7 +78,7 @@ public class BootstrapService {
     Uni<Void> bootstrapAdmin() {
         if (getConfigOperation.getServiceConfig().bootstrap().admin().enabled()) {
             return systemModule.getBootstrapService().bootstrapAdmin()
-                    .invoke(voidItem -> log.info("Admin has been initialized"));
+                    .invoke(voidItem -> log.info("Admin was initialized"));
         } else {
             log.info("Bootstrap admin is not enabled, skip operation");
             return Uni.createFrom().voidItem();
@@ -77,7 +88,7 @@ public class BootstrapService {
     Uni<Void> bootstrapDefaultPool() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultPool().enabled()) {
             return systemModule.getBootstrapService().bootstrapDefaultPool()
-                    .invoke(voidItem -> log.info("Default pool has been initialized"));
+                    .invoke(voidItem -> log.info("Default pool was initialized"));
         } else {
             log.info("Bootstrap default pool is not enabled, skip operation");
             return Uni.createFrom().voidItem();
@@ -87,7 +98,7 @@ public class BootstrapService {
     Uni<Void> bootstrapDockerHost() {
         if (getConfigOperation.getServiceConfig().bootstrap().dockerHost().enabled()) {
             return systemModule.getBootstrapService().bootstrapDockerHost()
-                    .invoke(voidItem -> log.info("Docker host has been initialized"));
+                    .invoke(voidItem -> log.info("Docker host was initialized"));
         } else {
             log.info("Bootstrap docker host is not enabled, skip operation");
             return Uni.createFrom().voidItem();
@@ -97,7 +108,7 @@ public class BootstrapService {
     Uni<Void> bootstrapRelay() {
         if (getConfigOperation.getServiceConfig().bootstrap().relayJob().enabled()) {
             return systemModule.getBootstrapService().bootstrapRelay()
-                    .invoke(voidItem -> log.info("Relay has been initialized"));
+                    .invoke(voidItem -> log.info("Relay was initialized"));
         } else {
             log.info("Bootstrap relay is not enabled, skip operation");
             return Uni.createFrom().voidItem();
