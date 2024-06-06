@@ -20,7 +20,7 @@ public class ServiceHeadersFactory extends ReactiveClientHeadersFactory {
                                  final IssueJwtTokenOperation issueJwtTokenOperation) {
         userAgent = getConfigOperation.getServiceConfig().index().serverUri().getHost();
         serviceJwtToken = issueJwtTokenOperation.issueServiceJwtToken();
-        log.info("Service JWT token was issued, userAgent={}, {}", userAgent, serviceJwtToken);
+        log.info("Service JWT token was issued, userAgent={}", userAgent);
     }
 
     @Override

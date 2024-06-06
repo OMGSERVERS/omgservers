@@ -11,20 +11,20 @@
 
 #### Mandatory variables and their value templates
 
-- OMGSERVERS_DB_URL=postgresql://<db_hostname>:<db_port>/<db_name>
-- OMGSERVERS_MQ_HOST=<mq_host>
+- OMGSERVERS_DATABASE_URL=postgresql://<db_hostname>:<db_port>/<db_name>
+- OMGSERVERS_QUEUES_HOST=<mq_host>
 - OMGSERVERS_EXTERNAL_URI=http://<external_hostname>:<external_port>
 - OMGSERVERS_INTERNAL_URI=http://<internal_hostname>:<internal_port>
 
 #### Optional variables and their default values
 
-- OMGSERVERS_DB_USERNAME=root
-- OMGSERVERS_DB_PASSWORD=root
-- OMGSERVERS_MQ_PORT=5672
-- OMGSERVERS_MQ_USERNAME=admin
-- OMGSERVERS_MQ_PASSWORD=admin
-- OMGSERVERS_MQ_SERVICE_QUEUE=ServiceEvents
-- OMGSERVERS_MQ_FORWARDING_QUEUE=ForwardedEvents
+- OMGSERVERS_DATABASE_USERNAME=root
+- OMGSERVERS_DATABASE_PASSWORD=root
+- OMGSERVERS_QUEUES_PORT=5672
+- OMGSERVERS_QUEUES_USERNAME=admin
+- OMGSERVERS_QUEUES_PASSWORD=admin
+- OMGSERVERS_QUEUES_SERVICE_QUEUE=ServiceEvents
+- OMGSERVERS_QUEUES_FORWARDING_QUEUE=ForwardedEvents
 - OMGSERVERS_ROOT_LOG_LEVEL=INFO
 - OMGSERVERS_APP_LOG_LEVEL=INFO
 - OMGSERVERS_TRAFFIC_LOG_LEVEL=INFO

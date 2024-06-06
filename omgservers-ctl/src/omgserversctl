@@ -23,21 +23,18 @@ help() {
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
     echo " omgserversctl admin useCredentials <user_id> <password>"
   fi
-  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printActive" ]; then
-    echo " omgserversctl admin printActive"
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printCurrent" ]; then
+    echo " omgserversctl admin printCurrent"
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createToken" ]; then
     echo " omgserversctl admin createToken"
-  fi
-  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createSupport" ]; then
-    echo " omgserversctl admin createSupport"
   fi
   # Support
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support useCredentials" ]; then
     echo " omgserversctl support useCredentials <user_id> <password>"
   fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support printActive" ]; then
-    echo " omgserversctl support printActive"
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support printCurrent" ]; then
+    echo " omgserversctl support printCurrent"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createToken" ]; then
     echo " omgserversctl support createToken"
@@ -55,8 +52,8 @@ help() {
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer useCredentials" ]; then
     echo " omgserversctl developer useCredentials <user_id> <password>"
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printActive" ]; then
-    echo " omgserversctl developer printActive"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printCurrent" ]; then
+    echo " omgserversctl developer printCurrent"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
     echo " omgserversctl developer createToken"
@@ -117,12 +114,13 @@ admin_useCredentials() {
 
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Admin credentials were set, ADMIN_USER_ID=${ADMIN_USER_ID}"
 
+  internal_useEnv
   admin_createToken
 
   exit 0
 }
 
-admin_printActive() {
+admin_printCurrent() {
   ADMIN_USER_ID=${OMGSERVERS_ADMIN_USER_ID}
   ADMIN_USER_PASSWORD=${OMGSERVERS_ADMIN_PASSWORD}
   ADMIN_TOKEN=${OMGSERVERS_ADMIN_TOKEN}
@@ -180,46 +178,6 @@ admin_createToken() {
   exit 0
 }
 
-admin_createSupport() {
-  ADMIN_TOKEN=$OMGSERVERS_ADMIN_TOKEN
-
-  if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active admin token was not found"
-    exit 1
-  fi
-
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/admin/request/create-support"
-  echo >> ~/.omgservers/logs
-  echo $ENDPOINT >> ~/.omgservers/logs
-
-  curl -s -S -X PUT --fail-with-body \
-    "${ENDPOINT}" \
-    -H "Content-type: application/json" \
-    -H "Authorization: Bearer ${OMGSERVERS_ADMIN_TOKEN}" \
-    -o ~/.omgservers/tmp/admin-create-support.json
-
-  cat ~/.omgservers/tmp/admin-create-support.json >> ~/.omgservers/logs
-  echo >> ~/.omgservers/logs
-
-  USER_ID=$(cat ~/.omgservers/tmp/admin-create-support.json | jq -r .user_id)
-  if [ -z "$USER_ID" -o "$USER_ID" == "null" ]; then
-    echo "ERROR: USER_ID was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERS_SUPPORT_USER_ID=$USER_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
-
-  PASSWORD=$(cat ~/.omgservers/tmp/admin-create-support.json | jq -r .password)
-  if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
-    echo "ERROR: PASSWORD was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERS_SUPPORT_USER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
-
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Support was created, USER_ID=$USER_ID"
-
-  exit 0
-}
-
 # SUPPORT
 
 support_useCredentials() {
@@ -236,12 +194,13 @@ support_useCredentials() {
 
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Support credentials were set, SUPPORT_USER_ID=$SUPPORT_USER_ID"
 
+  internal_useEnv
   support_createToken
 
   exit 0
 }
 
-support_printActive() {
+support_printCurrent() {
   SUPPORT_USER_ID=${OMGSERVERS_SUPPORT_USER_ID}
   SUPPORT_USER_PASSWORD=${OMGSERVERS_SUPPORT_USER_PASSWORD}
   SUPPORT_TOKEN=${OMGSERVERS_SUPPORT_TOKEN}
@@ -432,7 +391,7 @@ support_createDeveloper() {
 
 # DEVELOPER
 
-developer_printActive() {
+developer_printCurrent() {
   DEVELOPER_USER_ID=${OMGSERVERS_DEVELOPER_USER_ID}
   DEVELOPER_PASSWORD=${OMGSERVERS_DEVELOPER_USER_PASSWORD}
   DEVELOPER_TOKEN=${OMGSERVERS_DEVELOPER_TOKEN}
@@ -503,6 +462,7 @@ developer_useCredentials() {
 
   echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
+  internal_useEnv
   developer_createToken
 
   exit 0
@@ -746,12 +706,10 @@ fi
 if [ "$1" = "admin" ]; then
   if [ "$2" = "useCredentials" ]; then
       admin_useCredentials $3 $4
-  elif [ "$2" = "printActive" ]; then
-    admin_printActive
+  elif [ "$2" = "printCurrent" ]; then
+    admin_printCurrent
   elif [ "$2" = "createToken" ]; then
     admin_createToken
-  elif [ "$2" = "createSupport" ]; then
-    admin_createSupport
   else
     help "admin"
   fi
@@ -759,8 +717,8 @@ if [ "$1" = "admin" ]; then
 elif [ "$1" = "support" ]; then
   if [ "$2" = "useCredentials" ]; then
     support_useCredentials $3 $4
-  elif [ "$2" = "printActive" ]; then
-    support_printActive
+  elif [ "$2" = "printCurrent" ]; then
+    support_printCurrent
   elif [ "$2" = "createToken" ]; then
     support_createToken
   elif [ "$2" = "createTenant" ]; then
@@ -776,8 +734,8 @@ elif [ "$1" = "support" ]; then
 elif [ "$1" = "developer" ]; then
   if [ "$2" = "useCredentials" ]; then
     developer_useCredentials $3 $4
-  elif [ "$2" = "printActive" ]; then
-      developer_printActive
+  elif [ "$2" = "printCurrent" ]; then
+      developer_printCurrent
   elif [ "$2" = "createToken" ]; then
     developer_createToken
   elif [ "$2" = "useTenant" ]; then

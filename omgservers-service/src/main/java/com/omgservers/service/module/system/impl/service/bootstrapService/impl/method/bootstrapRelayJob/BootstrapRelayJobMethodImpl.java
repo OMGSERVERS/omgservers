@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelay;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob;
 
 import com.omgservers.service.module.system.impl.component.relayJobTask.RelayJobTask;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapRelayMethodImpl implements BootstrapRelayMethod {
+class BootstrapRelayJobMethodImpl implements BootstrapRelayJobMethod {
 
     final GetConfigOperation getConfigOperation;
 
@@ -20,7 +20,7 @@ class BootstrapRelayMethodImpl implements BootstrapRelayMethod {
     final Scheduler scheduler;
 
     @Override
-    public Uni<Void> bootstrapRelay() {
+    public Uni<Void> bootstrapRelayJob() {
         log.debug("Bootstrap relay");
 
         return Uni.createFrom().voidItem()

@@ -26,8 +26,10 @@ public class SupportApiTester {
 
     final ObjectMapper objectMapper;
 
-    public String createSupportToken(final Long userId,
-                                     final String password) throws JsonProcessingException {
+    public String createSupportToken() throws JsonProcessingException {
+        final var userId = getConfigOperation.getConfig().support().userId();
+        final var password = getConfigOperation.getConfig().support().password();
+
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Support"))

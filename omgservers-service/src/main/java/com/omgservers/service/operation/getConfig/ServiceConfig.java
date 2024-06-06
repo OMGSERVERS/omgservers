@@ -30,6 +30,10 @@ public interface ServiceConfig {
         long rootId();
 
         long poolId();
+
+        long adminId();
+
+        long supportId();
     }
 
     interface GeneratorConfig {
@@ -82,6 +86,8 @@ public interface ServiceConfig {
 
         BootstrapAdminConfig admin();
 
+        BootstrapSupportConfig support();
+
         BootstrapRootConfig root();
 
         BootstrapDefaultPoolConfig defaultPool();
@@ -106,7 +112,11 @@ public interface ServiceConfig {
     interface BootstrapAdminConfig {
         boolean enabled();
 
-        long userId();
+        String password();
+    }
+
+    interface BootstrapSupportConfig {
+        boolean enabled();
 
         String password();
     }

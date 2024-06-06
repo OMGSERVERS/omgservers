@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapAdmin;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapAdminUser;
 
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapAdminMethodImpl implements BootstrapAdminMethod {
+class BootstrapAdminUserMethodImpl implements BootstrapAdminUserMethod {
 
     final UserModule userModule;
 
@@ -28,12 +28,12 @@ class BootstrapAdminMethodImpl implements BootstrapAdminMethod {
     final UserModelFactory userModelFactory;
 
     @Override
-    public Uni<Void> bootstrapAdmin() {
-        log.debug("Bootstrap admin");
+    public Uni<Void> bootstrapAdminUser() {
+        log.debug("Bootstrap admin user");
 
-        final var userId = getConfigOperation.getServiceConfig().bootstrap().admin().userId();
+        final var userId = getConfigOperation.getServiceConfig().defaults().adminId();
         return getUser(userId)
-                .invoke(root -> log.info("Admin was already create, skip operation, userId={}", userId))
+                .invoke(root -> log.info("Admin user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap";

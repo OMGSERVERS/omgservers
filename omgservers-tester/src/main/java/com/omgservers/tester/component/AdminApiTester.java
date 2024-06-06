@@ -2,8 +2,6 @@ package com.omgservers.tester.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.dto.admin.CreateSupportAdminRequest;
-import com.omgservers.model.dto.admin.CreateSupportAdminResponse;
 import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
 import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
@@ -37,20 +35,5 @@ public class AdminApiTester {
 
         final var response = responseSpecification.getBody().as(CreateTokenAdminResponse.class);
         return response.getRawToken();
-    }
-
-    public CreateSupportAdminResponse createSupport(final String token) throws JsonProcessingException {
-        final var responseSpecification = RestAssured
-                .with()
-                .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
-                .auth().oauth2(token)
-                .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateSupportAdminRequest()))
-                .when().put("/omgservers/v1/entrypoint/admin/request/create-support");
-        responseSpecification.then().statusCode(200);
-
-        final var response = responseSpecification.getBody().as(CreateSupportAdminResponse.class);
-        return response;
     }
 }

@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchema;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDatabaseSchema;
 
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapSchemaMethodImpl implements BootstrapSchemaMethod {
+class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod {
 
     private static final String SYSTEM_SCHEMA_LOCATION = "db/system";
     private static final String SHARDS_SCHEMA_LOCATION = "db/shards";
@@ -24,8 +24,8 @@ class BootstrapSchemaMethodImpl implements BootstrapSchemaMethod {
     final DataSource dataSource;
 
     @Override
-    public Uni<Void> bootstrapSchema() {
-        log.debug("Bootstrap schema");
+    public Uni<Void> bootstrapDatabaseSchema() {
+        log.debug("Bootstrap database schema");
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())

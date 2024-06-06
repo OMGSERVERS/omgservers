@@ -11,7 +11,15 @@ public interface TesterConfig {
 
     AdminConfig admin();
 
+    SupportConfig support();
+
     interface AdminConfig {
+        long userId();
+
+        String password();
+    }
+
+    interface SupportConfig {
         long userId();
 
         String password();

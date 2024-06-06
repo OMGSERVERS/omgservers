@@ -37,11 +37,8 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     public TestVersionModel bootstrapTestVersion(final String mainLua,
                                                  final VersionConfigModel versionConfig) throws IOException {
         final var adminToken = adminApiTester.createAdminToken();
-        final var createSupportAdminResponse = adminApiTester.createSupport(adminToken);
 
-        final var supportUserId = createSupportAdminResponse.getUserId();
-        final var supportPassword = createSupportAdminResponse.getPassword();
-        final var supportToken = supportApiTester.createSupportToken(supportUserId, supportPassword);
+        final var supportToken = supportApiTester.createSupportToken();
         final var tenantId = supportApiTester.createTenant(supportToken);
 
         final var createDeveloperAdminResponse = supportApiTester.createDeveloper(supportToken, tenantId);
@@ -64,8 +61,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var versionId = createVersionDeveloperResponse.getId();
 
         return TestVersionModel.builder()
-                .supportUserId(supportUserId)
-                .supportPassword(supportPassword)
+                .adminToken(adminToken)
                 .supportToken(supportToken)
                 .tenantId(tenantId)
                 .developerUserId(developerUserId)

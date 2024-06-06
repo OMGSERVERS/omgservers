@@ -26,13 +26,13 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueAdminJwtToken() {
-        final var subject = String.valueOf(getConfigOperation.getServiceConfig().bootstrap().admin().userId());
+        final var subject = String.valueOf(getConfigOperation.getServiceConfig().defaults().adminId());
         final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
                 .subject(subject)
                 .expiresIn(ADMIN_TOKEN_DURATION)
                 .groups(UserRoleEnum.ADMIN.getName())
                 .sign();
-        
+
         return jwtToken;
     }
 

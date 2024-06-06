@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRoot;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceRoot;
 
 import com.omgservers.model.dto.root.SyncRootRequest;
 import com.omgservers.service.factory.root.RootModelFactory;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapRootMethodImpl implements BootstrapRootMethod {
+class BootstrapServiceRootMethodImpl implements BootstrapServiceRootMethod {
 
     final RootModule rootModule;
 
@@ -21,8 +21,8 @@ class BootstrapRootMethodImpl implements BootstrapRootMethod {
     final RootModelFactory rootModelFactory;
 
     @Override
-    public Uni<Void> bootstrapRoot() {
-        log.debug("Bootstrap root");
+    public Uni<Void> bootstrapServiceRoot() {
+        log.debug("Bootstrap service root");
 
         final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
 

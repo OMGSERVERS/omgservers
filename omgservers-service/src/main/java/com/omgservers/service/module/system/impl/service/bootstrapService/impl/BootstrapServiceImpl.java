@@ -1,13 +1,14 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl;
 
 import com.omgservers.service.module.system.impl.service.bootstrapService.BootstrapService;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapAdmin.BootstrapAdminMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapAdminUser.BootstrapAdminUserMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDatabaseSchema.BootstrapDatabaseSchemaMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDefaultPool.BootstrapDefaultPoolMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapIndex.BootstrapIndexMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelay.BootstrapRelayMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRoot.BootstrapRootMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchema.BootstrapSchemaMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob.BootstrapRelayJobMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceIndex.BootstrapServiceIndexMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceRoot.BootstrapServiceRootMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSupportUser.BootstrapSupportUserMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,32 +20,38 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BootstrapServiceImpl implements BootstrapService {
 
+    final BootstrapDatabaseSchemaMethod bootstrapDatabaseSchemaMethod;
+    final BootstrapServiceIndexMethod bootstrapServiceIndexMethod;
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
+    final BootstrapSupportUserMethod bootstrapSupportUserMethod;
+    final BootstrapServiceRootMethod bootstrapServiceRootMethod;
     final BootstrapDockerHostMethod bootstrapDockerHostMethod;
-    final BootstrapSchemaMethod bootstrapSchemaMethod;
-    final BootstrapAdminMethod bootstrapAdminMethod;
-    final BootstrapIndexMethod bootstrapIndexMethod;
-    final BootstrapRelayMethod bootstrapRelayMethod;
-    final BootstrapRootMethod bootstrapRootMethod;
+    final BootstrapAdminUserMethod bootstrapAdminUserMethod;
+    final BootstrapRelayJobMethod bootstrapRelayJobMethod;
 
     @Override
-    public Uni<Void> bootstrapSchema() {
-        return bootstrapSchemaMethod.bootstrapSchema();
+    public Uni<Void> bootstrapDatabaseSchema() {
+        return bootstrapDatabaseSchemaMethod.bootstrapDatabaseSchema();
     }
 
     @Override
-    public Uni<Void> bootstrapIndex() {
-        return bootstrapIndexMethod.bootstrapIndex();
+    public Uni<Void> bootstrapServiceIndex() {
+        return bootstrapServiceIndexMethod.bootstrapServiceIndex();
     }
 
     @Override
-    public Uni<Void> bootstrapRoot() {
-        return bootstrapRootMethod.bootstrapRoot();
+    public Uni<Void> bootstrapServiceRoot() {
+        return bootstrapServiceRootMethod.bootstrapServiceRoot();
     }
 
     @Override
-    public Uni<Void> bootstrapAdmin() {
-        return bootstrapAdminMethod.bootstrapAdmin();
+    public Uni<Void> bootstrapAdminUser() {
+        return bootstrapAdminUserMethod.bootstrapAdminUser();
+    }
+
+    @Override
+    public Uni<Void> bootstrapSupportUser() {
+        return bootstrapSupportUserMethod.bootstrapSupportUser();
     }
 
     @Override
@@ -58,7 +65,7 @@ class BootstrapServiceImpl implements BootstrapService {
     }
 
     @Override
-    public Uni<Void> bootstrapRelay() {
-        return bootstrapRelayMethod.bootstrapRelay();
+    public Uni<Void> bootstrapRelayJob() {
+        return bootstrapRelayJobMethod.bootstrapRelayJob();
     }
 }

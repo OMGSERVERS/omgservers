@@ -1,4 +1,4 @@
-package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapIndex;
+package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceIndex;
 
 import com.omgservers.model.dto.system.FindIndexRequest;
 import com.omgservers.model.dto.system.FindIndexResponse;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapIndexMethodImpl implements BootstrapIndexMethod {
+class BootstrapServiceIndexMethodImpl implements BootstrapServiceIndexMethod {
 
     final SystemModule systemModule;
 
@@ -27,12 +27,12 @@ class BootstrapIndexMethodImpl implements BootstrapIndexMethod {
     final IndexModelFactory indexModelFactory;
 
     @Override
-    public Uni<Void> bootstrapIndex() {
-        log.debug("Bootstrap index");
+    public Uni<Void> bootstrapServiceIndex() {
+        log.debug("Bootstrap service index");
 
         final var indexName = getConfigOperation.getServiceConfig().index().name();
         return findIndex(indexName)
-                .invoke(root -> log.info("Index was already create, skip operation, indexName={}", indexName))
+                .invoke(root -> log.info("Service index was already create, skip operation, indexName={}", indexName))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var servers = getConfigOperation.getServiceConfig().bootstrap().index().servers();

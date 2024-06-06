@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl;
 
-import com.omgservers.model.dto.admin.CreateSupportAdminRequest;
-import com.omgservers.model.dto.admin.CreateSupportAdminResponse;
 import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
 import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
 import com.omgservers.service.entrypoint.admin.impl.service.adminService.AdminService;
@@ -21,10 +19,5 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateTokenAdminResponse> createToken(final CreateTokenAdminRequest request) {
         return adminService.createToken(request);
-    }
-
-    @Override
-    public Uni<CreateSupportAdminResponse> createSupport(final CreateSupportAdminRequest request) {
-        return adminService.createSupport(request);
     }
 }

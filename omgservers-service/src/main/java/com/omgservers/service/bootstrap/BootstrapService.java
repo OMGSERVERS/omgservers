@@ -35,52 +35,63 @@ public class BootstrapService {
     void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_SERVICE_PRIORITY)
                  final StartupEvent event) {
         Uni.createFrom().voidItem()
-                .flatMap(voidItem -> bootstrapSchema())
-                .flatMap(voidItem -> bootstrapIndex())
-                .flatMap(voidItem -> bootstrapRoot())
-                .flatMap(voidItem -> bootstrapAdmin())
+                .flatMap(voidItem -> bootstrapDatabaseSchema())
+                .flatMap(voidItem -> bootstrapServiceIndex())
+                .flatMap(voidItem -> bootstrapServiceRoot())
+                .flatMap(voidItem -> bootstrapAdminUser())
+                .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .flatMap(voidItem -> bootstrapDockerHost())
-                .flatMap(voidItem -> bootstrapRelay())
+                .flatMap(voidItem -> bootstrapRelayJob())
                 .await().indefinitely();
     }
 
-    Uni<Void> bootstrapSchema() {
+    Uni<Void> bootstrapDatabaseSchema() {
         if (getConfigOperation.getServiceConfig().bootstrap().schema().enabled()) {
-            return systemModule.getBootstrapService().bootstrapSchema()
-                    .invoke(voidItem -> log.info("Schema was initialized"));
+            return systemModule.getBootstrapService().bootstrapDatabaseSchema()
+                    .invoke(voidItem -> log.info("Database schema was initialized"));
         } else {
-            log.info("Bootstrap schema is not enabled, skip operation");
+            log.info("Bootstrap of database schema is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Void> bootstrapIndex() {
+    Uni<Void> bootstrapServiceIndex() {
         if (getConfigOperation.getServiceConfig().bootstrap().index().enabled()) {
-            return systemModule.getBootstrapService().bootstrapIndex()
-                    .invoke(voidItem -> log.info("Index was initialized"));
+            return systemModule.getBootstrapService().bootstrapServiceIndex()
+                    .invoke(voidItem -> log.info("Service index was initialized"));
         } else {
-            log.info("Bootstrap index is not enabled, skip operation");
+            log.info("Bootstrap of service index is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Void> bootstrapRoot() {
+    Uni<Void> bootstrapServiceRoot() {
         if (getConfigOperation.getServiceConfig().bootstrap().root().enabled()) {
-            return systemModule.getBootstrapService().bootstrapRoot()
-                    .invoke(voidItem -> log.info("Root was initialized"));
+            return systemModule.getBootstrapService().bootstrapServiceRoot()
+                    .invoke(voidItem -> log.info("Service root was initialized"));
         } else {
-            log.info("Bootstrap root is not enabled, skip operation");
+            log.info("Bootstrap of service root is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Void> bootstrapAdmin() {
+    Uni<Void> bootstrapAdminUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().admin().enabled()) {
-            return systemModule.getBootstrapService().bootstrapAdmin()
-                    .invoke(voidItem -> log.info("Admin was initialized"));
+            return systemModule.getBootstrapService().bootstrapAdminUser()
+                    .invoke(voidItem -> log.info("Admin user was initialized"));
         } else {
-            log.info("Bootstrap admin is not enabled, skip operation");
+            log.info("Bootstrap of admin user is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapSupportUser() {
+        if (getConfigOperation.getServiceConfig().bootstrap().support().enabled()) {
+            return systemModule.getBootstrapService().bootstrapSupportUser()
+                    .invoke(voidItem -> log.info("Support user was initialized"));
+        } else {
+            log.info("Bootstrap of support user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -90,7 +101,7 @@ public class BootstrapService {
             return systemModule.getBootstrapService().bootstrapDefaultPool()
                     .invoke(voidItem -> log.info("Default pool was initialized"));
         } else {
-            log.info("Bootstrap default pool is not enabled, skip operation");
+            log.info("Bootstrap of default pool is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -100,17 +111,17 @@ public class BootstrapService {
             return systemModule.getBootstrapService().bootstrapDockerHost()
                     .invoke(voidItem -> log.info("Docker host was initialized"));
         } else {
-            log.info("Bootstrap docker host is not enabled, skip operation");
+            log.info("Bootstrap of docker host is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Void> bootstrapRelay() {
+    Uni<Void> bootstrapRelayJob() {
         if (getConfigOperation.getServiceConfig().bootstrap().relayJob().enabled()) {
-            return systemModule.getBootstrapService().bootstrapRelay()
-                    .invoke(voidItem -> log.info("Relay was initialized"));
+            return systemModule.getBootstrapService().bootstrapRelayJob()
+                    .invoke(voidItem -> log.info("Relay job was initialized"));
         } else {
-            log.info("Bootstrap relay is not enabled, skip operation");
+            log.info("Bootstrap of relay job is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

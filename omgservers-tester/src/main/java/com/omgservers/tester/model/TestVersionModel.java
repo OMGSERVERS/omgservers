@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class TestVersionModel {
 
+    String adminToken;
+
     Long supportUserId;
     String supportPassword;
     String supportToken;

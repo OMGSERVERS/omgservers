@@ -4,17 +4,19 @@ import io.smallrye.mutiny.Uni;
 
 public interface BootstrapService {
 
-    Uni<Void> bootstrapSchema();
+    Uni<Void> bootstrapDatabaseSchema();
 
-    Uni<Void> bootstrapIndex();
+    Uni<Void> bootstrapServiceIndex();
 
-    Uni<Void> bootstrapRoot();
+    Uni<Void> bootstrapServiceRoot();
 
-    Uni<Void> bootstrapAdmin();
+    Uni<Void> bootstrapAdminUser();
+
+    Uni<Void> bootstrapSupportUser();
 
     Uni<Void> bootstrapDefaultPool();
 
     Uni<Void> bootstrapDockerHost();
 
-    Uni<Void> bootstrapRelay();
+    Uni<Void> bootstrapRelayJob();
 }
