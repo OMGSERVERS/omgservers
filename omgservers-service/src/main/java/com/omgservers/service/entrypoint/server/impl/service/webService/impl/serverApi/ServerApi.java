@@ -5,6 +5,7 @@ import com.omgservers.model.dto.server.BcryptHashServerResponse;
 import com.omgservers.model.dto.server.GenerateIdServerResponse;
 import com.omgservers.model.dto.server.PingServerServerResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -23,5 +24,5 @@ public interface ServerApi {
 
     @PUT
     @Path("/bcrypt-hash")
-    Uni<BcryptHashServerResponse> bcryptHash(BcryptHashServerRequest request);
+    Uni<BcryptHashServerResponse> bcryptHash(@NotNull BcryptHashServerRequest request);
 }

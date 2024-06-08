@@ -2,6 +2,7 @@ package com.omgservers.service.exception;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.NotSupportedException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,12 @@ public class ServerSideExceptionMapper {
         } else {
             return throwable(e);
         }
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<ExceptionErrorResponse> notSupportedException(final NotSupportedException e) {
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.MEDIA_TYPE_WRONG);
+        return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
     @ServerExceptionMapper

@@ -8,6 +8,7 @@ import com.omgservers.model.dto.worker.InterchangeWorkerRequest;
 import com.omgservers.model.dto.worker.InterchangeWorkerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -20,13 +21,13 @@ public interface WorkerApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenWorkerResponse> createToken(CreateTokenWorkerRequest request);
+    Uni<CreateTokenWorkerResponse> createToken(@NotNull CreateTokenWorkerRequest request);
 
     @PUT
     @Path("/get-version")
-    Uni<GetVersionWorkerResponse> getVersion(GetVersionWorkerRequest request);
+    Uni<GetVersionWorkerResponse> getVersion(@NotNull GetVersionWorkerRequest request);
 
     @PUT
     @Path("/interchange")
-    Uni<InterchangeWorkerResponse> interchange(InterchangeWorkerRequest request);
+    Uni<InterchangeWorkerResponse> interchange(@NotNull InterchangeWorkerRequest request);
 }

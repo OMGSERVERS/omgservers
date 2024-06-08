@@ -13,6 +13,7 @@ import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -29,19 +30,19 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
+    Uni<CreateTokenDeveloperResponse> createToken(@NotNull CreateTokenDeveloperRequest request);
 
     @PUT
     @Path("/get-tenant-dashboard")
-    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(GetTenantDashboardDeveloperRequest request);
+    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(@NotNull GetTenantDashboardDeveloperRequest request);
 
     @PUT
     @Path("/create-project")
-    Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
+    Uni<CreateProjectDeveloperResponse> createProject(@NotNull CreateProjectDeveloperRequest request);
 
     @PUT
     @Path("/create-version")
-    Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
+    Uni<CreateVersionDeveloperResponse> createVersion(@NotNull CreateVersionDeveloperRequest request);
 
     @PUT
     @Path("upload-version")
@@ -51,5 +52,5 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/delete-version")
-    Uni<DeleteVersionDeveloperResponse> deleteVersion(DeleteVersionDeveloperRequest request);
+    Uni<DeleteVersionDeveloperResponse> deleteVersion(@NotNull DeleteVersionDeveloperRequest request);
 }

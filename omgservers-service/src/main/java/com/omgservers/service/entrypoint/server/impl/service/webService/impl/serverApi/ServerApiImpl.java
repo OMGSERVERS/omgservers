@@ -8,6 +8,7 @@ import com.omgservers.service.entrypoint.server.impl.service.webService.WebServi
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,7 @@ public class ServerApiImpl implements ServerApi {
     }
 
     @Override
-    public Uni<BcryptHashServerResponse> bcryptHash(final BcryptHashServerRequest request) {
+    public Uni<BcryptHashServerResponse> bcryptHash(@NotNull final BcryptHashServerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::bcryptHash);
     }
 }

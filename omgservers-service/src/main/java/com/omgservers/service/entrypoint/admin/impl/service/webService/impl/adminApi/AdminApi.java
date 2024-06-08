@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adm
 import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
 import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -13,5 +14,5 @@ public interface AdminApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenAdminResponse> createToken(CreateTokenAdminRequest request);
+    Uni<CreateTokenAdminResponse> createToken(@NotNull CreateTokenAdminRequest request);
 }

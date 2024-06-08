@@ -9,6 +9,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +25,7 @@ public class AdminApiImpl implements AdminApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenAdminResponse> createToken(final CreateTokenAdminRequest request) {
+    public Uni<CreateTokenAdminResponse> createToken(@NotNull final CreateTokenAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
     }
 }

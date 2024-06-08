@@ -19,6 +19,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -37,23 +38,23 @@ class DeveloperApiImpl implements DeveloperApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenDeveloperResponse> createToken(final CreateTokenDeveloperRequest request) {
+    public Uni<CreateTokenDeveloperResponse> createToken(@NotNull final CreateTokenDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
     }
 
     @Override
     public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
-            final GetTenantDashboardDeveloperRequest request) {
+            @NotNull final GetTenantDashboardDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
     }
 
     @Override
-    public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> createProject(@NotNull final CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createProject);
     }
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> createVersion(@NotNull final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
     }
 
@@ -66,7 +67,7 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> deleteVersion(@NotNull final DeleteVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
     }
 }

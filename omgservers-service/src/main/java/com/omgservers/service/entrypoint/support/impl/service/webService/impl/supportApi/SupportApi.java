@@ -10,6 +10,7 @@ import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -22,18 +23,18 @@ public interface SupportApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenSupportResponse> createToken(CreateTokenSupportRequest request);
+    Uni<CreateTokenSupportResponse> createToken(@NotNull CreateTokenSupportRequest request);
 
     @PUT
     @Path("/create-tenant")
-    Uni<CreateTenantSupportResponse> createTenant(CreateTenantSupportRequest request);
+    Uni<CreateTenantSupportResponse> createTenant(@NotNull CreateTenantSupportRequest request);
 
     @PUT
     @Path("/delete-tenant")
-    Uni<DeleteTenantSupportResponse> deleteTenant(DeleteTenantSupportRequest request);
+    Uni<DeleteTenantSupportResponse> deleteTenant(@NotNull DeleteTenantSupportRequest request);
 
     @PUT
     @Path("/create-developer")
-    Uni<CreateDeveloperSupportResponse> createDeveloper(CreateDeveloperSupportRequest request);
+    Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull CreateDeveloperSupportRequest request);
 
 }

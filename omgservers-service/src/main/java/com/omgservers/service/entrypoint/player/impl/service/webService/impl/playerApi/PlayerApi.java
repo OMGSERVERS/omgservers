@@ -10,6 +10,7 @@ import com.omgservers.model.dto.player.InterchangePlayerRequest;
 import com.omgservers.model.dto.player.InterchangePlayerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -22,17 +23,17 @@ public interface PlayerApi {
 
     @PUT
     @Path("/create-user")
-    Uni<CreateUserPlayerResponse> createUser(CreateUserPlayerRequest request);
+    Uni<CreateUserPlayerResponse> createUser(@NotNull CreateUserPlayerRequest request);
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenPlayerResponse> createToken(CreateTokenPlayerRequest request);
+    Uni<CreateTokenPlayerResponse> createToken(@NotNull CreateTokenPlayerRequest request);
 
     @PUT
     @Path("/create-client")
-    Uni<CreateClientPlayerResponse> createClient(CreateClientPlayerRequest request);
+    Uni<CreateClientPlayerResponse> createClient(@NotNull CreateClientPlayerRequest request);
 
     @PUT
     @Path("/interchange")
-    Uni<InterchangePlayerResponse> interchange(InterchangePlayerRequest request);
+    Uni<InterchangePlayerResponse> interchange(@NotNull InterchangePlayerRequest request);
 }

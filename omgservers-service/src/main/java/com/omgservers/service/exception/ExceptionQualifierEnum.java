@@ -2,6 +2,7 @@ package com.omgservers.service.exception;
 
 public enum ExceptionQualifierEnum {
     REQUEST_WRONG,
+    MEDIA_TYPE_WRONG,
     ARGUMENT_WRONG,
     OBJECT_WRONG,
     MESSAGE_QUALIFIER_WRONG,

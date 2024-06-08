@@ -12,6 +12,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,19 +26,19 @@ class WorkerApiImpl implements WorkerApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenWorkerResponse> createToken(final CreateTokenWorkerRequest request) {
+    public Uni<CreateTokenWorkerResponse> createToken(@NotNull final CreateTokenWorkerRequest request) {
         return webService.createToken(request);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.WORKER})
-    public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
+    public Uni<GetVersionWorkerResponse> getVersion(@NotNull final GetVersionWorkerRequest request) {
         return webService.getVersion(request);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.WORKER})
-    public Uni<InterchangeWorkerResponse> interchange(final InterchangeWorkerRequest request) {
+    public Uni<InterchangeWorkerResponse> interchange(@NotNull final InterchangeWorkerRequest request) {
         return webService.interchange(request);
     }
 }

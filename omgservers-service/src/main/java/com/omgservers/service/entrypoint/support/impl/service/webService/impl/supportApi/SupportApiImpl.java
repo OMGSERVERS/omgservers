@@ -15,6 +15,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,22 +31,22 @@ public class SupportApiImpl implements SupportApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenSupportResponse> createToken(final CreateTokenSupportRequest request) {
+    public Uni<CreateTokenSupportResponse> createToken(@NotNull final CreateTokenSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
     }
 
     @Override
-    public Uni<CreateTenantSupportResponse> createTenant(final CreateTenantSupportRequest request) {
+    public Uni<CreateTenantSupportResponse> createTenant(@NotNull final CreateTenantSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenant);
     }
 
     @Override
-    public Uni<DeleteTenantSupportResponse> deleteTenant(DeleteTenantSupportRequest request) {
+    public Uni<DeleteTenantSupportResponse> deleteTenant(@NotNull final DeleteTenantSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
     }
 
     @Override
-    public Uni<CreateDeveloperSupportResponse> createDeveloper(final CreateDeveloperSupportRequest request) {
+    public Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull final CreateDeveloperSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
     }
 }

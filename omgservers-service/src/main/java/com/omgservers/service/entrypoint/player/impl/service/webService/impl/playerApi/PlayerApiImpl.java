@@ -15,6 +15,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,25 +31,25 @@ class PlayerApiImpl implements PlayerApi {
 
     @Override
     @PermitAll
-    public Uni<CreateUserPlayerResponse> createUser(final CreateUserPlayerRequest request) {
+    public Uni<CreateUserPlayerResponse> createUser(@NotNull final CreateUserPlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createUser);
     }
 
     @Override
     @PermitAll
-    public Uni<CreateTokenPlayerResponse> createToken(final CreateTokenPlayerRequest request) {
+    public Uni<CreateTokenPlayerResponse> createToken(@NotNull final CreateTokenPlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.PLAYER})
-    public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
+    public Uni<CreateClientPlayerResponse> createClient(@NotNull final CreateClientPlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createClient);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.PLAYER})
-    public Uni<InterchangePlayerResponse> interchange(final InterchangePlayerRequest request) {
+    public Uni<InterchangePlayerResponse> interchange(@NotNull final InterchangePlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::interchange);
     }
 }
