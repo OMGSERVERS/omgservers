@@ -160,7 +160,7 @@ admin_createToken() {
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json
+    -o ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json || true
 
   cat ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -240,7 +240,7 @@ support_createToken() {
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json
+    -o ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json || true
 
   cat ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -267,14 +267,17 @@ support_createTenant() {
   fi
 
   ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
+  REQUEST="{}"
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
 
   curl -s -S -X PUT --fail-with-body \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
-    -o ~/.omgservers/tmp/support-create-tenant.json
+    -d "${REQUEST}" \
+    -o ~/.omgservers/tmp/support-create-tenant.json || true
 
   cat ~/.omgservers/tmp/support-create-tenant.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -317,7 +320,7 @@ support_deleteTenant() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json
+    -o ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json || true
 
   cat ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -365,7 +368,7 @@ support_createDeveloper() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json
+    -o ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json || true
 
   cat ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -431,7 +434,7 @@ developer_createToken() {
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json
+    -o ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json || true
 
   cat ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -524,7 +527,7 @@ developer_createProject() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json
+    -o ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json || true
 
   cat ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
@@ -583,7 +586,7 @@ developer_getTenantDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json
+    -o ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json || true
 
   cat ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
