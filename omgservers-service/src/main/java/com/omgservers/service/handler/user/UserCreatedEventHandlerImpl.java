@@ -1,14 +1,20 @@
 package com.omgservers.service.handler.user;
 
+import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.model.dto.user.GetUserRequest;
 import com.omgservers.model.dto.user.GetUserResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.model.user.UserModel;
+import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,6 +28,11 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
     final SystemModule systemModule;
     final UserModule userModule;
+    final RootModule rootModule;
+
+    final GetConfigOperation getConfigOperation;
+
+    final RootEntityRefModelFactory rootEntityRefModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -39,7 +50,13 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> {
                     log.info("User was created, id={}, role={}", userId, user.getRole());
 
-                    return Uni.createFrom().voidItem();
+                    final var idempotencyKey = event.getIdempotencyKey();
+                    return switch (user.getRole()) {
+                        case ADMIN -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.ADMIN);
+                        case SUPPORT -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.SUPPORT);
+                        case DEVELOPER -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.DEVELOPER);
+                        default -> Uni.createFrom().voidItem();
+                    };
                 })
                 .replaceWithVoid();
     }
@@ -48,5 +65,17 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetUserRequest(id);
         return userModule.getUserService().getUser(request)
                 .map(GetUserResponse::getUser);
+    }
+
+    Uni<Boolean> syncRootUserRef(final Long tenantId,
+                                 final String idempotencyKey,
+                                 final RootEntityRefQualifierEnum refQualifier) {
+        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
+        final var rootEntityRef = rootEntityRefModelFactory.create(idempotencyKey, rootId,
+                refQualifier,
+                tenantId);
+        final var request = new SyncRootEntityRefRequest(rootEntityRef);
+        return rootModule.getRootService().syncRootEntityRefWithIdempotency(request)
+                .map(SyncRootEntityRefResponse::getCreated);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.root;
 
-import com.omgservers.model.dto.root.GetRootRequest;
-import com.omgservers.model.dto.root.GetRootResponse;
+import com.omgservers.model.dto.root.root.GetRootRequest;
+import com.omgservers.model.dto.root.root.GetRootResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;

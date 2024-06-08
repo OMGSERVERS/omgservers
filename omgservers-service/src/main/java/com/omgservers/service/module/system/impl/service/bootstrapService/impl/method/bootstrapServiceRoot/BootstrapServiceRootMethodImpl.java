@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceRoot;
 
-import com.omgservers.model.dto.root.SyncRootRequest;
+import com.omgservers.model.dto.root.root.SyncRootRequest;
 import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

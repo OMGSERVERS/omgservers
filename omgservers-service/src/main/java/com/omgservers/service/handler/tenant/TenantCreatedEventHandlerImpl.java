@@ -1,14 +1,20 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.model.dto.tenant.GetTenantRequest;
 import com.omgservers.model.dto.tenant.GetTenantResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
+import com.omgservers.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,6 +28,11 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
     final SystemModule systemModule;
+    final RootModule rootModule;
+
+    final GetConfigOperation getConfigOperation;
+
+    final RootEntityRefModelFactory rootEntityRefModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -39,7 +50,9 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenant -> {
                     log.info("Tenant was created, tenant={}", tenantId);
 
-                    return Uni.createFrom().voidItem();
+                    final var idempotencyKey = event.getIdempotencyKey();
+
+                    return syncRootEntityRef(tenantId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
@@ -48,5 +61,16 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetTenantRequest(id);
         return tenantModule.getTenantService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
+    }
+
+    Uni<Boolean> syncRootEntityRef(final Long tenantId,
+                                   final String idempotencyKey) {
+        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
+        final var rootEntityRef = rootEntityRefModelFactory.create(idempotencyKey, rootId,
+                RootEntityRefQualifierEnum.TENANT,
+                tenantId);
+        final var request = new SyncRootEntityRefRequest(rootEntityRef);
+        return rootModule.getRootService().syncRootEntityRefWithIdempotency(request)
+                .map(SyncRootEntityRefResponse::getCreated);
     }
 }

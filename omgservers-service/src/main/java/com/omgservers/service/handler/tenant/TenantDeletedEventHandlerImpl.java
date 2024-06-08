@@ -1,5 +1,9 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefRequest;
+import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefResponse;
+import com.omgservers.model.dto.root.rootEntityRef.FindRootEntityRefRequest;
+import com.omgservers.model.dto.root.rootEntityRef.FindRootEntityRefResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
@@ -14,11 +18,15 @@ import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.model.project.ProjectModel;
+import com.omgservers.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,6 +43,9 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
     final SystemModule systemModule;
+    final RootModule rootModule;
+
+    final GetConfigOperation getConfigOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -53,7 +64,8 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                     log.info("Tenant was deleted, tenant={}", tenantId);
 
                     return deleteTenantPermissions(tenantId)
-                            .flatMap(voidItem -> deleteProjects(tenantId));
+                            .flatMap(voidItem -> deleteProjects(tenantId))
+                            .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId));
                 })
                 .replaceWithVoid();
     }
@@ -132,5 +144,28 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteProjectRequest(tenantId, id);
         return tenantModule.getProjectService().deleteProject(request)
                 .map(DeleteProjectResponse::getDeleted);
+    }
+
+    Uni<Void> findAndDeleteRootTenantRef(final Long tenantId) {
+        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
+        return findRootEntityRef(rootId, tenantId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(rootEntityRef ->
+                        deleteRootEntityRef(rootId, rootEntityRef.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,
+                                              final Long tenantId) {
+        final var request = new FindRootEntityRefRequest(rootId, tenantId);
+        return rootModule.getRootService().findRootEntityRef(request)
+                .map(FindRootEntityRefResponse::getRootEntityRef);
+    }
+
+    Uni<Boolean> deleteRootEntityRef(final Long rootId, final Long id) {
+        final var request = new DeleteRootEntityRefRequest(rootId, id);
+        return rootModule.getRootService().deleteRootEntityRef(request)
+                .map(DeleteRootEntityRefResponse::getDeleted);
     }
 }

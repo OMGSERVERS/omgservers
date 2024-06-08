@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.root;
 
-import com.omgservers.model.dto.root.DeleteRootRequest;
+import com.omgservers.model.dto.root.root.DeleteRootRequest;
 import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.root.testInterface.RootDeletedEventHandlerImplTestInterface;

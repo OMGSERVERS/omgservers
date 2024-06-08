@@ -21,7 +21,7 @@ class DeletePoolRequestMethodImpl implements DeletePoolRequestMethod {
     final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeletePoolRequestResponse> deletePoolRuntimeServerContainerRequest(
+    public Uni<DeletePoolRequestResponse> deletePoolRequest(
             final DeletePoolRequestRequest request) {
         log.debug("Delete pool request, request={}", request);
 

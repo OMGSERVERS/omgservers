@@ -3,6 +3,7 @@ package com.omgservers.service.handler.tenant;
 import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.TenantCreatedEventHandlerImplTestInterface;
+import com.omgservers.service.service.testInterface.BootstrapServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.Test;
 class TenantCreatedEventHandlerImplTest extends Assertions {
 
     @Inject
+    BootstrapServiceTestInterface bootstrapService;
+
+    @Inject
     TenantCreatedEventHandlerImplTestInterface tenantCreatedEventHandler;
 
     @Inject
@@ -25,6 +29,8 @@ class TenantCreatedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
+        bootstrapService.bootstrap();
+
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var tenantId = tenant.getId();
 

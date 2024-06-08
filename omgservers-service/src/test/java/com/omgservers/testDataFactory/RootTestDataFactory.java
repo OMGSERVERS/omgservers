@@ -1,11 +1,12 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.model.dto.root.GetRootRequest;
-import com.omgservers.model.dto.root.SyncRootRequest;
+import com.omgservers.model.dto.root.root.GetRootRequest;
+import com.omgservers.model.dto.root.root.SyncRootRequest;
 import com.omgservers.model.root.RootModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.module.root.impl.service.rootService.testInterface.RootServiceTestInterface;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,12 +19,13 @@ public class RootTestDataFactory {
 
     final RootServiceTestInterface rootService;
 
+    final GenerateIdOperation generateIdOperation;
     final GetConfigOperation getConfigOperation;
 
     final RootModelFactory rootModelFactory;
 
     public RootModel createRoot() {
-        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
+        final var rootId = generateIdOperation.generateId();
 
         try {
             final var getRootRequest = new GetRootRequest(rootId);

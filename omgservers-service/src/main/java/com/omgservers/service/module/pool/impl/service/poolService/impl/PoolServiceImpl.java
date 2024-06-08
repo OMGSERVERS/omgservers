@@ -46,7 +46,7 @@ import com.omgservers.service.module.pool.impl.service.poolService.impl.method.p
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.findPoolRequest.FindPoolRequestMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.getPoolRequest.GetPoolRequestMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.syncPoolRequest.SyncPoolRequestMethod;
-import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.viewPoolRequest.ViewPoolRequestsMethod;
+import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.viewPoolRequests.ViewPoolRequestsMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.deletePoolServer.DeletePoolServerMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.getPoolServer.GetPoolServerMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServer.syncPoolServer.SyncPoolServerMethod;
@@ -240,7 +240,7 @@ class PoolServiceImpl implements PoolService {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::deletePoolRequest,
-                deletePoolRequestMethod::deletePoolRuntimeServerContainerRequest);
+                deletePoolRequestMethod::deletePoolRequest);
     }
 
     @Override

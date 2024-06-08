@@ -8,6 +8,19 @@ create table if not exists tab_root (
     deleted boolean not null
 );
 
+create table if not exists tab_root_entity_ref (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    root_id bigint not null references tab_root(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    entity_id bigint not null,
+    deleted boolean not null
+);
+
+create index if not exists idx_root_entity_ref_root_id on tab_root_entity_ref(root_id);
+
 -- pool module
 
 create table if not exists tab_pool (
