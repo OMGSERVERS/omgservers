@@ -4,9 +4,9 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers-runtime</artifactId>
+        <artifactId>omgservers-docker</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-luajit</artifactId>
+    <artifactId>omgservers-builder</artifactId>
 </project>

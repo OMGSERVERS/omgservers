@@ -4,16 +4,9 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers</artifactId>
+        <artifactId>omgservers-environment</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-builder</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-container-image-docker</artifactId>
-        </dependency>
-    </dependencies>
+    <artifactId>omgservers-integration</artifactId>
 </project>

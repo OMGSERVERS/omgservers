@@ -1,0 +1,227 @@
+version: "3.8"
+services:
+  # frontend
+  entrypoint:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "entrypoint"
+    restart: unless-stopped
+    ports:
+      - "${ENTRYPOINT_PORT}:10001"
+    networks:
+      - frontend
+    volumes:
+      - ./config/envoy/entrypoint.yaml:/etc/envoy/envoy.yaml
+      - entrypoint-logs:/var/log/envoy
+    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+  apigateway:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "apigateway"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    ports:
+      - "${APIGATEWAY_EXTERNAL_PORT}:10001"
+      - "${APIGATEWAY_INTERNAL_PORT}:10002"
+    networks:
+      - frontend
+    volumes:
+      - ./config/envoy/apigateway.yaml:/etc/envoy/envoy.yaml
+      - apigateway-logs:/var/log/envoy
+    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+  gateway0:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway0"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    networks:
+      - workers
+      - backend
+    volumes:
+      - ./config/envoy/gateway0.yaml:/etc/envoy/envoy.yaml
+      - gateway0-logs:/var/log/envoy
+    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+  gateway1:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway1"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./config/envoy/gateway1.yaml:/etc/envoy/envoy.yaml
+      - gateway1-logs:/var/log/envoy
+    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+  # backend
+  docker:
+    image: "alpine/socat"
+    container_name: "docker"
+    networks:
+      - docker
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  registry:
+    image: "registry:2.8.3"
+    container_name: "registry"
+    restart: unless-stopped
+    ports:
+      - "${REGISTRY_PORT}:5000"
+    networks:
+      - docker
+  builder:
+    image: "omgservers/omgservers-builder:${OMGSERVERS_VERSION}"
+    container_name: "builder"
+    restart: unless-stopped
+    ports:
+      - "${BUILDER_PORT}:8080"
+    networks:
+      - backend
+      - docker
+    environment:
+      - JENKINS_URL=http://builder:7070
+      - JENKINS_ADMIN_ID=${BUILDER_USERNAME}
+      - JENKINS_ADMIN_PASSWORD=${BUILDER_PASSWORD}
+      - JENKINS_ADMIN_TOKEN=${BUILDER_TOKEN}
+      - DOCKER_HOST=${DOCKER_HOST}
+      - DOCKER_REGISTRY=localhost:5050
+  # service1
+  database1:
+    image: "postgres:16"
+    container_name: "database1"
+    restart: unless-stopped
+    shm_size: 128m
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=root
+    networks:
+      - service1
+    volumes:
+      - database1-data:/var/lib/postgresql
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=256 -c log_statement=ddl -c log_min_messages=info -c logging_collector=true -c log_directory=/var/log/postgresql
+  queues1:
+    image: "apache/activemq-artemis:2.33.0-alpine"
+    container_name: "queues1"
+    restart: unless-stopped
+    environment:
+      - ARTEMIS_USER=admin
+      - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
+    volumes:
+      - ./config/artemis/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./config/artemis/log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
+      - queues1-data:/var/lib/artemis-instance
+    networks:
+      - service1
+  service1a:
+    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    container_name: "service1a"
+    restart: unless-stopped
+    networks:
+      - backend
+      - docker
+      - service1
+    depends_on:
+      - database1
+      - queues1
+    volumes:
+      - ./certs/jwt_keys:/deployments/jwt_keys
+      - service1a-logs:/var/log/omgservers
+    environment:
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
+      - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
+      - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - OMGSERVERS_QUEUES_HOST=queues1
+      - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
+      - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:10001
+      - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${OMGSERVERS_ADMIN_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${OMGSERVERS_SUPPORT_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway0:10001
+      - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=0
+      - OMGSERVERS_BUILDER_URI=http://builder:8080
+      - OMGSERVERS_BUILDER_USER_ID=${BUILDER_USERNAME}
+      - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
+      - OMGSERVERS_JWT_PUBLIC_KEY=/deployments/jwt_keys/public.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/deployments/jwt_keys/private.pem
+  service1b:
+    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    container_name: "service1b"
+    restart: unless-stopped
+    networks:
+      - backend
+      - docker
+      - service1
+    depends_on:
+      - database1
+      - queues1
+      - service1a
+    volumes:
+      - ./certs/jwt_keys:/deployments/jwt_keys
+      - service1b-logs:/var/log/omgservers
+    environment:
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
+      - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
+      - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - OMGSERVERS_QUEUES_HOST=queues1
+      - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
+      - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway0:10001
+      - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=0
+      - OMGSERVERS_BUILDER_URI=http://builder:8080
+      - OMGSERVERS_BUILDER_USER_ID=${BUILDER_USERNAME}
+      - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
+      - OMGSERVERS_JWT_PUBLIC_KEY=/deployments/jwt_keys/public.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/deployments/jwt_keys/private.pem
+volumes:
+  entrypoint-logs:
+    name: entrypoint-logs
+    driver: local
+  apigateway-logs:
+    name: apigateway-logs
+    driver: local
+  gateway0-logs:
+    name: apigateway-logs
+    driver: local
+  gateway1-logs:
+    name: gateway1-logs
+    driver: local
+  database1-data:
+    name: database1-data
+    driver: local
+  queues1-data:
+    name: queues1-data
+    driver: local
+  service1a-logs:
+    name: service1a-logs
+    driver: local
+  service1b-logs:
+    name: service1b-logs
+    driver: local
+networks:
+  frontend:
+    name: frontend
+  backend:
+    name: backend
+  docker:
+    name: docker
+  workers:
+    name: workers
+  service1:
+    name: service1

@@ -27,13 +27,13 @@
     </properties>
 
     <modules>
-        <module>omgservers-document</module>
-        <module>omgservers-service</module>
-        <module>omgservers-model</module>
-        <module>omgservers-runtime</module>
-        <module>omgservers-tester</module>
         <module>omgservers-ctl</module>
-        <module>omgservers-builder</module>
+        <module>omgservers-document</module>
+        <module>omgservers-environment</module>
+        <module>omgservers-model</module>
+        <module>omgservers-service</module>
+        <module>omgservers-docker</module>
+        <module>omgservers-tester</module>
     </modules>
 
     <dependencies>
