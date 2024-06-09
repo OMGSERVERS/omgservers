@@ -1,5 +1,11 @@
 version: "3.8"
 services:
+  # bootstrap
+  jwtkeys:
+    image: "omgservers/omgservers-jwtkeys:${OMGSERVERS_VERSION}"
+    container_name: "jwtkeys"
+    volumes:
+      - jwtkeys-data:/jwtkeys
   # frontend
   entrypoint:
     image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
@@ -124,10 +130,11 @@ services:
       - docker
       - service1
     depends_on:
+      - jwtkeys
       - database1
       - queues1
     volumes:
-      - ./certs/jwt_keys:/deployments/jwt_keys
+      - jwtkeys-data:/jwtkeys:ro
       - service1a-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
@@ -154,8 +161,8 @@ services:
       - OMGSERVERS_BUILDER_URI=http://builder:8080
       - OMGSERVERS_BUILDER_USER_ID=${BUILDER_USERNAME}
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
-      - OMGSERVERS_JWT_PUBLIC_KEY=/deployments/jwt_keys/public.pem
-      - OMGSERVERS_JWT_PRIVATE_KEY=/deployments/jwt_keys/private.pem
+      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
   service1b:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
     container_name: "service1b"
@@ -165,11 +172,12 @@ services:
       - docker
       - service1
     depends_on:
+      - jwtkeys
       - database1
       - queues1
       - service1a
     volumes:
-      - ./certs/jwt_keys:/deployments/jwt_keys
+      - jwtkeys-data:/jwtkeys:ro
       - service1b-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
@@ -187,9 +195,12 @@ services:
       - OMGSERVERS_BUILDER_URI=http://builder:8080
       - OMGSERVERS_BUILDER_USER_ID=${BUILDER_USERNAME}
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
-      - OMGSERVERS_JWT_PUBLIC_KEY=/deployments/jwt_keys/public.pem
-      - OMGSERVERS_JWT_PRIVATE_KEY=/deployments/jwt_keys/private.pem
+      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
 volumes:
+  jwtkeys-data:
+    name: jwtkeys-data
+    driver: local
   entrypoint-logs:
     name: entrypoint-logs
     driver: local

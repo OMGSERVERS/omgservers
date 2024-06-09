@@ -31,9 +31,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OMGSERVERS_omgservers
       - name: Start containers
-        run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml up -d && sleep 90
+        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml up -d && sleep 90
       - name: Check status
-        run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml ps
+        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml ps
       - name: Init registry
         run: docker tag omgservers/omgservers-luajit:1.0.0-SNAPSHOT localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT && docker push localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT
       - name: Integration testing
@@ -43,10 +43,10 @@ jobs:
         run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
       - name: Log containers
         if: always()
-        run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml logs
+        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml logs
       - name: Stop containers
         if: always()
-        run: docker compose -f omgservers-tester/localEnv/cluster/compose.yaml down --remove-orphans
+        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml down --remove-orphans
       - name: Log into Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
@@ -58,5 +58,7 @@ jobs:
         run: docker push omgservers/omgservers-builder:1.0.0-SNAPSHOT
       - name: Push omgservers-gateway
         run: docker push omgservers/omgservers-gateway:1.0.0-SNAPSHOT
+      - name: Push omgservers-jwtkeys
+        run: docker push omgservers/omgservers-jwtkeys:1.0.0-SNAPSHOT
       - name: Push omgservers-luajit
         run: docker push omgservers/omgservers-luajit:1.0.0-SNAPSHOT

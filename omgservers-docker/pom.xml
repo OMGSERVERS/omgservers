@@ -13,6 +13,7 @@
 
     <modules>
         <module>omgservers-builder</module>
+        <module>omgservers-jwtkeys</module>
         <module>omgservers-gateway</module>
         <module>omgservers-luajit</module>
     </modules>
