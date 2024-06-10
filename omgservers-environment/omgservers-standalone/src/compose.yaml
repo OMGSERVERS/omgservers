@@ -8,7 +8,7 @@ services:
       - jwtkeys-data:/jwtkeys
   # frontend
   entrypoint:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint"
     restart: unless-stopped
     ports:
@@ -17,40 +17,8 @@ services:
     networks:
       - frontend
     volumes:
-      - ./config/envoy/entrypoint.yaml:/etc/envoy/envoy.yaml
       - entrypoint-logs:/var/log/envoy
-    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
-  apigateway:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "apigateway"
-    restart: unless-stopped
-    depends_on:
-      - entrypoint
-    ports:
-      - "${APIGATEWAY_EXTERNAL_PORT}:10001"
-      - "${APIGATEWAY_INTERNAL_PORT}:10002"
-      - "${APIGATEWAY_ADMIN_PORT}:10000"
-    networks:
-      - frontend
-    volumes:
-      - ./config/envoy/apigateway.yaml:/etc/envoy/envoy.yaml
-      - apigateway-logs:/var/log/envoy
-    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
-  gateway0:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway0"
-    restart: unless-stopped
-    depends_on:
-      - entrypoint
-    ports:
-      - "${GATEWAY0_ADMIN_PORT}:10000"
-    networks:
-      - workers
-      - backend
-    volumes:
-      - ./config/envoy/gateway0.yaml:/etc/envoy/envoy.yaml
-      - gateway0-logs:/var/log/envoy
-    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone.yaml --log-path /var/log/envoy/system.log"
   gateway1:
     image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
     container_name: "gateway1"
@@ -58,14 +26,56 @@ services:
     depends_on:
       - entrypoint
     ports:
+      - "${GATEWAY1_PORT}:10001"
       - "${GATEWAY1_ADMIN_PORT}:10000"
     networks:
       - frontend
-      - backend
     volumes:
-      - ./config/envoy/gateway1.yaml:/etc/envoy/envoy.yaml
       - gateway1-logs:/var/log/envoy
-    command: "-c /etc/envoy/envoy.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone1.yaml --log-path /var/log/envoy/system.log"
+  gateway2:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway2"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    ports:
+      - "${GATEWAY2_PORT}:10001"
+      - "${GATEWAY2_ADMIN_PORT}:10000"
+    networks:
+      - frontend
+    volumes:
+      - gateway2-logs:/var/log/envoy
+    command: "-c /etc/envoy/standalone2.yaml --log-path /var/log/envoy/system.log"
+  gateway3:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway3"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    ports:
+      - "${GATEWAY3_PORT}:10001"
+      - "${GATEWAY3_ADMIN_PORT}:10000"
+    networks:
+      - workers
+      - frontend
+    volumes:
+      - gateway3-logs:/var/log/envoy
+    command: "-c /etc/envoy/standalone3.yaml --log-path /var/log/envoy/system.log"
+  ingress:
+    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
+    container_name: "ingress"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    ports:
+      - "${INGRESS_ADMIN_PORT}:10000"
+    networks:
+      - frontend
+      - service
+    volumes:
+      - ingress-logs:/var/log/envoy
+    command: "-c /etc/envoy/ingress.yaml --log-path /var/log/envoy/system.log"
   # backend
   docker:
     image: "alpine/socat"
@@ -94,15 +104,15 @@ services:
       - docker
     environment:
       - JENKINS_URL=http://builder:7070
-      - JENKINS_ADMIN_ID=234099757604143104
+      - JENKINS_ADMIN_ID=builder
       - JENKINS_ADMIN_PASSWORD=${BUILDER_PASSWORD}
       - JENKINS_ADMIN_TOKEN=${BUILDER_TOKEN}
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050
-  # service1
-  database1:
+  # service
+  database:
     image: "postgres:16"
-    container_name: "database1"
+    container_name: "database"
     restart: unless-stopped
     shm_size: 128m
     environment:
@@ -110,96 +120,94 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=root
     networks:
-      - service1
+      - service
     volumes:
-      - database1-data:/var/lib/postgresql
+      - database-data:/var/lib/postgresql
     command: postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=256 -c log_statement=ddl -c log_min_messages=info -c logging_collector=true -c log_directory=/var/log/postgresql
-  queues1:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "queues1"
+  queues:
+    image: "omgservers/omgservers-queues:${OMGSERVERS_VERSION}"
+    container_name: "queues"
     restart: unless-stopped
     environment:
       - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
     volumes:
-      - ./config/artemis/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
-      - ./config/artemis/log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
-      - queues1-data:/var/lib/artemis-instance
+      - queues-data:/var/lib/artemis-instance
     networks:
-      - service1
-  service1a:
+      - service
+  service1:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service1a"
+    container_name: "service1"
     restart: unless-stopped
     networks:
       - backend
       - docker
-      - service1
+      - service
     depends_on:
       - jwtkeys
-      - database1
-      - queues1
+      - database
+      - queues
     volumes:
       - jwtkeys-data:/jwtkeys:ro
-      - service1a-logs:/var/log/omgservers
+      - service1-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
-      - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
+      - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - OMGSERVERS_QUEUES_HOST=queues1
+      - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=1
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://ingress:10001
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://ingress:10001
       - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${OMGSERVERS_ADMIN_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${OMGSERVERS_SUPPORT_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway0:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-      - OMGSERVERS_BUILDER_USER_ID=234099757604143104
+      - OMGSERVERS_BUILDER_USER_ID=builder
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
       - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
       - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
-  service1b:
+  service2:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service1b"
+    container_name: "service2"
     restart: unless-stopped
     networks:
       - backend
       - docker
-      - service1
+      - service
     depends_on:
       - jwtkeys
-      - database1
-      - queues1
-      - service1a
+      - database
+      - queues
+      - service1
     volumes:
       - jwtkeys-data:/jwtkeys:ro
-      - service1b-logs:/var/log/omgservers
+      - service2-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
-      - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
+      - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - OMGSERVERS_QUEUES_HOST=queues1
+      - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=1
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway0:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://ingress:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-      - OMGSERVERS_BUILDER_USER_ID=234099757604143104
+      - OMGSERVERS_BUILDER_USER_ID=builder
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
       - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
       - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
@@ -210,26 +218,29 @@ volumes:
   entrypoint-logs:
     name: entrypoint-logs
     driver: local
-  apigateway-logs:
-    name: apigateway-logs
-    driver: local
-  gateway0-logs:
-    name: apigateway-logs
-    driver: local
   gateway1-logs:
     name: gateway1-logs
     driver: local
-  database1-data:
-    name: database1-data
+  gateway2-logs:
+    name: gateway2-logs
     driver: local
-  queues1-data:
-    name: queues1-data
+  gateway3-logs:
+    name: gateway3-logs
     driver: local
-  service1a-logs:
-    name: service1a-logs
+  ingress-logs:
+    name: ingress-logs
     driver: local
-  service1b-logs:
-    name: service1b-logs
+  database-data:
+    name: database-data
+    driver: local
+  queues-data:
+    name: queues-data
+    driver: local
+  service1-logs:
+    name: service1-logs
+    driver: local
+  service2-logs:
+    name: service2-logs
     driver: local
 networks:
   frontend:
@@ -240,5 +251,5 @@ networks:
     name: docker
   workers:
     name: workers
-  service1:
-    name: service1
+  service:
+    name: service

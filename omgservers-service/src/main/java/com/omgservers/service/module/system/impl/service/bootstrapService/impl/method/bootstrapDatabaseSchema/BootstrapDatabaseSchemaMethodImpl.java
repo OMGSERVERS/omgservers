@@ -56,7 +56,6 @@ class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod
 
     Uni<Void> migrateShard(final String location, final int shard) {
         return Uni.createFrom().voidItem()
-                .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
                     Flyway flyway = Flyway.configure()
                             .dataSource(dataSource)

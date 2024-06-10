@@ -4,9 +4,17 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers-environment</artifactId>
+        <artifactId>omgservers-sidecontainer</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-integration</artifactId>
+    <artifactId>omgservers-ingress</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.omgservers</groupId>
+            <artifactId>omgservers-proxy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
