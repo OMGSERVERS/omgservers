@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     ports:
       - "${ENTRYPOINT_PORT}:10001"
+      - "${ENTRYPOINT_ADMIN_PORT}:10000"
     networks:
       - frontend
     volumes:
@@ -28,6 +29,7 @@ services:
     ports:
       - "${APIGATEWAY_EXTERNAL_PORT}:10001"
       - "${APIGATEWAY_INTERNAL_PORT}:10002"
+      - "${APIGATEWAY_ADMIN_PORT}:10000"
     networks:
       - frontend
     volumes:
@@ -40,6 +42,8 @@ services:
     restart: unless-stopped
     depends_on:
       - entrypoint
+    ports:
+      - "${GATEWAY0_ADMIN_PORT}:10000"
     networks:
       - workers
       - backend
@@ -53,6 +57,8 @@ services:
     restart: unless-stopped
     depends_on:
       - entrypoint
+    ports:
+      - "${GATEWAY1_ADMIN_PORT}:10000"
     networks:
       - frontend
       - backend
