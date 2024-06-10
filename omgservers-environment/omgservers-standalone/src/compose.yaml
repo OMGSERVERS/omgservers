@@ -113,7 +113,7 @@ services:
     container_name: "queues1"
     restart: unless-stopped
     environment:
-      - ARTEMIS_USER=admin
+      - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
     volumes:
       - ./config/artemis/broker.xml:/var/lib/artemis-instance/etc-override/broker.xml

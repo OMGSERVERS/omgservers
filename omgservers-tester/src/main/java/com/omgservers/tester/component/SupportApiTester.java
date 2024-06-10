@@ -33,7 +33,7 @@ public class SupportApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Support"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenSupportRequest(userId, password)))
                 .when().put("/omgservers/v1/entrypoint/support/request/create-token");
@@ -47,7 +47,7 @@ public class SupportApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Support"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantSupportRequest()))
@@ -63,7 +63,7 @@ public class SupportApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Support"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantSupportRequest(tenantId)))
@@ -79,7 +79,7 @@ public class SupportApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Support"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateDeveloperSupportRequest(tenantId)))

@@ -26,8 +26,8 @@ services:
     image: "apache/activemq-artemis:2.33.0-alpine"
     container_name: "queues"
     environment:
-      - ARTEMIS_USER=admin
-      - ARTEMIS_PASSWORD=admin
+      - ARTEMIS_USER=queues
+      - ARTEMIS_PASSWORD=queues
     volumes:
       - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     ports:
@@ -50,8 +50,8 @@ services:
       - omgservers
     environment:
       - JENKINS_URL=http://localhost:7070
-      - JENKINS_ADMIN_ID=admin
-      - JENKINS_ADMIN_PASSWORD=admin
+      - JENKINS_ADMIN_ID=builder
+      - JENKINS_ADMIN_PASSWORD=builder
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050

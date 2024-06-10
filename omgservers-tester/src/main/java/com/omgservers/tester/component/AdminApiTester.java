@@ -27,7 +27,7 @@ public class AdminApiTester {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Admin"))
-                .baseUri(getConfigOperation.getConfig().serviceUri().toString())
+                .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenAdminRequest(userId, password)))
                 .when().put("/omgservers/v1/entrypoint/admin/request/create-token");
