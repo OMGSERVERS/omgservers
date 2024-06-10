@@ -31,10 +31,10 @@ public class PoolRequestConfigModel {
         String image;
 
         @NotNull
-        Integer cpuLimit;
+        Integer cpuLimitInMilliseconds;
 
         @NotNull
-        Integer memoryLimit;
+        Integer memoryLimitInMegabytes;
 
         @NotNull
         Map<String, String> environment;

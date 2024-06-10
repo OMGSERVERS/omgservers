@@ -36,7 +36,7 @@ class BootstrapAdminUserMethodImpl implements BootstrapAdminUserMethod {
                 .invoke(root -> log.info("Admin user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    final var idempotencyKey = "bootstrap";
+                    final var idempotencyKey = "bootstrap/admin";
                     final var password = getConfigOperation.getServiceConfig().bootstrap().admin().password();
                     final var passwordHash = BcryptUtil.bcryptHash(password);
                     final var user = userModelFactory.create(userId, UserRoleEnum.ADMIN, passwordHash, idempotencyKey);

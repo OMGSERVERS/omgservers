@@ -118,8 +118,10 @@ public class PoolJobTaskImpl {
         final var runtimeId = poolRequest.getRuntimeId();
         final var config = PoolServerContainerConfigModel.create();
         config.setImageId(poolRequest.getConfig().getServerContainerConfig().getImage());
-        config.setCpuLimit(poolRequest.getConfig().getServerContainerConfig().getCpuLimit());
-        config.setMemoryLimit(poolRequest.getConfig().getServerContainerConfig().getMemoryLimit());
+        config.setCpuLimitInMilliseconds(poolRequest.getConfig()
+                .getServerContainerConfig().getCpuLimitInMilliseconds());
+        config.setMemoryLimitInMegabytes(poolRequest.getConfig()
+                .getServerContainerConfig().getMemoryLimitInMegabytes());
         config.setEnvironment(poolRequest.getConfig().getServerContainerConfig().getEnvironment());
         final var poolServerContainer = poolServerContainerModelFactory.create(poolId, serverId, runtimeId, config);
         final var request = new SyncPoolServerContainerRequest(poolServerContainer);

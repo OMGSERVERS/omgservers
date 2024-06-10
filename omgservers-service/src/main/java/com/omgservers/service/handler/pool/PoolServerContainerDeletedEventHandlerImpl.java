@@ -18,9 +18,9 @@ import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -106,7 +106,8 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
-                    final var containerName = poolServerContainer.getId().toString();
+                    final var containerName = "pool_" + poolServerContainer.getPoolId() +
+                            "_container_" + poolServerContainer.getId();
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
 

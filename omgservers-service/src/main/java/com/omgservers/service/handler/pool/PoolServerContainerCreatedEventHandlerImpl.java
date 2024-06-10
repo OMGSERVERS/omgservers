@@ -1,8 +1,7 @@
 package com.omgservers.service.handler.pool;
 
-import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.RestartPolicy;
 import com.omgservers.model.dto.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.model.dto.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.model.dto.pool.poolServerContainer.GetPoolServerContainerRequest;
@@ -115,7 +114,8 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
                     final var imageId = poolServerContainer.getConfig().getImageId();
-                    final var name = poolServerContainer.getId().toString();
+                    final var containerName = "pool_" + poolServerContainer.getPoolId() +
+                            "_container_" + poolServerContainer.getId();
                     final var environment = poolServerContainer.getConfig().getEnvironment().entrySet().stream()
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
                             .toList();
@@ -125,24 +125,40 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                     final var dockerNetwork = getConfigOperation.getServiceConfig().workers().dockerNetwork();
 
                     try {
+                        // Convert milliseconds -> microseconds
+                        final var cpuQuotaInMicroseconds = poolServerContainer.getConfig()
+                                .getCpuLimitInMilliseconds() * 1000L;
+                        // Convert megabytes -> bytes
+                        final var memoryLimitInBytes = poolServerContainer.getConfig()
+                                .getMemoryLimitInMegabytes() * 1024L * 1024L;
+
+                        final var hostConfig = HostConfig.newHostConfig()
+                                .withNetworkMode(dockerNetwork)
+                                .withCpuQuota(cpuQuotaInMicroseconds)
+                                .withMemory(memoryLimitInBytes)
+                                .withRestartPolicy(RestartPolicy.unlessStoppedRestart());
+
                         final var createContainerResponse = dockerClient.createContainerCmd(imageId)
-                                .withName(name)
+                                .withName(containerName)
                                 .withEnv(environment)
-                                .withExposedPorts(ExposedPort.parse("8080/tcp"))
-                                .withHostConfig(HostConfig.newHostConfig()
-                                        .withNetworkMode(dockerNetwork)
-                                        .withPortBindings(PortBinding.parse(":8080")))
+                                .withHostConfig(hostConfig)
                                 .exec();
-                        log.info("Create docker container, response={}", createContainerResponse);
+                        log.info("Docker container was created, " +
+                                        "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, response={}",
+                                containerName,
+                                dockerNetwork,
+                                cpuQuotaInMicroseconds,
+                                memoryLimitInBytes,
+                                createContainerResponse);
 
-                        final var inspectContainerResponse = dockerClient.inspectContainerCmd(name)
+                        final var inspectContainerResponse = dockerClient.inspectContainerCmd(containerName)
                                 .exec();
-                        log.info("Inspect container, response={}", inspectContainerResponse);
+                        log.info("Docker container was inspected, response={}", inspectContainerResponse);
 
-                        final var startContainerResponse = dockerClient.startContainerCmd(name)
+                        final var startContainerResponse = dockerClient.startContainerCmd(containerName)
                                 .exec();
 
-                        log.info("Start container, response={}", startContainerResponse);
+                        log.info("Docker container was started, response={}", startContainerResponse);
                     } catch (Exception e) {
                         // TODO: handle docker exception
                         log.error("Start container failed, {}:{}", e.getClass().getSimpleName(), e.getMessage());

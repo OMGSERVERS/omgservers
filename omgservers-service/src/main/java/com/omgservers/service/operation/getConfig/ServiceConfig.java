@@ -72,11 +72,13 @@ public interface ServiceConfig {
     interface WorkersConfig {
         long inactiveInterval();
 
-        String dockerImage();
-
         String dockerNetwork();
 
         URI serviceUri();
+
+        int defaultCpuLimit();
+
+        int defaultMemoryLimit();
     }
 
     interface BootstrapConfig {

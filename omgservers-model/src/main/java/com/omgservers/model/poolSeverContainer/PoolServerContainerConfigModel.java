@@ -21,10 +21,10 @@ public class PoolServerContainerConfigModel {
     String imageId;
 
     @NotNull
-    Integer cpuLimit;
+    Integer cpuLimitInMilliseconds;
 
     @NotNull
-    Integer memoryLimit;
+    Integer memoryLimitInMegabytes;
 
     @NotNull
     Map<String, String> environment;

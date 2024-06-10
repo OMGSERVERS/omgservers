@@ -98,11 +98,11 @@ public class PoolTestDataFactory {
         final var serverId = poolServer.getId();
         final var runtimeId = runtime.getId();
 
-        final var dockerImage = getConfigOperation.getServiceConfig().workers().dockerImage();
+        final var dockerImage = "ubuntu:latest";
         final var config = PoolServerContainerConfigModel.create();
         config.setImageId(dockerImage);
-        config.setCpuLimit(1000);
-        config.setMemoryLimit(2048);
+        config.setCpuLimitInMilliseconds(100);
+        config.setMemoryLimitInMegabytes(200);
         config.setEnvironment(new HashMap<>());
 
         final var poolServerContainer = poolServerContainerModelFactory.create(poolId,

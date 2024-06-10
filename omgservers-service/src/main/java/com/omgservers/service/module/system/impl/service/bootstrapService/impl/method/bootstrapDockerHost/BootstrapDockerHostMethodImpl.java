@@ -38,7 +38,7 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
                 dockerHostConfig.maxContainers()));
 
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
-        final var idempotencyKey = "bootstrap";
+        final var idempotencyKey = "bootstrap/dockerHost";
 
         final var poolServer = poolServerModelFactory.create(defaultPoolId,
                 PoolServerQualifierEnum.DOCKER_HOST,
