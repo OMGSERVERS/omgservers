@@ -62,20 +62,6 @@ services:
     volumes:
       - gateway3-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone3.yaml --log-path /var/log/envoy/system.log"
-  ingress:
-    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
-    container_name: "ingress"
-    restart: unless-stopped
-    depends_on:
-      - entrypoint
-    ports:
-      - "${INGRESS_ADMIN_PORT}:10000"
-    networks:
-      - frontend
-      - service
-    volumes:
-      - ingress-logs:/var/log/envoy
-    command: "-c /etc/envoy/ingress.yaml --log-path /var/log/envoy/system.log"
   # backend
   docker:
     image: "alpine/socat"
@@ -110,6 +96,20 @@ services:
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050
   # service
+  ingress:
+    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
+    container_name: "ingress"
+    restart: unless-stopped
+    depends_on:
+      - entrypoint
+    ports:
+      - "${INGRESS_ADMIN_PORT}:10000"
+    networks:
+      - frontend
+      - service
+    volumes:
+      - ingress-logs:/var/log/envoy
+    command: "-c /etc/envoy/ingress.yaml --log-path /var/log/envoy/system.log"
   database:
     image: "postgres:16"
     container_name: "database"
