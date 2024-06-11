@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>omgservers-gateway</artifactId>
+            <artifactId>omgservers-proxy</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

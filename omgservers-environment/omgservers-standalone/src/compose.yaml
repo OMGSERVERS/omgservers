@@ -7,60 +7,60 @@ services:
     volumes:
       - jwtkeys-data:/jwtkeys
   # frontend
-  entrypoint:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
-    container_name: "entrypoint"
+  ingress:
+    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
+    container_name: "ingress"
     restart: unless-stopped
     ports:
-      - "${ENTRYPOINT_PORT}:10001"
-      - "${ENTRYPOINT_ADMIN_PORT}:10000"
+      - "${INGRESS_PORT}:10001"
+      - "${INGRESS_ADMIN_PORT}:10000"
     networks:
       - frontend
     volumes:
-      - entrypoint-logs:/var/log/envoy
+      - ingress-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone.yaml --log-path /var/log/envoy/system.log"
-  gateway1:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway1"
+  entrypoint1:
+    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    container_name: "entrypoint1"
     restart: unless-stopped
     depends_on:
-      - entrypoint
+      - ingress
     ports:
-      - "${GATEWAY1_PORT}:10001"
-      - "${GATEWAY1_ADMIN_PORT}:10000"
+      - "${ENTRYPOINT1_PORT}:10001"
+      - "${ENTRYPOINT1_ADMIN_PORT}:10000"
     networks:
       - frontend
     volumes:
-      - gateway1-logs:/var/log/envoy
+      - entrypoint1-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone1.yaml --log-path /var/log/envoy/system.log"
-  gateway2:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway2"
+  entrypoint2:
+    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    container_name: "entrypoint2"
     restart: unless-stopped
     depends_on:
-      - entrypoint
+      - ingress
     ports:
-      - "${GATEWAY2_PORT}:10001"
-      - "${GATEWAY2_ADMIN_PORT}:10000"
+      - "${ENTRYPOINT2_PORT}:10001"
+      - "${ENTRYPOINT2_ADMIN_PORT}:10000"
     networks:
       - frontend
     volumes:
-      - gateway2-logs:/var/log/envoy
+      - entrypoint2-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone2.yaml --log-path /var/log/envoy/system.log"
-  gateway3:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway3"
+  entrypoint3:
+    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    container_name: "entrypoint3"
     restart: unless-stopped
     depends_on:
-      - entrypoint
+      - ingress
     ports:
-      - "${GATEWAY3_PORT}:10001"
-      - "${GATEWAY3_ADMIN_PORT}:10000"
+      - "${ENTRYPOINT3_PORT}:10001"
+      - "${ENTRYPOINT3_ADMIN_PORT}:10000"
     networks:
       - workers
       - frontend
     volumes:
-      - gateway3-logs:/var/log/envoy
+      - entrypoint3-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone3.yaml --log-path /var/log/envoy/system.log"
   # backend
   docker:
@@ -96,20 +96,23 @@ services:
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050
   # service
-  ingress:
-    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
-    container_name: "ingress"
+  gateway:
+    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway"
     restart: unless-stopped
     depends_on:
-      - entrypoint
+      - entrypoint1
+      - entrypoint2
+      - entrypoint3
     ports:
-      - "${INGRESS_ADMIN_PORT}:10000"
+      - "${GATEWAY_PORT}:10001"
+      - "${GATEWAY_ADMIN_PORT}:10000"
     networks:
       - frontend
       - service
     volumes:
-      - ingress-logs:/var/log/envoy
-    command: "-c /etc/envoy/ingress.yaml --log-path /var/log/envoy/system.log"
+      - gateway-logs:/var/log/envoy
+    command: "-c /etc/envoy/service.yaml --log-path /var/log/envoy/system.log"
   database:
     image: "postgres:16"
     container_name: "database"
@@ -158,9 +161,9 @@ services:
       - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=1
-      - OMGSERVERS_INDEX_SERVER_URI=http://ingress:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://ingress:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway:10001
       - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
@@ -201,8 +204,8 @@ services:
       - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=1
-      - OMGSERVERS_INDEX_SERVER_URI=http://ingress:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://entrypoint3:10001
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
@@ -215,20 +218,20 @@ volumes:
   jwtkeys-data:
     name: jwtkeys-data
     driver: local
-  entrypoint-logs:
-    name: entrypoint-logs
-    driver: local
-  gateway1-logs:
-    name: gateway1-logs
-    driver: local
-  gateway2-logs:
-    name: gateway2-logs
-    driver: local
-  gateway3-logs:
-    name: gateway3-logs
-    driver: local
   ingress-logs:
     name: ingress-logs
+    driver: local
+  entrypoint1-logs:
+    name: entrypoint1-logs
+    driver: local
+  entrypoint2-logs:
+    name: entrypoint2-logs
+    driver: local
+  entrypoint3-logs:
+    name: entrypoint3-logs
+    driver: local
+  gateway-logs:
+    name: gateway-logs
     driver: local
   database-data:
     name: database-data

@@ -1,1 +1,1 @@
-# omgservers-apigateway
+# omgservers-gateway

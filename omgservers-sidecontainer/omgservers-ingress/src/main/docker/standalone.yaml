@@ -21,7 +21,7 @@ static_resources:
                   - name: envoy.access_loggers.file
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
-                      path: /var/log/envoy/external.log
+                      path: /var/log/envoy/access.log
                 route_config:
                   name: local_route
                   virtual_hosts:
@@ -30,11 +30,7 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/omgservers/v1/entrypoint/developer/request"
-                          route:
-                            cluster: cluster
-                        - match:
-                            prefix: "/omgservers/v1/entrypoint/player/request"
+                            prefix: "/"
                           route:
                             cluster: cluster
                 http_filters:
@@ -52,5 +48,5 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: ingress
+                      address: entrypoint1
                       port_value: 10001

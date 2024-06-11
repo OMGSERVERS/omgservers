@@ -1,0 +1,173 @@
+#!/bin/bash
+set -e
+
+# INTERNAL
+
+internal_help() {
+  echo "PROJECT ctl, v1.0.0"
+  echo "Usage:"
+  if [ -z "$1" -o "$1" = "help" ]; then
+    echo " projectctl help"
+  fi
+  # Project
+  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildWithTests" ]; then
+    echo " projectctl project buildWithTests"
+  fi
+  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildWithoutTests" ]; then
+    echo " projectctl project buildWithoutTests"
+  fi
+  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildAndSonar" ]; then
+    echo " projectctl project buildAndSonar"
+  fi
+  # Env
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env down" ]; then
+    echo " projectctl env down"
+  fi
+  # Env development
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env development" -o "$1" = "env development up" ]; then
+    echo " projectctl env development up"
+  fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env development" -o "$1" = "env development test" ]; then
+    echo " projectctl env development test"
+  fi
+  # Env integration
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration up" ]; then
+    echo " projectctl env integration up"
+  fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration logs" ]; then
+    echo " projectctl env integration logs"
+  fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration test" ]; then
+    echo " projectctl env integration test"
+  fi
+  # Env standalone
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone up" ]; then
+    echo " projectctl env standalone up"
+  fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone test" ]; then
+    echo " projectctl env standalone test"
+  fi
+}
+
+# HANDLERS
+
+project_buildWithTests() {
+  ./mvnw -B install
+}
+
+project_buildWithoutTests() {
+  ./mvnw -B install -DskipTests
+}
+
+project_buildAndSonar() {
+  ./mvnw -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OMGSERVERS_omgservers
+}
+
+env_down() {
+  docker compose -p development down
+  docker compose -p integration down
+  docker compose -p standalone down
+  exit 0
+}
+
+env_development_up() {
+  docker compose -p integration down
+  docker compose -p standalone down
+
+  docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml up --remove-orphans -d
+  docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml ps
+  exit 0
+}
+
+env_development_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+  exit 0
+}
+
+env_integration_up() {
+  docker compose -p development down
+  docker compose -p standalone down
+
+  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml up --remove-orphans -d
+  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml ps
+  exit 0
+}
+
+env_integration_logs() {
+  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml logs -f
+}
+
+env_integration_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
+      ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+
+  exit 0
+}
+
+env_standalone_up() {
+  docker compose -p development down
+  docker compose -p integration down
+
+  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml up --remove-orphans -d
+  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml ps
+  exit 0
+}
+
+env_standalone_logs() {
+  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml logs -f
+}
+
+env_standalone_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
+        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+
+  exit 0
+}
+
+# Env
+if [ "$1" = "project" ]; then
+  if [ "$2" = "buildWithTests" ]; then
+    project_buildWithTests
+  elif [ "$2" = "buildWithoutTests" ]; then
+    project_buildWithoutTests
+  elif [ "$2" = "buildAndSonar" ]; then
+    project_buildAndSonar
+  else
+    internal_help "project"
+  fi
+elif [ "$1" = "env" ]; then
+  if [ "$2" = "down" ]; then
+    env_down
+  elif [ "$2" = "development" ]; then
+    if [ "$3" = "up" ]; then
+      env_development_up
+    elif [ "$3" = "test" ]; then
+      env_development_test
+    else
+      internal_help "env development"
+    fi
+  elif [ "$2" = "integration" ]; then
+    if [ "$3" = "up" ]; then
+      env_integration_up
+    elif [ "$3" = "logs" ]; then
+      env_integration_logs
+    elif [ "$3" = "test" ]; then
+      env_integration_test
+    else
+      internal_help "env integration"
+    fi
+  elif [ "$2" = "standalone" ]; then
+    if [ "$3" = "up" ]; then
+      env_standalone_up
+    elif [ "$3" = "test" ]; then
+      env_standalone_test
+    else
+      internal_help "env standalone"
+    fi
+  else
+    internal_help "env"
+  fi
+else
+  internal_help
+fi

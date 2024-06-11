@@ -13,9 +13,9 @@
 
     <modules>
         <module>omgservers-builder</module>
+        <module>omgservers-ingress</module>
         <module>omgservers-entrypoint</module>
         <module>omgservers-gateway</module>
-        <module>omgservers-ingress</module>
         <module>omgservers-jwtkeys</module>
         <module>omgservers-luajit</module>
         <module>omgservers-proxy</module>
