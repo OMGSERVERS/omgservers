@@ -125,7 +125,7 @@ env_standalone_test() {
   exit 0
 }
 
-# Env
+# Project
 if [ "$1" = "project" ]; then
   if [ "$2" = "buildWithTests" ]; then
     project_buildWithTests
@@ -136,6 +136,7 @@ if [ "$1" = "project" ]; then
   else
     internal_help "project"
   fi
+# Env
 elif [ "$1" = "env" ]; then
   if [ "$2" = "down" ]; then
     env_down
