@@ -20,5 +20,5 @@ public class RunLuaJitWorkerBuilderV1Request {
     String versionId;
 
     @NotNull
-    String sourceCodeJson;
+    String base64Archive;
 }

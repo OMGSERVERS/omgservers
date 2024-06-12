@@ -29,7 +29,7 @@ class SelectActiveVersionsByStageIdOperationImpl implements SelectActiveVersions
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, stage_id, created, modified, config, source_code, deleted
+                        select id, idempotency_key, tenant_id, stage_id, created, modified, config, archive, deleted
                         from $schema.tab_tenant_version
                         where tenant_id = $1 and stage_id = $2 and deleted = false
                         order by id asc

@@ -8,7 +8,7 @@ pipelineJob("luajit-worker-builder-v1") {
         stringParam("groupId", null, "Group for new container.")
         stringParam("containerName", null, "Image name to build.")
         stringParam("versionId", null, "The version id is used as the docker image tag.")
-        textParam("sourceCodeJson", null, "Source code is in json representation.")
+        textParam("base64Archive", null, "Base64 encoded version archive.")
     }
 
     quietPeriod(0)

@@ -1,7 +1,6 @@
 package com.omgservers.model.dto.developer;
 
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +21,5 @@ public class CreateVersionDeveloperRequest {
     VersionConfigModel versionConfig;
 
     @NotNull
-    VersionSourceCodeModel sourceCode;
+    String base64Archive;
 }

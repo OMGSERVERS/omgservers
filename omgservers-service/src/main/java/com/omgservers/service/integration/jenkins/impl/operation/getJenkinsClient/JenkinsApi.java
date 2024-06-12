@@ -21,7 +21,7 @@ public interface JenkinsApi {
     Uni<Response> runLuaJitWorkerBuilderV1(@FormParam("groupId") String groupId,
                                            @FormParam("containerName") String containerName,
                                            @FormParam("versionId") String versionId,
-                                           @FormParam("sourceCodeJson") String sourceCodeJson);
+                                           @FormParam("base64Archive") String base64Archive);
 
     @GET
     @Path("/job/luajit-worker-builder-v1/{buildNumber}/api/json")

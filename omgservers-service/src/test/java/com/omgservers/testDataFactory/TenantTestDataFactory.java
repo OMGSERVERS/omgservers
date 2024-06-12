@@ -17,7 +17,6 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.tenant.TenantModel;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
@@ -43,6 +42,9 @@ import com.omgservers.service.module.tenant.impl.service.versionService.testInte
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Slf4j
 @ApplicationScoped
@@ -92,11 +94,11 @@ public class TenantTestDataFactory {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
         final var versionConfig = VersionConfigModel.create();
-        final var versionSourceCode = VersionSourceCodeModel.create();
+        final var base64Archive = Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8));
         final var version = versionModelFactory.create(tenantId,
                 stageId,
                 versionConfig,
-                versionSourceCode);
+                base64Archive);
         final var syncVersionRequest = new SyncVersionRequest(version);
         versionService.syncVersion(syncVersionRequest);
         return version;

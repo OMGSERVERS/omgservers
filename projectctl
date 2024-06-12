@@ -44,6 +44,9 @@ internal_help() {
   if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone up" ]; then
     echo " projectctl env standalone up"
   fi
+  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone logs" ]; then
+    echo " projectctl env standalone logs"
+  fi
   if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone test" ]; then
     echo " projectctl env standalone test"
   fi
@@ -161,6 +164,8 @@ elif [ "$1" = "env" ]; then
   elif [ "$2" = "standalone" ]; then
     if [ "$3" = "up" ]; then
       env_standalone_up
+    elif [ "$3" = "logs" ]; then
+      env_standalone_logs
     elif [ "$3" = "test" ]; then
       env_standalone_test
     else

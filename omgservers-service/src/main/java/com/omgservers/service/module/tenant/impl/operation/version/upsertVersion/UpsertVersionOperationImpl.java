@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +38,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(
-                            id, idempotency_key, tenant_id, stage_id, created, modified, config, source_code, deleted)
+                            id, idempotency_key, tenant_id, stage_id, created, modified, config, archive, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
@@ -50,7 +51,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
                         version.getCreated().atOffset(ZoneOffset.UTC),
                         version.getModified().atOffset(ZoneOffset.UTC),
                         getConfigString(version),
-                        getSourceCode(version),
+                        getArchiveBytes(version),
                         version.getDeleted()
                 ),
                 () -> new VersionCreatedEventBodyModel(version.getTenantId(), version.getId()),
@@ -66,11 +67,7 @@ class UpsertVersionOperationImpl implements UpsertVersionOperation {
         }
     }
 
-    String getSourceCode(final VersionModel version) {
-        try {
-            return objectMapper.writeValueAsString(version.getSourceCode());
-        } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
-        }
+    byte[] getArchiveBytes(final VersionModel version) {
+        return Base64.getDecoder().decode(version.getBase64Archive());
     }
 }

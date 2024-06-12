@@ -4,25 +4,15 @@ pipeline {
         string(name: "groupId", description: "Group for new container.")
         string(name: "containerName", description: "Image name to build.")
         string(name: "versionId", description: "The version id is used as the docker image tag.")
-        text(name: "sourceCodeJson", description: "Source code is in json representation.")
+        text(name: "base64Archive", description: "Base64 encoded version archive.")
     }
     stages {
         stage("Prepare") {
             steps {
                 cleanWs()
-                dir("lua") {
-                    script {
-                        def files = readJSON text: "${sourceCodeJson}"
-                        files.each { file ->
-                            def fileName = file.file_name
-                            def base64content = file.base64content
-                            def decodedContent = new String(base64content.decodeBase64())
-
-                            writeFile file: fileName, text: decodedContent
-                            sh "cat ${fileName}"
-                        }
-                    }
-                    sh "ls -lah"
+                script {
+                    writeFile file: "archive.zip", text: base64Archive, encoding: "Base64"
+                    unzip zipFile: "archive.zip", dir: "lua"
                 }
             }
         }

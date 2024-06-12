@@ -15,7 +15,6 @@ import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
 import io.restassured.RestAssured;
@@ -87,7 +86,7 @@ public class DeveloperApiTester {
                                                         final Long tenantId,
                                                         final Long stageId,
                                                         final VersionConfigModel versionConfig,
-                                                        final VersionSourceCodeModel sourceCode)
+                                                        final String base64Archive)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -96,7 +95,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, sourceCode)))
+                        new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig, base64Archive)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/create-version");
         responseSpecification.then().statusCode(200);
 

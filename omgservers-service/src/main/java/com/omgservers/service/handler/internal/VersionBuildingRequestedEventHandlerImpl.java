@@ -11,12 +11,10 @@ import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsR
 import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
+import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -29,7 +27,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -91,21 +88,17 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Integer> runLuaJitWorkerBuilderV1(VersionModel version) {
-        try {
-            final var versionId = version.getId();
-            final var groupId = "omgservers/tenant/" + version.getTenantId();
-            final var containerName = "universal";
-            final var sourceCodeJson = objectMapper.writeValueAsString(version.getSourceCode().getFiles());
-            final var request = new RunLuaJitWorkerBuilderV1Request(groupId,
-                    containerName,
-                    versionId.toString(),
-                    sourceCodeJson);
+        final var versionId = version.getId();
+        final var groupId = "omgservers/tenant/" + version.getTenantId();
+        final var containerName = "universal";
+        final var base64Archive = version.getBase64Archive();
+        final var request = new RunLuaJitWorkerBuilderV1Request(groupId,
+                containerName,
+                versionId.toString(),
+                base64Archive);
 
-            return jenkinsIntegration.getJenkinsService().runLuaJitWorkerBuilderV1(request)
-                    .map(RunLuaJitWorkerBuilderV1Response::getBuildNumber);
-        } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
-        }
+        return jenkinsIntegration.getJenkinsService().runLuaJitWorkerBuilderV1(request)
+                .map(RunLuaJitWorkerBuilderV1Response::getBuildNumber);
     }
 
     Uni<Boolean> syncVersionJenkinsRequest(final VersionModel version,

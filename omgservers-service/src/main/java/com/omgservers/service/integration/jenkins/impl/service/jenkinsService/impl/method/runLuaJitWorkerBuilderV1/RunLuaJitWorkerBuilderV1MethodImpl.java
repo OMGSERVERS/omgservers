@@ -30,9 +30,9 @@ class RunLuaJitWorkerBuilderV1MethodImpl implements RunLuaJitWorkerBuilderV1Meth
         final var groupId = request.getGroupId();
         final var containerName = request.getContainerName();
         final var versionId = request.getVersionId();
-        final var sourceCodeJson = request.getSourceCodeJson();
+        final var base64Archive = request.getBase64Archive();
 
-        return jenkinsClient.runLuaJitWorkerBuilderV1(groupId, containerName, versionId, sourceCodeJson)
+        return jenkinsClient.runLuaJitWorkerBuilderV1(groupId, containerName, versionId, base64Archive)
                 .map(response -> {
                     final var locationHeader = response.getHeaderString("Location");
                     log.info("Got jenkins response, locationHeader={}", locationHeader);

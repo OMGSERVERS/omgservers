@@ -1,12 +1,11 @@
 package com.omgservers.tester.operation.bootstrapTestVersion;
 
-import com.omgservers.model.file.EncodedFileModel;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.model.TestVersionModel;
+import com.omgservers.tester.operation.createBase64Archive.CreateBase64ArchiveOperation;
 import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -14,14 +13,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Map;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation {
 
+    CreateBase64ArchiveOperation createBase64ArchiveOperation;
     GetLuaFileOperation getLuaFileOperation;
 
     DeveloperApiTester developerApiTester;
@@ -51,13 +50,14 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var stageId = createProjectDeveloperResponse.getStageId();
         final var stageSecret = createProjectDeveloperResponse.getSecret();
 
-        final var sourceCode = VersionSourceCodeModel.create();
-        sourceCode.getFiles().add(new EncodedFileModel("main.lua", Base64.getEncoder()
-                .encodeToString(mainLua.getBytes(StandardCharsets.UTF_8))));
-        sourceCode.getFiles().add(new EncodedFileModel("omgservers.lua", Base64.getEncoder()
-                .encodeToString(getLuaFileOperation.getOmgserversLua().getBytes(StandardCharsets.UTF_8))));
+        final var base64Archive = createBase64ArchiveOperation.createBase64Archive(Map.of(
+                        "main.lua", mainLua,
+                        "omgservers.lua", getLuaFileOperation.getOmgserversLua()
+                )
+        );
+
         final var createVersionDeveloperResponse = developerApiTester
-                .createVersion(developerToken, tenantId, stageId, versionConfig, sourceCode);
+                .createVersion(developerToken, tenantId, stageId, versionConfig, base64Archive);
         final var versionId = createVersionDeveloperResponse.getId();
 
         return TestVersionModel.builder()

@@ -22,6 +22,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -49,12 +51,12 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
 
         return getVersion(tenantId, versionId)
                 .flatMap(version -> {
-                    log.info("Version was created, version={}/{}, stageId={}, modes={}, files={}",
+                    log.info("Version was created, version={}/{}, stageId={}, modes={}, archiveSizeInBytes={}",
                             tenantId,
                             versionId,
                             version.getStageId(),
                             version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
-                            version.getSourceCode().getFiles().size());
+                            version.getBase64Archive().getBytes(StandardCharsets.UTF_8).length);
 
                     final var idempotencyKey = event.getIdempotencyKey();
 

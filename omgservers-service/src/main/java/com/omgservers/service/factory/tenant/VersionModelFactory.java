@@ -2,7 +2,6 @@ package com.omgservers.service.factory.tenant;
 
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,14 +21,14 @@ public class VersionModelFactory {
             final Long tenantId,
             final Long stageId,
             final VersionConfigModel versionConfig,
-            final VersionSourceCodeModel sourceCode) {
+            final String base64Archive) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id,
                 tenantId,
                 stageId,
                 versionConfig,
-                sourceCode,
+                base64Archive,
                 idempotencyKey);
     }
 
@@ -37,14 +36,14 @@ public class VersionModelFactory {
             final Long tenantId,
             final Long stageId,
             final VersionConfigModel versionConfig,
-            final VersionSourceCodeModel sourceCode,
+            final String base64Archive,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id,
                 tenantId,
                 stageId,
                 versionConfig,
-                sourceCode,
+                base64Archive,
                 idempotencyKey);
     }
 
@@ -52,7 +51,7 @@ public class VersionModelFactory {
                                final Long tenantId,
                                final Long stageId,
                                final VersionConfigModel versionConfig,
-                               final VersionSourceCodeModel sourceCode,
+                               final String base64Archive,
                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -64,7 +63,7 @@ public class VersionModelFactory {
         version.setModified(now);
         version.setIdempotencyKey(idempotencyKey);
         version.setConfig(versionConfig);
-        version.setSourceCode(sourceCode);
+        version.setBase64Archive(base64Archive);
         version.setDeleted(false);
         return version;
     }

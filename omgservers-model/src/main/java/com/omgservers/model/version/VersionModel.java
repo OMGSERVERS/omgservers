@@ -43,7 +43,7 @@ public class VersionModel {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    VersionSourceCodeModel sourceCode;
+    String base64Archive;
 
     @NotNull
     Boolean deleted;

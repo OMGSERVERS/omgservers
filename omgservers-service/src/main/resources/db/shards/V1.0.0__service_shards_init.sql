@@ -219,7 +219,7 @@ create table if not exists tab_tenant_version (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null,
-    source_code json not null,
+    archive bytea not null,
     deleted boolean not null
 );
 

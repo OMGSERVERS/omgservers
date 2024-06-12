@@ -8,7 +8,6 @@ import com.omgservers.model.dto.tenant.SyncVersionRequest;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.VersionModelFactory;
@@ -41,10 +40,10 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         final var stageConfig = request.getVersionConfig();
-        final var sourceCode = request.getSourceCode();
+        final var base64Archive = request.getBase64Archive();
 
         return checkVersionManagementPermission(tenantId, stageId, userId)
-                .flatMap(voidItem -> createVersion(tenantId, stageId, stageConfig, sourceCode))
+                .flatMap(voidItem -> createVersion(tenantId, stageId, stageConfig, base64Archive))
                 .map(VersionModel::getId)
                 .map(CreateVersionDeveloperResponse::new);
     }
@@ -71,8 +70,8 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     Uni<VersionModel> createVersion(final Long tenantId,
                                     final Long stageId,
                                     final VersionConfigModel versionConfig,
-                                    final VersionSourceCodeModel sourceCode) {
-        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, sourceCode);
+                                    final String base64Archive) {
+        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, base64Archive);
         final var request = new SyncVersionRequest(version);
         return tenantModule.getVersionService().syncVersion(request)
                 .replaceWith(version);

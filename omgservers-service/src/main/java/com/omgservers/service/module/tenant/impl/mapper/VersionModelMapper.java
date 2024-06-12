@@ -3,7 +3,6 @@ package com.omgservers.service.module.tenant.impl.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
@@ -12,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Slf4j
 @ApplicationScoped
@@ -31,7 +31,7 @@ public class VersionModelMapper {
         version.setDeleted(row.getBoolean("deleted"));
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));
-            version.setSourceCode(objectMapper.readValue(row.getString("source_code"), VersionSourceCodeModel.class));
+            version.setBase64Archive(Base64.getEncoder().encodeToString(row.getBuffer("archive").getBytes()));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "version can't be parsed, version=" + version, e);

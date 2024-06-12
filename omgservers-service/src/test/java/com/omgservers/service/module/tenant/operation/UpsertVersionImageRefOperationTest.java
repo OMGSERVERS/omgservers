@@ -2,7 +2,6 @@ package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -22,6 +21,9 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Slf4j
 @QuarkusTest
@@ -72,7 +74,7 @@ class UpsertVersionImageRefOperationTest extends Assertions {
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
                 VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
+                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
 
         final var versionLobbyRef = versionLobbyRefModelFactory.create(tenant.getId(),
@@ -96,7 +98,7 @@ class UpsertVersionImageRefOperationTest extends Assertions {
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
                 VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
+                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
         final var versionLobbyRef = versionLobbyRefModelFactory.create(tenant.getId(),
                 version.getId(),
@@ -129,7 +131,7 @@ class UpsertVersionImageRefOperationTest extends Assertions {
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
                 VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
+                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
         final var versionLobbyRef1 = versionLobbyRefModelFactory.create(tenant.getId(),
                 version.getId(),

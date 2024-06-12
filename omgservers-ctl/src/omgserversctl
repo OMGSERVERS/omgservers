@@ -12,12 +12,12 @@ help() {
   if [ -z "$1" -o "$1" = "logs" ]; then
     echo " omgserversctl logs"
   fi
-  # Env
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env print" ]; then
-    echo " omgserversctl env print"
+  # Environment
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
+    echo " omgserversctl environment printCurrent"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env useLocal" ]; then
-    echo " omgserversctl env useLocal"
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
+    echo " omgserversctl environment useEnvironment <name> <external_url> <internal_url>"
   fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
@@ -71,7 +71,7 @@ help() {
     echo " omgserversctl developer getTenantDashboard"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadVersion" ]; then
-    echo " omgserversctl developer uploadVersion <scripts_path>"
+    echo " omgserversctl developer uploadVersion <project_path>"
   fi
 }
 
@@ -79,21 +79,28 @@ logs() {
   cat ~/.omgservers/logs
 }
 
-# ENV
+# ENVIRONMENT
 
-env_print() {
-  env | grep OMGSERVERS_ | sort
+environment_printCurrent() {
+  env | grep OMGSERVERSCTL_ | sort
   exit 0
 }
 
-env_useLocal() {
-  ENVIRONMENT=local
+environment_useEnvironment() {
+  ENVIRONMENT_NAME=$1
+  ENVIRONMENT_EXTERNAL_URL=$2
+  ENVIRONMENT_INTERNAL_URL=$3
 
-  echo "export OMGSERVERS_ENVIRONMENT_TYPE=$ENVIRONMENT" >> ~/.omgservers/environment
-  echo "export OMGSERVERS_ENVIRONMENT_EXTERNAL_URL=http://localhost:10001" >> ~/.omgservers/environment.local
-  echo "export OMGSERVERS_ENVIRONMENT_INTERNAL_URL=http://localhost:10002" >> ~/.omgservers/environment.local
+  if [ -z "${ENVIRONMENT_NAME}" -o -z "${ENVIRONMENT_EXTERNAL_URL}" -o -z "${ENVIRONMENT_INTERNAL_URL}" ]; then
+    help "environment useEnvironment"
+    exit 1
+  fi
 
-  echo "$(date) $(echo $ENVIRONMENT) Environment has been set, ENVIRONMENT=$ENVIRONMENT"
+  echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ~/.omgservers/environment
+  echo "export OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL=${ENVIRONMENT_EXTERNAL_URL}" >> ~/.omgservers/environment.${ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL=${ENVIRONMENT_INTERNAL_URL}" >> ~/.omgservers/environment.${ENVIRONMENT_NAME}
+
+  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, EXTERNAL_URL=${ENVIRONMENT_EXTERNAL_URL}, INTERNAL_URL=${ENVIRONMENT_INTERNAL_URL}"
 
   exit 0
 }
@@ -109,71 +116,78 @@ admin_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERS_ADMIN_USER_ID=${ADMIN_USER_ID}" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
-  echo "export OMGSERVERS_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_ADMIN_USER_ID=${ADMIN_USER_ID}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Admin credentials were set, ADMIN_USER_ID=${ADMIN_USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER_ID=${ADMIN_USER_ID}"
 
-  internal_useEnv
+  internal_useEnvironment
   admin_createToken
 
   exit 0
 }
 
 admin_printCurrent() {
-  ADMIN_USER_ID=${OMGSERVERS_ADMIN_USER_ID}
-  ADMIN_USER_PASSWORD=${OMGSERVERS_ADMIN_PASSWORD}
-  ADMIN_TOKEN=${OMGSERVERS_ADMIN_TOKEN}
+  ADMIN_USER_ID=${OMGSERVERSCTL_ADMIN_USER_ID}
+  ADMIN_USER_PASSWORD=${OMGSERVERSCTL_ADMIN_PASSWORD}
+  ADMIN_TOKEN=${OMGSERVERSCTL_ADMIN_TOKEN}
 
   if [ -z "${ADMIN_USER_ID}" -o -z "${ADMIN_USER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active admin was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin was not set"
     exit 1
   fi
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active admin was found, ADMIN_USER_ID=${ADMIN_USER_ID}, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current admin was found, ADMIN_USER_ID=${ADMIN_USER_ID}, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active admin was found, ADMIN_USER_ID=${ADMIN_USER_ID}, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current admin was found, ADMIN_USER_ID=${ADMIN_USER_ID}, (token exists)"
   fi
 
   exit 0
 }
 
 admin_createToken() {
-  ADMIN_USER_ID=${OMGSERVERS_ADMIN_USER_ID}
-  ADMIN_PASSWORD=${OMGSERVERS_ADMIN_PASSWORD}
+  ADMIN_USER_ID=${OMGSERVERSCTL_ADMIN_USER_ID}
+  ADMIN_PASSWORD=${OMGSERVERSCTL_ADMIN_PASSWORD}
 
   if [ -z "${ADMIN_USER_ID}" -o -z "${ADMIN_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active admin credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin credentials were not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using admin, USER_ID=${ADMIN_USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, USER_ID=${ADMIN_USER_ID}"
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/admin/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user_id\": \"${ADMIN_USER_ID}\", \"password\": \"${ADMIN_PASSWORD}\"}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json || true
+    -o ~/.omgservers/temp/admin-create-token_${ADMIN_USER_ID}.json)
 
-  cat ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/admin-create-token_${ADMIN_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  ADMIN_TOKEN=$(cat ~/.omgservers/tmp/admin-create-token_${ADMIN_USER_ID}.json | jq -r .raw_token)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  ADMIN_TOKEN=$(cat ~/.omgservers/temp/admin-create-token_${ADMIN_USER_ID}.json | jq -r .raw_token)
   if [ -z "$ADMIN_TOKEN" -o "$ADMIN_TOKEN" == "null" ]; then
     echo "ERROR: ADMIN_TOKEN was not received"
     exit 1
   fi
 
-  echo "export OMGSERVERS_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Admin token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
 
   exit 0
 }
@@ -189,205 +203,233 @@ support_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERS_SUPPORT_USER_ID=$SUPPORT_USER_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
-  echo "export OMGSERVERS_SUPPORT_USER_PASSWORD=$SUPPORT_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_SUPPORT_USER_ID=$SUPPORT_USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_SUPPORT_USER_PASSWORD=$SUPPORT_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Support credentials were set, SUPPORT_USER_ID=$SUPPORT_USER_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER_ID=$SUPPORT_USER_ID"
 
-  internal_useEnv
+  internal_useEnvironment
   support_createToken
 
   exit 0
 }
 
 support_printCurrent() {
-  SUPPORT_USER_ID=${OMGSERVERS_SUPPORT_USER_ID}
-  SUPPORT_USER_PASSWORD=${OMGSERVERS_SUPPORT_USER_PASSWORD}
-  SUPPORT_TOKEN=${OMGSERVERS_SUPPORT_TOKEN}
+  SUPPORT_USER_ID=${OMGSERVERSCTL_SUPPORT_USER_ID}
+  SUPPORT_USER_PASSWORD=${OMGSERVERSCTL_SUPPORT_USER_PASSWORD}
+  SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_USER_ID}" -o -z "${SUPPORT_USER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active support was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support was not found"
     exit 1
   fi
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (token exists)"
   fi
 
   exit 0
 }
 
 support_createToken() {
-  SUPPORT_USER_ID=$OMGSERVERS_SUPPORT_USER_ID
-  SUPPORT_PASSWORD=$OMGSERVERS_SUPPORT_USER_PASSWORD
+  SUPPORT_USER_ID=$OMGSERVERSCTL_SUPPORT_USER_ID
+  SUPPORT_PASSWORD=$OMGSERVERSCTL_SUPPORT_USER_PASSWORD
 
   if [ -z "${SUPPORT_USER_ID}" -o -z "${SUPPORT_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active support credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support credentials were not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using support, USER_ID=$SUPPORT_USER_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, USER_ID=$SUPPORT_USER_ID"
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user_id\": \"${SUPPORT_USER_ID}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json || true
+    -o ~/.omgservers/temp/support-create-token_${SUPPORT_USER_ID}.json)
 
-  cat ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/support-create-token_${SUPPORT_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  RAW_TOKEN=$(cat ~/.omgservers/tmp/support-create-token_${SUPPORT_USER_ID}.json | jq -r .raw_token)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  RAW_TOKEN=$(cat ~/.omgservers/temp/support-create-token_${SUPPORT_USER_ID}.json | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
     echo "ERROR: RAW_TOKEN was not received"
     exit 1
   fi
 
-  echo "export OMGSERVERS_SUPPORT_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Support token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created"
 
   exit 0
 }
 
 support_createTenant() {
-  SUPPORT_TOKEN=$OMGSERVERS_SUPPORT_TOKEN
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
   REQUEST="{}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-create-tenant.json || true
+    -o ~/.omgservers/temp/support-create-tenant.json)
 
-  cat ~/.omgservers/tmp/support-create-tenant.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/support-create-tenant.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  TENANT_ID=$(cat ~/.omgservers/tmp/support-create-tenant.json | jq -r .id)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  TENANT_ID=$(cat ~/.omgservers/temp/support-create-tenant.json | jq -r .id)
   if [ -z "$TENANT_ID" -o "$TENANT_ID" == "null" ]; then
     echo "ERROR: TENANT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_TENANT_ID=$TENANT_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_TENANT_ID=$TENANT_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Tenant was created, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT_ID=$TENANT_ID"
 
   exit 0
 }
 
 support_deleteTenant() {
-  SUPPORT_TOKEN=$OMGSERVERS_SUPPORT_TOKEN
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
     exit 1
   fi
 
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
   REQUEST="{\"tenant_id\": \"${TENANT_ID}\"}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json || true
+    -o ~/.omgservers/temp/support-delete-tenant_${TENANT_ID}.json)
 
-  cat ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/support-delete-tenant_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  DELETED=$(cat ~/.omgservers/tmp/support-delete-tenant_${TENANT_ID}.json | jq -r .deleted)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ~/.omgservers/temp/support-delete-tenant_${TENANT_ID}.json | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
     echo "ERROR: DELETED was not received"
     exit 1
   fi
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Tenant was deleted, TENANT_ID=${TENANT_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was deleted, TENANT_ID=${TENANT_ID}"
   else
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Tenant was not deleted, TENANT_ID=${TENANT_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was not deleted, TENANT_ID=${TENANT_ID}"
   fi
 
   exit 0
 }
 
 support_createDeveloper() {
-  SUPPORT_TOKEN=$OMGSERVERS_SUPPORT_TOKEN
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
     exit 1
   fi
 
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-developer"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-developer"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json || true
+    -o ~/.omgservers/temp/support-create-developer_${TENANT_ID}.json)
 
-  cat ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/support-create-developer_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  USER_ID=$(cat ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json | jq -r .user_id)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  USER_ID=$(cat ~/.omgservers/temp/support-create-developer_${TENANT_ID}.json | jq -r .user_id)
   if [ -z "$USER_ID" -o "$USER_ID" == "null" ]; then
     echo "ERROR: USER_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  PASSWORD=$(cat ~/.omgservers/tmp/support-create-developer_${TENANT_ID}.json | jq -r .password)
+  PASSWORD=$(cat ~/.omgservers/temp/support-create-developer_${TENANT_ID}.json | jq -r .password)
   if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
     echo "ERROR: PASSWORD was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_DEVELOPER_USER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Developer was created, USER_ID=$USER_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, USER_ID=$USER_ID"
 
   exit 0
 }
@@ -395,58 +437,65 @@ support_createDeveloper() {
 # DEVELOPER
 
 developer_printCurrent() {
-  DEVELOPER_USER_ID=${OMGSERVERS_DEVELOPER_USER_ID}
-  DEVELOPER_PASSWORD=${OMGSERVERS_DEVELOPER_USER_PASSWORD}
-  DEVELOPER_TOKEN=${OMGSERVERS_DEVELOPER_TOKEN}
+  DEVELOPER_USER_ID=${OMGSERVERSCTL_DEVELOPER_USER_ID}
+  DEVELOPER_PASSWORD=${OMGSERVERSCTL_DEVELOPER_USER_PASSWORD}
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active developer was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer was not found"
     exit 1
   fi
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (token exists)"
   fi
 
   exit 0
 }
 
 developer_createToken() {
-  DEVELOPER_USER_ID=$OMGSERVERS_DEVELOPER_USER_ID
-  DEVELOPER_PASSWORD=$OMGSERVERS_DEVELOPER_USER_PASSWORD
+  DEVELOPER_USER_ID=$OMGSERVERSCTL_DEVELOPER_USER_ID
+  DEVELOPER_PASSWORD=$OMGSERVERSCTL_DEVELOPER_USER_PASSWORD
 
   if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active developer credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer credentials were not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using developer, USER_ID=$DEVELOPER_USER_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using developer, USER_ID=$DEVELOPER_USER_ID"
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-token"
   REQUEST="{\"user_id\": \"${DEVELOPER_USER_ID}\", \"password\": \"${DEVELOPER_PASSWORD}\"}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json || true
+    -o ~/.omgservers/temp/developer-create-token_${DEVELOPER_USER_ID}.json)
 
-  cat ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/developer-create-token_${DEVELOPER_USER_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  RAW_TOKEN=$(cat ~/.omgservers/tmp/developer-create-token_${DEVELOPER_USER_ID}.json | jq -r .raw_token)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  RAW_TOKEN=$(cat ~/.omgservers/temp/developer-create-token_${DEVELOPER_USER_ID}.json | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
     echo "ERROR: RAW_TOKEN was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_DEVELOPER_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Developer token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
 
   exit 0
 }
@@ -460,12 +509,12 @@ developer_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERS_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
-  echo "export OMGSERVERS_DEVELOPER_USER_PASSWORD=$DEVELOPER_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$DEVELOPER_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
-  internal_useEnv
+  internal_useEnvironment
   developer_createToken
 
   exit 0
@@ -479,188 +528,219 @@ developer_useTenant() {
     exit 1
   fi
 
-  echo "export OMGSERVERS_TENANT_ID=${TENANT_ID}" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_TENANT_ID=${TENANT_ID}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Tenant was set, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was set, TENANT_ID=$TENANT_ID"
 
   exit 0
 }
 
 developer_printTenant() {
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Tenant was found, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was found, TENANT_ID=${TENANT_ID}"
 
   exit 0
 }
 
 developer_createProject() {
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
 
-  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-project"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json || true
+    -o ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json)
 
-  cat ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  PROJECT_ID=$(cat ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json | jq -r .project_id)
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  PROJECT_ID=$(cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json | jq -r .project_id)
   if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
     echo "ERROR: PROJECT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  STAGE_ID=$(cat ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
+  STAGE_ID=$(cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
   if [ -z "$STAGE_ID" -o "$STAGE_ID" == "null" ]; then
     echo "ERROR: STAGE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_STAGE_ID=$STAGE_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  STAGE_SECRET=$(cat ~/.omgservers/tmp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
+  STAGE_SECRET=$(cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
   if [ -z "$STAGE_SECRET" -o "$STAGE_SECRET" == "null" ]; then
     echo "ERROR: STAGE_SECRET was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Project was created, PROJECT_ID=$PROJECT_ID, STAGE_ID=$STAGE_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=$PROJECT_ID, STAGE_ID=$STAGE_ID"
 
   exit 0
 }
 
 developer_getTenantDashboard() {
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
 
-  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERS_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+
   echo >> ~/.omgservers/logs
   echo $ENDPOINT >> ~/.omgservers/logs
   echo $REQUEST >> ~/.omgservers/logs
 
-  curl -s -S -X PUT --fail-with-body \
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json || true
+    -o ~/.omgservers/temp/developer-get-tenant-dashboard_${TENANT_ID}.json)
 
-  cat ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json >> ~/.omgservers/logs
+  cat ~/.omgservers/temp/developer-get-tenant-dashboard_${TENANT_ID}.json >> ~/.omgservers/logs
   echo >> ~/.omgservers/logs
 
-  open ~/.omgservers/tmp/developer-get-tenant-dashboard_${TENANT_ID}.json
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  open ~/.omgservers/temp/developer-get-tenant-dashboard_${TENANT_ID}.json
 }
 
 developer_uploadVersion() {
-  SCRIPTS_PATH=$1
+  PROJECT_PATH=$1
 
-  if [ -z "${SCRIPTS_PATH}" ]; then
+  if [ -z "${PROJECT_PATH}" ]; then
     help "developer uploadVersion"
     exit 1
   fi
 
-  TENANT_ID=$OMGSERVERS_TENANT_ID
+  TENANT_ID=$OMGSERVERSCTL_TENANT_ID
 
   if [ -z "${TENANT_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active tenant was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current tenant was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
 
-  STAGE_ID=$OMGSERVERS_STAGE_ID
+  STAGE_ID=$OMGSERVERSCTL_STAGE_ID
 
   if [ -z "${STAGE_ID}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active stage was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current stage was not found"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Using stage, STAGE_ID=$STAGE_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=$STAGE_ID"
 
-  DEVELOPER_TOKEN=$OMGSERVERS_DEVELOPER_TOKEN
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) ERROR: Active developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
     exit 1
   fi
 
-  pushd ${SCRIPTS_PATH} >> /dev/null
+  pushd ${PROJECT_PATH} >> /dev/null
 
-  MULTIPART_FILES_PARAMS=$(find . -type f -name "*.lua" | sed "s/\(\.\/\)\(.*\)/-F \"\2=@\1\2\"/g" | tr -s '\n' ' ')
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Version files, $MULTIPART_FILES_PARAMS"
+  if [ ! -f "config.json" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Version config.json was not found, PROJECT_PATH=${PROJECT_PATH}"
+    exit 1
+  fi
 
-  CURL_CMD="curl -s -S -X PUT --fail-with-body \
-    \"${OMGSERVERS_URL}/omgservers/v1/entrypoint/developer/request/upload-version\" \
-    -H \"Content-type: multipart/form-data\" \
-    -H \"Authorization: Bearer ${DEVELOPER_TOKEN}\" \
-    -F \"tenantId=${TENANT_ID}\" \
-    -F \"stageId=${STAGE_ID}\" \
-    -F \"config.json=@./config.json\" \
-    $MULTIPART_FILES_PARAMS \
-    -o ~/.omgservers/tmp/developer-upload-version"
+  mkdir -p .omgservers
+  find . -type f -name "*.lua" | zip -@ .omgservers/scripts.zip
 
-  eval "$CURL_CMD"
+  ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-version"
 
-  VERSION_ID=$(cat ~/.omgservers/tmp/developer-upload-version | jq .id)
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: multipart/form-data" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -F "tenantId=${TENANT_ID}" \
+    -F "stageId=${STAGE_ID}" \
+    -F "config.json=@./config.json" \
+    -F "scripts.zip=@./.omgservers/scripts.zip" \
+    -o ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json)
+
+  cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  popd >> /dev/null
+
+  VERSION_ID=$(cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json | jq .id)
   if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
     echo "ERROR: VERSION_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERS_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
 
-  echo "$(date) $(echo $OMGSERVERS_ENVIRONMENT_TYPE) Version was uploaded, VERSION_ID=$VERSION_ID"
-
-  popd >> /dev/null
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was uploaded, VERSION_ID=$VERSION_ID, TENANT_ID=${TENANT_ID}, STAGE_ID=${STAGE_ID}"
 }
 
 # INTERNAL
 
-internal_useEnv() {
-  if [ ! -d "~/.omgservers/tmp" ]; then
-    mkdir -p ~/.omgservers/tmp
+internal_useEnvironment() {
+  if [ ! -d "~/.omgservers/temp" ]; then
+    mkdir -p ~/.omgservers/temp
   fi
   if [ ! -f "~/.omgservers/environment" ]; then
     touch ~/.omgservers/environment
@@ -668,15 +748,17 @@ internal_useEnv() {
   if [ ! -f "~/.omgservers/logs" ]; then
     touch ~/.omgservers/logs
   fi
+
   source ~/.omgservers/environment
-  if [ -n "${OMGSERVERS_ENVIRONMENT_TYPE}" ]; then
-    source ~/.omgservers/environment.${OMGSERVERS_ENVIRONMENT_TYPE}
+
+  if [ -n "${OMGSERVERSCTL_ENVIRONMENT_NAME-}" ]; then
+    source ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
   fi
 }
 
 # MAIN
 
-internal_useEnv
+internal_useEnvironment
 
 if [ -z "$1" -o "$1" = "help" ]; then
   help
@@ -689,18 +771,18 @@ if [ -z "$1" -o "$1" = "logs" ]; then
 fi
 
 # Env
-if [ "$1" = "env" ]; then
-  if [ "$2" = "print" ]; then
-    env_print
-  elif [ "$2" = "useLocal" ]; then
-    env_useLocal
+if [ "$1" = "environment" ]; then
+  if [ "$2" = "printCurrent" ]; then
+    environment_printCurrent
+  elif [ "$2" = "useEnvironment" ]; then
+    environment_useEnvironment $3 $4 $5
   else
-    help "env"
+    help "environment"
     exit 0
   fi
 fi
 
-if [ -z "${OMGSERVERS_ENVIRONMENT_TYPE}" ]; then
+if [ -z "${OMGSERVERSCTL_ENVIRONMENT_NAME}" ]; then
   echo "$(date) $(echo unknown) ERROR: Environment was not selected"
   exit 1
 fi

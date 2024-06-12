@@ -1,7 +1,6 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionSourceCodeModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;
@@ -19,6 +18,9 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Slf4j
 @QuarkusTest
@@ -68,7 +70,7 @@ class SelectVersionOperationTest extends Assertions {
         final var stage = stageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version1 = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
-                VersionSourceCodeModel.create());
+                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version1);
 
         final var version2 = selectVersionOperation.selectVersion(shard, tenant.getId(), version1.getId(), false);
