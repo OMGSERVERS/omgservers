@@ -43,7 +43,7 @@ services:
     networks:
       - omgservers
   builder:
-    image: "omgservers/omgservers-builder:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
     ports:
       - "7070:8080"
@@ -75,7 +75,7 @@ services:
     networks:
       - omgservers
   service1a:
-    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
+    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
     container_name: "service1a"
     restart: unless-stopped
     networks:
@@ -86,9 +86,9 @@ services:
     tmpfs:
       - /var/log/omgservers
     environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
       - OMGSERVERS_QUEUES_HOST=queues1
       - OMGSERVERS_INDEX_SHARD_COUNT=3

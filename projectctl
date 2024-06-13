@@ -9,46 +9,74 @@ internal_help() {
   if [ -z "$1" -o "$1" = "help" ]; then
     echo " projectctl help"
   fi
-  # Project
-  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildWithTests" ]; then
-    echo " projectctl project buildWithTests"
+  # Build
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build printVersion" ]; then
+    echo " projectctl build printVersion"
   fi
-  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildWithoutTests" ]; then
-    echo " projectctl project buildWithoutTests"
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build withTests" ]; then
+    echo " projectctl build withTests"
   fi
-  if [ -z "$1" -o "$1" = "project" -o "$1" = "project buildAndSonar" ]; then
-    echo " projectctl project buildAndSonar"
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build withoutTests" ]; then
+    echo " projectctl build withoutTests"
   fi
-  # Env
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env down" ]; then
-    echo " projectctl env down"
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build testWithSonar" ]; then
+    echo " projectctl build testWithSonar"
   fi
-  # Env development
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env development" -o "$1" = "env development up" ]; then
-    echo " projectctl env development up"
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build beforeCommit" ]; then
+    echo " projectctl build beforeCommit"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env development" -o "$1" = "env development test" ]; then
-    echo " projectctl env development test"
+  if [ -z "$1" -o "$1" = "build" -o "$1" = "build pushImages" ]; then
+    echo " projectctl build pushImages"
   fi
-  # Env integration
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration up" ]; then
-    echo " projectctl env integration up"
+  # Environment
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
+    echo " projectctl environment printCurrent"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration logs" ]; then
-    echo " projectctl env integration logs"
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment down" ]; then
+    echo " projectctl environment down"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env integration" -o "$1" = "env integration test" ]; then
-    echo " projectctl env integration test"
+  # Environment localtesting
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment localtesting" -o "$1" = "environment localtesting up" ]; then
+    echo " projectctl environment localtesting up"
   fi
-  # Env standalone
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone up" ]; then
-    echo " projectctl env standalone up"
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment localtesting" -o "$1" = "environment localtesting test" ]; then
+    echo " projectctl environment localtesting test"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone logs" ]; then
-    echo " projectctl env standalone logs"
+  # Environment development
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development up" ]; then
+    echo " projectctl environment development up"
   fi
-  if [ -z "$1" -o "$1" = "env" -o "$1" = "env standalone" -o "$1" = "env standalone test" ]; then
-    echo " projectctl env standalone test"
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development reset" ]; then
+    echo " projectctl environment development reset"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development logs" ]; then
+    echo " projectctl environment development logs"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development test" ]; then
+    echo " projectctl environment development test"
+  fi
+  # Environment integration
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration up" ]; then
+    echo " projectctl environment integration up"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration reset" ]; then
+    echo " projectctl environment integration reset"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration logs" ]; then
+    echo " projectctl environment integration logs"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration test" ]; then
+    echo " projectctl environment integration test"
+  fi
+  # Environment standalone
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone up" ]; then
+    echo " projectctl environment standalone up"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone logs" ]; then
+    echo " projectctl environment standalone logs"
+  fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone test" ]; then
+    echo " projectctl environment standalone test"
   fi
 }
 
@@ -58,26 +86,46 @@ build_printVersion() {
   ./mvnw -B help:evaluate -Dexpression=project.version -q -DforceStdout
 }
 
-project_buildWithTests() {
+build_withTests() {
   ./mvnw -B install
 }
 
-project_buildWithoutTests() {
+build_withoutTests() {
   ./mvnw -B install -DskipTests
 }
 
-project_buildAndSonar() {
+build_testWithSonar() {
   ./mvnw -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OMGSERVERS_omgservers
 }
 
-env_down() {
+build_beforeCommit() {
+#  build_withTests
+
+  environment_localtesting_up
+  environment_development_up
+  environment_integration_up
+  environment_standalone_up
+
+  environment_down
+}
+
+build_pushImages() {
+  ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true
+}
+
+environment_printCurrent() {
+  docker compose ls
+}
+
+environment_down() {
+  docker compose -p localtesting down
   docker compose -p development down
   docker compose -p integration down
   docker compose -p standalone down
-  exit 0
 }
 
-env_development_up() {
+environment_localtesting_up() {
+  docker compose -p development down
   docker compose -p integration down
   docker compose -p standalone down
 
@@ -90,18 +138,51 @@ env_development_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml up --remove-orphans -d
-  docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml ps
-  exit 0
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f omgservers-environment/omgservers-localtesting/src/compose.yaml up --remove-orphans -d
+  docker compose -p localtesting ps
 }
 
-env_development_test() {
+environment_localtesting_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=LOCALTESTING \
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+}
+
+environment_development_up() {
+  docker compose -p localtesting down
+  docker compose -p integration down
+  docker compose -p standalone down
+
+  OMGSERVERS_VERSION=$(build_printVersion)
+
+  if [ -z "${OMGSERVERS_VERSION}" ]; then
+    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+    exit 1
+  fi
+
+  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml up --remove-orphans -d
+  docker compose -p development ps
+}
+
+environment_development_reset() {
+  docker compose -p development down
+  environment_development_up
+}
+
+environment_development_logs() {
+  docker compose -p development logs -f
+}
+
+environment_development_test() {
+  environment_development_up
+
   OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
-  exit 0
 }
 
-env_integration_up() {
+environment_integration_up() {
+  docker compose -p localtesting down
   docker compose -p development down
   docker compose -p standalone down
 
@@ -114,9 +195,8 @@ env_integration_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml up --remove-orphans -d
-  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml ps
-  exit 0
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml up --remove-orphans -d
+  docker compose -p integration ps
 }
 
 environment_integration_reset() {
@@ -124,18 +204,19 @@ environment_integration_reset() {
   environment_integration_up
 }
 
-env_integration_logs() {
-  docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml logs -f
+environment_integration_logs() {
+  docker compose -p integration logs -f
 }
 
-env_integration_test() {
+environment_integration_test() {
+  environment_integration_up
+
   OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
       ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
-
-  exit 0
 }
 
-env_standalone_up() {
+environment_standalone_up() {
+  docker compose -p localtesting down
   docker compose -p development down
   docker compose -p integration down
 
@@ -148,67 +229,88 @@ env_standalone_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml up --remove-orphans -d
-  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml ps
-  exit 0
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml up --remove-orphans -d
+  docker compose -p standalone ps
 }
 
-env_standalone_logs() {
-  docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml logs -f
+environment_standalone_logs() {
+  docker compose -p standalone logs -f
 }
 
-env_standalone_test() {
+environment_standalone_test() {
+  environment_standalone_up
+
   OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
         ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
-
-  exit 0
 }
 
-# Project
-if [ "$1" = "project" ]; then
-  if [ "$2" = "buildWithTests" ]; then
-    project_buildWithTests
-  elif [ "$2" = "buildWithoutTests" ]; then
-    project_buildWithoutTests
-  elif [ "$2" = "buildAndSonar" ]; then
-    project_buildAndSonar
+# Build
+if [ "$1" = "build" ]; then
+  if [ "$2" = "printVersion" ]; then
+    build_printVersion
+  elif [ "$2" = "withTests" ]; then
+    build_withTests
+  elif [ "$2" = "withoutTests" ]; then
+    build_withoutTests
+  elif [ "$2" = "testWithSonar" ]; then
+    build_testWithSonar
+  elif [ "$2" = "beforeCommit" ]; then
+    build_beforeCommit
+  elif [ "$2" = "pushImages" ]; then
+    build_pushImages
   else
-    internal_help "project"
+    internal_help "build"
   fi
-# Env
-elif [ "$1" = "env" ]; then
-  if [ "$2" = "down" ]; then
-    env_down
+# Environment
+elif [ "$1" = "environment" ]; then
+  if [ "$2" = "printCurrent" ]; then
+    environment_printCurrent
+  elif [ "$2" = "down" ]; then
+    environment_down
+  elif [ "$2" = "localtesting" ]; then
+    if [ "$3" = "up" ]; then
+      environment_localtesting_up
+    elif [ "$3" = "test" ]; then
+      environment_localtesting_test
+    else
+      internal_help "environment localtesting"
+    fi
   elif [ "$2" = "development" ]; then
     if [ "$3" = "up" ]; then
-      env_development_up
+      environment_development_up
+    elif [ "$3" = "reset" ]; then
+      environment_development_reset
+    elif [ "$3" = "logs" ]; then
+      environment_development_logs
     elif [ "$3" = "test" ]; then
-      env_development_test
+      environment_development_test
     else
-      internal_help "env development"
+      internal_help "environment development"
     fi
   elif [ "$2" = "integration" ]; then
     if [ "$3" = "up" ]; then
-      env_integration_up
+      environment_integration_up
+    elif [ "$3" = "reset" ]; then
+      environment_integration_reset
     elif [ "$3" = "logs" ]; then
-      env_integration_logs
+      environment_integration_logs
     elif [ "$3" = "test" ]; then
-      env_integration_test
+      environment_integration_test
     else
-      internal_help "env integration"
+      internal_help "environment integration"
     fi
   elif [ "$2" = "standalone" ]; then
     if [ "$3" = "up" ]; then
-      env_standalone_up
+      environment_standalone_up
     elif [ "$3" = "logs" ]; then
-      env_standalone_logs
+      environment_standalone_logs
     elif [ "$3" = "test" ]; then
-      env_standalone_test
+      environment_standalone_test
     else
-      internal_help "env standalone"
+      internal_help "environment standalone"
     fi
   else
-    internal_help "env"
+    internal_help "environment"
   fi
 else
   internal_help

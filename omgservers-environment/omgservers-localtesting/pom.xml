@@ -4,17 +4,9 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers</artifactId>
+        <artifactId>omgservers-environment</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>omgservers-environment</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>omgservers-development</module>
-        <module>omgservers-integration</module>
-        <module>omgservers-localtesting</module>
-        <module>omgservers-standalone</module>
-    </modules>
+    <artifactId>omgservers-localtesting</artifactId>
 </project>

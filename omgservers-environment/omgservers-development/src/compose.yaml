@@ -21,13 +21,11 @@ services:
     networks:
       - omgservers
   queues:
-    image: "apache/activemq-artemis:2.33.0-alpine"
+    image: "omgservers/omgservers-queues:${OMGSERVERS_VERSION}"
     container_name: "queues"
     environment:
       - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=queues
-    volumes:
-      - ./broker.xml:/var/lib/artemis-instance/etc-override/broker.xml
     ports:
       - "5672:5672"
     networks:
@@ -53,6 +51,40 @@ services:
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5050
+  service:
+    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    container_name: "service"
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - omgservers
+    depends_on:
+      - database
+      - queues
+    environment:
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
+      - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
+      - OMGSERVERS_DATABASE_PASSWORD=root
+      - OMGSERVERS_QUEUES_HOST=queues
+      - OMGSERVERS_QUEUES_PASSWORD=queues
+      - OMGSERVERS_INDEX_SERVER_URI=http://service:8080
+      - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service:8080
+      - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=support
+      - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://service:8080
+      - OMGSERVERS_WORKERS_DOCKER_NETWORK=omgservers
+      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=0
+      - OMGSERVERS_BUILDER_URI=http://builder:8080
+      - OMGSERVERS_BUILDER_USER_ID=builder
+      - OMGSERVERS_BUILDER_USER_TOKEN=1167db115da39e5c7776c661e463fe7933
 networks:
   omgservers:
     name: omgservers

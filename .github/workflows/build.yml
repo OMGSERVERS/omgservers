@@ -52,21 +52,5 @@ jobs:
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Push omgservers-service
-        run: docker push omgservers/omgservers-service:1.0.0-SNAPSHOT
-      - name: Push omgservers-builder
-        run: docker push omgservers/omgservers-builder:1.0.0-SNAPSHOT
-      - name: Push omgservers-entrypoint
-        run: docker push omgservers/omgservers-entrypoint:1.0.0-SNAPSHOT
-      - name: Push omgservers-gateway
-        run: docker push omgservers/omgservers-gateway:1.0.0-SNAPSHOT
-      - name: Push omgservers-ingress
-        run: docker push omgservers/omgservers-ingress:1.0.0-SNAPSHOT
-      - name: Push omgservers-jwtkeys
-        run: docker push omgservers/omgservers-jwtkeys:1.0.0-SNAPSHOT
-      - name: Push omgservers-luajit
-        run: docker push omgservers/omgservers-luajit:1.0.0-SNAPSHOT
-      - name: Push omgservers-proxy
-        run: docker push omgservers/omgservers-proxy:1.0.0-SNAPSHOT
-      - name: Push omgservers-queues
-        run: docker push omgservers/omgservers-queues:1.0.0-SNAPSHOT
+      - name: Push images
+        run: ./projectctl build pushImages

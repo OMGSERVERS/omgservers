@@ -1,2 +1,3 @@
-FROM omgservers/omgservers-proxy:1.0.0-SNAPSHOT
+ARG OMGSERVERS_VERSION
+FROM omgservers/omgservers-proxy:${OMGSERVERS_VERSION}
 COPY src/main/docker/standalone.yaml /etc/envoy/standalone.yaml

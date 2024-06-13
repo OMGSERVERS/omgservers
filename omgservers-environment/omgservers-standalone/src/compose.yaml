@@ -93,7 +93,7 @@ services:
       - JENKINS_ADMIN_PASSWORD=${BUILDER_PASSWORD}
       - JENKINS_ADMIN_TOKEN=${BUILDER_TOKEN}
       - DOCKER_HOST=tcp://docker:2375
-      - DOCKER_REGISTRY=localhost:5050
+      - DOCKER_REGISTRY=${REGISTRY_PORT}
   # service
   gateway:
     image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"

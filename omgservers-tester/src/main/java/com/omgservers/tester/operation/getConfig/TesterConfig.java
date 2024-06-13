@@ -9,6 +9,8 @@ public interface TesterConfig {
 
     EnvironmentEnum environment();
 
+    EnvironmentConfig localtesting();
+
     EnvironmentConfig development();
 
     EnvironmentConfig integration();
