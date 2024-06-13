@@ -16,8 +16,6 @@ services:
       - "${INGRESS_ADMIN_PORT}:10000"
     networks:
       - frontend
-    volumes:
-      - ingress-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone.yaml"
   entrypoint1:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
@@ -30,8 +28,6 @@ services:
       - "${ENTRYPOINT1_ADMIN_PORT}:10000"
     networks:
       - frontend
-    volumes:
-      - entrypoint1-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone1.yaml"
   entrypoint2:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
@@ -44,8 +40,6 @@ services:
       - "${ENTRYPOINT2_ADMIN_PORT}:10000"
     networks:
       - frontend
-    volumes:
-      - entrypoint2-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone2.yaml"
   entrypoint3:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
@@ -59,8 +53,6 @@ services:
     networks:
       - workers
       - frontend
-    volumes:
-      - entrypoint3-logs:/var/log/envoy
     command: "-c /etc/envoy/standalone3.yaml"
   # backend
   docker:
@@ -109,8 +101,6 @@ services:
     networks:
       - frontend
       - service
-    volumes:
-      - gateway-logs:/var/log/envoy
     command: "-c /etc/envoy/service12.yaml"
   database:
     image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
@@ -150,7 +140,6 @@ services:
       - queues
     volumes:
       - jwtkeys-data:/jwtkeys:ro
-      - service1-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -192,7 +181,6 @@ services:
       - service1
     volumes:
       - jwtkeys-data:/jwtkeys:ro
-      - service2-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -214,32 +202,11 @@ volumes:
   jwtkeys-data:
     name: jwtkeys-data
     driver: local
-  ingress-logs:
-    name: ingress-logs
-    driver: local
-  entrypoint1-logs:
-    name: entrypoint1-logs
-    driver: local
-  entrypoint2-logs:
-    name: entrypoint2-logs
-    driver: local
-  entrypoint3-logs:
-    name: entrypoint3-logs
-    driver: local
-  gateway-logs:
-    name: gateway-logs
-    driver: local
   database-data:
     name: database-data
     driver: local
   queues-data:
     name: queues-data
-    driver: local
-  service1-logs:
-    name: service1-logs
-    driver: local
-  service2-logs:
-    name: service2-logs
     driver: local
 networks:
   frontend:
