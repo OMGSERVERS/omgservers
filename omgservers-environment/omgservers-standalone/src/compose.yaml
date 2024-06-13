@@ -250,5 +250,6 @@ networks:
     name: docker
   workers:
     name: workers
+    internal: true
   service:
     name: service

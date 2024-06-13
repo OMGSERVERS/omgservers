@@ -84,6 +84,9 @@ internal_help() {
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone ps" ]; then
     echo " projectctl environment standalone ps"
   fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone reset" ]; then
+    echo " projectctl environment standalone reset"
+  fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone logs" ]; then
     echo " projectctl environment standalone logs"
   fi
@@ -261,6 +264,11 @@ environment_standalone_ps() {
   docker compose -p standalone ps
 }
 
+environment_standalone_reset() {
+  docker compose -p standalone down
+  environment_standalone_up
+}
+
 environment_standalone_logs() {
   docker compose -p standalone logs $@
 }
@@ -338,6 +346,8 @@ elif [ "$1" = "environment" ]; then
       environment_standalone_up
     elif [ "$3" = "ps" ]; then
       environment_standalone_ps
+    elif [ "$3" = "reset" ]; then
+      environment_standalone_reset
     elif [ "$3" = "logs" ]; then
       environment_standalone_logs "${@:4}"
     elif [ "$3" = "test" ]; then
