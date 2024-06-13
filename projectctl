@@ -191,7 +191,7 @@ environment_development_reset() {
 }
 
 environment_development_logs() {
-  docker compose -p development logs -f
+  docker compose -p development logs $@
 }
 
 environment_development_test() {
@@ -229,7 +229,7 @@ environment_integration_reset() {
 }
 
 environment_integration_logs() {
-  docker compose -p integration logs -f
+  docker compose -p integration logs $@
 }
 
 environment_integration_test() {
@@ -262,7 +262,7 @@ environment_standalone_ps() {
 }
 
 environment_standalone_logs() {
-  docker compose -p standalone logs -f
+  docker compose -p standalone logs $@
 }
 
 environment_standalone_test() {
@@ -313,7 +313,7 @@ elif [ "$1" = "environment" ]; then
     elif [ "$3" = "reset" ]; then
       environment_development_reset
     elif [ "$3" = "logs" ]; then
-      environment_development_logs
+      environment_development_logs "${@:4}"
     elif [ "$3" = "test" ]; then
       environment_development_test
     else
@@ -327,7 +327,7 @@ elif [ "$1" = "environment" ]; then
     elif [ "$3" = "reset" ]; then
       environment_integration_reset
     elif [ "$3" = "logs" ]; then
-      environment_integration_logs
+      environment_integration_logs "${@:4}"
     elif [ "$3" = "test" ]; then
       environment_integration_test
     else
@@ -339,7 +339,7 @@ elif [ "$1" = "environment" ]; then
     elif [ "$3" = "ps" ]; then
       environment_standalone_ps
     elif [ "$3" = "logs" ]; then
-      environment_standalone_logs
+      environment_standalone_logs "${@:4}"
     elif [ "$3" = "test" ]; then
       environment_standalone_test
     else

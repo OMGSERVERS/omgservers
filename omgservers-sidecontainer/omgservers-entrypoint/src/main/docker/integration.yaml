@@ -48,14 +48,14 @@ static_resources:
                   address:
                     socket_address:
                       address: gateway1
-                      port_value: 8080
+                      port_value: 10001
               - endpoint:
                   address:
                     socket_address:
                       address: gateway2
-                      port_value: 8080
+                      port_value: 10001
               - endpoint:
                   address:
                     socket_address:
                       address: gateway3
-                      port_value: 8080
+                      port_value: 10001

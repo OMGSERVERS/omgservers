@@ -5,7 +5,7 @@ services:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint"
     ports:
-      - "8080:8080"
+      - "8080:10001"
     networks:
       - omgservers
     command: "-c /etc/envoy/integration.yaml"

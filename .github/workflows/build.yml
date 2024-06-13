@@ -32,8 +32,6 @@ jobs:
         run: ./projectctl build testWithSonar
       - name: Start containers
         run: ./projectctl environment integration up && sleep 90
-      - name: Check status
-        run: ./projectctl environment integration ps
       - name: Init registry
         run: docker tag omgservers/omgservers-luajit:1.0.0-SNAPSHOT localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT && docker push localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT
       - name: Run tests
@@ -43,7 +41,7 @@ jobs:
         run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
       - name: Log containers
         if: always()
-        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml logs
+        run: ./projectctl environment integration logs
       - name: Stop containers
         if: always()
         run: ./projectctl environment down
