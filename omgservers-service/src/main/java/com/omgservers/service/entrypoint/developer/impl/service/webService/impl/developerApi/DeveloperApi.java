@@ -4,8 +4,6 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
@@ -39,10 +37,6 @@ public interface DeveloperApi {
     @PUT
     @Path("/create-project")
     Uni<CreateProjectDeveloperResponse> createProject(@NotNull CreateProjectDeveloperRequest request);
-
-    @PUT
-    @Path("/create-version")
-    Uni<CreateVersionDeveloperResponse> createVersion(@NotNull CreateVersionDeveloperRequest request);
 
     @PUT
     @Path("upload-version")

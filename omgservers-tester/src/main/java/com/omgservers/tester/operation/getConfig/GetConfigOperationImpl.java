@@ -13,6 +13,7 @@ class GetConfigOperationImpl implements GetConfigOperation {
 
     public TesterConfig.EnvironmentConfig getConfig() {
         return switch (testerConfig.environment()) {
+            case LOCALTESTING -> testerConfig.localtesting();
             case DEVELOPMENT -> testerConfig.development();
             case INTEGRATION -> testerConfig.integration();
             case STANDALONE -> testerConfig.standalone();

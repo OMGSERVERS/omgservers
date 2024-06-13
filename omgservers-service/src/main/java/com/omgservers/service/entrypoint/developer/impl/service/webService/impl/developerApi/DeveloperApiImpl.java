@@ -4,8 +4,6 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
@@ -51,11 +49,6 @@ class DeveloperApiImpl implements DeveloperApi {
     @Override
     public Uni<CreateProjectDeveloperResponse> createProject(@NotNull final CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createProject);
-    }
-
-    @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(@NotNull final CreateVersionDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
     }
 
     @Override

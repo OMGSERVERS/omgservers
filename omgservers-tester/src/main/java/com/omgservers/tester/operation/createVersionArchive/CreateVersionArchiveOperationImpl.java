@@ -1,4 +1,4 @@
-package com.omgservers.tester.operation.createBase64Archive;
+package com.omgservers.tester.operation.createVersionArchive;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -16,10 +16,10 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class CreateBase64ArchiveOperationImpl implements CreateBase64ArchiveOperation {
+class CreateVersionArchiveOperationImpl implements CreateVersionArchiveOperation {
 
     @Override
-    public String createBase64Archive(Map<String, String> files) throws IOException {
+    public byte[] createArchive(Map<String, String> files) throws IOException {
         try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              final var zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 
@@ -35,7 +35,12 @@ class CreateBase64ArchiveOperationImpl implements CreateBase64ArchiveOperation {
 
             zipOutputStream.finish();
 
-            return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+            return byteArrayOutputStream.toByteArray();
         }
+    }
+
+    @Override
+    public String createBase64Archive(Map<String, String> files) throws IOException {
+        return Base64.getEncoder().encodeToString(createArchive(files));
     }
 }

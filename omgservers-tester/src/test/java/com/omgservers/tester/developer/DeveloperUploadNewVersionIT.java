@@ -36,7 +36,7 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
             uploadTestVersionOperation.uploadTestVersion(testVersion, """                                               
                     """);
 
-            Thread.sleep(120_000);
+            Thread.sleep(16_000);
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }

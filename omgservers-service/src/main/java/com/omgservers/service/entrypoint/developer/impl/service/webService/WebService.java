@@ -4,8 +4,6 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
@@ -21,8 +19,6 @@ public interface WebService {
     Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(GetTenantDashboardDeveloperRequest request);
 
     Uni<CreateProjectDeveloperResponse> createProject(CreateProjectDeveloperRequest request);
-
-    Uni<CreateVersionDeveloperResponse> createVersion(CreateVersionDeveloperRequest request);
 
     Uni<UploadVersionDeveloperResponse> uploadVersion(UploadVersionDeveloperRequest request);
 

@@ -698,7 +698,7 @@ developer_uploadVersion() {
   fi
 
   mkdir -p .omgservers
-  find . -type f -name "*.lua" | zip -@ .omgservers/scripts.zip
+  find . -type f -name "*.lua" | zip -@ .omgservers/project.zip
 
   ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-version"
 
@@ -712,7 +712,7 @@ developer_uploadVersion() {
     -F "tenantId=${TENANT_ID}" \
     -F "stageId=${STAGE_ID}" \
     -F "config.json=@./config.json" \
-    -F "scripts.zip=@./.omgservers/scripts.zip" \
+    -F "project.zip=@./.omgservers/project.zip" \
     -o ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json)
 
   cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgservers/logs
