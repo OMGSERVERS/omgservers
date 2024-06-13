@@ -54,6 +54,10 @@ internal_help() {
 
 # HANDLERS
 
+build_printVersion() {
+  ./mvnw -B help:evaluate -Dexpression=project.version -q -DforceStdout
+}
+
 project_buildWithTests() {
   ./mvnw -B install
 }
@@ -77,6 +81,15 @@ env_development_up() {
   docker compose -p integration down
   docker compose -p standalone down
 
+  OMGSERVERS_VERSION=$(build_printVersion)
+
+  if [ -z "${OMGSERVERS_VERSION}" ]; then
+    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+    exit 1
+  fi
+
+  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+
   docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml up --remove-orphans -d
   docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml ps
   exit 0
@@ -92,9 +105,23 @@ env_integration_up() {
   docker compose -p development down
   docker compose -p standalone down
 
+  OMGSERVERS_VERSION=$(build_printVersion)
+
+  if [ -z "${OMGSERVERS_VERSION}" ]; then
+    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+    exit 1
+  fi
+
+  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+
   docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml up --remove-orphans -d
   docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml ps
   exit 0
+}
+
+environment_integration_reset() {
+  docker compose -p integration down
+  environment_integration_up
 }
 
 env_integration_logs() {
@@ -111,6 +138,15 @@ env_integration_test() {
 env_standalone_up() {
   docker compose -p development down
   docker compose -p integration down
+
+  OMGSERVERS_VERSION=$(build_printVersion)
+
+  if [ -z "${OMGSERVERS_VERSION}" ]; then
+    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+    exit 1
+  fi
+
+  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
   docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml up --remove-orphans -d
   docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml ps

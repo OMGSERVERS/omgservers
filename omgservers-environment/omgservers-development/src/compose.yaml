@@ -1,19 +1,17 @@
 version: "3.8"
 services:
   docker:
-    image: "alpine/socat"
+    image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
     container_name: "docker"
     networks:
       - omgservers
-    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     ports:
       - "2375:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   database:
-    image: "postgres:15.1"
+    image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
     container_name: "database"
-    command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -35,7 +33,7 @@ services:
     networks:
       - omgservers
   registry:
-    image: "registry:2.8.3"
+    image: "omgservers/omgservers-registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
     ports:
       - "5050:5000"

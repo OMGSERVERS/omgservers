@@ -18,7 +18,7 @@ services:
       - frontend
     volumes:
       - ingress-logs:/var/log/envoy
-    command: "-c /etc/envoy/standalone.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone.yaml"
   entrypoint1:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint1"
@@ -32,7 +32,7 @@ services:
       - frontend
     volumes:
       - entrypoint1-logs:/var/log/envoy
-    command: "-c /etc/envoy/standalone1.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone1.yaml"
   entrypoint2:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint2"
@@ -46,7 +46,7 @@ services:
       - frontend
     volumes:
       - entrypoint2-logs:/var/log/envoy
-    command: "-c /etc/envoy/standalone2.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone2.yaml"
   entrypoint3:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint3"
@@ -61,18 +61,17 @@ services:
       - frontend
     volumes:
       - entrypoint3-logs:/var/log/envoy
-    command: "-c /etc/envoy/standalone3.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/standalone3.yaml"
   # backend
   docker:
-    image: "alpine/socat"
+    image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
     container_name: "docker"
     networks:
       - docker
-    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   registry:
-    image: "registry:2.8.3"
+    image: "omgservers/omgservers-registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
     restart: unless-stopped
     ports:
@@ -112,9 +111,9 @@ services:
       - service
     volumes:
       - gateway-logs:/var/log/envoy
-    command: "-c /etc/envoy/service.yaml --log-path /var/log/envoy/system.log"
+    command: "-c /etc/envoy/service12.yaml"
   database:
-    image: "postgres:16"
+    image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
     container_name: "database"
     restart: unless-stopped
     shm_size: 128m
@@ -126,7 +125,6 @@ services:
       - service
     volumes:
       - database-data:/var/lib/postgresql
-    command: postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=256 -c log_statement=ddl -c log_min_messages=info -c logging_collector=true -c log_directory=/var/log/postgresql
   queues:
     image: "omgservers/omgservers-queues:${OMGSERVERS_VERSION}"
     container_name: "queues"
@@ -155,7 +153,6 @@ services:
       - service1-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
-      - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - OMGSERVERS_QUEUES_HOST=queues
@@ -198,7 +195,6 @@ services:
       - service2-logs:/var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
-      - OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED=${OMGSERVERS_CONSOLE_LOGS}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - OMGSERVERS_QUEUES_HOST=queues
