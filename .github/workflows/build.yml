@@ -29,15 +29,15 @@ jobs:
       - name: Build project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OMGSERVERS_omgservers
+        run: ./projectctl build testWithSonar
       - name: Start containers
-        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml up -d && sleep 90
+        run: ./projectctl environment integration up && sleep 90
       - name: Check status
-        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml ps
+        run: ./projectctl environment integration ps
       - name: Init registry
         run: docker tag omgservers/omgservers-luajit:1.0.0-SNAPSHOT localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT && docker push localhost:5050/omgservers/omgservers-luajit:1.0.0-SNAPSHOT
-      - name: Integration testing
-        run: mvn -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+      - name: Run tests
+        run: ./projectctl environment integration test
       - name: Log builder job
         if: always()
         run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
@@ -46,7 +46,7 @@ jobs:
         run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml logs
       - name: Stop containers
         if: always()
-        run: docker compose -f omgservers-environment/omgservers-integration/src/compose.yaml down --remove-orphans
+        run: ./projectctl environment down
       - name: Log into Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
