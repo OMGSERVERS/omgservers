@@ -27,7 +27,6 @@
     </properties>
 
     <modules>
-        <module>omgservers-ctl</module>
         <module>omgservers-document</module>
         <module>omgservers-environment</module>
         <module>omgservers-model</module>

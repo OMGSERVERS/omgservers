@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-  docker:
+  dockerpoint:
     image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
-    container_name: "docker"
+    container_name: "dockerpoint"
     networks:
       - omgservers
     ports:
@@ -49,7 +49,7 @@ services:
       - JENKINS_ADMIN_ID=builder
       - JENKINS_ADMIN_PASSWORD=builder
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
-      - DOCKER_HOST=tcp://docker:2375
+      - DOCKER_HOST=tcp://dockerpoint:2375
       - DOCKER_REGISTRY=localhost:5050
   service:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
@@ -85,6 +85,21 @@ services:
       - OMGSERVERS_BUILDER_URI=http://builder:8080
       - OMGSERVERS_BUILDER_USER_ID=builder
       - OMGSERVERS_BUILDER_USER_TOKEN=1167db115da39e5c7776c661e463fe7933
+  ctl:
+    image: "omgservers/omgservers-ctl:${OMGSERVERS_VERSION}"
+    container_name: "ctl"
+    depends_on:
+      - service
+    environment:
+      - DELAY=16
+      - EXTERNAL_URL=http://service:8080
+      - INTERNAL_URL=http://service:8080
+      - ADMIN_USER_ID=223221505901723648
+      - ADMIN_PASSWORD=admin
+      - SUPPORT_USER_ID=231928170708729857
+      - SUPPORT_PASSWORD=support
+    networks:
+      - omgservers
 networks:
   omgservers:
     name: omgservers

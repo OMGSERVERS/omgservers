@@ -58,6 +58,9 @@ internal_help() {
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development logs" ]; then
     echo " projectctl environment development logs"
   fi
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development ctl" ]; then
+    echo " projectctl environment development ctl"
+  fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development test" ]; then
     echo " projectctl environment development test"
   fi
@@ -197,6 +200,10 @@ environment_development_logs() {
   docker compose -p development logs $@
 }
 
+environment_development_ctl() {
+  docker compose -p development exec ctl /bin/bash
+}
+
 environment_development_test() {
   environment_development_up
 
@@ -322,6 +329,8 @@ elif [ "$1" = "environment" ]; then
       environment_development_reset
     elif [ "$3" = "logs" ]; then
       environment_development_logs "${@:4}"
+    elif [ "$3" = "ctl" ]; then
+      environment_development_ctl
     elif [ "$3" = "test" ]; then
       environment_development_test
     else

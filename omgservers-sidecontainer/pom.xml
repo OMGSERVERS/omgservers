@@ -13,6 +13,7 @@
 
     <modules>
         <module>omgservers-builder</module>
+        <module>omgservers-ctl</module>
         <module>omgservers-database</module>
         <module>omgservers-dockerpoint</module>
         <module>omgservers-entrypoint</module>

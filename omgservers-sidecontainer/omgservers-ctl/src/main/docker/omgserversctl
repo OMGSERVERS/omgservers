@@ -83,7 +83,6 @@ logs() {
 
 environment_printCurrent() {
   env | grep OMGSERVERSCTL_ | sort
-  exit 0
 }
 
 environment_useEnvironment() {
@@ -96,13 +95,13 @@ environment_useEnvironment() {
     exit 1
   fi
 
+  : > ~/.omgservers/environment
+
   echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ~/.omgservers/environment
-  echo "export OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL=${ENVIRONMENT_EXTERNAL_URL}" >> ~/.omgservers/environment.${ENVIRONMENT_NAME}
-  echo "export OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL=${ENVIRONMENT_INTERNAL_URL}" >> ~/.omgservers/environment.${ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL=${ENVIRONMENT_EXTERNAL_URL}" >> ~/.omgservers/environment
+  echo "export OMGSERVERSCTL_ENVIRONMENT_INTERNAL_URL=${ENVIRONMENT_INTERNAL_URL}" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, EXTERNAL_URL=${ENVIRONMENT_EXTERNAL_URL}, INTERNAL_URL=${ENVIRONMENT_INTERNAL_URL}"
-
-  exit 0
 }
 
 # ADMIN
@@ -116,15 +115,13 @@ admin_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ADMIN_USER_ID=${ADMIN_USER_ID}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
-  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_ADMIN_USER_ID=${ADMIN_USER_ID}" >> ~/.omgservers/environment
+  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER_ID=${ADMIN_USER_ID}"
 
   internal_useEnvironment
   admin_createToken
-
-  exit 0
 }
 
 admin_printCurrent() {
@@ -142,8 +139,6 @@ admin_printCurrent() {
   else
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current admin was found, ADMIN_USER_ID=${ADMIN_USER_ID}, (token exists)"
   fi
-
-  exit 0
 }
 
 admin_createToken() {
@@ -185,11 +180,10 @@ admin_createToken() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
 
-  exit 0
 }
 
 # SUPPORT
@@ -203,15 +197,14 @@ support_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_SUPPORT_USER_ID=$SUPPORT_USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
-  echo "export OMGSERVERSCTL_SUPPORT_USER_PASSWORD=$SUPPORT_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_SUPPORT_USER_ID=$SUPPORT_USER_ID" >> ~/.omgservers/environment
+  echo "export OMGSERVERSCTL_SUPPORT_USER_PASSWORD=$SUPPORT_PASSWORD" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER_ID=$SUPPORT_USER_ID"
 
   internal_useEnvironment
   support_createToken
 
-  exit 0
 }
 
 support_printCurrent() {
@@ -225,12 +218,10 @@ support_printCurrent() {
   fi
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current support was found, SUPPORT_USER_ID=$SUPPORT_USER_ID, (token exists)"
   fi
-
-  exit 0
 }
 
 support_createToken() {
@@ -272,11 +263,9 @@ support_createToken() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created"
-
-  exit 0
 }
 
 support_createTenant() {
@@ -315,11 +304,9 @@ support_createTenant() {
     echo "ERROR: TENANT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_TENANT_ID=$TENANT_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_TENANT_ID=$TENANT_ID" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT_ID=$TENANT_ID"
-
-  exit 0
 }
 
 support_deleteTenant() {
@@ -371,8 +358,6 @@ support_deleteTenant() {
   else
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was not deleted, TENANT_ID=${TENANT_ID}"
   fi
-
-  exit 0
 }
 
 support_createDeveloper() {
@@ -420,18 +405,19 @@ support_createDeveloper() {
     echo "ERROR: USER_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgservers/environment
 
   PASSWORD=$(cat ~/.omgservers/temp/support-create-developer_${TENANT_ID}.json | jq -r .password)
   if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
     echo "ERROR: PASSWORD was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$PASSWORD" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, USER_ID=$USER_ID"
 
-  exit 0
+  internal_useEnvironment
+  developer_createToken
 }
 
 # DEVELOPER
@@ -447,12 +433,10 @@ developer_printCurrent() {
   fi
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Active developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current developer was found, DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, (token exists)"
   fi
-
-  exit 0
 }
 
 developer_createToken() {
@@ -493,11 +477,9 @@ developer_createToken() {
     echo "ERROR: RAW_TOKEN was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
-
-  exit 0
 }
 
 developer_useCredentials() {
@@ -509,15 +491,13 @@ developer_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$DEVELOPER_PASSWORD" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ~/.omgservers/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_PASSWORD=$DEVELOPER_PASSWORD" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
   internal_useEnvironment
   developer_createToken
-
-  exit 0
 }
 
 developer_useTenant() {
@@ -528,11 +508,9 @@ developer_useTenant() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_TENANT_ID=${TENANT_ID}" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_TENANT_ID=${TENANT_ID}" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was set, TENANT_ID=$TENANT_ID"
-
-  exit 0
 }
 
 developer_printTenant() {
@@ -544,8 +522,6 @@ developer_printTenant() {
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was found, TENANT_ID=${TENANT_ID}"
-
-  exit 0
 }
 
 developer_createProject() {
@@ -593,25 +569,23 @@ developer_createProject() {
     echo "ERROR: PROJECT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment
 
   STAGE_ID=$(cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
   if [ -z "$STAGE_ID" -o "$STAGE_ID" == "null" ]; then
     echo "ERROR: STAGE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> ~/.omgservers/environment
 
   STAGE_SECRET=$(cat ~/.omgservers/temp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
   if [ -z "$STAGE_SECRET" -o "$STAGE_SECRET" == "null" ]; then
     echo "ERROR: STAGE_SECRET was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=$PROJECT_ID, STAGE_ID=$STAGE_ID"
-
-  exit 0
 }
 
 developer_getTenantDashboard() {
@@ -731,7 +705,7 @@ developer_uploadVersion() {
     echo "ERROR: VERSION_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was uploaded, VERSION_ID=$VERSION_ID, TENANT_ID=${TENANT_ID}, STAGE_ID=${STAGE_ID}"
 }
@@ -752,7 +726,7 @@ internal_useEnvironment() {
   source ~/.omgservers/environment
 
   if [ -n "${OMGSERVERSCTL_ENVIRONMENT_NAME-}" ]; then
-    source ~/.omgservers/environment.${OMGSERVERSCTL_ENVIRONMENT_NAME}
+    source ~/.omgservers/environment
   fi
 }
 
@@ -778,7 +752,6 @@ if [ "$1" = "environment" ]; then
     environment_useEnvironment $3 $4 $5
   else
     help "environment"
-    exit 0
   fi
 fi
 

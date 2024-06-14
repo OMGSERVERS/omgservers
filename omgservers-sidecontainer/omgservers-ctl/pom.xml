@@ -3,10 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers</artifactId>
+        <artifactId>omgservers-sidecontainer</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>omgservers-ctl</artifactId>
-
 </project>
