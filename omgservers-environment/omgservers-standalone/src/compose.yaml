@@ -6,11 +6,20 @@ services:
     container_name: "jwtkeys"
     volumes:
       - jwtkeys-data:/jwtkeys
+  edgecertificate:
+    image: "omgservers/omgservers-edgecertificate:${OMGSERVERS_VERSION}"
+    container_name: "edgecertificate"
+    volumes:
+      - edgecertificate-data:/etc/letsencrypt/live/edgecertificate
   # frontend
   ingress:
     image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
     container_name: "ingress"
     restart: unless-stopped
+    depends_on:
+      - edgecertificate
+    volumes:
+      - edgecertificate-data:/edgecertificate:ro
     ports:
       - "${INGRESS_PORT}:10001"
       - "${INGRESS_ADMIN_PORT}:10000"
@@ -146,7 +155,7 @@ services:
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
-      - OMGSERVERS_INDEX_SHARD_COUNT=1
+      - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
       - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway:10001
@@ -187,7 +196,7 @@ services:
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
-      - OMGSERVERS_INDEX_SHARD_COUNT=1
+      - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
       - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
       - OMGSERVERS_WORKERS_SERVICE_URI=http://entrypoint3:10001
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
@@ -207,6 +216,9 @@ volumes:
     driver: local
   queues-data:
     name: queues-data
+    driver: local
+  edgecertificate-data:
+    name: edgecertificate-data
     driver: local
 networks:
   frontend:
