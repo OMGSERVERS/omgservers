@@ -43,7 +43,7 @@ static_resources:
               common_tls_context:
                 tls_certificates:
                   certificate_chain:
-                    filename: "/certificate/certificate.pem"
+                    filename: "/certificate/server.pem"
                   private_key:
                     filename: "/certificate/privateKey.pem"
   clusters:

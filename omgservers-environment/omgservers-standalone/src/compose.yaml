@@ -6,7 +6,7 @@ services:
     container_name: "ingress"
     restart: unless-stopped
     volumes:
-      - ./ingress/certificate.pem:/certificate/certificate.pem:ro
+      - ./ingress/server.pem:/certificate/server.pem:ro
       - ./ingress/privateKey.pem:/certificate/privateKey.pem:ro
     ports:
       - "${INGRESS_PORT}:10001"
