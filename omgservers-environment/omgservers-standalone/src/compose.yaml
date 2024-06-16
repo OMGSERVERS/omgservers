@@ -6,8 +6,8 @@ services:
     container_name: "ingress"
     restart: unless-stopped
     volumes:
-      - ./certificate/certificate.pem:/certificate/certificate.pem:ro
-      - ./certificate/privateKey.pem:/certificate/privateKey.pem:ro
+      - ./ingress/certificate.pem:/certificate/certificate.pem:ro
+      - ./ingress/privateKey.pem:/certificate/privateKey.pem:ro
     ports:
       - "${INGRESS_PORT}:10001"
       - "127.0.0.1:20000:10000"
@@ -135,8 +135,8 @@ services:
       - database
       - queues
     volumes:
-      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
-      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
+      - ./service/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./service/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -176,8 +176,8 @@ services:
       - queues
       - service1
     volumes:
-      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
-      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
+      - ./service/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./service/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
