@@ -135,8 +135,8 @@ services:
       - database
       - queues
     volumes:
-      - ./service/privateKey.pem:/jwtkeys/privateKey:ro
-      - ./service/publicKey.pem:/jwtkeys/publicKey:ro
+      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -176,8 +176,8 @@ services:
       - queues
       - service1
     volumes:
-      - ./service/privateKey.pem:/jwtkeys/privateKey:ro
-      - ./service/publicKey.pem:/jwtkeys/publicKey:ro
+      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
