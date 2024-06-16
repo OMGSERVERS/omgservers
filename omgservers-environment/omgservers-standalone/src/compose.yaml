@@ -1,90 +1,78 @@
 version: "3.8"
 services:
-  # bootstrap
-  jwtkeys:
-    image: "omgservers/omgservers-jwtkeys:${OMGSERVERS_VERSION}"
-    container_name: "jwtkeys"
-    volumes:
-      - jwtkeys-data:/jwtkeys
-  edgecertificate:
-    image: "omgservers/omgservers-edgecertificate:${OMGSERVERS_VERSION}"
-    container_name: "edgecertificate"
-    volumes:
-      - edgecertificate-data:/etc/letsencrypt/live/edgecertificate
   # frontend
   ingress:
-    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-ingress:1.0.0-SNAPSHOT"
     container_name: "ingress"
     restart: unless-stopped
-    depends_on:
-      - edgecertificate
     volumes:
-      - edgecertificate-data:/edgecertificate:ro
+      - ./certificate/certificate.pem:/certificate/certificate.pem:ro
+      - ./certificate/privateKey.pem:/certificate/privateKey.pem:ro
     ports:
       - "${INGRESS_PORT}:10001"
-      - "${INGRESS_ADMIN_PORT}:10000"
+      - "127.0.0.1:20000:10000"
     networks:
       - frontend
     command: "-c /etc/envoy/standalone.yaml"
   entrypoint1:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-entrypoint:1.0.0-SNAPSHOT"
     container_name: "entrypoint1"
     restart: unless-stopped
     depends_on:
       - ingress
     ports:
-      - "${ENTRYPOINT1_PORT}:10001"
-      - "${ENTRYPOINT1_ADMIN_PORT}:10000"
+      - "127.0.0.1:10001:10001"
+      - "127.0.0.1:20001:10000"
     networks:
       - frontend
     command: "-c /etc/envoy/standalone1.yaml"
   entrypoint2:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-entrypoint:1.0.0-SNAPSHOT"
     container_name: "entrypoint2"
     restart: unless-stopped
     depends_on:
       - ingress
     ports:
-      - "${ENTRYPOINT2_PORT}:10001"
-      - "${ENTRYPOINT2_ADMIN_PORT}:10000"
+      - "127.0.0.1:10002:10001"
+      - "127.0.0.1:20002:10000"
     networks:
       - frontend
     command: "-c /etc/envoy/standalone2.yaml"
   entrypoint3:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-entrypoint:1.0.0-SNAPSHOT"
     container_name: "entrypoint3"
     restart: unless-stopped
     depends_on:
       - ingress
     ports:
-      - "${ENTRYPOINT3_PORT}:10001"
-      - "${ENTRYPOINT3_ADMIN_PORT}:10000"
+      - "127.0.0.1:10003:10001"
+      - "127.0.0.1:20003:10000"
     networks:
       - workers
       - frontend
     command: "-c /etc/envoy/standalone3.yaml"
   # backend
   docker:
-    image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-dockerpoint:1.0.0-SNAPSHOT"
     container_name: "docker"
     networks:
       - docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   registry:
-    image: "omgservers/omgservers-registry:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-registry:1.0.0-SNAPSHOT"
     container_name: "registry"
     restart: unless-stopped
     ports:
-      - "${REGISTRY_PORT}:5000"
+      - "127.0.0.1:5000:5000"
     networks:
       - docker
   builder:
-    image: "omgservers/omgservers-builder:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-builder:1.0.0-SNAPSHOT"
     container_name: "builder"
     restart: unless-stopped
     ports:
-      - "${BUILDER_PORT}:8080"
+      - "127.0.0.1:8080:8080"
     networks:
       - backend
       - docker
@@ -94,10 +82,10 @@ services:
       - JENKINS_ADMIN_PASSWORD=${BUILDER_PASSWORD}
       - JENKINS_ADMIN_TOKEN=${BUILDER_TOKEN}
       - DOCKER_HOST=tcp://docker:2375
-      - DOCKER_REGISTRY=${REGISTRY_PORT}
+      - DOCKER_REGISTRY=127.0.0.1:5000
   # service
   gateway:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-gateway:1.0.0-SNAPSHOT"
     container_name: "gateway"
     restart: unless-stopped
     depends_on:
@@ -105,14 +93,14 @@ services:
       - entrypoint2
       - entrypoint3
     ports:
-      - "${GATEWAY_PORT}:10001"
-      - "${GATEWAY_ADMIN_PORT}:10000"
+      - "127.0.0.1:10004:10001"
+      - "127.0.0.1:20004:10000"
     networks:
       - frontend
       - service
     command: "-c /etc/envoy/service12.yaml"
   database:
-    image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-database:1.0.0-SNAPSHOT"
     container_name: "database"
     restart: unless-stopped
     shm_size: 128m
@@ -125,7 +113,7 @@ services:
     volumes:
       - database-data:/var/lib/postgresql
   queues:
-    image: "omgservers/omgservers-queues:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-queues:1.0.0-SNAPSHOT"
     container_name: "queues"
     restart: unless-stopped
     environment:
@@ -136,7 +124,7 @@ services:
     networks:
       - service
   service1:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "service1"
     restart: unless-stopped
     networks:
@@ -144,11 +132,11 @@ services:
       - docker
       - service
     depends_on:
-      - jwtkeys
       - database
       - queues
     volumes:
-      - jwtkeys-data:/jwtkeys:ro
+      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -173,10 +161,10 @@ services:
       - OMGSERVERS_BUILDER_URI=http://builder:8080
       - OMGSERVERS_BUILDER_USER_ID=builder
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
-      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
-      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
+      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/publicKey.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/privateKey.pem
   service2:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-service:1.0.0-SNAPSHOT"
     container_name: "service2"
     restart: unless-stopped
     networks:
@@ -184,12 +172,12 @@ services:
       - docker
       - service
     depends_on:
-      - jwtkeys
       - database
       - queues
       - service1
     volumes:
-      - jwtkeys-data:/jwtkeys:ro
+      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey:ro
+      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -205,20 +193,14 @@ services:
       - OMGSERVERS_BUILDER_URI=http://builder:8080
       - OMGSERVERS_BUILDER_USER_ID=builder
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
-      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/service/public.pem
-      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/service/private.pem
+      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/publicKey.pem
+      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/privateKey.pem
 volumes:
-  jwtkeys-data:
-    name: jwtkeys-data
-    driver: local
   database-data:
     name: database-data
     driver: local
   queues-data:
     name: queues-data
-    driver: local
-  edgecertificate-data:
-    name: edgecertificate-data
     driver: local
 networks:
   frontend:

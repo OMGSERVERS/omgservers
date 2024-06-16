@@ -1,1 +1,0 @@
-# omgservers-jwtkeys
