@@ -29,7 +29,7 @@ services:
     command: "-c /etc/envoy/service3ab.yaml"
   # backend
   docker:
-    image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-docker:${OMGSERVERS_VERSION}"
     container_name: "docker"
     networks:
       - omgservers

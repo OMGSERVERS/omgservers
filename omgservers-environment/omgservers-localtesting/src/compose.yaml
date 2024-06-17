@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   docker:
-    image: "omgservers/omgservers-dockerpoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/omgservers-docker:${OMGSERVERS_VERSION}"
     container_name: "docker"
     networks:
       - omgservers

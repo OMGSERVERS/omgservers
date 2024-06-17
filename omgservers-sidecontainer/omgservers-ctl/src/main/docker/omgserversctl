@@ -753,6 +753,7 @@ if [ "$1" = "environment" ]; then
   else
     help "environment"
   fi
+  exit 0
 fi
 
 if [ -z "${OMGSERVERSCTL_ENVIRONMENT_NAME}" ]; then

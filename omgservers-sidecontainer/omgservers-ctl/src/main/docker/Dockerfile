@@ -5,7 +5,8 @@ COPY --chown=omgservers:omgservers src/main/docker/omgserversctl /home/omgserver
 RUN chmod +x /home/omgservers/omgserversctl
 USER omgservers
 WORKDIR /home/omgservers
-CMD [ -n "${DELAY}" ] && echo "Waiting for ${DELAY} seconds, before start" && sleep ${DELAY}; \
+CMD set -e; \
+    [ -n "${DELAY}" ] && echo "Waiting for ${DELAY} seconds, before start" && sleep ${DELAY}; \
     [ -n "${EXTERNAL_URL}" -o -n "${INTERNAL_URL}" ] && ./omgserversctl environment useEnvironment default ${EXTERNAL_URL} ${INTERNAL_URL}; \
     [ -n "${ADMIN_USER_ID}" -o -n "${ADMIN_PASSWORD}" ] && ./omgserversctl admin useCredentials ${ADMIN_USER_ID} ${ADMIN_PASSWORD}; \
     [ -n "${SUPPORT_USER_ID}" -o -n "${SUPPORT_PASSWORD}" ] && ./omgserversctl support useCredentials ${SUPPORT_USER_ID} ${SUPPORT_PASSWORD}; \
