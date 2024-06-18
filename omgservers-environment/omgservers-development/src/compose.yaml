@@ -99,6 +99,7 @@ services:
       - ADMIN_PASSWORD=admin
       - SUPPORT_USER_ID=231928170708729857
       - SUPPORT_PASSWORD=support
+      - BACKGROUND=true
     networks:
       - omgservers
 networks:

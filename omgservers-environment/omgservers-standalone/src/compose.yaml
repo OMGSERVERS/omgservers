@@ -66,6 +66,7 @@ services:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - SUPPORT_USER_ID=231928170708729857
       - SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
+      - BACKGROUND=true
     networks:
       - frontend
   # backend
