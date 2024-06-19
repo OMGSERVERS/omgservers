@@ -51,6 +51,7 @@ public class MatchmakerJobTaskExecutionRequestedEventHandlerImpl implements Even
                     if (oneMoreTime) {
                         return requestFurtherExecution(matchmakerId);
                     } else {
+                        log.warn("Job was finished");
                         return Uni.createFrom().voidItem();
                     }
                 });

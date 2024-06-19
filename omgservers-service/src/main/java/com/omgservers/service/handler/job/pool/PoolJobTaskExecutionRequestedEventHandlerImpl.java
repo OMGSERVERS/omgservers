@@ -51,6 +51,7 @@ public class PoolJobTaskExecutionRequestedEventHandlerImpl implements EventHandl
                     if (oneMoreTime) {
                         return requestFurtherExecution(poolId);
                     } else {
+                        log.warn("Job was finished");
                         return Uni.createFrom().voidItem();
                     }
                 });

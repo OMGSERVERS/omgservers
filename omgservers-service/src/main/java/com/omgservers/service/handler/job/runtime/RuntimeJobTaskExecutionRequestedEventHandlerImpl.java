@@ -51,6 +51,7 @@ public class RuntimeJobTaskExecutionRequestedEventHandlerImpl implements EventHa
                     if (oneMoreTime) {
                         return requestFurtherExecution(runtimeId);
                     } else {
+                        log.warn("Job was finished");
                         return Uni.createFrom().voidItem();
                     }
                 });

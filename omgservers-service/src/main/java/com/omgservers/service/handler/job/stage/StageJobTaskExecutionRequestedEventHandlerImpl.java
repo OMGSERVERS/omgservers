@@ -52,6 +52,7 @@ public class StageJobTaskExecutionRequestedEventHandlerImpl implements EventHand
                     if (oneMoreTime) {
                         return requestFurtherExecution(tenantId, stageId);
                     } else {
+                        log.warn("Job was finished");
                         return Uni.createFrom().voidItem();
                     }
                 });
