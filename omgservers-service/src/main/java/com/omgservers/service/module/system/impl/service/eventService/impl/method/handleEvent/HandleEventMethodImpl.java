@@ -65,24 +65,30 @@ public class HandleEventMethodImpl implements HandleEventMethod {
         log.trace("Handle event, request={}", request);
 
         final var eventId = request.getEventId();
-        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        selectEventOperation.selectEvent(sqlConnection, eventId)
-                                .flatMap(event -> handleEvent(event)
-                                        .call(handled -> forwardEvent(event))
-                                        .flatMap(handled -> {
-                                            final var status = handled ? EventStatusEnum.HANDLED : EventStatusEnum.FAILED;
-                                            return deleteEventAndUpdateStatusOperation.deleteEventAndUpdateStatus(
-                                                    changeContext,
-                                                    sqlConnection,
-                                                    eventId,
-                                                    status);
-                                        }))
+        return pgPool.withConnection(sqlConnection -> selectEventOperation.selectEvent(sqlConnection, eventId))
+                .flatMap(event -> handleEvent(event)
+                        .call(handled -> forwardEvent(event))
+                        .flatMap(handled -> {
+                            final var status = handled ? EventStatusEnum.HANDLED : EventStatusEnum.FAILED;
+                            return changeWithContextOperation.<Boolean>changeWithContext(
+                                            (changeContext, sqlConnection) -> deleteEventAndUpdateStatusOperation
+                                                    .deleteEventAndUpdateStatus(
+                                                            changeContext,
+                                                            sqlConnection,
+                                                            eventId,
+                                                            status))
+                                    .map(ChangeContext::getResult);
+                        })
                 )
-                .map(ChangeContext::getResult)
                 .map(HandleEventResponse::new);
     }
 
     Uni<Boolean> handleEvent(final EventModel event) {
+        if (event.getStatus().equals(EventStatusEnum.HANDLED)) {
+            log.warn("Event was already handled, event={}", event);
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
+
         final var qualifier = event.getQualifier();
         if (eventHandlers.containsKey(qualifier)) {
             final var eventHandler = eventHandlers.get(qualifier);
