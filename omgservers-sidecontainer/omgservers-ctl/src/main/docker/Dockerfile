@@ -1,5 +1,5 @@
 FROM alpine:latest
-RUN apk update && apk add --no-cache curl jq bash
+RUN apk update && apk add --no-cache curl jq bash zip
 RUN adduser -D -s /bin/bash omgservers
 COPY --chown=omgservers:omgservers src/main/docker/omgserversctl /home/omgservers/
 RUN chmod +x /home/omgservers/omgserversctl

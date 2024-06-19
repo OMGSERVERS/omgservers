@@ -34,9 +34,7 @@ if [ -n "${DEVELOPER_STAGE_ID}" ]; then
 fi
 
 if [ -n "${BACKGROUND}" ]; then
-  echo "Run in background"
   tail -f /dev/null
 else
-  echo "Interactive run"
   ./omgserversctl $@
 fi

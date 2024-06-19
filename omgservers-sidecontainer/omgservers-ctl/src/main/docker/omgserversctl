@@ -802,14 +802,14 @@ developer_uploadVersion() {
 
   popd >> /dev/null
 
-  VERSION_ID=$(cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json | jq .id)
+  VERSION_ID=$(cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
   if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
     echo "ERROR: VERSION_ID was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgservers/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was uploaded, VERSION_ID=$VERSION_ID, TENANT_ID=${TENANT_ID}, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was uploaded, VERSION_ID=${VERSION_ID}, TENANT_ID=${TENANT_ID}, STAGE_ID=${STAGE_ID}"
 }
 
 # INTERNAL
