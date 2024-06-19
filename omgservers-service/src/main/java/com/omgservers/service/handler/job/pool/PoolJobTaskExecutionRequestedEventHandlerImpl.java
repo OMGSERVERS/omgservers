@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.job.pool;
 
 import com.omgservers.model.dto.system.SyncEventRequest;
+import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
@@ -49,7 +50,10 @@ public class PoolJobTaskExecutionRequestedEventHandlerImpl implements EventHandl
                 })
                 .flatMap(oneMoreTime -> {
                     if (oneMoreTime) {
-                        return requestFurtherExecution(poolId);
+                        return requestFurtherExecution(poolId)
+                                .invoke(result -> log.debug("Further execution was requested, " +
+                                        "poolId={}, result={}", poolId, result))
+                                .replaceWithVoid();
                     } else {
                         log.warn("Job was finished");
                         return Uni.createFrom().voidItem();
@@ -57,13 +61,13 @@ public class PoolJobTaskExecutionRequestedEventHandlerImpl implements EventHandl
                 });
     }
 
-    Uni<Void> requestFurtherExecution(final Long poolId) {
+    Uni<Boolean> requestFurtherExecution(final Long poolId) {
         final var eventBody = new PoolJobTaskExecutionRequestedEventBodyModel(poolId);
         final var eventModel = eventModelFactory.create(eventBody);
         eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(JOB_INTERVAL_IN_SECONDS)));
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
         return systemModule.getEventService().syncEvent(syncEventRequest)
-                .replaceWithVoid();
+                .map(SyncEventResponse::getCreated);
     }
 }
