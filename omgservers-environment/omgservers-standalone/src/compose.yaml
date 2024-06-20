@@ -13,7 +13,7 @@ services:
       - "127.0.0.1:20000:10000"
     networks:
       - frontend
-    command: "-c /etc/envoy/standalone.yaml"
+    command: "-c /etc/envoy/entrypoint1.yaml"
   entrypoint1:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint1"
@@ -25,6 +25,7 @@ services:
       - "127.0.0.1:20001:10000"
     networks:
       - frontend
+      - service
     command: "-c /etc/envoy/standalone1.yaml"
   entrypoint2:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
@@ -37,6 +38,7 @@ services:
       - "127.0.0.1:20002:10000"
     networks:
       - frontend
+      - service
     command: "-c /etc/envoy/standalone2.yaml"
   entrypoint3:
     image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
@@ -50,6 +52,7 @@ services:
     networks:
       - workers
       - frontend
+      - service
     command: "-c /etc/envoy/standalone3.yaml"
   ctl:
     image: "omgservers/omgservers-ctl:${OMGSERVERS_VERSION}"
@@ -103,21 +106,6 @@ services:
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=127.0.0.1:5000
   # service
-  gateway:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway"
-    restart: unless-stopped
-    depends_on:
-      - entrypoint1
-      - entrypoint2
-      - entrypoint3
-    ports:
-      - "127.0.0.1:10004:10001"
-      - "127.0.0.1:20004:10000"
-    networks:
-      - frontend
-      - service
-    command: "-c /etc/envoy/service12.yaml"
   database:
     image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
     container_name: "database"
@@ -142,9 +130,9 @@ services:
       - queues-data:/var/lib/artemis-instance
     networks:
       - service
-  service1:
+  service:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service1"
+    container_name: "service"
     restart: unless-stopped
     networks:
       - backend
@@ -163,9 +151,9 @@ services:
       - OMGSERVERS_QUEUES_HOST=queues
       - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://service:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service:8080
       - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
@@ -173,38 +161,6 @@ services:
       - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
-      - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
-      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=0
-      - OMGSERVERS_BUILDER_URI=http://builder:8080
-      - OMGSERVERS_BUILDER_USER_ID=builder
-      - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
-      - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/publicKey.pem
-      - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/privateKey.pem
-  service2:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service2"
-    restart: unless-stopped
-    networks:
-      - backend
-      - docker
-      - service
-    depends_on:
-      - database
-      - queues
-      - service1
-    volumes:
-      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey.pem:ro
-      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey.pem:ro
-    environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
-      - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
-      - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - OMGSERVERS_QUEUES_HOST=queues
-      - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
-      - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway:10001
       - OMGSERVERS_WORKERS_SERVICE_URI=http://entrypoint3:10001
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0

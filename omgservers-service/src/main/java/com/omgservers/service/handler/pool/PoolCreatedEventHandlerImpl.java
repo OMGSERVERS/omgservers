@@ -2,16 +2,17 @@ package com.omgservers.service.handler.pool;
 
 import com.omgservers.model.dto.pool.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.pool.GetPoolResponse;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.system.job.SyncJobRequest;
+import com.omgservers.model.dto.system.job.SyncJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.pool.PoolModel;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.system.SystemModule;
@@ -35,6 +36,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
     final PoolServerModelFactory poolServerModelFactory;
     final EventModelFactory eventModelFactory;
     final PoolModelFactory poolModelFactory;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -54,7 +56,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
                     final var idempotencyKey = event.getIdempotencyKey();
 
-                    return requestJobExecution(poolId, idempotencyKey);
+                    return syncPoolJob(poolId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
@@ -65,13 +67,12 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 .map(GetPoolResponse::getPool);
     }
 
-    Uni<Boolean> requestJobExecution(final Long poolId, final String idempotencyKey) {
-        final var eventBody = new PoolJobTaskExecutionRequestedEventBodyModel(poolId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
+    Uni<Boolean> syncPoolJob(final Long runtimeId,
+                             final String idempotencyKey) {
+        final var job = jobModelFactory.create(JobQualifierEnum.POOL, runtimeId, idempotencyKey);
 
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+        final var syncEventRequest = new SyncJobRequest(job);
+        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+                .map(SyncJobResponse::getCreated);
     }
 }

@@ -26,9 +26,14 @@ import com.omgservers.model.dto.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.model.dto.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
 import com.omgservers.model.dto.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
+import com.omgservers.model.dto.system.job.DeleteJobRequest;
+import com.omgservers.model.dto.system.job.DeleteJobResponse;
+import com.omgservers.model.dto.system.job.FindJobRequest;
+import com.omgservers.model.dto.system.job.FindJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.model.job.JobModel;
 import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.model.runtime.RuntimeModel;
@@ -97,7 +102,8 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                     return deleteRuntimeCommands(runtimeId)
                             .flatMap(voidItem -> deleteRuntimeAssignments(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeRef(runtime))
-                            .flatMap(voidItem -> deleteRuntimeContainer(runtimeId));
+                            .flatMap(voidItem -> deleteRuntimeContainer(runtimeId))
+                            .flatMap(voidItem -> findAndDeleteJob(runtimeId));
                 })
                 .replaceWithVoid();
     }
@@ -273,5 +279,25 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeletePoolServerContainerRequest(poolId, serverId, containerId);
         return poolModule.getPoolService().deletePoolServerContainer(request)
                 .map(DeletePoolServerContainerResponse::getDeleted);
+    }
+
+    Uni<Void> findAndDeleteJob(final Long tenantId) {
+        return findJob(tenantId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<JobModel> findJob(final Long tenantId) {
+        final var request = new FindJobRequest(tenantId);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    Uni<Boolean> deleteJob(final Long id) {
+        final var request = new DeleteJobRequest(id);
+        return systemModule.getJobService().deleteJob(request)
+                .map(DeleteJobResponse::getDeleted);
     }
 }

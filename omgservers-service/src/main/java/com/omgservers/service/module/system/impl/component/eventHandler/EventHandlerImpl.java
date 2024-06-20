@@ -24,7 +24,11 @@ public class EventHandlerImpl implements EventHandler {
 
         final var eventId = message;
         return handleEvent(eventId)
-                .replaceWithVoid();
+                .replaceWithVoid()
+                .onFailure()
+                .invoke(t -> log.error("Event handling error, eventId={}, {}:{}", eventId,
+                        t.getClass().getSimpleName(),
+                        t.getMessage()));
     }
 
     Uni<Boolean> handleEvent(final Long eventId) {

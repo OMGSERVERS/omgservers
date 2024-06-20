@@ -4,7 +4,9 @@ import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.system.impl.service.bootstrapService.BootstrapService;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;
 import com.omgservers.service.module.system.impl.service.indexService.IndexService;
+import com.omgservers.service.module.system.impl.service.jobService.JobService;
 import com.omgservers.service.module.system.impl.service.serviceAccountService.ServiceAccountService;
+import com.omgservers.service.module.system.impl.service.taskService.TaskService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,8 @@ public class SystemModuleImpl implements SystemModule {
     final BootstrapService bootstrapService;
     final EventService eventService;
     final IndexService indexService;
+    final TaskService taskService;
+    final JobService jobService;
 
     @Override
     public ServiceAccountService getServiceAccountService() {
@@ -38,5 +42,15 @@ public class SystemModuleImpl implements SystemModule {
     @Override
     public IndexService getIndexService() {
         return indexService;
+    }
+
+    @Override
+    public TaskService getTaskService() {
+        return taskService;
+    }
+
+    @Override
+    public JobService getJobService() {
+        return jobService;
     }
 }

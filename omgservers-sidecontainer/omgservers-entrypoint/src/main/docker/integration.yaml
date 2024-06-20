@@ -47,15 +47,15 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: gateway1
-                      port_value: 10001
+                      address: service1
+                      port_value: 8080
               - endpoint:
                   address:
                     socket_address:
-                      address: gateway2
-                      port_value: 10001
+                      address: service2
+                      port_value: 8080
               - endpoint:
                   address:
                     socket_address:
-                      address: gateway3
-                      port_value: 10001
+                      address: service3
+                      port_value: 8080

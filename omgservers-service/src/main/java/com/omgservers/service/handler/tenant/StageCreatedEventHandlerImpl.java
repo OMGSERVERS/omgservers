@@ -1,12 +1,9 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.GetStageResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.service.factory.system.EventModelFactory;
@@ -46,7 +43,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(stage -> {
                     log.info("Stage was created, stage={}/{}", tenantId, stageId);
 
-                    return requestJobExecution(tenantId, stageId, event.getIdempotencyKey());
+                    return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();
     }
@@ -55,17 +52,5 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetStageRequest(tenantId, id);
         return tenantModule.getStageService().getStage(request)
                 .map(GetStageResponse::getStage);
-    }
-
-    Uni<Boolean> requestJobExecution(final Long tenantId,
-                                     final Long stageId,
-                                     final String idempotencyKey) {
-        final var eventBody = new StageJobTaskExecutionRequestedEventBodyModel(tenantId, stageId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
     }
 }

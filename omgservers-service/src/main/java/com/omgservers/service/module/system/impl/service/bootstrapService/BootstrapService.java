@@ -19,4 +19,6 @@ public interface BootstrapService {
     Uni<Void> bootstrapDockerHost();
 
     Uni<Void> bootstrapRelayJob();
+
+    Uni<Void> bootstrapSchedulerJob();
 }

@@ -12,10 +12,6 @@ import com.omgservers.model.event.body.internal.VersionBuildingFailedEventBodyMo
 import com.omgservers.model.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.model.event.body.internal.VersionDeploymentRequestedEventBodyModel;
-import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.event.body.job.PoolJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
-import com.omgservers.model.event.body.job.StageJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
 import com.omgservers.model.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
@@ -80,6 +76,8 @@ import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.model.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexCreatedEventBodyModel;
 import com.omgservers.model.event.body.system.IndexDeletedEventBodyModel;
+import com.omgservers.model.event.body.system.JobCreatedEventBodyModel;
+import com.omgservers.model.event.body.system.JobDeletedEventBodyModel;
 import com.omgservers.model.event.body.system.ServiceAccountCreatedEventBodyModel;
 import com.omgservers.model.event.body.system.ServiceAccountDeletedEventBodyModel;
 
@@ -89,6 +87,8 @@ public enum EventQualifierEnum {
     INDEX_DELETED(IndexDeletedEventBodyModel.class, true),
     SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class, true),
     SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class, true),
+    JOB_CREATED(JobCreatedEventBodyModel.class, false),
+    JOB_DELETED(JobDeletedEventBodyModel.class, false),
     // Module
     ROOT_CREATED(RootCreatedEventBodyModel.class, false),
     ROOT_DELETED(RootDeletedEventBodyModel.class, false),
@@ -164,12 +164,7 @@ public enum EventQualifierEnum {
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class, false),
     LOBBY_ASSIGNMENT_REQUESTED(LobbyAssignmentRequestedEventBodyModel.class, false),
-    MATCHMAKER_ASSIGNMENT_REQUESTED(MatchmakerAssignmentRequestedEventBodyModel.class, false),
-    // Job
-    STAGE_JOB_TASK_EXECUTION_REQUESTED(StageJobTaskExecutionRequestedEventBodyModel.class, false),
-    MATCHMAKER_JOB_TASK_EXECUTION_REQUESTED(MatchmakerJobTaskExecutionRequestedEventBodyModel.class, false),
-    RUNTIME_JOB_TASK_EXECUTION_REQUESTED(RuntimeJobTaskExecutionRequestedEventBodyModel.class, false),
-    POOL_JOB_TASK_EXECUTION_REQUESTED(PoolJobTaskExecutionRequestedEventBodyModel.class, false);
+    MATCHMAKER_ASSIGNMENT_REQUESTED(MatchmakerAssignmentRequestedEventBodyModel.class, false);
 
     final Class<? extends EventBodyModel> bodyClass;
     final boolean forward;

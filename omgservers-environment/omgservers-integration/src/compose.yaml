@@ -9,24 +9,6 @@ services:
     networks:
       - omgservers
     command: "-c /etc/envoy/integration.yaml"
-  gateway1:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway1"
-    networks:
-      - omgservers
-    command: "-c /etc/envoy/service1ab.yaml"
-  gateway2:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway2"
-    networks:
-      - omgservers
-    command: "-c /etc/envoy/service2ab.yaml"
-  gateway3:
-    image: "omgservers/omgservers-gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway3"
-    networks:
-      - omgservers
-    command: "-c /etc/envoy/service3ab.yaml"
   # backend
   docker:
     image: "omgservers/omgservers-docker:${OMGSERVERS_VERSION}"
@@ -74,17 +56,15 @@ services:
       - ARTEMIS_PASSWORD=queues
     networks:
       - omgservers
-  service1a:
+  service1:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service1a"
+    container_name: "service1"
     restart: unless-stopped
     networks:
       - omgservers
     depends_on:
       - database1
       - queues1
-    tmpfs:
-      - /var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
@@ -92,41 +72,17 @@ services:
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
       - OMGSERVERS_QUEUES_HOST=queues1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://service1:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:10001,http://gateway2:10001,http://gateway3:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
       - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway1:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://service1:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
-      - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service1b:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service1b"
-    restart: unless-stopped
-    networks:
-      - omgservers
-    depends_on:
-      - database1
-      - queues1
-      - service1a
-    tmpfs:
-      - /var/log/omgservers
-    environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
-      - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues1
-      - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway1:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway1:10001
-      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=1
       - OMGSERVERS_BUILDER_URI=http://builder:8080
   # service2
   database2:
@@ -146,17 +102,15 @@ services:
       - ARTEMIS_PASSWORD=queues
     networks:
       - omgservers
-  service2a:
+  service2:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service2a"
+    container_name: "service2"
     restart: unless-stopped
     networks:
       - omgservers
     depends_on:
       - database2
       - queues2
-    tmpfs:
-      - /var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
@@ -164,36 +118,12 @@ services:
       - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/root
       - OMGSERVERS_QUEUES_HOST=queues2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway2:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://service2:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:10001,http://gateway2:10001,http://gateway3:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway2:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://service2:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=2
-      - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service2b:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service2b"
-    restart: unless-stopped
-    networks:
-      - omgservers
-    depends_on:
-      - database2
-      - queues2
-      - service2a
-    tmpfs:
-      - /var/log/omgservers
-    environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
-      - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues2
-      - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway2:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway2:10001
-      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=3
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=1
       - OMGSERVERS_BUILDER_URI=http://builder:8080
   # service3
   database3:
@@ -213,17 +143,15 @@ services:
       - ARTEMIS_PASSWORD=queues
     networks:
       - omgservers
-  service3a:
+  service3:
     image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service3a"
+    container_name: "service3"
     restart: unless-stopped
     networks:
       - omgservers
     depends_on:
       - database3
       - queues3
-    tmpfs:
-      - /var/log/omgservers
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
@@ -231,36 +159,12 @@ services:
       - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/root
       - OMGSERVERS_QUEUES_HOST=queues3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway3:10001
+      - OMGSERVERS_INDEX_SERVER_URI=http://service3:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://gateway1:10001,http://gateway2:10001,http://gateway3:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
+      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://service3:8080
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=4
-      - OMGSERVERS_BUILDER_URI=http://builder:8080
-  service3b:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
-    container_name: "service3b"
-    restart: unless-stopped
-    networks:
-      - omgservers
-    depends_on:
-      - database3
-      - queues3
-      - service3a
-    tmpfs:
-      - /var/log/omgservers
-    environment:
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
-      - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues3
-      - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_INDEX_SERVER_URI=http://gateway3:10001
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway3:10001
-      - OMGSERVERS_GENERATOR_DATACENTER_ID=0
-      - OMGSERVERS_GENERATOR_INSTANCE_ID=5
+      - OMGSERVERS_GENERATOR_INSTANCE_ID=2
       - OMGSERVERS_BUILDER_URI=http://builder:8080
 networks:
   omgservers:

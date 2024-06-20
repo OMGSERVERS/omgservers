@@ -4,6 +4,10 @@ import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.model.dto.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.model.dto.root.rootEntityRef.FindRootEntityRefResponse;
+import com.omgservers.model.dto.system.job.DeleteJobRequest;
+import com.omgservers.model.dto.system.job.DeleteJobResponse;
+import com.omgservers.model.dto.system.job.FindJobRequest;
+import com.omgservers.model.dto.system.job.FindJobResponse;
 import com.omgservers.model.dto.tenant.DeleteProjectRequest;
 import com.omgservers.model.dto.tenant.DeleteProjectResponse;
 import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
@@ -17,6 +21,7 @@ import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
+import com.omgservers.model.job.JobModel;
 import com.omgservers.model.project.ProjectModel;
 import com.omgservers.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.model.tenant.TenantModel;
@@ -65,8 +70,13 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
                     return deleteTenantPermissions(tenantId)
                             .flatMap(voidItem -> deleteProjects(tenantId))
-                            .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId));
+                            .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId))
+                            .flatMap(voidItem -> findAndDeleteJob(tenantId));
                 })
+//                .onFailure().recoverWithUni(throwable -> {
+//                    log.error(throwable.getMessage());
+//                    return Uni.createFrom().voidItem();
+//                })
                 .replaceWithVoid();
     }
 
@@ -167,5 +177,25 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteRootEntityRefRequest(rootId, id);
         return rootModule.getRootService().deleteRootEntityRef(request)
                 .map(DeleteRootEntityRefResponse::getDeleted);
+    }
+
+    Uni<Void> findAndDeleteJob(final Long tenantId) {
+        return findJob(tenantId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<JobModel> findJob(final Long tenantId) {
+        final var request = new FindJobRequest(tenantId);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    Uni<Boolean> deleteJob(final Long id) {
+        final var request = new DeleteJobRequest(id);
+        return systemModule.getJobService().deleteJob(request)
+                .map(DeleteJobResponse::getDeleted);
     }
 }

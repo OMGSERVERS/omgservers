@@ -1,19 +1,23 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
+import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestRequest;
 import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
-import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerCommandsResponse;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
+import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
+import com.omgservers.model.dto.system.job.DeleteJobRequest;
+import com.omgservers.model.dto.system.job.DeleteJobResponse;
+import com.omgservers.model.dto.system.job.FindJobRequest;
+import com.omgservers.model.dto.system.job.FindJobResponse;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRefResponse;
 import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefRequest;
@@ -21,14 +25,16 @@ import com.omgservers.model.dto.tenant.FindVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.model.job.JobModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -46,6 +52,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
+    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -66,7 +73,8 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                     return deleteMatchmakerCommands(matchmakerId)
                             .flatMap(voidItem -> deleteRequests(matchmakerId))
                             .flatMap(voidItem -> deleteMatches(matchmakerId))
-                            .flatMap(voidItem -> findAndDeleteVersionMatchmakerRef(matchmaker));
+                            .flatMap(voidItem -> findAndDeleteVersionMatchmakerRef(matchmaker))
+                            .flatMap(voidItem -> findAndDeleteJob(matchmakerId));
                 })
                 .replaceWithVoid();
     }
@@ -207,5 +215,25 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
         final var request = new DeleteVersionMatchmakerRefRequest(tenantId, id);
         return tenantModule.getVersionService().deleteVersionMatchmakerRef(request)
                 .map(DeleteVersionMatchmakerRefResponse::getDeleted);
+    }
+
+    Uni<Void> findAndDeleteJob(final Long tenantId) {
+        return findJob(tenantId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<JobModel> findJob(final Long tenantId) {
+        final var request = new FindJobRequest(tenantId);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    Uni<Boolean> deleteJob(final Long id) {
+        final var request = new DeleteJobRequest(id);
+        return systemModule.getJobService().deleteJob(request)
+                .map(DeleteJobResponse::getDeleted);
     }
 }

@@ -47,5 +47,5 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: gateway
-                      port_value: 10001
+                      address: service
+                      port_value: 8080

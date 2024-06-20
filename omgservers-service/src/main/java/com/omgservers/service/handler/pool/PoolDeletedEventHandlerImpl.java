@@ -2,13 +2,20 @@ package com.omgservers.service.handler.pool;
 
 import com.omgservers.model.dto.pool.pool.GetPoolRequest;
 import com.omgservers.model.dto.pool.pool.GetPoolResponse;
+import com.omgservers.model.dto.system.job.DeleteJobRequest;
+import com.omgservers.model.dto.system.job.DeleteJobResponse;
+import com.omgservers.model.dto.system.job.FindJobRequest;
+import com.omgservers.model.dto.system.job.FindJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.pool.PoolDeletedEventBodyModel;
+import com.omgservers.model.job.JobModel;
 import com.omgservers.model.pool.PoolModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolDeletedEventHandlerImpl implements EventHandler {
 
+    final SystemModule systemModule;
     final PoolModule poolModule;
 
     final PoolModelFactory poolModelFactory;
@@ -40,7 +48,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(pool -> {
                     log.info("Pool was deleted, pool={}", poolId);
 
-                    return Uni.createFrom().voidItem();
+                    return findAndDeleteJob(poolId);
                 })
                 .replaceWithVoid();
     }
@@ -49,5 +57,25 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
         final var request = new GetPoolRequest(id);
         return poolModule.getPoolService().getPool(request)
                 .map(GetPoolResponse::getPool);
+    }
+
+    Uni<Void> findAndDeleteJob(final Long poolId) {
+        return findJob(poolId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<JobModel> findJob(final Long poolId) {
+        final var request = new FindJobRequest(poolId);
+        return systemModule.getJobService().findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    Uni<Boolean> deleteJob(final Long id) {
+        final var request = new DeleteJobRequest(id);
+        return systemModule.getJobService().deleteJob(request)
+                .map(DeleteJobResponse::getDeleted);
     }
 }

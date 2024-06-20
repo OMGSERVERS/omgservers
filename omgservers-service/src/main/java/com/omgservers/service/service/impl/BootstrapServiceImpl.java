@@ -49,7 +49,8 @@ public class BootstrapServiceImpl implements BootstrapService {
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .flatMap(voidItem -> bootstrapDockerHost())
-                .flatMap(voidItem -> bootstrapRelayJob());
+                .flatMap(voidItem -> bootstrapRelayJob())
+                .flatMap(voidItem -> bootstrapSchedulerJob());
     }
 
     Uni<Void> bootstrapDatabaseSchema() {
@@ -128,6 +129,16 @@ public class BootstrapServiceImpl implements BootstrapService {
                     .invoke(voidItem -> log.info("Relay job was initialized"));
         } else {
             log.info("Bootstrap of relay job is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapSchedulerJob() {
+        if (getConfigOperation.getServiceConfig().bootstrap().schedulerJob().enabled()) {
+            return systemModule.getBootstrapService().bootstrapSchedulerJob()
+                    .invoke(voidItem -> log.info("Scheduler job was initialized"));
+        } else {
+            log.info("Bootstrap of scheduler job is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

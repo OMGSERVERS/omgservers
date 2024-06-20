@@ -18,30 +18,30 @@ create table if not exists tab_service_account (
     unique(username)
 );
 
-create table if not exists tab_container (
+create table if not exists tab_job (
     id bigint primary key,
+    idempotency_key text not null,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    entity_id bigint not null,
     qualifier text not null,
-    image text not null,
-    config json not null,
+    entity_id bigint not null,
     deleted boolean not null,
-    unique(entity_id)
+    unique(idempotency_key)
 );
 
 create table if not exists tab_event (
     id bigint primary key,
-    idempotency_key text not null unique,
+    idempotency_key text not null,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     delayed timestamp with time zone not null,
     qualifier text not null,
     body json not null,
     status text not null,
-    deleted boolean not null
+    deleted boolean not null,
+    unique(idempotency_key)
 );
 
 create index if not exists idx_index_name on tab_index(name);
 create index if not exists idx_service_account on tab_service_account(username);
-create index if not exists idx_container_entity_id on tab_container(entity_id);
+create index if not exists idx_job_entity_id on tab_job(entity_id);

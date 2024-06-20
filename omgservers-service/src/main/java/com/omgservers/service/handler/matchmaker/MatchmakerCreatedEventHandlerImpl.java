@@ -2,20 +2,21 @@ package com.omgservers.service.handler.matchmaker;
 
 import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
 import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.system.job.SyncJobRequest;
+import com.omgservers.model.dto.system.job.SyncJobResponse;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
 import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.job.MatchmakerJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.factory.tenant.VersionMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -38,6 +39,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
     final EventModelFactory eventModelFactory;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -61,7 +63,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                     final var idempotencyKey = event.getIdempotencyKey();
 
                     return syncVersionMatchmakerRef(matchmaker, idempotencyKey)
-                            .flatMap(created -> requestJobExecution(matchmakerId, idempotencyKey));
+                            .flatMap(created -> syncMatchmakerJob(matchmakerId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -98,13 +100,12 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<Boolean> requestJobExecution(final Long matchmakerId, final String idempotencyKey) {
-        final var eventBody = new MatchmakerJobTaskExecutionRequestedEventBodyModel(matchmakerId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
+    Uni<Boolean> syncMatchmakerJob(final Long matchmakerId,
+                                   final String idempotencyKey) {
+        final var job = jobModelFactory.create(JobQualifierEnum.MATCHMAKER, matchmakerId, idempotencyKey);
 
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+        final var syncEventRequest = new SyncJobRequest(job);
+        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+                .map(SyncJobResponse::getCreated);
     }
 }

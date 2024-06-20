@@ -207,6 +207,11 @@ under the License.
                 <auto-create-queues>true</auto-create-queues>
                 <auto-create-addresses>true</auto-create-addresses>
             </address-setting>
+            <address-setting match="ServiceEvents">
+                <redelivery-delay>1000</redelivery-delay>
+                <redelivery-delay-multiplier>4</redelivery-delay-multiplier>
+                <max-redelivery-delay>300000</max-redelivery-delay>
+            </address-setting>
             <!--default for catch all-->
             <address-setting match="#">
                 <dead-letter-address>DLQ</dead-letter-address>

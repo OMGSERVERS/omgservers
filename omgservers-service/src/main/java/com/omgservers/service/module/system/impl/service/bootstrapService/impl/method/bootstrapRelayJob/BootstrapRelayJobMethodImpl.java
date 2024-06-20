@@ -1,6 +1,7 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob;
 
-import com.omgservers.service.module.system.impl.component.relayJobTask.RelayJobTask;
+import com.omgservers.model.dto.system.task.ExecuteRelayTaskRequest;
+import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
@@ -14,14 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class BootstrapRelayJobMethodImpl implements BootstrapRelayJobMethod {
 
-    final GetConfigOperation getConfigOperation;
+    final SystemModule systemModule;
 
-    final RelayJobTask relayJobTask;
+    final GetConfigOperation getConfigOperation;
     final Scheduler scheduler;
 
     @Override
     public Uni<Void> bootstrapRelayJob() {
-        log.debug("Bootstrap relay");
+        log.debug("Bootstrap relay job");
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
@@ -29,7 +30,11 @@ class BootstrapRelayJobMethodImpl implements BootstrapRelayJobMethod {
                     final var trigger = scheduler.newJob("relay")
                             .setInterval(interval)
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
-                            .setAsyncTask(scheduledExecution -> relayJobTask.executeTask())
+                            .setAsyncTask(scheduledExecution -> {
+                                final var request = new ExecuteRelayTaskRequest();
+                                return systemModule.getTaskService().executeRelayTask(request)
+                                        .replaceWithVoid();
+                            })
                             .schedule();
 
                     log.info("Relay job was scheduled, {}", trigger);

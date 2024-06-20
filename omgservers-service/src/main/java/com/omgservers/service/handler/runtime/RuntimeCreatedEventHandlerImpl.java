@@ -8,11 +8,13 @@ import com.omgservers.model.dto.runtime.GetRuntimeRequest;
 import com.omgservers.model.dto.runtime.GetRuntimeResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.system.job.SyncJobRequest;
+import com.omgservers.model.dto.system.job.SyncJobResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.model.event.body.job.RuntimeJobTaskExecutionRequestedEventBodyModel;
 import com.omgservers.model.event.body.module.runtime.RuntimeCreatedEventBodyModel;
+import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
@@ -23,6 +25,7 @@ import com.omgservers.service.factory.matchmaker.MatchmakerMatchRuntimeRefModelF
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.runtime.RuntimePermissionModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
@@ -60,6 +63,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final PoolRequestModelFactory poolRequestModelFactory;
     final EventModelFactory eventModelFactory;
     final UserModelFactory userModelFactory;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -82,7 +86,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     final var idempotencyKey = event.getIdempotencyKey();
                     return syncRuntimeRef(runtime, idempotencyKey)
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))
-                            .flatMap(created -> requestJobExecution(runtimeId, idempotencyKey));
+                            .flatMap(created -> syncRuntimeJob(runtimeId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -155,13 +159,12 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncEventResponse::getCreated);
     }
 
-    Uni<Boolean> requestJobExecution(final Long runtimeId, final String idempotencyKey) {
-        final var eventBody = new RuntimeJobTaskExecutionRequestedEventBodyModel(runtimeId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
+    Uni<Boolean> syncRuntimeJob(final Long runtimeId,
+                                final String idempotencyKey) {
+        final var job = jobModelFactory.create(JobQualifierEnum.RUNTIME, runtimeId, idempotencyKey);
 
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
+        final var syncEventRequest = new SyncJobRequest(job);
+        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+                .map(SyncJobResponse::getCreated);
     }
 }

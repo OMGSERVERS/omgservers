@@ -56,6 +56,12 @@ public interface ServiceConfig {
         String interval();
     }
 
+    interface BootstrapSchedulerJobConfig {
+        boolean enabled();
+
+        String interval();
+    }
+
     interface ClientsConfig {
         long tokenLifetime();
 
@@ -97,6 +103,8 @@ public interface ServiceConfig {
         BootstrapDockerHostConfig dockerHost();
 
         BootstrapRelayJobConfig relayJob();
+
+        BootstrapSchedulerJobConfig schedulerJob();
     }
 
     interface BootstrapSchemaConfig {
