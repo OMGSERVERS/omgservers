@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.job.matchmaker.operation.handlerMatchmakerRequests;
+package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
 import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
 import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
@@ -8,8 +8,8 @@ import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.model.request.MatchmakerRequestModel;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.service.handler.job.matchmaker.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

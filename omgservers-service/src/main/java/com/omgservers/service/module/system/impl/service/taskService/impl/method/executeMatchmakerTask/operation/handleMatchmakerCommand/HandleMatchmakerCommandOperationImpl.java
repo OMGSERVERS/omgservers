@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.job.matchmaker.operation.handleMatchmakerCommand;
+package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand;
 
 import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
