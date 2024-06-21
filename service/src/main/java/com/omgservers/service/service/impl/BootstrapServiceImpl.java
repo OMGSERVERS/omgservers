@@ -1,9 +1,6 @@
 package com.omgservers.service.service.impl;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
-import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.IndexModelFactory;
-import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -27,10 +24,6 @@ public class BootstrapServiceImpl implements BootstrapService {
     final UserModule userModule;
 
     final GetConfigOperation getConfigOperation;
-
-    final IndexModelFactory indexModelFactory;
-    final EventModelFactory eventModelFactory;
-    final UserModelFactory userModelFactory;
 
     @WithSpan
     void startup(@Observes @Priority(ServicePriorityConfiguration.START_UP_BOOTSTRAP_SERVICE_PRIORITY)
