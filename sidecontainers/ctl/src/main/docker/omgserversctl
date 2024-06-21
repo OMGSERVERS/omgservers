@@ -766,15 +766,24 @@ developer_uploadVersion() {
     exit 1
   fi
 
-  pushd ${PROJECT_PATH} >> /dev/null
+  ARCHIVE_PATH=$(eval echo ~/.omgservers/versions/version_${TENANT_ID}_${STAGE_ID}.zip)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=${ARCHIVE_PATH}"
+
+  pushd ${PROJECT_PATH}
 
   if [ ! -f "config.json" ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Version config.json was not found, PROJECT_PATH=${PROJECT_PATH}"
     exit 1
   fi
 
-  mkdir -p .omgservers
-  find . -type f -name "*.lua" | zip -@ .omgservers/project.zip
+  if [ ! -f "main.lua" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Version main.lua was not found, PROJECT_PATH=${PROJECT_PATH}"
+    exit 1
+  fi
+
+  find . -type f -name "*.lua" | zip -@ ${ARCHIVE_PATH}
+
+  popd >> /dev/null
 
   ENDPOINT="${OMGSERVERSCTL_ENVIRONMENT_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-version"
 
@@ -787,8 +796,8 @@ developer_uploadVersion() {
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -F "tenantId=${TENANT_ID}" \
     -F "stageId=${STAGE_ID}" \
-    -F "config.json=@./config.json" \
-    -F "project.zip=@./.omgservers/project.zip" \
+    -F "config.json=@${PROJECT_PATH}/config.json" \
+    -F "project.zip=@${ARCHIVE_PATH}" \
     -o ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json)
 
   cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgservers/logs
@@ -799,8 +808,6 @@ developer_uploadVersion() {
     tail -2 ~/.omgservers/logs
     exit 1
   fi
-
-  popd >> /dev/null
 
   VERSION_ID=$(cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
   if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
@@ -830,6 +837,9 @@ internal_useEnvironment() {
 
 if [ ! -d "~/.omgservers/temp" ]; then
   mkdir -p ~/.omgservers/temp
+fi
+if [ ! -d "~/.omgservers/versions" ]; then
+  mkdir -p ~/.omgservers/versions
 fi
 if [ ! -f "~/.omgservers/environment" ]; then
   touch ~/.omgservers/environment
