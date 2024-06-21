@@ -89,6 +89,8 @@ services:
       - "127.0.0.1:5000:5000"
     networks:
       - docker
+    volumes:
+      - registry-data:/var/lib/registry
   builder:
     image: "omgservers/omgservers-builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
@@ -171,6 +173,9 @@ services:
       - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/publicKey.pem
       - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/privateKey.pem
 volumes:
+  registry-data:
+    name: registry-data
+    driver: local
   database-data:
     name: database-data
     driver: local
