@@ -156,7 +156,7 @@ environment_localtesting_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f omgservers-environment/omgservers-localtesting/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f environments/localtesting/src/compose.yaml up --remove-orphans -d
   docker compose -p localtesting ps
 }
 
@@ -166,7 +166,7 @@ environment_localtesting_ps() {
 
 environment_localtesting_test() {
   OMGSERVERS_TESTER_ENVIRONMENT=LOCALTESTING \
-    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
 environment_development_up() {
@@ -183,7 +183,7 @@ environment_development_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f omgservers-environment/omgservers-development/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f environments/development/src/compose.yaml up --remove-orphans -d
   docker compose -p development ps
 }
 
@@ -208,7 +208,7 @@ environment_development_test() {
   environment_development_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
-    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
 environment_integration_up() {
@@ -225,7 +225,7 @@ environment_integration_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p integration -f omgservers-environment/omgservers-integration/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p integration -f environments/integration/src/compose.yaml up --remove-orphans -d
   docker compose -p integration ps
 }
 
@@ -246,7 +246,7 @@ environment_integration_test() {
   environment_integration_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
-      ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+      ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
 environment_standalone_up() {
@@ -263,7 +263,7 @@ environment_standalone_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p standalone -f omgservers-environment/omgservers-standalone/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p standalone -f environments/standalone/src/compose.yaml up --remove-orphans -d
   docker compose -p standalone ps
 }
 
@@ -284,7 +284,7 @@ environment_standalone_test() {
   environment_standalone_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
-        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tester/pom.xml verify
+        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
 # Build

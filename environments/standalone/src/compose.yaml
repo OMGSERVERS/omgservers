@@ -2,7 +2,7 @@ version: "3.8"
 services:
   # frontend
   ingress:
-    image: "omgservers/omgservers-ingress:${OMGSERVERS_VERSION}"
+    image: "omgservers/ingress:${OMGSERVERS_VERSION}"
     container_name: "ingress"
     restart: unless-stopped
     volumes:
@@ -15,7 +15,7 @@ services:
       - frontend
     command: "-c /etc/envoy/entrypoint1.yaml"
   entrypoint1:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint1"
     restart: unless-stopped
     depends_on:
@@ -28,7 +28,7 @@ services:
       - service
     command: "-c /etc/envoy/standalone1.yaml"
   entrypoint2:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint2"
     restart: unless-stopped
     depends_on:
@@ -41,7 +41,7 @@ services:
       - service
     command: "-c /etc/envoy/standalone2.yaml"
   entrypoint3:
-    image: "omgservers/omgservers-entrypoint:${OMGSERVERS_VERSION}"
+    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
     container_name: "entrypoint3"
     restart: unless-stopped
     depends_on:
@@ -55,7 +55,7 @@ services:
       - service
     command: "-c /etc/envoy/standalone3.yaml"
   ctl:
-    image: "omgservers/omgservers-ctl:${OMGSERVERS_VERSION}"
+    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
     container_name: "ctl"
     restart: unless-stopped
     depends_on:
@@ -74,7 +74,7 @@ services:
       - frontend
   # backend
   docker:
-    image: "omgservers/omgservers-docker:${OMGSERVERS_VERSION}"
+    image: "omgservers/docker:${OMGSERVERS_VERSION}"
     container_name: "docker"
     restart: unless-stopped
     networks:
@@ -82,7 +82,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   registry:
-    image: "omgservers/omgservers-registry:${OMGSERVERS_VERSION}"
+    image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
     restart: unless-stopped
     ports:
@@ -92,7 +92,7 @@ services:
     volumes:
       - registry-data:/var/lib/registry
   builder:
-    image: "omgservers/omgservers-builder:${OMGSERVERS_VERSION}"
+    image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
     restart: unless-stopped
     ports:
@@ -109,7 +109,7 @@ services:
       - DOCKER_REGISTRY=127.0.0.1:5000
   # service
   database:
-    image: "omgservers/omgservers-database:${OMGSERVERS_VERSION}"
+    image: "omgservers/database:${OMGSERVERS_VERSION}"
     container_name: "database"
     restart: unless-stopped
     shm_size: 128m
@@ -122,7 +122,7 @@ services:
     volumes:
       - database-data:/var/lib/postgresql
   queues:
-    image: "omgservers/omgservers-queues:${OMGSERVERS_VERSION}"
+    image: "omgservers/queues:${OMGSERVERS_VERSION}"
     container_name: "queues"
     restart: unless-stopped
     environment:
@@ -133,7 +133,7 @@ services:
     networks:
       - service
   service:
-    image: "omgservers/omgservers-service:${OMGSERVERS_VERSION}"
+    image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service"
     restart: unless-stopped
     networks:

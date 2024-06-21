@@ -5,7 +5,7 @@
 
 ### Installation
 
-- [Docker](https://hub.docker.com/r/omgservers/omgservers-service)
+- [Docker](https://hub.docker.com/r/omgservers/service)
 
 ### Environment variables
 
