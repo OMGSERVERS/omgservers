@@ -99,7 +99,7 @@ services:
       - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
     ports:
-      - "8161:8161"
+      - "127.0.0.1:8161:8161"
     volumes:
       - queues:/var/lib/artemis-instance
     networks:
