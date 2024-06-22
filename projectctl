@@ -35,66 +35,66 @@ internal_help() {
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment down" ]; then
     echo " projectctl environment down"
   fi
-  # Environment localtesting
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment localtesting" -o "$1" = "environment localtesting up" ]; then
-    echo " projectctl environment localtesting up"
+  # Localtesting
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting up" ]; then
+    echo " projectctl localtesting up"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment localtesting" -o "$1" = "environment localtesting ps" ]; then
-    echo " projectctl environment localtesting ps"
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
+    echo " projectctl localtesting ps"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment localtesting" -o "$1" = "environment localtesting test" ]; then
-    echo " projectctl environment localtesting test"
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting test" ]; then
+    echo " projectctl localtesting test"
   fi
-  # Environment development
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development up" ]; then
-    echo " projectctl environment development up"
+  # Development
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development up" ]; then
+    echo " projectctl development up"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development ps" ]; then
-    echo " projectctl environment development ps"
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development ps" ]; then
+    echo " projectctl development ps"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development reset" ]; then
-    echo " projectctl environment development reset"
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development reset" ]; then
+    echo " projectctl development reset"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development logs" ]; then
-    echo " projectctl environment development logs"
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development logs" ]; then
+    echo " projectctl development logs"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development ctl" ]; then
-    echo " projectctl environment development ctl"
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development ctl" ]; then
+    echo " projectctl development ctl"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment development" -o "$1" = "environment development test" ]; then
-    echo " projectctl environment development test"
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development test" ]; then
+    echo " projectctl development test"
   fi
-  # Environment integration
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration up" ]; then
-    echo " projectctl environment integration up"
+  # Integration
+  if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration up" ]; then
+    echo " projectctl integration up"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration ps" ]; then
-    echo " projectctl environment integration ps"
+  if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration ps" ]; then
+    echo " projectctl integration ps"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration reset" ]; then
-    echo " projectctl environment integration reset"
+  if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration reset" ]; then
+    echo " projectctl integration reset"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration logs" ]; then
-    echo " projectctl environment integration logs"
+  if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration logs" ]; then
+    echo " projectctl integration logs"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment integration" -o "$1" = "environment integration test" ]; then
-    echo " projectctl environment integration test"
+  if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration test" ]; then
+    echo " projectctl integration test"
   fi
-  # Environment standalone
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone up" ]; then
-    echo " projectctl environment standalone up"
+  # Standalone
+  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone up" ]; then
+    echo " projectctl standalone up"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone ps" ]; then
-    echo " projectctl environment standalone ps"
+  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone ps" ]; then
+    echo " projectctl standalone ps"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone reset" ]; then
-    echo " projectctl environment standalone reset"
+  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone reset" ]; then
+    echo " projectctl standalone reset"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone logs" ]; then
-    echo " projectctl environment standalone logs"
+  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone logs" ]; then
+    echo " projectctl standalone logs"
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment standalone" -o "$1" = "environment standalone test" ]; then
-    echo " projectctl environment standalone test"
+  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone test" ]; then
+    echo " projectctl standalone test"
   fi
 }
 
@@ -119,10 +119,10 @@ build_testWithSonar() {
 build_beforeCommit() {
 #  build_withTests
 
-  environment_localtesting_up
-  environment_development_up
-  environment_integration_up
-  environment_standalone_up
+  localtesting_up
+  development_up
+  integration_up
+  standalone_up
 
   environment_down
 }
@@ -142,7 +142,7 @@ environment_down() {
   docker compose -p standalone down
 }
 
-environment_localtesting_up() {
+localtesting_up() {
   docker compose -p development down
   docker compose -p integration down
   docker compose -p standalone down
@@ -160,16 +160,16 @@ environment_localtesting_up() {
   docker compose -p localtesting ps
 }
 
-environment_localtesting_ps() {
+localtesting_ps() {
   docker compose -p localtesting ps
 }
 
-environment_localtesting_test() {
+localtesting_test() {
   OMGSERVERS_TESTER_ENVIRONMENT=LOCALTESTING \
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
-environment_development_up() {
+development_up() {
   docker compose -p localtesting down
   docker compose -p integration down
   docker compose -p standalone down
@@ -187,31 +187,31 @@ environment_development_up() {
   docker compose -p development ps
 }
 
-environment_development_ps() {
+development_ps() {
   docker compose -p development ps
 }
 
-environment_development_reset() {
+development_reset() {
   docker compose -p development down
-  environment_development_up
+  development_up
 }
 
-environment_development_logs() {
+development_logs() {
   docker compose -p development logs $@
 }
 
-environment_development_ctl() {
+development_ctl() {
   docker compose -p development exec ctl /bin/bash
 }
 
-environment_development_test() {
-  environment_development_up
+development_test() {
+  development_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
-environment_integration_up() {
+integration_up() {
   docker compose -p localtesting down
   docker compose -p development down
   docker compose -p standalone down
@@ -229,27 +229,27 @@ environment_integration_up() {
   docker compose -p integration ps
 }
 
-environment_integration_ps() {
+integration_ps() {
   docker compose -p integration ps
 }
 
-environment_integration_reset() {
+integration_reset() {
   docker compose -p integration down
-  environment_integration_up
+  integration_up
 }
 
-environment_integration_logs() {
+integration_logs() {
   docker compose -p integration logs $@
 }
 
-environment_integration_test() {
-  environment_integration_up
+integration_test() {
+  integration_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
       ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
 }
 
-environment_standalone_up() {
+standalone_up() {
   docker compose -p localtesting down
   docker compose -p development down
   docker compose -p integration down
@@ -267,21 +267,21 @@ environment_standalone_up() {
   docker compose -p standalone ps
 }
 
-environment_standalone_ps() {
+standalone_ps() {
   docker compose -p standalone ps
 }
 
-environment_standalone_reset() {
+standalone_reset() {
   docker compose -p standalone down
-  environment_standalone_up
+  standalone_up
 }
 
-environment_standalone_logs() {
+standalone_logs() {
   docker compose -p standalone logs $@
 }
 
-environment_standalone_test() {
-  environment_standalone_up
+standalone_test() {
+  standalone_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
         ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f tester/pom.xml verify
@@ -310,62 +310,62 @@ elif [ "$1" = "environment" ]; then
     environment_printCurrent
   elif [ "$2" = "down" ]; then
     environment_down
-  elif [ "$2" = "localtesting" ]; then
-    if [ "$3" = "up" ]; then
-      environment_localtesting_up
-    elif [ "$3" = "ps" ]; then
-      environment_localtesting_ps
-    elif [ "$3" = "test" ]; then
-      environment_localtesting_test
-    else
-      internal_help "environment localtesting"
-    fi
-  elif [ "$2" = "development" ]; then
-    if [ "$3" = "up" ]; then
-      environment_development_up
-    elif [ "$3" = "ps" ]; then
-      environment_development_ps
-    elif [ "$3" = "reset" ]; then
-      environment_development_reset
-    elif [ "$3" = "logs" ]; then
-      environment_development_logs "${@:4}"
-    elif [ "$3" = "ctl" ]; then
-      environment_development_ctl
-    elif [ "$3" = "test" ]; then
-      environment_development_test
-    else
-      internal_help "environment development"
-    fi
-  elif [ "$2" = "integration" ]; then
-    if [ "$3" = "up" ]; then
-      environment_integration_up
-    elif [ "$3" = "ps" ]; then
-      environment_integration_ps
-    elif [ "$3" = "reset" ]; then
-      environment_integration_reset
-    elif [ "$3" = "logs" ]; then
-      environment_integration_logs "${@:4}"
-    elif [ "$3" = "test" ]; then
-      environment_integration_test
-    else
-      internal_help "environment integration"
-    fi
-  elif [ "$2" = "standalone" ]; then
-    if [ "$3" = "up" ]; then
-      environment_standalone_up
-    elif [ "$3" = "ps" ]; then
-      environment_standalone_ps
-    elif [ "$3" = "reset" ]; then
-      environment_standalone_reset
-    elif [ "$3" = "logs" ]; then
-      environment_standalone_logs "${@:4}"
-    elif [ "$3" = "test" ]; then
-      environment_standalone_test
-    else
-      internal_help "environment standalone"
-    fi
   else
     internal_help "environment"
+  fi
+elif [ "$1" = "localtesting" ]; then
+  if [ "$2" = "up" ]; then
+    localtesting_up
+  elif [ "$2" = "ps" ]; then
+    localtesting_ps
+  elif [ "$2" = "test" ]; then
+    localtesting_test
+  else
+    internal_help "localtesting"
+  fi
+elif [ "$1" = "development" ]; then
+  if [ "$2" = "up" ]; then
+    development_up
+  elif [ "$2" = "ps" ]; then
+    development_ps
+  elif [ "$2" = "reset" ]; then
+    development_reset
+  elif [ "$2" = "logs" ]; then
+    development_logs "${@:4}"
+  elif [ "$2" = "ctl" ]; then
+    development_ctl
+  elif [ "$2" = "test" ]; then
+    development_test
+  else
+    internal_help "development"
+  fi
+elif [ "$1" = "integration" ]; then
+  if [ "$2" = "up" ]; then
+    integration_up
+  elif [ "$2" = "ps" ]; then
+    integration_ps
+  elif [ "$2" = "reset" ]; then
+    integration_reset
+  elif [ "$2" = "logs" ]; then
+    integration_logs "${@:4}"
+  elif [ "$2" = "test" ]; then
+    integration_test
+  else
+    internal_help "integration"
+  fi
+elif [ "$1" = "standalone" ]; then
+  if [ "$2" = "up" ]; then
+    standalone_up
+  elif [ "$2" = "ps" ]; then
+    standalone_ps
+  elif [ "$2" = "reset" ]; then
+    standalone_reset
+  elif [ "$2" = "logs" ]; then
+    standalone_logs "${@:4}"
+  elif [ "$2" = "test" ]; then
+    standalone_test
+  else
+    internal_help "standalone"
   fi
 else
   internal_help

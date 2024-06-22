@@ -9,12 +9,4 @@
     </parent>
 
     <artifactId>gateway</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.omgservers</groupId>
-            <artifactId>proxy</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>

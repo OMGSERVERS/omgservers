@@ -31,17 +31,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./projectctl build testWithSonar
       - name: Start containers
-        run: ./projectctl environment integration up && sleep 90
+        run: ./projectctl integration up && sleep 90
       - name: Init registry
         run: docker tag omgservers/luajit:1.0.0-SNAPSHOT localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT && docker push localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT
       - name: Run tests
-        run: ./projectctl environment integration test
+        run: ./projectctl integration test
       - name: Log builder job
         if: always()
         run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
       - name: Log containers
         if: always()
-        run: ./projectctl environment integration logs
+        run: ./projectctl integration logs
       - name: Stop containers
         if: always()
         run: ./projectctl environment down

@@ -17,11 +17,8 @@
         <module>ctl</module>
         <module>database</module>
         <module>docker</module>
-        <module>entrypoint</module>
         <module>gateway</module>
-        <module>ingress</module>
         <module>luajit</module>
-        <module>proxy</module>
         <module>queues</module>
         <module>registry</module>
     </modules>

@@ -1,11 +1,12 @@
 version: "3.8"
 services:
   # frontend
-  entrypoint:
-    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
-    container_name: "entrypoint"
+  gateway:
+    image: "omgservers/gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway"
     ports:
-      - "8080:10001"
+      - "8080:8080"
+      - "10000:10000"
     networks:
       - omgservers
     command: "-c /etc/envoy/integration.yaml"

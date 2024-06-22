@@ -5,8 +5,6 @@ services:
     container_name: "docker"
     networks:
       - omgservers
-    ports:
-      - "2375:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   database:
@@ -16,8 +14,6 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=root
-    ports:
-      - "5432:5432"
     networks:
       - omgservers
   queues:
@@ -27,7 +23,6 @@ services:
       - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=queues
     ports:
-      - "5672:5672"
       - "8161:8161"
     networks:
       - omgservers
@@ -46,7 +41,7 @@ services:
     networks:
       - omgservers
     environment:
-      - JENKINS_URL=http://localhost:7070
+      - JENKINS_URL=http://localhost:8080
       - JENKINS_ADMIN_ID=builder
       - JENKINS_ADMIN_PASSWORD=builder
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933

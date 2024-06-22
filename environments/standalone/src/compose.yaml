@@ -1,84 +1,35 @@
 version: "3.8"
 services:
   # frontend
-  ingress:
-    image: "omgservers/ingress:${OMGSERVERS_VERSION}"
-    container_name: "ingress"
+  gateway:
+    image: "omgservers/gateway:${OMGSERVERS_VERSION}"
+    container_name: "gateway"
     restart: unless-stopped
     volumes:
-      - ./ingress/server.pem:/certificate/server.pem:ro
-      - ./ingress/privateKey.pem:/certificate/privateKey.pem:ro
+      - ./gateway/server.pem:/certificate/server.pem:ro
+      - ./gateway/privateKey.pem:/certificate/privateKey.pem:ro
     ports:
-      - "${INGRESS_PORT}:10001"
-      - "127.0.0.1:20000:10000"
+      - "${GATEWAY_PORT}:8443"
+      - "127.0.0.1:10000-10003:10000-10003"
     networks:
-      - frontend
-    command: "-c /etc/envoy/entrypoint1.yaml"
-  entrypoint1:
-    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
-    container_name: "entrypoint1"
-    restart: unless-stopped
-    depends_on:
-      - ingress
-    ports:
-      - "127.0.0.1:10001:10001"
-      - "127.0.0.1:20001:10000"
-    networks:
-      - frontend
-      - service
-    command: "-c /etc/envoy/standalone1.yaml"
-  entrypoint2:
-    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
-    container_name: "entrypoint2"
-    restart: unless-stopped
-    depends_on:
-      - ingress
-    ports:
-      - "127.0.0.1:10002:10001"
-      - "127.0.0.1:20002:10000"
-    networks:
-      - frontend
-      - service
-    command: "-c /etc/envoy/standalone2.yaml"
-  entrypoint3:
-    image: "omgservers/entrypoint:${OMGSERVERS_VERSION}"
-    container_name: "entrypoint3"
-    restart: unless-stopped
-    depends_on:
-      - ingress
-    ports:
-      - "127.0.0.1:10003:10001"
-      - "127.0.0.1:20003:10000"
-    networks:
-      - workers
-      - frontend
-      - service
-    command: "-c /etc/envoy/standalone3.yaml"
-  ctl:
-    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
-    container_name: "ctl"
-    restart: unless-stopped
-    depends_on:
-      - entrypoint1
-      - entrypoint2
-    environment:
-      - DELAY=16
-      - EXTERNAL_URL=http://entrypoint1:10001
-      - INTERNAL_URL=http://entrypoint2:10001
-      - ADMIN_USER_ID=223221505901723648
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - SUPPORT_USER_ID=231928170708729857
-      - SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
-      - BACKGROUND=true
-    networks:
-      - frontend
+      service:
+        ipv4_address: 172.1.0.2
+      workers:
+        ipv4_address: 172.2.0.2
+    command: "-c /etc/envoy/standalone.yaml"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
   # backend
   docker:
     image: "omgservers/docker:${OMGSERVERS_VERSION}"
     container_name: "docker"
     restart: unless-stopped
     networks:
-      - docker
+      service:
+        ipv4_address: 172.1.0.3
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   registry:
@@ -88,18 +39,24 @@ services:
     ports:
       - "127.0.0.1:5000:5000"
     networks:
-      - docker
+      service:
+        ipv4_address: 172.1.0.4
     volumes:
-      - registry-data:/var/lib/registry
+      - registry:/var/lib/registry
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
   builder:
     image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:7070:8080"
     networks:
-      - backend
-      - docker
+      service:
+        ipv4_address: 172.1.0.5
     environment:
       - JENKINS_URL=http://builder:7070
       - JENKINS_ADMIN_ID=builder
@@ -107,6 +64,13 @@ services:
       - JENKINS_ADMIN_TOKEN=${BUILDER_TOKEN}
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=127.0.0.1:5000
+    volumes:
+      - builder:/var/jenkins_home
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
   # service
   database:
     image: "omgservers/database:${OMGSERVERS_VERSION}"
@@ -118,9 +82,15 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=root
     networks:
-      - service
+      service:
+        ipv4_address: 172.1.0.6
     volumes:
-      - database-data:/var/lib/postgresql
+      - database:/var/lib/postgresql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
   queues:
     image: "omgservers/queues:${OMGSERVERS_VERSION}"
     container_name: "queues"
@@ -128,18 +98,25 @@ services:
     environment:
       - ARTEMIS_USER=queues
       - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
+    ports:
+      - "8161:8161"
     volumes:
-      - queues-data:/var/lib/artemis-instance
+      - queues:/var/lib/artemis-instance
     networks:
-      - service
+      service:
+        ipv4_address: 172.1.0.7
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
   service:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service"
     restart: unless-stopped
     networks:
-      - backend
-      - docker
-      - service
+      service:
+        ipv4_address: 172.1.0.8
     depends_on:
       - database
       - queues
@@ -163,7 +140,7 @@ services:
       - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
-      - OMGSERVERS_WORKERS_SERVICE_URI=http://entrypoint3:10001
+      - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway:10003
       - OMGSERVERS_WORKERS_DOCKER_NETWORK=workers
       - OMGSERVERS_GENERATOR_DATACENTER_ID=0
       - OMGSERVERS_GENERATOR_INSTANCE_ID=0
@@ -172,25 +149,53 @@ services:
       - OMGSERVERS_BUILDER_USER_TOKEN=${BUILDER_TOKEN}
       - OMGSERVERS_JWT_PUBLIC_KEY=/jwtkeys/publicKey.pem
       - OMGSERVERS_JWT_PRIVATE_KEY=/jwtkeys/privateKey.pem
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "8"
+  ctl:
+    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
+    container_name: "ctl"
+    restart: unless-stopped
+    depends_on:
+      - gateway
+    environment:
+      - DELAY=16
+      - EXTERNAL_URL=http://service:8080
+      - INTERNAL_URL=http://service:8080
+      - ADMIN_USER_ID=223221505901723648
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - SUPPORT_USER_ID=231928170708729857
+      - SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
+      - BACKGROUND=true
+    networks:
+      service:
+        ipv4_address: 172.1.0.9
 volumes:
-  registry-data:
-    name: registry-data
+  builder:
+    name: builder
     driver: local
-  database-data:
-    name: database-data
+  registry:
+    name: registry
     driver: local
-  queues-data:
-    name: queues-data
+  database:
+    name: database
+    driver: local
+  queues:
+    name: queues
     driver: local
 networks:
-  frontend:
-    name: frontend
-  backend:
-    name: backend
-  docker:
-    name: docker
+  service:
+    name: service
+    ipam:
+      config:
+        - subnet: 172.1.0.0/16
+          gateway: 172.1.0.1
   workers:
     name: workers
     internal: true
-  service:
-    name: service
+    ipam:
+      config:
+        - subnet: 172.2.0.0/16
+          gateway: 172.2.0.1
