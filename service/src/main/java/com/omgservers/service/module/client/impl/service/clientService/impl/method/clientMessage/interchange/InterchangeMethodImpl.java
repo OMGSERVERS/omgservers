@@ -8,12 +8,11 @@ import com.omgservers.model.dto.client.InterchangeResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.event.body.internal.MatchmakerMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
 import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.client.MessageModelFactory;
+import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.client.impl.operation.clientMessage.deleteClientMessagesByIds.DeleteClientMessagesByIdsOperation;
 import com.omgservers.service.module.client.impl.operation.clientMessage.selectActiveClientMessagesByClientId.SelectActiveClientMessagesByClientIdOperation;
@@ -89,8 +88,6 @@ class InterchangeMethodImpl implements InterchangeMethod {
                 .onItem().transformToUniAndConcatenate(message -> {
                     final var eventBody = switch (message.getQualifier()) {
                         case CLIENT_OUTGOING_MESSAGE -> new ClientMessageReceivedEventBodyModel(clientId,
-                                message);
-                        case CLIENT_MATCHMAKER_MESSAGE -> new MatchmakerMessageReceivedEventBodyModel(clientId,
                                 message);
                         default ->
                                 throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,

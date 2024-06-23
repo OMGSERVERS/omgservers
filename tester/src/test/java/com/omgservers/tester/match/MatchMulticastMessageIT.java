@@ -41,6 +41,20 @@ public class MatchMulticastMessageIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                                 if command.qualifier == "INIT_RUNTIME" then
                                     self.clients = {}
@@ -98,8 +112,8 @@ public class MatchMulticastMessageIT extends BaseTestClass {
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment2.getId()));
 
-            playerApiTester.requestMatchmaking(testClient1, "test");
-            playerApiTester.requestMatchmaking(testClient2, "test");
+            playerApiTester.sendMessage(testClient1, new MatchKickClientIT.LobbyTestMessage("request_matchmaking"));
+            playerApiTester.sendMessage(testClient2, new MatchKickClientIT.LobbyTestMessage("request_matchmaking"));
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
@@ -108,7 +122,7 @@ public class MatchMulticastMessageIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment2.getId()));
 
-            playerApiTester.sendMessage(testClient1, new TestMessage("multicast_request"));
+            playerApiTester.sendMessage(testClient1, new MatchTestMessage("multicast_request"));
 
             final var serverMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
@@ -129,7 +143,13 @@ public class MatchMulticastMessageIT extends BaseTestClass {
 
     @Data
     @AllArgsConstructor
-    static class TestMessage {
+    static class LobbyTestMessage {
+        String text;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MatchTestMessage {
         String text;
     }
 }

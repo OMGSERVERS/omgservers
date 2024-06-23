@@ -92,13 +92,6 @@ public class PlayerApiTester {
         interchange(testClient, Collections.singletonList(messageModel), new ArrayList<>());
     }
 
-    public void requestMatchmaking(TestClientModel testClient, String mode) throws JsonProcessingException {
-        final var messageModel = new MessageModel(idGenerator.getAndIncrement(),
-                MessageQualifierEnum.CLIENT_MATCHMAKER_MESSAGE,
-                new MatchmakerMessageBodyModel(mode));
-        interchange(testClient, Collections.singletonList(messageModel), new ArrayList<>());
-    }
-
     public MessageModel waitMessage(final TestClientModel testClient,
                                     final MessageQualifierEnum messageQualifier)
             throws InterruptedException, JsonProcessingException {

@@ -6,15 +6,15 @@ import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.model.version.VersionGroupModel;
 import com.omgservers.model.version.VersionModeModel;
 import com.omgservers.tester.BaseTestClass;
-import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -41,6 +41,20 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                             end
                         end)
@@ -66,7 +80,7 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
             final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment1.getId()));
-            playerApiTester.requestMatchmaking(testClient1, "test");
+            playerApiTester.sendMessage(testClient1, new TestMessage("request_matchmaking"));
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment1.getId()));
@@ -82,7 +96,7 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
             final var matchmakerAssignment2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment2.getId()));
-            playerApiTester.requestMatchmaking(testClient2, "test");
+            playerApiTester.sendMessage(testClient2, new TestMessage("request_matchmaking"));
             final var matchAssignment2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment2.getId()));
@@ -97,5 +111,11 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class TestMessage {
+        String text;
     }
 }

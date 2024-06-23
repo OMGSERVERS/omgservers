@@ -42,6 +42,20 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                                 if command.qualifier == "HANDLE_MESSAGE" then
                                     local var message = command.message
@@ -82,7 +96,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             // Reassignment 1
 
-            playerApiTester.requestMatchmaking(testClient, "test");
+            playerApiTester.sendMessage(testClient, new TestMessage("request_matchmaking"));
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
@@ -100,7 +114,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             // Reassignment 2
 
-            playerApiTester.requestMatchmaking(testClient, "test");
+            playerApiTester.sendMessage(testClient, new TestMessage("request_matchmaking"));
 
             final var matchAssignment2 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&

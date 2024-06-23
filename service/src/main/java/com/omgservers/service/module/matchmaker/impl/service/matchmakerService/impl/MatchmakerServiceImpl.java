@@ -60,37 +60,40 @@ import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.model.dto.matchmaker.ViewMatchmakerRequestsResponse;
+import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.matchmaker.impl.operation.getMatchmakerModuleClient.GetMatchmakerModuleClientOperation;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.MatchmakerService;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.deleteMatchmaker.DeleteMatchmakerMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.deleteMatchmakerAssignment.DeleteMatchmakerAssignmentMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.deleteMatchmakerCommand.DeleteMatchmakerCommandMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.deleteMatchmakerMatch.DeleteMatchmakerMatchMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.deleteMatchmakerMatchClient.DeleteMatchmakerMatchClientMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.deleteMatchmakerMatchRuntimeRef.DeleteMatchmakerMatchRuntimeRefMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.deleteMatchmakerRequest.DeleteMatchmakerRequestMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.findMatchmakerAssignment.FindMatchmakerAssignmentMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.findMatchmakerMatchClient.FindMatchmakerMatchClientMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.findMatchmakerMatchRuntimeRef.FindMatchmakerMatchRuntimeRefMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.getMatchmaker.GetMatchmakerMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.getMatchmakerAssignment.GetMatchmakerAssignmentMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.getMatchmakerMatch.GetMatchmakerMatchMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.getMatchmakerMatchClient.GetMatchmakerMatchClientMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.getMatchmakerMatchRuntimeRef.GetMatchmakerMatchRuntimeRefMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.getMatchmakerState.GetMatchmakerStateMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.syncMatchmaker.SyncMatchmakerMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.syncMatchmakerAssignment.SyncMatchmakerAssignmentMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.syncMatchmakerCommand.SyncMatchmakerCommandMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.syncMatchmakerMatch.SyncMatchmakerMatchMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.syncMatchmakerMatchClient.SyncMatchmakerMatchClientMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.syncMatchmakerMatchRuntimeRef.SyncMatchmakerMatchRuntimeRefMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.syncMatchmakerRequest.SyncMatchmakerRequestMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.updateMatchmakerMatchStatus.UpdateMatchmakerMatchStatusMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.updateMatchmakerState.UpdateMatchmakerStateMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.deleteMatchmakerAssignment.DeleteMatchmakerAssignmentMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.findMatchmakerAssignment.FindMatchmakerAssignmentMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.getMatchmakerAssignment.GetMatchmakerAssignmentMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.syncMatchmakerAssignment.SyncMatchmakerAssignmentMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerAssignment.viewMatchmakerAssignments.ViewMatchmakerAssignmentsMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.deleteMatchmakerCommand.DeleteMatchmakerCommandMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.syncMatchmakerCommand.SyncMatchmakerCommandMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.viewMatchmakerCommands.ViewMatchmakerCommandsMethod;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.viewMatchmakerMatchClients.ViewMatchmakerMatchClientsMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.deleteMatchmakerMatch.DeleteMatchmakerMatchMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.getMatchmakerMatch.GetMatchmakerMatchMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.syncMatchmakerMatch.SyncMatchmakerMatchMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.updateMatchmakerMatchStatus.UpdateMatchmakerMatchStatusMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.viewMatchmakerMatches.ViewMatchmakerMatchesMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.deleteMatchmakerMatchClient.DeleteMatchmakerMatchClientMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.findMatchmakerMatchClient.FindMatchmakerMatchClientMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.getMatchmakerMatchClient.GetMatchmakerMatchClientMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.syncMatchmakerMatchClient.SyncMatchmakerMatchClientMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchClient.viewMatchmakerMatchClients.ViewMatchmakerMatchClientsMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.deleteMatchmakerMatchRuntimeRef.DeleteMatchmakerMatchRuntimeRefMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.findMatchmakerMatchRuntimeRef.FindMatchmakerMatchRuntimeRefMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.getMatchmakerMatchRuntimeRef.GetMatchmakerMatchRuntimeRefMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.syncMatchmakerMatchRuntimeRef.SyncMatchmakerMatchRuntimeRefMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.deleteMatchmakerRequest.DeleteMatchmakerRequestMethod;
+import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.syncMatchmakerRequest.SyncMatchmakerRequestMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.viewMatchmakerRequests.ViewMatchmakerRequestsMethod;
 import com.omgservers.service.module.matchmaker.impl.service.webService.impl.api.MatchmakerApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
@@ -258,6 +261,24 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncMatchmakerRequest,
                 syncMatchmakerRequestMethod::syncMatchmakerRequest);
+    }
+
+    @Override
+    public Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequestWithIdempotency(
+            SyncMatchmakerRequestRequest request) {
+        return syncMatchmakerRequest(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}",
+                                    request.getMatchmakerRequest(), t.getMessage());
+                            return Uni.createFrom().item(new SyncMatchmakerRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

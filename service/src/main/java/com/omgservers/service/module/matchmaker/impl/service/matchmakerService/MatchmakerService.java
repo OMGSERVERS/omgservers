@@ -78,7 +78,8 @@ public interface MatchmakerService {
 
     Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(@Valid SyncMatchmakerAssignmentRequest request);
 
-    Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(@Valid DeleteMatchmakerAssignmentRequest request);
+    Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(
+            @Valid DeleteMatchmakerAssignmentRequest request);
 
     Uni<GetMatchmakerStateResponse> getMatchmakerState(@Valid GetMatchmakerStateRequest request);
 
@@ -91,6 +92,9 @@ public interface MatchmakerService {
     Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(@Valid ViewMatchmakerCommandsRequest request);
 
     Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequest(@Valid SyncMatchmakerRequestRequest request);
+
+    Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequestWithIdempotency(
+            @Valid SyncMatchmakerRequestRequest request);
 
     Uni<DeleteMatchmakerRequestResponse> deleteMatchmakerRequest(@Valid DeleteMatchmakerRequestRequest request);
 

@@ -42,6 +42,20 @@ public class MatchKickClientIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                                 if command.qualifier == "HANDLE_MESSAGE" then
                                     local var message = command.message
@@ -109,8 +123,8 @@ public class MatchKickClientIT extends BaseTestClass {
 
             // Matchmaking requests
 
-            playerApiTester.requestMatchmaking(testClient1, "test");
-            playerApiTester.requestMatchmaking(testClient2, "test");
+            playerApiTester.sendMessage(testClient1, new LobbyTestMessage("request_matchmaking"));
+            playerApiTester.sendMessage(testClient2, new LobbyTestMessage("request_matchmaking"));
 
             // Match assignments
 
@@ -121,7 +135,7 @@ public class MatchKickClientIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment2.getId()));
 
-            playerApiTester.sendMessage(testClient1, new TestMessage(testClient2.getClientId()));
+            playerApiTester.sendMessage(testClient1, new MatchTestMessage(testClient2.getClientId()));
 
             // Match message for client1
 
@@ -144,7 +158,13 @@ public class MatchKickClientIT extends BaseTestClass {
 
     @Data
     @AllArgsConstructor
-    static class TestMessage {
+    static class LobbyTestMessage {
+        String text;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MatchTestMessage {
         @JsonProperty("client_id")
         Long id;
     }

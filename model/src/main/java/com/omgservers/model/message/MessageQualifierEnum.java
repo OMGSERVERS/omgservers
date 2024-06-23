@@ -3,7 +3,6 @@ package com.omgservers.model.message;
 import com.omgservers.model.message.body.ClientOutgoingMessageBodyModel;
 import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerAssignmentMessageBodyModel;
-import com.omgservers.model.message.body.MatchmakerMessageBodyModel;
 import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
@@ -11,7 +10,6 @@ import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
 public enum MessageQualifierEnum {
     // Client messages
     CLIENT_OUTGOING_MESSAGE(ClientOutgoingMessageBodyModel.class),
-    CLIENT_MATCHMAKER_MESSAGE(MatchmakerMessageBodyModel.class),
     // Server messages
     SERVER_WELCOME_MESSAGE(ServerWelcomeMessageBodyModel.class),
     RUNTIME_ASSIGNMENT_MESSAGE(RuntimeAssignmentMessageBodyModel.class),

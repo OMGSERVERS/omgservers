@@ -13,6 +13,8 @@ import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOp
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -40,6 +42,20 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                                 if command.qualifier == "ADD_MATCH_CLIENT" then
                                     return {
@@ -86,7 +102,7 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment1.getId()));
 
-            playerApiTester.requestMatchmaking(testClient1, "test");
+            playerApiTester.sendMessage(testClient1, new TestMessage("request_matchmaking"));
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
@@ -115,7 +131,7 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(lobbyAssignment2.getId()));
 
-            playerApiTester.requestMatchmaking(testClient2, "test");
+            playerApiTester.sendMessage(testClient2, new TestMessage("request_matchmaking"));
 
             final var matchAssignment2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
@@ -135,5 +151,11 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class TestMessage {
+        String text;
     }
 }

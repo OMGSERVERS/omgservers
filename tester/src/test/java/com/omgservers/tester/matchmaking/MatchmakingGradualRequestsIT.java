@@ -11,6 +11,8 @@ import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOp
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +40,20 @@ public class MatchmakingGradualRequestsIT extends BaseTestClass {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
                         require("omgservers").enter_loop(function(self, qualifier, command)
                             if qualifier == "LOBBY" then
+                                if command.qualifier == "HANDLE_MESSAGE" then
+                                    local var text = command.message.text
+                                    if text == "request_matchmaking" then
+                                        return {
+                                            {
+                                                qualifier = "REQUEST_MATCHMAKING",
+                                                body = {
+                                                    client_id = command.client_id,
+                                                    mode = "test"
+                                                }
+                                            }
+                                        }
+                                    end
+                                end
                             elseif qualifier == "MATCH" then
                             end
                         end)
@@ -109,19 +125,19 @@ public class MatchmakingGradualRequestsIT extends BaseTestClass {
 
             // Gradual matchmaking requests
 
-            playerApiTester.requestMatchmaking(testClient1, "test");
+            playerApiTester.sendMessage(testClient1, new TestMessage("request_matchmaking"));
             Thread.sleep(1_000);
 
-            playerApiTester.requestMatchmaking(testClient2, "test");
+            playerApiTester.sendMessage(testClient2, new TestMessage("request_matchmaking"));
             Thread.sleep(1_000);
 
-            playerApiTester.requestMatchmaking(testClient3, "test");
+            playerApiTester.sendMessage(testClient3, new TestMessage("request_matchmaking"));
             Thread.sleep(1_000);
 
-            playerApiTester.requestMatchmaking(testClient4, "test");
+            playerApiTester.sendMessage(testClient4, new TestMessage("request_matchmaking"));
             Thread.sleep(1_000);
 
-            playerApiTester.requestMatchmaking(testClient5, "test");
+            playerApiTester.sendMessage(testClient5, new TestMessage("request_matchmaking"));
             Thread.sleep(1_000);
 
             // Match assignments
@@ -145,5 +161,11 @@ public class MatchmakingGradualRequestsIT extends BaseTestClass {
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class TestMessage {
+        String text;
     }
 }
