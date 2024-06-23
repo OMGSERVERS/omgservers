@@ -797,7 +797,7 @@ developer_uploadVersion() {
     -F "tenantId=${TENANT_ID}" \
     -F "stageId=${STAGE_ID}" \
     -F "config.json=@${PROJECT_PATH}/config.json" \
-    -F "project.zip=@${ARCHIVE_PATH}" \
+    -F "version.zip=@${ARCHIVE_PATH}" \
     -o ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json)
 
   cat ~/.omgservers/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgservers/logs

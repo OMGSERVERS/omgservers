@@ -108,7 +108,7 @@ public class DeveloperApiTester {
                 .multiPart("config.json", "config.json",
                         objectMapper.writeValueAsString(versionConfig).getBytes(StandardCharsets.UTF_8),
                         "application/octet-stream")
-                .multiPart("project.zip", "project.zip",
+                .multiPart("version.zip", "version.zip",
                         archiveBytes, "application/octet-stream")
                 .when().put("/omgservers/v1/entrypoint/developer/request/upload-version");
         responseSpecification.then().statusCode(200);

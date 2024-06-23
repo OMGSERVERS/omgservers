@@ -33,7 +33,7 @@ import java.util.Base64;
 class UploadVersionMethodImpl implements UploadVersionMethod {
 
     private static final String CONFIG_JSON = "config.json";
-    private static final String PROJECT_ZIP = "project.zip";
+    private static final String VERSION_ZIP = "version.zip";
 
     final TenantModule tenantModule;
 
@@ -82,21 +82,21 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
 
     String getBase64Archive(final UploadVersionDeveloperRequest request) {
         return request.getFiles().stream()
-                .filter(fileUpload -> fileUpload.name().equals(PROJECT_ZIP))
+                .filter(fileUpload -> fileUpload.name().equals(VERSION_ZIP))
                 .map(fileUpload -> {
                     try {
                         final var fileContent = Files.readAllBytes(fileUpload.filePath());
                         final var base64Archive = Base64.getEncoder().encodeToString(fileContent);
                         return base64Archive;
                     } catch (IOException e) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.PROJECT_ZIP_WRONG,
-                                String.format(PROJECT_ZIP + " was not parsed, request=%s, %s",
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.VERSION_ZIP_WRONG,
+                                String.format(VERSION_ZIP + " was not parsed, request=%s, %s",
                                         request, e.getMessage()), e);
                     }
                 })
                 .findFirst()
-                .orElseThrow(() -> new ServerSideBadRequestException(ExceptionQualifierEnum.PROJECT_ZIP_NOT_FOUND,
-                        PROJECT_ZIP + " was not found, request=" + request));
+                .orElseThrow(() -> new ServerSideBadRequestException(ExceptionQualifierEnum.VERSION_ZIP_NOT_FOUND,
+                        VERSION_ZIP + " was not found, request=" + request));
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
