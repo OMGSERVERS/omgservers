@@ -38,7 +38,7 @@ jobs:
         run: ./projectctl integration test
       - name: Log builder job
         if: always()
-        run: curl -v -u admin:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
+        run: curl -v -u builder:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-worker-builder-v1/1/consoleText
       - name: Log containers
         if: always()
         run: ./projectctl integration logs
