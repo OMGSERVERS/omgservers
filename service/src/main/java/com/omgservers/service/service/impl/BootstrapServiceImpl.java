@@ -36,7 +36,7 @@ public class BootstrapServiceImpl implements BootstrapService {
     public Uni<Void> bootstrap() {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> bootstrapDatabaseSchema())
-                .flatMap(voidItem -> bootstrapServiceIndex())
+                .flatMap(voidItem -> bootstrapServerIndex())
                 .flatMap(voidItem -> bootstrapServiceRoot())
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
@@ -56,12 +56,12 @@ public class BootstrapServiceImpl implements BootstrapService {
         }
     }
 
-    Uni<Void> bootstrapServiceIndex() {
+    Uni<Void> bootstrapServerIndex() {
         if (getConfigOperation.getServiceConfig().bootstrap().index().enabled()) {
-            return systemModule.getBootstrapService().bootstrapServiceIndex()
-                    .invoke(voidItem -> log.info("Service index was initialized"));
+            return systemModule.getBootstrapService().bootstrapServerIndex()
+                    .invoke(voidItem -> log.info("Server index was initialized"));
         } else {
-            log.info("Bootstrap of service index is not enabled, skip operation");
+            log.info("Bootstrap of server index is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

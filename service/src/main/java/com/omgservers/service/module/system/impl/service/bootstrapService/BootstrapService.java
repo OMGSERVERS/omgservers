@@ -6,7 +6,7 @@ public interface BootstrapService {
 
     Uni<Void> bootstrapDatabaseSchema();
 
-    Uni<Void> bootstrapServiceIndex();
+    Uni<Void> bootstrapServerIndex();
 
     Uni<Void> bootstrapServiceRoot();
 

@@ -7,7 +7,7 @@ import com.omgservers.service.module.system.impl.service.bootstrapService.impl.m
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob.BootstrapRelayJobMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchedulerJob.BootstrapSchedulerJobMethod;
-import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceIndex.BootstrapServiceIndexMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServerIndex.BootstrapServerIndexMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServiceRoot.BootstrapServiceRootMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSupportUser.BootstrapSupportUserMethod;
 import io.smallrye.mutiny.Uni;
@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 class BootstrapServiceImpl implements BootstrapService {
 
     final BootstrapDatabaseSchemaMethod bootstrapDatabaseSchemaMethod;
-    final BootstrapServiceIndexMethod bootstrapServiceIndexMethod;
     final BootstrapSchedulerJobMethod bootstrapSchedulerJobMethod;
+    final BootstrapServerIndexMethod bootstrapServerIndexMethod;
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
     final BootstrapSupportUserMethod bootstrapSupportUserMethod;
     final BootstrapServiceRootMethod bootstrapServiceRootMethod;
@@ -37,8 +37,8 @@ class BootstrapServiceImpl implements BootstrapService {
     }
 
     @Override
-    public Uni<Void> bootstrapServiceIndex() {
-        return bootstrapServiceIndexMethod.bootstrapServiceIndex();
+    public Uni<Void> bootstrapServerIndex() {
+        return bootstrapServerIndexMethod.bootstrapServerIndex();
     }
 
     @Override
