@@ -70,7 +70,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
                     return getRuntime(runtimeId)
                             .flatMap(runtime -> {
-                                final var idempotencyKey = event.getIdempotencyKey();
+                                final var idempotencyKey = event.getId().toString();
                                 return syncRuntimeAssignmentMessage(runtime, clientId, idempotencyKey)
                                         .flatMap(created -> handlePreviousClientRuntimeRefs(clientRuntimeRef));
                             });

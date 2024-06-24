@@ -60,7 +60,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                             matchmaker.getTenantId(),
                             matchmaker.getVersionId());
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncVersionMatchmakerRef(matchmaker, idempotencyKey)
                             .flatMap(created -> syncMatchmakerJob(matchmakerId, idempotencyKey));

@@ -50,7 +50,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(user -> {
                     log.info("User was created, id={}, role={}", userId, user.getRole());
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
                     return switch (user.getRole()) {
                         case ADMIN -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.ADMIN);
                         case SUPPORT -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.SUPPORT);

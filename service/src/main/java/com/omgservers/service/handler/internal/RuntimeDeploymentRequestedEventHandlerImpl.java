@@ -86,7 +86,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                     .flatMap(imageRef -> {
                                         final var userId = runtime.getUserId();
                                         final var password = generateSecureStringOperation.generateSecureString();
-                                        final var idempotencyKey = event.getIdempotencyKey();
+                                        final var idempotencyKey = event.getId().toString();
                                         final var imageId = imageRef.getImageId();
                                         return createUser(userId, password, idempotencyKey)
                                                 .flatMap(user -> syncPoolRequest(runtime, user, password, imageId));

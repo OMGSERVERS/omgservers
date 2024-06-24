@@ -54,7 +54,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(pool -> {
                     log.info("Pool was created, pool={}", poolId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncPoolJob(poolId, idempotencyKey);
                 })

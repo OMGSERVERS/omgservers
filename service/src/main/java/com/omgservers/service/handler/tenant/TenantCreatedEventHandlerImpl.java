@@ -55,7 +55,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenant -> {
                     log.info("Tenant was created, tenant={}", tenantId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncRootEntityRef(tenantId, idempotencyKey)
                             .flatMap(created -> syncTenantJob(tenantId, idempotencyKey));

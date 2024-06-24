@@ -58,7 +58,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                             version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
                             version.getBase64Archive().getBytes(StandardCharsets.UTF_8).length);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     // TODO: request building only if there is source code else request deployment
                     return requestVersionBuilding(tenantId, versionId, idempotencyKey);

@@ -62,7 +62,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
         final var versionId = body.getVersionId();
         final var checkingInterval = body.getCheckingInterval();
 
-        final var idempotencyKey = event.getIdempotencyKey();
+        final var idempotencyKey = event.getId().toString();
 
         return viewVersionJenkinsRequests(tenantId, versionId)
                 .flatMap(versionJenkinsRequests -> {

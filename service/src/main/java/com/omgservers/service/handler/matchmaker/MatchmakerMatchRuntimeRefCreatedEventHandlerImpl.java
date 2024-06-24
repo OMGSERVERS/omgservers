@@ -50,7 +50,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                     log.info("Matchmaker match runtime ref was created, matchmakerId={}, matchId={}, runtimeId={} ",
                             matchmakerId, matchId, runtimeId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
                     return syncPrepareMatchMatchmakerCommand(matchmakerId, matchId, idempotencyKey)
                             .replaceWithVoid();
                 });

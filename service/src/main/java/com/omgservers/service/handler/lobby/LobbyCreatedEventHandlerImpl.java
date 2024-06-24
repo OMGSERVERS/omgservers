@@ -58,7 +58,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(lobby -> {
                     log.info("Lobby was created, id={}", lobbyId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncRuntime(lobby, idempotencyKey)
                             .flatMap(created -> syncVersionLobbyRef(lobby, idempotencyKey));

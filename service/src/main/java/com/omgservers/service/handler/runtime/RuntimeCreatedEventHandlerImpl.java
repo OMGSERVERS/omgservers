@@ -83,7 +83,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
                     return syncRuntimeRef(runtime, idempotencyKey)
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))
                             .flatMap(created -> syncRuntimeJob(runtimeId, idempotencyKey));

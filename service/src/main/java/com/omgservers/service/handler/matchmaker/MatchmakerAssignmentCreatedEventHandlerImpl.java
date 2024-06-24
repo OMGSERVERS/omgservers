@@ -51,7 +51,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
                     log.info("Matchmaker assignment was created, matchmakerAssignment={}/{}, clientId={}",
                             matchmakerId, id, clientId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
                     return syncClientMatchmakerRef(clientId, matchmakerId, idempotencyKey);
                 })
                 .replaceWithVoid();

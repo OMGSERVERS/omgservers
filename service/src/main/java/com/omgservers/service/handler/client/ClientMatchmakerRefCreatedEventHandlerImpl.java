@@ -52,7 +52,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                     log.info("Client matchmaker ref was created, clientMatchmaker={}/{}, matchmakerId={}",
                             clientId, id, matchmakerId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncMatchmakerAssignmentMessage(clientId, matchmakerId, idempotencyKey);
                 })

@@ -62,7 +62,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .flatMap(version -> {
                     log.info("Version building was requested, version={}/{}", tenantId, versionId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     // TODO: detect job qualifier based on version
                     return buildLuaJitWorker(version, idempotencyKey)

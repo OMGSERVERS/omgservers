@@ -60,7 +60,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                             .flatMap(match -> {
                                 final var runtimeId = match.getRuntimeId();
 
-                                final var idempotencyKey = event.getIdempotencyKey();
+                                final var idempotencyKey = event.getId().toString();
                                 return syncRuntimeAssignment(runtimeId, clientId, matchClient, idempotencyKey);
                             });
                 })

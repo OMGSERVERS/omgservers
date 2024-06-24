@@ -52,7 +52,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
         return selectVersionMatchmakerRef(tenantId, versionId)
                 .flatMap(versionMatchmakerRef -> {
                     final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                    final var idempotencyKey = event.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     return syncMatchmakerAssignment(matchmakerId, clientId, idempotencyKey);
                 })
