@@ -11,10 +11,10 @@ import com.omgservers.service.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.deleteRuntimeCommandsByIds.DeleteRuntimeCommandByIdsOperation;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.ExecuteOutgoingCommandOperation;
-import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtime.updateRuntimeLastActivity.UpdateRuntimeLastActivityOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.deleteRuntimeCommandsByIds.DeleteRuntimeCommandByIdsOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -94,7 +94,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                     runtimeId,
                                     outgoingCommand,
                                     t.getClass().getSimpleName(),
-                                    t.getMessage());
+                                    t.getMessage(),
+                                    t);
                             return Uni.createFrom().voidItem();
                         }))
                 .collect().asList()

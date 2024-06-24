@@ -6,7 +6,9 @@ import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyMo
 import com.omgservers.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.UpdateRuntimeCommandBodyModel;
+import lombok.Getter;
 
+@Getter
 public enum RuntimeCommandQualifierEnum {
     INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
     UPDATE_RUNTIME(UpdateRuntimeCommandBodyModel.class),
@@ -19,9 +21,5 @@ public enum RuntimeCommandQualifierEnum {
 
     RuntimeCommandQualifierEnum(Class<? extends RuntimeCommandBodyModel> bodyClass) {
         this.bodyClass = bodyClass;
-    }
-
-    public Class<? extends RuntimeCommandBodyModel> getBodyClass() {
-        return bodyClass;
     }
 }

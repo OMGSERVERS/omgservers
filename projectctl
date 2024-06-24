@@ -331,7 +331,7 @@ elif [ "$1" = "development" ]; then
   elif [ "$2" = "reset" ]; then
     development_reset
   elif [ "$2" = "logs" ]; then
-    development_logs "${@:4}"
+    development_logs "${@:3}"
   elif [ "$2" = "ctl" ]; then
     development_ctl
   elif [ "$2" = "test" ]; then
@@ -347,7 +347,7 @@ elif [ "$1" = "integration" ]; then
   elif [ "$2" = "reset" ]; then
     integration_reset
   elif [ "$2" = "logs" ]; then
-    integration_logs "${@:4}"
+    integration_logs "${@:3}"
   elif [ "$2" = "test" ]; then
     integration_test
   else
@@ -361,7 +361,7 @@ elif [ "$1" = "standalone" ]; then
   elif [ "$2" = "reset" ]; then
     standalone_reset
   elif [ "$2" = "logs" ]; then
-    standalone_logs "${@:4}"
+    standalone_logs "${@:3}"
   elif [ "$2" = "test" ]; then
     standalone_test
   else
