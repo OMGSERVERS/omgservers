@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,7 @@ public class ServerWelcomeMessageBodyModel extends MessageBodyModel {
 
     @NotNull
     Long versionId;
+
+    @NotNull
+    Instant versionCreated;
 }

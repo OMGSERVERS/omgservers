@@ -7,6 +7,8 @@ import com.omgservers.model.dto.client.SyncClientMessageRequest;
 import com.omgservers.model.dto.client.SyncClientMessageResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
+import com.omgservers.model.dto.tenant.GetVersionRequest;
+import com.omgservers.model.dto.tenant.GetVersionResponse;
 import com.omgservers.model.event.EventModel;
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
@@ -14,12 +16,14 @@ import com.omgservers.model.event.body.internal.MatchmakerAssignmentRequestedEve
 import com.omgservers.model.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.model.version.VersionModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.system.SystemModule;
+import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -33,6 +37,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     final ClientModule clientModule;
     final SystemModule systemModule;
+    final TenantModule tenantModule;
 
     final ClientMessageModelFactory clientMessageModelFactory;
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
@@ -56,14 +61,16 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                     final var tenantId = client.getTenantId();
                     final var versionId = client.getVersionId();
 
-                    log.info("Client was created, id={}, version={}/{}",
-                            clientId, tenantId, versionId);
+                    return getVersion(tenantId, versionId)
+                            .flatMap(version -> {
+                                log.info("Client was created, id={}, version={}/{}",
+                                        clientId, tenantId, versionId);
 
-                    final var idempotencyKey = event.getIdempotencyKey();
-
-                    return syncWelcomeMessage(client, idempotencyKey)
-                            .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
-                            .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));
+                                final var idempotencyKey = event.getId().toString();
+                                return syncWelcomeMessage(client, version, idempotencyKey)
+                                        .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
+                                        .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -74,11 +81,20 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Boolean> syncWelcomeMessage(final ClientModel client, final String idempotencyKey) {
+    Uni<VersionModel> getVersion(final Long tenantId, final Long id) {
+        final var request = new GetVersionRequest(tenantId, id);
+        return tenantModule.getVersionService().getVersion(request)
+                .map(GetVersionResponse::getVersion);
+    }
+
+    Uni<Boolean> syncWelcomeMessage(final ClientModel client,
+                                    final VersionModel version,
+                                    final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
         final var versionId = client.getVersionId();
-        final var messageBody = new ServerWelcomeMessageBodyModel(tenantId, versionId);
+        final var created = version.getCreated();
+        final var messageBody = new ServerWelcomeMessageBodyModel(tenantId, versionId, created);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
                 messageBody,

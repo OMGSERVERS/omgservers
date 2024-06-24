@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.time.Instant;
 
 @Slf4j
 @QuarkusTest
@@ -23,7 +24,7 @@ class MessageModelTest extends Assertions {
         final var qualifier = MessageQualifierEnum.SERVER_WELCOME_MESSAGE;
         final var tenantId = 2000L;
         final var versionId = 3000L;
-        final var body = new ServerWelcomeMessageBodyModel(tenantId, versionId);
+        final var body = new ServerWelcomeMessageBodyModel(tenantId, versionId, Instant.now());
 
         final var messageModel = new MessageModel(id,
                 qualifier,

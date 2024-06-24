@@ -29,7 +29,7 @@ class ClientMessageModelTest extends Assertions {
         final var qualifier = MessageQualifierEnum.SERVER_WELCOME_MESSAGE;
         final var tenantId = 3000L;
         final var versionId = 4000L;
-        final var body = new ServerWelcomeMessageBodyModel(tenantId, versionId);
+        final var body = new ServerWelcomeMessageBodyModel(tenantId, versionId, created);
         final var deleted = false;
 
         final var clientMessageModel = new ClientMessageModel(id,
