@@ -2,10 +2,14 @@ package com.omgservers.service.entrypoint.support.impl.service.webService.impl.s
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.CreateTokenSupportRequest;
 import com.omgservers.model.dto.support.CreateTokenSupportResponse;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import com.omgservers.model.user.UserRoleEnum;
@@ -48,5 +52,17 @@ public class SupportApiImpl implements SupportApi {
     @Override
     public Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull final CreateDeveloperSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
+    }
+
+    @Override
+    public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+            @NotNull final CreateTenantPermissionsSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantPermissions);
+    }
+
+    @Override
+    public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+            @NotNull final DeleteTenantPermissionsSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermissions);
     }
 }

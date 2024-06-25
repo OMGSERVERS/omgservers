@@ -1,5 +1,6 @@
 package com.omgservers.tester.operation.bootstrapTestVersion;
 
+import com.omgservers.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.model.version.VersionConfigModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Slf4j
 @ApplicationScoped
@@ -42,6 +44,11 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var createDeveloperAdminResponse = supportApiTester.createDeveloper(supportToken, tenantId);
         final var developerUserId = createDeveloperAdminResponse.getUserId();
         final var developerPassword = createDeveloperAdminResponse.getPassword();
+
+        supportApiTester.createTenantPermissions(supportToken,
+                tenantId,
+                developerUserId,
+                Set.of(TenantPermissionEnum.CREATE_PROJECT, TenantPermissionEnum.GET_DASHBOARD));
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
         final var createProjectDeveloperResponse = developerApiTester.createProject(developerToken, tenantId);

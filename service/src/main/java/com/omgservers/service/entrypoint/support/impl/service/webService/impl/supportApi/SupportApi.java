@@ -2,10 +2,14 @@ package com.omgservers.service.entrypoint.support.impl.service.webService.impl.s
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.CreateTokenSupportRequest;
 import com.omgservers.model.dto.support.CreateTokenSupportResponse;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
@@ -37,4 +41,13 @@ public interface SupportApi {
     @Path("/create-developer")
     Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull CreateDeveloperSupportRequest request);
 
+    @PUT
+    @Path("/create-tenant-permissions")
+    Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+            @NotNull CreateTenantPermissionsSupportRequest request);
+
+    @PUT
+    @Path("/delete-tenant-permissions")
+    Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+            @NotNull DeleteTenantPermissionsSupportRequest request);
 }

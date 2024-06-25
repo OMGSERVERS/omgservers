@@ -2,17 +2,23 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.CreateTokenSupportRequest;
 import com.omgservers.model.dto.support.CreateTokenSupportResponse;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createDeveloper.CreateDeveloperMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenant.CreateTenantMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenantPermissions.CreateTenantPermissionsMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenant.DeleteTenantMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenantPermissions.DeleteTenantPermissionsMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -25,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportServiceImpl implements SupportService {
 
+    final CreateTenantPermissionsMethod createTenantPermissionsMethod;
+    final DeleteTenantPermissionsMethod deleteTenantPermissionsMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
@@ -48,5 +56,17 @@ class SupportServiceImpl implements SupportService {
     @Override
     public Uni<CreateDeveloperSupportResponse> createDeveloper(@Valid final CreateDeveloperSupportRequest request) {
         return createDeveloperMethod.createDeveloper(request);
+    }
+
+    @Override
+    public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+            CreateTenantPermissionsSupportRequest request) {
+        return createTenantPermissionsMethod.createTenantPermissions(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+            DeleteTenantPermissionsSupportRequest request) {
+        return deleteTenantPermissionsMethod.deleteTenantPermissions(request);
     }
 }

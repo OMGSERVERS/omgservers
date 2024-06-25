@@ -2,14 +2,7 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
 import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.model.user.UserModel;
 import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
@@ -42,44 +35,16 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     public Uni<CreateDeveloperSupportResponse> createDeveloper(final CreateDeveloperSupportRequest request) {
         log.debug("Create developer, request={}", request);
 
-        final var tenantId = request.getTenantId();
         final var password = generateSecureStringOperation.generateSecureString();
-        return getTenant(tenantId)
-                .flatMap(tenant -> createUser(password))
-                .call(user -> syncCreateProjectPermission(tenantId, user.getId()))
-                .call(user -> syncGetDashboardPermission(tenantId, user.getId()))
+        return createUser(password)
                 .map(user -> new CreateDeveloperSupportResponse(user.getId(), password));
     }
 
-    Uni<TenantModel> getTenant(Long tenantId) {
-        final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getTenantService().getTenant(getTenantRequest)
-                .map(GetTenantResponse::getTenant);
-    }
-
-    Uni<UserModel> createUser(String password) {
+    Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
         final var syncUserShardedRequest = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(syncUserShardedRequest)
                 .replaceWith(user);
-    }
-
-    Uni<Boolean> syncCreateProjectPermission(Long tenantId, Long userId) {
-        final var tenantPermission = tenantPermissionModelFactory
-                .create(tenantId, userId, TenantPermissionEnum.CREATE_PROJECT);
-        return syncTenantPermission(tenantPermission);
-    }
-
-    Uni<Boolean> syncGetDashboardPermission(Long tenantId, Long userId) {
-        final var tenantPermission = tenantPermissionModelFactory
-                .create(tenantId, userId, TenantPermissionEnum.GET_DASHBOARD);
-        return syncTenantPermission(tenantPermission);
-    }
-
-    Uni<Boolean> syncTenantPermission(TenantPermissionModel tenantPermission) {
-        final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
-        return tenantModule.getTenantService().syncTenantPermission(syncTenantPermissionServiceRequest)
-                .map(SyncTenantPermissionResponse::getCreated);
     }
 }

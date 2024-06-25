@@ -12,7 +12,7 @@ public class InvalidFormatExceptionMapper implements ExceptionMapper<InvalidForm
 
     @Override
     public Response toResponse(InvalidFormatException e) {
-        log.debug("Uncaught exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
+        log.warn("Uncaught exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
 
         final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.REQUEST_WRONG);
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode())

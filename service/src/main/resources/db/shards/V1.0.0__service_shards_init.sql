@@ -158,13 +158,14 @@ create table if not exists tab_tenant (
 
 create table if not exists tab_tenant_permission (
     id bigint primary key,
-    idempotency_key text not null unique,
+    idempotency_key text not null,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null
+    deleted boolean not null,
+    unique(idempotency_key)
 );
 
 create table if not exists tab_tenant_project (
@@ -178,14 +179,15 @@ create table if not exists tab_tenant_project (
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
-    idempotency_key text not null unique,
+    idempotency_key text not null,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null
+    deleted boolean not null,
+    unique(idempotency_key)
 );
 
 create table if not exists tab_tenant_stage (
@@ -292,13 +294,16 @@ create table if not exists tab_tenant_version_matchmaker_ref (
 );
 
 create index if not exists idx_tenant_permission_tenant_id on tab_tenant_permission(tenant_id);
+create unique index idx_tenant_permission_uniqueness on tab_tenant_permission(tenant_id, user_id, permission) where deleted = false;
 create index if not exists idx_tenant_project_tenant_id on tab_tenant_project(tenant_id);
 create index if not exists idx_tenant_project_permission_tenant_id on tab_tenant_project_permission(tenant_id);
 create index if not exists idx_tenant_project_permission_project_id on tab_tenant_project_permission(project_id);
+create unique index idx_tenant_project_permission_uniqueness on tab_tenant_project_permission(project_id, user_id, permission) where deleted = false;
 create index if not exists idx_tenant_stage_tenant_id on tab_tenant_stage(tenant_id);
 create index if not exists idx_tenant_stage_project_id on tab_tenant_stage(project_id);
 create index if not exists idx_tenant_stage_permission_tenant_id on tab_tenant_stage_permission(tenant_id);
 create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_stage_permission(stage_id);
+create unique index idx_tenant_stage_permission_uniqueness on tab_tenant_stage_permission(stage_id, user_id, permission) where deleted = false;
 create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
 create index if not exists idx_tenant_version_stage_id on tab_tenant_version(stage_id);
 create index if not exists idx_tenant_version_jenkins_request_tenant_id on tab_tenant_version_jenkins_request(tenant_id);
@@ -494,6 +499,7 @@ create table if not exists tab_runtime_pool_server_container_ref (
 );
 
 create index if not exists idx_runtime_permission_runtime_id on tab_runtime_permission(runtime_id);
+create unique index idx_runtime_permission_uniqueness on tab_runtime_permission(runtime_id, user_id, permission) where deleted = false;
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_assignment_runtime_id on tab_runtime_assignment(runtime_id);
 create index if not exists idx_runtime_pool_server_container_ref_runtime_id on tab_runtime_pool_server_container_ref(runtime_id);

@@ -2,10 +2,14 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService;
 
 import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
 import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.CreateTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.CreateTenantSupportRequest;
 import com.omgservers.model.dto.support.CreateTenantSupportResponse;
 import com.omgservers.model.dto.support.CreateTokenSupportRequest;
 import com.omgservers.model.dto.support.CreateTokenSupportResponse;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportRequest;
+import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
 import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
 import io.smallrye.mutiny.Uni;
@@ -20,4 +24,10 @@ public interface SupportService {
     Uni<DeleteTenantSupportResponse> deleteTenant(@Valid DeleteTenantSupportRequest request);
 
     Uni<CreateDeveloperSupportResponse> createDeveloper(@Valid CreateDeveloperSupportRequest request);
+
+    Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+            @Valid CreateTenantPermissionsSupportRequest request);
+
+    Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+            @Valid DeleteTenantPermissionsSupportRequest request);
 }

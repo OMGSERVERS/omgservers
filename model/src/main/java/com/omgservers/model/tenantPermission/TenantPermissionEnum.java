@@ -8,7 +8,7 @@ public enum TenantPermissionEnum {
     CREATE_PROJECT,
 
     /**
-     * Permission allows user to get dashboard regarding tenant.
+     * Permission allows user to get tenant dashboard.
      */
     GET_DASHBOARD,
 }

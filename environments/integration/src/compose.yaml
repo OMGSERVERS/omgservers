@@ -10,6 +10,21 @@ services:
     networks:
       - omgservers
     command: "-c /etc/envoy/integration.yaml"
+  ctl:
+    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
+    container_name: "ctl"
+    restart: unless-stopped
+    environment:
+      - DELAY=16
+      - EXTERNAL_URL=http://gateway:8080
+      - INTERNAL_URL=http://gateway:8080
+      - ADMIN_USER_ID=223221505901723648
+      - ADMIN_PASSWORD=admin
+      - SUPPORT_USER_ID=231928170708729857
+      - SUPPORT_PASSWORD=support
+      - BACKGROUND=true
+    networks:
+      - omgservers
   # backend
   docker:
     image: "omgservers/docker:${OMGSERVERS_VERSION}"
