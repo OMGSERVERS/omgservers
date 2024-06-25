@@ -54,20 +54,46 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
     echo " omgserversctl support deleteTenant <tenant_id> => DELETED"
   fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
+    echo " omgserversctl support createProject <tenant_id> => PROJECT_ID, STAGE_ID, STAGE_SECRET"
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
+    echo " omgserversctl support deleteProject <tenant_id> <project_id> => DELETED"
+  fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createDeveloper" ]; then
     echo " omgserversctl support createDeveloper => DEVELOPER_USER_ID, DEVELOPER_PASSWORD"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
     echo " omgserversctl support createTenantPermission <tenant_id> <user_id> <tenant_permission>"
     echo "   tenant_permission:"
-    echo "     - CREATE_PROJECT"
+    echo "     - PROJECT_MANAGEMENT"
     echo "     - GET_DASHBOARD"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
     echo " omgserversctl support deleteTenantPermission <tenant_id> <user_id> <tenant_permission>"
     echo "   tenant_permission:"
-    echo "     - CREATE_PROJECT"
+    echo "     - PROJECT_MANAGEMENT"
     echo "     - GET_DASHBOARD"
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
+    echo " omgserversctl support createProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
+    echo "   project_permission:"
+    echo "     - STAGE_MANAGEMENT"
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
+    echo " omgserversctl support deleteProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
+    echo "   project_permission:"
+    echo "     - STAGE_MANAGEMENT"
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
+    echo " omgserversctl support createStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
+    echo "   stage_permission:"
+    echo "     - VERSION_MANAGEMENT"
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
+    echo " omgserversctl support deleteStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
+    echo "   stage_permission:"
+    echo "     - VERSION_MANAGEMENT"
   fi
   # Developer
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer useCredentials" ]; then
@@ -234,7 +260,6 @@ admin_createToken() {
   echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgservers/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
-
 }
 
 # SUPPORT
@@ -421,6 +446,125 @@ support_deleteTenant() {
   fi
 }
 
+support_createProject() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+
+  if [ -z "${TENANT_ID}" ]; then
+    help "support createProject"
+    exit 1
+  fi
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-create-project_${TENANT_ID}.json)
+
+  cat ~/.omgservers/temp/support-create-project_${TENANT_ID}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  PROJECT_ID=$(cat ~/.omgservers/temp/support-create-project_${TENANT_ID}.json | jq -r .project_id)
+  if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
+    echo "ERROR: PROJECT_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgservers/environment
+
+  STAGE_ID=$(cat ~/.omgservers/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_id)
+  if [ -z "${STAGE_ID}" -o "${STAGE_ID}" == "null" ]; then
+    echo "ERROR: STAGE_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_STAGE_ID=${STAGE_ID}" >> ~/.omgservers/environment
+
+  STAGE_SECRET=$(cat ~/.omgservers/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_secret)
+  if [ -z "${STAGE_SECRET}" -o "${STAGE_SECRET}" == "null" ]; then
+    echo "ERROR: STAGE_SECRET was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgservers/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
+}
+
+support_deleteProject() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  PROJECT_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" ]; then
+    help "support deleteProject"
+    exit 1
+  fi
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"project_id\": ${PROJECT_ID} }"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json)
+
+  cat ~/.omgservers/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ~/.omgservers/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ~/.omgservers/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT_ID=${TENANT_ID}, PROJECT_ID=${PROJECT_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT_ID=${TENANT_ID}, PROJECT_ID=${PROJECT_ID}"
+  fi
+}
+
 support_createDeveloper() {
   internal_useEnvironment
 
@@ -571,6 +715,214 @@ support_deleteTenantPermission() {
   fi
 
   DELETED_PERMISSION=$(cat ~/.omgservers/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+}
+
+support_createProjectPermission() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  PROJECT_ID=$2
+  USER_ID=$3
+  PROJECT_PERMISSION=$4
+
+  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" -o -z "${USER_ID}" -o -z "${PROJECT_PERMISSION}" ]; then
+    help "support createProjectPermission"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, PROJECT_PERMISSION=${PROJECT_PERMISSION}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${PROJECT_PERMISSION}\"]}"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+
+  cat ~/.omgservers/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  CREATED_PERMISSION=$(cat ~/.omgservers/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .created_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+}
+
+support_deleteProjectPermission() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  PROJECT_ID=$2
+  USER_ID=$3
+  PROJECT_PERMISSION=$4
+
+  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" -o -z "${USER_ID}" -o -z "${PROJECT_PERMISSION}" ]; then
+    help "support createProjectPermission"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, PROJECT_PERMISSION=${PROJECT_PERMISSION}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${PROJECT_PERMISSION}\"]}"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+
+  cat ~/.omgservers/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  DELETED_PERMISSION=$(cat ~/.omgservers/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+}
+
+support_createStagePermission() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  STAGE_ID=$2
+  USER_ID=$3
+  STAGE_PERMISSION=$4
+
+  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${USER_ID}" -o -z "${STAGE_PERMISSION}" ]; then
+    help "support createStagePermission"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, STAGE_PERMISSION=${STAGE_PERMISSION}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${STAGE_PERMISSION}\"]}"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+
+  cat ~/.omgservers/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  CREATED_PERMISSION=$(cat ~/.omgservers/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .created_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+}
+
+support_deleteStagePermission() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  STAGE_ID=$2
+  USER_ID=$3
+  STAGE_PERMISSION=$4
+
+  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${USER_ID}" -o -z "${STAGE_PERMISSION}" ]; then
+    help "support deleteStagePermission"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, STAGE_PERMISSION=${STAGE_PERMISSION}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${STAGE_PERMISSION}\"]}"
+
+  echo >> ~/.omgservers/logs
+  echo $ENDPOINT >> ~/.omgservers/logs
+  echo $REQUEST >> ~/.omgservers/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ~/.omgservers/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+
+  cat ~/.omgservers/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgservers/logs
+  echo >> ~/.omgservers/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ~/.omgservers/logs
+    exit 1
+  fi
+
+  DELETED_PERMISSION=$(cat ~/.omgservers/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -927,12 +1279,24 @@ elif [ "$1" = "support" ]; then
     support_createTenant
   elif [ "$2" = "deleteTenant" ]; then
     support_deleteTenant $3
+  elif [ "$2" = "createProject" ]; then
+    support_createProject $3
+  elif [ "$2" = "deleteProject" ]; then
+    support_deleteProject $3 $4
   elif [ "$2" = "createDeveloper" ]; then
     support_createDeveloper $3
   elif [ "$2" = "createTenantPermission" ]; then
     support_createTenantPermission $3 $4 $5
   elif [ "$2" = "deleteTenantPermission" ]; then
     support_deleteTenantPermission $3 $4 $5
+  elif [ "$2" = "createProjectPermission" ]; then
+    support_createProjectPermission $3 $4 $5 $6
+  elif [ "$2" = "deleteProjectPermission" ]; then
+    support_deleteProjectPermission $3 $4 $5 $6
+  elif [ "$2" = "createStagePermission" ]; then
+    support_createStagePermission $3 $4 $5 $6
+  elif [ "$2" = "deleteStagePermission" ]; then
+    support_deleteStagePermission $3 $4 $5 $6
   else
     help "support"
   fi

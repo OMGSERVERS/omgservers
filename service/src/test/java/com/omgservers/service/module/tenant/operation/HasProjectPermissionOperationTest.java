@@ -53,7 +53,7 @@ class HasProjectPermissionOperationTest extends Assertions {
         final var project = projectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
         final var permission = projectPermissionModelFactory.create(tenant.getId(), project.getId(), userId,
-                ProjectPermissionEnum.CREATE_STAGE);
+                ProjectPermissionEnum.STAGE_MANAGEMENT);
         upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
 
         assertTrue(hasProjectPermissionOperation.hasProjectPermission(shard,
@@ -71,7 +71,7 @@ class HasProjectPermissionOperationTest extends Assertions {
                 tenantId(),
                 projectId(),
                 userId(),
-                ProjectPermissionEnum.CREATE_STAGE));
+                ProjectPermissionEnum.STAGE_MANAGEMENT));
     }
 
     Long userId() {

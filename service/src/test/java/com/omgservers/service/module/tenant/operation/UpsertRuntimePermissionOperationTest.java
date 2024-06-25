@@ -47,7 +47,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
 
         final var permission = tenantPermissionModelFactory.create(tenant.getId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT);
+                TenantPermissionEnum.PROJECT_MANAGEMENT);
 
         final var changeContext = upsertTenantPermissionOperation.upsertTenantPermission(shard, permission);
         assertTrue(changeContext.getResult());
@@ -60,7 +60,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var permission = tenantPermissionModelFactory.create(tenant.getId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT);
+                TenantPermissionEnum.PROJECT_MANAGEMENT);
         upsertTenantPermissionOperation.upsertTenantPermission(shard, permission);
 
         final var changeContext = upsertTenantPermissionOperation.upsertTenantPermission(shard, permission);
@@ -73,7 +73,7 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
 
         final var permission = tenantPermissionModelFactory.create(tenantId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT);
+                TenantPermissionEnum.PROJECT_MANAGEMENT);
         assertThrows(ServerSideBadRequestException.class, () -> upsertTenantPermissionOperation
                 .upsertTenantPermission(shard, permission));
     }
@@ -85,12 +85,12 @@ class UpsertRuntimePermissionOperationTest extends Assertions {
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var permission1 = tenantPermissionModelFactory.create(tenant.getId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT);
+                TenantPermissionEnum.PROJECT_MANAGEMENT);
         upsertTenantPermissionOperation.upsertTenantPermission(shard, permission1);
 
         final var permission2 = tenantPermissionModelFactory.create(tenant.getId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT,
+                TenantPermissionEnum.PROJECT_MANAGEMENT,
                 permission1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertTenantPermissionOperation.upsertTenantPermission(shard, permission2));

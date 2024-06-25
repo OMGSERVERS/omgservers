@@ -46,7 +46,7 @@ class HasRuntimePermissionOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var permission =
-                tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionEnum.CREATE_PROJECT);
+                tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionEnum.PROJECT_MANAGEMENT);
         upsertTenantPermissionOperation.upsertTenantPermission(shard, permission);
 
         assertTrue(hasTenantPermissionOperation.hasTenantPermission(shard,
@@ -62,7 +62,7 @@ class HasRuntimePermissionOperationTest extends Assertions {
         assertFalse(hasTenantPermissionOperation.hasTenantPermission(shard,
                 tenantId(),
                 userId(),
-                TenantPermissionEnum.CREATE_PROJECT));
+                TenantPermissionEnum.PROJECT_MANAGEMENT));
     }
 
     Long userId() {

@@ -67,7 +67,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     }
 
     Uni<Void> checkCreateProjectPermission(final Long tenantId, final Long userId) {
-        final var permission = TenantPermissionEnum.CREATE_PROJECT;
+        final var permission = TenantPermissionEnum.PROJECT_MANAGEMENT;
         final var hasTenantPermissionServiceRequest = new HasTenantPermissionRequest(tenantId, userId, permission);
         return tenantModule.getTenantService().hasTenantPermission(hasTenantPermissionServiceRequest)
                 .map(HasTenantPermissionResponse::getResult)
@@ -90,7 +90,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     }
 
     Uni<ProjectPermissionModel> syncProjectPermission(final Long tenantId, final Long projectId, final Long userId) {
-        final var permission = ProjectPermissionEnum.CREATE_STAGE;
+        final var permission = ProjectPermissionEnum.STAGE_MANAGEMENT;
         final var projectPermission = projectPermissionModelFactory.create(tenantId, projectId, userId, permission);
         final var request = new SyncProjectPermissionRequest(projectPermission);
         return tenantModule.getProjectService().syncProjectPermission(request)

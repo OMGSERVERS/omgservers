@@ -3,9 +3,9 @@ package com.omgservers.model.tenantPermission;
 public enum TenantPermissionEnum {
 
     /**
-     * Permission allows user to create new projects within tenant.
+     * Permission allows user to manage tenant projects.
      */
-    CREATE_PROJECT,
+    PROJECT_MANAGEMENT,
 
     /**
      * Permission allows user to get tenant dashboard.

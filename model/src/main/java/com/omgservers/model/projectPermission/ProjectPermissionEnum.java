@@ -3,7 +3,7 @@ package com.omgservers.model.projectPermission;
 public enum ProjectPermissionEnum {
 
     /**
-     * Permission allows user to create new stages within the project.
+     * Permission allows user to manage project stages.
      */
-    CREATE_STAGE,
+    STAGE_MANAGEMENT,
 }

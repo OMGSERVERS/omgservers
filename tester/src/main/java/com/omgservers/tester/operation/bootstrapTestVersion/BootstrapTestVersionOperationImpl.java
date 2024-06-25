@@ -48,7 +48,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         supportApiTester.createTenantPermissions(supportToken,
                 tenantId,
                 developerUserId,
-                Set.of(TenantPermissionEnum.CREATE_PROJECT, TenantPermissionEnum.GET_DASHBOARD));
+                Set.of(TenantPermissionEnum.PROJECT_MANAGEMENT, TenantPermissionEnum.GET_DASHBOARD));
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
         final var createProjectDeveloperResponse = developerApiTester.createProject(developerToken, tenantId);
