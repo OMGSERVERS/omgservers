@@ -35,16 +35,16 @@ class UpsertIndexOperationImpl implements UpsertIndexOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, 0,
                 """
-                        insert into system.tab_index(id, created, modified, name, config, deleted)
+                        insert into system.tab_index(id, idempotency_key, created, modified, config, deleted)
                         values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
                 List.of(
                         index.getId(),
+                        index.getIdempotencyKey(),
                         index.getCreated().atOffset(ZoneOffset.UTC),
                         index.getModified().atOffset(ZoneOffset.UTC),
-                        index.getName(),
                         getConfigString(index),
                         index.getDeleted()
                 ),

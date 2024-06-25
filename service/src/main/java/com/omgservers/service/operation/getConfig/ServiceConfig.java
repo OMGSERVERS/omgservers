@@ -27,6 +27,8 @@ public interface ServiceConfig {
     BuilderConfig builder();
 
     interface DefaultsConfig {
+        long indexId();
+
         long rootId();
 
         long poolId();
@@ -43,8 +45,6 @@ public interface ServiceConfig {
     }
 
     interface IndexConfig {
-        String name();
-
         int shardCount();
 
         URI serverUri();

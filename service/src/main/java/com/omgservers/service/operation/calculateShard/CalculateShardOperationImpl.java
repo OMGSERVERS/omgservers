@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.calculateShard;
 
-import com.omgservers.model.dto.system.FindIndexRequest;
-import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.shard.ShardModel;
 import com.omgservers.service.module.system.SystemModule;
@@ -33,13 +33,13 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
 
     @Override
     public Uni<ShardModel> calculateShard(List<String> keys) {
-        final var indexName = getConfigOperation.getServiceConfig().index().name();
-        return calculateShard(indexName, keys);
+        final var indexId = getConfigOperation.getServiceConfig().defaults().indexId();
+        return calculateShard(indexId, keys);
     }
 
     @Override
-    public Uni<ShardModel> calculateShard(String indexName, List<String> keys) {
-        return findIndex(indexName)
+    public Uni<ShardModel> calculateShard(Long indexId, List<String> keys) {
+        return getIndex(indexId)
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);
@@ -52,10 +52,10 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                 });
     }
 
-    Uni<IndexModel> findIndex(final String indexName) {
-        final var request = new FindIndexRequest(indexName);
-        return systemModule.getIndexService().findIndex(request)
-                .map(FindIndexResponse::getIndex);
+    Uni<IndexModel> getIndex(final Long indexId) {
+        final var request = new GetIndexRequest(indexId);
+        return systemModule.getIndexService().getIndex(request)
+                .map(GetIndexResponse::getIndex);
     }
 
     @Override

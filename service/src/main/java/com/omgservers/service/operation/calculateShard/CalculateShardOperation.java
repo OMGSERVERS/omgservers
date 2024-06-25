@@ -11,7 +11,7 @@ public interface CalculateShardOperation {
 
     Uni<ShardModel> calculateShard(List<String> keys);
 
-    Uni<ShardModel> calculateShard(String indexName, List<String> keys);
+    Uni<ShardModel> calculateShard(Long indexId, List<String> keys);
 
     Integer calculateShard(Integer indexShardCount, String... keys);
 

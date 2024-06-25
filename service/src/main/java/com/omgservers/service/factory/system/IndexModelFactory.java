@@ -17,15 +17,34 @@ public class IndexModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public IndexModel create(final String name,
+    public IndexModel create(final IndexConfigModel config) {
+        final var id = generateIdOperation.generateId();
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, config, idempotencyKey);
+    }
+
+    public IndexModel create(final IndexConfigModel config,
+                             final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, config, idempotencyKey);
+    }
+
+    public IndexModel create(final Long id,
                              final IndexConfigModel config) {
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, config, idempotencyKey);
+    }
+
+    public IndexModel create(final Long id,
+                             final IndexConfigModel config,
+                             final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
         final var index = new IndexModel();
-        index.setId(generateIdOperation.generateId());
+        index.setId(id);
+        index.setIdempotencyKey(idempotencyKey);
         index.setCreated(now);
         index.setModified(now);
-        index.setName(name);
         index.setConfig(config);
         index.setDeleted(false);
         return index;

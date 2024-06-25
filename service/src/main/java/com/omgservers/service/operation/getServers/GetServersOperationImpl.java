@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.getServers;
 
-import com.omgservers.model.dto.system.FindIndexRequest;
-import com.omgservers.model.dto.system.FindIndexResponse;
+import com.omgservers.model.dto.system.GetIndexRequest;
+import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.model.index.IndexModel;
 import com.omgservers.model.index.IndexServerModel;
 import com.omgservers.service.module.system.SystemModule;
@@ -27,16 +27,16 @@ class GetServersOperationImpl implements GetServersOperation {
 
     @Override
     public Uni<List<URI>> getServers() {
-        final var indexName = getConfigOperation.getServiceConfig().index().name();
-        return findIndex(indexName)
+        final var indexId = getConfigOperation.getServiceConfig().defaults().indexId();
+        return getIndex(indexId)
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerModel::getUri)
                         .toList());
     }
 
-    Uni<IndexModel> findIndex(final String indexName) {
-        final var request = new FindIndexRequest(indexName);
-        return systemModule.getIndexService().findIndex(request)
-                .map(FindIndexResponse::getIndex);
+    Uni<IndexModel> getIndex(final Long indexId) {
+        final var request = new GetIndexRequest(indexId);
+        return systemModule.getIndexService().getIndex(request)
+                .map(GetIndexResponse::getIndex);
     }
 }

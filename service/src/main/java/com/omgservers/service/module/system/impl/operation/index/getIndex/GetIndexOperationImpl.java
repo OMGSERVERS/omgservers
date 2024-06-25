@@ -27,7 +27,7 @@ class GetIndexOperationImpl implements GetIndexOperation {
                 sqlConnection,
                 0,
                 """
-                        select id, created, modified, name, version, config
+                        select id, idempotency_key, created, modified, config, deleted
                         from system.tab_index
                         where id = $1
                         limit 1

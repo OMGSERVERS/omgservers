@@ -22,9 +22,9 @@ public class IndexModelMapper {
     public IndexModel fromRow(final Row row) {
         final var index = new IndexModel();
         index.setId(row.getLong("id"));
+        index.setIdempotencyKey(row.getString("idempotency_key"));
         index.setCreated(row.getOffsetDateTime("created").toInstant());
         index.setModified(row.getOffsetDateTime("modified").toInstant());
-        index.setName(row.getString("name"));
         index.setDeleted(row.getBoolean("deleted"));
         try {
             index.setConfig(objectMapper.readValue(row.getString("config"), IndexConfigModel.class));

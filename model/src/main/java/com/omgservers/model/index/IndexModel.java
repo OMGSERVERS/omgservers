@@ -1,7 +1,7 @@
 package com.omgservers.model.index;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +18,9 @@ public class IndexModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    String idempotencyKey;
+
     @NotNull
     @EqualsAndHashCode.Exclude
     Instant created;
@@ -25,10 +28,6 @@ public class IndexModel {
     @NotNull
     @EqualsAndHashCode.Exclude
     Instant modified;
-
-    @NotNull
-    @Size(max = 64)
-    String name;
 
     @NotNull
     @ToString.Exclude
