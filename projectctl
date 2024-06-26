@@ -58,6 +58,9 @@ internal_help() {
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development logs" ]; then
     echo " projectctl development logs"
   fi
+  if [ -z "$1" -o "$1" = "development" -o "$1" = "development database" ]; then
+    echo " projectctl development database"
+  fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development ctl" ]; then
     echo " projectctl development ctl"
   fi
@@ -205,6 +208,10 @@ development_logs() {
   docker compose -p development logs $@
 }
 
+development_database() {
+  docker compose -p development exec database psql
+}
+
 development_ctl() {
   docker compose -p development exec ctl /bin/bash
 }
@@ -347,6 +354,8 @@ elif [ "$1" = "development" ]; then
     development_reset
   elif [ "$2" = "logs" ]; then
     development_logs "${@:3}"
+  elif [ "$2" = "database" ]; then
+    development_database
   elif [ "$2" = "ctl" ]; then
     development_ctl
   elif [ "$2" = "test" ]; then
