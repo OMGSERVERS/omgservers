@@ -16,6 +16,8 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
+    volumes:
+      - database:/var/lib/postgresql
   queues:
     image: "omgservers/queues:${OMGSERVERS_VERSION}"
     container_name: "queues"
@@ -26,6 +28,8 @@ services:
       - "8161:8161"
     networks:
       - omgservers
+    volumes:
+      - queues:/var/lib/artemis-instance
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
@@ -33,6 +37,8 @@ services:
       - "5000:5000"
     networks:
       - omgservers
+    volumes:
+      - registry:/var/lib/registry
   builder:
     image: "omgservers/builder:1.0.0-SNAPSHOT"
     container_name: "builder"
@@ -47,6 +53,8 @@ services:
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5000
+    volumes:
+      - builder:/var/jenkins_home
   service:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service"
@@ -98,6 +106,24 @@ services:
       - BACKGROUND=true
     networks:
       - omgservers
+    volumes:
+      - ctl:/root/.omgserversctl
+volumes:
+  builder:
+    name: builder
+    driver: local
+  registry:
+    name: registry
+    driver: local
+  database:
+    name: database
+    driver: local
+  queues:
+    name: queues
+    driver: local
+  ctl:
+    name: ctl
+    driver: local
 networks:
   omgservers:
     name: omgservers
