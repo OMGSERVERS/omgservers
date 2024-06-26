@@ -31,7 +31,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./projectctl build testWithSonar
       - name: Start containers
-        run: ./projectctl integration up && sleep 90
+        run: ./projectctl integration up && sleep 30
       - name: Init registry
         run: docker tag omgservers/luajit:1.0.0-SNAPSHOT localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT && docker push localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT
       - name: Run tests
@@ -44,7 +44,7 @@ jobs:
         run: ./projectctl integration logs
       - name: Stop containers
         if: always()
-        run: ./projectctl environment down
+        run: yes | ./projectctl environment down
       - name: Log into Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
