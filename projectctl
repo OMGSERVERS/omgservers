@@ -101,6 +101,21 @@ internal_help() {
   fi
 }
 
+internal_ask_down() {
+  ENVIRONMENTS=$1
+
+  CURRENT_ENVIRONMENT=$(docker compose ls -q | grep -E "${ENVIRONMENTS}" || echo "")
+  if [ -n "${CURRENT_ENVIRONMENT}" ]; then
+    read -p "Does \"${CURRENT_ENVIRONMENT}\" has to be to down (y/n)? : " ANSWER
+    if [ "${ANSWER}" == "y" ]; then
+      docker compose -p ${CURRENT_ENVIRONMENT} down -v
+    else
+      echo "Operation was cancelled"
+      exit 0
+    fi
+  fi
+}
+
 # HANDLERS
 
 build_printVersion() {
@@ -139,16 +154,19 @@ environment_printCurrent() {
 }
 
 environment_down() {
-  docker compose -p localtesting down -v
-  docker compose -p development down -v
-  docker compose -p integration down -v
-  docker compose -p standalone down -v
+  read -p 'Continue (y/n)? : ' ANSWER
+  if [ "${ANSWER}" == "y" ]; then
+    docker compose -p localtesting down -v
+    docker compose -p development down -v
+    docker compose -p integration down -v
+    docker compose -p standalone down -v
+  else
+    echo "Reset was cancelled"
+  fi
 }
 
 localtesting_up() {
-  docker compose -p development down -v
-  docker compose -p integration down -v
-  docker compose -p standalone down -v
+  internal_ask_down "integration|development|standalone"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -173,9 +191,7 @@ localtesting_test() {
 }
 
 development_up() {
-  docker compose -p localtesting down -v
-  docker compose -p integration down -v
-  docker compose -p standalone down -v
+  internal_ask_down "localtesting|integration|standalone"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -224,9 +240,7 @@ development_test() {
 }
 
 integration_up() {
-  docker compose -p localtesting down -v
-  docker compose -p development down -v
-  docker compose -p standalone down -v
+  internal_ask_down "localtesting|development|standalone"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -267,9 +281,7 @@ integration_test() {
 }
 
 standalone_up() {
-  docker compose -p localtesting down -v
-  docker compose -p development down -v
-  docker compose -p integration down -v
+  internal_ask_down "localtesting|development|integration"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
