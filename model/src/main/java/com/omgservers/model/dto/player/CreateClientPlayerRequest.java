@@ -20,5 +20,5 @@ public class CreateClientPlayerRequest {
 
     @NotBlank
     @Size(max = 1024)
-    String secret;
+    String stageSecret;
 }
