@@ -80,6 +80,13 @@ help() {
       echo "     - GAME_DEVELOPER_PASSWORD"
     fi
   fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting uploadVersion" ]; then
+    echo " omgserversctl localtesting uploadVersion <project_path>"
+    if [ "$1" = "localtesting uploadVersion" ]; then
+      echo "   produces:"
+      echo "     - VERSION_ID"
+    fi
+  fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
     echo " omgserversctl admin useCredentials <user_id> <password>"
@@ -213,7 +220,7 @@ help() {
     echo " omgserversctl developer printCurrent"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
-    echo " omgserversctl developer createToken"
+    echo " omgserversctl developer createToken <user_id> <password>"
     if [ "$1" = "developer createToken" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_TOKEN"
@@ -414,6 +421,49 @@ localtesting_createGame() {
   echo "export OMGSERVERSCTL_GAME_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
   echo "export OMGSERVERSCTL_GAME_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
   echo "export OMGSERVERSCTL_GAME_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
+}
+
+localtesting_uploadVersion() {
+
+  PROJECT_PATH=$1
+
+  if [ -z "${PROJECT_PATH}" ]; then
+    help "localtesting uploadVersion"
+    exit 1
+  fi
+
+  GAME_TENANT_ID=$(environment_printVariable GAME_TENANT_ID)
+  if [ -z "${GAME_TENANT_ID}" ]; then
+    echo "GAME_TENANT_ID was not found"
+    exit 1
+  fi
+
+  GAME_PROJECT_ID=$(environment_printVariable GAME_PROJECT_ID)
+  if [ -z "${GAME_PROJECT_ID}" ]; then
+    echo "GAME_PROJECT_ID was not found"
+    exit 1
+  fi
+
+  GAME_STAGE_ID=$(environment_printVariable GAME_STAGE_ID)
+  if [ -z "${GAME_STAGE_ID}" ]; then
+    echo "GAME_STAGE_ID was not found"
+    exit 1
+  fi
+
+  GAME_DEVELOPER_USER_ID=$(environment_printVariable GAME_DEVELOPER_USER_ID)
+  if [ -z "${GAME_DEVELOPER_USER_ID}" ]; then
+    echo "GAME_DEVELOPER_USER_ID was not found"
+    exit 1
+  fi
+
+  GAME_DEVELOPER_PASSWORD=$(environment_printVariable GAME_DEVELOPER_PASSWORD)
+  if [ -z "${GAME_DEVELOPER_PASSWORD}" ]; then
+    echo "GAME_DEVELOPER_PASSWORD was not found"
+    exit 1
+  fi
+
+  developer_createToken ${GAME_DEVELOPER_USER_ID} ${GAME_DEVELOPER_PASSWORD}
+  developer_uploadVersion ${GAME_TENANT_ID} ${GAME_STAGE_ID} ${PROJECT_PATH}
 }
 
 # ADMIN
@@ -856,7 +906,7 @@ support_createDeveloper() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER_ID=${USER_ID}, DEVELOPER_PASSWORD=${PASSWORD}"
 
   internal_useEnvironment
-  developer_createToken
+  developer_createToken ${USER_ID} ${PASSWORD}
 }
 
 support_createTenantPermission() {
@@ -1191,11 +1241,11 @@ developer_printCurrent() {
 developer_createToken() {
   internal_useEnvironment
 
-  DEVELOPER_USER_ID=$OMGSERVERSCTL_DEVELOPER_USER_ID
-  DEVELOPER_PASSWORD=$OMGSERVERSCTL_DEVELOPER_PASSWORD
+  DEVELOPER_USER_ID=$1
+  DEVELOPER_PASSWORD=$2
 
   if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer credentials were not found"
+    help "developer createToken"
     exit 1
   fi
 
@@ -1250,7 +1300,7 @@ developer_useCredentials() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
   internal_useEnvironment
-  developer_createToken
+  developer_createToken ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
 }
 
 developer_createProject() {
@@ -1520,6 +1570,8 @@ if [ "$1" = "localtesting" ]; then
     localtesting_ctl
   elif [ "$2" = "createGame" ]; then
     localtesting_createGame
+  elif [ "$2" = "uploadVersion" ]; then
+    localtesting_uploadVersion $3
   else
     help "localtesting"
   fi
