@@ -21,144 +21,222 @@ help() {
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
     echo " omgserversctl environment useEnvironment <name> <external_url> <internal_url>"
-    echo "   produces:"
-    echo "     - ENVIRONMENT_NAME"
-    echo "     - EXTERNAL_URL"
-    echo "     - INTERNAL_URL"
+    if [ "$1" = "environment useEnvironment" ]; then
+      echo "   produces:"
+      echo "     - ENVIRONMENT_NAME"
+      echo "     - EXTERNAL_URL"
+      echo "     - INTERNAL_URL"
+    fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment usePublic" ]; then
     echo " omgserversctl environment usePublic"
-    echo "   produces:"
-    echo "     - ENVIRONMENT_NAME"
-    echo "     - EXTERNAL_URL"
-    echo "     - INTERNAL_URL"
+    if [ "$1" = "environment usePublic" ]; then
+      echo "   produces:"
+      echo "     - ENVIRONMENT_NAME"
+      echo "     - EXTERNAL_URL"
+      echo "     - INTERNAL_URL"
+    fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocal" ]; then
     echo " omgserversctl environment useLocal"
-    echo "   produces:"
-    echo "     - ENVIRONMENT_NAME"
-    echo "     - EXTERNAL_URL"
-    echo "     - INTERNAL_URL"
+    if [ "$1" = "environment useLocal" ]; then
+      echo "   produces:"
+      echo "     - ENVIRONMENT_NAME"
+      echo "     - EXTERNAL_URL"
+      echo "     - INTERNAL_URL"
+    fi
+  fi
+  # Localtesting
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting up" ]; then
+    echo " omgserversctl localtesting up"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting down" ]; then
+    echo " omgserversctl localtesting down"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
+    echo " omgserversctl localtesting ps"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting reset" ]; then
+    echo " omgserversctl localtesting reset"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting logs" ]; then
+    echo " omgserversctl localtesting logs"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting database" ]; then
+    echo " omgserversctl localtesting database"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ctl" ]; then
+    echo " omgserversctl localtesting ctl"
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting createGame" ]; then
+    echo " omgserversctl localtesting createGame"
+    if [ "$1" = "localtesting createGame" ]; then
+      echo "   produces:"
+      echo "     - GAME_TENANT_ID"
+      echo "     - GAME_PROJECT_ID"
+      echo "     - GAME_STAGE_ID"
+      echo "     - GAME_STAGE_SECRET"
+      echo "     - GAME_DEVELOPER_USER_ID"
+      echo "     - GAME_DEVELOPER_PASSWORD"
+    fi
   fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
     echo " omgserversctl admin useCredentials <user_id> <password>"
-    echo "   produces:"
-    echo "     - ADMIN_USER_ID"
-    echo "     - ADMIN_PASSWORD"
+    if [ "$1" = "admin useCredentials" ]; then
+      echo "   produces:"
+      echo "     - ADMIN_USER_ID"
+      echo "     - ADMIN_PASSWORD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printCurrent" ]; then
     echo " omgserversctl admin printCurrent"
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createToken" ]; then
     echo " omgserversctl admin createToken"
-    echo "   produces:"
-    echo "     - ADMIN_TOKEN"
+    if [ "$1" = "admin createToken" ]; then
+      echo "   produces:"
+      echo "     - ADMIN_TOKEN"
+    fi
   fi
   # Support
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support useCredentials" ]; then
     echo " omgserversctl support useCredentials <user_id> <password>"
-    echo "   produces:"
-    echo "     - SUPPORT_USER_ID"
-    echo "     - SUPPORT_PASSWORD"
+    if [ "$1" = "support useCredentials" ]; then
+      echo "   produces:"
+      echo "     - SUPPORT_USER_ID"
+      echo "     - SUPPORT_PASSWORD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support printCurrent" ]; then
     echo " omgserversctl support printCurrent"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createToken" ]; then
     echo " omgserversctl support createToken"
-    echo "   produces:"
-    echo "     - SUPPORT_TOKEN"
+    if [ "$1" = "support createToken" ]; then
+      echo "   produces:"
+      echo "     - SUPPORT_TOKEN"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenant" ]; then
     echo " omgserversctl support createTenant"
-    echo "   produces:"
-    echo "     - TENANT_ID"
+    if [ "$1" = "support createTenant" ]; then
+      echo "   produces:"
+      echo "     - TENANT_ID"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
     echo " omgserversctl support deleteTenant <tenant_id>"
-    echo "   produces:"
-    echo "     - DELETED"
+    if [ "$1" = "support deleteTenant" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
     echo " omgserversctl support createProject <tenant_id>"
-    echo "   produces:"
-    echo "     - PROJECT_ID"
-    echo "     - STAGE_ID"
-    echo "     - STAGE_SECRET"
+    if [ "$1" = "support createProject" ]; then
+      echo "   produces:"
+      echo "     - PROJECT_ID"
+      echo "     - STAGE_ID"
+      echo "     - STAGE_SECRET"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
     echo " omgserversctl support deleteProject <tenant_id> <project_id>"
-    echo "   produces:"
-    echo "     - DELETED"
+    if [ "$1" = "support deleteProject" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createDeveloper" ]; then
     echo " omgserversctl support createDeveloper"
-    echo "   produces:"
-    echo "     - DEVELOPER_USER_ID"
-    echo "     - DEVELOPER_PASSWORD"
+    if [ "$1" = "support createDeveloper" ]; then
+      echo "   produces:"
+      echo "     - DEVELOPER_USER_ID"
+      echo "     - DEVELOPER_PASSWORD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
     echo " omgserversctl support createTenantPermission <tenant_id> <user_id> <tenant_permission>"
-    echo "   tenant_permission:"
-    echo "     - PROJECT_MANAGEMENT"
-    echo "     - GET_DASHBOARD"
+    if [ "$1" = "support createTenantPermission" ]; then
+      echo "   tenant_permission:"
+      echo "     - PROJECT_MANAGEMENT"
+      echo "     - GET_DASHBOARD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
     echo " omgserversctl support deleteTenantPermission <tenant_id> <user_id> <tenant_permission>"
-    echo "   tenant_permission:"
-    echo "     - PROJECT_MANAGEMENT"
-    echo "     - GET_DASHBOARD"
+    if [ "$1" = "support deleteTenantPermission" ]; then
+      echo "   tenant_permission:"
+      echo "     - PROJECT_MANAGEMENT"
+      echo "     - GET_DASHBOARD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
     echo " omgserversctl support createProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
-    echo "   project_permission:"
-    echo "     - STAGE_MANAGEMENT"
+    if [ "$1" = "support createProjectPermission" ]; then
+      echo "   project_permission:"
+      echo "     - STAGE_MANAGEMENT"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
     echo " omgserversctl support deleteProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
-    echo "   project_permission:"
-    echo "     - STAGE_MANAGEMENT"
+    if [ "$1" = "support deleteProjectPermission" ]; then
+      echo "   project_permission:"
+      echo "     - STAGE_MANAGEMENT"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
     echo " omgserversctl support createStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
-    echo "   stage_permission:"
-    echo "     - VERSION_MANAGEMENT"
+    if [ "$1" = "support createStagePermission" ]; then
+      echo "   stage_permission:"
+      echo "     - VERSION_MANAGEMENT"
+    fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
     echo " omgserversctl support deleteStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
-    echo "   stage_permission:"
-    echo "     - VERSION_MANAGEMENT"
+    if [ "$1" = "support deleteStagePermission" ]; then
+      echo "   stage_permission:"
+      echo "     - VERSION_MANAGEMENT"
+    fi
   fi
   # Developer
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer useCredentials" ]; then
     echo " omgserversctl developer useCredentials <user_id> <password>"
-    echo "   produces:"
-    echo "     - DEVELOPER_USER_ID"
-    echo "     - DEVELOPER_PASSWORD"
+    if [ "$1" = "developer useCredentials" ]; then
+      echo "   produces:"
+      echo "     - DEVELOPER_USER_ID"
+      echo "     - DEVELOPER_PASSWORD"
+    fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printCurrent" ]; then
     echo " omgserversctl developer printCurrent"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
     echo " omgserversctl developer createToken"
-    echo "   produces:"
-    echo "     - DEVELOPER_TOKEN"
+    if [ "$1" = "developer createToken" ]; then
+      echo "   produces:"
+      echo "     - DEVELOPER_TOKEN"
+    fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
     echo " omgserversctl developer createProject <tenant_id>"
-    echo "   produces:"
-    echo "     - PROJECT_ID"
-    echo "     - STAGE_ID"
-    echo "     - STAGE_SECRET"
+    if [ "$1" = "developer createProject" ]; then
+      echo "   produces:"
+      echo "     - PROJECT_ID"
+      echo "     - STAGE_ID"
+      echo "     - STAGE_SECRET"
+    fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
     echo " omgserversctl developer getTenantDashboard <tenant_id>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadVersion" ]; then
     echo " omgserversctl developer uploadVersion <tenant_id> <stage_id> <project_path>"
-    echo "   produces:"
-    echo "     - VERSION_ID"
+    if [ "$1" = "developer uploadVersion" ]; then
+      echo "   produces:"
+      echo "     - VERSION_ID"
+    fi
   fi
 }
 
@@ -219,6 +297,123 @@ environment_usePublic() {
 
 environment_useLocal() {
   environment_useEnvironment local http://localhost:8080 http://localhost:8080
+  admin_useCredentials 223221505901723648 admin
+  support_useCredentials 231928170708729857 support
+}
+
+# LOCALTESTING
+
+localtesting_up() {
+#  internal_useEnvironment
+
+  if [ ! -d ~/.omgserversctl/localtesting ]; then
+    mkdir -p ~/.omgserversctl/localtesting
+    curl -o ~/.omgserversctl/localtesting/compose.yaml https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/environments/development/src/compose.yaml
+    curl -o ~/.omgserversctl/localtesting/.env https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/environments/development/src/.env
+  fi
+
+  docker compose -p omgservers -f ~/.omgserversctl/localtesting/compose.yaml up --remove-orphans -d
+  docker compose -p omgservers ps
+}
+
+localtesting_down() {
+  read -p 'Continue (y/n)? : ' ANSWER
+  if [ "${ANSWER}" == "y" ]; then
+    docker compose -p omgservers down -v
+  else
+    echo "Operation was cancelled"
+  fi
+}
+
+localtesting_ps() {
+  internal_useEnvironment
+  docker compose -p omgservers ps
+}
+
+localtesting_reset() {
+  read -p 'Continue (y/n)? : ' ANSWER
+  if [ "${ANSWER}" == "y" ]; then
+    docker compose -p omgservers down -v
+    rm -rf ~/.omgserversctl/localtesting
+
+    localtesting_up
+  else
+    echo "Operation was cancelled"
+  fi
+}
+
+localtesting_logs() {
+  docker compose -p omgservers logs $@
+}
+
+localtesting_database() {
+  docker compose -p omgservers exec database psql
+}
+
+localtesting_ctl() {
+  docker compose -p omgservers exec ctl /bin/bash
+}
+
+localtesting_createGame() {
+  support_createToken
+  support_createTenant
+
+  TENANT_ID=$(environment_printVariable TENANT_ID)
+  if [ -z "${TENANT_ID}" ]; then
+    echo "TENANT_ID was not found"
+    exit 1
+  fi
+
+  support_createProject ${TENANT_ID}
+
+  PROJECT_ID=$(environment_printVariable PROJECT_ID)
+  if [ -z "${PROJECT_ID}" ]; then
+    echo "PROJECT_ID was not found"
+    exit 1
+  fi
+
+  STAGE_ID=$(environment_printVariable STAGE_ID)
+  if [ -z "${STAGE_ID}" ]; then
+    echo "STAGE_ID was not found"
+    exit 1
+  fi
+
+  STAGE_SECRET=$(environment_printVariable STAGE_SECRET)
+  if [ -z "${STAGE_SECRET}" ]; then
+    echo "STAGE_SECRET was not found"
+    exit 1
+  fi
+
+  support_createDeveloper
+
+  DEVELOPER_USER_ID=$(environment_printVariable DEVELOPER_USER_ID)
+  if [ -z "${DEVELOPER_USER_ID}" ]; then
+    echo "DEVELOPER_USER_ID was not found"
+    exit 1
+  fi
+
+  DEVELOPER_PASSWORD=$(environment_printVariable DEVELOPER_PASSWORD)
+  if [ -z "${DEVELOPER_PASSWORD}" ]; then
+    echo "DEVELOPER_PASSWORD was not found"
+    exit 1
+  fi
+
+  support_createTenantPermission ${TENANT_ID} ${DEVELOPER_USER_ID} GET_DASHBOARD
+  support_createStagePermission ${TENANT_ID} ${STAGE_ID} ${DEVELOPER_USER_ID} VERSION_MANAGEMENT
+
+  developer_useCredentials ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Game was created:"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_TENANT_ID=${TENANT_ID}, GAME_PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_STAGE_ID=${STAGE_ID}, GAME_STAGE_SECRET=${STAGE_SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, GAME_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}"
+
+  echo "export OMGSERVERSCTL_GAME_TENANT_ID=${TENANT_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_GAME_PROJECT_ID=${PROJECT_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_GAME_STAGE_ID=${STAGE_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_GAME_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_GAME_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_GAME_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
 }
 
 # ADMIN
@@ -1252,7 +1447,6 @@ internal_useEnvironment() {
 
   if [ -z "${OMGSERVERSCTL_ENVIRONMENT_NAME}" ]; then
     echo "$(date) $(echo unknown) ERROR: Environment was not configured"
-    help "environment useEnvironment"
     exit 1
   else
     source ~/.omgserversctl/environment
@@ -1274,12 +1468,18 @@ if [ ! -f "~/.omgserversctl/logs" ]; then
   touch ~/.omgserversctl/logs
 fi
 
-if [ -z "$1" -o "$1" = "help" ]; then
+if [ -z "$1" ]; then
   help
   exit 0
 fi
 
-if [ -z "$1" -o "$1" = "logs" ]; then
+if [ "$1" = "help" ]; then
+  shift
+  help "$*"
+  exit 0
+fi
+
+if [ "$1" = "logs" ]; then
   logs
   exit 0
 fi
@@ -1302,8 +1502,29 @@ if [ "$1" = "environment" ]; then
   exit 0
 fi
 
+# Localtesting
+if [ "$1" = "localtesting" ]; then
+  if [ "$2" = "up" ]; then
+    localtesting_up
+  elif [ "$2" = "down" ]; then
+    localtesting_down
+  elif [ "$2" = "ps" ]; then
+    localtesting_ps
+  elif [ "$2" = "reset" ]; then
+    localtesting_reset
+  elif [ "$2" = "logs" ]; then
+    localtesting_logs "${@:3}"
+  elif [ "$2" = "database" ]; then
+    localtesting_database
+  elif [ "$2" = "ctl" ]; then
+    localtesting_ctl
+  elif [ "$2" = "createGame" ]; then
+    localtesting_createGame
+  else
+    help "localtesting"
+  fi
 # Admin
-if [ "$1" = "admin" ]; then
+elif [ "$1" = "admin" ]; then
   if [ "$2" = "useCredentials" ]; then
     admin_useCredentials $3 $4
   elif [ "$2" = "printCurrent" ]; then

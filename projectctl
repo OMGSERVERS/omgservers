@@ -161,7 +161,7 @@ environment_down() {
     docker compose -p integration down -v
     docker compose -p standalone down -v
   else
-    echo "Reset was cancelled"
+    echo "Operation was cancelled"
   fi
 }
 
@@ -216,7 +216,7 @@ development_reset() {
     docker compose -p development down -v
     development_up
   else
-    echo "Reset was cancelled"
+    echo "Operation was cancelled"
   fi
 }
 
@@ -265,7 +265,7 @@ integration_reset() {
     docker compose -p integration down -v
     integration_up
   else
-    echo "Reset was cancelled"
+    echo "Operation was cancelled"
   fi
 }
 
@@ -306,7 +306,7 @@ standalone_reset() {
     docker compose -p standalone down -v
     standalone_up
   else
-    echo "Reset was cancelled"
+    echo "Operation was cancelled"
   fi
 }
 
