@@ -68,23 +68,23 @@ help() {
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ctl" ]; then
     echo " omgserversctl localtesting ctl"
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting createGame" ]; then
-    echo " omgserversctl localtesting createGame"
-    if [ "$1" = "localtesting createGame" ]; then
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting createProject" ]; then
+    echo " omgserversctl localtesting createProject"
+    if [ "$1" = "localtesting createProject" ]; then
       echo "   produces:"
-      echo "     - GAME_TENANT_ID"
-      echo "     - GAME_PROJECT_ID"
-      echo "     - GAME_STAGE_ID"
-      echo "     - GAME_STAGE_SECRET"
-      echo "     - GAME_DEVELOPER_USER_ID"
-      echo "     - GAME_DEVELOPER_PASSWORD"
+      echo "     - LOCALTESTING_TENANT_ID"
+      echo "     - LOCALTESTING_PROJECT_ID"
+      echo "     - LOCALTESTING_STAGE_ID"
+      echo "     - LOCALTESTING_STAGE_SECRET"
+      echo "     - LOCALTESTING_DEVELOPER_USER_ID"
+      echo "     - LOCALTESTING_DEVELOPER_PASSWORD"
     fi
   fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting uploadVersion" ]; then
     echo " omgserversctl localtesting uploadVersion <project_path>"
     if [ "$1" = "localtesting uploadVersion" ]; then
       echo "   produces:"
-      echo "     - VERSION_ID"
+      echo "     - LOCALTESTING_VERSION_ID"
     fi
   fi
   # Admin
@@ -220,7 +220,7 @@ help() {
     echo " omgserversctl developer printCurrent"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
-    echo " omgserversctl developer createToken <user_id> <password>"
+    echo " omgserversctl developer createToken"
     if [ "$1" = "developer createToken" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_TOKEN"
@@ -361,7 +361,7 @@ localtesting_ctl() {
   docker compose -p omgservers exec ctl /bin/bash
 }
 
-localtesting_createGame() {
+localtesting_createProject() {
   support_createToken
   support_createTenant
 
@@ -410,17 +410,17 @@ localtesting_createGame() {
 
   developer_useCredentials ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Game was created:"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_TENANT_ID=${TENANT_ID}, GAME_PROJECT_ID=${PROJECT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_STAGE_ID=${STAGE_ID}, GAME_STAGE_SECRET=${STAGE_SECRET}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) GAME_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, GAME_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created:"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_TENANT_ID=${TENANT_ID}, LOCALTESTING_PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_STAGE_ID=${STAGE_ID}, LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}"
 
-  echo "export OMGSERVERSCTL_GAME_TENANT_ID=${TENANT_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_GAME_PROJECT_ID=${PROJECT_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_GAME_STAGE_ID=${STAGE_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_GAME_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_GAME_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_GAME_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_TENANT_ID=${TENANT_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_PROJECT_ID=${PROJECT_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_ID=${STAGE_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
 }
 
 localtesting_uploadVersion() {
@@ -432,38 +432,45 @@ localtesting_uploadVersion() {
     exit 1
   fi
 
-  GAME_TENANT_ID=$(environment_printVariable GAME_TENANT_ID)
-  if [ -z "${GAME_TENANT_ID}" ]; then
-    echo "GAME_TENANT_ID was not found"
+  LOCALTESTING_TENANT_ID=$(environment_printVariable LOCALTESTING_TENANT_ID)
+  if [ -z "${LOCALTESTING_TENANT_ID}" ]; then
+    echo "LOCALTESTING_TENANT_ID was not found"
     exit 1
   fi
 
-  GAME_PROJECT_ID=$(environment_printVariable GAME_PROJECT_ID)
-  if [ -z "${GAME_PROJECT_ID}" ]; then
-    echo "GAME_PROJECT_ID was not found"
+  LOCALTESTING_PROJECT_ID=$(environment_printVariable LOCALTESTING_PROJECT_ID)
+  if [ -z "${LOCALTESTING_PROJECT_ID}" ]; then
+    echo "LOCALTESTING_PROJECT_ID was not found"
     exit 1
   fi
 
-  GAME_STAGE_ID=$(environment_printVariable GAME_STAGE_ID)
-  if [ -z "${GAME_STAGE_ID}" ]; then
-    echo "GAME_STAGE_ID was not found"
+  LOCALTESTING_STAGE_ID=$(environment_printVariable LOCALTESTING_STAGE_ID)
+  if [ -z "${LOCALTESTING_STAGE_ID}" ]; then
+    echo "LOCALTESTING_STAGE_ID was not found"
     exit 1
   fi
 
-  GAME_DEVELOPER_USER_ID=$(environment_printVariable GAME_DEVELOPER_USER_ID)
-  if [ -z "${GAME_DEVELOPER_USER_ID}" ]; then
-    echo "GAME_DEVELOPER_USER_ID was not found"
+  LOCALTESTING_DEVELOPER_USER_ID=$(environment_printVariable LOCALTESTING_DEVELOPER_USER_ID)
+  if [ -z "${LOCALTESTING_DEVELOPER_USER_ID}" ]; then
+    echo "LOCALTESTING_DEVELOPER_USER_ID was not found"
     exit 1
   fi
 
-  GAME_DEVELOPER_PASSWORD=$(environment_printVariable GAME_DEVELOPER_PASSWORD)
-  if [ -z "${GAME_DEVELOPER_PASSWORD}" ]; then
-    echo "GAME_DEVELOPER_PASSWORD was not found"
+  LOCALTESTING_DEVELOPER_PASSWORD=$(environment_printVariable LOCALTESTING_DEVELOPER_PASSWORD)
+  if [ -z "${LOCALTESTING_DEVELOPER_PASSWORD}" ]; then
+    echo "LOCALTESTING_DEVELOPER_PASSWORD was not found"
     exit 1
   fi
 
-  developer_createToken ${GAME_DEVELOPER_USER_ID} ${GAME_DEVELOPER_PASSWORD}
-  developer_uploadVersion ${GAME_TENANT_ID} ${GAME_STAGE_ID} ${PROJECT_PATH}
+  developer_useCredentials ${LOCALTESTING_DEVELOPER_USER_ID} ${LOCALTESTING_DEVELOPER_PASSWORD}
+  developer_uploadVersion ${LOCALTESTING_TENANT_ID} ${LOCALTESTING_STAGE_ID} ${PROJECT_PATH}
+
+  LOCALTESTING_VERSION_ID=$(environment_printVariable VERSION_ID)
+  if [ -z "${LOCALTESTING_VERSION_ID}" ]; then
+    echo "LOCALTESTING_VERSION_ID was not found"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_LOCALTESTING_VERSION_ID=$LOCALTESTING_VERSION_ID" >> ~/.omgserversctl/environment
 }
 
 # ADMIN
@@ -1241,15 +1248,13 @@ developer_printCurrent() {
 developer_createToken() {
   internal_useEnvironment
 
-  DEVELOPER_USER_ID=$1
-  DEVELOPER_PASSWORD=$2
+  DEVELOPER_USER_ID=${OMGSERVERSCTL_DEVELOPER_USER_ID}
+  DEVELOPER_PASSWORD=${OMGSERVERSCTL_DEVELOPER_PASSWORD}
 
   if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    help "developer createToken"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer credentials were not found"
     exit 1
   fi
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using developer, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-token"
   REQUEST="{\"user_id\": \"${DEVELOPER_USER_ID}\", \"password\": \"${DEVELOPER_PASSWORD}\"}"
@@ -1568,8 +1573,8 @@ if [ "$1" = "localtesting" ]; then
     localtesting_database
   elif [ "$2" = "ctl" ]; then
     localtesting_ctl
-  elif [ "$2" = "createGame" ]; then
-    localtesting_createGame
+  elif [ "$2" = "createProject" ]; then
+    localtesting_createProject
   elif [ "$2" = "uploadVersion" ]; then
     localtesting_uploadVersion $3
   else
