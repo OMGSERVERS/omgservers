@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.pool;
 
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.omgservers.model.dto.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.model.dto.pool.poolServer.GetPoolServerResponse;
@@ -28,6 +29,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 @Slf4j
 @ApplicationScoped
@@ -132,7 +135,15 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                         final var memoryLimitInBytes = poolServerContainer.getConfig()
                                 .getMemoryLimitInMegabytes() * 1024L * 1024L;
 
+                        final var logConfig = new LogConfig();
+                        logConfig.setType(LogConfig.LoggingType.JSON_FILE);
+                        logConfig.setConfig(Map.of(
+                                "max-size", "10m",
+                                "max-file", "8"
+                        ));
+
                         final var hostConfig = HostConfig.newHostConfig()
+                                .withLogConfig(logConfig)
                                 .withNetworkMode(dockerNetwork)
                                 .withCpuQuota(cpuQuotaInMicroseconds)
                                 .withMemory(memoryLimitInBytes)
