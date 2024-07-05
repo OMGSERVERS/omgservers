@@ -1,4 +1,5 @@
-version: "3.8"
+name: localtesting
+
 services:
   docker:
     image: "omgservers/docker:${OMGSERVERS_VERSION}"

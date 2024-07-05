@@ -1,4 +1,5 @@
-version: "3.8"
+name: development
+
 services:
   docker:
     image: "omgservers/docker:${OMGSERVERS_VERSION}"
