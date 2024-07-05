@@ -16,7 +16,6 @@ import java.io.IOException;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UploadTestVersionOperationImpl implements UploadTestVersionOperation {
 
-    @Inject
     DeveloperApiTester developerApiTester;
 
     @Override
