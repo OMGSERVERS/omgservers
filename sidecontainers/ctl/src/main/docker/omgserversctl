@@ -80,6 +80,9 @@ help() {
       echo "     - LOCALTESTING_DEVELOPER_PASSWORD"
     fi
   fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting printProject" ]; then
+    echo " omgserversctl localtesting printProject"
+  fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting uploadVersion" ]; then
     echo " omgserversctl localtesting uploadVersion <project_path>"
     if [ "$1" = "localtesting uploadVersion" ]; then
@@ -421,6 +424,30 @@ localtesting_createProject() {
   echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
   echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
   echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
+}
+
+localtesting_printProject() {
+  LOCALTESTING_TENANT_ID=$(environment_printVariable LOCALTESTING_TENANT_ID)
+  LOCALTESTING_PROJECT_ID=$(environment_printVariable LOCALTESTING_PROJECT_ID)
+  LOCALTESTING_STAGE_ID=$(environment_printVariable LOCALTESTING_STAGE_ID)
+  LOCALTESTING_STAGE_SECRET=$(environment_printVariable LOCALTESTING_STAGE_SECRET)
+  LOCALTESTING_DEVELOPER_USER_ID=$(environment_printVariable LOCALTESTING_DEVELOPER_USER_ID)
+  LOCALTESTING_DEVELOPER_PASSWORD=$(environment_printVariable LOCALTESTING_DEVELOPER_PASSWORD)
+
+  if [ -z "${LOCALTESTING_TENANT_ID}" -o \
+       -z "${LOCALTESTING_PROJECT_ID}" -o \
+       -z "${LOCALTESTING_STAGE_ID}" -o \
+       -z "${LOCALTESTING_STAGE_SECRET}" -o \
+       -z "${LOCALTESTING_DEVELOPER_USER_ID}" -o \
+       -z "${LOCALTESTING_DEVELOPER_PASSWORD}" ]; then
+    echo "Project was not found"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was found:"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_TENANT_ID=${LOCALTESTING_TENANT_ID}, LOCALTESTING_PROJECT_ID=${LOCALTESTING_PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_STAGE_ID=${LOCALTESTING_STAGE_ID}, LOCALTESTING_STAGE_SECRET=${LOCALTESTING_STAGE_SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_DEVELOPER_USER_ID=${LOCALTESTING_DEVELOPER_USER_ID}, LOCALTESTING_DEVELOPER_PASSWORD=${LOCALTESTING_DEVELOPER_PASSWORD}"
 }
 
 localtesting_uploadVersion() {
@@ -1575,6 +1602,8 @@ if [ "$1" = "localtesting" ]; then
     localtesting_ctl
   elif [ "$2" = "createProject" ]; then
     localtesting_createProject
+  elif [ "$2" = "printProject" ]; then
+    localtesting_printProject
   elif [ "$2" = "uploadVersion" ]; then
     localtesting_uploadVersion $3
   else
