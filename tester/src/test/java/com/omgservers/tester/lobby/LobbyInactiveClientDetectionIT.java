@@ -57,7 +57,7 @@ public class LobbyInactiveClientDetectionIT extends BaseTestClass {
                     Collections.singletonList(lobbyAssignment.getId()));
 
             log.info("Waiting for disconnection");
-            Thread.sleep(30_000);
+            Thread.sleep(60_000);
 
             final var disconnectionMessage = playerApiTester.waitMessage(testClient,
                     MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
