@@ -40,48 +40,52 @@ public class MatchKickClientIT extends BaseTestClass {
     @Test
     void matchKickClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                        require("omgservers").enter_loop(function(self, qualifier, command)
-                            if qualifier == "LOBBY" then
-                                if command.qualifier == "HANDLE_MESSAGE" then
-                                    local var text = command.message.text
-                                    if text == "request_matchmaking" then
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                                local runtime_qualifier = omgserver.qualifier
+                                
+                                if runtime_qualifier == "LOBBY" then
+                                    if command_qualifier == "HANDLE_MESSAGE" then
+                                        local var text = command_body.message.text
+                                        if text == "request_matchmaking" then
+                                            return {
+                                                 {
+                                                    qualifier = "REQUEST_MATCHMAKING",
+                                                    body = {
+                                                        client_id = command_body.client_id,
+                                                        mode = "test"
+                                                    }
+                                                }
+                                            }
+                                        end
+                                    end
+                                elseif runtime_qualifier == "MATCH" then
+                                    if command_qualifier == "HANDLE_MESSAGE" then
+                                        local var message = command_body.message
                                         return {
                                             {
-                                                qualifier = "REQUEST_MATCHMAKING",
+                                                qualifier = "KICK_CLIENT",
                                                 body = {
-                                                    client_id = command.client_id,
-                                                    mode = "test"
+                                                    client_id = command_body.message.client_id
+                                                }
+                                            }
+                                        }
+                                    elseif command_qualifier == "DELETE_CLIENT" then
+                                        return {
+                                            {
+                                                qualifier = "BROADCAST_MESSAGE",
+                                                body = {
+                                                    message = {
+                                                        text = "client_was_deleted"
+                                                    }
                                                 }
                                             }
                                         }
                                     end
                                 end
-                            elseif qualifier == "MATCH" then
-                                if command.qualifier == "HANDLE_MESSAGE" then
-                                    local var message = command.message
-                                    return {
-                                        {
-                                            qualifier = "KICK_CLIENT",
-                                            body = {
-                                                client_id = command.message.client_id
-                                            }
-                                        }
-                                    }
-                                end
-                                if command.qualifier == "DELETE_CLIENT" then
-                                    return {
-                                        {
-                                            qualifier = "BROADCAST_MESSAGE",
-                                            body =  {
-                                                message = {
-                                                    text = "client_was_deleted"
-                                                }
-                                            }
-                                        }
-                                    }
-                                end
-                            end
-                        end)
+                            end,
+                        })                        
                         """,
                 new VersionConfigModel(new ArrayList<>() {{
                     add(VersionModeModel.create("test", 2, 16, new ArrayList<>() {{

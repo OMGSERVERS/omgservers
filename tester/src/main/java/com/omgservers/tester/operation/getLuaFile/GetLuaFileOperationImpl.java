@@ -13,8 +13,8 @@ import java.util.Scanner;
 class GetLuaFileOperationImpl implements GetLuaFileOperation {
 
     @Override
-    public String getOmgserversLua() {
-        final var inputStream = this.getClass().getResourceAsStream("/omgservers.lua");
+    public String getOmgserverLua() {
+        final var inputStream = this.getClass().getResourceAsStream("/omgserver.lua");
         try (Scanner scanner = new Scanner(inputStream, "UTF-8")) {
             return scanner.useDelimiter("\\A").next();
         }

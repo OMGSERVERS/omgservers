@@ -25,11 +25,16 @@ public class PlayerCreateClientIT extends BaseTestClass {
     @Test
     void createClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""                       
-                        require("omgservers").enter_loop(function(self, qualifier, command)
-                            if qualifier == "LOBBY" then
-                            elseif qualifier == "MATCH" then
-                            end
-                        end)
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                                local runtime_qualifier = omgserver.qualifier
+                                
+                                if runtime_qualifier == "LOBBY" then
+                                elseif runtime_qualifier == "MATCH" then
+                                end
+                            end,
+                        })
                         """);
 
         Thread.sleep(16_000);

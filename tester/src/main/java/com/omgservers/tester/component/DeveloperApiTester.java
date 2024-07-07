@@ -93,7 +93,7 @@ public class DeveloperApiTester {
 
         final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of(
                         "main.lua", mainLua,
-                        "omgservers.lua", getLuaFileOperation.getOmgserversLua()
+                        "omgserver.lua", getLuaFileOperation.getOmgserverLua()
                 )
         );
 

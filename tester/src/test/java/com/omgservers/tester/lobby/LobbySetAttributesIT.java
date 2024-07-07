@@ -36,61 +36,64 @@ public class LobbySetAttributesIT extends BaseTestClass {
     void lobbySetAttributesIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, qualifier, command)
-                            if qualifier == "LOBBY" then
-                                if command.qualifier == "INIT_RUNTIME" then
-                                    self.attributes = {}
-                                end
-                                if command.qualifier == "ADD_CLIENT" then
-                                    self.attributes[command.client_id] = command.attributes
-                                end
-                                if command.qualifier == "HANDLE_MESSAGE" then
-                                    local var text = command.message.text
-                                    if text == "init_attributes" then
-                                        return {
-                                            {
-                                                qualifier = "SET_ATTRIBUTES",
-                                                body = {
-                                                    client_id = command.client_id,
-                                                    attributes = {
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                                local runtime_qualifier = omgserver.qualifier
+                                
+                                if runtime_qualifier == "LOBBY" then
+                                    if command_qualifier == "INIT_RUNTIME" then
+                                        self.attributes = {}
+                                    elseif command_qualifier == "ADD_CLIENT" then
+                                        self.attributes[command_body.client_id] = command_body.attributes
+                                    elseif command_qualifier == "HANDLE_MESSAGE" then
+                                        local var text = command_body.message.text
+                                        if text == "init_attributes" then
+                                            return {
+                                                {
+                                                    qualifier = "SET_ATTRIBUTES",
+                                                    body = {
+                                                        client_id = command_body.client_id,
                                                         attributes = {
-                                                            {
-                                                                name = "a1",
-                                                                type = "LONG",
-                                                                value = 1
+                                                            attributes = {
+                                                                {
+                                                                    name = "a1",
+                                                                    type = "LONG",
+                                                                    value = 1
+                                                                }
                                                             }
                                                         }
                                                     }
-                                                }
-                                            },
-                                            {
-                                                qualifier = "RESPOND_CLIENT",
-                                                body =  {
-                                                    client_id = command.client_id,
-                                                    message = {
-                                                        text = "attributes_was_init"
+                                                },
+                                                {
+                                                    qualifier = "RESPOND_CLIENT",
+                                                    body =  {
+                                                        client_id = command_body.client_id,
+                                                        message = {
+                                                            text = "attributes_was_init"
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
-                                    elseif text == "check_attributes" then
-                                        local attributes = self.attributes[command.client_id]
-                                        return {
-                                            {
-                                                qualifier = "RESPOND_CLIENT",
-                                                body = {
-                                                    client_id = command.client_id,
-                                                    message = {
-                                                        text = "attributes_was_checked"
+                                        elseif text == "check_attributes" then
+                                            local attributes = self.attributes[command_body.client_id]
+                                            return {
+                                                {
+                                                    qualifier = "RESPOND_CLIENT",
+                                                    body = {
+                                                        client_id = command_body.client_id,
+                                                        message = {
+                                                            text = "attributes_was_checked"
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
+                                        end
                                     end
+                                elseif runtime_qualifier == "MATCH" then
                                 end
-                            elseif qualifier == "MATCH" then
-                            end
-                        end)
+                            end,
+                        })                        
                         """);
 
         Thread.sleep(16_000);

@@ -33,24 +33,29 @@ public class LobbyAddClientIT extends BaseTestClass {
     @Test
     void lobbyAddClientIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion("""
-                require("omgservers").enter_loop(function(self, qualifier, command)
-                    if qualifier == "LOBBY" then
-                        if command.qualifier == "ADD_CLIENT" then
-                            return {
-                                {
-                                    qualifier = "RESPOND_CLIENT",
-                                    body = {
-                                        client_id = command.client_id,
-                                        message = {
-                                            text = "client_was_added"
+                local omgserver = require("omgserver")
+                omgserver:enter_loop({
+                    handle = function(self, command_qualifier, command_body)
+                        local runtime_qualifier = omgserver.qualifier
+                        
+                        if runtime_qualifier == "LOBBY" then
+                            if command_qualifier == "ADD_CLIENT" then
+                                return {
+                                    {
+                                        qualifier = "RESPOND_CLIENT",
+                                        body = {
+                                            client_id = command_body.client_id,
+                                            message = {
+                                                text = "client_was_added"
+                                            }
                                         }
                                     }
                                 }
-                            }
+                            end
+                        elseif runtime_qualifier == "MATCH" then
                         end
-                    elseif qualifier == "MATCH" then
-                    end
-                end)
+                    end,
+                })
                 """);
 
         Thread.sleep(16_000);

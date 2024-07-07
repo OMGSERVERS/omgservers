@@ -26,8 +26,11 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
     void getTenantDashboardIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, command)
-                        end)
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                            end,
+                        })
                         """);
 
         Thread.sleep(16_000);

@@ -26,8 +26,11 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
     void uploadNewVersionIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, command)
-                        end)
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                            end,
+                        })
                         """);
 
         Thread.sleep(16_000);

@@ -36,26 +36,31 @@ public class LobbyHandleMessageIT extends BaseTestClass {
     void lobbyHandleMessage() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, qualifier, command)
-                            if qualifier == "LOBBY" then
-                                if command.qualifier == "HANDLE_MESSAGE" then
-                                    local var message = command.message
-                                    assert(message.text == "helloworld", "message.text is wrong")
-                                    return {
-                                        {
-                                            qualifier = "RESPOND_CLIENT",
-                                            body = {
-                                                client_id = command.client_id,
-                                                message = {
-                                                    text = "message_was_handled"
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                                local runtime_qualifier = omgserver.qualifier
+                                
+                                if runtime_qualifier == "LOBBY" then
+                                    if command_qualifier == "HANDLE_MESSAGE" then
+                                        local var message = command_body.message
+                                        assert(message.text == "helloworld", "message.text is wrong")
+                                        return {
+                                            {
+                                                qualifier = "RESPOND_CLIENT",
+                                                body = {
+                                                    client_id = command_body.client_id,
+                                                    message = {
+                                                        text = "message_was_handled"
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                    end
+                                elseif runtime_qualifier == "MATCH" then
                                 end
-                            elseif qualifier == "MATCH" then
-                            end
-                        end)
+                            end,
+                        })                        
                         """);
 
         Thread.sleep(16_000);

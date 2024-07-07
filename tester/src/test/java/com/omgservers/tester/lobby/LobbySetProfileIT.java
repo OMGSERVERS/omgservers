@@ -36,61 +36,65 @@ public class LobbySetProfileIT extends BaseTestClass {
     void lobbySetProfileIT() throws Exception {
         final var testVersion = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
-                        require("omgservers").enter_loop(function(self, qualifier, command)
-                            if qualifier == "LOBBY" then
-                                if command.qualifier == "INIT_RUNTIME" then
-                                    self.profiles = {}
-                                end
-                                if command.qualifier == "ADD_CLIENT" then
-                                    self.profiles[command.client_id] = command.profile
-                                end
-                                if command.qualifier == "HANDLE_MESSAGE" then
-                                    local var text = command.message.text
-                                    if text == "init_profile" then
-                                        return {
-                                            {
-                                                qualifier = "SET_PROFILE",
-                                                body =  {
-                                                    client_id = command.client_id,
-                                                    profile = {
-                                                        a1 = 1,
-                                                        a2 = "string",
-                                                        a3 = 3.14,
-                                                        a4 = true
+                        local omgserver = require("omgserver")
+                        omgserver:enter_loop({
+                            handle = function(self, command_qualifier, command_body)
+                                local runtime_qualifier = omgserver.qualifier
+                                
+                                if runtime_qualifier == "LOBBY" then
+                                    if command_qualifier == "INIT_RUNTIME" then
+                                        self.profiles = {}
+                                    elseif command_qualifier == "ADD_CLIENT" then
+                                        self.profiles[command_body.client_id] = command_body.profile
+                                    elseif command_qualifier == "HANDLE_MESSAGE" then
+                                        local var text = command_body.message.text
+                                        if text == "init_profile" then
+                                            return {
+                                                {
+                                                    qualifier = "SET_PROFILE",
+                                                    body =  {
+                                                        client_id = command_body.client_id,
+                                                        profile = {
+                                                            a1 = 1,
+                                                            a2 = "string",
+                                                            a3 = 3.14,
+                                                            a4 = true
+                                                        }
                                                     }
-                                                }
-                                            },
-                                            {
-                                                qualifier = "RESPOND_CLIENT",
-                                                body = {
-                                                    client_id = command.client_id,
-                                                    message = {
-                                                        text = "profile_was_init"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    elseif text == "check_profile" then
-                                        local var profile = self.profiles[command.client_id]
-                                        assert(type(profile.a1) == "number", "a1 is wrong")
-                                        assert(type(profile.a2) == "string", "a2 is wrong")
-                                        assert(type(profile.a3) == "number", "a3 is wrong")
-                                        assert(type(profile.a4) == "boolean", "a4 is wrong")
-                                        return {
-                                            {
-                                                qualifier = "RESPOND_CLIENT",
-                                                body =  {
-                                                    client_id = command.client_id,
-                                                    message = {
-                                                        text = "profile_was_checked"
+                                                },
+                                                {
+                                                    qualifier = "RESPOND_CLIENT",
+                                                    body = {
+                                                        client_id = command_body.client_id,
+                                                        message = {
+                                                            text = "profile_was_init"
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
+                                        elseif text == "check_profile" then
+                                            local var profile = self.profiles[command_body.client_id]
+                                            assert(type(profile.a1) == "number", "a1 is wrong")
+                                            assert(type(profile.a2) == "string", "a2 is wrong")
+                                            assert(type(profile.a3) == "number", "a3 is wrong")
+                                            assert(type(profile.a4) == "boolean", "a4 is wrong")
+                                            return {
+                                                {
+                                                    qualifier = "RESPOND_CLIENT",
+                                                    body =  {
+                                                        client_id = command_body.client_id,
+                                                        message = {
+                                                            text = "profile_was_checked"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        end
                                     end
+                                elseif runtime_qualifier == "MATCH" then
                                 end
-                            end
-                        end)
+                            end,
+                        })                        
                         """);
 
         Thread.sleep(16_000);
