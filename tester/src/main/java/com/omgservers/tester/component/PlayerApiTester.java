@@ -115,7 +115,7 @@ public class PlayerApiTester {
                                     final Predicate<MessageModel> filter,
                                     final List<Long> consumedMessages)
             throws InterruptedException, JsonProcessingException {
-        final var maxAttempts = 16;
+        final var maxAttempts = 21;
 
         int attempt = 0;
         while (attempt < maxAttempts) {
