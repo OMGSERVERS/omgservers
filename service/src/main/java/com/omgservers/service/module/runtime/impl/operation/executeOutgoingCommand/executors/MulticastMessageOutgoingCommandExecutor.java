@@ -70,7 +70,7 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
                                         return multicastMessage(clients, message);
                                     } else {
                                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
-                                                String.format("wrong clientIds, runtimeId=%s, clients=%s",
+                                                String.format("wrong client ids, runtimeId=%s, clients=%s",
                                                         runtimeId, clients));
                                     }
                                 }))

@@ -11,6 +11,7 @@ local base64 = require("base64")
 local settings = {
     debug = true,
     trace = false,
+    iterate_delay = 0.25,
 }
 
 local internal = {
@@ -255,7 +256,7 @@ local server = {
         while not finished do
             self:iterate(raw_token, handler)
 
-            socket.sleep(1)
+            socket.sleep(settings.iterate_delay)
         end
 
         internal:log("Loop finished")

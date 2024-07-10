@@ -45,13 +45,13 @@ public class MatchmakingInstantRequestsIT extends BaseTestClass {
                                 
                                 if runtime_qualifier == "LOBBY" then
                                     if command_qualifier == "HANDLE_MESSAGE" then
-                                        local var text = command_qualifier.message.text
+                                        local var text = command_body.message.text
                                         if text == "request_matchmaking" then
                                             return {
                                                 {
                                                     qualifier = "REQUEST_MATCHMAKING",
                                                     body = {
-                                                        client_id = command_qualifier.client_id,
+                                                        client_id = command_body.client_id,
                                                         mode = "test"
                                                     }
                                                 }
