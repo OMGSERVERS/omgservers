@@ -13,6 +13,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -26,6 +28,8 @@ public class SchedulerTaskImpl {
                         .onItem().transformToUniAndMerge(this::executeJob)
                         .collect().asList()
                 )
+                .repeat().withDelay(Duration.ofSeconds(1)).indefinitely()
+                .collect().last()
                 .replaceWith(Boolean.TRUE);
     }
 

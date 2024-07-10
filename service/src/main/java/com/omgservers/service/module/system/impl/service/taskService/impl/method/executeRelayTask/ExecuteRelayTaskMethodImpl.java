@@ -24,6 +24,7 @@ public class ExecuteRelayTaskMethodImpl implements ExecuteRelayTaskMethod {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
+                .invoke(result -> log.info("Task finished, result={}", result))
                 .map(ExecuteRelayTaskResponse::new);
     }
 }

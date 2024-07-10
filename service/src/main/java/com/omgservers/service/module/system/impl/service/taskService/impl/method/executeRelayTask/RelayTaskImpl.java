@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -23,6 +25,8 @@ public class RelayTaskImpl {
         return Multi.createBy().repeating()
                 .uni(this::relayEvents)
                 .whilst(Boolean.TRUE::equals)
+                .collect().last()
+                .repeat().withDelay(Duration.ofMillis(100)).indefinitely()
                 .collect().last()
                 .replaceWith(Boolean.TRUE);
     }
