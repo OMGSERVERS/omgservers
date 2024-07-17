@@ -278,7 +278,7 @@ environment_printVariable() {
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Variable was not found, VARIABLE_NAME=${VARIABLE_NAME}"
     exit 1
   else
-    echo ${!VARIABLE_NAME}
+    echo -n ${!VARIABLE_NAME}
   fi
 }
 
@@ -291,8 +291,6 @@ environment_useEnvironment() {
     help "environment useEnvironment"
     exit 1
   fi
-
-  : > ~/.omgserversctl/environment
 
   echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ~/.omgserversctl/environment
   echo "export OMGSERVERSCTL_EXTERNAL_URL=${EXTERNAL_URL}" >> ~/.omgserversctl/environment
@@ -314,8 +312,6 @@ environment_useLocal() {
 # LOCALTESTING
 
 localtesting_up() {
-#  internal_useEnvironment
-
   if [ ! -d ~/.omgserversctl/localtesting ]; then
     mkdir -p ~/.omgserversctl/localtesting
     curl -o ~/.omgserversctl/localtesting/compose.yaml https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/environments/development/src/compose.yaml
@@ -327,16 +323,16 @@ localtesting_up() {
 }
 
 localtesting_down() {
-  read -p 'Continue (y/n)? : ' ANSWER
+  read -p "Continue (y/n)? : " ANSWER
   if [ "${ANSWER}" == "y" ]; then
     docker compose -p omgservers down -v
+    : > ~/.omgserversctl/environment
   else
     echo "Operation was cancelled"
   fi
 }
 
 localtesting_ps() {
-  internal_useEnvironment
   docker compose -p omgservers ps
 }
 
@@ -365,6 +361,8 @@ localtesting_ctl() {
 }
 
 localtesting_createProject() {
+  internal_useEnvironment
+
   support_createToken
   support_createTenant
 
@@ -427,6 +425,8 @@ localtesting_createProject() {
 }
 
 localtesting_printProject() {
+  internal_useEnvironment
+
   LOCALTESTING_TENANT_ID=$(environment_printVariable LOCALTESTING_TENANT_ID)
   LOCALTESTING_PROJECT_ID=$(environment_printVariable LOCALTESTING_PROJECT_ID)
   LOCALTESTING_STAGE_ID=$(environment_printVariable LOCALTESTING_STAGE_ID)
@@ -451,6 +451,7 @@ localtesting_printProject() {
 }
 
 localtesting_uploadVersion() {
+  internal_useEnvironment
 
   PROJECT_PATH=$1
 

@@ -1,7 +1,8 @@
-FROM alpine:latest
+FROM alpinelinux/docker-cli
 RUN apk update \
     && apk add --no-cache curl jq bash zip \
     && mkdir -p /opt/omgserversctl
+
 WORKDIR /opt/omgserversctl
 COPY src/main/docker/*.sh .
 RUN chmod u+x *.sh
