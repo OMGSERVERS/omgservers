@@ -27,7 +27,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
     public Uni<InterchangePlayerResponse> interchange(final InterchangePlayerRequest request) {
         log.debug("Interchange, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var clientId = request.getClientId();
         final var messagesToHandle = request.getOutgoingMessages();

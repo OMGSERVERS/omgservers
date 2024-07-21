@@ -55,7 +55,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
         log.debug("Create client, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();

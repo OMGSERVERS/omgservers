@@ -48,7 +48,7 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
     public Uni<UploadVersionDeveloperResponse> uploadVersion(final UploadVersionDeveloperRequest request) {
         log.debug("Upload version, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();

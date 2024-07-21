@@ -53,8 +53,9 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         log.debug("Create project, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
         final var tenantId = request.getTenantId();
+
         return checkCreateProjectPermission(tenantId, userId)
                 .flatMap(voidItem -> syncProject(tenantId, userId)
                         .flatMap(project -> syncStage(tenantId, project.getId(), userId)

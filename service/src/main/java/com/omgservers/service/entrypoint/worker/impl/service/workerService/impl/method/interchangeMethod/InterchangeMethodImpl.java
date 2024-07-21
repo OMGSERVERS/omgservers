@@ -27,7 +27,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     @Override
     public Uni<InterchangeWorkerResponse> interchange(final InterchangeWorkerRequest request) {
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var runtimeId = request.getRuntimeId();
         final var outgoingCommands = request.getOutgoingCommands();

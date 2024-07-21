@@ -35,7 +35,7 @@ class GetVersionMethodImpl implements GetVersionMethod {
     public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
         log.debug("Get version, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var runtimeId = request.getRuntimeId();
 

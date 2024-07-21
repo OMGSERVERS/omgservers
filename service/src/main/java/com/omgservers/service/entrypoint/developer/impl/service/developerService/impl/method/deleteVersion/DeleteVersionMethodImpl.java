@@ -37,7 +37,7 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
     public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
         log.debug("Delete version, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
         final var tenantId = request.getTenantId();
         final var versionId = request.getId();

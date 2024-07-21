@@ -34,7 +34,7 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
             final GetTenantDashboardDeveloperRequest request) {
         log.debug("Get tenant dashboard, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.upn));
+        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
         final var tenantId = request.getTenantId();
         return checkGetDashboardPermission(tenantId, userId)
                 .flatMap(voidItem -> getTenantDashboard(tenantId))
