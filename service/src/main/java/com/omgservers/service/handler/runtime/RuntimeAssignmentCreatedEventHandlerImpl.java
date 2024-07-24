@@ -19,7 +19,7 @@ import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
 import com.omgservers.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;

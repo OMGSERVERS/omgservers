@@ -11,7 +11,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.MatchmakerAssignmentMessageBodyModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;

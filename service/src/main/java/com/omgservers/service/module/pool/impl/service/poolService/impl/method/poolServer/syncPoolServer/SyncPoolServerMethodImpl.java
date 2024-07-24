@@ -2,7 +2,7 @@ package com.omgservers.service.module.pool.impl.service.poolService.impl.method.
 
 import com.omgservers.model.dto.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.model.dto.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.pool.impl.operation.pool.hasPool.HasPoolOperation;
 import com.omgservers.service.module.pool.impl.operation.poolServer.upsertPoolServer.UpsertPoolServerOperation;

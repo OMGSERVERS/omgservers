@@ -1,4 +1,4 @@
-package com.omgservers.service.service;
+package com.omgservers.router.service.bootstrap;
 
 import io.smallrye.mutiny.Uni;
 

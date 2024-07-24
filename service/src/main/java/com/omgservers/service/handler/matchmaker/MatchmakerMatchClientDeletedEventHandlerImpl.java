@@ -15,7 +15,7 @@ import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBod
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.model.matchmaker.MatchmakerModel;
 import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.system.EventModelFactory;

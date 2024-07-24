@@ -1,6 +1,6 @@
 package com.omgservers.service.service.testInterface;
 
-import com.omgservers.service.service.BootstrapService;
+import com.omgservers.service.service.bootstrap.BootstrapService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

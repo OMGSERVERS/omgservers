@@ -34,7 +34,7 @@ import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainer
 import com.omgservers.model.dto.pool.poolServerContainer.SyncPoolServerContainerResponse;
 import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersRequest;
 import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;

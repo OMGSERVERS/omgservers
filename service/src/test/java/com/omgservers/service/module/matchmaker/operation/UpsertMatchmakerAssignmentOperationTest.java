@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;

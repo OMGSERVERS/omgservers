@@ -3,7 +3,7 @@ package com.omgservers.service.module.pool.impl.operation.poolServerContainer.up
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

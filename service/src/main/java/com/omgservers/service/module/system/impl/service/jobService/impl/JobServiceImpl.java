@@ -10,7 +10,7 @@ import com.omgservers.model.dto.system.job.SyncJobRequest;
 import com.omgservers.model.dto.system.job.SyncJobResponse;
 import com.omgservers.model.dto.system.job.ViewJobsRequest;
 import com.omgservers.model.dto.system.job.ViewJobsResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.jobService.JobService;

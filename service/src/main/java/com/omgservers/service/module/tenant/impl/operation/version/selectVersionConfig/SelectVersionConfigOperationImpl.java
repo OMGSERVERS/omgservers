@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.version.selectVersio
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

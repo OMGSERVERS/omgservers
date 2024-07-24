@@ -17,7 +17,7 @@ import com.omgservers.model.poolRequest.PoolRequestModel;
 import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerConfigModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolServerContainerModelFactory;

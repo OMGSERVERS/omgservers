@@ -2,7 +2,7 @@ package com.omgservers.service.module.user.impl.operation.userPlayer.selectPlaye
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;

@@ -6,7 +6,7 @@ import com.omgservers.model.dto.system.GetIndexRequest;
 import com.omgservers.model.dto.system.GetIndexResponse;
 import com.omgservers.model.dto.system.SyncIndexRequest;
 import com.omgservers.model.dto.system.SyncIndexResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.indexService.IndexService;

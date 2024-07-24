@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 import com.omgservers.model.dto.tenant.GetStageRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
 import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import io.smallrye.mutiny.Uni;

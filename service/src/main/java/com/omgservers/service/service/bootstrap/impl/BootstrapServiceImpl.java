@@ -1,10 +1,10 @@
-package com.omgservers.service.service.impl;
+package com.omgservers.service.service.bootstrap.impl;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.service.BootstrapService;
+import com.omgservers.service.service.bootstrap.BootstrapService;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
@@ -40,6 +40,7 @@ public class BootstrapServiceImpl implements BootstrapService {
                 .flatMap(voidItem -> bootstrapServiceRoot())
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
+                .flatMap(voidItem -> bootstrapRouterUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .flatMap(voidItem -> bootstrapDockerHost())
                 .flatMap(voidItem -> bootstrapRelayJob())
@@ -92,6 +93,16 @@ public class BootstrapServiceImpl implements BootstrapService {
                     .invoke(voidItem -> log.info("Support user was initialized"));
         } else {
             log.info("Bootstrap of support user is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapRouterUser() {
+        if (getConfigOperation.getServiceConfig().bootstrap().routerUser().enabled()) {
+            return systemModule.getBootstrapService().bootstrapRouterUser()
+                    .invoke(voidItem -> log.info("Router user was initialized"));
+        } else {
+            log.info("Bootstrap of router user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

@@ -24,4 +24,7 @@ public class RuntimeAssignmentMessageBodyModel extends MessageBodyModel {
 
     @NotNull
     RuntimeConfigModel runtimeConfig;
+
+    @NotNull
+    String wsToken;
 }

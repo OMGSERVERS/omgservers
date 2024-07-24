@@ -3,7 +3,7 @@ package com.omgservers.service.module.user.impl.operation.userPlayer.upsertPlaye
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.module.user.PlayerCreatedEventBodyModel;
 import com.omgservers.model.player.PlayerModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

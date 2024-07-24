@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 
 import com.omgservers.model.dto.tenant.SyncStageRequest;
 import com.omgservers.model.dto.tenant.SyncStageResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.project.hasProject.HasProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.stage.upsertStage.UpsertStageOperation;

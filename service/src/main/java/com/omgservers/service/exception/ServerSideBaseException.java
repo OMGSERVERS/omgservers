@@ -1,5 +1,7 @@
 package com.omgservers.service.exception;
 
+import com.omgservers.model.exception.ExceptionQualifierEnum;
+
 public class ServerSideBaseException extends RuntimeException {
 
     final ExceptionQualifierEnum qualifier;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.user.operation;
 
 import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;

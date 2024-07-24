@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.operation.matchmakerReques
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.request.MatchmakerRequestModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

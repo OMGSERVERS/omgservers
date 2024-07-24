@@ -15,7 +15,7 @@ import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.stagePermission.StagePermissionEnum;
 import com.omgservers.model.stagePermission.StagePermissionModel;
 import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.ProjectPermissionModelFactory;

@@ -1,4 +1,4 @@
-package com.omgservers.service.exception;
+package com.omgservers.model.exception;
 
 public enum ExceptionQualifierEnum {
     REQUEST_WRONG,
@@ -15,6 +15,7 @@ public enum ExceptionQualifierEnum {
     CREDENTIALS_WRONG,
     CONFIGURATION_WRONG,
     SHARD_WRONG,
+    WS_TOKEN_WRONG,
     CONFIG_JSON_NOT_FOUND,
     VERSION_ZIP_NOT_FOUND,
     COMMAND_EXECUTOR_NOT_FOUND,

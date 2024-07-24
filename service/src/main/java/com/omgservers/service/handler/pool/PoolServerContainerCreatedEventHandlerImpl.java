@@ -14,7 +14,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
 import com.omgservers.model.poolServer.PoolServerModel;
 import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModelFactory;

@@ -1,5 +1,7 @@
 package com.omgservers.service.exception;
 
+import com.omgservers.model.exception.ExceptionErrorResponse;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.NotSupportedException;
@@ -72,7 +74,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
@@ -83,7 +85,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.UNAUTHORIZED, exceptionErrorResponse);
     }
 
@@ -94,7 +96,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.FORBIDDEN, exceptionErrorResponse);
     }
 
@@ -105,7 +107,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.NOT_FOUND, exceptionErrorResponse);
     }
 
@@ -116,7 +118,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.CONFLICT, exceptionErrorResponse);
     }
 
@@ -127,7 +129,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.GONE, exceptionErrorResponse);
     }
 
@@ -138,7 +140,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(e);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
     }
 

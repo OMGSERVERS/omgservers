@@ -15,7 +15,7 @@ import com.omgservers.model.dto.user.SyncPlayerRequest;
 import com.omgservers.model.player.PlayerModel;
 import com.omgservers.model.stage.StageModel;
 import com.omgservers.model.version.VersionModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.user.PlayerModelFactory;

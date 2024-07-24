@@ -9,7 +9,7 @@ import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
 import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
 import com.omgservers.model.message.MessageModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;

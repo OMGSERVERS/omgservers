@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.operation;
 import com.omgservers.model.runtime.RuntimeConfigModel;
 import com.omgservers.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.runtime.RuntimePermissionModelFactory;

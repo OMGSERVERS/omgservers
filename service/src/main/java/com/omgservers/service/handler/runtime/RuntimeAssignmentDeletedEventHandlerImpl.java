@@ -18,7 +18,7 @@ import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;

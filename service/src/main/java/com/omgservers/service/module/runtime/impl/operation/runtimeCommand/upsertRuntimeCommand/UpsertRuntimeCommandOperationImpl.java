@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upse
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

@@ -15,7 +15,7 @@ import com.omgservers.model.event.body.internal.VersionBuildingFailedEventBodyMo
 import com.omgservers.model.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;

@@ -12,6 +12,11 @@ public enum UserRoleEnum {
     SUPPORT(Names.SUPPORT),
 
     /**
+     * Role which is used to interact with the service through Router Api.
+     */
+    ROUTER(Names.ROUTER),
+
+    /**
      * Role which is used to interact with the service through Developer Api.
      */
     DEVELOPER(Names.DEVELOPER),
@@ -24,7 +29,21 @@ public enum UserRoleEnum {
     /**
      * Role which is used to interact with the service through Worker Api.
      */
-    WORKER(Names.WORKER);
+    WORKER(Names.WORKER),
+
+    /**
+     * Role which is used to connect to the service WebSocket endpoint.
+     */
+    WEBSOCKET(Names.WEBSOCKET);
+
+    public static UserRoleEnum fromString(String name) {
+        for (var value : UserRoleEnum.values()) {
+            if (value.getName().equalsIgnoreCase(name)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with name " + name);
+    }
 
     final String name;
 
@@ -39,8 +58,10 @@ public enum UserRoleEnum {
     public class Names {
         static public final String ADMIN = "admin";
         static public final String SUPPORT = "support";
+        static public final String ROUTER = "router";
         static public final String DEVELOPER = "developer";
         static public final String PLAYER = "player";
         static public final String WORKER = "worker";
+        static public final String WEBSOCKET = "websocket";
     }
 }

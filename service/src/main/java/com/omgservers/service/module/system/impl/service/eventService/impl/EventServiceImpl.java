@@ -6,7 +6,7 @@ import com.omgservers.model.dto.system.RelayEventsRequest;
 import com.omgservers.model.dto.system.RelayEventsResponse;
 import com.omgservers.model.dto.system.SyncEventRequest;
 import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;

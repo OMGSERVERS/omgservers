@@ -1,6 +1,5 @@
 package com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient;
 
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;

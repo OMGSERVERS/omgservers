@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.u
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

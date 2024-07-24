@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 
 import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
 import com.omgservers.model.dto.client.SyncClientRuntimeRefResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.client.hasClient.HasClientOperation;

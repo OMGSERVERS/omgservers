@@ -16,7 +16,7 @@ import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.model.dto.root.rootEntityRef.ViewRootEntityRefsRequest;
 import com.omgservers.model.dto.root.rootEntityRef.ViewRootEntityRefsResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.root.impl.operation.getRootModuleClient.GetRootModuleClientOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.user.validateCredentials;
 
 import com.omgservers.model.user.UserModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;

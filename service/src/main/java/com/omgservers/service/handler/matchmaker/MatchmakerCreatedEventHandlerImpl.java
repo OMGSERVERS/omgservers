@@ -11,7 +11,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.model.job.JobQualifierEnum;
 import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;

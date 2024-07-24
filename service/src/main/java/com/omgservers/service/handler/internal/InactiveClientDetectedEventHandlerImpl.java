@@ -14,7 +14,7 @@ import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyM
 import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;

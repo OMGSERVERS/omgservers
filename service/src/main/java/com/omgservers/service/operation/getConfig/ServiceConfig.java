@@ -36,6 +36,8 @@ public interface ServiceConfig {
         long adminId();
 
         long supportId();
+
+        long routerUserId();
     }
 
     interface GeneratorConfig {
@@ -96,6 +98,8 @@ public interface ServiceConfig {
 
         BootstrapSupportConfig support();
 
+        BootstrapRouterUserConfig routerUser();
+
         BootstrapRootConfig root();
 
         BootstrapDefaultPoolConfig defaultPool();
@@ -126,6 +130,12 @@ public interface ServiceConfig {
     }
 
     interface BootstrapSupportConfig {
+        boolean enabled();
+
+        String password();
+    }
+
+    interface BootstrapRouterUserConfig {
         boolean enabled();
 
         String password();

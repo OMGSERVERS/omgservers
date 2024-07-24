@@ -11,7 +11,7 @@ import com.omgservers.model.event.EventQualifierEnum;
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.model.lobby.LobbyModel;
 import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;

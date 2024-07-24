@@ -2,7 +2,7 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 
 import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefResponse;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.root.impl.operation.root.hasRoot.HasRootOperation;
 import com.omgservers.service.module.root.impl.operation.rootEntityRef.upsertRootEntityRef.UpsertRootEntityRefOperation;

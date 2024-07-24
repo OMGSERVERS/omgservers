@@ -33,7 +33,7 @@ class BootstrapSupportUserMethodImpl implements BootstrapSupportUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().supportId();
         return getUser(userId)
-                .invoke(root -> log.info("Support user was already create, skip operation, userId={}", userId))
+                .invoke(user -> log.info("Support user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/support";

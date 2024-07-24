@@ -23,7 +23,7 @@ import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.model.version.VersionModel;
 import com.omgservers.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.service.exception.ExceptionQualifierEnum;
+import com.omgservers.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;

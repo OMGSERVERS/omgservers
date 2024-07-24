@@ -1,6 +1,7 @@
 package com.omgservers.service.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.model.exception.ExceptionErrorResponse;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;

@@ -1,4 +1,4 @@
-package com.omgservers.service.exception;
+package com.omgservers.model.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,4 @@ import lombok.NoArgsConstructor;
 public class ExceptionErrorResponse {
 
     ExceptionQualifierEnum qualifier;
-
-    public ExceptionErrorResponse(final ServerSideBaseException e) {
-        qualifier = e.getQualifier();
-    }
 }
