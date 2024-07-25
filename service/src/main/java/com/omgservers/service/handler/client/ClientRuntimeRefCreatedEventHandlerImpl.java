@@ -25,7 +25,6 @@ import com.omgservers.model.message.MessageQualifierEnum;
 import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
 import com.omgservers.model.runtime.RuntimeModel;
 import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -33,7 +32,6 @@ import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -50,8 +48,6 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
     final ClientModule clientModule;
-
-    final IssueJwtTokenOperation issueJwtTokenOperation;
 
     final ClientMessageModelFactory clientMessageModelFactory;
 
@@ -108,11 +104,9 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncRuntimeAssignmentMessage(final RuntimeModel runtime,
                                               final Long clientId,
                                               final String idempotencyKey) {
-        final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtime.getId(), UserRoleEnum.PLAYER);
         final var messageBody = new RuntimeAssignmentMessageBodyModel(runtime.getId(),
                 runtime.getQualifier(),
-                runtime.getConfig(),
-                wsToken);
+                runtime.getConfig());
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                 messageBody,

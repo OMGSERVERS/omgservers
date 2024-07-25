@@ -22,13 +22,6 @@ class IssueJwtTokenOperationTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void whenIssueAdminJwtToken_thenIssued() {
-        final var jwtToken = issueJwtTokenOperation.issueAdminJwtToken();
-        assertNotNull(jwtToken);
-        log.info("Admin JWT token, {}", jwtToken);
-    }
-
-    @Test
     void whenIssueServiceJwtToken_thenIssued() {
         final var jwtToken = issueJwtTokenOperation.issueServiceJwtToken();
         assertNotNull(jwtToken);

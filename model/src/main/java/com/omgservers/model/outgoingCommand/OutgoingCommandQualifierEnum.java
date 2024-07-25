@@ -8,6 +8,7 @@ import com.omgservers.model.outgoingCommand.body.RespondClientOutgoingCommandBod
 import com.omgservers.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
 import com.omgservers.model.outgoingCommand.body.SetProfileOutgoingCommandBodyModel;
 import com.omgservers.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
+import com.omgservers.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyModel;
 import lombok.Getter;
 
 @Getter
@@ -22,7 +23,9 @@ public enum OutgoingCommandQualifierEnum {
 
     REQUEST_MATCHMAKING(RequestMatchmakingOutgoingCommandBodyModel.class, true),
     KICK_CLIENT(KickClientOutgoingCommandBodyModel.class, true),
-    STOP_MATCHMAKING(StopMatchmakingOutgoingCommandBodyModel.class, true);
+    STOP_MATCHMAKING(StopMatchmakingOutgoingCommandBodyModel.class, true),
+
+    UPGRADE_CONNECTION(UpgradeConnectionOutgoingCommandBodyModel.class, true);
 
     final Class<? extends OutgoingCommandBodyModel> bodyClass;
     final Boolean infoLogging;

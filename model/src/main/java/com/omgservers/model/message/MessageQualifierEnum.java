@@ -1,6 +1,7 @@
 package com.omgservers.model.message;
 
 import com.omgservers.model.message.body.ClientOutgoingMessageBodyModel;
+import com.omgservers.model.message.body.ConnectionUpgradeMessageBodyModel;
 import com.omgservers.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.model.message.body.MatchmakerAssignmentMessageBodyModel;
 import com.omgservers.model.message.body.RuntimeAssignmentMessageBodyModel;
@@ -14,6 +15,7 @@ public enum MessageQualifierEnum {
     SERVER_WELCOME_MESSAGE(ServerWelcomeMessageBodyModel.class),
     RUNTIME_ASSIGNMENT_MESSAGE(RuntimeAssignmentMessageBodyModel.class),
     MATCHMAKER_ASSIGNMENT_MESSAGE(MatchmakerAssignmentMessageBodyModel.class),
+    CONNECTION_UPGRADE_MESSAGE(ConnectionUpgradeMessageBodyModel.class),
     DISCONNECTION_REASON_MESSAGE(DisconnectionReasonMessageBodyModel.class),
     SERVER_OUTGOING_MESSAGE(ServerOutgoingMessageBodyModel.class);
 

@@ -5,11 +5,7 @@ import com.omgservers.model.user.UserRoleEnum;
 import java.util.Set;
 
 public interface IssueJwtTokenOperation {
-    String issueAdminJwtToken();
-
     String issueServiceJwtToken();
-
-    String issueRouterUserJwtToken();
 
     String issueUserJwtToken(Long userId, Set<String> groups);
 

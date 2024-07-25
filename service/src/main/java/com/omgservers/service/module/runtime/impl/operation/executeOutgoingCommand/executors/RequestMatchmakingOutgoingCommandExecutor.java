@@ -49,7 +49,6 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
     final HasRuntimeAssignmentOperation hasRuntimeAssignmentOperation;
     final CheckShardOperation checkShardOperation;
 
-    final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
     final MatchmakerRequestModelFactory matchmakerRequestModelFactory;
     final PgPool pgPool;
 

@@ -42,7 +42,7 @@ public enum UserRoleEnum {
                 return value;
             }
         }
-        throw new IllegalArgumentException("No enum constant with name " + name);
+        throw new IllegalArgumentException("no enum constant with name " + name);
     }
 
     final String name;

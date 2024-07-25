@@ -19,25 +19,11 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     // TODO: get from configuration
     private static final String TOKEN_ISSUER = "https://omgservers.com";
-    private static final Duration ADMIN_TOKEN_DURATION = Duration.ofSeconds(3600);
     private static final Duration SERVICE_TOKEN_DURATION = Duration.ofSeconds(31536000);
-    private static final Duration ROUTER_TOKEN_DURATION = Duration.ofSeconds(31536000);
     private static final Duration USER_TOKEN_DURATION = Duration.ofSeconds(3600);
     private static final Duration WS_TOKEN_DURATION = Duration.ofSeconds(6000);
 
     final GetConfigOperation getConfigOperation;
-
-    @Override
-    public String issueAdminJwtToken() {
-        final var subject = String.valueOf(getConfigOperation.getServiceConfig().defaults().adminId());
-        final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
-                .subject(subject)
-                .expiresIn(ADMIN_TOKEN_DURATION)
-                .groups(UserRoleEnum.ADMIN.getName())
-                .sign();
-
-        return jwtToken;
-    }
 
     @Override
     public String issueServiceJwtToken() {
@@ -46,18 +32,6 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
                 .subject(subject)
                 .expiresIn(SERVICE_TOKEN_DURATION)
                 .groups(InternalRoleEnum.SERVICE.getName())
-                .sign();
-
-        return jwtToken;
-    }
-
-    @Override
-    public String issueRouterUserJwtToken() {
-        final var subject = String.valueOf(getConfigOperation.getServiceConfig().defaults().routerUserId());
-        final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
-                .subject(subject)
-                .expiresIn(ROUTER_TOKEN_DURATION)
-                .groups(UserRoleEnum.ROUTER.getName())
                 .sign();
 
         return jwtToken;
