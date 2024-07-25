@@ -32,6 +32,16 @@ services:
       - "8161:8161"
     networks:
       - omgservers
+  router:
+    image: "omgservers/router:${OMGSERVERS_VERSION}"
+    container_name: "router"
+    environment:
+      - OMGSERVERS_SERVICE_URI=http://host.docker.internal:8080
+      - OMGSERVERS_USER_PASSWORD=router
+    ports:
+      - "6060:8080"
+    networks:
+      - omgservers
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"

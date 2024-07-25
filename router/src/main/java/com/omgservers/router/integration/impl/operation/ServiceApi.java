@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
+@Path("/omgservers/v1/entrypoint/router/request")
 public interface ServiceApi {
 
     @PUT

@@ -17,10 +17,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class BootstrapServiceImpl implements BootstrapService {
+
+    private static final Duration BACKOFF_INTERVAL = Duration.ofSeconds(1);
+    private static final Duration MAX_BACKOFF = Duration.ofSeconds(1);
 
     final ServiceIntegration serviceIntegration;
     final GetConfigOperation getConfigOperation;
@@ -31,17 +36,24 @@ public class BootstrapServiceImpl implements BootstrapService {
     void startup(
             @Observes @Priority(RouterPriorityConfiguration.START_UP_BOOTSTRAP_PRIORITY) final StartupEvent event) {
         bootstrap()
+                .onFailure().retry().withBackOff(BACKOFF_INTERVAL, MAX_BACKOFF).indefinitely()
                 .await().indefinitely();
     }
 
     @Override
     public Uni<Void> bootstrap() {
         return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> bootstrapServiceToken());
+                .flatMap(voidItem -> bootstrapServiceToken())
+                .onFailure().transform(t -> {
+                    log.error("Bootstrap failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
+                    return t;
+                });
     }
 
     Uni<Void> bootstrapServiceToken() {
         final var userId = getConfigOperation.getRouterConfig().userId();
+        log.info("Bootstrap service token, userId={}", userId);
+
         final var password = getConfigOperation.getRouterConfig().password();
         final var request = new CreateTokenRouterRequest(userId, password);
         return serviceIntegration.getServiceService().createToken(request)
