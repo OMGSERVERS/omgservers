@@ -15,22 +15,25 @@ fi
 mkdir -p $CLIENT
 
 echo Generate $CLIENT private key
-openssl genrsa -out $CLIENT/client.key 4096
+openssl genrsa -out $CLIENT/private_key.pem 4096
 
 echo Generate $CLIENT certificate
-openssl req -new -subj "/CN=$CLIENT" -key $CLIENT/client.key -sha256 -out $CLIENT/client.csr
+openssl req -new -subj "/CN=$CLIENT" -key $CLIENT/private_key.pem -sha256 -out $CLIENT/client.csr
 
 echo Generate extfile $CLIENT/extfile.cnf
 echo "extendedKeyUsage = clientAuth" > $CLIENT/extfile.cnf
 
 echo Sign $CLIENT certificate
-openssl x509 -req -days 1095 -sha256 -in $CLIENT/client.csr -CA ca-cert/ca.crt -CAkey ca-cert/ca.key \
-  -CAcreateserial -out $CLIENT/client.crt -extfile $CLIENT/extfile.cnf
+openssl x509 -req -days 1095 -sha256 -in $CLIENT/client.csr -CA ca-cert/cert.pem -CAkey ca-cert/private_key.pem \
+  -CAcreateserial -out $CLIENT/cert.pem -extfile $CLIENT/extfile.cnf
+
+echo Extract public key
+openssl x509 -in $CLIENT/cert.pem -pubkey -noout > $CLIENT/public_key.pem
 
 echo Copy CA certificate
-cp ca-cert/ca.crt $CLIENT/ca.pem
+cp ca-cert/cert.pem $CLIENT/ca.pem
 
 rm $CLIENT/client.csr $CLIENT/extfile.cnf
-chmod 0400 $CLIENT/client.key
-chmod 0444 $CLIENT/client.crt
+chmod 0400 $CLIENT/private_key.pem
+chmod 0444 $CLIENT/cert.pem
 chmod 0444 $CLIENT/ca.pem
