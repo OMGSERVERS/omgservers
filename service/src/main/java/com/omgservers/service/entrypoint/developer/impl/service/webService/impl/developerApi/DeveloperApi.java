@@ -4,8 +4,12 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
@@ -39,10 +43,18 @@ public interface DeveloperApi {
     Uni<CreateProjectDeveloperResponse> createProject(@NotNull CreateProjectDeveloperRequest request);
 
     @PUT
+    @Path("/create-version")
+    Uni<CreateVersionDeveloperResponse> createVersion(@NotNull CreateVersionDeveloperRequest request);
+
+    @PUT
     @Path("upload-version")
     Uni<UploadVersionDeveloperResponse> uploadVersion(@RestForm("tenantId") Long tenantId,
                                                       @RestForm("stageId") Long stageId,
                                                       @RestForm(FileUpload.ALL) List<FileUpload> files);
+
+    @PUT
+    @Path("/deploy-version")
+    Uni<DeployVersionDeveloperResponse> deployVersion(@NotNull DeployVersionDeveloperRequest request);
 
     @PUT
     @Path("/delete-version")

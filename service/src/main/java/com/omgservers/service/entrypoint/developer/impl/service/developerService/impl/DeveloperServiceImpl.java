@@ -4,8 +4,12 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
@@ -13,7 +17,9 @@ import com.omgservers.model.dto.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createProject.CreateProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createToken.CreateTokenMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createVersion.CreateVersionMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deleteVersion.DeleteVersionMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployVersion.DeployVersionMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getTenantDashboard.GetTenantDashboardMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.uploadVersion.UploadVersionMethod;
 import io.smallrye.mutiny.Uni;
@@ -29,9 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 class DeveloperServiceImpl implements DeveloperService {
 
     final GetTenantDashboardMethod getTenantDashboardMethod;
+    final CreateVersionMethod createVersionMethod;
     final CreateProjectMethod createProjectMethod;
     final UploadVersionMethod uploadVersionMethod;
     final DeleteVersionMethod deleteVersionMethod;
+    final DeployVersionMethod deployVersionMethod;
     final CreateTokenMethod createTokenMethod;
 
     @Override
@@ -51,8 +59,18 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
+    public Uni<CreateVersionDeveloperResponse> createVersion(@Valid final CreateVersionDeveloperRequest request) {
+        return createVersionMethod.createVersion(request);
+    }
+
+    @Override
     public Uni<UploadVersionDeveloperResponse> uploadVersion(@Valid final UploadVersionDeveloperRequest request) {
         return uploadVersionMethod.uploadVersion(request);
+    }
+
+    @Override
+    public Uni<DeployVersionDeveloperResponse> deployVersion(@Valid final DeployVersionDeveloperRequest request) {
+        return deployVersionMethod.deployVersion(request);
     }
 
     @Override

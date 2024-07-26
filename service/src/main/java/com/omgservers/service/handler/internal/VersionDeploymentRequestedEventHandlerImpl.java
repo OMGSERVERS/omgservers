@@ -47,7 +47,7 @@ public class VersionDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .flatMap(version -> {
                     log.info("Version deployment was requested, version={}/{}", tenantId, versionId);
 
-                    final var idempotencyKey = version.getIdempotencyKey();
+                    final var idempotencyKey = event.getId().toString();
 
                     // TODO: creating lobby/matchmaker requests only if developer requested it
                     return syncVersionLobbyRequest(tenantId, versionId, idempotencyKey)

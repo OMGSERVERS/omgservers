@@ -4,8 +4,12 @@ import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
 import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperRequest;
+import com.omgservers.model.dto.developer.DeployVersionDeveloperResponse;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.model.dto.developer.UploadVersionDeveloperRequest;
@@ -52,11 +56,21 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
+    public Uni<CreateVersionDeveloperResponse> createVersion(@NotNull final CreateVersionDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
+    }
+
+    @Override
     public Uni<UploadVersionDeveloperResponse> uploadVersion(final Long tenantId,
                                                              final Long stageId,
                                                              final List<FileUpload> files) {
         final var request = new UploadVersionDeveloperRequest(tenantId, stageId, files);
         return handleApiRequestOperation.handleApiRequest(log, request, webService::uploadVersion);
+    }
+
+    @Override
+    public Uni<DeployVersionDeveloperResponse> deployVersion(@NotNull final DeployVersionDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deployVersion);
     }
 
     @Override

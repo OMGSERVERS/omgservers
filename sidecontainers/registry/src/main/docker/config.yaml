@@ -1,0 +1,38 @@
+version: 0.1
+log:
+  fields:
+    service: registry
+    environment: omgservers
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :5000
+  headers:
+    X-Content-Type-Options: [ nosniff ]
+notifications:
+  events:
+    includereferences: true
+  endpoints:
+    - name: omgservers
+      disabled: false
+      url: http://host.docker.internal:8080/omgservers/v1/entrypoint/registry/event
+      headers:
+        Content-Type: [ application/json ]
+      timeout: 5s
+      threshold: 10
+      backoff: 1s
+      ignoredmediatypes:
+        - application/octet-stream
+      ignore:
+        mediatypes:
+          - application/octet-stream
+        actions:
+          - pull
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
