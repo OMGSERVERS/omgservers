@@ -36,7 +36,7 @@ class BootstrapRouterUserMethodImpl implements BootstrapRouterUserMethod {
                 .invoke(user -> log.info("Router user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    final var idempotencyKey = "bootstrap/router-user";
+                    final var idempotencyKey = "bootstrap/routerUser";
                     final var password = getConfigOperation.getServiceConfig().bootstrap().routerUser().password();
                     final var passwordHash = BcryptUtil.bcryptHash(password);
                     final var user = userModelFactory.create(userId,

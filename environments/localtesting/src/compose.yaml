@@ -45,6 +45,8 @@ services:
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
+    environment:
+      - REGISTRY_LOG_FIELDS_ENVIRONMENT=localtesting
     ports:
       - "5000:5000"
     networks:

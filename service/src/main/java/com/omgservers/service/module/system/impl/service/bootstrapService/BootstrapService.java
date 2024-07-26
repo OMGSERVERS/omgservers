@@ -16,6 +16,8 @@ public interface BootstrapService {
 
     Uni<Void> bootstrapRouterUser();
 
+    Uni<Void> bootstrapRegistryUser();
+
     Uni<Void> bootstrapDefaultPool();
 
     Uni<Void> bootstrapDockerHost();

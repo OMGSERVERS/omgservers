@@ -5,6 +5,7 @@ import com.omgservers.service.module.system.impl.service.bootstrapService.impl.m
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDatabaseSchema.BootstrapDatabaseSchemaMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDefaultPool.BootstrapDefaultPoolMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
+import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRegistryUser.BootstrapRegistryUserMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob.BootstrapRelayJobMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRouterUser.BootstrapRouterUserMethod;
 import com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchedulerJob.BootstrapSchedulerJobMethod;
@@ -24,6 +25,7 @@ class BootstrapServiceImpl implements BootstrapService {
 
     final BootstrapDatabaseSchemaMethod bootstrapDatabaseSchemaMethod;
     final BootstrapSchedulerJobMethod bootstrapSchedulerJobMethod;
+    final BootstrapRegistryUserMethod bootstrapRegistryUserMethod;
     final BootstrapServerIndexMethod bootstrapServerIndexMethod;
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
     final BootstrapSupportUserMethod bootstrapSupportUserMethod;
@@ -61,6 +63,11 @@ class BootstrapServiceImpl implements BootstrapService {
     @Override
     public Uni<Void> bootstrapRouterUser() {
         return bootstrapRouterUserMethod.bootstrapRouterUser();
+    }
+
+    @Override
+    public Uni<Void> bootstrapRegistryUser() {
+        return bootstrapRegistryUserMethod.bootstrapRegistryUser();
     }
 
     @Override

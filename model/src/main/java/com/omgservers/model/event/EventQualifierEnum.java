@@ -1,6 +1,7 @@
 package com.omgservers.model.event;
 
 import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
+import com.omgservers.model.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.model.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
@@ -152,6 +153,7 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_SERVER_CONTAINER_REF_CREATED(RuntimePoolServerContainerRefCreatedEventBodyModel.class, false),
     RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
+    DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class, false),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_CHECKING_REQUESTED(VersionBuildingCheckingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),

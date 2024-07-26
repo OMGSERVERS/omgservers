@@ -38,6 +38,8 @@ public interface ServiceConfig {
         long supportId();
 
         long routerUserId();
+
+        long registryUserId();
     }
 
     interface GeneratorConfig {
@@ -99,6 +101,8 @@ public interface ServiceConfig {
         BootstrapSupportConfig support();
 
         BootstrapRouterUserConfig routerUser();
+
+        BootstrapRouterUserConfig registryUser();
 
         BootstrapRootConfig root();
 

@@ -17,6 +17,11 @@ public enum UserRoleEnum {
     ROUTER(Names.ROUTER),
 
     /**
+     * Role which is used to interact with the service through Registry Api.
+     */
+    REGISTRY(Names.REGISTRY),
+
+    /**
      * Role which is used to interact with the service through Developer Api.
      */
     DEVELOPER(Names.DEVELOPER),
@@ -59,6 +64,7 @@ public enum UserRoleEnum {
         static public final String ADMIN = "admin";
         static public final String SUPPORT = "support";
         static public final String ROUTER = "router";
+        static public final String REGISTRY = "registry";
         static public final String DEVELOPER = "developer";
         static public final String PLAYER = "player";
         static public final String WORKER = "worker";

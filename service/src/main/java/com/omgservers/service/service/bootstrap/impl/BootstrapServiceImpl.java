@@ -41,6 +41,7 @@ public class BootstrapServiceImpl implements BootstrapService {
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapRouterUser())
+                .flatMap(voidItem -> bootstrapRegistryUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .flatMap(voidItem -> bootstrapDockerHost())
                 .flatMap(voidItem -> bootstrapRelayJob())
@@ -103,6 +104,16 @@ public class BootstrapServiceImpl implements BootstrapService {
                     .invoke(voidItem -> log.info("Router user was initialized"));
         } else {
             log.info("Bootstrap of router user is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> bootstrapRegistryUser() {
+        if (getConfigOperation.getServiceConfig().bootstrap().registryUser().enabled()) {
+            return systemModule.getBootstrapService().bootstrapRegistryUser()
+                    .invoke(voidItem -> log.info("Registry user was initialized"));
+        } else {
+            log.info("Bootstrap of registry user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
