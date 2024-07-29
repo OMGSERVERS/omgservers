@@ -111,8 +111,8 @@ import com.omgservers.service.module.tenant.impl.service.versionService.impl.met
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.getVersionMatchmakerRequest.GetVersionMatchmakerRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.syncVersionMatchmakerRequest.SyncVersionMatchmakerRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.viewVersionMatchmakerRequests.ViewVersionMatchmakerRequestsMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

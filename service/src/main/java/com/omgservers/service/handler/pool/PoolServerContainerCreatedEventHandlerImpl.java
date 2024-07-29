@@ -21,8 +21,8 @@ import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModel
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

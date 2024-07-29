@@ -1,21 +1,21 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.schema.event.body.module.tenant.VersionCreatedEventBodyModel;
 import com.omgservers.schema.model.version.VersionModeModel;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,9 +30,10 @@ import java.nio.charset.StandardCharsets;
 public class VersionCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final SystemModule systemModule;
     final TenantModule tenantModule;
     final LobbyModule lobbyModule;
+
+    final EventService eventService;
 
     final EventModelFactory eventModelFactory;
 
@@ -80,7 +81,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

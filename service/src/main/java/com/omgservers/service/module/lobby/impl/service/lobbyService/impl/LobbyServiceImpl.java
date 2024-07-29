@@ -24,8 +24,8 @@ import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method
 import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobby.syncLobby.SyncLobbyMethod;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobbyRuntimeRef.syncLobbyRuntimeRef.SyncLobbyRuntimeRefMethod;
 import com.omgservers.service.module.lobby.impl.service.webService.impl.api.LobbyApi;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

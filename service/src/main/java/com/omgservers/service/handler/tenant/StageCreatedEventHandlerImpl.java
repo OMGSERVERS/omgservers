@@ -12,9 +12,8 @@ import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 public class StageCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
 
     final GetConfigOperation getConfigOperation;
 
@@ -51,7 +49,9 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(stage -> {
                     log.info("Stage was created, stage={}/{}", tenantId, stageId);
 
-                    return syncBuilderPermission(tenantId, stageId);
+                    final var idempotencyKey = event.getId().toString();
+
+                    return syncBuilderPermission(tenantId, stageId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
@@ -63,12 +63,17 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<StagePermissionModel> syncBuilderPermission(final Long tenantId,
-                                                    final Long stageId) {
+                                                    final Long stageId,
+                                                    final String idempotencyKey) {
         final var builderUserId = getConfigOperation.getServiceConfig().defaults().builderUserId();
         final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
-        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, builderUserId, permission);
+        final var stagePermission = stagePermissionModelFactory.create(tenantId,
+                stageId,
+                builderUserId,
+                permission,
+                idempotencyKey);
         final var request = new SyncStagePermissionRequest(stagePermission);
-        return tenantModule.getStageService().syncStagePermission(request)
+        return tenantModule.getStageService().syncStagePermissionWithIdempotency(request)
                 .replaceWith(stagePermission);
     }
 }

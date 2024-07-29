@@ -1,5 +1,6 @@
 package com.omgservers.service.module.tenant.impl.service.stageService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteStageRequest;
@@ -18,20 +19,22 @@ import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
 import com.omgservers.schema.module.tenant.ViewStagesRequest;
 import com.omgservers.schema.module.tenant.ViewStagesResponse;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.deleteStage.DeleteStageMethod;
-import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.deleteStagePermission.DeleteStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.getStage.GetStageMethod;
-import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.hasStagePermission.HasStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.syncStage.SyncStageMethod;
-import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.syncStagePermission.SyncStagePermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.validateStageSecret.ValidateStageSecretMethod;
-import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.viewStagePermissions.ViewStagePermissionsMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.viewStages.ViewStagesMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.deleteStagePermission.DeleteStagePermissionMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.hasStagePermission.HasStagePermissionMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.syncStagePermission.SyncStagePermissionMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.viewStagePermissions.ViewStagePermissionsMethod;
+import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -112,6 +115,24 @@ public class StageServiceImpl implements StageService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncStagePermission,
                 syncStagePermissionMethod::syncStagePermission);
+    }
+
+    @Override
+    public Uni<SyncStagePermissionResponse> syncStagePermissionWithIdempotency(
+            @Valid final SyncStagePermissionRequest request) {
+        return syncStagePermission(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getPermission(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncStagePermissionResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

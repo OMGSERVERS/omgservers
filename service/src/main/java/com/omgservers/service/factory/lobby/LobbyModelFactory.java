@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.lobby;
 
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

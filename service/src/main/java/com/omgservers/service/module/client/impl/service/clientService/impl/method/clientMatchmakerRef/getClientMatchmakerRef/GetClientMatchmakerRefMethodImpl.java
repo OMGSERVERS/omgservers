@@ -3,7 +3,7 @@ package com.omgservers.service.module.client.impl.service.clientService.impl.met
 import com.omgservers.schema.module.client.GetClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.GetClientMatchmakerRefResponse;
 import com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.selectClientMatchmakerRef.SelectClientMatchmakerRefOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

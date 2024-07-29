@@ -15,9 +15,8 @@ import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserDeletedEventHandlerImpl implements EventHandler {
 
-    final SystemModule systemModule;
     final UserModule userModule;
     final RootModule rootModule;
 

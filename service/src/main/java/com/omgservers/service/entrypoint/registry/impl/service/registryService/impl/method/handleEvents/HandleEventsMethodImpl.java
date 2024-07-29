@@ -1,12 +1,12 @@
 package com.omgservers.service.entrypoint.registry.impl.service.registryService.impl.method.handleEvents;
 
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
 import com.omgservers.schema.entrypoint.registry.handleEvents.HandleEventsRegistryRequest;
+import com.omgservers.schema.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.module.system.SystemModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandleEventsMethodImpl implements HandleEventsMethod {
 
-    final SystemModule systemModule;
+    final EventService eventService;
 
     final EventModelFactory eventModelFactory;
 
@@ -39,7 +39,7 @@ class HandleEventsMethodImpl implements HandleEventsMethod {
         final var eventModel = eventModelFactory.create(eventBody, eventId);
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

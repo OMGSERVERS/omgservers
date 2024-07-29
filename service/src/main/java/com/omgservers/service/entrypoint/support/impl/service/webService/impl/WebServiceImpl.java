@@ -28,7 +28,6 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
 import com.omgservers.service.entrypoint.support.impl.service.webService.WebService;
-import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class WebServiceImpl implements WebService {
-
-    final SystemModule systemModule;
 
     final SupportService supportService;
 

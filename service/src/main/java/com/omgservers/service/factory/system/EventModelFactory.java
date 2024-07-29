@@ -3,7 +3,7 @@ package com.omgservers.service.factory.system;
 import com.omgservers.schema.event.EventBodyModel;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventStatusEnum;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

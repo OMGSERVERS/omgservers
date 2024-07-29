@@ -2,11 +2,10 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
 import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.deleteVersionMatchmakerRequest.DeleteVersionMatchmakerRequestOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -16,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class DeleteVersionMatchmakerRequestMethodImpl implements DeleteVersionMatchmakerRequestMethod {
-
-    final SystemModule systemModule;
 
     final DeleteVersionMatchmakerRequestOperation deleteVersionMatchmakerRequestOperation;
     final ChangeWithContextOperation changeWithContextOperation;

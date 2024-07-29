@@ -16,7 +16,7 @@ import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.lobby.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

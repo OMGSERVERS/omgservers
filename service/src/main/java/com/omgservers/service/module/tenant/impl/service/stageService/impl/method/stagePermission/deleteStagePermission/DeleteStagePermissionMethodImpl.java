@@ -3,9 +3,9 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
 import com.omgservers.service.module.tenant.impl.operation.stagePermission.deleteStagePermission.DeleteStagePermissionOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

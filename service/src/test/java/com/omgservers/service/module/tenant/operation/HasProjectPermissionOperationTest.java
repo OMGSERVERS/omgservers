@@ -8,7 +8,7 @@ import com.omgservers.service.module.tenant.operation.testInterface.HasProjectPe
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectPermissionOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

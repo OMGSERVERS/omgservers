@@ -1,29 +1,29 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
-import com.omgservers.schema.module.client.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.SyncClientMessageResponse;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.schema.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.schema.event.body.module.client.ClientCreatedEventBodyModel;
+import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.client.GetClientRequest;
+import com.omgservers.schema.module.client.GetClientResponse;
+import com.omgservers.schema.module.client.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.SyncClientMessageResponse;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -36,8 +36,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     final ClientModule clientModule;
-    final SystemModule systemModule;
     final TenantModule tenantModule;
+
+    final EventService eventService;
 
     final ClientMessageModelFactory clientMessageModelFactory;
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
@@ -115,7 +116,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 
@@ -129,7 +130,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

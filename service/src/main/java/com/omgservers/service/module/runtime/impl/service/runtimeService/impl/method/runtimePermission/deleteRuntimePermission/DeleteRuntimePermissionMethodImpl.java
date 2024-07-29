@@ -3,9 +3,9 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.schema.module.runtime.DeleteRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimePermission.deleteRuntimePermission.DeleteRuntimePermissionOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

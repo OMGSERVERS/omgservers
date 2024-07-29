@@ -6,7 +6,7 @@ import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
 import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.router.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;

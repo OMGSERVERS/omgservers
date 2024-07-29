@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.version.selectActive
 
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionModelMapper;
-import com.omgservers.service.operation.selectList.SelectListOperation;
+import com.omgservers.service.server.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -36,7 +36,7 @@ import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.client.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

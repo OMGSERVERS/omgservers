@@ -8,7 +8,7 @@ import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
 import com.omgservers.service.module.lobby.operation.testInterface.UpsertLobbyOperationTestInterface;
 import com.omgservers.service.module.lobby.operation.testInterface.UpsertLobbyRuntimeRefOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

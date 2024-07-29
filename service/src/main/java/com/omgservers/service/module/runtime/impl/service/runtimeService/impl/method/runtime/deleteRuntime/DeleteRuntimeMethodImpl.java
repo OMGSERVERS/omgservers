@@ -1,13 +1,12 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.deleteRuntime;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
-import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.runtime.impl.operation.runtime.deleteRuntime.DeleteRuntimeOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
-
-    final SystemModule systemModule;
 
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteRuntimeOperation deleteRuntimeOperation;

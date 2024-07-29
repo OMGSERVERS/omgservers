@@ -1,6 +1,13 @@
 package com.omgservers.service.handler.matchmaker;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
@@ -9,20 +16,13 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.service.system.SyncEventRequest;
 import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
-import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
-import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.system.SystemModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
 
     final MatchmakerModule matchmakerModule;
     final ClientModule clientModule;
-    final SystemModule systemModule;
+    final EventService eventService;
 
     final EventModelFactory eventModelFactory;
 
@@ -120,7 +120,7 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEvent(syncEventRequest)
+        return eventService.syncEvent(syncEventRequest)
                 .map(SyncEventResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

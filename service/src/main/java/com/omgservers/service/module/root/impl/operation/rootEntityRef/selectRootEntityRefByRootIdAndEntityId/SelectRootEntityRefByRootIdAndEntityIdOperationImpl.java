@@ -2,7 +2,7 @@ package com.omgservers.service.module.root.impl.operation.rootEntityRef.selectRo
 
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.service.module.root.impl.mappers.RootEntityRefModelMapper;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.server.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

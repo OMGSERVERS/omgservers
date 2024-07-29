@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.tenant;
 
 import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateSecureString.GenerateSecureStringOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

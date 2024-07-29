@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.project.hasProject;
 
-import com.omgservers.service.operation.hasObject.HasObjectOperation;
+import com.omgservers.service.server.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

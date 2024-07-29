@@ -15,7 +15,7 @@ import com.omgservers.service.module.tenant.operation.testInterface.UpsertStageO
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertVersionLobbyRefOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertVersionOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

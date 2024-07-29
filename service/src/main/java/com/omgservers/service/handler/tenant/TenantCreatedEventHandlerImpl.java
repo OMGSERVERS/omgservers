@@ -1,24 +1,24 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
-import com.omgservers.schema.service.system.job.SyncJobRequest;
-import com.omgservers.schema.service.system.job.SyncJobResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
+import com.omgservers.schema.module.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.GetTenantResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -31,8 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
     final RootModule rootModule;
+
+    final JobService jobService;
 
     final GetConfigOperation getConfigOperation;
 
@@ -85,7 +86,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         final var job = jobModelFactory.create(JobQualifierEnum.TENANT, tenantId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+        return jobService.syncJobWithIdempotency(syncEventRequest)
                 .map(SyncJobResponse::getCreated);
     }
 }

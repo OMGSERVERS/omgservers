@@ -1,17 +1,17 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
-import com.omgservers.schema.service.system.job.SyncJobRequest;
-import com.omgservers.schema.service.system.job.SyncJobResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -20,8 +20,8 @@ import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.factory.tenant.VersionMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -34,8 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
-    final SystemModule systemModule;
     final TenantModule tenantModule;
+
+    final JobService jobService;
 
     final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
     final EventModelFactory eventModelFactory;
@@ -105,7 +106,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var job = jobModelFactory.create(JobQualifierEnum.MATCHMAKER, matchmakerId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+        return jobService.syncJobWithIdempotency(syncEventRequest)
                 .map(SyncJobResponse::getCreated);
     }
 }

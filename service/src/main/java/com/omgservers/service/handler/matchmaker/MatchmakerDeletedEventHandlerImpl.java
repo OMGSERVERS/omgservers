@@ -1,5 +1,14 @@
 package com.omgservers.service.handler.matchmaker;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
@@ -14,28 +23,19 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
-import com.omgservers.schema.service.system.job.DeleteJobRequest;
-import com.omgservers.schema.service.system.job.DeleteJobResponse;
-import com.omgservers.schema.service.system.job.FindJobRequest;
-import com.omgservers.schema.service.system.job.FindJobResponse;
 import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
 import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.service.system.job.DeleteJobRequest;
+import com.omgservers.schema.service.system.job.DeleteJobResponse;
+import com.omgservers.schema.service.system.job.FindJobRequest;
+import com.omgservers.schema.service.system.job.FindJobResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -52,7 +52,8 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
-    final SystemModule systemModule;
+
+    final JobService jobService;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -227,13 +228,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<JobModel> findJob(final Long tenantId) {
         final var request = new FindJobRequest(tenantId);
-        return systemModule.getJobService().findJob(request)
+        return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }
 
     Uni<Boolean> deleteJob(final Long id) {
         final var request = new DeleteJobRequest(id);
-        return systemModule.getJobService().deleteJob(request)
+        return jobService.deleteJob(request)
                 .map(DeleteJobResponse::getDeleted);
     }
 }

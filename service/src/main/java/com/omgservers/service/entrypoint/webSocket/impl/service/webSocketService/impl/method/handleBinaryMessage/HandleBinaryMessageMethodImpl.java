@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketServic
 
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.HandleBinaryMessageRequest;
+import com.omgservers.service.server.service.room.RoomService;
+import com.omgservers.service.server.service.room.dto.HandleBinaryMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.router.impl.service.routerService.impl
 
 import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
 import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

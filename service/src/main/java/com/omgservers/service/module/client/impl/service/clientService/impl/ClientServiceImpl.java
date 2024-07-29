@@ -57,8 +57,8 @@ import com.omgservers.service.module.client.impl.service.clientService.impl.meth
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.getClientRuntimeRef.GetClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

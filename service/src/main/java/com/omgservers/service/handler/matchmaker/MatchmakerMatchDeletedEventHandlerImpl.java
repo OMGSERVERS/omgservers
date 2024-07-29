@@ -1,5 +1,10 @@
 package com.omgservers.service.handler.matchmaker;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
@@ -8,15 +13,9 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,7 +32,6 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
-    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {

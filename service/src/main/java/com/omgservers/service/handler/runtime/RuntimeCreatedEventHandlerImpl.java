@@ -1,5 +1,12 @@
 package com.omgservers.service.handler.runtime;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
+import com.omgservers.schema.event.body.module.runtime.RuntimeCreatedEventBodyModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
@@ -10,13 +17,6 @@ import com.omgservers.schema.service.system.SyncEventRequest;
 import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.schema.service.system.job.SyncJobRequest;
 import com.omgservers.schema.service.system.job.SyncJobResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.schema.event.body.module.runtime.RuntimeCreatedEventBodyModel;
-import com.omgservers.schema.model.job.JobQualifierEnum;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -32,10 +32,11 @@ import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.generateSecureString.GenerateSecureStringOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.service.event.EventService;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -49,10 +50,12 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
-    final SystemModule systemModule;
     final LobbyModule lobbyModule;
     final UserModule userModule;
     final PoolModule poolModule;
+
+    final EventService eventService;
+    final JobService jobService;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
     final GetConfigOperation getConfigOperation;
@@ -155,7 +158,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 
@@ -164,7 +167,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var job = jobModelFactory.create(JobQualifierEnum.RUNTIME, runtimeId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+        return jobService.syncJobWithIdempotency(syncEventRequest)
                 .map(SyncJobResponse::getCreated);
     }
 }

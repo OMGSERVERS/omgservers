@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketServic
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.AddConnectionRequest;
+import com.omgservers.service.server.service.room.RoomService;
+import com.omgservers.service.server.service.room.dto.AddConnectionRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

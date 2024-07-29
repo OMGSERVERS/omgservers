@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.system;
 
-import com.omgservers.schema.service.system.job.GetJobRequest;
-import com.omgservers.schema.service.system.job.GetJobResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.system.JobDeletedEventBodyModel;
 import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.service.system.job.GetJobRequest;
+import com.omgservers.schema.service.system.job.GetJobResponse;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.system.SystemModule;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class JobDeletedEventHandlerImpl implements EventHandler {
 
-    final SystemModule systemModule;
+    final JobService jobService;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -43,7 +43,7 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
 
     Uni<JobModel> getJob(final Long id) {
         final var request = new GetJobRequest(id);
-        return systemModule.getJobService().getJob(request)
+        return jobService.getJob(request)
                 .map(GetJobResponse::getJob);
     }
 }

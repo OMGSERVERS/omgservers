@@ -1,25 +1,25 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.interchange;
 
+import com.omgservers.schema.event.body.internal.ClientMessageReceivedEventBodyModel;
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.message.MessageModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.InterchangeRequest;
 import com.omgservers.schema.module.client.InterchangeResponse;
 import com.omgservers.schema.service.system.SyncEventRequest;
 import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.event.body.internal.ClientMessageReceivedEventBodyModel;
-import com.omgservers.schema.model.message.MessageModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.client.impl.operation.clientMessage.deleteClientMessagesByIds.DeleteClientMessagesByIdsOperation;
 import com.omgservers.service.module.client.impl.operation.clientMessage.selectActiveClientMessagesByClientId.SelectActiveClientMessagesByClientIdOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -35,7 +35,8 @@ import java.util.List;
 class InterchangeMethodImpl implements InterchangeMethod {
 
     final ClientModule clientModule;
-    final SystemModule systemModule;
+
+    final EventService eventService;
 
     final SelectActiveClientMessagesByClientIdOperation selectActiveClientMessagesByClientIdOperation;
     final DeleteClientMessagesByIdsOperation deleteClientMessagesByIdsOperation;
@@ -96,7 +97,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
                     final var eventModel = eventModelFactory.create(eventBody);
                     final var syncEventRequest = new SyncEventRequest(eventModel);
-                    return systemModule.getEventService().syncEvent(syncEventRequest)
+                    return eventService.syncEvent(syncEventRequest)
                             .map(SyncEventResponse::getCreated)
                             .replaceWith(Boolean.TRUE);
                 })

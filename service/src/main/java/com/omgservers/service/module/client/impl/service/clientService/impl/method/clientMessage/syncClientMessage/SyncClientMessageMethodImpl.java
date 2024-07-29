@@ -1,16 +1,15 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.syncClientMessage;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.client.hasClient.HasClientOperation;
 import com.omgservers.service.module.client.impl.operation.clientMessage.upsertClientMessage.UpsertClientMessageOperation;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
-
-    final SystemModule systemModule;
 
     final UpsertClientMessageOperation upsertClientMessageOperation;
     final ChangeWithContextOperation changeWithContextOperation;

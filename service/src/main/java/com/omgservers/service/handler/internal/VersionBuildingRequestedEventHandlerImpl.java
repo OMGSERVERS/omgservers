@@ -21,9 +21,9 @@ import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.integration.jenkins.JenkinsIntegration;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
+import com.omgservers.service.server.service.jenkins.JenkinsService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -39,9 +39,10 @@ import java.time.Instant;
 public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
     static private final int INITIAL_CHECKING_INTERVAL_IN_SECONDS = 1;
 
-    final JenkinsIntegration jenkinsIntegration;
     final TenantModule tenantModule;
-    final SystemModule systemModule;
+
+    final JenkinsService jenkinsService;
+    final EventService eventService;
 
     final VersionJenkinsRequestModelFactory versionJenkinsRequestModelFactory;
 
@@ -116,7 +117,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 versionId.toString(),
                 base64Archive);
 
-        return jenkinsIntegration.getJenkinsService().runLuaJitWorkerBuilderV1(request)
+        return jenkinsService.runLuaJitWorkerBuilderV1(request)
                 .map(RunLuaJitWorkerBuilderV1Response::getBuildNumber);
     }
 
@@ -148,7 +149,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
         eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(INITIAL_CHECKING_INTERVAL_IN_SECONDS)));
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

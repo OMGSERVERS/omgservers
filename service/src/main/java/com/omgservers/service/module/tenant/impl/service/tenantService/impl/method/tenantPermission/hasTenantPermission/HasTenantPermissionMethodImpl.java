@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.hasTenantPermission.HasTenantPermissionOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

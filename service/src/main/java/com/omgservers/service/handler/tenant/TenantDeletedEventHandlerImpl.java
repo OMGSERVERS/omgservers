@@ -1,13 +1,17 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.TenantDeletedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.project.ProjectModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefResponse;
-import com.omgservers.schema.service.system.job.DeleteJobRequest;
-import com.omgservers.schema.service.system.job.DeleteJobResponse;
-import com.omgservers.schema.service.system.job.FindJobRequest;
-import com.omgservers.schema.service.system.job.FindJobResponse;
 import com.omgservers.schema.module.tenant.DeleteProjectRequest;
 import com.omgservers.schema.module.tenant.DeleteProjectResponse;
 import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
@@ -18,20 +22,16 @@ import com.omgservers.schema.module.tenant.ViewProjectsRequest;
 import com.omgservers.schema.module.tenant.ViewProjectsResponse;
 import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.TenantDeletedEventBodyModel;
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.service.system.job.DeleteJobRequest;
+import com.omgservers.schema.service.system.job.DeleteJobResponse;
+import com.omgservers.schema.service.system.job.FindJobRequest;
+import com.omgservers.schema.service.system.job.FindJobResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,8 +47,9 @@ import java.util.List;
 public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
     final RootModule rootModule;
+
+    final JobService jobService;
 
     final GetConfigOperation getConfigOperation;
 
@@ -189,13 +190,13 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     Uni<JobModel> findJob(final Long tenantId) {
         final var request = new FindJobRequest(tenantId);
-        return systemModule.getJobService().findJob(request)
+        return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }
 
     Uni<Boolean> deleteJob(final Long id) {
         final var request = new DeleteJobRequest(id);
-        return systemModule.getJobService().deleteJob(request)
+        return jobService.deleteJob(request)
                 .map(DeleteJobResponse::getDeleted);
     }
 }

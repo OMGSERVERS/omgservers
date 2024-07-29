@@ -1,21 +1,21 @@
 package com.omgservers.service.handler.pool;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.pool.PoolDeletedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.service.system.job.DeleteJobRequest;
 import com.omgservers.schema.service.system.job.DeleteJobResponse;
 import com.omgservers.schema.service.system.job.FindJobRequest;
 import com.omgservers.schema.service.system.job.FindJobResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.pool.PoolDeletedEventBodyModel;
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.system.SystemModule;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,8 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolDeletedEventHandlerImpl implements EventHandler {
 
-    final SystemModule systemModule;
     final PoolModule poolModule;
+
+    final JobService jobService;
 
     final PoolModelFactory poolModelFactory;
 
@@ -69,13 +70,13 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
 
     Uni<JobModel> findJob(final Long poolId) {
         final var request = new FindJobRequest(poolId);
-        return systemModule.getJobService().findJob(request)
+        return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }
 
     Uni<Boolean> deleteJob(final Long id) {
         final var request = new DeleteJobRequest(id);
-        return systemModule.getJobService().deleteJob(request)
+        return jobService.deleteJob(request)
                 .map(DeleteJobResponse::getDeleted);
     }
 }

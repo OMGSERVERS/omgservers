@@ -1,22 +1,22 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.schema.module.pool.pool.GetPoolRequest;
-import com.omgservers.schema.module.pool.pool.GetPoolResponse;
-import com.omgservers.schema.service.system.job.SyncJobRequest;
-import com.omgservers.schema.service.system.job.SyncJobResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
+import com.omgservers.schema.module.pool.pool.GetPoolRequest;
+import com.omgservers.schema.module.pool.pool.GetPoolResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.system.SystemModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,8 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolCreatedEventHandlerImpl implements EventHandler {
 
-    final SystemModule systemModule;
     final PoolModule poolModule;
+
+    final JobService jobService;
 
     final GetConfigOperation getConfigOperation;
 
@@ -72,7 +73,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
         final var job = jobModelFactory.create(JobQualifierEnum.POOL, runtimeId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
-        return systemModule.getJobService().syncJobWithIdempotency(syncEventRequest)
+        return jobService.syncJobWithIdempotency(syncEventRequest)
                 .map(SyncJobResponse::getCreated);
     }
 }

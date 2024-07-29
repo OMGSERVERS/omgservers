@@ -1,5 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteVersionRequest;
@@ -10,15 +16,8 @@ import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
-import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -36,7 +35,6 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
-    final SystemModule systemModule;
 
     @Override
     public EventQualifierEnum getQualifier() {

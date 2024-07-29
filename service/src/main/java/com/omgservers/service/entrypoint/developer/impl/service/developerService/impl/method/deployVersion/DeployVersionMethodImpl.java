@@ -3,21 +3,21 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
 import com.omgservers.schema.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
+import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,7 +32,8 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 class DeployVersionMethodImpl implements DeployVersionMethod {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
+
+    final EventService eventService;
 
     final VersionImageRefModelFactory versionImageRefModelFactory;
     final EventModelFactory eventModelFactory;
@@ -92,7 +93,7 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
         final var eventModel = eventModelFactory.create(eventBody, idempotencyKey);
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

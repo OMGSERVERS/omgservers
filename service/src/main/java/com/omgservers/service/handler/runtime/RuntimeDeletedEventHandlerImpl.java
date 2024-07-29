@@ -1,5 +1,16 @@
 package com.omgservers.service.handler.runtime;
 
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
+import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefResponse;
 import com.omgservers.schema.module.lobby.FindLobbyRuntimeRefRequest;
@@ -30,27 +41,16 @@ import com.omgservers.schema.service.system.job.DeleteJobRequest;
 import com.omgservers.schema.service.system.job.DeleteJobResponse;
 import com.omgservers.schema.service.system.job.FindJobRequest;
 import com.omgservers.schema.service.system.job.FindJobResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.runtime.RuntimeDeletedEventBodyModel;
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
-import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getServers.GetServersOperation;
+import com.omgservers.service.server.operation.getServers.GetServersOperation;
+import com.omgservers.service.server.service.job.JobService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -68,10 +68,11 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
-    final SystemModule systemModule;
     final LobbyModule lobbyModule;
     final UserModule userModule;
     final PoolModule poolModule;
+
+    final JobService jobService;
 
     final GetServersOperation getServersOperation;
 
@@ -272,7 +273,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
     }
 
-    Uni<Boolean> deletePoolServerContainer(RuntimePoolServerContainerRefModel runtimePoolServerContainerRef) {
+    Uni<Boolean> deletePoolServerContainer(final RuntimePoolServerContainerRefModel runtimePoolServerContainerRef) {
         final var poolId = runtimePoolServerContainerRef.getPoolId();
         final var serverId = runtimePoolServerContainerRef.getServerId();
         final var containerId = runtimePoolServerContainerRef.getContainerId();
@@ -291,13 +292,13 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<JobModel> findJob(final Long tenantId) {
         final var request = new FindJobRequest(tenantId);
-        return systemModule.getJobService().findJob(request)
+        return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }
 
     Uni<Boolean> deleteJob(final Long id) {
         final var request = new DeleteJobRequest(id);
-        return systemModule.getJobService().deleteJob(request)
+        return jobService.deleteJob(request)
                 .map(DeleteJobResponse::getDeleted);
     }
 }

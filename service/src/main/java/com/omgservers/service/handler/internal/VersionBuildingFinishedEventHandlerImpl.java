@@ -1,18 +1,18 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.schema.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
+    final EventService eventService;
 
     final EventModelFactory eventModelFactory;
 
@@ -67,7 +67,7 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 }

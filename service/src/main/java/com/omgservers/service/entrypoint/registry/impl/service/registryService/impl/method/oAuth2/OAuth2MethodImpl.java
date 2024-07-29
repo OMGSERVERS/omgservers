@@ -5,8 +5,8 @@ import com.omgservers.schema.entrypoint.registry.getToken.OAuth2RegistryResponse
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.service.registry.IssueTokenRequest;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
-import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
-import com.omgservers.service.service.registry.RegistryService;
+import com.omgservers.service.server.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
+import com.omgservers.service.server.service.registry.RegistryService;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.mutiny.Uni;

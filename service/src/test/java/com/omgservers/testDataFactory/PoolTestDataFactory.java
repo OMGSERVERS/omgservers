@@ -20,7 +20,7 @@ import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.pool.PoolServerContainerModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.module.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

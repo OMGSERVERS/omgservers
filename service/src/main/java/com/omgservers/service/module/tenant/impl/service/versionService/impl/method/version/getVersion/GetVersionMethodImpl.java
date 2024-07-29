@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.service.module.tenant.impl.operation.version.selectVersion.SelectVersionOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

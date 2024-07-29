@@ -3,9 +3,9 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
 import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerAttributes.UpdatePlayerAttributesOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

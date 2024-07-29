@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.server.impl.service.serverService.impl.method.generateId;
 
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import com.omgservers.schema.entrypoint.server.GenerateIdServerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

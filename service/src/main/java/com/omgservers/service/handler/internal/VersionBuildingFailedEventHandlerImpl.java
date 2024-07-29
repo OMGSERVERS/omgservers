@@ -1,14 +1,13 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
-    final SystemModule systemModule;
 
     final EventModelFactory eventModelFactory;
 

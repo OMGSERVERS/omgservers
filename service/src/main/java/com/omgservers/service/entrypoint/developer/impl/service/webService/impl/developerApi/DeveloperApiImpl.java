@@ -16,7 +16,7 @@ import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionJenkinsRequest.deleteVersionJenkinsRequest;
 
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

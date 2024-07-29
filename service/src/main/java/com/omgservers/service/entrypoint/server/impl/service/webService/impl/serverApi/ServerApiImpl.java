@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.server.BcryptHashServerResponse;
 import com.omgservers.schema.entrypoint.server.GenerateIdServerResponse;
 import com.omgservers.schema.entrypoint.server.PingServerServerResponse;
 import com.omgservers.service.entrypoint.server.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.constraints.NotNull;

@@ -1,29 +1,29 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
 import com.omgservers.schema.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.integration.jenkins.JenkinsIntegration;
-import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.service.event.EventService;
+import com.omgservers.service.server.service.jenkins.JenkinsService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,9 +40,11 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHandler {
 
-    final JenkinsIntegration jenkinsIntegration;
     final TenantModule tenantModule;
-    final SystemModule systemModule;
+
+    final JenkinsService jenkinsService;
+    final EventService eventService;
+
 
     final VersionImageRefModelFactory versionImageRefModelFactory;
 
@@ -142,7 +144,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
 
     Uni<String> getLuaJitWorkerBuilderV1Request(final Integer buildNumber) {
         final var getLuaJitWorkerBuilderV1Request = new GetLuaJitWorkerBuilderV1Request(buildNumber);
-        return jenkinsIntegration.getJenkinsService().getLuaJitWorkerBuilderV1(getLuaJitWorkerBuilderV1Request)
+        return jenkinsService.getLuaJitWorkerBuilderV1(getLuaJitWorkerBuilderV1Request)
                 .map(GetLuaJitWorkerBuilderV1Response::getImageId);
     }
 
@@ -176,7 +178,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
         eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(checkingInterval)));
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 
@@ -188,7 +190,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 
@@ -201,7 +203,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
                 idempotencyKey + "/" + eventBody.getQualifier());
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return systemModule.getEventService().syncEventWithIdempotency(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 

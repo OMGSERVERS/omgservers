@@ -28,8 +28,8 @@ import com.omgservers.service.module.tenant.impl.service.projectService.impl.met
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.projectPermission.viewProjectPermissions.ViewProjectPermissionsMethod;
 import com.omgservers.service.module.tenant.impl.service.projectService.impl.method.project.viewProjects.ViewProjectsMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.deleteStagePermission.DeleteStagePermissionMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

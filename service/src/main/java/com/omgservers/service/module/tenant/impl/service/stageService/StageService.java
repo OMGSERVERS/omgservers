@@ -37,6 +37,8 @@ public interface StageService {
 
     Uni<SyncStagePermissionResponse> syncStagePermission(@Valid SyncStagePermissionRequest request);
 
+    Uni<SyncStagePermissionResponse> syncStagePermissionWithIdempotency(@Valid SyncStagePermissionRequest request);
+
     Uni<DeleteStagePermissionResponse> deleteStagePermission(@Valid DeleteStagePermissionRequest request);
 
     Uni<ValidateStageSecretResponse> validateStageSecret(@Valid ValidateStageSecretRequest request);
