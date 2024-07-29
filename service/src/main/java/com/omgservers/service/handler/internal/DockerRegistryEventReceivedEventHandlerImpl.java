@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dockerRepository.DockerContainerQualifierEnum;
-import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.model.dto.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
-import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.registry.DockerRegistryEventDto;
+import com.omgservers.schema.service.registry.DockerRegistryContainerQualifierEnum;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -73,7 +73,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
             return syncVersionImageRef(tenantId,
                     versionId,
                     imageId,
-                    dockerRepository.getQualifier(),
+                    dockerRepository.getContainer(),
                     idempotencyKey)
                     .replaceWithVoid();
         } catch (NumberFormatException e) {
@@ -84,7 +84,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
     Uni<Boolean> syncVersionImageRef(final Long tenantId,
                                      final Long versionId,
                                      final String imageId,
-                                     final DockerContainerQualifierEnum qualifier,
+                                     final DockerRegistryContainerQualifierEnum qualifier,
                                      final String idempotencyKey) {
         final var versionImageRefQualifier = switch (qualifier) {
             case LOBBY -> VersionImageRefQualifierEnum.LOBBY;

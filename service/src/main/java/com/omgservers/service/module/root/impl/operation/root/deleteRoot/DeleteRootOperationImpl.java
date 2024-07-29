@@ -1,6 +1,6 @@
 package com.omgservers.service.module.root.impl.operation.root.deleteRoot;
 
-import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

@@ -1,20 +1,23 @@
 package com.omgservers.service.handler.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Response;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
-import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
+import com.omgservers.schema.event.body.internal.VersionBuildingRequestedEventBodyModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.module.tenant.GetStageRequest;
+import com.omgservers.schema.module.tenant.GetStageResponse;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -60,15 +63,27 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
         return getVersion(tenantId, versionId)
                 .flatMap(version -> {
-                    log.info("Version building was requested, version={}/{}", tenantId, versionId);
+                    final var stageId = version.getStageId();
+                    return getStage(tenantId, stageId)
+                            .flatMap(stage -> {
+                                final var projectId = stage.getProjectId();
+                                log.info("Version building was requested, version={}/{}", tenantId, versionId);
 
-                    final var idempotencyKey = event.getId().toString();
+                                final var idempotencyKey = event.getId().toString();
 
-                    // TODO: detect job qualifier based on version
-                    return buildLuaJitWorker(version, idempotencyKey)
-                            .flatMap(created -> requestVersionChecking(tenantId, versionId, idempotencyKey));
+                                // TODO: detect job qualifier based on version
+                                return buildLuaJitWorker(projectId, version, idempotencyKey)
+                                        .flatMap(
+                                                created -> requestVersionChecking(tenantId, versionId, idempotencyKey));
+                            });
                 })
                 .replaceWithVoid();
+    }
+
+    Uni<StageModel> getStage(final Long tenantId, final Long id) {
+        final var request = new GetStageRequest(tenantId, id);
+        return tenantModule.getStageService().getStage(request)
+                .map(GetStageResponse::getStage);
     }
 
     Uni<VersionModel> getVersion(Long tenantId, Long id) {
@@ -77,9 +92,10 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .map(GetVersionResponse::getVersion);
     }
 
-    Uni<Void> buildLuaJitWorker(final VersionModel version,
+    Uni<Void> buildLuaJitWorker(final Long projectId,
+                                final VersionModel version,
                                 final String idempotencyKey) {
-        return runLuaJitWorkerBuilderV1(version)
+        return runLuaJitWorkerBuilderV1(projectId, version)
                 .flatMap(buildNumber -> syncVersionJenkinsRequest(version,
                         VersionJenkinsRequestQualifierEnum.LUAJIT_WORKER_BUILDER_V1,
                         buildNumber,
@@ -87,9 +103,12 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Integer> runLuaJitWorkerBuilderV1(VersionModel version) {
+    Uni<Integer> runLuaJitWorkerBuilderV1(final Long projectId,
+                                          final VersionModel version) {
+        final var tenantId = version.getTenantId();
+        final var stageId = version.getStageId();
         final var versionId = version.getId();
-        final var groupId = "omgservers/tenant/" + version.getTenantId();
+        final var groupId = String.format("omgservers/%d/%d/%d", tenantId, projectId, stageId);
         final var containerName = "universal";
         final var base64Archive = version.getBase64Archive();
         final var request = new RunLuaJitWorkerBuilderV1Request(groupId,

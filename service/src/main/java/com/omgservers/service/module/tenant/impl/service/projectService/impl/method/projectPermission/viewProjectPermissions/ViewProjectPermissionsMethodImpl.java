@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl.method.projectPermission.viewProjectPermissions;
 
-import com.omgservers.model.dto.tenant.ViewProjectPermissionsRequest;
-import com.omgservers.model.dto.tenant.ViewProjectPermissionsResponse;
+import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.service.module.tenant.impl.operation.projectPermission.selectActiveProjectPermissionsByProjectId.SelectActiveProjectPermissionsByProjectIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

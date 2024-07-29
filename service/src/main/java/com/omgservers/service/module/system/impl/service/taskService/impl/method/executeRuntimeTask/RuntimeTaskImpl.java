@@ -1,15 +1,15 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeRuntimeTask;
 
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsRequest;
-import com.omgservers.model.dto.runtime.ViewRuntimeAssignmentsResponse;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.model.event.body.internal.InactiveClientDetectedEventBodyModel;
-import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
+import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.schema.event.body.internal.InactiveClientDetectedEventBodyModel;
+import com.omgservers.schema.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.service.jobService.impl.method.viewJobs;
 
-import com.omgservers.model.dto.system.job.ViewJobsRequest;
-import com.omgservers.model.dto.system.job.ViewJobsResponse;
+import com.omgservers.schema.service.system.job.ViewJobsRequest;
+import com.omgservers.schema.service.system.job.ViewJobsResponse;
 import com.omgservers.service.module.system.impl.operation.job.selectJobs.SelectJobsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

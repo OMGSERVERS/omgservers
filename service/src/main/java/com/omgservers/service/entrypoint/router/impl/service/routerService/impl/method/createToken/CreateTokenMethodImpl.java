@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.router.impl.service.routerService.impl.method.createToken;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
-import com.omgservers.model.dto.user.CreateTokenRequest;
-import com.omgservers.model.dto.user.CreateTokenResponse;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
+import com.omgservers.schema.module.user.CreateTokenRequest;
+import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

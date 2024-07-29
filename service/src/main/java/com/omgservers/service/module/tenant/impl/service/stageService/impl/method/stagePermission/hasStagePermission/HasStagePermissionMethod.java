@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.hasStagePermission;
 
-import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
-import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
+import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface HasStagePermissionMethod {

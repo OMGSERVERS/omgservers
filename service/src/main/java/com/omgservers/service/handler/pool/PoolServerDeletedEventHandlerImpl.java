@@ -1,16 +1,16 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.poolServer.GetPoolServerRequest;
-import com.omgservers.model.dto.pool.poolServer.GetPoolServerResponse;
-import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.model.dto.pool.poolServerContainer.ViewPoolServerContainersResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.pool.PoolServerDeletedEventBodyModel;
-import com.omgservers.model.poolServer.PoolServerModel;
-import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
+import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
+import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
+import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
+import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
+import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.pool.PoolServerDeletedEventBodyModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Multi;

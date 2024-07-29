@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDefaultPool;
 
-import com.omgservers.model.dto.pool.pool.SyncPoolRequest;
+import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

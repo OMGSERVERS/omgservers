@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand;
 
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

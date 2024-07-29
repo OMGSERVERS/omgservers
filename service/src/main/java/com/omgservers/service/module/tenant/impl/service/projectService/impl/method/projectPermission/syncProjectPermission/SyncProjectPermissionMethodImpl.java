@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl.method.projectPermission.syncProjectPermission;
 
-import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
-import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.project.hasProject.HasProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.projectPermission.upsertProjectPermission.UpsertProjectPermissionOperation;

@@ -1,16 +1,16 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestResponse;
-import com.omgservers.model.dto.tenant.FindVersionLobbyRequestRequest;
-import com.omgservers.model.dto.tenant.FindVersionLobbyRequestResponse;
-import com.omgservers.model.dto.tenant.GetVersionLobbyRefRequest;
-import com.omgservers.model.dto.tenant.GetVersionLobbyRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
-import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
-import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
+import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.FindVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.FindVersionLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.GetVersionLobbyRefRequest;
+import com.omgservers.schema.module.tenant.GetVersionLobbyRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;

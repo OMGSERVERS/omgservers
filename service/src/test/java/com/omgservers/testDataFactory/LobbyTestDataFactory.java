@@ -1,12 +1,12 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.model.dto.lobby.SyncLobbyRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.lobby.LobbyModel;
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
+import com.omgservers.schema.module.lobby.SyncLobbyRequest;
+import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
+import com.omgservers.schema.model.lobby.LobbyModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;

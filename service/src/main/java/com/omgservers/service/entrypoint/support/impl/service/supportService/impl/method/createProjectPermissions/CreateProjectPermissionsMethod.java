@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createProjectPermissions;
 
-import com.omgservers.model.dto.support.CreateProjectPermissionsSupportRequest;
-import com.omgservers.model.dto.support.CreateProjectPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateProjectPermissionsMethod {

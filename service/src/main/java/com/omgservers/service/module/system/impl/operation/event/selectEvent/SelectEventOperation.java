@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.event.selectEvent;
 
-import com.omgservers.model.event.EventModel;
+import com.omgservers.schema.event.EventModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

@@ -1,16 +1,16 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenantPermissions;
 
-import com.omgservers.model.dto.support.CreateTenantPermissionsSupportRequest;
-import com.omgservers.model.dto.support.CreateTenantPermissionsSupportResponse;
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.model.dto.user.GetUserRequest;
-import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.model.user.UserModel;
+import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.module.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.SyncTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.SyncTenantPermissionResponse;
+import com.omgservers.schema.module.user.GetUserRequest;
+import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionLobbyRequest.selectActiveVersionLobbyRequestsByTenantId;
 
-import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
+import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionLobbyRequestModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

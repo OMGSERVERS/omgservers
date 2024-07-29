@@ -1,9 +1,9 @@
 package com.omgservers.service.operation.calculateShard;
 
-import com.omgservers.model.dto.system.GetIndexRequest;
-import com.omgservers.model.dto.system.GetIndexResponse;
-import com.omgservers.model.index.IndexModel;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.schema.service.system.GetIndexRequest;
+import com.omgservers.schema.service.system.GetIndexResponse;
+import com.omgservers.schema.model.index.IndexModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

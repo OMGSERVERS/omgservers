@@ -1,8 +1,8 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobbyRuntimeRef.syncLobbyRuntimeRef;
 
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyRuntimeRefResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
+import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.lobby.impl.operation.lobby.hasLobby.HasLobbyOperation;
 import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.upsertLobbyRuntimeRef.UpsertLobbyRuntimeRefOperation;

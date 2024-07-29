@@ -1,9 +1,9 @@
 package com.omgservers.router.integration.impl.service.impl;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterRequest;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterResponse;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
 import com.omgservers.router.integration.impl.service.ServiceService;
 import com.omgservers.router.integration.impl.service.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.router.integration.impl.service.impl.method.getRuntimeServerUri.GetRuntimeServerUriMethod;

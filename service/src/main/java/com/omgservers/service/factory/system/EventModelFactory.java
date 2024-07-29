@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.system;
 
-import com.omgservers.model.event.EventBodyModel;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.schema.event.EventBodyModel;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventStatusEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.lobby;
 
-import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
+import com.omgservers.schema.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;

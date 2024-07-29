@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.stage.deleteStage;
 
-import com.omgservers.model.event.body.module.tenant.StageDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.stage.selectStage.SelectStageOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

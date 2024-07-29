@@ -1,15 +1,15 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.model.dto.tenant.SyncVersionLobbyRequestResponse;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.VersionDeploymentRequestedEventBodyModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.VersionDeploymentRequestedEventBodyModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.VersionMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;

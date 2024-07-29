@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.player.impl.service.webService.impl.playerWebSocket;
 
-import com.omgservers.model.message.MessageModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.message.MessageModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.HandshakeRequest;
 import io.quarkus.websockets.next.OnClose;

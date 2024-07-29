@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobby.getLobby;
 
-import com.omgservers.model.dto.lobby.GetLobbyRequest;
-import com.omgservers.model.dto.lobby.GetLobbyResponse;
+import com.omgservers.schema.module.lobby.GetLobbyRequest;
+import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.service.module.lobby.impl.operation.lobby.selectLobby.SelectLobbyOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

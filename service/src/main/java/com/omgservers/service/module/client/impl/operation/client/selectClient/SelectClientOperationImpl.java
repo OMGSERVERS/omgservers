@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.client.selectClient;
 
-import com.omgservers.model.client.ClientModel;
+import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.service.module.client.impl.mapper.ClientModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

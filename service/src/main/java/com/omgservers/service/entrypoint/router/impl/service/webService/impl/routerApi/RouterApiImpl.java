@@ -1,10 +1,10 @@
 package com.omgservers.service.entrypoint.router.impl.service.webService.impl.routerApi;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterRequest;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterResponse;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.router.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;

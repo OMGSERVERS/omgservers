@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobby.syncLobby;
 
-import com.omgservers.model.dto.lobby.SyncLobbyRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyResponse;
+import com.omgservers.schema.module.lobby.SyncLobbyRequest;
+import com.omgservers.schema.module.lobby.SyncLobbyResponse;
 import com.omgservers.service.module.lobby.impl.operation.lobby.upsertLobby.UpsertLobbyOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

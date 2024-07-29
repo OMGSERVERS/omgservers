@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.event.selectEventsForRelaying;
 
-import com.omgservers.model.event.EventProjectionModel;
+import com.omgservers.schema.event.EventProjectionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

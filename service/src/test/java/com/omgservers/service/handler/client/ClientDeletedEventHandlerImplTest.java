@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.model.dto.client.DeleteClientRequest;
-import com.omgservers.model.event.body.module.client.ClientDeletedEventBodyModel;
+import com.omgservers.schema.module.client.DeleteClientRequest;
+import com.omgservers.schema.event.body.module.client.ClientDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.client.testInterface.ClientDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.client.impl.service.clientService.testInterface.ClientServiceTestInterface;

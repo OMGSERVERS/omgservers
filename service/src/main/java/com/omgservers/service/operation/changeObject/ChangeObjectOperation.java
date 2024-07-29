@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.changeObject;
 
-import com.omgservers.model.event.EventBodyModel;
-import com.omgservers.model.log.LogModel;
+import com.omgservers.schema.event.EventBodyModel;
+import com.omgservers.schema.model.log.LogModel;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

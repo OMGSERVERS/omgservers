@@ -1,15 +1,15 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.client.GetClientRequest;
-import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
-import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
-import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.module.client.GetClientRequest;
+import com.omgservers.schema.module.client.GetClientResponse;
+import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
+import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;

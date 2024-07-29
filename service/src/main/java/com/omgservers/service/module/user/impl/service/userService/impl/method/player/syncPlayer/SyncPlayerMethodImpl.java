@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.syncPlayer;
 
-import com.omgservers.model.dto.user.SyncPlayerRequest;
-import com.omgservers.model.dto.user.SyncPlayerResponse;
+import com.omgservers.schema.module.user.SyncPlayerRequest;
+import com.omgservers.schema.module.user.SyncPlayerResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

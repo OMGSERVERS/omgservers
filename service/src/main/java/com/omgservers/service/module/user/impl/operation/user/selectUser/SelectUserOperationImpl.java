@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.impl.operation.user.selectUser;
 
-import com.omgservers.model.user.UserModel;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.user.impl.mapper.UserModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

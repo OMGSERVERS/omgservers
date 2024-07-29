@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.getRuntime;
 
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetRuntimeMethod {

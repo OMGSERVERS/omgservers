@@ -1,13 +1,20 @@
 version: 0.1
 log:
+  level: debug
   fields:
     service: registry
-    environment: omgservers
+    environment: ${OMGSERVERS_ENVIRONMENT}
 storage:
   cache:
     blobdescriptor: inmemory
   filesystem:
     rootdirectory: /var/lib/registry
+auth:
+  token:
+    issuer: omgservers
+    service: registry
+    realm: ${OMGSERVERS_SERVICE_URL}/omgservers/v1/entrypoint/registry/token
+    rootcertbundle: /root/certs/bundle/cert.pem
 http:
   addr: :5000
   headers:
@@ -18,7 +25,7 @@ notifications:
   endpoints:
     - name: omgservers
       disabled: false
-      url: http://host.docker.internal:8080/omgservers/v1/entrypoint/registry/event
+      url: ${OMGSERVERS_SERVICE_URL}/omgservers/v1/entrypoint/registry/events
       headers:
         Content-Type: [ application/json ]
       timeout: 5s

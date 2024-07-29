@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.operation;
 
-import com.omgservers.model.file.DecodedFileModel;
-import com.omgservers.model.file.EncodedFileModel;
+import com.omgservers.schema.model.file.DecodedFileModel;
+import com.omgservers.schema.model.file.EncodedFileModel;
 
 import java.util.List;
 

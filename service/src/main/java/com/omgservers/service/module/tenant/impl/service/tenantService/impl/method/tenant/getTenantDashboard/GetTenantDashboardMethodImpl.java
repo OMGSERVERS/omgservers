@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.getTenantDashboard;
 
-import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
-import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
-import com.omgservers.model.tenantDashboard.TenantDashboardModel;
+import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
+import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.model.tenantDashboard.TenantDashboardModel;
 import com.omgservers.service.module.tenant.impl.operation.project.selectActiveProjectsByTenantId.SelectActiveProjectsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.stage.selectActiveStagesByTenantId.SelectActiveStagesByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.selectActiveVersionMatchmakerRefsByTenantId.SelectActiveVersionMatchmakerRefsByTenantId;

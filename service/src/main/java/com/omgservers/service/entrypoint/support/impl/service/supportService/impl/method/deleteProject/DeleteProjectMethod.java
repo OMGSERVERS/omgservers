@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteProject;
 
-import com.omgservers.model.dto.support.DeleteProjectSupportRequest;
-import com.omgservers.model.dto.support.DeleteProjectSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteProjectSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteProjectSupportResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteProjectMethod {

@@ -1,9 +1,9 @@
 package com.omgservers.service.integration.jenkins.impl.service.jenkinsService.impl;
 
-import com.omgservers.model.dto.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.GetLuaJitWorkerBuilderV1Response;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
 import com.omgservers.service.integration.jenkins.impl.service.jenkinsService.JenkinsService;
 import com.omgservers.service.integration.jenkins.impl.service.jenkinsService.impl.method.getLuaJitWorkerBuilderV1.GetLuaJitWorkerBuilderV1Method;
 import com.omgservers.service.integration.jenkins.impl.service.jenkinsService.impl.method.runLuaJitWorkerBuilderV1.RunLuaJitWorkerBuilderV1Method;

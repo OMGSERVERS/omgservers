@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.HasTenantPermissionOperationTestInterface;

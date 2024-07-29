@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.webSocket.impl.security;
 
-import com.omgservers.model.wsToken.WsToken;
+import com.omgservers.schema.dto.wsToken.WsTokenDto;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.quarkus.security.credential.TokenCredential;
@@ -28,9 +28,9 @@ public class WebSocketAuthenticationMechanism implements HttpAuthenticationMecha
 
     @Override
     public Uni<SecurityIdentity> authenticate(RoutingContext context, IdentityProviderManager identityProviderManager) {
-        final var wsToken = context.request().getParam(WsToken.WS_TOKEN);
+        final var wsToken = context.request().getParam(WsTokenDto.WS_TOKEN);
         if (Objects.nonNull(wsToken)) {
-            var tokenCredential = new TokenCredential(wsToken, WsToken.WS_TOKEN);
+            var tokenCredential = new TokenCredential(wsToken, WsTokenDto.WS_TOKEN);
             var request = new TokenAuthenticationRequest(tokenCredential);
             HttpSecurityUtils.setRoutingContextAttribute(request, context);
             context.put(HttpAuthenticationMechanism.class.getName(), this);
@@ -43,7 +43,7 @@ public class WebSocketAuthenticationMechanism implements HttpAuthenticationMecha
     @Override
     public Uni<ChallengeData> getChallenge(RoutingContext context) {
         var result = new ChallengeData(HttpResponseStatus.UNAUTHORIZED.code(),
-                HttpHeaderNames.WWW_AUTHENTICATE, WsToken.WS_TOKEN);
+                HttpHeaderNames.WWW_AUTHENTICATE, WsTokenDto.WS_TOKEN);
         return Uni.createFrom().item(result);
     }
 
@@ -55,6 +55,6 @@ public class WebSocketAuthenticationMechanism implements HttpAuthenticationMecha
     @Override
     public Uni<HttpCredentialTransport> getCredentialTransport(RoutingContext context) {
         return Uni.createFrom()
-                .item(new HttpCredentialTransport(HttpCredentialTransport.Type.AUTHORIZATION, WsToken.WS_TOKEN));
+                .item(new HttpCredentialTransport(HttpCredentialTransport.Type.AUTHORIZATION, WsTokenDto.WS_TOKEN));
     }
 }

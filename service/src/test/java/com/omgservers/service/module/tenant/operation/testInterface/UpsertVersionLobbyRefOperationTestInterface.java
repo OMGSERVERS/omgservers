@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.upsertVersionLobbyRef.UpsertVersionLobbyRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

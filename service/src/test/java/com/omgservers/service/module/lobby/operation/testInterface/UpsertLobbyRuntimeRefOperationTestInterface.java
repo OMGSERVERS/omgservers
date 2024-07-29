@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.operation.testInterface;
 
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.upsertLobbyRuntimeRef.UpsertLobbyRuntimeRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

@@ -1,9 +1,9 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.GetLuaJitWorkerBuilderV1Response;
-import com.omgservers.model.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.VersionBuildingCheckingRequestedEventHandlerImplTestInterface;
 import com.omgservers.service.integration.jenkins.impl.service.jenkinsService.JenkinsService;

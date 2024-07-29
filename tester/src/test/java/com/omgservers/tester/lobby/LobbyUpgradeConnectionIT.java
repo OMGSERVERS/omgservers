@@ -1,8 +1,8 @@
 package com.omgservers.tester.lobby;
 
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ConnectionUpgradeMessageBodyModel;
-import com.omgservers.model.message.body.ConnectionUpgradeQualifierEnum;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -57,7 +57,7 @@ public class LobbyUpgradeConnectionIT extends BaseTestClass {
                 })
                 """);
 
-        Thread.sleep(21_000);
+        Thread.sleep(32_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

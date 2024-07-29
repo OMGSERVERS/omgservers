@@ -1,7 +1,7 @@
 package com.omgservers.tester.operation.bootstrapTestVersion;
 
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;

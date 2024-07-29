@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;

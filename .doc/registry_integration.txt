@@ -1,0 +1,44 @@
+Links
+https://distribution.github.io/distribution/spec/auth/
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/sso-protocols/docker.html
+
+Auth challenge
+Www-Authenticate: Bearer realm="https://auth.docker.io/token",service="registry.docker.io",scope="repository:samalba/my-app:pull,push"
+
+HTTP GET token request
+https://auth.docker.io/token?service=registry.docker.io&scope=repository:samalba/my-app:pull,push
+
+Here is an example of such a JWT Claim Set (formatted with whitespace for readability):
+{
+    "iss": "auth.docker.com",
+    "sub": "jlhawn",
+    "aud": "registry.docker.com",
+    "exp": 1415387315,
+    "nbf": 1415387015,
+    "iat": 1415387015,
+    "jti": "tYJCO1c6cnyy7kAn0c7rKPgbV1H1bFws",
+    "access": [
+        {
+            "type": "repository",
+            "name": "samalba/my-app",
+            "actions": [
+                "pull",
+                "push"
+            ]
+        }
+    ]
+}
+
+Resource Scope Grammar
+scope                   := resourcescope [ ' ' resourcescope ]*
+resourcescope           := resourcetype  ":" resourcename  ":" action [ ',' action ]*
+resourcetype            := resourcetypevalue [ '(' resourcetypevalue ')' ]
+resourcetypevalue       := /[a-z0-9]+/
+resourcename            := [ hostname '/' ] component [ '/' component ]*
+hostname                := hostcomponent ['.' hostcomponent]* [':' port-number]
+hostcomponent           := /([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])/
+port-number             := /[0-9]+/
+action                  := /[a-z]*/
+component               := alpha-numeric [ separator alpha-numeric ]*
+alpha-numeric           := /[a-z0-9]+/
+separator               := /[_.]|__|[-]*/

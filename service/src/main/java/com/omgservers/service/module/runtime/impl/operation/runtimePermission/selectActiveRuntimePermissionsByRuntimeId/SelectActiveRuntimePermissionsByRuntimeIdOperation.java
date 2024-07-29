@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePermission.selectActiveRuntimePermissionsByRuntimeId;
 
-import com.omgservers.model.runtimePermission.RuntimePermissionModel;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

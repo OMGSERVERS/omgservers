@@ -1,21 +1,21 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService;
 
-import com.omgservers.model.dto.tenant.DeleteTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.DeleteTenantPermissionResponse;
-import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.model.dto.tenant.DeleteTenantResponse;
-import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
-import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.SyncTenantPermissionResponse;
-import com.omgservers.model.dto.tenant.SyncTenantRequest;
-import com.omgservers.model.dto.tenant.SyncTenantResponse;
-import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.DeleteTenantRequest;
+import com.omgservers.schema.module.tenant.DeleteTenantResponse;
+import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
+import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.module.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.SyncTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.SyncTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

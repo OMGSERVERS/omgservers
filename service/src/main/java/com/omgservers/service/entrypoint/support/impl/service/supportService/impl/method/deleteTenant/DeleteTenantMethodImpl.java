@@ -1,8 +1,8 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenant;
 
-import com.omgservers.model.dto.support.DeleteTenantSupportRequest;
-import com.omgservers.model.dto.support.DeleteTenantSupportResponse;
-import com.omgservers.model.dto.tenant.DeleteTenantRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.module.tenant.DeleteTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.stagePermission.hasStagePermission;
 
-import com.omgservers.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.service.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

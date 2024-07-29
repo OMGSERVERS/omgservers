@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.event.deleteEventAndUpdateStatus;
 
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.schema.event.EventStatusEnum;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

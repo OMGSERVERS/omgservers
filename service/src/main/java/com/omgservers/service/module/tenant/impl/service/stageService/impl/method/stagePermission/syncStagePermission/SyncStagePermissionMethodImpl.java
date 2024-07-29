@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stagePermission.syncStagePermission;
 
-import com.omgservers.model.dto.tenant.SyncStagePermissionRequest;
-import com.omgservers.model.dto.tenant.SyncStagePermissionResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
+import com.omgservers.schema.module.tenant.SyncStagePermissionResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.stage.hasStage.HasStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.stagePermission.upsertStagePermission.UpsertStagePermissionOperation;

@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.model.dto.client.GetClientRuntimeRefRequest;
-import com.omgservers.model.dto.client.GetClientRuntimeRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
+import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.module.client.GetClientRuntimeRefRequest;
+import com.omgservers.schema.module.client.GetClientRuntimeRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;

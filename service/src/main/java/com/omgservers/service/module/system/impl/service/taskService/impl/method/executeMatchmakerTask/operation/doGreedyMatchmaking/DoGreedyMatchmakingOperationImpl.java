@@ -1,9 +1,9 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking;
 
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.request.MatchmakerRequestModel;
-import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.version.VersionModeModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.model.runtimePermission.RuntimePermissionModel;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

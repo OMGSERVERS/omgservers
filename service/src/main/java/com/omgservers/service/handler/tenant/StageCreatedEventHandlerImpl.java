@@ -1,15 +1,20 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.GetStageRequest;
-import com.omgservers.model.dto.tenant.GetStageResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.StageCreatedEventBodyModel;
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.StageCreatedEventBodyModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.module.tenant.GetStageRequest;
+import com.omgservers.schema.module.tenant.GetStageResponse;
+import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,6 +29,9 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final SystemModule systemModule;
 
+    final GetConfigOperation getConfigOperation;
+
+    final StagePermissionModelFactory stagePermissionModelFactory;
     final EventModelFactory eventModelFactory;
 
     @Override
@@ -43,7 +51,7 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(stage -> {
                     log.info("Stage was created, stage={}/{}", tenantId, stageId);
 
-                    return Uni.createFrom().voidItem();
+                    return syncBuilderPermission(tenantId, stageId);
                 })
                 .replaceWithVoid();
     }
@@ -52,5 +60,15 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetStageRequest(tenantId, id);
         return tenantModule.getStageService().getStage(request)
                 .map(GetStageResponse::getStage);
+    }
+
+    Uni<StagePermissionModel> syncBuilderPermission(final Long tenantId,
+                                                    final Long stageId) {
+        final var builderUserId = getConfigOperation.getServiceConfig().defaults().builderUserId();
+        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
+        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, builderUserId, permission);
+        final var request = new SyncStagePermissionRequest(stagePermission);
+        return tenantModule.getStageService().syncStagePermission(request)
+                .replaceWith(stagePermission);
     }
 }

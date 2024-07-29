@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeSchedulerTask;
 
-import com.omgservers.model.dto.system.task.ExecuteSchedulerTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteSchedulerTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteSchedulerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteSchedulerTaskResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

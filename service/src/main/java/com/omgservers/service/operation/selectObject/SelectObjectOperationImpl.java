@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.selectObject;
 
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.lobby.LogModelFactory;

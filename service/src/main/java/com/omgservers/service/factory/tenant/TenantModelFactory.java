@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

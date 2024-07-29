@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.selectVersionMatchmakerRef;
 
-import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionMatchmakerRefModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

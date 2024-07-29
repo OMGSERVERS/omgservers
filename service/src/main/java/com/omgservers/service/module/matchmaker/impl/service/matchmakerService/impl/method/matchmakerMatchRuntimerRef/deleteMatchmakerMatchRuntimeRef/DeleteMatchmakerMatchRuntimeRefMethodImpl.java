@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.deleteMatchmakerMatchRuntimeRef;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.deleteMatchmakerMatchRuntimeRef.DeleteMatchmakerMatchRuntimeRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

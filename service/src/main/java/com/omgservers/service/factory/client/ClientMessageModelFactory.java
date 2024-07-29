@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.client;
 
-import com.omgservers.model.clientMessage.ClientMessageModel;
-import com.omgservers.model.message.MessageBodyModel;
-import com.omgservers.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.message.MessageBodyModel;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

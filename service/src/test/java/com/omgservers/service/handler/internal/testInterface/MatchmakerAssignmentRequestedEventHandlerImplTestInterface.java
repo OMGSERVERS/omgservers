@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.internal.testInterface;
 
-import com.omgservers.model.event.EventModel;
+import com.omgservers.schema.event.EventModel;
 import com.omgservers.service.handler.internal.MatchmakerAssignmentRequestedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

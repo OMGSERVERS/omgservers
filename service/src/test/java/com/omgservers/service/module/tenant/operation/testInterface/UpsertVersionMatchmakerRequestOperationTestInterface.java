@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
+import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.upsertVersionMatchmakerRequest.UpsertVersionMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

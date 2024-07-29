@@ -1,19 +1,19 @@
 package com.omgservers.service.module.system.impl.service.taskService;
 
-import com.omgservers.model.dto.system.task.ExecuteMatchmakerTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteMatchmakerTaskResponse;
-import com.omgservers.model.dto.system.task.ExecutePoolTaskRequest;
-import com.omgservers.model.dto.system.task.ExecutePoolTaskResponse;
-import com.omgservers.model.dto.system.task.ExecuteRelayTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteRelayTaskResponse;
-import com.omgservers.model.dto.system.task.ExecuteRuntimeTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteRuntimeTaskResponse;
-import com.omgservers.model.dto.system.task.ExecuteSchedulerTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteSchedulerTaskResponse;
-import com.omgservers.model.dto.system.task.ExecuteStageTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteStageTaskResponse;
-import com.omgservers.model.dto.system.task.ExecuteTenantTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteTenantTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteMatchmakerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteMatchmakerTaskResponse;
+import com.omgservers.schema.service.system.task.ExecutePoolTaskRequest;
+import com.omgservers.schema.service.system.task.ExecutePoolTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteRelayTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteRelayTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteRuntimeTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteRuntimeTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteSchedulerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteSchedulerTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteStageTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteStageTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteTenantTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteTenantTaskResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

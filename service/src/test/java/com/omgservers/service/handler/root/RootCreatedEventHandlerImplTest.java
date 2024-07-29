@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.root;
 
-import com.omgservers.model.event.body.module.root.RootCreatedEventBodyModel;
+import com.omgservers.schema.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.root.testInterface.RootCreatedEventHandlerImplTestInterface;
 import com.omgservers.service.module.root.impl.service.rootService.testInterface.RootServiceTestInterface;

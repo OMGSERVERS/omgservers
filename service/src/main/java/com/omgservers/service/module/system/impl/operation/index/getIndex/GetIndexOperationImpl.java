@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.index.getIndex;
 
-import com.omgservers.model.index.IndexModel;
+import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.service.module.system.impl.mappers.IndexModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

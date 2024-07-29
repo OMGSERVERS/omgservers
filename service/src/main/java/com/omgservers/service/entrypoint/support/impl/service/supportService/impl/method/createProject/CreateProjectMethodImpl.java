@@ -1,11 +1,11 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createProject;
 
-import com.omgservers.model.dto.support.CreateProjectSupportRequest;
-import com.omgservers.model.dto.support.CreateProjectSupportResponse;
-import com.omgservers.model.dto.tenant.SyncProjectRequest;
-import com.omgservers.model.dto.tenant.SyncStageRequest;
-import com.omgservers.model.project.ProjectModel;
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.entrypoint.support.CreateProjectSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateProjectSupportResponse;
+import com.omgservers.schema.module.tenant.SyncProjectRequest;
+import com.omgservers.schema.module.tenant.SyncStageRequest;
+import com.omgservers.schema.model.project.ProjectModel;
+import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;

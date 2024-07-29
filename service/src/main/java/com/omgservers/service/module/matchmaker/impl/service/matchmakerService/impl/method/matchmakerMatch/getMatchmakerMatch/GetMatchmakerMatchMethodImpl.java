@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.getMatchmakerMatch;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.selectMatchmakerMatch.SelectMatchmakerMatchOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

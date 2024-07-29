@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.client.syncClient;
 
-import com.omgservers.model.dto.client.SyncClientRequest;
-import com.omgservers.model.dto.client.SyncClientResponse;
+import com.omgservers.schema.module.client.SyncClientRequest;
+import com.omgservers.schema.module.client.SyncClientResponse;
 import com.omgservers.service.module.client.impl.operation.client.upsertClient.UpsertClientOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

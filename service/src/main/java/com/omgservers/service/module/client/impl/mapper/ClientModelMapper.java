@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.client.ClientModel;
+import com.omgservers.schema.model.client.ClientModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

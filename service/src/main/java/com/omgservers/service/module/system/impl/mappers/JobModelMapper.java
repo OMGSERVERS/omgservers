@@ -1,8 +1,8 @@
 package com.omgservers.service.module.system.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.job.JobQualifierEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

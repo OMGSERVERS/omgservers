@@ -1,15 +1,15 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateVersionDeveloperResponse;
-import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
-import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
-import com.omgservers.model.dto.tenant.SyncVersionRequest;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
-import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
+import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
+import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.module.tenant.SyncVersionRequest;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.VersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;

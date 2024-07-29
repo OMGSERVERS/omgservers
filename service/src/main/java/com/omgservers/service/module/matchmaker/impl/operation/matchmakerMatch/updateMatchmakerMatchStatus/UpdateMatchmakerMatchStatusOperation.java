@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.updateMatchmakerMatchStatus;
 
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

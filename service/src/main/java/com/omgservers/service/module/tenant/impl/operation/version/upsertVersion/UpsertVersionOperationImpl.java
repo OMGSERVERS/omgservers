@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.operation.version.upsertVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.tenant.VersionCreatedEventBodyModel;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionCreatedEventBodyModel;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

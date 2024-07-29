@@ -1,6 +1,6 @@
 package com.omgservers.router.operation.routeQuery;
 
-import com.omgservers.model.wsToken.WsToken;
+import com.omgservers.schema.dto.wsToken.WsTokenDto;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +24,7 @@ public class RouteQueryOperationImpl implements RouteQueryOperation {
     @Override
     public Optional<URI> routeQuery(final String query) {
         final var parameters = parseQuery(query);
-        final var wsToken = parameters.get(WsToken.WS_TOKEN);
+        final var wsToken = parameters.get(WsTokenDto.WS_TOKEN);
         if (Objects.nonNull(wsToken)) {
             try {
                 final var jsonWebToken = jwtParser.parseOnly(wsToken);

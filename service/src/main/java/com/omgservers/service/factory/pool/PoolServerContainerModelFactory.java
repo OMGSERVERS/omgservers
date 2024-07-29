@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.model.poolSeverContainer.PoolServerContainerConfigModel;
-import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

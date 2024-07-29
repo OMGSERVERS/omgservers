@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeCommandOperationTestInterface;

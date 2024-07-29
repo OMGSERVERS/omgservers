@@ -1,14 +1,14 @@
 package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.method.getVersion;
 
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
-import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;

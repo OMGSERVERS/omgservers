@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.module.client.operation.testInterface.UpsertClientOperationTestInterface;

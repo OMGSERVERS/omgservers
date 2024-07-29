@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createProject;
 
-import com.omgservers.model.dto.developer.CreateProjectDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateProjectMethod {

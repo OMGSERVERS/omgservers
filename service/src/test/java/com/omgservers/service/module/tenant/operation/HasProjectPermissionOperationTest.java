@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.ProjectPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;

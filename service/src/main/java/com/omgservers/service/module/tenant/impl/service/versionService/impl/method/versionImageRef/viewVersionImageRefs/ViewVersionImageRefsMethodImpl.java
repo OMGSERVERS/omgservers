@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.viewVersionImageRefs;
 
-import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsRequest;
-import com.omgservers.model.dto.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsRequest;
+import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsResponse;
 import com.omgservers.service.module.tenant.impl.operation.versionImageRef.selectActiveVersionImageRefsByTenantId.SelectActiveVersionImageRefsByTenantId;
 import com.omgservers.service.module.tenant.impl.operation.versionImageRef.selectActiveVersionImageRefsByVersionId.SelectActiveVersionImageRefsByVersionId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

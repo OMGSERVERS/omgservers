@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.selectMatchmakerRequest;
 
-import com.omgservers.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import com.omgservers.service.module.matchmaker.impl.mappers.MatchmakerRequestModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

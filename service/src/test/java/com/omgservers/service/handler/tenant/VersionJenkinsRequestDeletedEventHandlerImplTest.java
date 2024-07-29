@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.model.event.body.module.tenant.VersionJenkinsRequestDeletedEventBodyModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.schema.event.body.module.tenant.VersionJenkinsRequestDeletedEventBodyModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionJenkinsRequestDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;

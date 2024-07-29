@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerProfile;
 
-import com.omgservers.model.dto.user.GetPlayerProfileRequest;
-import com.omgservers.model.dto.user.GetPlayerProfileResponse;
+import com.omgservers.schema.module.user.GetPlayerProfileRequest;
+import com.omgservers.schema.module.user.GetPlayerProfileResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayerProfile.SelectPlayerProfileOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

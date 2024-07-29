@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.upsertEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

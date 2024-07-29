@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;

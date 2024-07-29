@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl;
 
-import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
-import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
+import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import com.omgservers.service.entrypoint.admin.impl.service.adminService.AdminService;
 import com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.method.createToken.CreateTokenMethod;
 import io.smallrye.mutiny.Uni;

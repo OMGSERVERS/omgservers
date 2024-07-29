@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.deleteVersion;
 
-import com.omgservers.model.dto.tenant.DeleteVersionRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionResponse;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.schema.module.tenant.DeleteVersionRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionResponse;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.tenant.impl.operation.version.deleteVersion.DeleteVersionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

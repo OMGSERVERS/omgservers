@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.versionImageRef.VersionImageRefModel;
-import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

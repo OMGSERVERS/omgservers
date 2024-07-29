@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.getMatchmakerState;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.selectActiveMatchmakerMatchesByMatchmakerId.SelectActiveMatchmakerMatchesByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.selectActiveMatchmakerCommandsByMatchmakerId.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchClient.selectMatchmakerMatchClientsByMatchmakerId.SelectMatchmakerMatchClientsByMatchmakerIdOperation;

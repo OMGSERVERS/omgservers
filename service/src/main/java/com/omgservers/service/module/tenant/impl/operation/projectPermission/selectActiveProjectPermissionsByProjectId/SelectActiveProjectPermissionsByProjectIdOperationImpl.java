@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.projectPermission.selectActiveProjectPermissionsByProjectId;
 
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.service.module.tenant.impl.mapper.ProjectPermissionModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

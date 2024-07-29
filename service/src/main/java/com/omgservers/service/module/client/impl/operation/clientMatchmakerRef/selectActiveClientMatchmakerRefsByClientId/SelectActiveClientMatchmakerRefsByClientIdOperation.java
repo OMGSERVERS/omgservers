@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.selectActiveClientMatchmakerRefsByClientId;
 
-import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

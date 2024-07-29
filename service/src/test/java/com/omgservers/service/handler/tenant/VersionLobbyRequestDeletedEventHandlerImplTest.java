@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.model.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
+import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
+import com.omgservers.schema.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionLobbyRequestDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;

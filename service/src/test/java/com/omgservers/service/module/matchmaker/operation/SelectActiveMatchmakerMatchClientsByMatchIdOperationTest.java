@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.request.MatchmakerRequestConfigModel;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerRequestModelFactory;

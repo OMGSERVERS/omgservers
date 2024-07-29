@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.model.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
-import com.omgservers.model.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
+import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
+import com.omgservers.schema.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
+import com.omgservers.schema.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.pool.testInterface.PoolServerContainerCreatedEventHandlerImplTestInterface;
 import com.omgservers.service.handler.pool.testInterface.PoolServerContainerDeletedEventHandlerImplTestInterface;

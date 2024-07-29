@@ -1,11 +1,11 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.matchmakerCommandHandler;
 
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
-import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
+import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

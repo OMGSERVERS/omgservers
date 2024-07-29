@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
+import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

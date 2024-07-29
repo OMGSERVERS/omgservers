@@ -1,16 +1,16 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
-import com.omgservers.model.lobby.LobbyModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
+import com.omgservers.schema.model.lobby.LobbyModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;

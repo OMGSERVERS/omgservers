@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.root;
 
-import com.omgservers.model.root.RootModel;
+import com.omgservers.schema.model.root.RootModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

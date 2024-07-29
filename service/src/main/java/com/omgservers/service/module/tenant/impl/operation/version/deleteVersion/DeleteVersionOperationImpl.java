@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.version.deleteVersion;
 
-import com.omgservers.model.event.body.module.tenant.VersionDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.tenant.VersionDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.version.selectVersion.SelectVersionOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

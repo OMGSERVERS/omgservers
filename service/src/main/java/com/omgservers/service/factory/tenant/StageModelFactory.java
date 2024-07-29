@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.client;
 
-import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

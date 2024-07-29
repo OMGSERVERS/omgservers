@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.user;
 
-import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefRequest;
-import com.omgservers.model.dto.root.rootEntityRef.SyncRootEntityRefResponse;
-import com.omgservers.model.dto.user.GetUserRequest;
-import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.user.UserCreatedEventBodyModel;
-import com.omgservers.model.rootEntityRef.RootEntityRefQualifierEnum;
-import com.omgservers.model.user.UserModel;
+import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
+import com.omgservers.schema.module.user.GetUserRequest;
+import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerAttributes;
 
-import com.omgservers.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

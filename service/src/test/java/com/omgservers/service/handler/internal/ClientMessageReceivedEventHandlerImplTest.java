@@ -1,9 +1,9 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.message.MessageModel;
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ClientOutgoingMessageBodyModel;
+import com.omgservers.schema.event.body.internal.ClientMessageReceivedEventBodyModel;
+import com.omgservers.schema.model.message.MessageModel;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.ClientMessageReceivedEventHandlerImplTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;

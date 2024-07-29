@@ -1,13 +1,13 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.interchange;
 
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.dto.runtime.InterchangeRequest;
-import com.omgservers.model.dto.runtime.InterchangeResponse;
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.runtime.InterchangeRequest;
+import com.omgservers.schema.module.runtime.InterchangeResponse;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;

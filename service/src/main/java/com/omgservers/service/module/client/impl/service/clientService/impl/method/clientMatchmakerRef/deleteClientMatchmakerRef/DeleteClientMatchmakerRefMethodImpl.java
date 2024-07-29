@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.deleteClientMatchmakerRef;
 
-import com.omgservers.model.dto.client.DeleteClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.DeleteClientMatchmakerRefResponse;
+import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
 import com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.deleteClientMatchmakerRef.DeleteClientMatchmakerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

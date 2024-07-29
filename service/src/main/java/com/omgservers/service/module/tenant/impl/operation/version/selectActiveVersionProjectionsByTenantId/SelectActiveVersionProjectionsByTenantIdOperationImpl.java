@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionProjectionsByTenantId;
 
-import com.omgservers.model.version.VersionProjectionModel;
+import com.omgservers.schema.model.version.VersionProjectionModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionProjectionModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

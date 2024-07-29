@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.component.eventHandler;
 
-import com.omgservers.model.dto.system.HandleEventRequest;
-import com.omgservers.model.dto.system.HandleEventResponse;
+import com.omgservers.schema.service.system.HandleEventRequest;
+import com.omgservers.schema.service.system.HandleEventResponse;
 import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.reactive.messaging.annotations.Blocking;

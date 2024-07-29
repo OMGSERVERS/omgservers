@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.project.selectProject;
 
-import com.omgservers.model.project.ProjectModel;
+import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.service.module.tenant.impl.mapper.ProjectModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

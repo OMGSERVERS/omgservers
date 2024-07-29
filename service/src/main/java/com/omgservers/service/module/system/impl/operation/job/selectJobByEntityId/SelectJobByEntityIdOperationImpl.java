@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.job.selectJobByEntityId;
 
-import com.omgservers.model.job.JobModel;
+import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.module.system.impl.mappers.JobModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

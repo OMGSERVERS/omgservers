@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.project.selectActiveProjectsByTenantId;
 
-import com.omgservers.model.project.ProjectModel;
+import com.omgservers.schema.model.project.ProjectModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

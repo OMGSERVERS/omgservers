@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantPermission.upsertTenantPermission;
 
-import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;

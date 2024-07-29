@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.findClientMatchmakerRef;
 
-import com.omgservers.model.dto.client.FindClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.FindClientMatchmakerRefResponse;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface FindClientMatchmakerRefMethod {

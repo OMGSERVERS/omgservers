@@ -1,8 +1,8 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.user.syncUser;
 
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.dto.user.SyncUserResponse;
+import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.module.user.SyncUserResponse;
 import com.omgservers.service.module.user.impl.operation.user.upsertUser.UpsertUserOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

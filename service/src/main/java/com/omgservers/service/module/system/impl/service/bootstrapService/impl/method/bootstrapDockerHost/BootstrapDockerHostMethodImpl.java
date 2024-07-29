@@ -1,10 +1,10 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapDockerHost;
 
-import com.omgservers.model.dto.pool.poolServer.SyncPoolServerRequest;
-import com.omgservers.model.dto.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.model.poolServer.PoolServerConfigModel;
-import com.omgservers.model.poolServer.PoolServerModel;
-import com.omgservers.model.poolServer.PoolServerQualifierEnum;
+import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
+import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
+import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

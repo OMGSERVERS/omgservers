@@ -1,14 +1,14 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
-import com.omgservers.model.clientMessage.ClientMessageModel;
-import com.omgservers.model.dto.client.SyncClientMessageRequest;
-import com.omgservers.model.dto.client.SyncClientMessageResponse;
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
-import com.omgservers.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.module.client.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.SyncClientMessageResponse;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;

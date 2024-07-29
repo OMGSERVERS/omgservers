@@ -1,6 +1,6 @@
 package com.omgservers.service.module.root.impl.operation.rootEntityRef.selectActiveRootEntityRefByRootId;
 
-import com.omgservers.model.rootEntityRef.RootEntityRefModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.service.module.root.impl.mappers.RootEntityRefModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

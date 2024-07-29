@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobbyRuntimeRef.findLobbyRuntimeRef;
 
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.FindLobbyRuntimeRefResponse;
+import com.omgservers.schema.module.lobby.FindLobbyRuntimeRefRequest;
+import com.omgservers.schema.module.lobby.FindLobbyRuntimeRefResponse;
 import com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.selectLobbyRuntimeRefByLobbyId.SelectLobbyRuntimeByLobbyIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.user.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.user.UserModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

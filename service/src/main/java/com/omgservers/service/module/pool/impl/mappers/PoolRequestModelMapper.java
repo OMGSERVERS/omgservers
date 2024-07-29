@@ -1,9 +1,9 @@
 package com.omgservers.service.module.pool.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.poolRequest.PoolRequestConfigModel;
-import com.omgservers.model.poolRequest.PoolRequestModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;

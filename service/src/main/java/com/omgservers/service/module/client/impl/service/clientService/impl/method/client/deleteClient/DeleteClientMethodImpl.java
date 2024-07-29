@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.client.deleteClient;
 
-import com.omgservers.model.dto.client.DeleteClientRequest;
-import com.omgservers.model.dto.client.DeleteClientResponse;
+import com.omgservers.schema.module.client.DeleteClientRequest;
+import com.omgservers.schema.module.client.DeleteClientResponse;
 import com.omgservers.service.module.client.impl.operation.client.deleteClient.DeleteClientOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

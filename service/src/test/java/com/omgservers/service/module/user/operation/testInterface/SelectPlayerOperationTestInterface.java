@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
-import com.omgservers.model.player.PlayerModel;
+import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayer.SelectPlayerOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

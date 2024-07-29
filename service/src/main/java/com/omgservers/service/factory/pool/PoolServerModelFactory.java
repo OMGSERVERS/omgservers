@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.model.poolServer.PoolServerConfigModel;
-import com.omgservers.model.poolServer.PoolServerModel;
-import com.omgservers.model.poolServer.PoolServerQualifierEnum;
+import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

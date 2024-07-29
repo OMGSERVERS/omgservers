@@ -46,7 +46,10 @@ services:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
     environment:
-      - REGISTRY_LOG_FIELDS_ENVIRONMENT=localtesting
+      - OMGSERVERS_ENVIRONMENT=localtesting
+      - OMGSERVERS_SERVICE_URL=http://host.docker.internal:8080
+    volumes:
+      - ./cert.pem:/root/certs/bundle/cert.pem
     ports:
       - "5000:5000"
     networks:
@@ -63,6 +66,8 @@ services:
       - JENKINS_ADMIN_ID=builder
       - JENKINS_ADMIN_PASSWORD=builder
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
+      - OMGSERVERS_BUILDER_USER_ID=270042155391647744
+      - OMGSERVERS_BUILDER_USER_PASSWORD=builder
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5000
 networks:

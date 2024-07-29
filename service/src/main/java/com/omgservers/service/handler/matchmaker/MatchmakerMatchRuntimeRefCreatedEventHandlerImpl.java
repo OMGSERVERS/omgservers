@@ -1,15 +1,15 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;

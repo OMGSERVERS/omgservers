@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtime.selectRuntime;
 
-import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimeModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

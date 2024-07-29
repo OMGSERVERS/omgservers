@@ -1,11 +1,11 @@
 package com.omgservers.service.entrypoint.worker.impl.service.webService.impl.api;
 
-import com.omgservers.model.dto.worker.CreateTokenWorkerRequest;
-import com.omgservers.model.dto.worker.CreateTokenWorkerResponse;
-import com.omgservers.model.dto.worker.GetVersionWorkerRequest;
-import com.omgservers.model.dto.worker.GetVersionWorkerResponse;
-import com.omgservers.model.dto.worker.InterchangeWorkerRequest;
-import com.omgservers.model.dto.worker.InterchangeWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.InterchangeWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.InterchangeWorkerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;

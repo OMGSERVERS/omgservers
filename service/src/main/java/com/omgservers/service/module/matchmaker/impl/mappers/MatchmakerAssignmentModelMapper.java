@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.matchmakerAssignment.MatchmakerAssignmentModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

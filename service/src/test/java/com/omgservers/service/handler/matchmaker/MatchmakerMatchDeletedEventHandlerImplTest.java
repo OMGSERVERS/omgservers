@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerMatchRequest;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.matchmaker.testInterfaces.MatchmakerMatchDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.testInterface.MatchmakerServiceTestInterface;

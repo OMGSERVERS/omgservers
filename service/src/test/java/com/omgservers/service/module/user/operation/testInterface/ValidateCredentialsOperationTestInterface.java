@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
-import com.omgservers.model.user.UserModel;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

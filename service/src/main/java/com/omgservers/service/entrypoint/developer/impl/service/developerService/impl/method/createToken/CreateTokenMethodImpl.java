@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createToken;
 
-import com.omgservers.model.dto.developer.CreateTokenDeveloperRequest;
-import com.omgservers.model.dto.developer.CreateTokenDeveloperResponse;
-import com.omgservers.model.dto.user.CreateTokenRequest;
-import com.omgservers.model.dto.user.CreateTokenResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.module.user.CreateTokenRequest;
+import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

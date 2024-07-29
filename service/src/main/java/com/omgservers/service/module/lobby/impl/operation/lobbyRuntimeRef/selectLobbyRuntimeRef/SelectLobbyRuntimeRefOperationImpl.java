@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.selectLobbyRuntimeRef;
 
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.module.lobby.impl.mappers.LobbyRuntimeRefModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

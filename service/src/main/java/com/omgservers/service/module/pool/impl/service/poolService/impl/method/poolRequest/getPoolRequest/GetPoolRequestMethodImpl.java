@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.getPoolRequest;
 
-import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestRequest;
-import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestResponse;
+import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
+import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
 import com.omgservers.service.module.pool.impl.operation.poolRequest.selectPoolRequest.SelectPoolRequestOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

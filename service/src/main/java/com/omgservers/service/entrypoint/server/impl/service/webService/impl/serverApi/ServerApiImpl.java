@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.server.impl.service.webService.impl.serverApi;
 
-import com.omgservers.model.dto.server.BcryptHashServerRequest;
-import com.omgservers.model.dto.server.BcryptHashServerResponse;
-import com.omgservers.model.dto.server.GenerateIdServerResponse;
-import com.omgservers.model.dto.server.PingServerServerResponse;
+import com.omgservers.schema.entrypoint.server.BcryptHashServerRequest;
+import com.omgservers.schema.entrypoint.server.BcryptHashServerResponse;
+import com.omgservers.schema.entrypoint.server.GenerateIdServerResponse;
+import com.omgservers.schema.entrypoint.server.PingServerServerResponse;
 import com.omgservers.service.entrypoint.server.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;

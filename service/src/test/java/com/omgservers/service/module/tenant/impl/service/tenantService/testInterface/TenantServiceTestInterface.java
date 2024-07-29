@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.testInterface;
 
-import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.model.dto.tenant.DeleteTenantResponse;
-import com.omgservers.model.dto.tenant.SyncTenantRequest;
-import com.omgservers.model.dto.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.DeleteTenantRequest;
+import com.omgservers.schema.module.tenant.DeleteTenantResponse;
+import com.omgservers.schema.module.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.SyncTenantResponse;
 import com.omgservers.service.module.tenant.impl.service.tenantService.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

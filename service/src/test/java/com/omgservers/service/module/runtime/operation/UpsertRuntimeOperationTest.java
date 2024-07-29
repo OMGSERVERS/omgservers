@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;

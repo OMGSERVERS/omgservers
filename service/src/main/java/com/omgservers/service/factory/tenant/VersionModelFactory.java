@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

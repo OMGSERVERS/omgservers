@@ -1,6 +1,6 @@
 package com.omgservers.service.module.pool.impl.operation.poolServer.selectActivePoolServersByPoolId;
 
-import com.omgservers.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.service.module.pool.impl.mappers.PoolServerModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

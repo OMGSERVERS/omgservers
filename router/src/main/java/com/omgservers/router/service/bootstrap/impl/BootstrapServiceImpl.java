@@ -1,7 +1,7 @@
 package com.omgservers.router.service.bootstrap.impl;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
 import com.omgservers.router.components.TokenContainer;
 import com.omgservers.router.configuration.RouterPriorityConfiguration;
 import com.omgservers.router.integration.ServiceIntegration;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapServerIndex;
 
-import com.omgservers.model.dto.system.SyncIndexRequest;
-import com.omgservers.model.index.IndexConfigModel;
+import com.omgservers.schema.service.system.SyncIndexRequest;
+import com.omgservers.schema.model.index.IndexConfigModel;
 import com.omgservers.service.factory.system.IndexModelFactory;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

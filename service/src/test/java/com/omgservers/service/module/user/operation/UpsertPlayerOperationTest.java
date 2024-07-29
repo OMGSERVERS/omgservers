@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;

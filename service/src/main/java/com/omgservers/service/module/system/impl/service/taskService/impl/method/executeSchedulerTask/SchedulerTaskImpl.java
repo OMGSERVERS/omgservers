@@ -1,11 +1,11 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeSchedulerTask;
 
-import com.omgservers.model.dto.system.job.ViewJobsRequest;
-import com.omgservers.model.dto.system.task.ExecuteMatchmakerTaskRequest;
-import com.omgservers.model.dto.system.task.ExecutePoolTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteRuntimeTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteTenantTaskRequest;
-import com.omgservers.model.job.JobModel;
+import com.omgservers.schema.service.system.job.ViewJobsRequest;
+import com.omgservers.schema.service.system.task.ExecuteMatchmakerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecutePoolTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteRuntimeTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteTenantTaskRequest;
+import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

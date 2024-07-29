@@ -1,9 +1,9 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;

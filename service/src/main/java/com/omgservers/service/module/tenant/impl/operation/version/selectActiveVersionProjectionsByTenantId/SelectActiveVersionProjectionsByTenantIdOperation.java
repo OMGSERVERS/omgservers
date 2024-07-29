@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionProjectionsByTenantId;
 
-import com.omgservers.model.version.VersionProjectionModel;
+import com.omgservers.schema.model.version.VersionProjectionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

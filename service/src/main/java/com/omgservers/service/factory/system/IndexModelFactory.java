@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.system;
 
-import com.omgservers.model.index.IndexConfigModel;
-import com.omgservers.model.index.IndexModel;
+import com.omgservers.schema.model.index.IndexConfigModel;
+import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

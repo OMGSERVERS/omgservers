@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.operation.lobbyRuntimeRef.upsertLobbyRuntimeRef;
 
-import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.selectVersionMatchmakerRequest;
 
-import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
+import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

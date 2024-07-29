@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerAttributes;
 
-import com.omgservers.model.dto.user.GetPlayerAttributesRequest;
-import com.omgservers.model.dto.user.GetPlayerAttributesResponse;
+import com.omgservers.schema.module.user.GetPlayerAttributesRequest;
+import com.omgservers.schema.module.user.GetPlayerAttributesResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetPlayerAttributesMethod {

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayer;
 
-import com.omgservers.model.player.PlayerModel;
+import com.omgservers.schema.model.player.PlayerModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

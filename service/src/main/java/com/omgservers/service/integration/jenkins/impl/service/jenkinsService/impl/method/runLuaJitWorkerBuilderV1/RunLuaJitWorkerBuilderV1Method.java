@@ -1,7 +1,7 @@
 package com.omgservers.service.integration.jenkins.impl.service.jenkinsService.impl.method.runLuaJitWorkerBuilderV1;
 
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
 import io.smallrye.mutiny.Uni;
 
 public interface RunLuaJitWorkerBuilderV1Method {

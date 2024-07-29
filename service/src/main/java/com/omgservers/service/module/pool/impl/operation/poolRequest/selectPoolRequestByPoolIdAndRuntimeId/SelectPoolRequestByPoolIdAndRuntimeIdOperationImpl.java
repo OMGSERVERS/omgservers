@@ -1,6 +1,6 @@
 package com.omgservers.service.module.pool.impl.operation.poolRequest.selectPoolRequestByPoolIdAndRuntimeId;
 
-import com.omgservers.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.module.pool.impl.mappers.PoolRequestModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

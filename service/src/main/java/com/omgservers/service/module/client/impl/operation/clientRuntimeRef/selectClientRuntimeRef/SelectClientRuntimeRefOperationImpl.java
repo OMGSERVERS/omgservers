@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.clientRuntimeRef.selectClientRuntimeRef;
 
-import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.service.module.client.impl.mapper.ClientRuntimeRefModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

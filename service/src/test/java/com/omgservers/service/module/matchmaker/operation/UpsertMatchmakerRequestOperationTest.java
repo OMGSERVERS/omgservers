@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.request.MatchmakerRequestConfigModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;

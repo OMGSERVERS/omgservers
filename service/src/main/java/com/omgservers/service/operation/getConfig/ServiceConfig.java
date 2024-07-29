@@ -16,6 +16,8 @@ public interface ServiceConfig {
 
     IndexConfig index();
 
+    JwtConfig jwt();
+
     BootstrapConfig bootstrap();
 
     ClientsConfig clients();
@@ -40,6 +42,8 @@ public interface ServiceConfig {
         long routerUserId();
 
         long registryUserId();
+
+        long builderUserId();
     }
 
     interface GeneratorConfig {
@@ -52,6 +56,12 @@ public interface ServiceConfig {
         int shardCount();
 
         URI serverUri();
+    }
+
+    interface JwtConfig {
+        String issuer();
+
+        String x5c();
     }
 
     interface BootstrapRelayJobConfig {
@@ -96,13 +106,15 @@ public interface ServiceConfig {
 
         BootstrapIndexConfig index();
 
-        BootstrapAdminConfig admin();
+        BootstrapDefaultUserConfig admin();
 
-        BootstrapSupportConfig support();
+        BootstrapDefaultUserConfig support();
 
-        BootstrapRouterUserConfig routerUser();
+        BootstrapDefaultUserConfig routerUser();
 
-        BootstrapRouterUserConfig registryUser();
+        BootstrapDefaultUserConfig registryUser();
+
+        BootstrapDefaultUserConfig builderUser();
 
         BootstrapRootConfig root();
 
@@ -127,19 +139,7 @@ public interface ServiceConfig {
         List<URI> servers();
     }
 
-    interface BootstrapAdminConfig {
-        boolean enabled();
-
-        String password();
-    }
-
-    interface BootstrapSupportConfig {
-        boolean enabled();
-
-        String password();
-    }
-
-    interface BootstrapRouterUserConfig {
+    interface BootstrapDefaultUserConfig {
         boolean enabled();
 
         String password();

@@ -30,8 +30,8 @@
     <modules>
         <module>documents</module>
         <module>environments</module>
-        <module>model</module>
         <module>router</module>
+        <module>schema</module>
         <module>service</module>
         <module>sidecontainers</module>
         <module>tester</module>

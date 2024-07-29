@@ -1,7 +1,7 @@
 package com.omgservers.service.service.room.impl.method.handleTextMessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.service.room.dto.HandleTextMessageRequest;
 import com.omgservers.service.service.room.impl.component.RoomConnection;

@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.VersionBuildingFinishedEventBodyModel;
-import com.omgservers.model.event.body.internal.VersionDeploymentRequestedEventBodyModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
+import com.omgservers.schema.event.body.internal.VersionDeploymentRequestedEventBodyModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;

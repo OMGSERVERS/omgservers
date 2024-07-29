@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.matchmaker;
 
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandBodyModel;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

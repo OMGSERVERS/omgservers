@@ -37,6 +37,11 @@ services:
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
+    environment:
+      - OMGSERVERS_ENVIRONMENT=integration
+      - OMGSERVERS_SERVICE_URL=http://localhost:8080
+    volumes:
+      - ./cert.pem:/root/certs/bundle/cert.pem
     ports:
       - "5000:5000"
     networks:

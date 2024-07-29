@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.updatePlayerAttributes;
 
-import com.omgservers.model.dto.user.UpdatePlayerAttributesRequest;
-import com.omgservers.model.dto.user.UpdatePlayerAttributesResponse;
+import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
+import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerAttributes.UpdatePlayerAttributesOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

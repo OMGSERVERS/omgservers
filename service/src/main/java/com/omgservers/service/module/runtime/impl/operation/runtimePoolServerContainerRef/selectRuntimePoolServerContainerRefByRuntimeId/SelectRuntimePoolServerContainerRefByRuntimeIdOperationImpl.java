@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePoolServerContainerRef.selectRuntimePoolServerContainerRefByRuntimeId;
 
-import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
+import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimePoolServerContainerRefModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

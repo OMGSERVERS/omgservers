@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createToken;
 
-import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
-import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateTokenMethod {

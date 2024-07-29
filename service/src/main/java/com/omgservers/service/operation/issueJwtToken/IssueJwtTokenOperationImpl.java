@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.issueJwtToken;
 
-import com.omgservers.model.internalRole.InternalRoleEnum;
-import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.wsToken.WsToken;
+import com.omgservers.schema.dto.wsToken.WsTokenDto;
+import com.omgservers.schema.model.internalRole.InternalRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +18,6 @@ import java.util.Set;
 class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     // TODO: get from configuration
-    private static final String TOKEN_ISSUER = "https://omgservers.com";
     private static final Duration SERVICE_TOKEN_DURATION = Duration.ofSeconds(31536000);
     private static final Duration USER_TOKEN_DURATION = Duration.ofSeconds(3600);
     private static final Duration WS_TOKEN_DURATION = Duration.ofSeconds(6000);
@@ -27,8 +26,10 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueServiceJwtToken() {
+        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
         final var subject = getConfigOperation.getServiceConfig().index().serverUri().getHost();
-        final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
+        final var jwtToken = Jwt.issuer(issuer)
+                .audience(issuer)
                 .subject(subject)
                 .expiresIn(SERVICE_TOKEN_DURATION)
                 .groups(InternalRoleEnum.SERVICE.getName())
@@ -39,7 +40,9 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueUserJwtToken(final Long userId, final Set<String> groups) {
-        final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
+        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var jwtToken = Jwt.issuer(issuer)
+                .audience(issuer)
                 .subject(userId.toString())
                 .expiresIn(USER_TOKEN_DURATION)
                 .groups(groups)
@@ -48,13 +51,16 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
         return jwtToken;
     }
 
+    @Override
     public String issueWsJwtToken(final Long clientId,
                                   final Long runtimeId,
                                   final UserRoleEnum role) {
-        final var jwtToken = Jwt.issuer(TOKEN_ISSUER)
+        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var jwtToken = Jwt.issuer(issuer)
+                .audience(issuer)
                 .subject(clientId.toString())
-                .claim(WsToken.RUNTIME_ID_CLAIM, runtimeId.toString())
-                .claim(WsToken.USER_ROLE_CLAIM, role.getName())
+                .claim(WsTokenDto.RUNTIME_ID_CLAIM, runtimeId.toString())
+                .claim(WsTokenDto.USER_ROLE_CLAIM, role.getName())
                 .expiresIn(WS_TOKEN_DURATION)
                 .groups(UserRoleEnum.WEBSOCKET.getName())
                 .sign();

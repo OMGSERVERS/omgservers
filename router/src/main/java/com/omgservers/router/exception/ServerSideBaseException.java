@@ -1,6 +1,6 @@
 package com.omgservers.router.exception;
 
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 
 public class ServerSideBaseException extends RuntimeException {
 

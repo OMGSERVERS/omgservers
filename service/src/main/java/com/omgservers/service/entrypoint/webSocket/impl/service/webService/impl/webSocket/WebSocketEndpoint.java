@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webService.impl.webSocket;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webService.WebService;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.OnBinaryMessage;

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.syncMatchmakerCommand;
 
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.hasMatchmaker.HasMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.upsertMatchmakerCommand.UpsertMatchmakerCommandOperation;

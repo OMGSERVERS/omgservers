@@ -1,7 +1,7 @@
 package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobby.deleteLobby;
 
-import com.omgservers.model.dto.lobby.DeleteLobbyRequest;
-import com.omgservers.model.dto.lobby.DeleteLobbyResponse;
+import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
+import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
 import com.omgservers.service.module.lobby.impl.operation.lobby.deleteLobby.DeleteLobbyOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

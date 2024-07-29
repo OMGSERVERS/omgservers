@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePermission.hasRuntimePermission;
 
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
 import com.omgservers.service.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

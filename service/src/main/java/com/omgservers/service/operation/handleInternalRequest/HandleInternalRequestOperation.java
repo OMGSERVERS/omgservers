@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.handleInternalRequest;
 
-import com.omgservers.model.dto.ShardedRequest;
+import com.omgservers.schema.module.ShardedRequest;
 import io.smallrye.mutiny.Uni;
 import org.slf4j.Logger;
 

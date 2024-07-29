@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.validateStageSecret;
 
-import com.omgservers.model.dto.tenant.GetStageRequest;
-import com.omgservers.model.dto.tenant.ValidateStageSecretRequest;
-import com.omgservers.model.dto.tenant.ValidateStageSecretResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.GetStageRequest;
+import com.omgservers.schema.module.tenant.ValidateStageSecretRequest;
+import com.omgservers.schema.module.tenant.ValidateStageSecretResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import io.smallrye.mutiny.Uni;

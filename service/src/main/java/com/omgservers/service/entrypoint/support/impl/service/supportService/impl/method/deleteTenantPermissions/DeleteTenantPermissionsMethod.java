@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenantPermissions;
 
-import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportRequest;
-import com.omgservers.model.dto.support.DeleteTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteTenantPermissionsMethod {

@@ -33,7 +33,7 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
                         })
                         """);
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             final var tenantDashboard = developerApiTester.getTenantDashboard(version.getDeveloperToken(),

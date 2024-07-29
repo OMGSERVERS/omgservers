@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.user.deleteUser;
 
-import com.omgservers.model.dto.user.DeleteUserRequest;
-import com.omgservers.model.dto.user.DeleteUserResponse;
+import com.omgservers.schema.module.user.DeleteUserRequest;
+import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.service.module.user.impl.operation.user.deleteUser.DeleteUserOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

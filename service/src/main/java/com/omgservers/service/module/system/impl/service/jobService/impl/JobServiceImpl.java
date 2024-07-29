@@ -1,16 +1,16 @@
 package com.omgservers.service.module.system.impl.service.jobService.impl;
 
-import com.omgservers.model.dto.system.job.DeleteJobRequest;
-import com.omgservers.model.dto.system.job.DeleteJobResponse;
-import com.omgservers.model.dto.system.job.FindJobRequest;
-import com.omgservers.model.dto.system.job.FindJobResponse;
-import com.omgservers.model.dto.system.job.GetJobRequest;
-import com.omgservers.model.dto.system.job.GetJobResponse;
-import com.omgservers.model.dto.system.job.SyncJobRequest;
-import com.omgservers.model.dto.system.job.SyncJobResponse;
-import com.omgservers.model.dto.system.job.ViewJobsRequest;
-import com.omgservers.model.dto.system.job.ViewJobsResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.service.system.job.DeleteJobRequest;
+import com.omgservers.schema.service.system.job.DeleteJobResponse;
+import com.omgservers.schema.service.system.job.FindJobRequest;
+import com.omgservers.schema.service.system.job.FindJobResponse;
+import com.omgservers.schema.service.system.job.GetJobRequest;
+import com.omgservers.schema.service.system.job.GetJobResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
+import com.omgservers.schema.service.system.job.ViewJobsRequest;
+import com.omgservers.schema.service.system.job.ViewJobsResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.jobService.JobService;

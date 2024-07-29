@@ -1,6 +1,6 @@
 package com.omgservers.service.operation;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.quarkus.test.junit.QuarkusTest;

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.operation.tenant.upsertTenant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.tenant.TenantCreatedEventBodyModel;
-import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.schema.event.body.module.tenant.TenantCreatedEventBodyModel;
+import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

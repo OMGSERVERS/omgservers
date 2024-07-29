@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.viewTenantPermissions;
 
-import com.omgservers.model.dto.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.model.dto.tenant.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ViewTenantPermissionsMethod {

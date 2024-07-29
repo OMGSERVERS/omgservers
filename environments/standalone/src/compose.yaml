@@ -36,14 +36,18 @@ services:
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
+    environment:
+      - OMGSERVERS_ENVIRONMENT=standalone
+      - OMGSERVERS_SERVICE_URL=http://host.docker.internal:8080
+    volumes:
+      - ./jwtkeys/cert.pem:/root/certs/bundle/cert.pem
+      - registry:/var/lib/registry
     restart: unless-stopped
     ports:
       - "127.0.0.1:5000:5000"
     networks:
       service:
         ipv4_address: 172.1.0.4
-    volumes:
-      - registry:/var/lib/registry
     logging:
       driver: "json-file"
       options:
@@ -122,8 +126,8 @@ services:
       - database
       - queues
     volumes:
-      - ./jwtkeys/privateKey.pem:/jwtkeys/privateKey.pem:ro
-      - ./jwtkeys/publicKey.pem:/jwtkeys/publicKey.pem:ro
+      - ./jwtkeys/private_key.pem:/jwtkeys/private_key.pem:ro
+      - ./jwtkeys/public_key.pem:/jwtkeys/public_key.pem:ro
     environment:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
@@ -139,6 +143,12 @@ services:
       - OMGSERVERS_BOOTSTRAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_ROUTER_USER_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ROUTER_USER_PASSWORD=${ROUTER_USER_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_REGISTRY_USER_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_REGISTRY_USER_PASSWORD=${REGISTRY_USER_PASSWORD}
+      - OMGSERVERS_BOOTSTRAP_BUILDER_USER_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_BUILDER_USER_PASSWORD=${BUILDER_USER_PASSWORD}
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
       - OMGSERVERS_WORKERS_SERVICE_URI=http://gateway:10003

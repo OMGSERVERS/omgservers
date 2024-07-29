@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.stage.selectStage;
 
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.model.stage.StageModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

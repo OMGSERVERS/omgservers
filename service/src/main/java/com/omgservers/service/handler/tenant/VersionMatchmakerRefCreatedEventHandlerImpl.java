@@ -1,16 +1,16 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestResponse;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestRequest;
-import com.omgservers.model.dto.tenant.FindVersionMatchmakerRequestResponse;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRefCreatedEventBodyModel;
-import com.omgservers.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
+import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;

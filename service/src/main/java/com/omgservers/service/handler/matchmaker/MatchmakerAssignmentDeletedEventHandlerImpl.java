@@ -1,16 +1,16 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.model.dto.client.DeleteClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.DeleteClientMatchmakerRefResponse;
-import com.omgservers.model.dto.client.FindClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.FindClientMatchmakerRefResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
-import com.omgservers.model.matchmakerAssignment.MatchmakerAssignmentModel;
+import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;

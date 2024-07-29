@@ -1,6 +1,6 @@
 package com.omgservers.service.module.root.impl.operation.rootEntityRef.upsertRootEntityRef;
 
-import com.omgservers.model.rootEntityRef.RootEntityRefModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

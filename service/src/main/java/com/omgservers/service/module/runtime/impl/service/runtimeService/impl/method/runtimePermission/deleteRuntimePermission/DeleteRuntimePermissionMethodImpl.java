@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.deleteRuntimePermission;
 
-import com.omgservers.model.dto.runtime.DeleteRuntimePermissionRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimePermissionResponse;
+import com.omgservers.schema.module.runtime.DeleteRuntimePermissionRequest;
+import com.omgservers.schema.module.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimePermission.deleteRuntimePermission.DeleteRuntimePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

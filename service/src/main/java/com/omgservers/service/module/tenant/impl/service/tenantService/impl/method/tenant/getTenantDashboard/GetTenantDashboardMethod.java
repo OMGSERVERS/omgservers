@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.getTenantDashboard;
 
-import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
-import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
+import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.module.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.GetTenantResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetTenantDashboardMethod {

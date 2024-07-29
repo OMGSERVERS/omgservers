@@ -1,14 +1,14 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;

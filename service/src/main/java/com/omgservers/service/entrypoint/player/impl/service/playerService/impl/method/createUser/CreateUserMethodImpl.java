@@ -1,10 +1,10 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createUser;
 
-import com.omgservers.model.dto.player.CreateUserPlayerRequest;
-import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.user.UserModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
+import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;

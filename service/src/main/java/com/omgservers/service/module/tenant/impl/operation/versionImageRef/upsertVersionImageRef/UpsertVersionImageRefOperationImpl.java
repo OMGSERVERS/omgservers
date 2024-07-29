@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.versionImageRef.upsertVersionImageRef;
 
-import com.omgservers.model.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
-import com.omgservers.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

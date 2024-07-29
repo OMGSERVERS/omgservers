@@ -1,9 +1,9 @@
 package com.omgservers.service.module.user.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;

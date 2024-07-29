@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.upsertMatchmakerMatch.UpsertMatchmakerMatchOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

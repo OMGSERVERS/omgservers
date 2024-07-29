@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.operation.testInterface.DeletePlayerOperationTestInterface;

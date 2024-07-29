@@ -1,11 +1,11 @@
 package com.omgservers.service.module.system.impl.service.indexService;
 
-import com.omgservers.model.dto.system.DeleteIndexRequest;
-import com.omgservers.model.dto.system.DeleteIndexResponse;
-import com.omgservers.model.dto.system.GetIndexRequest;
-import com.omgservers.model.dto.system.GetIndexResponse;
-import com.omgservers.model.dto.system.SyncIndexRequest;
-import com.omgservers.model.dto.system.SyncIndexResponse;
+import com.omgservers.schema.service.system.DeleteIndexRequest;
+import com.omgservers.schema.service.system.DeleteIndexResponse;
+import com.omgservers.schema.service.system.GetIndexRequest;
+import com.omgservers.schema.service.system.GetIndexResponse;
+import com.omgservers.schema.service.system.SyncIndexRequest;
+import com.omgservers.schema.service.system.SyncIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

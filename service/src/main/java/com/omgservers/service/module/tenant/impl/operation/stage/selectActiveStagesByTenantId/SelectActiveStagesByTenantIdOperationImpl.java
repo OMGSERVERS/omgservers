@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.stage.selectActiveStagesByTenantId;
 
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.service.module.tenant.impl.mapper.StageModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

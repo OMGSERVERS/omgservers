@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.versionJenkinsRequest.upsertVersionJenkinsRequest;
 
-import com.omgservers.model.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.schema.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

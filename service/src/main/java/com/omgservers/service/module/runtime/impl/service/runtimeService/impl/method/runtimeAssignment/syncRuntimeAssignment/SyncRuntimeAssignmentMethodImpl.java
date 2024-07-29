@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.syncRuntimeAssignment;
 
-import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeAssignmentResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.runtime.hasRuntime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.upsertRuntimeAssignment.UpsertRuntimeAssignmentOperation;

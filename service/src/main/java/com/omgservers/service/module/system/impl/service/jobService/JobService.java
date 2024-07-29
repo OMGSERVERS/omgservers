@@ -1,15 +1,15 @@
 package com.omgservers.service.module.system.impl.service.jobService;
 
-import com.omgservers.model.dto.system.job.DeleteJobRequest;
-import com.omgservers.model.dto.system.job.DeleteJobResponse;
-import com.omgservers.model.dto.system.job.FindJobRequest;
-import com.omgservers.model.dto.system.job.FindJobResponse;
-import com.omgservers.model.dto.system.job.GetJobRequest;
-import com.omgservers.model.dto.system.job.GetJobResponse;
-import com.omgservers.model.dto.system.job.SyncJobRequest;
-import com.omgservers.model.dto.system.job.SyncJobResponse;
-import com.omgservers.model.dto.system.job.ViewJobsRequest;
-import com.omgservers.model.dto.system.job.ViewJobsResponse;
+import com.omgservers.schema.service.system.job.DeleteJobRequest;
+import com.omgservers.schema.service.system.job.DeleteJobResponse;
+import com.omgservers.schema.service.system.job.FindJobRequest;
+import com.omgservers.schema.service.system.job.FindJobResponse;
+import com.omgservers.schema.service.system.job.GetJobRequest;
+import com.omgservers.schema.service.system.job.GetJobResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
+import com.omgservers.schema.service.system.job.ViewJobsRequest;
+import com.omgservers.schema.service.system.job.ViewJobsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteDeveloper;
 
-import com.omgservers.model.dto.support.DeleteDeveloperSupportRequest;
-import com.omgservers.model.dto.support.DeleteDeveloperSupportResponse;
-import com.omgservers.model.dto.user.DeleteUserRequest;
-import com.omgservers.model.dto.user.DeleteUserResponse;
+import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
+import com.omgservers.schema.module.user.DeleteUserRequest;
+import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

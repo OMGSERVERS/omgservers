@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.system;
 
-import com.omgservers.model.job.JobModel;
-import com.omgservers.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

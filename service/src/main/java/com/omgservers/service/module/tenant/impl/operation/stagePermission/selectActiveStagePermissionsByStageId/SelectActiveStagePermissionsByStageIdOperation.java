@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.stagePermission.selectActiveStagePermissionsByStageId;
 
-import com.omgservers.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.stagePermission.StagePermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

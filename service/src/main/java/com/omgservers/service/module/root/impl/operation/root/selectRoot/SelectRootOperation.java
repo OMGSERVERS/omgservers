@@ -1,6 +1,6 @@
 package com.omgservers.service.module.root.impl.operation.root.selectRoot;
 
-import com.omgservers.model.root.RootModel;
+import com.omgservers.schema.model.root.RootModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

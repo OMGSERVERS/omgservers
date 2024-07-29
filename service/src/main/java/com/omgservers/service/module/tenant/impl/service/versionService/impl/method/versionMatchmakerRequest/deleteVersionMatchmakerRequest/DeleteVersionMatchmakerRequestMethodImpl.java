@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.deleteVersionMatchmakerRequest;
 
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.deleteVersionMatchmakerRequest.DeleteVersionMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

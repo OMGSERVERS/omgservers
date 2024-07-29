@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.uploadTestVersion;
 
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.model.TestVersionModel;
 import jakarta.enterprise.context.ApplicationScoped;

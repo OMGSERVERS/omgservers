@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.player.PlayerModel;
+import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.service.module.user.impl.mapper.PlayerModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRef.syncVersionLobbyRef;
 
-import com.omgservers.model.dto.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.model.dto.tenant.SyncVersionLobbyRefResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRefResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.version.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.upsertVersionLobbyRef.UpsertVersionLobbyRefOperation;

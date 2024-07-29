@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestRequest;
-import com.omgservers.model.dto.pool.poolRequest.GetPoolRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.pool.PoolRequestDeletedEventBodyModel;
-import com.omgservers.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
+import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.pool.PoolRequestDeletedEventBodyModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Uni;

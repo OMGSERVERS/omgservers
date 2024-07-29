@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl.method.project.deleteProject;
 
-import com.omgservers.model.dto.tenant.DeleteProjectRequest;
-import com.omgservers.model.dto.tenant.DeleteProjectResponse;
+import com.omgservers.schema.module.tenant.DeleteProjectRequest;
+import com.omgservers.schema.module.tenant.DeleteProjectResponse;
 import com.omgservers.service.module.tenant.impl.operation.project.deleteProject.DeleteProjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.root.impl.mappers;
 
-import com.omgservers.model.rootEntityRef.RootEntityRefModel;
-import com.omgservers.model.rootEntityRef.RootEntityRefQualifierEnum;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

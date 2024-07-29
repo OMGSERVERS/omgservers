@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionImageRef.selectActiveVersionImageRefsByTenantId;
 
-import com.omgservers.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionImageRefModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

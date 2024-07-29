@@ -1,10 +1,10 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createDeveloper;
 
-import com.omgservers.model.dto.support.CreateDeveloperSupportRequest;
-import com.omgservers.model.dto.support.CreateDeveloperSupportResponse;
-import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.user.UserModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;

@@ -1,15 +1,15 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeTenantTask;
 
-import com.omgservers.model.dto.system.task.ExecuteStageTaskRequest;
-import com.omgservers.model.dto.tenant.GetTenantRequest;
-import com.omgservers.model.dto.tenant.GetTenantResponse;
-import com.omgservers.model.dto.tenant.ViewProjectsRequest;
-import com.omgservers.model.dto.tenant.ViewProjectsResponse;
-import com.omgservers.model.dto.tenant.ViewStagesRequest;
-import com.omgservers.model.dto.tenant.ViewStagesResponse;
-import com.omgservers.model.project.ProjectModel;
-import com.omgservers.model.stage.StageModel;
-import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.schema.service.system.task.ExecuteStageTaskRequest;
+import com.omgservers.schema.module.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.ViewProjectsRequest;
+import com.omgservers.schema.module.tenant.ViewProjectsResponse;
+import com.omgservers.schema.module.tenant.ViewStagesRequest;
+import com.omgservers.schema.module.tenant.ViewStagesResponse;
+import com.omgservers.schema.model.project.ProjectModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.TenantModule;

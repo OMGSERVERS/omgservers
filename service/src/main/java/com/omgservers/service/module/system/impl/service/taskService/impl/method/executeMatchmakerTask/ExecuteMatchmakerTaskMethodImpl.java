@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask;
 
-import com.omgservers.model.dto.system.task.ExecuteMatchmakerTaskRequest;
-import com.omgservers.model.dto.system.task.ExecuteMatchmakerTaskResponse;
+import com.omgservers.schema.service.system.task.ExecuteMatchmakerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteMatchmakerTaskResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.model.runtime.RuntimeConfigModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

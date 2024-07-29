@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.checkShard;
 
-import com.omgservers.model.shard.ShardModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideGoneException;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;

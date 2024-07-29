@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.parseDockerRepository;
 
-import com.omgservers.model.dockerRepository.DockerContainerQualifierEnum;
+import com.omgservers.schema.service.registry.DockerRegistryContainerQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -24,7 +24,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
         assertEquals(231939082811342849L, repositoryModel.getStageId());
-        assertEquals(DockerContainerQualifierEnum.UNIVERSAL, repositoryModel.getQualifier());
+        assertEquals(DockerRegistryContainerQualifierEnum.UNIVERSAL, repositoryModel.getContainer());
     }
 
     @Test
@@ -36,7 +36,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
         assertEquals(231939082811342849L, repositoryModel.getStageId());
-        assertEquals(DockerContainerQualifierEnum.LOBBY, repositoryModel.getQualifier());
+        assertEquals(DockerRegistryContainerQualifierEnum.LOBBY, repositoryModel.getContainer());
     }
 
     @Test
@@ -48,7 +48,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
         assertEquals(231939082811342849L, repositoryModel.getStageId());
-        assertEquals(DockerContainerQualifierEnum.MATCH, repositoryModel.getQualifier());
+        assertEquals(DockerRegistryContainerQualifierEnum.MATCH, repositoryModel.getContainer());
     }
 
     @Test

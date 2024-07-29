@@ -1,13 +1,13 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
-import com.omgservers.model.dto.tenant.GetVersionConfigRequest;
-import com.omgservers.model.dto.tenant.GetVersionConfigResponse;
-import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
-import com.omgservers.model.matchmakerState.MatchmakerStateModel;
-import com.omgservers.model.request.MatchmakerRequestModel;
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
+import com.omgservers.schema.module.tenant.GetVersionConfigResponse;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.tenant.TenantModule;

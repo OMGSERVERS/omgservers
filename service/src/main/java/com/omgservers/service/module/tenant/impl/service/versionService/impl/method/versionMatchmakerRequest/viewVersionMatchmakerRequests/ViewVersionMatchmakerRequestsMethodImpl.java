@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRequest.viewVersionMatchmakerRequests;
 
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsRequest;
-import com.omgservers.model.dto.tenant.ViewVersionMatchmakerRequestsResponse;
+import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
+import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.selectActiveVersionMatchmakerRequestsByVersionId.SelectActiveVersionMatchmakerRequestsByVersionId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

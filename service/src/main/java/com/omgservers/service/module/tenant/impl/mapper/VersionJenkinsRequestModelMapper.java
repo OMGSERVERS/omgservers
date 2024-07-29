@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

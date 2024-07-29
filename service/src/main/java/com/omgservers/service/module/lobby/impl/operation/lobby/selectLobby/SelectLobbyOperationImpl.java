@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.impl.operation.lobby.selectLobby;
 
-import com.omgservers.model.lobby.LobbyModel;
+import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.service.module.lobby.impl.mappers.LobbyModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

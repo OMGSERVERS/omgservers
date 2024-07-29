@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand.deleteMatchmakerCommand;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerCommandResponse;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteMatchmakerCommandMethod {

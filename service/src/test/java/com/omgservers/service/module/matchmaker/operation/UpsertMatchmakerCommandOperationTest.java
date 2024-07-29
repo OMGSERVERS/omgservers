@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;

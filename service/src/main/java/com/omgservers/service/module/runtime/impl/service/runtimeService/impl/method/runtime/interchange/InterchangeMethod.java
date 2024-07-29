@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.interchange;
 
-import com.omgservers.model.dto.runtime.InterchangeRequest;
-import com.omgservers.model.dto.runtime.InterchangeResponse;
+import com.omgservers.schema.module.runtime.InterchangeRequest;
+import com.omgservers.schema.module.runtime.InterchangeResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface InterchangeMethod {

@@ -1,7 +1,7 @@
 package com.omgservers.tester.player;
 
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -43,7 +43,7 @@ public class PlayerWelcomeMessageIT extends BaseTestClass {
                         })
                         """);
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.deleteTenant;
 
-import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.model.dto.tenant.DeleteTenantResponse;
+import com.omgservers.schema.module.tenant.DeleteTenantRequest;
+import com.omgservers.schema.module.tenant.DeleteTenantResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteTenantMethod {

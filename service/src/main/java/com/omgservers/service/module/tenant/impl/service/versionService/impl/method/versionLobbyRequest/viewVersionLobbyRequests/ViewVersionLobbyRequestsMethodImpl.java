@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.viewVersionLobbyRequests;
 
-import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsRequest;
-import com.omgservers.model.dto.tenant.ViewVersionLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsRequest;
+import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsResponse;
 import com.omgservers.service.module.tenant.impl.operation.versionLobbyRequest.selectActiveVersionLobbyRequestsByVersionId.SelectActiveVersionLobbyRequestsByVersionId;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

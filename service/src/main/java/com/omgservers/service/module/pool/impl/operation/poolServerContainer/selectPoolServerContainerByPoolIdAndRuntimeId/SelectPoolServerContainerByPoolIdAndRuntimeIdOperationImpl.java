@@ -1,6 +1,6 @@
 package com.omgservers.service.module.pool.impl.operation.poolServerContainer.selectPoolServerContainerByPoolIdAndRuntimeId;
 
-import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.service.module.pool.impl.mappers.PoolServerContainerModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

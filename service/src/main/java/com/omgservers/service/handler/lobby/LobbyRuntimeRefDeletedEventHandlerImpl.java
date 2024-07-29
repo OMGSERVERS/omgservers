@@ -1,12 +1,12 @@
 
 package com.omgservers.service.handler.lobby;
 
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefRequest;
-import com.omgservers.model.dto.lobby.GetLobbyRuntimeRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.module.lobby.GetLobbyRuntimeRefRequest;
+import com.omgservers.schema.module.lobby.GetLobbyRuntimeRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;

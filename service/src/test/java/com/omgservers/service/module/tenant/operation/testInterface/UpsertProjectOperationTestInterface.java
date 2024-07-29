@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.project.ProjectModel;
+import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.service.module.tenant.impl.operation.project.upsertProject.UpsertProjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

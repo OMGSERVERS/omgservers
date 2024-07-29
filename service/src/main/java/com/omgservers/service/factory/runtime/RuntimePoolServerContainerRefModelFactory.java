@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
+import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

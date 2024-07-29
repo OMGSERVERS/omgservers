@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.impl.method.addConnection;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
 import com.omgservers.service.service.room.RoomService;

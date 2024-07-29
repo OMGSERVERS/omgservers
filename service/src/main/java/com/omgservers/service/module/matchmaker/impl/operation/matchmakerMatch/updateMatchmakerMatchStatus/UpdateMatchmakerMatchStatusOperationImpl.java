@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.updateMatchmakerMatchStatus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchStatusEnum;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

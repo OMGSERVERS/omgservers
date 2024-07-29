@@ -1,16 +1,16 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deleteVersion;
 
-import com.omgservers.model.dto.developer.DeleteVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.DeleteVersionDeveloperResponse;
-import com.omgservers.model.dto.tenant.DeleteVersionRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionResponse;
-import com.omgservers.model.dto.tenant.GetVersionRequest;
-import com.omgservers.model.dto.tenant.GetVersionResponse;
-import com.omgservers.model.dto.tenant.HasStagePermissionRequest;
-import com.omgservers.model.dto.tenant.HasStagePermissionResponse;
-import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.model.version.VersionModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.schema.module.tenant.DeleteVersionRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionResponse;
+import com.omgservers.schema.module.tenant.GetVersionRequest;
+import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
+import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.VersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;

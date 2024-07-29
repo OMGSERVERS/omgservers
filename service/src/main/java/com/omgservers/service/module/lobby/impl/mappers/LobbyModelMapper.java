@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.impl.mappers;
 
-import com.omgservers.model.lobby.LobbyModel;
+import com.omgservers.schema.model.lobby.LobbyModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

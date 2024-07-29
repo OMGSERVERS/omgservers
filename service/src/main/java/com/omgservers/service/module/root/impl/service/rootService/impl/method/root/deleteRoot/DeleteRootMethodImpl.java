@@ -1,7 +1,7 @@
 package com.omgservers.service.module.root.impl.service.rootService.impl.method.root.deleteRoot;
 
-import com.omgservers.model.dto.root.root.DeleteRootRequest;
-import com.omgservers.model.dto.root.root.DeleteRootResponse;
+import com.omgservers.schema.module.root.root.DeleteRootRequest;
+import com.omgservers.schema.module.root.root.DeleteRootResponse;
 import com.omgservers.service.module.root.impl.operation.root.deleteRoot.DeleteRootOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

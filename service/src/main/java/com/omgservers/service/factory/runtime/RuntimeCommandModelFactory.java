@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.model.runtimeCommand.RuntimeCommandBodyModel;
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

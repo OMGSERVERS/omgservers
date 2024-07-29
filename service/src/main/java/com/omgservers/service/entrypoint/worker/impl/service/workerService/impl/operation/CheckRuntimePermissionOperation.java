@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.operation;
 
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
 import io.smallrye.mutiny.Uni;
 
 public interface CheckRuntimePermissionOperation {

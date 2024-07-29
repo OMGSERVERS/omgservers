@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.handleInternalRequest;
 
-import com.omgservers.model.dto.ShardedRequest;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.ShardedRequest;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;

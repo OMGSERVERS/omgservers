@@ -1,12 +1,12 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.model.dto.user.SyncPlayerRequest;
-import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.stage.StageModel;
-import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.model.user.UserModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.module.user.SyncPlayerRequest;
+import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.impl.service.userService.testInterface.UserServiceTestInterface;

@@ -1,15 +1,15 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.interchange;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.dto.client.GetClientRequest;
-import com.omgservers.model.dto.client.GetClientResponse;
-import com.omgservers.model.dto.client.InterchangeRequest;
-import com.omgservers.model.dto.client.InterchangeResponse;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.model.event.body.internal.ClientMessageReceivedEventBodyModel;
-import com.omgservers.model.message.MessageModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.module.client.GetClientRequest;
+import com.omgservers.schema.module.client.GetClientResponse;
+import com.omgservers.schema.module.client.InterchangeRequest;
+import com.omgservers.schema.module.client.InterchangeResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.schema.event.body.internal.ClientMessageReceivedEventBodyModel;
+import com.omgservers.schema.model.message.MessageModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;

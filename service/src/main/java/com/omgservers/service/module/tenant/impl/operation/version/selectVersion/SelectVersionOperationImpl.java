@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectVersion;
 
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

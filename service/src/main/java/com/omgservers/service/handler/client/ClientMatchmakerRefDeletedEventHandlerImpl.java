@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.model.dto.client.GetClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.GetClientMatchmakerRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.module.client.GetClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.GetClientMatchmakerRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import io.smallrye.mutiny.Uni;

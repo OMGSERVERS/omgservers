@@ -2,8 +2,8 @@ package com.omgservers.tester.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.dto.admin.CreateTokenAdminRequest;
-import com.omgservers.model.dto.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
+import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.pool.impl.operation.poolServerContainer.deletePoolServerContainer;
 
-import com.omgservers.model.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

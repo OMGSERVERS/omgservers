@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionJenkinsRequest.deleteVersionJenkinsRequest;
 
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.module.tenant.impl.operation.versionJenkinsRequest.deleteVersionJenkinsRequest.DeleteVersionJenkinsRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

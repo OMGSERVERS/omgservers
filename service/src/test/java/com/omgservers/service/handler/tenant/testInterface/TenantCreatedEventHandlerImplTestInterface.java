@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.tenant.testInterface;
 
-import com.omgservers.model.event.EventModel;
+import com.omgservers.schema.event.EventModel;
 import com.omgservers.service.handler.tenant.TenantCreatedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

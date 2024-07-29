@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.model.projectPermission.ProjectPermissionEnum;
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

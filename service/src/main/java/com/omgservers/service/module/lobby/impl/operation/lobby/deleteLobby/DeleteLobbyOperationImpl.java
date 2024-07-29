@@ -1,6 +1,6 @@
 package com.omgservers.service.module.lobby.impl.operation.lobby.deleteLobby;
 
-import com.omgservers.model.event.body.module.lobby.LobbyDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.lobby.LobbyDeletedEventBodyModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

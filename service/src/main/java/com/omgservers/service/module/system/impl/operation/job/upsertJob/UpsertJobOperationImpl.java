@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.operation.job.upsertJob;
 
-import com.omgservers.model.event.body.system.JobCreatedEventBodyModel;
-import com.omgservers.model.job.JobModel;
+import com.omgservers.schema.event.body.system.JobCreatedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

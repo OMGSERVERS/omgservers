@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertTenantOperationTestInterface;

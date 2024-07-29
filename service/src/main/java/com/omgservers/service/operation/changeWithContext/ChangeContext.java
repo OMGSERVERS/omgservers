@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.changeWithContext;
 
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.log.LogModel;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.log.LogModel;
 import io.smallrye.mutiny.Context;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

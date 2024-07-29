@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.matchmaker.testInterfaces;
 
-import com.omgservers.model.event.EventModel;
+import com.omgservers.schema.event.EventModel;
 import com.omgservers.service.handler.matchmaker.MatchmakerMatchCreatedEventHandlerImpl;
 import com.omgservers.service.handler.matchmaker.MatchmakerMatchDeletedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;

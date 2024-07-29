@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.poolServer.GetPoolServerRequest;
-import com.omgservers.model.dto.pool.poolServer.GetPoolServerResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.pool.PoolServerCreatedEventBodyModel;
-import com.omgservers.model.poolServer.PoolServerModel;
+import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
+import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.pool.PoolServerCreatedEventBodyModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;

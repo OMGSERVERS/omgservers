@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

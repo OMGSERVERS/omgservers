@@ -1,14 +1,14 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getTenantDashboard;
 
-import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.model.dto.tenant.GetTenantDashboardRequest;
-import com.omgservers.model.dto.tenant.GetTenantDashboardResponse;
-import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
-import com.omgservers.model.tenantDashboard.TenantDashboardModel;
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
+import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
+import com.omgservers.schema.model.tenantDashboard.TenantDashboardModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;

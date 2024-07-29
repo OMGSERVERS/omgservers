@@ -1,9 +1,9 @@
 package com.omgservers.service.module.system.impl.service.eventService.impl.method.relayEvents;
 
-import com.omgservers.model.dto.system.RelayEventsRequest;
-import com.omgservers.model.dto.system.RelayEventsResponse;
-import com.omgservers.model.event.EventProjectionModel;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.schema.service.system.RelayEventsRequest;
+import com.omgservers.schema.service.system.RelayEventsResponse;
+import com.omgservers.schema.event.EventProjectionModel;
+import com.omgservers.schema.event.EventStatusEnum;
 import com.omgservers.service.module.system.impl.component.eventEmitter.EventEmitter;
 import com.omgservers.service.module.system.impl.operation.event.selectEventsForRelaying.SelectEventsForRelayingOperation;
 import com.omgservers.service.module.system.impl.operation.event.updateEventsStatusByIds.UpdateEventsStatusByIdsOperation;

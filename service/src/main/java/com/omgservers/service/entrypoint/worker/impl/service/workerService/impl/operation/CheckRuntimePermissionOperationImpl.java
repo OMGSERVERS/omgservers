@@ -1,8 +1,8 @@
 package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.operation;
 
-import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.runtime.FindRuntimePermissionRequest;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;

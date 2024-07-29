@@ -1,12 +1,11 @@
 package com.omgservers.service.handler.system;
 
-import com.omgservers.model.dto.system.job.GetJobRequest;
-import com.omgservers.model.dto.system.job.GetJobResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.system.JobCreatedEventBodyModel;
-import com.omgservers.model.event.body.system.JobDeletedEventBodyModel;
-import com.omgservers.model.job.JobModel;
+import com.omgservers.schema.service.system.job.GetJobRequest;
+import com.omgservers.schema.service.system.job.GetJobResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.system.JobDeletedEventBodyModel;
+import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;
 import io.smallrye.mutiny.Uni;

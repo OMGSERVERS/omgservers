@@ -1,10 +1,10 @@
 package com.omgservers.tester.match;
 
-import com.omgservers.model.message.MessageQualifierEnum;
-import com.omgservers.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.model.version.VersionConfigModel;
-import com.omgservers.model.version.VersionGroupModel;
-import com.omgservers.model.version.VersionModeModel;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionGroupModel;
+import com.omgservers.schema.model.version.VersionModeModel;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -85,7 +85,7 @@ public class MatchBroadcastMessageIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(16_000);
+        Thread.sleep(32_000);
 
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

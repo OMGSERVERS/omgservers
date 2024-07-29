@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
-import com.omgservers.model.dto.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.system.SystemModule;

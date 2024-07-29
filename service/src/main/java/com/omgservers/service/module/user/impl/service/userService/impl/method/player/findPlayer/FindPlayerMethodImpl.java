@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.findPlayer;
 
-import com.omgservers.model.dto.user.FindPlayerRequest;
-import com.omgservers.model.dto.user.FindPlayerResponse;
+import com.omgservers.schema.module.user.FindPlayerRequest;
+import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayerByUserIdAndStageId.SelectPlayerByUserIdAndStageIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.runtime.DeleteRuntimeRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeResponse;
-import com.omgservers.model.dto.runtime.GetRuntimeRequest;
-import com.omgservers.model.dto.runtime.GetRuntimeResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
-import com.omgservers.model.runtime.RuntimeModel;
+import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
+import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;

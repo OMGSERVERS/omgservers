@@ -1,7 +1,7 @@
 package com.omgservers.service.exception;
 
-import com.omgservers.model.exception.ExceptionErrorResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionErrorResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.NotSupportedException;

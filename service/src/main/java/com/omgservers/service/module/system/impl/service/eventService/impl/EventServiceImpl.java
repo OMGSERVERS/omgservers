@@ -1,12 +1,12 @@
 package com.omgservers.service.module.system.impl.service.eventService.impl;
 
-import com.omgservers.model.dto.system.HandleEventRequest;
-import com.omgservers.model.dto.system.HandleEventResponse;
-import com.omgservers.model.dto.system.RelayEventsRequest;
-import com.omgservers.model.dto.system.RelayEventsResponse;
-import com.omgservers.model.dto.system.SyncEventRequest;
-import com.omgservers.model.dto.system.SyncEventResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.service.system.HandleEventRequest;
+import com.omgservers.schema.service.system.HandleEventResponse;
+import com.omgservers.schema.service.system.RelayEventsRequest;
+import com.omgservers.schema.service.system.RelayEventsResponse;
+import com.omgservers.schema.service.system.SyncEventRequest;
+import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.system.impl.service.eventService.EventService;

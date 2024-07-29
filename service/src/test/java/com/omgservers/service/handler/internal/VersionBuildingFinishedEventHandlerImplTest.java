@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.event.body.internal.VersionBuildingFinishedEventBodyModel;
+import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.VersionBuildingFinishedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

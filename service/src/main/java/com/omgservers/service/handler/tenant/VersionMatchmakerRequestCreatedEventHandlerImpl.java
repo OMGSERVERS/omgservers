@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestRequest;
-import com.omgservers.model.dto.tenant.GetVersionMatchmakerRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
-import com.omgservers.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId;
 
-import com.omgservers.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimeCommandModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

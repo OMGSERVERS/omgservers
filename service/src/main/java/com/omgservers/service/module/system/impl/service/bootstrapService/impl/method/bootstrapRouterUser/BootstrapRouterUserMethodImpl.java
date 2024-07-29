@@ -1,11 +1,11 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRouterUser;
 
-import com.omgservers.model.dto.user.GetUserRequest;
-import com.omgservers.model.dto.user.GetUserResponse;
-import com.omgservers.model.dto.user.SyncUserRequest;
-import com.omgservers.model.dto.user.SyncUserResponse;
-import com.omgservers.model.user.UserModel;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.module.user.GetUserRequest;
+import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.module.user.SyncUserResponse;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;

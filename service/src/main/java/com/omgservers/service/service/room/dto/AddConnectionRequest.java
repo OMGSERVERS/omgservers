@@ -1,6 +1,6 @@
 package com.omgservers.service.service.room.dto;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

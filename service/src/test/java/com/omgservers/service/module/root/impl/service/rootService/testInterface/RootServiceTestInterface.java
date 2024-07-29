@@ -1,11 +1,11 @@
 package com.omgservers.service.module.root.impl.service.rootService.testInterface;
 
-import com.omgservers.model.dto.root.root.DeleteRootRequest;
-import com.omgservers.model.dto.root.root.DeleteRootResponse;
-import com.omgservers.model.dto.root.root.GetRootRequest;
-import com.omgservers.model.dto.root.root.GetRootResponse;
-import com.omgservers.model.dto.root.root.SyncRootRequest;
-import com.omgservers.model.dto.root.root.SyncRootResponse;
+import com.omgservers.schema.module.root.root.DeleteRootRequest;
+import com.omgservers.schema.module.root.root.DeleteRootResponse;
+import com.omgservers.schema.module.root.root.GetRootRequest;
+import com.omgservers.schema.module.root.root.GetRootResponse;
+import com.omgservers.schema.module.root.root.SyncRootRequest;
+import com.omgservers.schema.module.root.root.SyncRootResponse;
 import com.omgservers.service.module.root.impl.service.rootService.RootService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.webSocket.impl.security;
 
-import com.omgservers.model.user.UserRoleEnum;
-import com.omgservers.model.wsToken.WsToken;
+import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.dto.wsToken.WsTokenDto;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.IdentityProvider;
@@ -35,7 +35,7 @@ public class WebSocketTokenIdentityProvider implements IdentityProvider<TokenAut
     public Uni<SecurityIdentity> authenticate(TokenAuthenticationRequest request,
                                               AuthenticationRequestContext context) {
         final var tokenType = request.getToken().getType();
-        if (!tokenType.equals(WsToken.WS_TOKEN)) {
+        if (!tokenType.equals(WsTokenDto.WS_TOKEN)) {
             return Uni.createFrom().nullItem();
         }
 
@@ -64,9 +64,9 @@ public class WebSocketTokenIdentityProvider implements IdentityProvider<TokenAut
 
         builder.addAttribute("subject", Long.valueOf(subject));
         builder.addAttribute("tokenId", jsonWebToken.getTokenID());
-        jsonWebToken.<String>claim(WsToken.RUNTIME_ID_CLAIM)
+        jsonWebToken.<String>claim(WsTokenDto.RUNTIME_ID_CLAIM)
                 .ifPresent(claim -> builder.addAttribute("runtimeId", Long.valueOf(claim)));
-        jsonWebToken.<String>claim(WsToken.USER_ROLE_CLAIM)
+        jsonWebToken.<String>claim(WsTokenDto.USER_ROLE_CLAIM)
                 .ifPresent(claim -> builder.addAttribute("userRole", UserRoleEnum.fromString(claim)));
 
         builder.setAnonymous(false);

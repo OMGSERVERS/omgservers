@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.selectActiveVersionLobbyRefsByVersionId;
 
-import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

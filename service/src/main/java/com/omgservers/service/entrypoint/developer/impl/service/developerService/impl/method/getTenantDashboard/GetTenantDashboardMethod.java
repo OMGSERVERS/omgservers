@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getTenantDashboard;
 
-import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.model.dto.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface GetTenantDashboardMethod {

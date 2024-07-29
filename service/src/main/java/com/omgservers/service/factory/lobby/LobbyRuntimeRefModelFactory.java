@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.lobby;
 
-import com.omgservers.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

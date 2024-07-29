@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.deleteClientRuntimeRef;
 
-import com.omgservers.model.dto.client.DeleteClientRuntimeRefRequest;
-import com.omgservers.model.dto.client.DeleteClientRuntimeRefResponse;
+import com.omgservers.schema.module.client.DeleteClientRuntimeRefRequest;
+import com.omgservers.schema.module.client.DeleteClientRuntimeRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteClientRuntimeRefMethod {

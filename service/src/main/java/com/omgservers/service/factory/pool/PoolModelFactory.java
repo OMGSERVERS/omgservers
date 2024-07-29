@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.model.pool.PoolModel;
+import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

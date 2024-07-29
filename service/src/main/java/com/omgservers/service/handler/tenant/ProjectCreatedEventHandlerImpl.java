@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.GetProjectRequest;
-import com.omgservers.model.dto.tenant.GetProjectResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.ProjectCreatedEventBodyModel;
-import com.omgservers.model.project.ProjectModel;
+import com.omgservers.schema.module.tenant.GetProjectRequest;
+import com.omgservers.schema.module.tenant.GetProjectResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.ProjectCreatedEventBodyModel;
+import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;

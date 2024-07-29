@@ -1,7 +1,7 @@
 package com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.viewRootEntityRefs;
 
-import com.omgservers.model.dto.root.rootEntityRef.ViewRootEntityRefsRequest;
-import com.omgservers.model.dto.root.rootEntityRef.ViewRootEntityRefsResponse;
+import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsRequest;
+import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsResponse;
 import com.omgservers.service.module.root.impl.operation.rootEntityRef.selectActiveRootEntityRefByRootId.SelectActiveRootEntityRefByRootIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

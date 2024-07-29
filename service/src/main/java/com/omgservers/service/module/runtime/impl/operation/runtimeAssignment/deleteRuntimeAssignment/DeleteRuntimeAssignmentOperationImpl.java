@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.deleteRuntimeAssignment;
 
-import com.omgservers.model.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

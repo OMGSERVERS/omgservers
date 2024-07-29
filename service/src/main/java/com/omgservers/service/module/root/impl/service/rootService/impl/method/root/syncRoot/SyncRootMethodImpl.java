@@ -1,7 +1,7 @@
 package com.omgservers.service.module.root.impl.service.rootService.impl.method.root.syncRoot;
 
-import com.omgservers.model.dto.root.root.SyncRootRequest;
-import com.omgservers.model.dto.root.root.SyncRootResponse;
+import com.omgservers.schema.module.root.root.SyncRootRequest;
+import com.omgservers.schema.module.root.root.SyncRootResponse;
 import com.omgservers.service.module.root.impl.operation.root.upsertRoot.UpsertRootOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

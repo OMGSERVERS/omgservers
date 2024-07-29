@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.root;
 
-import com.omgservers.model.dto.root.root.GetRootRequest;
-import com.omgservers.model.dto.root.root.GetRootResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.root.RootDeletedEventBodyModel;
-import com.omgservers.model.root.RootModel;
+import com.omgservers.schema.module.root.root.GetRootRequest;
+import com.omgservers.schema.module.root.root.GetRootResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.root.RootDeletedEventBodyModel;
+import com.omgservers.schema.model.root.RootModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
 import io.smallrye.mutiny.Uni;

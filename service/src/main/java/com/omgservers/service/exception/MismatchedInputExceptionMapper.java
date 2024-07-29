@@ -1,8 +1,8 @@
 package com.omgservers.service.exception;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.omgservers.model.exception.ExceptionErrorResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionErrorResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;

@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.user;
 
-import com.omgservers.model.player.PlayerAttributesModel;
-import com.omgservers.model.player.PlayerModel;
+import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

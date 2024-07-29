@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.impl.method.projectPermission.syncProjectPermission;
 
-import com.omgservers.model.dto.tenant.SyncProjectPermissionRequest;
-import com.omgservers.model.dto.tenant.SyncProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncProjectPermissionMethod {

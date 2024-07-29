@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapRelayJob;
 
-import com.omgservers.model.dto.system.task.ExecuteRelayTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteRelayTaskRequest;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.scheduler.Scheduled;

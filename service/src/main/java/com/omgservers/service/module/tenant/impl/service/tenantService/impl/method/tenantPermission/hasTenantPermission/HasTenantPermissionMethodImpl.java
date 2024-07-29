@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.hasTenantPermission;
 
-import com.omgservers.model.dto.tenant.HasTenantPermissionRequest;
-import com.omgservers.model.dto.tenant.HasTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.hasTenantPermission.HasTenantPermissionOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

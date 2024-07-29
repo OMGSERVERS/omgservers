@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.omgservers</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>schema</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

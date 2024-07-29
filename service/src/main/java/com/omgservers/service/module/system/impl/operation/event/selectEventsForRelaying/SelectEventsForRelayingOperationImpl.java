@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.operation.event.selectEventsForRelaying;
 
-import com.omgservers.model.event.EventProjectionModel;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.schema.event.EventProjectionModel;
+import com.omgservers.schema.event.EventStatusEnum;
 import com.omgservers.service.module.system.impl.mappers.EventProjectionModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

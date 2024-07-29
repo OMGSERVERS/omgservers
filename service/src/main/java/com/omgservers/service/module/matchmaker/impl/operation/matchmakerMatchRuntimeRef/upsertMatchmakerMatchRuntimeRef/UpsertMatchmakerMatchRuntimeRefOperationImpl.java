@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.upsertMatchmakerMatchRuntimeRef;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
-import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

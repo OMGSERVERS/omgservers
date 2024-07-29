@@ -1,10 +1,10 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.syncRuntime;
 
-import com.omgservers.model.dto.runtime.SyncRuntimeRequest;
-import com.omgservers.model.dto.runtime.SyncRuntimeResponse;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
+import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.runtime.upsertRuntime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand.UpsertRuntimeCommandOperation;

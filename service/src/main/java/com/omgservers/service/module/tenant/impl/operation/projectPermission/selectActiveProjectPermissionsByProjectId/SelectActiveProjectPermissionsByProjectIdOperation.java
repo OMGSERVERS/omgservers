@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.projectPermission.selectActiveProjectPermissionsByProjectId;
 
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

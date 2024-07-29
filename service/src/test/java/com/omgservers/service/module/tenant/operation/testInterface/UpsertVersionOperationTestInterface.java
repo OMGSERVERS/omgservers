@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.module.tenant.impl.operation.version.upsertVersion.UpsertVersionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

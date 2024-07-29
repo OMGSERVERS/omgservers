@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.job.selectJob;
 
-import com.omgservers.model.job.JobModel;
+import com.omgservers.schema.model.job.JobModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

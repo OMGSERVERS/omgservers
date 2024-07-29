@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimePermission.selectRuntimePermissionByRuntimeIdAndUserId;
 
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.model.runtimePermission.RuntimePermissionModel;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimePermissionModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

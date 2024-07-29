@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.issueJwtToken;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 
 import java.util.Set;
 

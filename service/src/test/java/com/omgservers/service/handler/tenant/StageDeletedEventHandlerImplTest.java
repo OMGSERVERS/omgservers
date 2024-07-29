@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.DeleteStageRequest;
-import com.omgservers.model.event.body.module.tenant.StageDeletedEventBodyModel;
+import com.omgservers.schema.module.tenant.DeleteStageRequest;
+import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.StageDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.tenant.impl.service.stageService.testInterface.StageServiceTestInterface;

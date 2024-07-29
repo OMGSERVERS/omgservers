@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;

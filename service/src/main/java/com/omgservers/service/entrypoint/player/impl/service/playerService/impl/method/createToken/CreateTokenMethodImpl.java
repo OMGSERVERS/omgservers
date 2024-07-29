@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createToken;
 
-import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
-import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
-import com.omgservers.model.dto.user.CreateTokenRequest;
-import com.omgservers.model.dto.user.CreateTokenResponse;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
+import com.omgservers.schema.module.user.CreateTokenRequest;
+import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;

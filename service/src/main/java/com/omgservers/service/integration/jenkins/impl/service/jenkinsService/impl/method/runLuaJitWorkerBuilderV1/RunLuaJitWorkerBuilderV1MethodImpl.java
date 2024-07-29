@@ -1,8 +1,8 @@
 package com.omgservers.service.integration.jenkins.impl.service.jenkinsService.impl.method.runLuaJitWorkerBuilderV1;
 
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Response;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.integration.jenkins.impl.operation.getJenkinsClient.GetJenkinsClientOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.router.integration.impl.service.impl.method.createToken;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateTokenMethod {

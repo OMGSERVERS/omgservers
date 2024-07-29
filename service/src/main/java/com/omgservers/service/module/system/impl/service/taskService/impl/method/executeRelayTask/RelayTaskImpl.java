@@ -1,7 +1,7 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeRelayTask;
 
-import com.omgservers.model.dto.system.RelayEventsRequest;
-import com.omgservers.model.dto.system.RelayEventsResponse;
+import com.omgservers.schema.service.system.RelayEventsRequest;
+import com.omgservers.schema.service.system.RelayEventsResponse;
 import com.omgservers.service.module.system.SystemModule;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Multi;

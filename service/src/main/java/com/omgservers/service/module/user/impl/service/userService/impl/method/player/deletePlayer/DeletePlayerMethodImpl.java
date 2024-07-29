@@ -1,8 +1,8 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.player.deletePlayer;
 
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.model.dto.user.DeletePlayerRequest;
-import com.omgservers.model.dto.user.DeletePlayerResponse;
+import com.omgservers.schema.module.user.DeletePlayerRequest;
+import com.omgservers.schema.module.user.DeletePlayerResponse;
 import com.omgservers.service.module.user.impl.operation.userPlayer.deletePlayer.DeletePlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;

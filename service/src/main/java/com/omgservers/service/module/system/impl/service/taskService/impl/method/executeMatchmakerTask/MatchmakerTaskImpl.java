@@ -1,14 +1,14 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerStateRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
-import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleEndedMatches.HandleEndedMatchesOperation;
 import com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;

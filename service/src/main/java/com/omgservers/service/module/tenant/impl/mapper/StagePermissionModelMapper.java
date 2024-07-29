@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.model.stagePermission.StagePermissionEnum;
-import com.omgservers.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.stagePermission.StagePermissionModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

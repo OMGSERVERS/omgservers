@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.event.body.module.tenant.VersionCreatedEventBodyModel;
+import com.omgservers.schema.event.body.module.tenant.VersionCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

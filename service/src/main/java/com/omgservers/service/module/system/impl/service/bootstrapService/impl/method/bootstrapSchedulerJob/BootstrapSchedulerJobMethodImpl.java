@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.service.bootstrapService.impl.method.bootstrapSchedulerJob;
 
-import com.omgservers.model.dto.system.task.ExecuteSchedulerTaskRequest;
+import com.omgservers.schema.service.system.task.ExecuteSchedulerTaskRequest;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.scheduler.Scheduled;

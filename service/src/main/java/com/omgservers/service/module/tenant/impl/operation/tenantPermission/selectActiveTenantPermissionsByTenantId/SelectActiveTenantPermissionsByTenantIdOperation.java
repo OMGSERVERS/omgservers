@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantPermission.selectActiveTenantPermissionsByTenantId;
 
-import com.omgservers.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.findRuntimePermission;
 
-import com.omgservers.model.dto.runtime.FindRuntimePermissionRequest;
-import com.omgservers.model.dto.runtime.FindRuntimePermissionResponse;
+import com.omgservers.schema.module.runtime.FindRuntimePermissionRequest;
+import com.omgservers.schema.module.runtime.FindRuntimePermissionResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimePermission.selectRuntimePermissionByRuntimeIdAndUserId.SelectRuntimePermissionByRuntimeIdAndUserIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

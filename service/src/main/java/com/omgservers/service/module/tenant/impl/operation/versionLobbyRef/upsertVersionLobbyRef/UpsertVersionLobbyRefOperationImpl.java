@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.upsertVersionLobbyRef;
 
-import com.omgservers.model.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
-import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

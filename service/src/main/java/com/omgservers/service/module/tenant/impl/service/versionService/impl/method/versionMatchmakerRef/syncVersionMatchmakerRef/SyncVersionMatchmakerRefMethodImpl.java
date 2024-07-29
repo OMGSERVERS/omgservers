@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionMatchmakerRef.syncVersionMatchmakerRef;
 
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.model.dto.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.version.hasVersion.HasVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.upsertVersionMatchmakerRef.UpsertVersionMatchmakerRefOperation;

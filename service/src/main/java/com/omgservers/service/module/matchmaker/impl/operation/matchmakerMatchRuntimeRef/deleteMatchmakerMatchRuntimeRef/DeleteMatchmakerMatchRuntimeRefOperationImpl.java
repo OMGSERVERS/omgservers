@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.deleteMatchmakerMatchRuntimeRef;
 
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchClient.selectMatchmakerMatchClient.SelectMatchmakerMatchClientOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

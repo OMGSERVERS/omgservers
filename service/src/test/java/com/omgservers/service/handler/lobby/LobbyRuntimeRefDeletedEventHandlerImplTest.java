@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.lobby;
 
-import com.omgservers.model.dto.lobby.DeleteLobbyRuntimeRefRequest;
-import com.omgservers.model.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
+import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefRequest;
+import com.omgservers.schema.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

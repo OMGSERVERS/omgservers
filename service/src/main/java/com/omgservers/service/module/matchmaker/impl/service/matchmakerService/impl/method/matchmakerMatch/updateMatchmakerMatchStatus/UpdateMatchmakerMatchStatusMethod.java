@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatch.updateMatchmakerMatchStatus;
 
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusRequest;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerMatchStatusResponse;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerMatchStatusRequest;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerMatchStatusResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface UpdateMatchmakerMatchStatusMethod {

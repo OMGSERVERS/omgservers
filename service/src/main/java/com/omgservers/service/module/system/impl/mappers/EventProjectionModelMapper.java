@@ -1,8 +1,8 @@
 package com.omgservers.service.module.system.impl.mappers;
 
-import com.omgservers.model.event.EventProjectionModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.EventStatusEnum;
+import com.omgservers.schema.event.EventProjectionModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.EventStatusEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

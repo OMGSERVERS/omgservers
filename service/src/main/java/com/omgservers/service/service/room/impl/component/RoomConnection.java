@@ -1,6 +1,6 @@
 package com.omgservers.service.service.room.impl.component;
 
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import io.quarkus.websockets.next.WebSocketConnection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

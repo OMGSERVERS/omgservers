@@ -1,11 +1,11 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.updateMatchmakerState;
 
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.model.dto.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.deleteMatchmakerCommand.DeleteMatchmakerCommandOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.deleteMatchmakerMatch.DeleteMatchmakerMatchOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchClient.deleteMatchmakerMatchClient.DeleteMatchmakerMatchClientOperation;

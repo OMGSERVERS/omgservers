@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantPermission.hasTenantPermission;
 
-import com.omgservers.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

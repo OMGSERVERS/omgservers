@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.router.impl.service.routerService.impl.method.getRuntimeServerUri;
 
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterRequest;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterResponse;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

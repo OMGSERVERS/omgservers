@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.runtimePermission.RuntimePermissionEnum;
-import com.omgservers.model.runtimePermission.RuntimePermissionModel;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionEnum;
+import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMatchmakerRef.findClientMatchmakerRef;
 
-import com.omgservers.model.dto.client.FindClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.FindClientMatchmakerRefResponse;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.FindClientMatchmakerRefResponse;
 import com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.selectClientMatchmakerRefByClientIdAndRuntimeId.SelectClientMatchmakerRefByClientIdAndMatchmakerIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

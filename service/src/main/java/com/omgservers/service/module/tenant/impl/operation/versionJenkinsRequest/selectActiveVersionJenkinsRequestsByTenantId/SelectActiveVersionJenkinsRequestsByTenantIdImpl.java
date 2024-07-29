@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionJenkinsRequest.selectActiveVersionJenkinsRequestsByTenantId;
 
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.service.module.tenant.impl.mapper.VersionJenkinsRequestModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

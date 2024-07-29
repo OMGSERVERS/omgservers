@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.operation.matchmakerAssignment.deleteMatchmakerAssignment;
 
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.selectMatchmakerRequest.SelectMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

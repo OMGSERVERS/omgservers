@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand;
 
-import com.omgservers.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteOutgoingCommandOperation {

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.operation.pool.upsertPool;
 
-import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
-import com.omgservers.model.pool.PoolModel;
+import com.omgservers.schema.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

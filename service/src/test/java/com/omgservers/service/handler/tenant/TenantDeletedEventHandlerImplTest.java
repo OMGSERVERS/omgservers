@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.DeleteTenantRequest;
-import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
+import com.omgservers.schema.module.tenant.DeleteTenantRequest;
+import com.omgservers.schema.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.TenantDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;

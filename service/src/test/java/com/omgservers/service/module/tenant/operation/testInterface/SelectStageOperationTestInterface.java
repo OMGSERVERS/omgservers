@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.model.stage.StageModel;
+import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.service.module.tenant.impl.operation.stage.selectStage.SelectStageOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

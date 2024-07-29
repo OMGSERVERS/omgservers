@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployVersion;
 
-import com.omgservers.model.dto.developer.DeployVersionDeveloperRequest;
-import com.omgservers.model.dto.developer.DeployVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeployVersionMethod {

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.system.impl.service.taskService.impl.method.executeMatchmakerTask.operation.handleEndedMatches;
 
-import com.omgservers.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
-import com.omgservers.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

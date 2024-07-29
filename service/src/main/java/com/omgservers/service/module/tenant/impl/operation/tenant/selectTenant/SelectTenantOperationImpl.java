@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenant.selectTenant;
 
-import com.omgservers.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.module.tenant.impl.mapper.TenantModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

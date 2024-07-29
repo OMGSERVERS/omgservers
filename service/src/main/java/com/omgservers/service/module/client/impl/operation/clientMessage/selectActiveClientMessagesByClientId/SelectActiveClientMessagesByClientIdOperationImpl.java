@@ -1,6 +1,6 @@
 package com.omgservers.service.module.client.impl.operation.clientMessage.selectActiveClientMessagesByClientId;
 
-import com.omgservers.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.service.module.client.impl.mapper.ClientMessageModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;

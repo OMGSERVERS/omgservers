@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.model.dto.jenkins.RunLuaJitWorkerBuilderV1Response;
-import com.omgservers.model.event.body.internal.VersionBuildingRequestedEventBodyModel;
+import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.schema.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.VersionBuildingRequestedEventHandlerImplTestInterface;
 import com.omgservers.service.integration.jenkins.impl.service.jenkinsService.JenkinsService;

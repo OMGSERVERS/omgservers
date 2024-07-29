@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.deleteMatchmaker;
 
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerRequest;
-import com.omgservers.model.dto.matchmaker.DeleteMatchmakerResponse;
-import com.omgservers.model.shard.ShardModel;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.deleteMatchmaker.DeleteMatchmakerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

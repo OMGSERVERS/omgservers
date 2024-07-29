@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.versionJenkinsRequest.upsertVersionJenkinsRequest;
 
-import com.omgservers.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

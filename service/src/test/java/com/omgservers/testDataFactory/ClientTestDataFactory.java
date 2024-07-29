@@ -1,16 +1,16 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.model.client.ClientModel;
-import com.omgservers.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.model.dto.client.SyncClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.SyncClientRequest;
-import com.omgservers.model.dto.client.SyncClientRuntimeRefRequest;
-import com.omgservers.model.matchmaker.MatchmakerModel;
-import com.omgservers.model.player.PlayerModel;
-import com.omgservers.model.runtime.RuntimeModel;
-import com.omgservers.model.tenant.TenantModel;
-import com.omgservers.model.version.VersionModel;
+import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.module.client.SyncClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.SyncClientRequest;
+import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;

@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefRequest;
-import com.omgservers.model.dto.tenant.versionImageRef.GetVersionImageRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
-import com.omgservers.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefRequest;
+import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;

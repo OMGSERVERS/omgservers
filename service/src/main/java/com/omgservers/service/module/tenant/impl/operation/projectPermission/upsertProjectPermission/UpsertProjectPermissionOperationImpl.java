@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.projectPermission.upsertProjectPermission;
 
-import com.omgservers.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

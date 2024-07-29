@@ -1,11 +1,10 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.interchangeMethod;
 
-import com.omgservers.model.dto.client.InterchangeRequest;
-import com.omgservers.model.dto.client.InterchangeResponse;
-import com.omgservers.model.dto.player.InterchangePlayerRequest;
-import com.omgservers.model.dto.player.InterchangePlayerResponse;
+import com.omgservers.schema.module.client.InterchangeRequest;
+import com.omgservers.schema.module.client.InterchangeResponse;
+import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
+import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
 import com.omgservers.service.module.client.ClientModule;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

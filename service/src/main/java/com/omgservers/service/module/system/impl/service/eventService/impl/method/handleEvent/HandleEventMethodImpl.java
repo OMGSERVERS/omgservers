@@ -1,12 +1,12 @@
 package com.omgservers.service.module.system.impl.service.eventService.impl.method.handleEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.model.dto.system.HandleEventRequest;
-import com.omgservers.model.dto.system.HandleEventResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.EventStatusEnum;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.service.system.HandleEventRequest;
+import com.omgservers.schema.service.system.HandleEventResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.EventStatusEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.handler.EventHandler;

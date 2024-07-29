@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectVersionConfig;
 
-import com.omgservers.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.system.impl.operation.event.selectEvent;
 
-import com.omgservers.model.event.EventModel;
+import com.omgservers.schema.event.EventModel;
 import com.omgservers.service.module.system.impl.mappers.EventModelMapper;
 import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;

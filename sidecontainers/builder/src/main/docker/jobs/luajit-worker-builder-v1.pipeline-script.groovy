@@ -25,7 +25,7 @@ pipeline {
                     CMD ["luajit", "main.lua"]
                 """
                 script {
-                    docker.withRegistry("https://${env.DOCKER_REGISTRY}") {
+                    docker.withRegistry("https://${env.DOCKER_REGISTRY}", "builder-user-credentials") {
                         def dockerImage = docker.build("${groupId}/${containerName}:${versionId}")
                         dockerImage.push()
                         def imageName = dockerImage.imageName()

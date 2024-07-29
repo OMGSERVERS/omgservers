@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.operation.testInterface;
 
-import com.omgservers.model.player.PlayerModel;
+import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.service.module.user.impl.operation.userPlayer.upsertPlayer.UpsertPlayerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.pool.impl.operation.poolServerContainer.selectPoolServerContainer;
 
-import com.omgservers.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

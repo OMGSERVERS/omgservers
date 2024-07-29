@@ -1,8 +1,8 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.user.createToken;
 
-import com.omgservers.model.dto.user.CreateTokenRequest;
-import com.omgservers.model.dto.user.CreateTokenResponse;
-import com.omgservers.model.user.UserModel;
+import com.omgservers.schema.module.user.CreateTokenRequest;
+import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.user.impl.operation.user.selectUser.SelectUserOperation;
 import com.omgservers.service.module.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;

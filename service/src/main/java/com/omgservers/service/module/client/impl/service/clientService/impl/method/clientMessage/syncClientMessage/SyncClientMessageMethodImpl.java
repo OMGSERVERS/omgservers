@@ -1,8 +1,8 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientMessage.syncClientMessage;
 
-import com.omgservers.model.dto.client.SyncClientMessageRequest;
-import com.omgservers.model.dto.client.SyncClientMessageResponse;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.client.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.SyncClientMessageResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.client.hasClient.HasClientOperation;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolRequest.deletePoolRequest;
 
-import com.omgservers.model.dto.pool.poolRequest.DeletePoolRequestRequest;
-import com.omgservers.model.dto.pool.poolRequest.DeletePoolRequestResponse;
+import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
+import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.service.module.pool.impl.operation.poolRequest.deletePoolRequest.DeletePoolRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

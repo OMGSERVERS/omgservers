@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteProject;
 
-import com.omgservers.model.dto.support.DeleteProjectSupportRequest;
-import com.omgservers.model.dto.support.DeleteProjectSupportResponse;
-import com.omgservers.model.dto.tenant.DeleteProjectRequest;
-import com.omgservers.model.dto.tenant.DeleteProjectResponse;
+import com.omgservers.schema.entrypoint.support.DeleteProjectSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteProjectSupportResponse;
+import com.omgservers.schema.module.tenant.DeleteProjectRequest;
+import com.omgservers.schema.module.tenant.DeleteProjectResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionLobbyRequest.deleteVersionLobbyRequest;
 
-import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.model.dto.tenant.DeleteVersionLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteVersionLobbyRequestMethod {

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.deleteRootEntityRef;
 
-import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefRequest;
-import com.omgservers.model.dto.root.rootEntityRef.DeleteRootEntityRefResponse;
+import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
+import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.service.module.root.impl.operation.rootEntityRef.deleteRootEntityRef.DeleteRootEntityRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

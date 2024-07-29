@@ -1,14 +1,14 @@
 package com.omgservers.service.entrypoint.player.impl.service.webService.impl.playerApi;
 
-import com.omgservers.model.dto.player.CreateClientPlayerRequest;
-import com.omgservers.model.dto.player.CreateClientPlayerResponse;
-import com.omgservers.model.dto.player.CreateTokenPlayerRequest;
-import com.omgservers.model.dto.player.CreateTokenPlayerResponse;
-import com.omgservers.model.dto.player.CreateUserPlayerRequest;
-import com.omgservers.model.dto.player.CreateUserPlayerResponse;
-import com.omgservers.model.dto.player.InterchangePlayerRequest;
-import com.omgservers.model.dto.player.InterchangePlayerResponse;
-import com.omgservers.model.user.UserRoleEnum;
+import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
+import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
+import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
+import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
+import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.player.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;

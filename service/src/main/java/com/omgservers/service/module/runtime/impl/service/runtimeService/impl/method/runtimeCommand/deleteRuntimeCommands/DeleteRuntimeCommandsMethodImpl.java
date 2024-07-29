@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.deleteRuntimeCommands;
 
-import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsRequest;
-import com.omgservers.model.dto.runtime.DeleteRuntimeCommandsResponse;
+import com.omgservers.schema.module.runtime.DeleteRuntimeCommandsRequest;
+import com.omgservers.schema.module.runtime.DeleteRuntimeCommandsResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.deleteRuntimeCommandsByIds.DeleteRuntimeCommandByIdsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;

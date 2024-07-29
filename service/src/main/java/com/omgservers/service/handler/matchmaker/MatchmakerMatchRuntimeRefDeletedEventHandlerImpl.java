@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
-import com.omgservers.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;

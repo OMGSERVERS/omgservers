@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenant.deleteTenant;
 
-import com.omgservers.model.event.body.module.tenant.TenantDeletedEventBodyModel;
+import com.omgservers.schema.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.tenant.selectTenant.SelectTenantOperation;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;

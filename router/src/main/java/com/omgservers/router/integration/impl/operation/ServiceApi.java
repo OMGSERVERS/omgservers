@@ -1,9 +1,9 @@
 package com.omgservers.router.integration.impl.operation;
 
-import com.omgservers.model.dto.router.CreateTokenRouterRequest;
-import com.omgservers.model.dto.router.CreateTokenRouterResponse;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterRequest;
-import com.omgservers.model.dto.router.GetRuntimeServerUriRouterResponse;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterRequest;
+import com.omgservers.schema.entrypoint.router.CreateTokenRouterResponse;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterRequest;
+import com.omgservers.schema.entrypoint.router.GetRuntimeServerUriRouterResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;

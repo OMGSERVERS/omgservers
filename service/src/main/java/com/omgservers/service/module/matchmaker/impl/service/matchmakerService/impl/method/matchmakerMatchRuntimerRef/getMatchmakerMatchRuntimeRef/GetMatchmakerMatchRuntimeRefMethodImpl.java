@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchRuntimerRef.getMatchmakerMatchRuntimeRef;
 
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.selectMatchmakerMatchRuntimeRef.SelectMatchmakerMatchRuntimeRefOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

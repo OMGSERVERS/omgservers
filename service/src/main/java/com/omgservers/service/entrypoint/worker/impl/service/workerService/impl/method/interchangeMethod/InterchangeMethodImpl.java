@@ -1,12 +1,11 @@
 package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.method.interchangeMethod;
 
-import com.omgservers.model.dto.runtime.InterchangeRequest;
-import com.omgservers.model.dto.runtime.InterchangeResponse;
-import com.omgservers.model.dto.worker.InterchangeWorkerRequest;
-import com.omgservers.model.dto.worker.InterchangeWorkerResponse;
+import com.omgservers.schema.module.runtime.InterchangeRequest;
+import com.omgservers.schema.module.runtime.InterchangeResponse;
+import com.omgservers.schema.entrypoint.worker.InterchangeWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.InterchangeWorkerResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

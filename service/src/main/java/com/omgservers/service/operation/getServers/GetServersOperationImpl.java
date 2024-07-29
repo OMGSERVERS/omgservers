@@ -1,9 +1,9 @@
 package com.omgservers.service.operation.getServers;
 
-import com.omgservers.model.dto.system.GetIndexRequest;
-import com.omgservers.model.dto.system.GetIndexResponse;
-import com.omgservers.model.index.IndexModel;
-import com.omgservers.model.index.IndexServerModel;
+import com.omgservers.schema.service.system.GetIndexRequest;
+import com.omgservers.schema.service.system.GetIndexResponse;
+import com.omgservers.schema.model.index.IndexModel;
+import com.omgservers.schema.model.index.IndexServerModel;
 import com.omgservers.service.module.system.SystemModule;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.root.impl.mappers;
 
-import com.omgservers.model.root.RootModel;
+import com.omgservers.schema.model.root.RootModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

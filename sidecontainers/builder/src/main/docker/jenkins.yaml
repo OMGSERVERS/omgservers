@@ -55,6 +55,16 @@ globalCredentialsConfiguration:
   configuration:
     providerFilter: "none"
     typeFilter: "none"
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "builder-user-credentials"
+              username: "${OMGSERVERS_BUILDER_USER_ID}"
+              password: "${OMGSERVERS_BUILDER_USER_PASSWORD}"
+              description: "Builder user to get registry access token"
 appearance:
   prism:
     theme: PRISM

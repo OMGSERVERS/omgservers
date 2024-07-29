@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.model.versionImageRef.VersionImageRefModel;
-import com.omgservers.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.model.dto.client.SyncClientMatchmakerRefRequest;
-import com.omgservers.model.dto.client.SyncClientMatchmakerRefResponse;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentRequest;
-import com.omgservers.model.dto.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
-import com.omgservers.model.matchmakerAssignment.MatchmakerAssignmentModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.client.SyncClientMatchmakerRefRequest;
+import com.omgservers.schema.module.client.SyncClientMatchmakerRefResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

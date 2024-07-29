@@ -2,7 +2,7 @@ package com.omgservers.service.integration.jenkins.impl.operation.getJenkinsClie
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.service.exception.ClientSideHttpException;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideInternalException;
 import jakarta.ws.rs.core.Response;

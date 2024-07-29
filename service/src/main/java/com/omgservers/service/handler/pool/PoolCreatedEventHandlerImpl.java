@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.model.dto.pool.pool.GetPoolRequest;
-import com.omgservers.model.dto.pool.pool.GetPoolResponse;
-import com.omgservers.model.dto.system.job.SyncJobRequest;
-import com.omgservers.model.dto.system.job.SyncJobResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.pool.PoolCreatedEventBodyModel;
-import com.omgservers.model.job.JobQualifierEnum;
-import com.omgservers.model.pool.PoolModel;
+import com.omgservers.schema.module.pool.pool.GetPoolRequest;
+import com.omgservers.schema.module.pool.pool.GetPoolResponse;
+import com.omgservers.schema.service.system.job.SyncJobRequest;
+import com.omgservers.schema.service.system.job.SyncJobResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;

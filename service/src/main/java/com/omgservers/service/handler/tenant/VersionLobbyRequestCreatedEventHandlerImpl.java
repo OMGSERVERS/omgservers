@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.model.dto.lobby.SyncLobbyRequest;
-import com.omgservers.model.dto.lobby.SyncLobbyResponse;
-import com.omgservers.model.dto.tenant.GetVersionLobbyRequestRequest;
-import com.omgservers.model.dto.tenant.GetVersionLobbyRequestResponse;
-import com.omgservers.model.event.EventModel;
-import com.omgservers.model.event.EventQualifierEnum;
-import com.omgservers.model.event.body.module.tenant.VersionLobbyRequestCreatedEventBodyModel;
-import com.omgservers.model.versionLobbyRequest.VersionLobbyRequestModel;
-import com.omgservers.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.lobby.SyncLobbyRequest;
+import com.omgservers.schema.module.lobby.SyncLobbyResponse;
+import com.omgservers.schema.module.tenant.GetVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.GetVersionLobbyRequestResponse;
+import com.omgservers.schema.event.EventModel;
+import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.schema.event.body.module.tenant.VersionLobbyRequestCreatedEventBodyModel;
+import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
