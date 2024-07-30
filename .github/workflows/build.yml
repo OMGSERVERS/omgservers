@@ -32,8 +32,6 @@ jobs:
         run: ./projectctl build testWithSonar
       - name: Start containers
         run: ./projectctl integration up && sleep 30
-      - name: Init registry
-        run: docker tag omgservers/luajit:1.0.0-SNAPSHOT localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT && docker push localhost:5000/omgservers/luajit:1.0.0-SNAPSHOT
       - name: Run tests
         run: ./projectctl integration test
       - name: Log builder job
