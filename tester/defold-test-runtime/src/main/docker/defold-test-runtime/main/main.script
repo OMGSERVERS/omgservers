@@ -1,0 +1,12 @@
+function update(self, dt)
+	self.timer = self.timer or 0
+	self.counter = self.counter or 0
+	
+	self.timer = self.timer + dt
+	if self.timer > 1 then
+		print(self.counter)
+		
+		self.counter = self.counter + 1
+		self.timer = 0
+	end
+end

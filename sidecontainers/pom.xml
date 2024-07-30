@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>bob</module>
         <module>builder</module>
         <module>ca</module>
         <module>ctl</module>
