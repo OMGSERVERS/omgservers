@@ -5,7 +5,7 @@ import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.stagePermission.StagePermissionModel;
-import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.version.VersionProjectionModel;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteVersionRequest;
@@ -102,10 +102,10 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> deleteVersions(final Long tenantId, final Long stageId) {
-        return viewVersions(tenantId, stageId)
-                .flatMap(versions -> Multi.createFrom().iterable(versions)
-                        .onItem().transformToUniAndConcatenate(version ->
-                                deleteVersion(tenantId, version.getId())
+        return viewVersionProjections(tenantId, stageId)
+                .flatMap(versionProjections -> Multi.createFrom().iterable(versionProjections)
+                        .onItem().transformToUniAndConcatenate(versionProjection ->
+                                deleteVersion(tenantId, versionProjection.getId())
                                         .onFailure()
                                         .recoverWithItem(t -> {
                                             log.warn("Delete version failed, " +
@@ -114,7 +114,7 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
                                                             "{}:{}",
                                                     tenantId,
                                                     stageId,
-                                                    version.getId(),
+                                                    versionProjection.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;
@@ -125,10 +125,10 @@ public class StageDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<VersionModel>> viewVersions(final Long tenantId, final Long stageId) {
+    Uni<List<VersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
         final var request = new ViewVersionsRequest(tenantId, stageId);
         return tenantModule.getVersionService().viewVersions(request)
-                .map(ViewVersionsResponse::getVersions);
+                .map(ViewVersionsResponse::getVersionProjections);
     }
 
     Uni<Boolean> deleteVersion(final Long tenantId, final Long id) {

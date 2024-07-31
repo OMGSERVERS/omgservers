@@ -6,12 +6,20 @@ import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
-import com.omgservers.schema.model.tenantDashboard.TenantDashboardModel;
+import com.omgservers.schema.entrypoint.developer.dto.StageDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.TenantDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.VersionDashboardDto;
 import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.tester.operation.createVersionArchive.CreateVersionArchiveOperation;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
@@ -52,8 +60,8 @@ public class DeveloperApiTester {
         return response.getRawToken();
     }
 
-    public TenantDashboardModel getTenantDashboard(final String token,
-                                                   final Long tenantId)
+    public TenantDashboardDto getTenantDashboard(final String token,
+                                                 final Long tenantId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -84,12 +92,66 @@ public class DeveloperApiTester {
         return response;
     }
 
+    public StageDashboardDto getStageDashboard(final String token,
+                                               final Long tenantId,
+                                               final Long stageId)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(new GetStageDashboardDeveloperRequest(tenantId, stageId)))
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-stage-dashboard");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(GetStageDashboardDeveloperResponse.class);
+        return response.getStageDashboard();
+    }
+
+    public CreateVersionDeveloperResponse createVersion(final String token,
+                                                        final Long tenantId,
+                                                        final Long stageId,
+                                                        final VersionConfigModel versionConfig) throws IOException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .contentType(ContentType.JSON)
+                .auth().oauth2(token)
+                .body(objectMapper.writeValueAsString(
+                        new CreateVersionDeveloperRequest(tenantId, stageId, versionConfig)))
+                .when().put("/omgservers/v1/entrypoint/developer/request/create-version");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(CreateVersionDeveloperResponse.class);
+        return response;
+    }
+
+    public VersionDashboardDto getVersionDashboard(final String token,
+                                                   final Long tenantId,
+                                                   final Long versionId)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(new GetVersionDashboardDeveloperRequest(tenantId, versionId)))
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-version-dashboard");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(GetVersionDashboardDeveloperResponse.class);
+        return response.getVersionDashboard();
+    }
+
     public UploadVersionDeveloperResponse uploadVersion(final String token,
                                                         final Long tenantId,
                                                         final Long stageId,
                                                         final VersionConfigModel versionConfig,
-                                                        final String mainLua)
-            throws IOException {
+                                                        final String mainLua) throws IOException {
 
         final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of(
                         "main.lua", mainLua,

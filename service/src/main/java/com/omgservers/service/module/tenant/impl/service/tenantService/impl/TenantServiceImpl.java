@@ -4,8 +4,8 @@ import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteTenantRequest;
 import com.omgservers.schema.module.tenant.DeleteTenantResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
@@ -22,7 +22,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.TenantSer
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.deleteTenant.DeleteTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.deleteTenantPermission.DeleteTenantPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.getTenant.GetTenantMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.getTenantDashboard.GetTenantDashboardMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.getTenantData.GetTenantDataMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.hasTenantPermission.HasTenantPermissionMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.syncTenant.SyncTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.syncTenantPermission.SyncTenantPermissionMethod;
@@ -45,7 +45,7 @@ public class TenantServiceImpl implements TenantService {
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final HasTenantPermissionMethod hasTenantPermissionMethod;
-    final GetTenantDashboardMethod getTenantDashboard;
+    final GetTenantDataMethod getTenantDetails;
     final DeleteTenantMethod deleteTenantMethod;
     final SyncTenantMethod syncTenantMethod;
     final GetTenantMethod getTenantMethod;
@@ -63,11 +63,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<GetTenantDashboardResponse> getTenantDashboard(@Valid final GetTenantDashboardRequest request) {
+    public Uni<GetTenantDataResponse> getTenantData(@Valid final GetTenantDataRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantDashboard,
-                getTenantDashboard::getTenantDashboard);
+                TenantModuleClient::getTenantData,
+                getTenantDetails::getTenantData);
     }
 
     @Override

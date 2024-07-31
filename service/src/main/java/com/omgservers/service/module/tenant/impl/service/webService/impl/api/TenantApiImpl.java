@@ -1,5 +1,6 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteProjectRequest;
@@ -34,8 +35,6 @@ import com.omgservers.schema.module.tenant.GetProjectRequest;
 import com.omgservers.schema.module.tenant.GetProjectResponse;
 import com.omgservers.schema.module.tenant.GetStageRequest;
 import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
@@ -100,6 +99,12 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -118,7 +123,6 @@ import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenk
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.tenant.impl.service.webService.WebService;
 import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -143,8 +147,8 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<GetTenantDashboardResponse> getTenantDashboard(final GetTenantDashboardRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
+    public Uni<GetTenantDataResponse> getTenantData(final GetTenantDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantData);
     }
 
     @Override
@@ -223,6 +227,11 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
+    public Uni<GetStageDataResponse> getStageData(final GetStageDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getStageData);
+    }
+
+    @Override
     public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStage);
     }
@@ -268,6 +277,11 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
+    public Uni<GetVersionDataResponse> getVersionData(final GetVersionDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionData);
+    }
+
+    @Override
     public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersion);
     }
@@ -288,7 +302,8 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(final GetVersionJenkinsRequestRequest request) {
+    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(
+            final GetVersionJenkinsRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionJenkinsRequest);
     }
 
@@ -299,7 +314,8 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(final SyncVersionJenkinsRequestRequest request) {
+    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(
+            final SyncVersionJenkinsRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionJenkinsRequest);
     }
 
@@ -351,7 +367,8 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<SyncVersionLobbyRequestResponse> syncVersionJenkinsRequest(final SyncVersionLobbyRequestRequest request) {
+    public Uni<SyncVersionLobbyRequestResponse> syncVersionJenkinsRequest(
+            final SyncVersionLobbyRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRequest);
     }
 

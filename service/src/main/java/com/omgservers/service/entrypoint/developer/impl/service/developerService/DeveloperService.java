@@ -10,8 +10,12 @@ import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +29,11 @@ public interface DeveloperService {
 
     Uni<CreateProjectDeveloperResponse> createProject(@Valid CreateProjectDeveloperRequest request);
 
+    Uni<GetStageDashboardDeveloperResponse> getStageDashboard(@Valid GetStageDashboardDeveloperRequest request);
+
     Uni<CreateVersionDeveloperResponse> createVersion(@Valid CreateVersionDeveloperRequest request);
+
+    Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(@Valid GetVersionDashboardDeveloperRequest request);
 
     Uni<UploadVersionDeveloperResponse> uploadVersion(@Valid UploadVersionDeveloperRequest request);
 

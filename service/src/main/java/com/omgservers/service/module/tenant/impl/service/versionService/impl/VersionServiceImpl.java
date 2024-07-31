@@ -1,5 +1,6 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefRequest;
 import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefResponse;
 import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
@@ -52,6 +53,8 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -70,7 +73,6 @@ import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenk
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
@@ -80,6 +82,7 @@ import com.omgservers.service.module.tenant.impl.service.versionService.impl.met
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.findStageVersionId.SelectStageVersionMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.getVersion.GetVersionMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.getVersionConfig.GetVersionConfigMethod;
+import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.getVersionData.GetVersionDataMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.syncVersion.SyncVersionMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.version.viewVersions.ViewVersionsMethod;
 import com.omgservers.service.module.tenant.impl.service.versionService.impl.method.versionImageRef.deleteVersionImageRef.DeleteVersionImageRefMethod;
@@ -157,6 +160,7 @@ public class VersionServiceImpl implements VersionService {
     final GetVersionLobbyRefMethod getVersionLobbyRefMethod;
     final GetVersionImageRefMethod getVersionImageRefMethod;
     final GetVersionConfigMethod getVersionConfigMethod;
+    final GetVersionDataMethod getVersionDataMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final ViewVersionsMethod viewVersionsMethod;
     final SyncVersionMethod syncVersionMethod;
@@ -172,6 +176,14 @@ public class VersionServiceImpl implements VersionService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getVersion,
                 getVersionMethod::getVersion);
+    }
+
+    @Override
+    public Uni<GetVersionDataResponse> getVersionData(@Valid final GetVersionDataRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getVersionData,
+                getVersionDataMethod::getVersionData);
     }
 
     @Override

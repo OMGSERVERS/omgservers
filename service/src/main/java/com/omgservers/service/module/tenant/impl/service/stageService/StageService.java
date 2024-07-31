@@ -18,12 +18,16 @@ import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
 import com.omgservers.schema.module.tenant.ViewStagesRequest;
 import com.omgservers.schema.module.tenant.ViewStagesResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface StageService {
 
     Uni<GetStageResponse> getStage(@Valid GetStageRequest request);
+
+    Uni<GetStageDataResponse> getStageData(@Valid GetStageDataRequest request);
 
     Uni<SyncStageResponse> syncStage(@Valid SyncStageRequest request);
 

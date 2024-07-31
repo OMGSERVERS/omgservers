@@ -2,13 +2,14 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
 import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
-import com.omgservers.schema.model.tenantDashboard.TenantDashboardModel;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
+import com.omgservers.service.entrypoint.developer.impl.operation.mapTenantDataToDashboard.MapTenantDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -26,6 +27,8 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
 
     final TenantModule tenantModule;
 
+    final MapTenantDataToDashboardOperation mapTenantDataToDashboardOperation;
+
     final JsonWebToken jwt;
 
     @Override
@@ -36,19 +39,14 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
         final var tenantId = request.getTenantId();
         return checkGetDashboardPermission(tenantId, userId)
-                .flatMap(voidItem -> getTenantDashboard(tenantId))
+                .flatMap(voidItem -> getTenantData(tenantId))
+                .map(mapTenantDataToDashboardOperation::mapTenantDataToDashboard)
                 .map(GetTenantDashboardDeveloperResponse::new);
-    }
-
-    Uni<TenantDashboardModel> getTenantDashboard(Long id) {
-        final var request = new GetTenantDashboardRequest(id);
-        return tenantModule.getTenantService().getTenantDashboard(request)
-                .map(GetTenantDashboardResponse::getTenantDashboard);
     }
 
     Uni<Void> checkGetDashboardPermission(final Long tenantId, final Long userId) {
         // TODO: move to new operation
-        final var permission = TenantPermissionEnum.GET_DASHBOARD;
+        final var permission = TenantPermissionEnum.GETTING_DASHBOARD;
         final var hasTenantPermissionServiceRequest = new HasTenantPermissionRequest(tenantId, userId, permission);
         return tenantModule.getTenantService().hasTenantPermission(hasTenantPermissionServiceRequest)
                 .map(HasTenantPermissionResponse::getResult)
@@ -60,5 +58,11 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                     }
                 })
                 .replaceWithVoid();
+    }
+
+    Uni<TenantDataDto> getTenantData(Long id) {
+        final var request = new GetTenantDataRequest(id);
+        return tenantModule.getTenantService().getTenantData(request)
+                .map(GetTenantDataResponse::getTenantData);
     }
 }

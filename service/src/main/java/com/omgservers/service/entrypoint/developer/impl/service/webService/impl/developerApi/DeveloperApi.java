@@ -10,8 +10,12 @@ import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
@@ -43,8 +47,16 @@ public interface DeveloperApi {
     Uni<CreateProjectDeveloperResponse> createProject(@NotNull CreateProjectDeveloperRequest request);
 
     @PUT
+    @Path("/get-stage-dashboard")
+    Uni<GetStageDashboardDeveloperResponse> getStageDashboard(@NotNull GetStageDashboardDeveloperRequest request);
+
+    @PUT
     @Path("/create-version")
     Uni<CreateVersionDeveloperResponse> createVersion(@NotNull CreateVersionDeveloperRequest request);
+
+    @PUT
+    @Path("/get-version-dashboard")
+    Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(@NotNull GetVersionDashboardDeveloperRequest request);
 
     @PUT
     @Path("upload-version")

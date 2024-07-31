@@ -10,5 +10,5 @@ public enum TenantPermissionEnum {
     /**
      * Permission allows user to get tenant dashboard.
      */
-    GET_DASHBOARD,
+    GETTING_DASHBOARD,
 }

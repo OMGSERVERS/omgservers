@@ -2,12 +2,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
-import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
 import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
@@ -15,7 +10,12 @@ import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.SyncProjectRequest;
+import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
+import com.omgservers.schema.module.tenant.SyncStageRequest;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.ProjectPermissionModelFactory;
@@ -104,14 +104,25 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
         final var stage = stageModelFactory.create(tenantId, projectId);
         final var syncStageInternalRequest = new SyncStageRequest(stage);
         return tenantModule.getStageService().syncStage(syncStageInternalRequest)
-                .flatMap(response -> syncStagePermission(tenantId, stage.getId(), userId))
+                .flatMap(response -> syncStageVersionManagementPermission(tenantId, stage.getId(), userId))
+                .flatMap(response -> syncStageGettingDashboardPermission(tenantId, stage.getId(), userId))
                 .replaceWith(stage);
     }
 
-    Uni<StagePermissionModel> syncStagePermission(final Long tenantId,
-                                                  final Long stageId,
-                                                  final Long userId) {
+    Uni<StagePermissionModel> syncStageVersionManagementPermission(final Long tenantId,
+                                                                   final Long stageId,
+                                                                   final Long userId) {
         final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
+        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
+        final var request = new SyncStagePermissionRequest(stagePermission);
+        return tenantModule.getStageService().syncStagePermission(request)
+                .replaceWith(stagePermission);
+    }
+
+    Uni<StagePermissionModel> syncStageGettingDashboardPermission(final Long tenantId,
+                                                                  final Long stageId,
+                                                                  final Long userId) {
+        final var permission = StagePermissionEnum.GETTING_DASHBOARD;
         final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
         final var request = new SyncStagePermissionRequest(stagePermission);
         return tenantModule.getStageService().syncStagePermission(request)

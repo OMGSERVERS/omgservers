@@ -34,8 +34,6 @@ import com.omgservers.schema.module.tenant.GetProjectRequest;
 import com.omgservers.schema.module.tenant.GetProjectResponse;
 import com.omgservers.schema.module.tenant.GetStageRequest;
 import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
@@ -100,6 +98,12 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -145,8 +149,8 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantDashboardResponse> getTenantDashboard(final GetTenantDashboardRequest request) {
-        return tenantService.getTenantDashboard(request);
+    public Uni<GetTenantDataResponse> getTenantData(final GetTenantDataRequest request) {
+        return tenantService.getTenantData(request);
     }
 
     @Override
@@ -225,6 +229,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<GetStageDataResponse> getStageData(final GetStageDataRequest request) {
+        return stageService.getStageData(request);
+    }
+
+    @Override
     public Uni<ViewStagesResponse> viewStages(final ViewStagesRequest request) {
         return stageService.viewStages(request);
     }
@@ -265,6 +274,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<GetVersionDataResponse> getVersionData(final GetVersionDataRequest request) {
+        return versionService.getVersionData(request);
+    }
+
+    @Override
     public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
         return versionService.viewVersions(request);
     }
@@ -290,7 +304,8 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(final GetVersionJenkinsRequestRequest request) {
+    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(
+            final GetVersionJenkinsRequestRequest request) {
         return versionService.getVersionJenkinsRequest(request);
     }
 
@@ -301,7 +316,8 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(final SyncVersionJenkinsRequestRequest request) {
+    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(
+            final SyncVersionJenkinsRequestRequest request) {
         return versionService.syncVersionJenkinsRequest(request);
     }
 
@@ -347,7 +363,8 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(final ViewVersionLobbyRequestsRequest request) {
+    public Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(
+            final ViewVersionLobbyRequestsRequest request) {
         return versionService.viewVersionLobbyRequests(request);
     }
 
@@ -357,7 +374,8 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(final DeleteVersionLobbyRequestRequest request) {
+    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(
+            final DeleteVersionLobbyRequestRequest request) {
         return versionService.deleteVersionLobbyRequest(request);
     }
 

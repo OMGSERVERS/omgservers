@@ -34,8 +34,6 @@ import com.omgservers.schema.module.tenant.GetProjectRequest;
 import com.omgservers.schema.module.tenant.GetProjectResponse;
 import com.omgservers.schema.module.tenant.GetStageRequest;
 import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
@@ -100,6 +98,12 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -132,8 +136,8 @@ public interface TenantApi {
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
 
     @PUT
-    @Path("/get-tenant-dashboard")
-    Uni<GetTenantDashboardResponse> getTenantDashboard(GetTenantDashboardRequest request);
+    @Path("/get-tenant-data")
+    Uni<GetTenantDataResponse> getTenantData(GetTenantDataRequest request);
 
     @PUT
     @Path("/sync-tenant")
@@ -196,6 +200,10 @@ public interface TenantApi {
     Uni<GetStageResponse> getStage(GetStageRequest request);
 
     @PUT
+    @Path("/get-stage-data")
+    Uni<GetStageDataResponse> getStageData(GetStageDataRequest request);
+
+    @PUT
     @Path("/sync-stage")
     Uni<SyncStageResponse> syncStage(SyncStageRequest request);
 
@@ -230,6 +238,10 @@ public interface TenantApi {
     @PUT
     @Path("/get-version")
     Uni<GetVersionResponse> getVersion(GetVersionRequest request);
+
+    @PUT
+    @Path("/get-version-data")
+    Uni<GetVersionDataResponse> getVersionData(GetVersionDataRequest request);
 
     @PUT
     @Path("/sync-version")

@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.service.versionService.impl.me
 
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionProjectionsByStageId.SelectActiveVersionProjectionsByStageIdOperation;
 import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class ViewVersionsMethodImpl implements ViewVersionsMethod {
 
-    final SelectActiveVersionsByStageIdOperation selectActiveVersionsByStageIdOperation;
+    final SelectActiveVersionProjectionsByStageIdOperation selectActiveVersionProjectionsByStageIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -28,8 +28,8 @@ class ViewVersionsMethodImpl implements ViewVersionsMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     final var stageId = request.getStageId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveVersionsByStageIdOperation
-                            .selectActiveVersionsByStageId(sqlConnection,
+                    return pgPool.withTransaction(sqlConnection -> selectActiveVersionProjectionsByStageIdOperation
+                            .selectActiveVersionProjectionsByStageId(sqlConnection,
                                     shard.shard(),
                                     tenantId,
                                     stageId

@@ -9,7 +9,7 @@ import com.omgservers.schema.module.tenant.SyncVersionRequest;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.service.entrypoint.developer.impl.operation.EncodeFilesOperation;
+import com.omgservers.service.entrypoint.developer.impl.operation.encodeFiles.EncodeFilesOperation;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideForbiddenException;

@@ -4,8 +4,8 @@ import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
 import com.omgservers.schema.module.tenant.DeleteTenantRequest;
 import com.omgservers.schema.module.tenant.DeleteTenantResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
@@ -23,7 +23,7 @@ public interface TenantService {
 
     Uni<GetTenantResponse> getTenant(@Valid GetTenantRequest request);
 
-    Uni<GetTenantDashboardResponse> getTenantDashboard(@Valid GetTenantDashboardRequest request);
+    Uni<GetTenantDataResponse> getTenantData(@Valid GetTenantDataRequest request);
 
     Uni<SyncTenantResponse> syncTenant(@Valid SyncTenantRequest request);
 

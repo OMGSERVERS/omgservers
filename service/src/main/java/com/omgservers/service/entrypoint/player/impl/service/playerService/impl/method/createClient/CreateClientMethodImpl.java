@@ -1,10 +1,14 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createClient;
 
-import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.module.client.SyncClientRequest;
-import com.omgservers.schema.module.client.SyncClientResponse;
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
+import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.version.VersionProjectionModel;
+import com.omgservers.schema.module.client.SyncClientRequest;
+import com.omgservers.schema.module.client.SyncClientResponse;
 import com.omgservers.schema.module.tenant.ValidateStageSecretRequest;
 import com.omgservers.schema.module.tenant.ValidateStageSecretResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
@@ -12,14 +16,10 @@ import com.omgservers.schema.module.tenant.ViewVersionsResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
-import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
-import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
+import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -108,9 +108,9 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long playerId,
                                   final Long tenantId,
                                   final Long stageId) {
-        return selectStageVersion(tenantId, stageId)
-                .map(version -> {
-                    final var versionId = version.getId();
+        return selectStageVersionProjection(tenantId, stageId)
+                .map(versionProjection -> {
+                    final var versionId = versionProjection.getId();
                     final var client = clientModelFactory.create(userId,
                             playerId,
                             tenantId,
@@ -120,8 +120,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
                 });
     }
 
-    Uni<VersionModel> selectStageVersion(final Long tenantId, final Long stageId) {
-        return viewVersions(tenantId, stageId)
+    Uni<VersionProjectionModel> selectStageVersionProjection(final Long tenantId, final Long stageId) {
+        return viewVersionProjections(tenantId, stageId)
                 .map(versions -> {
                     if (versions.isEmpty()) {
                         throw new ServerSideNotFoundException(
@@ -129,16 +129,16 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                 String.format("version was not selected, tenantId=%d, stageId=%d", tenantId, stageId));
                     } else {
                         return versions.stream()
-                                .max(Comparator.comparing(VersionModel::getId))
+                                .max(Comparator.comparing(VersionProjectionModel::getId))
                                 .get();
                     }
                 });
     }
 
-    Uni<List<VersionModel>> viewVersions(final Long tenantId, final Long stageId) {
+    Uni<List<VersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
         final var request = new ViewVersionsRequest(tenantId, stageId);
         return tenantModule.getVersionService().viewVersions(request)
-                .map(ViewVersionsResponse::getVersions);
+                .map(ViewVersionsResponse::getVersionProjections);
     }
 
     Uni<Boolean> syncClient(ClientModel client) {

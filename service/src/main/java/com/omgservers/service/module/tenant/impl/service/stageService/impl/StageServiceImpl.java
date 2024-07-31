@@ -19,6 +19,8 @@ import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
 import com.omgservers.schema.module.tenant.ViewStagesRequest;
 import com.omgservers.schema.module.tenant.ViewStagesResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
@@ -26,6 +28,7 @@ import com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient
 import com.omgservers.service.module.tenant.impl.service.stageService.StageService;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.deleteStage.DeleteStageMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.getStage.GetStageMethod;
+import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.getStageData.GetStageDataMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.syncStage.SyncStageMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.validateStageSecret.ValidateStageSecretMethod;
 import com.omgservers.service.module.tenant.impl.service.stageService.impl.method.stage.viewStages.ViewStagesMethod;
@@ -52,6 +55,7 @@ public class StageServiceImpl implements StageService {
     final SyncStagePermissionMethod syncStagePermissionMethod;
     final ValidateStageSecretMethod validateStageSecretMethod;
     final HasStagePermissionMethod hasStagePermissionMethod;
+    final GetStageDataMethod getStageDataMethod;
     final DeleteStageMethod deleteStageMethod;
     final ViewStagesMethod viewStagesMethod;
     final SyncStageMethod syncStageMethod;
@@ -67,6 +71,14 @@ public class StageServiceImpl implements StageService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getStage,
                 getStageMethod::getStage);
+    }
+
+    @Override
+    public Uni<GetStageDataResponse> getStageData(@Valid final GetStageDataRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getStageData,
+                getStageDataMethod::getStageData);
     }
 
     @Override

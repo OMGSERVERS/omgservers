@@ -1,5 +1,8 @@
 package com.omgservers.service.server.service.task.impl.method.executeStageTask;
 
+import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.version.VersionProjectionModel;
+import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.tenant.DeleteVersionRequest;
@@ -10,9 +13,6 @@ import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
@@ -47,7 +47,7 @@ public class StageTaskImpl {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
 
-        return viewVersions(tenantId, stageId)
+        return viewVersionProjections(tenantId, stageId)
                 .flatMap(versions -> {
                     if (versions.size() > 1) {
                         final var previousVersions = versions.subList(0, versions.size() - 1);
@@ -61,20 +61,21 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<List<VersionModel>> viewVersions(final Long tenantId, final Long stageId) {
+    Uni<List<VersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
         final var request = new ViewVersionsRequest(tenantId, stageId);
         return tenantModule.getVersionService().viewVersions(request)
-                .map(ViewVersionsResponse::getVersions);
+                .map(ViewVersionsResponse::getVersionProjections);
     }
 
-    Uni<Boolean> handlePreviousVersion(final VersionModel version) {
-        final var tenantId = version.getTenantId();
-        final var versionId = version.getId();
+    Uni<Boolean> handlePreviousVersion(final VersionProjectionModel versionProjection) {
+        final var tenantId = versionProjection.getTenantId();
+        final var versionId = versionProjection.getId();
 
-        return handlePreviousVersionRuntimes(version)
+        return handlePreviousVersionRuntimes(versionProjection)
                 .flatMap(isEmpty -> {
                     if (isEmpty) {
-                        log.info("Previous version without clients was found, version={}/{}", tenantId, versionId);
+                        log.info("Previous versionProjection without clients was found, version={}/{}", tenantId,
+                                versionId);
                         return deleteVersion(tenantId, versionId);
                     } else {
                         return Uni.createFrom().item(Boolean.FALSE);
@@ -82,9 +83,9 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<Boolean> handlePreviousVersionRuntimes(final VersionModel version) {
-        final var tenantId = version.getTenantId();
-        final var versionId = version.getId();
+    Uni<Boolean> handlePreviousVersionRuntimes(final VersionProjectionModel versionProjection) {
+        final var tenantId = versionProjection.getTenantId();
+        final var versionId = versionProjection.getId();
         return viewVersionLobbyRefs(tenantId, versionId)
                 .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
                         .onItem().transformToUniAndConcatenate(versionRuntime -> {

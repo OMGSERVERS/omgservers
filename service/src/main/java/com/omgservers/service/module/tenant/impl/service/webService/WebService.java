@@ -34,8 +34,6 @@ import com.omgservers.schema.module.tenant.GetProjectRequest;
 import com.omgservers.schema.module.tenant.GetProjectResponse;
 import com.omgservers.schema.module.tenant.GetStageRequest;
 import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantDashboardRequest;
-import com.omgservers.schema.module.tenant.GetTenantDashboardResponse;
 import com.omgservers.schema.module.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
@@ -100,6 +98,12 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
+import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -119,14 +123,12 @@ import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenk
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
 
 public interface WebService {
 
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
 
-    Uni<GetTenantDashboardResponse> getTenantDashboard(GetTenantDashboardRequest request);
+    Uni<GetTenantDataResponse> getTenantData(GetTenantDataRequest request);
 
     Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request);
 
@@ -158,6 +160,8 @@ public interface WebService {
 
     Uni<GetStageResponse> getStage(GetStageRequest request);
 
+    Uni<GetStageDataResponse> getStageData(GetStageDataRequest request);
+
     Uni<SyncStageResponse> syncStage(SyncStageRequest request);
 
     Uni<ViewStagesResponse> viewStages(ViewStagesRequest request);
@@ -173,6 +177,8 @@ public interface WebService {
     Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request);
 
     Uni<GetVersionResponse> getVersion(GetVersionRequest request);
+
+    Uni<GetVersionDataResponse> getVersionData(GetVersionDataRequest request);
 
     Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
 

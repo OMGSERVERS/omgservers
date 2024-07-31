@@ -25,6 +25,8 @@ public interface TesterConfig {
         AdminConfig admin();
 
         SupportConfig support();
+
+        RegistryConfig registry();
     }
 
     interface AdminConfig {
@@ -37,5 +39,9 @@ public interface TesterConfig {
         long userId();
 
         String password();
+    }
+
+    interface RegistryConfig {
+        String url();
     }
 }

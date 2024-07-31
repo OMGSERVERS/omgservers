@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.SelectStageVersionRequest;
 import com.omgservers.schema.module.tenant.SelectStageVersionResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionsByStageId.SelectActiveVersionsByStageIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.version.selectActiveVersionProjectionsByStageId.SelectActiveVersionProjectionsByStageIdOperation;
 import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SelectStageVersionMethodImpl implements SelectStageVersionMethod {
 
-    final SelectActiveVersionsByStageIdOperation selectActiveVersionsByStageIdOperation;
+    final SelectActiveVersionProjectionsByStageIdOperation selectActiveVersionProjectionsByStageIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -30,8 +30,8 @@ class SelectStageVersionMethodImpl implements SelectStageVersionMethod {
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
                     final var stageId = request.getStageId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveVersionsByStageIdOperation
-                            .selectActiveVersionsByStageId(sqlConnection, shardModel.shard(), tenantId, stageId)
+                    return pgPool.withTransaction(sqlConnection -> selectActiveVersionProjectionsByStageIdOperation
+                            .selectActiveVersionProjectionsByStageId(sqlConnection, shardModel.shard(), tenantId, stageId)
                             .map(versions -> {
                                 if (versions.isEmpty()) {
                                     throw new ServerSideNotFoundException(ExceptionQualifierEnum.VERSION_NOT_FOUND,

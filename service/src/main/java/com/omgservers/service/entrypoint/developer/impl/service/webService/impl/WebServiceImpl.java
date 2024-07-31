@@ -10,8 +10,12 @@ import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
@@ -41,6 +45,11 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<GetStageDashboardDeveloperResponse> getStageDashboard(final GetStageDashboardDeveloperRequest request) {
+        return developerService.getStageDashboard(request);
+    }
+
+    @Override
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         return developerService.createProject(request);
     }
@@ -48,6 +57,12 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         return developerService.createVersion(request);
+    }
+
+    @Override
+    public Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(
+            final GetVersionDashboardDeveloperRequest request) {
+        return developerService.getVersionDashboard(request);
     }
 
     @Override

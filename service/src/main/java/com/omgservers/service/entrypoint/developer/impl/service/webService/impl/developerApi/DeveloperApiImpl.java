@@ -10,8 +10,12 @@ import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -56,8 +60,20 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
+    public Uni<GetStageDashboardDeveloperResponse> getStageDashboard(
+            @NotNull final GetStageDashboardDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getStageDashboard);
+    }
+
+    @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(@NotNull final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::createVersion);
+    }
+
+    @Override
+    public Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(
+            @NotNull final GetVersionDashboardDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionDashboard);
     }
 
     @Override

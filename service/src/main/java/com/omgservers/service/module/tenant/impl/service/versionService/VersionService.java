@@ -52,6 +52,8 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
 import com.omgservers.schema.module.tenant.ViewVersionsRequest;
 import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
+import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
@@ -76,6 +78,8 @@ import jakarta.validation.Valid;
 public interface VersionService {
 
     Uni<GetVersionResponse> getVersion(@Valid GetVersionRequest request);
+
+    Uni<GetVersionDataResponse> getVersionData(@Valid GetVersionDataRequest request);
 
     Uni<SyncVersionResponse> syncVersion(@Valid SyncVersionRequest request);
 
@@ -120,7 +124,8 @@ public interface VersionService {
 
     Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(@Valid SyncVersionLobbyRequestRequest request);
 
-    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequestWithIdempotency(@Valid SyncVersionLobbyRequestRequest request);
+    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequestWithIdempotency(
+            @Valid SyncVersionLobbyRequestRequest request);
 
     Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(@Valid DeleteVersionLobbyRequestRequest request);
 
