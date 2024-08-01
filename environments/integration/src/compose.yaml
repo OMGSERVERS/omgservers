@@ -39,7 +39,7 @@ services:
     container_name: "registry"
     environment:
       - OMGSERVERS_ENVIRONMENT=integration
-      - OMGSERVERS_SERVICE_URL=http://localhost:8080
+      - OMGSERVERS_SERVICE_URL=http://host.docker.internal:8080
     volumes:
       - ./cert.pem:/root/certs/bundle/cert.pem
     ports:
@@ -100,6 +100,8 @@ services:
       - OMGSERVERS_BOOTSTRAP_ROOT_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_ADMIN_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_SUPPORT_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_ROUTER_USER_ENABLED=true
+      - OMGSERVERS_BOOTSTRAP_REGISTRY_USER_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DOCKER_HOST_ENABLED=true
       - OMGSERVERS_WORKERS_SERVICE_URI=http://service1:8080

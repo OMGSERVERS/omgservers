@@ -26,8 +26,6 @@ notifications:
     - name: omgservers
       disabled: false
       url: ${OMGSERVERS_SERVICE_URL}/omgservers/v1/entrypoint/registry/events
-      headers:
-        Content-Type: [ application/json ]
       timeout: 5s
       threshold: 10
       backoff: 1s
