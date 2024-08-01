@@ -71,8 +71,6 @@ public class MatchmakingNewMatchAssignmentIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(32_000);
-
         try {
             // Client 1
 

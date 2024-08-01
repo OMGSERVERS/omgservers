@@ -33,8 +33,6 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
                         })
                         """);
 
-        Thread.sleep(32_000);
-
         try {
             uploadTestVersionOperation.uploadTestVersion(testVersion, """                                               
                     """);

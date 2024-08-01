@@ -60,6 +60,23 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .uploadVersion(developerToken, tenantId, stageId, versionConfig, mainLua);
         final var versionId = createVersionDeveloperResponse.getId();
 
+        var currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
+        var attempt = 1;
+        while ((currentVersionDashboard.getVersion().getLobbyRefs().isEmpty() ||
+                currentVersionDashboard.getVersion().getMatchmakerRefs().isEmpty()) &&
+                attempt < 8) {
+            try {
+                log.info("Waiting for deployment, attempt={}", attempt);
+                Thread.sleep((long) attempt * 2 * 1000);
+                currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
+                attempt++;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        log.info("Version was deployed, version={}", versionId);
+
         return TestVersionModel.builder()
                 .adminToken(adminToken)
                 .supportToken(supportToken)

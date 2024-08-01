@@ -85,8 +85,6 @@ public class MatchBroadcastMessageIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(32_000);
-
         try {
             final var testClient1 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);

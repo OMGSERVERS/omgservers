@@ -86,8 +86,6 @@ public class MatchHandleMessageIT extends BaseTestClass {
                 }})
         );
 
-        Thread.sleep(32_000);
-
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
             final var welcomeMessage = playerApiTester.waitMessage(testClient,

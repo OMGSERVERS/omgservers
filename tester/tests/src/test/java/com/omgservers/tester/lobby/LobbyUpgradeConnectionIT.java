@@ -57,8 +57,6 @@ public class LobbyUpgradeConnectionIT extends BaseTestClass {
                 })
                 """);
 
-        Thread.sleep(32_000);
-
         try {
             final var testClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
