@@ -2,7 +2,7 @@ package com.omgservers.tester.operation.pushTestVersionImage;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Image;
-import com.omgservers.tester.model.TestVersionModel;
+import com.omgservers.tester.dto.TestVersionDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,17 +19,17 @@ class PushTestVersionImageOperationImpl implements PushTestVersionImageOperation
     @Override
     public void pushTestVersionImage(final DockerClient dockerClient,
                                      final String image,
-                                     final TestVersionModel testVersionModel) throws InterruptedException {
+                                     final TestVersionDto testVersionDto) throws InterruptedException {
         final var imageIdOptional = getImageId(dockerClient, image);
         if (imageIdOptional.isEmpty()) {
             throw new IllegalArgumentException(image + " was not found");
         }
         final var imageId = imageIdOptional.get();
 
-        final var tenantId = testVersionModel.getTenantId();
-        final var projectId = testVersionModel.getProjectId();
-        final var stageId = testVersionModel.getStageId();
-        final var versionId = testVersionModel.getVersionId();
+        final var tenantId = testVersionDto.getTenantId();
+        final var projectId = testVersionDto.getProjectId();
+        final var stageId = testVersionDto.getStageId();
+        final var versionId = testVersionDto.getVersionId();
         final var repository = String.format("localhost:5000/omgservers/%s/%s/%s/universal",
                 tenantId,
                 projectId,

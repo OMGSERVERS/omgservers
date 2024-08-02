@@ -5,7 +5,7 @@ import com.omgservers.schema.model.version.VersionConfigModel;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
-import com.omgservers.tester.model.TestVersionModel;
+import com.omgservers.tester.dto.TestVersionDto;
 import com.omgservers.tester.operation.createVersionArchive.CreateVersionArchiveOperation;
 import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,12 +29,12 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
     AdminApiTester adminApiTester;
 
     @Override
-    public TestVersionModel createTestVersion() throws IOException {
+    public TestVersionDto createTestVersion() throws IOException {
         return createTestVersion(VersionConfigModel.create());
     }
 
     @Override
-    public TestVersionModel createTestVersion(final VersionConfigModel versionConfig) throws IOException {
+    public TestVersionDto createTestVersion(final VersionConfigModel versionConfig) throws IOException {
         final var adminToken = adminApiTester.createAdminToken();
 
         final var supportToken = supportApiTester.createSupportToken();
@@ -59,7 +59,7 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
                 .createVersion(developerToken, tenantId, stageId, versionConfig);
         final var versionId = createVersionDeveloperResponse.getId();
 
-        return TestVersionModel.builder()
+        return TestVersionDto.builder()
                 .adminToken(adminToken)
                 .supportToken(supportToken)
                 .tenantId(tenantId)

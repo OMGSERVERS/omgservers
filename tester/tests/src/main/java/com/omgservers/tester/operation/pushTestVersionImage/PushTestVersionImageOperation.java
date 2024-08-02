@@ -1,11 +1,11 @@
 package com.omgservers.tester.operation.pushTestVersionImage;
 
 import com.github.dockerjava.api.DockerClient;
-import com.omgservers.tester.model.TestVersionModel;
+import com.omgservers.tester.dto.TestVersionDto;
 
 public interface PushTestVersionImageOperation {
 
     void pushTestVersionImage(DockerClient dockerClient,
                               String image,
-                              TestVersionModel testVersionModel) throws InterruptedException;
+                              TestVersionDto testVersionDto) throws InterruptedException;
 }

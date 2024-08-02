@@ -3,7 +3,7 @@ package com.omgservers.tester.operation.waitForDeployment;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
-import com.omgservers.tester.model.TestVersionModel;
+import com.omgservers.tester.dto.TestVersionDto;
 import com.omgservers.tester.operation.createVersionArchive.CreateVersionArchiveOperation;
 import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ class WaitForDeploymentOperationImpl implements WaitForDeploymentOperation {
     AdminApiTester adminApiTester;
 
     @Override
-    public void waitForDeployment(final TestVersionModel testVersion) throws IOException {
+    public void waitForDeployment(final TestVersionDto testVersion) throws IOException {
         final var developerToken = testVersion.getDeveloperToken();
         final var tenantId = testVersion.getTenantId();
         final var versionId = testVersion.getVersionId();

@@ -1,11 +1,11 @@
-package com.omgservers.tester.model;
+package com.omgservers.tester.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class TestVersionModel {
+public class TestVersionDto {
 
     String adminToken;
 
