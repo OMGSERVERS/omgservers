@@ -35,6 +35,10 @@ class GetDockerClientOperationImpl implements GetDockerClientOperation {
                     .withDockerHost(uri.toString())
                     .withDockerTlsVerify(tlsVerify)
                     .withDockerCertPath(certPath)
+                    .withRegistryUrl(getConfigOperation.getServiceConfig().registry().uri().toString())
+                    .withRegistryUsername(String.valueOf(getConfigOperation.getServiceConfig()
+                            .defaults().serviceUserId()))
+                    .withRegistryPassword(getConfigOperation.getServiceConfig().bootstrap().serviceUser().password())
                     .build();
 
             final var httpClient = new ZerodepDockerHttpClient.Builder()

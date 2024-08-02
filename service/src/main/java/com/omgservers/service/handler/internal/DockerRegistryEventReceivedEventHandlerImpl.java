@@ -1,25 +1,28 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.service.registry.DockerRegistryContainerQualifierEnum;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
 import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
+import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.schema.service.registry.DockerRegistryContainerQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.server.operation.buildDockerImageId.BuildDockerImageIdOperation;
+import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.server.operation.parseDockerRepository.ParseDockerRepositoryOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URI;
 
 @Slf4j
 @ApplicationScoped
@@ -32,6 +35,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
 
     final ParseDockerRepositoryOperation parseDockerRepositoryOperation;
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
+    final GetConfigOperation getConfigOperation;
 
     final VersionImageRefModelFactory versionImageRefModelFactory;
 
@@ -68,7 +72,9 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         try {
             final var tenantId = dockerRepository.getTenantId();
             final var versionId = Long.valueOf(tag);
-            final var imageId = buildDockerImageIdOperation.buildDockerImageId(dockerRepository, versionId);
+            final var registryHost = getRegistryHost(event);
+            final var imageId = registryHost + "/" +
+                    buildDockerImageIdOperation.buildDockerImageId(dockerRepository, versionId);
 
             return syncVersionImageRef(tenantId,
                     versionId,
@@ -101,5 +107,21 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         final var request = new SyncVersionImageRefRequest(versionImageRef);
         return tenantModule.getVersionService().syncVersionImageRefWithIdempotency(request)
                 .map(SyncVersionImageRefResponse::getCreated);
+    }
+
+    String getRegistryHost(final DockerRegistryEventDto event) {
+        try {
+            final var uri = URI.create(event.getTarget().getUrl());
+            final var port = uri.getPort();
+            final var host = uri.getHost();
+            if (port == -1) {
+                return host;
+            } else {
+                return host + ":" + port;
+            }
+        } catch (Exception e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG,
+                    "target url couldn't be parsed");
+        }
     }
 }

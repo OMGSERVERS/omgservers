@@ -51,7 +51,8 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
 
                     final var idempotencyKey = event.getId().toString();
 
-                    return syncBuilderPermission(tenantId, stageId, idempotencyKey);
+                    return syncBuilderPermission(tenantId, stageId, idempotencyKey)
+                            .flatMap(permission -> syncServicePermission(tenantId, stageId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -71,7 +72,22 @@ public class StageCreatedEventHandlerImpl implements EventHandler {
                 stageId,
                 builderUserId,
                 permission,
-                idempotencyKey);
+                idempotencyKey + "/" + builderUserId + "/" + permission);
+        final var request = new SyncStagePermissionRequest(stagePermission);
+        return tenantModule.getStageService().syncStagePermissionWithIdempotency(request)
+                .replaceWith(stagePermission);
+    }
+
+    Uni<StagePermissionModel> syncServicePermission(final Long tenantId,
+                                                    final Long stageId,
+                                                    final String idempotencyKey) {
+        final var serviceUserId = getConfigOperation.getServiceConfig().defaults().serviceUserId();
+        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
+        final var stagePermission = stagePermissionModelFactory.create(tenantId,
+                stageId,
+                serviceUserId,
+                permission,
+                idempotencyKey + "/" + serviceUserId + "/" + permission);
         final var request = new SyncStagePermissionRequest(stagePermission);
         return tenantModule.getStageService().syncStagePermissionWithIdempotency(request)
                 .replaceWith(stagePermission);

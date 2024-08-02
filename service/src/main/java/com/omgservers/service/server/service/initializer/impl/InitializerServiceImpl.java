@@ -44,6 +44,7 @@ public class InitializerServiceImpl implements InitializerService {
                 .flatMap(voidItem -> initializeRouterUser())
                 .flatMap(voidItem -> initializeRegistryUser())
                 .flatMap(voidItem -> initializeBuilderUser())
+                .flatMap(voidItem -> initializeServiceUser())
                 .flatMap(voidItem -> initializeDefaultPool())
                 .flatMap(voidItem -> initializeDockerHost())
                 .flatMap(voidItem -> initializeRelayJob())
@@ -126,6 +127,16 @@ public class InitializerServiceImpl implements InitializerService {
                     .invoke(voidItem -> log.info("Builder user was initialized"));
         } else {
             log.info("Bootstrap of builder user is not enabled, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+    }
+
+    Uni<Void> initializeServiceUser() {
+        if (getConfigOperation.getServiceConfig().bootstrap().serviceUser().enabled()) {
+            return bootstrapService.bootstrapServiceUser()
+                    .invoke(voidItem -> log.info("Service user was initialized"));
+        } else {
+            log.info("Bootstrap of service user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

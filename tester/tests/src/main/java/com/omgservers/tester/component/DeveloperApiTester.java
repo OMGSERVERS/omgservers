@@ -10,6 +10,8 @@ import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
@@ -176,6 +178,23 @@ public class DeveloperApiTester {
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(UploadVersionDeveloperResponse.class);
+        return response;
+    }
+
+    public DeployVersionDeveloperResponse deployVersion(final String token, final Long tenantId, final Long versionId)
+            throws JsonProcessingException {
+        final var responseSpecification = RestAssured
+                .with()
+                .filter(new LoggingFilter("Developer"))
+                .baseUri(getConfigOperation.getConfig().externalUri().toString())
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(
+                        new DeployVersionDeveloperRequest(tenantId, versionId)))
+                .when().put("/omgservers/v1/entrypoint/developer/request/deploy-version");
+        responseSpecification.then().statusCode(200);
+
+        final var response = responseSpecification.getBody().as(DeployVersionDeveloperResponse.class);
         return response;
     }
 

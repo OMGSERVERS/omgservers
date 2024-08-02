@@ -30,6 +30,11 @@ public enum UserRoleEnum {
     BUILDER(Names.BUILDER),
 
     /**
+     * Role which is used to do inter server requests.
+     */
+    SERVICE(Names.SERVICE),
+
+    /**
      * Role which is used to interact with the service through Developer Api.
      */
     DEVELOPER(Names.DEVELOPER),
@@ -70,6 +75,7 @@ public enum UserRoleEnum {
         static public final String ROUTER = "router";
         static public final String REGISTRY = "registry";
         static public final String BUILDER = "builder";
+        static public final String SERVICE = "service";
         static public final String DEVELOPER = "developer";
         static public final String PLAYER = "player";
         static public final String WORKER = "worker";

@@ -1,6 +1,5 @@
 package com.omgservers.service.server.service.bootstrap.impl;
 
-import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapRouterUser.BootstrapRouterUserMethod;
 import com.omgservers.service.server.service.bootstrap.BootstrapService;
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapAdminUser.BootstrapAdminUserMethod;
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapBuilderUser.BootstrapBuilderUserMethod;
@@ -13,6 +12,7 @@ import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapRout
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapSchedulerJob.BootstrapSchedulerJobMethod;
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapServerIndex.BootstrapServerIndexMethod;
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapServiceRoot.BootstrapServiceRootMethod;
+import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapServiceUser.BootstrapServiceUserMethod;
 import com.omgservers.service.server.service.bootstrap.impl.method.bootstrapSupportUser.BootstrapSupportUserMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,6 +29,7 @@ class BootstrapServiceImpl implements BootstrapService {
     final BootstrapSchedulerJobMethod bootstrapSchedulerJobMethod;
     final BootstrapRegistryUserMethod bootstrapRegistryUserMethod;
     final BootstrapBuilderUserMethod bootstrapBuilderUserMethod;
+    final BootstrapServiceUserMethod bootstrapServiceUserMethod;
     final BootstrapServerIndexMethod bootstrapServerIndexMethod;
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
     final BootstrapSupportUserMethod bootstrapSupportUserMethod;
@@ -76,6 +77,11 @@ class BootstrapServiceImpl implements BootstrapService {
     @Override
     public Uni<Void> bootstrapBuilderUser() {
         return bootstrapBuilderUserMethod.bootstrapBuilderUser();
+    }
+
+    @Override
+    public Uni<Void> bootstrapServiceUser() {
+        return bootstrapServiceUserMethod.bootstrapServiceUser();
     }
 
     @Override

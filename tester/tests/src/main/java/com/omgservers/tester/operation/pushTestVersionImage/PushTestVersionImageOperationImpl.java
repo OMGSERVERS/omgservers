@@ -36,9 +36,11 @@ class PushTestVersionImageOperationImpl implements PushTestVersionImageOperation
                 stageId);
         dockerClient.tagImageCmd(imageId, repository, versionId.toString()).exec();
 
+        log.info("Pushing...");
         dockerClient.pushImageCmd(repository + ":" + versionId)
                 .start()
                 .awaitCompletion(1, TimeUnit.MINUTES);
+        log.info("Pushed");
     }
 
     Optional<String> getImageId(final DockerClient dockerClient,

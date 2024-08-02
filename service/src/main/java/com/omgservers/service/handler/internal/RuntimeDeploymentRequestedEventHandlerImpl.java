@@ -186,7 +186,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var poolRequestConfig = new PoolRequestConfigModel();
         poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
-        poolRequestConfig.getServerContainerConfig().setImage(imageId);
+        poolRequestConfig.getServerContainerConfig().setImageId(imageId);
         // TODO: get limits from version config
         final var defaultCpuLimit = getConfigOperation.getServiceConfig().workers().defaultCpuLimit();
         poolRequestConfig.getServerContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);

@@ -1,3 +1,9 @@
+local omgserver = require("omgserver.omgserver")
+
+function init()
+	omgserver.bootstrap()
+end
+
 function update(self, dt)
 	self.timer = self.timer or 0
 	self.counter = self.counter or 0

@@ -28,6 +28,8 @@ public interface ServiceConfig {
 
     BuilderConfig builder();
 
+    RegistryConfig registry();
+
     interface DefaultsConfig {
         long indexId();
 
@@ -44,6 +46,8 @@ public interface ServiceConfig {
         long registryUserId();
 
         long builderUserId();
+
+        long serviceUserId();
     }
 
     interface GeneratorConfig {
@@ -116,6 +120,8 @@ public interface ServiceConfig {
 
         BootstrapDefaultUserConfig builderUser();
 
+        BootstrapDefaultUserConfig serviceUser();
+
         BootstrapRootConfig root();
 
         BootstrapDefaultPoolConfig defaultPool();
@@ -171,6 +177,10 @@ public interface ServiceConfig {
         String userId();
 
         String userToken();
+    }
+
+    interface RegistryConfig {
+        URI uri();
     }
 
     class UserHomeConverter implements Converter<String> {

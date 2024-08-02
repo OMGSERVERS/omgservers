@@ -28,7 +28,7 @@ public class PoolRequestConfigModel {
     public static class ServerContainerConfig {
 
         @NotNull
-        String image;
+        String imageId;
 
         @NotNull
         Integer cpuLimitInMilliseconds;
