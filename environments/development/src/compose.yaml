@@ -36,7 +36,8 @@ services:
     container_name: "registry"
     environment:
       - OMGSERVERS_ENVIRONMENT=development
-      - OMGSERVERS_SERVICE_URL=http://host.docker.internal:8080
+      - OMGSERVERS_AUTH_URL=http://localhost:8080
+      - OMGSERVERS_SERVICE_URL=http://service:8080
     volumes:
       - ./cert.pem:/root/certs/bundle/cert.pem
       - registry:/var/lib/registry

@@ -13,7 +13,7 @@ auth:
   token:
     issuer: omgservers
     service: registry
-    realm: ${OMGSERVERS_SERVICE_URL}/omgservers/v1/entrypoint/registry/token
+    realm: ${OMGSERVERS_AUTH_URL}/omgservers/v1/entrypoint/registry/token
     rootcertbundle: /root/certs/bundle/cert.pem
 http:
   addr: :5000

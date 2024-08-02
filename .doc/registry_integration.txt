@@ -2,8 +2,8 @@ Links
 https://distribution.github.io/distribution/spec/auth/
 https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/sso-protocols/docker.html
 
-Auth challenge
-Www-Authenticate: Bearer realm="https://auth.docker.io/token",service="registry.docker.io",scope="repository:samalba/my-app:pull,push"
+To get auth challenge: curl -v -L http://localhost:5000/v2
+- Www-Authenticate: Bearer realm="https://auth.docker.io/token",service="registry.docker.io",scope="repository:samalba/my-app:pull,push"
 
 HTTP GET token request
 https://auth.docker.io/token?service=registry.docker.io&scope=repository:samalba/my-app:pull,push

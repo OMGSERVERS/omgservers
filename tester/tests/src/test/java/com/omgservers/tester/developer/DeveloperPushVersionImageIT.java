@@ -42,6 +42,8 @@ public class DeveloperPushVersionImageIT extends BaseTestClass {
                 "omgservers/defold-test-runtime:1.0.0-SNAPSHOT",
                 testVersion);
 
+        Thread.sleep(1000);
+
         try {
             final var versionDashboard = developerApiTester.getVersionDashboard(testVersion.getDeveloperToken(),
                     testVersion.getTenantId(), testVersion.getVersionId());
