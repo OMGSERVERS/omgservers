@@ -62,9 +62,10 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
 
         var currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
         var attempt = 1;
+        var maxAttempts = 12;
         while ((currentVersionDashboard.getVersion().getLobbyRefs().isEmpty() ||
                 currentVersionDashboard.getVersion().getMatchmakerRefs().isEmpty()) &&
-                attempt < 8) {
+                attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);
                 Thread.sleep((long) attempt * 2 * 1000);
@@ -75,7 +76,11 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
             }
         }
 
-        log.info("Version was deployed, version={}", versionId);
+        if (attempt < maxAttempts) {
+            log.info("Version was deployed, version={}", versionId);
+        } else {
+            throw new IllegalStateException("Version was not deployed, versionId=" + versionId);
+        }
 
         return TestVersionModel.builder()
                 .adminToken(adminToken)
