@@ -14,8 +14,6 @@ public interface BootstrapService {
 
     Uni<Void> bootstrapSupportUser();
 
-    Uni<Void> bootstrapRouterUser();
-
     Uni<Void> bootstrapRegistryUser();
 
     Uni<Void> bootstrapBuilderUser();

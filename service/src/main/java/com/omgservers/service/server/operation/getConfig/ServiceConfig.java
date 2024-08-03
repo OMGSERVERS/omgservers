@@ -41,8 +41,6 @@ public interface ServiceConfig {
 
         long supportId();
 
-        long routerUserId();
-
         long registryUserId();
 
         long builderUserId();
@@ -113,8 +111,6 @@ public interface ServiceConfig {
         BootstrapDefaultUserConfig admin();
 
         BootstrapDefaultUserConfig support();
-
-        BootstrapDefaultUserConfig routerUser();
 
         BootstrapDefaultUserConfig registryUser();
 

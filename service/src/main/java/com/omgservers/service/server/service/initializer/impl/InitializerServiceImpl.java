@@ -41,7 +41,6 @@ public class InitializerServiceImpl implements InitializerService {
                 .flatMap(voidItem -> initializeServiceRoot())
                 .flatMap(voidItem -> initializeAdminUser())
                 .flatMap(voidItem -> initializeSupportUser())
-                .flatMap(voidItem -> initializeRouterUser())
                 .flatMap(voidItem -> initializeRegistryUser())
                 .flatMap(voidItem -> initializeBuilderUser())
                 .flatMap(voidItem -> initializeServiceUser())
@@ -97,16 +96,6 @@ public class InitializerServiceImpl implements InitializerService {
                     .invoke(voidItem -> log.info("Support user was initialized"));
         } else {
             log.info("Bootstrap of support user is not enabled, skip operation");
-            return Uni.createFrom().voidItem();
-        }
-    }
-
-    Uni<Void> initializeRouterUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().routerUser().enabled()) {
-            return bootstrapService.bootstrapRouterUser()
-                    .invoke(voidItem -> log.info("Router user was initialized"));
-        } else {
-            log.info("Bootstrap of router user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
