@@ -1,18 +1,14 @@
-local omgserver = require("omgserver.omgserver")
+local omgserver = require("omgservers.omgserver")
 
 function init()
-	omgserver.bootstrap()
+	omgserver:init(function()
+		local runtime_qualifier = omgserver:get_qualifier()
+		print("[GAME] Server was initialized, qualifier=" .. runtime_qualifier)
+	end)
 end
 
 function update(self, dt)
-	self.timer = self.timer or 0
-	self.counter = self.counter or 0
-	
-	self.timer = self.timer + dt
-	if self.timer > 1 then
-		print(self.counter)
-		
-		self.counter = self.counter + 1
-		self.timer = 0
-	end
+	omgserver:update(dt, function(command_qualifier, command_body)
+		print("[GAME] Command was received, qualifier=" .. command_qualifier)
+	end)
 end
